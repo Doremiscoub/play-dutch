@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import GameSetup from '@/components/GameSetup';
@@ -26,6 +27,10 @@ const Home: React.FC = () => {
     setShowTutorial(false);
   };
 
+  const handleStartTournament = (tournamentName: string, players: string[], rounds: number) => {
+    navigate('/tournament', { state: { tournamentName, players, rounds } });
+  };
+
   return (
     <div className="relative min-h-screen overflow-hidden">
       <div className="fixed inset-0 -z-10">
@@ -50,9 +55,9 @@ const Home: React.FC = () => {
         <div className="space-y-6">
           <GameSetup onStartGame={handleStartGame} />
           
-          <TournamentMode onStartTournament={handleStartGame} />
+          <TournamentMode onStartTournament={handleStartTournament} />
           
-          <InteractiveTutorial onComplete={() => console.log('Tutorial completed')} />
+          <InteractiveTutorial onComplete={handleTutorialComplete} />
         </div>
       </motion.div>
     </div>

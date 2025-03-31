@@ -1,303 +1,366 @@
 
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import useTournamentStore from '@/store/tournamentStore';
+import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Trophy, Medal, ArrowLeft, ArrowRight, Calendar, Star, Award, Users, Home } from 'lucide-react';
-import { toast } from 'sonner';
-import confetti from 'canvas-confetti';
-import ProfCartouche from '@/components/ProfCartouche';
-import { Progress } from '@/components/ui/progress';
-import { Badge } from '@/components/ui/badge';
+import useTournamentStore from '@/store/tournamentStore';
+import { Player, PlayerStatistics } from '@/types';
+import { v4 as uuidv4 } from 'uuid';
+import ScoreBoard from '@/components/ScoreBoard';
 import TournamentPodium from '@/components/TournamentPodium';
-import { TournamentPlayer } from '@/types/tournament';
+import { motion } from 'framer-motion';
+import { Trophy, ArrowLeft, BarChart2, Award } from 'lucide-react';
+import { toast } from 'sonner';
+import AnimatedBackground from '@/components/AnimatedBackground';
 
 const TournamentPage: React.FC = () => {
+  const location = useLocation();
   const navigate = useNavigate();
   const { 
-    currentTournament,
-    tournamentHistory,
-    resetTournament,
-    getCurrentGame,
-    getRemainingGames,
-    getTournamentStandings
+    activeTournament, 
+    updateTournament, 
+    createTournamentGame,
+    updateTournamentGame,
+    finishTournament
   } = useTournamentStore();
   
-  const [showConfetti, setShowConfetti] = useState(false);
+  const [players, setPlayers] = useState<Player[]>([]);
+  const [currentGame, setCurrentGame] = useState(1);
+  const [isGameFinished, setIsGameFinished] = useState(false);
+  const [tournamentFinished, setTournamentFinished] = useState(false);
+  const [showStats, setShowStats] = useState(false);
   
-  // Vérifier si nous sommes dans un tournoi actif
   useEffect(() => {
-    if (!currentTournament && tournamentHistory.length === 0) {
+    // Initialize tournament from navigation state if available
+    const state = location.state as { 
+      tournamentName?: string;
+      players?: string[];
+      rounds?: number;
+    } | null;
+    
+    if (state?.players && state.tournamentName && state.rounds) {
+      // Convert string names to Player objects
+      const playerObjects: Player[] = state.players.map(name => ({
+        id: uuidv4(),
+        name,
+        totalScore: 0,
+        rounds: [],
+        stats: {
+          bestRound: null,
+          dutchCount: 0,
+          averageScore: 0,
+          worstRound: null,
+          improvementRate: 0,
+          consistencyScore: 0,
+          winStreak: 0,
+          roundsWon: 0,
+          wins: 0,
+          dutchSuccessRate: 0,
+          playStyle: ''
+        }
+      }));
+      
+      setPlayers(playerObjects);
+    } else if (activeTournament) {
+      // If we have an active tournament but no state, initialize from the store
+      const tournamentPlayers: Player[] = activeTournament.players.map(tp => ({
+        id: tp.id,
+        name: tp.name,
+        totalScore: tp.totalScore,
+        rounds: [],
+        stats: {
+          bestRound: null,
+          dutchCount: tp.dutchCount,
+          averageScore: tp.avgScorePerGame || 0,
+          worstRound: null,
+          improvementRate: 0,
+          consistencyScore: 0,
+          winStreak: 0,
+          roundsWon: 0,
+          wins: tp.wins,
+          dutchSuccessRate: 0,
+          playStyle: ''
+        }
+      }));
+      
+      setPlayers(tournamentPlayers);
+      setCurrentGame(activeTournament.currentGame);
+    } else {
+      // No tournament info, go back to home
       navigate('/');
     }
-  }, [currentTournament, tournamentHistory, navigate]);
+  }, [location, activeTournament, navigate]);
   
-  // Effet de confetti pour la fin du tournoi
-  useEffect(() => {
-    if (currentTournament?.winner && showConfetti) {
-      const duration = 5000;
-      const animationEnd = Date.now() + duration;
-      const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
-
-      function randomInRange(min: number, max: number) {
-        return Math.random() * (max - min) + min;
-      }
-
-      const interval = setInterval(() => {
-        const timeLeft = animationEnd - Date.now();
-
-        if (timeLeft <= 0) {
-          return clearInterval(interval);
+  const handleAddRound = (scores: number[], dutchPlayerId?: string) => {
+    // Update player scores for the current round
+    const updatedPlayers = players.map((player, index) => {
+      const isDutch = player.id === dutchPlayerId;
+      return {
+        ...player,
+        rounds: [
+          ...player.rounds,
+          { score: scores[index], isDutch }
+        ],
+        totalScore: player.totalScore + scores[index],
+        stats: {
+          ...player.stats,
+          dutchCount: player.stats?.dutchCount || 0 + (isDutch ? 1 : 0),
         }
+      };
+    });
+    
+    setPlayers(updatedPlayers);
+  };
 
-        const particleCount = 50 * (timeLeft / duration);
-        
-        confetti({
-          ...defaults,
-          particleCount,
-          origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
-          colors: ['#1EAEDB', '#F97316', '#8B5CF6'],
-        });
-        confetti({
-          ...defaults,
-          particleCount,
-          origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
-          colors: ['#1EAEDB', '#F97316', '#8B5CF6'],
-        });
-      }, 250);
+  const handleEndGame = () => {
+    if (!activeTournament) return;
+    
+    // Find the winner of this game
+    let highestScore = -999;
+    let winnerName = '';
+    let winnerId = '';
+    
+    players.forEach(player => {
+      if (player.totalScore > highestScore) {
+        highestScore = player.totalScore;
+        winnerName = player.name;
+        winnerId = player.id;
+      }
+    });
+    
+    // Create or update the game in the tournament store
+    const gameData = {
+      players: players.map(p => ({
+        id: p.id,
+        name: p.name,
+        score: p.totalScore,
+        isDutch: p.rounds.some(r => r.isDutch)
+      })),
+      winner: winnerName,
+      winnerId
+    };
+    
+    // If this game exists, update it, otherwise create it
+    updateTournamentGame(activeTournament.id, currentGame, gameData);
+    
+    // Check if tournament is finished
+    if (currentGame >= activeTournament.totalGames) {
+      setTournamentFinished(true);
       
-      return () => clearInterval(interval);
+      // Find overall tournament winner
+      const tournamentPlayers = activeTournament.players.map(tp => {
+        // Find this player in the current game
+        const currentPlayer = players.find(p => p.id === tp.id);
+        
+        return {
+          ...tp,
+          totalScore: tp.totalScore + (currentPlayer?.totalScore || 0),
+          wins: tp.wins + (winnerId === tp.id ? 1 : 0),
+          dutchCount: tp.dutchCount + (currentPlayer?.stats?.dutchCount || 0)
+        };
+      });
+      
+      // Find tournament winner
+      let highestTotalScore = -999;
+      let tournamentWinner = '';
+      
+      tournamentPlayers.forEach(player => {
+        if (player.totalScore > highestTotalScore) {
+          highestTotalScore = player.totalScore;
+          tournamentWinner = player.name;
+        }
+      });
+      
+      // Update tournament
+      finishTournament(activeTournament.id, {
+        players: tournamentPlayers,
+        winner: tournamentWinner
+      });
+      
+      // Show toast
+      toast.success(`${tournamentWinner} remporte le tournoi !`, {
+        description: `Score final: ${highestTotalScore} points`
+      });
+    } else {
+      // Move to next game
+      setIsGameFinished(true);
+      
+      // Update tournament state
+      updateTournament(activeTournament.id, {
+        currentGame: currentGame + 1,
+        players: activeTournament.players.map(tp => {
+          // Find this player in the current game
+          const currentPlayer = players.find(p => p.id === tp.id);
+          
+          return {
+            ...tp,
+            totalScore: tp.totalScore + (currentPlayer?.totalScore || 0),
+            wins: tp.wins + (winnerId === tp.id ? 1 : 0),
+            dutchCount: tp.dutchCount + (currentPlayer?.stats?.dutchCount || 0),
+            // Update other stats as needed
+          };
+        })
+      });
     }
-  }, [currentTournament?.winner, showConfetti]);
-  
-  // Lancer l'animation de confetti après le rendu initial
-  useEffect(() => {
-    if (currentTournament?.winner && !showConfetti) {
-      setTimeout(() => setShowConfetti(true), 1000);
-    }
-  }, [currentTournament?.winner, showConfetti]);
-
-  const handleStartNewGame = () => {
-    navigate('/game');
-    toast.success('Nouvelle partie du tournoi lancée');
   };
   
-  const handleEndTournament = () => {
-    resetTournament();
+  const startNextGame = () => {
+    // Reset players for the next game
+    const resetPlayers = players.map(player => ({
+      ...player,
+      totalScore: 0,
+      rounds: []
+    }));
+    
+    setPlayers(resetPlayers);
+    setCurrentGame(prev => prev + 1);
+    setIsGameFinished(false);
+  };
+  
+  const goToHome = () => {
     navigate('/');
   };
   
-  const handleGoHome = () => {
-    navigate('/');
-  };
-  
-  const getCurrentProgress = () => {
-    if (!currentTournament) return 100;
-    return ((currentTournament.currentGame - 1) / currentTournament.totalGames) * 100;
-  };
-  
-  // Si aucun tournoi n'est actif et qu'il n'y a pas d'historique, rediriger vers la page d'accueil
-  if (!currentTournament && tournamentHistory.length === 0) {
-    return null;
-  }
-  
-  const standings = getTournamentStandings();
-  const tournament = currentTournament || tournamentHistory[tournamentHistory.length - 1];
-  const isFinished = !currentTournament?.isActive;
-  
-  return (
-    <div className="min-h-screen pb-24">
-      <div className="sticky top-0 z-40 bg-white/70 backdrop-blur-md border-b border-white/20 shadow-sm">
-        <div className="container px-4 py-3 flex justify-between items-center">
-          <div className="flex items-center gap-3">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={handleGoHome}
-              className="rounded-full hover:bg-gray-100/70"
+  if (tournamentFinished) {
+    return (
+      <div className="min-h-screen relative">
+        <AnimatedBackground variant="subtle" />
+        
+        <div className="container mx-auto px-4 py-8">
+          <div className="flex justify-between items-center mb-8">
+            <Button 
+              variant="outline"
+              onClick={goToHome}
+              className="flex items-center gap-2"
             >
-              <Home className="h-5 w-5" />
+              <ArrowLeft size={16} />
+              Retour à l'accueil
             </Button>
             
-            <h1 className="text-xl font-bold bg-gradient-to-r from-dutch-orange to-dutch-purple bg-clip-text text-transparent">
-              Tournoi: {tournament.name}
-            </h1>
+            <Button
+              onClick={() => setShowStats(!showStats)}
+              className="flex items-center gap-2"
+            >
+              {showStats ? <Trophy size={16} /> : <BarChart2 size={16} />}
+              {showStats ? 'Voir le podium' : 'Voir les statistiques'}
+            </Button>
           </div>
           
-          <div className="flex items-center gap-2">
-            <Badge variant="outline" className="bg-white/70">
-              <Calendar className="h-3 w-3 mr-1" />
-              Partie {isFinished ? tournament.totalGames : getCurrentGame() - 1}/{tournament.totalGames}
-            </Badge>
-          </div>
+          <Card className="mb-8 bg-white/80 backdrop-blur-sm border border-white/50">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Trophy className="h-5 w-5 text-dutch-orange" />
+                Tournoi terminé: {activeTournament?.name}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {showStats ? (
+                <div className="space-y-6">
+                  <h2 className="text-xl font-semibold">Statistiques du tournoi</h2>
+                  {/* Add tournament stats here */}
+                </div>
+              ) : (
+                <TournamentPodium 
+                  players={activeTournament?.players.map(p => ({
+                    id: p.id,
+                    name: p.name,
+                    score: p.totalScore,
+                    wins: p.wins,
+                    dutchCount: p.dutchCount
+                  })) || []}
+                />
+              )}
+            </CardContent>
+          </Card>
         </div>
       </div>
-      
-      <div className="container px-4 py-6">
-        <AnimatePresence>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
-            className="space-y-6"
-          >
-            {tournament && (
-              <>
-                <Card className="bg-white/80 backdrop-blur-md border border-white/40 rounded-3xl overflow-hidden">
-                  <CardHeader className="bg-gradient-to-r from-dutch-blue/10 to-dutch-purple/10 px-6 pb-3">
-                    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                      <div>
-                        <CardTitle className="text-xl md:text-2xl bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">
-                          {isFinished ? 'Résultats du tournoi' : 'Classement provisoire'}
-                        </CardTitle>
-                        <p className="text-sm text-gray-600">
-                          {tournament.totalGames} manches {isFinished ? 'terminées' : `- ${getRemainingGames()} restantes`}
-                        </p>
-                      </div>
-                      
-                      {!isFinished && (
-                        <div className="flex items-center">
-                          <div className="flex-grow mr-4">
-                            <div className="text-xs text-gray-500 mb-1 flex justify-between">
-                              <span>Progression</span>
-                              <span>{Math.round(getCurrentProgress())}%</span>
-                            </div>
-                            <Progress value={getCurrentProgress()} className="h-2" />
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </CardHeader>
-                  
-                  <CardContent className="p-4 md:p-6">
-                    <div className="space-y-8">
-                      <ProfCartouche 
-                        players={standings.map(p => p.currentPlayer || {
-                          id: p.id,
-                          name: p.name,
-                          totalScore: p.totalScore,
-                          rounds: [],
-                          stats: {
-                            bestRound: p.bestGameScore || 0,
-                            avgRound: p.avgScorePerGame,
-                            dutchCount: p.dutchCount,
-                            wins: p.wins
-                          }
-                        })} 
-                        roundNumber={isFinished ? tournament.totalGames : getCurrentGame() - 1}
-                        view="podium"
-                      />
-
-                      {/* Podium du tournoi */}
-                      <TournamentPodium players={standings} isFinished={isFinished} />
-                      
-                      {/* Classement détaillé */}
-                      <div className="mt-8 overflow-x-auto">
-                        <table className="w-full bg-white/70 rounded-xl overflow-hidden">
-                          <thead className="bg-dutch-blue/10 text-dutch-blue">
-                            <tr>
-                              <th className="px-4 py-3 text-left">Rang</th>
-                              <th className="px-4 py-3 text-left">Joueur</th>
-                              <th className="px-4 py-3 text-center">Score</th>
-                              <th className="px-4 py-3 text-center">Parties</th>
-                              <th className="px-4 py-3 text-center">Victoires</th>
-                              <th className="px-4 py-3 text-center">Dutch</th>
-                              <th className="px-4 py-3 text-center">Moy/partie</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {standings.map((player, index) => (
-                              <tr 
-                                key={player.id} 
-                                className={`border-b border-gray-100 ${index === 0 ? 'bg-yellow-50/50' : ''}`}
-                              >
-                                <td className="px-4 py-3">
-                                  <div className="flex items-center">
-                                    {index === 0 ? (
-                                      <Trophy className="h-5 w-5 text-dutch-yellow" />
-                                    ) : index === 1 ? (
-                                      <Medal className="h-5 w-5 text-dutch-purple" />
-                                    ) : index === 2 ? (
-                                      <Medal className="h-5 w-5 text-dutch-orange" />
-                                    ) : (
-                                      <span className="font-medium text-gray-500">{index + 1}</span>
-                                    )}
-                                  </div>
-                                </td>
-                                <td className="px-4 py-3 font-medium">
-                                  {player.name}
-                                  {tournament.winner === player.name && (
-                                    <Badge variant="default" className="ml-2 bg-dutch-yellow text-white">
-                                      Vainqueur
-                                    </Badge>
-                                  )}
-                                </td>
-                                <td className="px-4 py-3 text-center font-bold">{player.totalScore}</td>
-                                <td className="px-4 py-3 text-center">{player.gamesPlayed}</td>
-                                <td className="px-4 py-3 text-center">{player.wins}</td>
-                                <td className="px-4 py-3 text-center">{player.dutchCount}</td>
-                                <td className="px-4 py-3 text-center">
-                                  {player.avgScorePerGame.toFixed(1)}
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+    );
+  }
+  
+  if (isGameFinished) {
+    return (
+      <div className="min-h-screen relative">
+        <AnimatedBackground variant="subtle" />
+        
+        <div className="container mx-auto px-4 py-8">
+          <Card className="mb-8 bg-white/80 backdrop-blur-sm border border-white/50">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Award className="h-5 w-5 text-dutch-orange" />
+                Partie {currentGame} terminée
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="text-center">
+              <motion.div
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                className="p-6"
+              >
+                <h2 className="text-2xl font-bold mb-4">Résultats</h2>
                 
-                {!isFinished ? (
-                  <div className="fixed bottom-8 left-0 right-0 px-4 z-40">
-                    <div className="max-w-md mx-auto">
-                      <motion.div
-                        initial={{ y: 100, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        className="flex gap-3"
-                      >
-                        <Button 
-                          variant="outline" 
-                          className="flex-1 bg-white/80 backdrop-blur-sm border border-white/40 shadow-md"
-                          onClick={handleEndTournament}
-                        >
-                          Abandonner le tournoi
-                        </Button>
-                        <Button 
-                          className="flex-1 bg-gradient-to-r from-dutch-blue to-dutch-purple text-white shadow-md"
-                          onClick={handleStartNewGame}
-                        >
-                          <Trophy className="h-4 w-4 mr-2" />
-                          Jouer la partie suivante
-                        </Button>
-                      </motion.div>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="fixed bottom-8 left-0 right-0 px-4 z-40">
-                    <div className="max-w-md mx-auto">
-                      <motion.div
-                        initial={{ y: 100, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                      >
-                        <Button 
-                          className="w-full bg-gradient-to-r from-dutch-green to-dutch-blue text-white shadow-md"
-                          onClick={handleGoHome}
-                        >
-                          <Home className="h-4 w-4 mr-2" />
-                          Retour à l'accueil
-                        </Button>
-                      </motion.div>
-                    </div>
-                  </div>
-                )}
-              </>
-            )}
-          </motion.div>
-        </AnimatePresence>
+                <div className="space-y-4 mb-8">
+                  {players
+                    .sort((a, b) => b.totalScore - a.totalScore)
+                    .map((player, index) => (
+                      <div key={player.id} className="flex items-center justify-between bg-white/50 rounded-lg p-3 shadow-sm">
+                        <div className="flex items-center gap-3">
+                          <div className={`w-6 h-6 rounded-full flex items-center justify-center text-white font-bold ${index === 0 ? 'bg-dutch-orange' : 'bg-dutch-purple'}`}>
+                            {index + 1}
+                          </div>
+                          <span className="font-medium">{player.name}</span>
+                        </div>
+                        <span className="font-bold">{player.totalScore} pts</span>
+                      </div>
+                    ))}
+                </div>
+                
+                <Button 
+                  onClick={startNextGame}
+                  className="bg-dutch-blue text-white w-full py-6 rounded-xl"
+                >
+                  Commencer la partie {currentGame + 1}
+                </Button>
+              </motion.div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
+  }
+  
+  return (
+    <div className="min-h-screen relative">
+      <AnimatedBackground variant="subtle" />
+      
+      <div className="container mx-auto px-4 py-8">
+        <Card className="mb-4 bg-white/80 backdrop-blur-sm border border-white/50">
+          <CardHeader>
+            <div className="flex justify-between items-center">
+              <CardTitle className="flex items-center gap-2">
+                <Trophy className="h-5 w-5 text-dutch-orange" />
+                {activeTournament?.name} - Partie {currentGame}/{activeTournament?.totalGames}
+              </CardTitle>
+            </div>
+          </CardHeader>
+        </Card>
+        
+        <ScoreBoard 
+          players={players}
+          onAddRound={handleAddRound}
+          onEndGame={handleEndGame}
+          onUndoLastRound={() => {
+            // Implementation for undo last round
+            const updatedPlayers = players.map(player => {
+              const lastRound = player.rounds[player.rounds.length - 1];
+              return {
+                ...player,
+                rounds: player.rounds.slice(0, -1),
+                totalScore: player.totalScore - (lastRound?.score || 0),
+              };
+            });
+            setPlayers(updatedPlayers);
+          }}
+        />
       </div>
     </div>
   );

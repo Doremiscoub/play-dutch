@@ -1,171 +1,177 @@
 
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
 import { v4 as uuidv4 } from 'uuid';
 import { Tournament, TournamentPlayer, TournamentGame } from '@/types/tournament';
-import { Player, Game } from '@/types';
 
 interface TournamentState {
-  currentTournament: Tournament | null;
-  tournamentHistory: Tournament[];
-  createTournament: (name: string, playerNames: string[], totalGames: number) => Tournament;
-  updateTournamentWithGameResult: (game: Game) => void;
-  endCurrentTournament: () => void;
-  resetTournament: () => void;
-  getCurrentGame: () => number;
-  getRemainingGames: () => number;
-  getTournamentStandings: () => TournamentPlayer[];
+  tournaments: Tournament[];
+  activeTournament: Tournament | null;
+  
+  // Tournament Actions
+  createTournament: (name: string, playerNames: string[], totalGames: number) => string;
+  updateTournament: (id: string, updates: Partial<Tournament>) => void;
+  finishTournament: (id: string, updates: { players: TournamentPlayer[], winner: string }) => void;
+  setActiveTournament: (id: string) => void;
+  
+  // Tournament Game Actions
+  createTournamentGame: (tournamentId: string, gameNumber: number, data: { 
+    players: { id: string, name: string, score: number, isDutch: boolean }[],
+    winner: string,
+    winnerId: string
+  }) => string;
+  updateTournamentGame: (tournamentId: string, gameNumber: number, data: {
+    players: { id: string, name: string, score: number, isDutch: boolean }[],
+    winner: string,
+    winnerId: string
+  }) => void;
 }
 
-const useTournamentStore = create<TournamentState>()(
-  persist(
-    (set, get) => ({
-      currentTournament: null,
-      tournamentHistory: [],
-
-      createTournament: (name, playerNames, totalGames) => {
-        const players: TournamentPlayer[] = playerNames.map(playerName => ({
-          id: uuidv4(),
-          name: playerName,
-          totalScore: 0,
-          gamesPlayed: 0,
-          wins: 0,
-          dutchCount: 0,
-          avgScorePerGame: 0,
-          bestGameScore: null,
-          worstGameScore: null
-        }));
-
-        const tournament: Tournament = {
-          id: uuidv4(),
-          name,
-          createdAt: new Date(),
-          players,
-          currentGame: 1,
-          totalGames,
-          isActive: true
-        };
-
-        set({ currentTournament: tournament });
-        return tournament;
-      },
-
-      updateTournamentWithGameResult: (game: Game) => {
-        const { currentTournament } = get();
-        if (!currentTournament) return;
-
-        set(state => {
-          const tournamentGame: TournamentGame = {
-            id: uuidv4(),
-            tournamentId: currentTournament.id,
-            gameNumber: currentTournament.currentGame,
-            players: game.players,
-            date: game.date,
-            winner: game.winner
-          };
-
-          // Mettre à jour les statistiques des joueurs
-          const updatedPlayers = currentTournament.players.map(player => {
-            const gamePlayer = game.players.find(p => p.name === player.name);
-            if (!gamePlayer) return player;
-
-            const isWinner = game.winner === player.name;
-            const newTotalScore = player.totalScore + gamePlayer.score;
-            const newGamesPlayed = player.gamesPlayed + 1;
-            
-            // Mettre à jour les meilleures et pires scores
-            let bestScore = player.bestGameScore;
-            let worstScore = player.worstGameScore;
-            
-            if (bestScore === null || gamePlayer.score < bestScore) {
-              bestScore = gamePlayer.score;
-            }
-            
-            if (worstScore === null || gamePlayer.score > worstScore) {
-              worstScore = gamePlayer.score;
-            }
-
-            return {
-              ...player,
-              totalScore: newTotalScore,
-              gamesPlayed: newGamesPlayed,
-              wins: isWinner ? player.wins + 1 : player.wins,
-              dutchCount: gamePlayer.isDutch ? player.dutchCount + 1 : player.dutchCount,
-              avgScorePerGame: newTotalScore / newGamesPlayed,
-              bestGameScore: bestScore,
-              worstGameScore: worstScore
-            };
-          });
-
-          // Vérifier si le tournoi est terminé
-          const isLastGame = currentTournament.currentGame >= currentTournament.totalGames;
-          
-          // Déterminer le gagnant du tournoi
-          let winner;
-          if (isLastGame) {
-            const sortedPlayers = [...updatedPlayers].sort((a, b) => a.totalScore - b.totalScore);
-            winner = sortedPlayers[0].name;
+const useTournamentStore = create<TournamentState>((set, get) => ({
+  tournaments: [],
+  activeTournament: null,
+  
+  createTournament: (name, playerNames, totalGames) => {
+    const id = uuidv4();
+    const now = new Date();
+    
+    const players: TournamentPlayer[] = playerNames.map(name => ({
+      id: uuidv4(),
+      name,
+      totalScore: 0,
+      gamesPlayed: 0,
+      wins: 0,
+      dutchCount: 0,
+      avgScorePerGame: 0,
+      bestGameScore: null,
+      worstGameScore: null
+    }));
+    
+    const tournament: Tournament = {
+      id,
+      name,
+      createdAt: now,
+      players,
+      currentGame: 1,
+      totalGames,
+      isActive: true
+    };
+    
+    set(state => ({
+      tournaments: [...state.tournaments, tournament],
+      activeTournament: tournament
+    }));
+    
+    return id;
+  },
+  
+  updateTournament: (id, updates) => {
+    set(state => ({
+      tournaments: state.tournaments.map(t => 
+        t.id === id ? { ...t, ...updates } : t
+      ),
+      activeTournament: state.activeTournament?.id === id 
+        ? { ...state.activeTournament, ...updates }
+        : state.activeTournament
+    }));
+  },
+  
+  finishTournament: (id, { players, winner }) => {
+    set(state => ({
+      tournaments: state.tournaments.map(t => 
+        t.id === id ? { 
+          ...t, 
+          players, 
+          isActive: false,
+          winner
+        } : t
+      ),
+      activeTournament: state.activeTournament?.id === id 
+        ? { 
+            ...state.activeTournament, 
+            players, 
+            isActive: false,
+            winner
           }
-
+        : state.activeTournament
+    }));
+  },
+  
+  setActiveTournament: (id) => {
+    const tournament = get().tournaments.find(t => t.id === id);
+    if (tournament) {
+      set({ activeTournament: tournament });
+    }
+  },
+  
+  createTournamentGame: (tournamentId, gameNumber, data) => {
+    const gameId = uuidv4();
+    const now = new Date();
+    
+    const game: TournamentGame = {
+      id: gameId,
+      tournamentId,
+      gameNumber,
+      players: data.players.map(p => ({
+        id: p.id,
+        name: p.name,
+        score: p.score,
+        isDutch: p.isDutch
+      })),
+      date: now,
+      winner: data.winner
+    };
+    
+    set(state => {
+      // Find the tournament
+      const tournament = state.tournaments.find(t => t.id === tournamentId);
+      
+      if (tournament) {
+        // Update player stats based on game results
+        const updatedPlayers = tournament.players.map(player => {
+          const gamePlayer = data.players.find(p => p.id === player.id);
+          
+          if (!gamePlayer) return player;
+          
+          const isWinner = data.winnerId === player.id;
+          
           return {
-            currentTournament: {
-              ...currentTournament,
-              players: updatedPlayers,
-              currentGame: currentTournament.currentGame + 1,
-              isActive: !isLastGame,
-              winner
-            }
+            ...player,
+            gamesPlayed: player.gamesPlayed + 1,
+            wins: player.wins + (isWinner ? 1 : 0),
+            dutchCount: player.dutchCount + (gamePlayer.isDutch ? 1 : 0),
+            totalScore: player.totalScore + gamePlayer.score,
+            avgScorePerGame: (player.totalScore + gamePlayer.score) / (player.gamesPlayed + 1),
+            bestGameScore: player.bestGameScore !== null 
+              ? Math.max(player.bestGameScore, gamePlayer.score)
+              : gamePlayer.score,
+            worstGameScore: player.worstGameScore !== null 
+              ? Math.min(player.worstGameScore, gamePlayer.score)
+              : gamePlayer.score
           };
         });
-      },
-
-      endCurrentTournament: () => {
-        const { currentTournament } = get();
-        if (!currentTournament) return;
-
-        // Trier les joueurs par score (le plus bas gagne)
-        const sortedPlayers = [...currentTournament.players].sort((a, b) => a.totalScore - b.totalScore);
-        const winner = sortedPlayers[0].name;
-
-        set(state => ({
-          tournamentHistory: [
-            ...state.tournamentHistory, 
-            { 
-              ...currentTournament, 
-              isActive: false,
-              winner
-            }
-          ],
-          currentTournament: null
-        }));
-      },
-
-      resetTournament: () => {
-        set({ currentTournament: null });
-      },
-
-      getCurrentGame: () => {
-        const { currentTournament } = get();
-        return currentTournament ? currentTournament.currentGame : 0;
-      },
-
-      getRemainingGames: () => {
-        const { currentTournament } = get();
-        if (!currentTournament) return 0;
-        return Math.max(0, currentTournament.totalGames - (currentTournament.currentGame - 1));
-      },
-
-      getTournamentStandings: () => {
-        const { currentTournament } = get();
-        if (!currentTournament) return [];
         
-        return [...currentTournament.players].sort((a, b) => a.totalScore - b.totalScore);
+        // Update tournament with new player stats
+        return {
+          tournaments: state.tournaments.map(t => 
+            t.id === tournamentId ? { ...t, players: updatedPlayers } : t
+          ),
+          activeTournament: state.activeTournament?.id === tournamentId 
+            ? { ...state.activeTournament, players: updatedPlayers }
+            : state.activeTournament
+        };
       }
-    }),
-    {
-      name: 'dutch-tournament-storage'
-    }
-  )
-);
+      
+      return state;
+    });
+    
+    return gameId;
+  },
+  
+  updateTournamentGame: (tournamentId, gameNumber, data) => {
+    // Similar logic to createTournamentGame but updates existing game
+    // For this simple implementation, we'll reuse the createTournamentGame function
+    get().createTournamentGame(tournamentId, gameNumber, data);
+  }
+}));
 
 export default useTournamentStore;
