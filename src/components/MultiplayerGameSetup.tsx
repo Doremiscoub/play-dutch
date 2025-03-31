@@ -67,10 +67,10 @@ const MultiplayerGameSetup: React.FC<MultiplayerGameSetupProps> = ({
         transition={{ duration: 0.5 }}
       >
         {/* Background elements */}
-        <div className="absolute inset-0 bg-gradient-to-br from-ios-background/80 to-white/80 -z-10 rounded-3xl" />
+        <div className="absolute inset-0 bg-gradient-to-br from-dutch-background/80 to-white/80 -z-10 rounded-3xl" />
         
         <motion.div
-          className="absolute top-10 left-[10%] w-40 h-40 rounded-full bg-ios-blue/10 blur-3xl -z-5"
+          className="absolute top-10 left-[10%] w-40 h-40 rounded-full bg-dutch-blue/10 blur-3xl -z-5"
           animate={{ 
             scale: [1, 1.2, 1],
             opacity: [0.4, 0.6, 0.4],
@@ -83,7 +83,7 @@ const MultiplayerGameSetup: React.FC<MultiplayerGameSetupProps> = ({
         />
         
         <motion.div
-          className="absolute bottom-20 right-[5%] w-48 h-48 rounded-full bg-ios-orange/10 blur-3xl -z-5"
+          className="absolute bottom-20 right-[5%] w-48 h-48 rounded-full bg-dutch-orange/10 blur-3xl -z-5"
           animate={{ 
             scale: [1, 1.3, 1],
             opacity: [0.3, 0.5, 0.3],
@@ -95,7 +95,7 @@ const MultiplayerGameSetup: React.FC<MultiplayerGameSetupProps> = ({
           }}
         />
       
-        <h1 className="text-3xl font-bold text-center mb-6 bg-gradient-to-r from-ios-blue via-ios-purple to-ios-pink bg-clip-text text-transparent">
+        <h1 className="text-3xl font-bold text-center mb-6 bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-pink bg-clip-text text-transparent">
           Nouvelle Partie
         </h1>
 
@@ -108,14 +108,14 @@ const MultiplayerGameSetup: React.FC<MultiplayerGameSetupProps> = ({
           <TabsList className="grid grid-cols-2 mb-6 rounded-full border border-white/40 bg-white/50 backdrop-blur-md p-1 shadow-sm">
             <TabsTrigger 
               value="local" 
-              className="rounded-full data-[state=active]:bg-white data-[state=active]:shadow flex items-center space-x-2 py-2.5"
+              className="rounded-full data-[state=active]:bg-white data-[state=active]:shadow-md flex items-center space-x-2 py-2.5 text-dutch-blue data-[state=active]:text-dutch-blue data-[state=inactive]:text-dutch-blue/70"
             >
               <User className="w-4 h-4" />
               <span>Solo/Local</span>
             </TabsTrigger>
             <TabsTrigger 
               value="multiplayer" 
-              className="rounded-full data-[state=active]:bg-white data-[state=active]:shadow flex items-center space-x-2 py-2.5"
+              className="rounded-full data-[state=active]:bg-white data-[state=active]:shadow-md flex items-center space-x-2 py-2.5 text-dutch-purple data-[state=active]:text-dutch-purple data-[state=inactive]:text-dutch-purple/70"
             >
               <Users className="w-4 h-4" />
               <span>Multijoueur</span>
@@ -129,12 +129,12 @@ const MultiplayerGameSetup: React.FC<MultiplayerGameSetupProps> = ({
               transition={{ duration: 0.4 }}
             >
               <Card className="rounded-3xl border border-white/50 bg-white/70 backdrop-blur-md shadow-md hover:shadow-lg transition-all duration-300">
-                <CardHeader>
-                  <CardTitle className="text-xl font-semibold text-ios-blue flex items-center gap-2">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-xl font-semibold text-dutch-blue flex items-center gap-2">
                     <Gamepad2 className="h-5 w-5" />
                     Partie Locale
                   </CardTitle>
-                  <CardDescription>
+                  <CardDescription className="text-gray-600">
                     Configurez une partie locale où les joueurs partagent le même appareil
                   </CardDescription>
                 </CardHeader>
@@ -153,12 +153,12 @@ const MultiplayerGameSetup: React.FC<MultiplayerGameSetupProps> = ({
             >
               {isSignedIn ? (
                 <Card className="rounded-3xl border border-white/50 bg-white/70 backdrop-blur-md shadow-md hover:shadow-lg transition-all duration-300">
-                  <CardHeader>
-                    <CardTitle className="text-xl font-semibold text-ios-purple flex items-center gap-2">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-xl font-semibold text-dutch-purple flex items-center gap-2">
                       <Globe className="h-5 w-5" />
                       Partie Multijoueur
                     </CardTitle>
-                    <CardDescription>
+                    <CardDescription className="text-gray-600">
                       Créez une partie en ligne pour jouer avec vos amis
                     </CardDescription>
                   </CardHeader>
@@ -172,14 +172,17 @@ const MultiplayerGameSetup: React.FC<MultiplayerGameSetupProps> = ({
                 </Card>
               ) : (
                 <Card className="rounded-3xl border border-white/50 bg-white/70 backdrop-blur-md shadow-md hover:shadow-lg transition-all duration-300">
-                  <CardHeader>
-                    <CardTitle className="text-xl font-semibold text-ios-purple">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-xl font-semibold text-dutch-purple">
                       Connectez-vous pour jouer en multijoueur
                     </CardTitle>
+                    <CardDescription className="text-gray-600">
+                      Le mode multijoueur nécessite une connexion pour inviter vos amis
+                    </CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="text-center py-8">
-                      <Share2 className="h-16 w-16 mx-auto text-ios-purple/50 mb-4" />
+                      <Share2 className="h-16 w-16 mx-auto text-dutch-purple/50 mb-4" />
                       <p className="text-gray-600 mb-4">
                         Le mode multijoueur nécessite une connexion pour inviter vos amis et gérer vos parties.
                       </p>
