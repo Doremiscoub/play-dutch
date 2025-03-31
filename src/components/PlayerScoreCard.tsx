@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Player } from '@/types';
@@ -106,7 +105,6 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
               <Progress 
                 value={progressPercentage} 
                 className="h-2.5 bg-gray-100/50"
-                // Using a className pattern that the Progress component will handle internally
                 indicatorClassName={`bg-gradient-to-r ${styles.progress}`}
               />
               <motion.div 

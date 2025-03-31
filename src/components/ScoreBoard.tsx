@@ -75,7 +75,6 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
   
   return (
     <div className="min-h-screen pb-20">
-      {/* En-tête */}
       <div className="sticky top-0 z-40 bg-white/70 backdrop-blur-md border-b border-white/20 shadow-sm">
         <div className="container px-4 py-3 flex justify-between items-center">
           <div className="flex items-center gap-3">
@@ -143,7 +142,6 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                     player={player}
                     position={index + 1}
                     isWinner={index === 0}
-                    totalPlayers={players.length}
                   />
                 </motion.div>
               ))}
@@ -196,14 +194,12 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
         )}
       </div>
       
-      {/* Boutons d'action fixes */}
       <GameActionButtons
         onUndoLastRound={onUndoLastRound}
         onEndGame={onEndGame}
         onAddRound={handleOpenModal}
       />
       
-      {/* Modal nouvelle manche */}
       <AnimatePresence>
         {showModal && (
           <NewRoundModal
@@ -219,7 +215,6 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
         )}
       </AnimatePresence>
       
-      {/* Dialog de confirmation de fin de partie */}
       <Dialog open={showGameEndConfirmation} onOpenChange={onCancelEndGame}>
         <DialogContent className="bg-white/90 backdrop-blur-md border border-white/40 rounded-3xl shadow-xl">
           <DialogHeader>
@@ -250,7 +245,6 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
         </DialogContent>
       </Dialog>
       
-      {/* Sidebar des statistiques */}
       <Sheet open={showStats} onOpenChange={setShowStats}>
         <SheetContent 
           className="bg-white/90 backdrop-blur-md border-l border-white/30 w-full max-w-md"
