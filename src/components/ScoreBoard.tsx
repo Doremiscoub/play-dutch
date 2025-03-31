@@ -70,155 +70,174 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
   };
   
   return (
-    <div className="w-full max-w-4xl mx-auto p-4 pb-24 md:pb-4 relative">
-      {/* Animated background similar to LocalGameSetup */}
+    <div className="min-h-screen w-full relative pb-24 md:pb-4">
+      {/* Animated background for full width */}
       <div className="fixed inset-0 -z-10">
-        <AnimatedBackground variant="subtle" />
+        <AnimatedBackground variant="default" />
       </div>
       
-      <AnimatePresence>
-        {showNewRoundModal && (
-          <NewRoundModal 
-            players={players}
-            onClose={handleCloseNewRoundModal}
-            onSave={handleAddRound}
-          />
-        )}
-      </AnimatePresence>
-      
-      <motion.div 
-        className="mb-6 relative"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
-      >
-        <div className="flex items-center justify-between mb-2 bg-white/70 backdrop-blur-md shadow-sm rounded-xl p-3 border border-white/30">
-          <div className="flex items-center">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="rounded-full bg-white/80 hover:bg-white/90 backdrop-blur-sm border border-white/30 shadow-sm mr-3"
-              onClick={() => navigate('/')}
-            >
-              <Home className="h-5 w-5 text-dutch-blue" />
-            </Button>
-            
-            <h1 className="text-xl font-bold bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">
-              Score
-            </h1>
-          </div>
-          
-          <div className="flex items-center gap-3">
-            <GameSettings 
-              soundEnabled={soundEnabled} 
-              setSoundEnabled={handleToggleSound} 
+      <div className="max-w-4xl mx-auto px-4">
+        <AnimatePresence>
+          {showNewRoundModal && (
+            <NewRoundModal 
+              players={players}
+              onClose={handleCloseNewRoundModal}
+              onSave={handleAddRound}
             />
-          </div>
-        </div>
+          )}
+        </AnimatePresence>
         
         <motion.div 
-          className="flex items-center justify-between mb-4 px-2"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
-        >
-          <div className="flex items-center bg-white/60 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-sm border border-white/20">
-            <Clock className="h-4 w-4 text-dutch-blue mr-2" />
-            <span className="text-sm text-gray-700 font-medium">
-              {totalRounds} {totalRounds <= 1 ? 'manche' : 'manches'}
-            </span>
-          </div>
-          
-          <AnimatePresence>
-            {totalRounds > 0 && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-              >
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  className="px-3 py-1.5 rounded-full bg-white/60 hover:bg-white/70 backdrop-blur-sm border border-white/30 shadow-sm"
-                  onClick={handleUndoLastRound}
-                >
-                  <RotateCcw className="h-3.5 w-3.5 mr-1.5 text-dutch-blue" />
-                  <span className="text-xs text-gray-700 font-medium">Annuler dernière manche</span>
-                </Button>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </motion.div>
-        
-        <motion.div 
-          className="flex items-center justify-between mb-4"
-          initial={{ opacity: 0, y: 10 }}
+          className="mb-6 relative"
+          initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
+          transition={{ duration: 0.3 }}
         >
-          <div className="px-2 w-full">
-            <ToggleGroup 
-              type="single" 
-              value={view} 
-              onValueChange={(value) => value && setView(value as 'podium' | 'table')} 
-              className="w-full bg-white/60 backdrop-blur-sm rounded-xl p-1.5 shadow-sm border border-white/20"
-            >
-              <ToggleGroupItem 
-                value="podium" 
-                className={cn(
-                  "flex-1 data-[state=on]:bg-white data-[state=on]:shadow-sm rounded-lg text-sm py-2 font-medium",
-                  view === "podium" ? "text-dutch-blue" : "text-gray-600"
-                )}
+          <div className="flex items-center justify-between mb-2 bg-white/70 backdrop-blur-md shadow-sm rounded-xl p-3 border border-white/30">
+            <div className="flex items-center">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="rounded-full bg-white/80 hover:bg-white/90 backdrop-blur-sm border border-white/30 shadow-sm mr-3"
+                onClick={() => navigate('/')}
               >
-                <Medal className="h-4 w-4 mr-1.5" />
-                Podium
-              </ToggleGroupItem>
-              <ToggleGroupItem 
-                value="table" 
-                className={cn(
-                  "flex-1 data-[state=on]:bg-white data-[state=on]:shadow-sm rounded-lg text-sm py-2 font-medium",
-                  view === "table" ? "text-dutch-blue" : "text-gray-600"
-                )}
-              >
-                <TableIcon className="h-4 w-4 mr-1.5" />
-                Tableau
-              </ToggleGroupItem>
-            </ToggleGroup>
+                <Home className="h-5 w-5 text-dutch-blue" />
+              </Button>
+              
+              <h1 className="text-xl font-bold bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">
+                Score
+              </h1>
+            </div>
+            
+            <div className="flex items-center gap-3">
+              {isSignedIn && user && (
+                <Avatar className="h-9 w-9 border-2 border-white/50 bg-white/50 backdrop-blur-sm hover:shadow-md transition-all">
+                  {user.hasImage ? (
+                    <img src={user.imageUrl} alt={user.fullName || "User"} className="rounded-full" />
+                  ) : (
+                    <AvatarFallback className="bg-gradient-to-br from-dutch-blue to-dutch-purple text-white text-xs">
+                      {user.fullName?.split(' ').map(name => name[0]).join('') || user.username?.substring(0, 2) || "U"}
+                    </AvatarFallback>
+                  )}
+                </Avatar>
+              )}
+              
+              <GameSettings 
+                soundEnabled={soundEnabled} 
+                setSoundEnabled={handleToggleSound} 
+              />
+            </div>
           </div>
-        </motion.div>
-      </motion.div>
-      
-      <div className="dutch-card backdrop-blur-md border border-white/40 bg-white/80 hover:shadow-lg transition-all duration-300 rounded-2xl overflow-hidden p-6">
-        {view === 'podium' ? (
-          <div>
-            <motion.div 
-              className="space-y-4 mb-6"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ staggerChildren: 0.1 }}
-            >
-              {sortedPlayers.map((player, index) => (
-                <PlayerScoreCard 
-                  key={player.id}
-                  player={player}
-                  position={index + 1}
-                  showRounds={true}
-                />
-              ))}
-            </motion.div>
-          </div>
-        ) : (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
+          
+          <motion.div 
+            className="flex items-center justify-between mb-4 px-2"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
           >
-            <ScoreTableView 
-              players={players} 
-              roundHistory={roundHistory}
-            />
+            <div className="flex items-center bg-white/60 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-sm border border-white/20">
+              <Clock className="h-4 w-4 text-dutch-blue mr-2" />
+              <span className="text-sm text-gray-700 font-medium">
+                {totalRounds} {totalRounds <= 1 ? 'manche' : 'manches'}
+              </span>
+            </div>
+            
+            <AnimatePresence>
+              {totalRounds > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                >
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="px-3 py-1.5 rounded-full bg-white/60 hover:bg-white/70 backdrop-blur-sm border border-white/30 shadow-sm"
+                    onClick={handleUndoLastRound}
+                  >
+                    <RotateCcw className="h-3.5 w-3.5 mr-1.5 text-dutch-blue" />
+                    <span className="text-xs text-gray-700 font-medium">Annuler dernière manche</span>
+                  </Button>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </motion.div>
-        )}
+          
+          <motion.div 
+            className="flex items-center justify-between mb-4"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            <div className="px-2 w-full">
+              <ToggleGroup 
+                type="single" 
+                value={view} 
+                onValueChange={(value) => value && setView(value as 'podium' | 'table')} 
+                className="w-full bg-white/60 backdrop-blur-sm rounded-xl p-1.5 shadow-sm border border-white/20"
+              >
+                <ToggleGroupItem 
+                  value="podium" 
+                  className={cn(
+                    "flex-1 data-[state=on]:bg-white data-[state=on]:shadow-sm rounded-lg text-sm py-2 font-medium",
+                    view === "podium" ? "text-dutch-blue" : "text-gray-600"
+                  )}
+                >
+                  <Medal className="h-4 w-4 mr-1.5" />
+                  Podium
+                </ToggleGroupItem>
+                <ToggleGroupItem 
+                  value="table" 
+                  className={cn(
+                    "flex-1 data-[state=on]:bg-white data-[state=on]:shadow-sm rounded-lg text-sm py-2 font-medium",
+                    view === "table" ? "text-dutch-blue" : "text-gray-600"
+                  )}
+                >
+                  <TableIcon className="h-4 w-4 mr-1.5" />
+                  Tableau
+                </ToggleGroupItem>
+              </ToggleGroup>
+            </div>
+          </motion.div>
+        </motion.div>
+        
+        <motion.div 
+          className="dutch-card backdrop-blur-md border border-white/40 bg-white/80 hover:shadow-lg transition-all duration-300 rounded-2xl overflow-hidden p-6"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          {view === 'podium' ? (
+            <div>
+              <motion.div 
+                className="space-y-4 mb-6"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ staggerChildren: 0.1 }}
+              >
+                {sortedPlayers.map((player, index) => (
+                  <PlayerScoreCard 
+                    key={player.id}
+                    player={player}
+                    position={index + 1}
+                    showRounds={true}
+                  />
+                ))}
+              </motion.div>
+            </div>
+          ) : (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <ScoreTableView 
+                players={players} 
+                roundHistory={roundHistory}
+              />
+            </motion.div>
+          )}
+        </motion.div>
       </div>
       
       {/* Alert Dialog for game end confirmation */}
