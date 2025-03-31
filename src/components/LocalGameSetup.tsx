@@ -2,9 +2,8 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Plus, Minus, Play, User, Gamepad2 } from 'lucide-react';
+import { Plus, Minus, Play, Clock, Users, LockIcon } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { toast } from 'sonner';
 import AnimatedBackground from './AnimatedBackground';
 
 interface LocalGameSetupProps {
@@ -56,14 +55,11 @@ const LocalGameSetup: React.FC<LocalGameSetupProps> = ({ onStartGame }) => {
       </div>
       
       <motion.div 
-        className="w-full max-w-md mx-auto p-6 relative z-10 pb-24"
+        className="w-full max-w-md mx-auto p-6 relative z-10 pb-40"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        {/* Background elements similaires à la page d'accueil */}
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-100/60 to-gray-200/60 backdrop-blur-sm -z-10 rounded-3xl" />
-        
         <motion.h1 
           className="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-pink bg-clip-text text-transparent"
           initial={{ y: -20, opacity: 0 }}
@@ -72,6 +68,62 @@ const LocalGameSetup: React.FC<LocalGameSetupProps> = ({ onStartGame }) => {
         >
           Nouvelle Partie
         </motion.h1>
+        
+        {/* Mode de jeu - avec les options multijoueur grisées */}
+        <motion.div 
+          className="dutch-card mb-8 backdrop-blur-md border border-white/40 bg-white/80 hover:shadow-lg transition-all duration-300 rounded-2xl overflow-hidden p-6"
+          initial={{ scale: 0.95, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ ...transitionProps, delay: 0.1 }}
+          whileHover={{ y: -3, boxShadow: "0 15px 30px rgba(0,0,0,0.1)" }}
+        >
+          <h2 className="text-xl font-semibold mb-4 text-dutch-blue">Mode de jeu</h2>
+          
+          <div className="space-y-3">
+            {/* Mode local */}
+            <motion.div 
+              className="p-3 bg-dutch-blue/10 rounded-xl border border-dutch-blue/30 flex items-center justify-between"
+              whileHover={{ scale: 1.02 }}
+            >
+              <div className="flex items-center gap-2">
+                <div className="bg-dutch-blue/20 p-2 rounded-lg">
+                  <Play className="h-5 w-5 text-dutch-blue" />
+                </div>
+                <div>
+                  <p className="font-medium text-dutch-blue">Local</p>
+                  <p className="text-xs text-gray-600">Sur cet appareil</p>
+                </div>
+              </div>
+              <div className="bg-dutch-blue/20 px-2 py-1 rounded text-xs font-medium text-dutch-blue">
+                Actif
+              </div>
+            </motion.div>
+            
+            {/* Mode multijoueur (grisé) */}
+            <motion.div 
+              className="p-3 bg-gray-100 rounded-xl border border-gray-200 flex items-center justify-between opacity-60"
+            >
+              <div className="flex items-center gap-2">
+                <div className="bg-gray-200 p-2 rounded-lg">
+                  <Users className="h-5 w-5 text-gray-500" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-1">
+                    <p className="font-medium text-gray-500">Multijoueur</p>
+                    <div className="bg-gray-200 px-1.5 py-0.5 rounded text-[10px] font-medium text-gray-500 flex items-center">
+                      <Clock className="h-3 w-3 mr-0.5" />
+                      À venir
+                    </div>
+                  </div>
+                  <p className="text-xs text-gray-500">Sur plusieurs appareils</p>
+                </div>
+              </div>
+              <div>
+                <LockIcon className="h-4 w-4 text-gray-400" />
+              </div>
+            </motion.div>
+          </div>
+        </motion.div>
         
         <motion.div 
           className="dutch-card mb-8 backdrop-blur-md border border-white/40 bg-white/80 hover:shadow-lg transition-all duration-300 rounded-2xl overflow-hidden p-6"
@@ -86,8 +138,6 @@ const LocalGameSetup: React.FC<LocalGameSetupProps> = ({ onStartGame }) => {
               <Button 
                 variant="dutch-glass" 
                 size="icon" 
-                glassmorphism
-                elevated
                 onClick={() => handleNumPlayersChange(false)}
                 disabled={numPlayers <= 2}
                 className="border border-white/40 shadow-md"
@@ -107,9 +157,7 @@ const LocalGameSetup: React.FC<LocalGameSetupProps> = ({ onStartGame }) => {
             <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
               <Button 
                 variant="dutch-glass" 
-                size="icon"
-                glassmorphism
-                elevated
+                size="icon" 
                 onClick={() => handleNumPlayersChange(true)}
                 disabled={numPlayers >= 10}
                 className="border border-white/40 shadow-md"
@@ -160,9 +208,9 @@ const LocalGameSetup: React.FC<LocalGameSetupProps> = ({ onStartGame }) => {
         </motion.div>
       </motion.div>
       
-      {/* Bouton Commencer flottant - moved up to avoid wave overlap */}
+      {/* Bouton Commencer flottant */}
       <motion.div
-        className="fixed left-0 right-0 bottom-10 flex justify-center z-50 px-6"
+        className="fixed left-0 right-0 bottom-8 flex justify-center z-50 px-6"
         initial={{ y: 100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.5, type: "spring", stiffness: 260, damping: 20 }}
@@ -176,9 +224,6 @@ const LocalGameSetup: React.FC<LocalGameSetupProps> = ({ onStartGame }) => {
             onClick={handleStartGame}
             variant="floating"
             size="game-action"
-            glassmorphism
-            elevated
-            animated
             className="w-full shadow-lg transition-all relative overflow-hidden rounded-2xl border border-white/20 backdrop-blur-md bg-gradient-to-r from-dutch-blue/90 via-dutch-purple/90 to-dutch-blue/90"
           >
             <motion.div 

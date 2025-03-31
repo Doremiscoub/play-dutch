@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Check, AlertTriangle, Crown, Gamepad } from 'lucide-react';
@@ -141,6 +142,10 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
       }
     }
   };
+  
+  if (!players || players.length === 0) {
+    return null;
+  }
   
   return (
     <motion.div

@@ -104,6 +104,11 @@ const GamePage: React.FC = () => {
   };
 
   const handleAddRound = (scores: number[], dutchPlayerId?: string) => {
+    if (!players || players.length === 0 || scores.length !== players.length) {
+      toast.error('Erreur: impossible d\'ajouter la manche.');
+      return;
+    }
+    
     setRoundHistory(prev => [...prev, { scores, dutchPlayerId }]);
     
     setPlayers(prevPlayers => {
@@ -261,6 +266,14 @@ const GamePage: React.FC = () => {
             exit={{ opacity: 0 }}
           >
             <LocalGameSetup onStartGame={handleStartGame} />
+            
+            <div className="fixed bottom-20 left-0 right-0 flex justify-center p-4">
+              <div className="bg-white/80 backdrop-blur-md border border-dutch-purple/20 rounded-xl p-3 shadow-md max-w-md">
+                <p className="text-sm text-center text-dutch-purple/90">
+                  <span className="font-semibold">À venir :</span> Mode multijoueur, connexion multi-appareils, et plus encore !
+                </p>
+              </div>
+            </div>
           </motion.div>
         ) : (
           <motion.div

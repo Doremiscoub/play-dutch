@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Player, ScoreBoardProps } from '@/types';
 import NewRoundModal from './NewRoundModal';
@@ -33,12 +34,11 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
   showGameEndConfirmation,
   onConfirmEndGame,
   onCancelEndGame,
-  isMultiplayer
+  isMultiplayer = false
 }) => {
   const [isNewRoundModalOpen, setIsNewRoundModalOpen] = useState(false);
   const [scores, setScores] = useState<number[]>([]);
   const [dutchPlayerId, setDutchPlayerId] = useState<string | undefined>(undefined);
-  const [isEndingGame, setIsEndingGame] = useState(false);
   const newRoundModalRef = useRef<HTMLDialogElement>(null);
 
   const handleClosePodium = () => {
@@ -46,6 +46,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
   };
 
   useEffect(() => {
+    // Ne pas ouvrir automatiquement la modale lors du montage du composant
     if (isNewRoundModalOpen && newRoundModalRef.current) {
       newRoundModalRef.current.showModal();
     } else if (newRoundModalRef.current) {
@@ -113,7 +114,9 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
               </TabsContent>
             </Tabs>
             
-            <AICommentator players={players} roundHistory={roundHistory} className="mb-4" />
+            {players && players.length > 0 && (
+              <AICommentator players={players} roundHistory={roundHistory} className="mb-4" />
+            )}
             
             <div className="grid grid-cols-2 gap-4">
               <Button 
@@ -206,7 +209,9 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                       <ScoreTableView players={players} roundHistory={roundHistory} />
                     </div>
                     <div className="col-span-6">
-                      <AICommentator players={players} roundHistory={roundHistory} className="h-full" />
+                      {players && players.length > 0 && (
+                        <AICommentator players={players} roundHistory={roundHistory} className="h-full" />
+                      )}
                     </div>
                     <div className="col-span-6">
                       <FifaStyleStats players={players} />
@@ -275,16 +280,18 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
           </div>
         )}
         
-        <NewRoundModal
-          players={players}
-          onClose={handleCloseModal}
-          onAddRound={handleAddRound}
-          setScores={setScores}
-          setDutchPlayerId={setDutchPlayerId}
-          scores={scores}
-          dutchPlayerId={dutchPlayerId}
-          modalRef={newRoundModalRef}
-        />
+        {isNewRoundModalOpen && (
+          <NewRoundModal
+            players={players}
+            onClose={handleCloseModal}
+            onAddRound={handleAddRound}
+            setScores={setScores}
+            setDutchPlayerId={setDutchPlayerId}
+            scores={scores}
+            dutchPlayerId={dutchPlayerId}
+            modalRef={newRoundModalRef}
+          />
+        )}
       </div>
     </div>
   );
@@ -295,6 +302,10 @@ interface FifaStyleStatsProps {
 }
 
 const FifaStyleStats: React.FC<FifaStyleStatsProps> = ({ players }) => {
+  if (!players || players.length === 0) {
+    return <div className="p-4 text-center">Aucune donnée disponible</div>;
+  }
+  
   const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
   
   const bestPlayer = sortedPlayers[0];
