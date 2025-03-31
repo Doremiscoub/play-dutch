@@ -355,6 +355,54 @@ export const getGamePlayerStats = (gameId: string) => {
   });
 };
 
+/**
+ * Generate a shareable link for a game
+ */
+export const generateGameLink = (gameId: string): string => {
+  const baseURL = window.location.origin;
+  return `${baseURL}/game?join=${gameId}`;
+};
+
+/**
+ * Share a game invitation using the Web Share API if available
+ */
+export const shareGameInvitation = async (gameId: string, hostName: string): Promise<boolean> => {
+  const link = generateGameLink(gameId);
+  const shareData = {
+    title: 'Dutch Blitz - Invitation',
+    text: `${hostName} t'invite à rejoindre une partie de Dutch Blitz! Code: ${gameId}`,
+    url: link
+  };
+
+  if (navigator.share && navigator.canShare(shareData)) {
+    try {
+      await navigator.share(shareData);
+      return true;
+    } catch (error) {
+      console.error('Error sharing:', error);
+      return false;
+    }
+  }
+  
+  return false;
+};
+
+/**
+ * Update game state with new scores, etc.
+ */
+export const updateGameState = (gameId: string, gameState: any): boolean => {
+  const game = activeGames[gameId];
+  
+  if (!game) {
+    return false;
+  }
+  
+  game.gameState = gameState;
+  game.lastActivity = new Date();
+  
+  return true;
+};
+
 // Setup automatic cleanup of disconnected players
 const cleanupDisconnectedPlayers = () => {
   const now = new Date();

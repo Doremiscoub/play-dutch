@@ -78,19 +78,19 @@ const TableHead = React.forwardRef<
   <th
     ref={ref}
     className={cn(
-      "h-10 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0",
-      onSort && "cursor-pointer select-none",
+      "h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0",
+      onSort && "cursor-pointer select-none hover:bg-muted/30 transition-colors duration-200",
       className
     )}
     onClick={onSort}
     {...props}
   >
     {onSort ? (
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-1.5">
         <span>{children}</span>
-        {sortDirection === null && <ArrowUpDown className="h-3 w-3 opacity-50" />}
-        {sortDirection === 'asc' && <ArrowUp className="h-3 w-3" />}
-        {sortDirection === 'desc' && <ArrowDown className="h-3 w-3" />}
+        {sortDirection === null && <ArrowUpDown className="h-3.5 w-3.5 opacity-50" />}
+        {sortDirection === 'asc' && <ArrowUp className="h-3.5 w-3.5 text-dutch-blue" />}
+        {sortDirection === 'desc' && <ArrowDown className="h-3.5 w-3.5 text-dutch-blue" />}
       </div>
     ) : (
       children

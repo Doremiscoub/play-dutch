@@ -30,20 +30,37 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
   // Calculate progress percentage (max score is 100)
   const progressPercentage = Math.min(player.totalScore, 100);
   
-  // Determine color based on position
-  const positionColors = [
-    'bg-gradient-to-r from-dutch-blue to-dutch-purple text-white', // 1st place
-    'bg-gradient-to-r from-dutch-purple to-dutch-pink text-white', // 2nd place
-    'bg-gradient-to-r from-dutch-orange to-dutch-pink text-white', // 3rd place
-  ];
+  // Determine position-based styling
+  const getPositionStyles = () => {
+    switch(position) {
+      case 1:
+        return {
+          card: 'border-2 border-dutch-yellow shadow-md shadow-dutch-yellow/10 bg-gradient-to-r from-dutch-blue/10 to-dutch-purple/10',
+          badge: 'bg-gradient-to-r from-dutch-blue to-dutch-purple text-white',
+          progress: 'from-dutch-blue to-dutch-purple'
+        };
+      case 2:
+        return {
+          card: 'border border-dutch-purple/30 shadow-sm bg-dutch-purple/5',
+          badge: 'bg-gradient-to-r from-dutch-purple to-dutch-pink text-white',
+          progress: 'from-dutch-purple to-dutch-pink'
+        };
+      case 3:
+        return {
+          card: 'border border-dutch-orange/30 shadow-sm bg-dutch-orange/5',
+          badge: 'bg-gradient-to-r from-dutch-orange to-dutch-pink text-white',
+          progress: 'from-dutch-orange to-dutch-pink'
+        };
+      default:
+        return {
+          card: 'bg-white/60 backdrop-blur-sm border border-white/20',
+          badge: 'bg-gradient-to-r from-gray-200 to-gray-300 text-gray-700',
+          progress: 'from-gray-300 to-gray-400'
+        };
+    }
+  };
   
-  const positionColor = position <= 3 
-    ? positionColors[position - 1] 
-    : 'bg-gradient-to-r from-gray-200 to-gray-300 text-gray-700';
-  
-  const cardClasses = isWinner
-    ? 'border-2 border-dutch-yellow bg-gradient-to-r from-dutch-purple/10 to-dutch-blue/10 backdrop-blur-sm'
-    : 'bg-white/60 backdrop-blur-sm border border-white/20';
+  const styles = getPositionStyles();
 
   // Determine if this is the last round score
   const isLastRoundHighScore = lastRoundScore !== undefined && 
@@ -58,19 +75,19 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
   return (
     <motion.div 
       className={cn(
-        "rounded-3xl p-5 shadow-sm transition-all hover:shadow-md",
-        cardClasses,
+        "rounded-2xl p-5 transition-all backdrop-blur-sm",
+        styles.card,
         `data-theme-${currentTheme}`
       )}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: position * 0.05 }}
       layout
-      whileHover={{ y: -2, boxShadow: "0 10px 25px -5px rgba(0,0,0,0.05)" }}
+      whileHover={{ y: -3, boxShadow: "0 12px 25px -5px rgba(0,0,0,0.08)" }}
     >
       <div className="flex items-center gap-3">
-        <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-bold ${positionColor} shadow-md`}>
-          {isWinner ? <Trophy className="h-4 w-4" aria-hidden="true" /> : position}
+        <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-bold ${styles.badge} shadow-md`}>
+          {isWinner || position === 1 ? <Trophy className="h-4 w-4" aria-hidden="true" /> : position}
         </div>
         
         <div className="flex-grow overflow-hidden">
@@ -93,10 +110,11 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
               <Progress 
                 value={progressPercentage} 
                 className="h-2.5 bg-gray-100/50"
+                indicatorClassName={`bg-gradient-to-r ${styles.progress}`}
               />
               <motion.div 
-                className="absolute bottom-0 h-2.5 rounded-full bg-gradient-to-r from-dutch-blue/20 to-dutch-purple/20 blur-sm w-full"
-                animate={{ opacity: [0.3, 0.6, 0.3] }}
+                className={`absolute bottom-0 h-2.5 rounded-full bg-gradient-to-r ${styles.progress} blur-sm w-full opacity-30`}
+                animate={{ opacity: [0.2, 0.5, 0.2] }}
                 transition={{ duration: 2, repeat: Infinity }}
               />
             </div>
@@ -132,7 +150,7 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
                 </motion.span>
               )}
               {stats.bestRound && (
-                <span title="Meilleur score">Min: {stats.bestRound}</span>
+                <span title="Meilleur score" className="text-green-600">Min: {stats.bestRound}</span>
               )}
               {hasImprovement && (
                 <span className="text-green-600" title="Amélioration">↑ {Math.abs(stats.improvementRate).toFixed(1)}</span>
