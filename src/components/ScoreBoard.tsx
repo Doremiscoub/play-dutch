@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { 
-  Plus, Trophy, BarChart3, Flag, Home, RotateCcw, Clock, 
-  LineChart, TableIcon, Medal, ArrowRight, Check, X, PlusCircle
+  Plus, Flag, BarChart3, Home, RotateCcw, Clock, 
+  LineChart, TableIcon, Medal, PlusCircle
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Player, ScoreBoardProps } from '@/types';
@@ -69,12 +69,6 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
     toast.success(newSetting ? 'Sons activés' : 'Sons désactivés');
   };
   
-  const handleClosePodium = () => {
-    setShowPodium(false);
-  };
-  
-  const shouldShowPodiumButton = totalRounds > 0;
-  
   return (
     <div className="w-full max-w-4xl mx-auto p-4 pb-24 md:pb-4">
       <AnimatePresence>
@@ -114,22 +108,6 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
               soundEnabled={soundEnabled} 
               setSoundEnabled={handleToggleSound} 
             />
-            
-            {isSignedIn && user && (
-              <Avatar className="h-10 w-10 border-2 border-white/50 shadow-md hover:border-white/70">
-                {user.hasImage ? (
-                  <img 
-                    src={user.imageUrl} 
-                    alt={user.fullName || 'Utilisateur'} 
-                    className="h-full w-full rounded-full object-cover"
-                  />
-                ) : (
-                  <AvatarFallback className="bg-gradient-to-br from-dutch-blue to-dutch-purple text-white">
-                    {user.firstName?.charAt(0) || user.username?.charAt(0) || '?'}
-                  </AvatarFallback>
-                )}
-              </Avatar>
-            )}
           </div>
         </div>
         
@@ -227,7 +205,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
             {showPodium && (
               <PodiumView 
                 players={sortedPlayers.slice(0, 3)}
-                onClose={handleClosePodium}
+                onClose={() => setShowPodium(false)}
                 isMultiplayer={isMultiplayer}
               />
             )}
@@ -340,21 +318,6 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
             </DialogContent>
           </Dialog>
         </motion.div>
-        
-        {/* Show Podium Button */}
-        {shouldShowPodiumButton && (
-          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            <Button 
-              onClick={() => setShowPodium(true)}
-              size="icon"
-              variant="game-control"
-              className="shadow-lg"
-              aria-label="Afficher le podium"
-            >
-              <Trophy className="h-5 w-5" />
-            </Button>
-          </motion.div>
-        )}
         
         {/* New Round Button */}
         <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>

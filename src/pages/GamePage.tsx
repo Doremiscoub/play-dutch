@@ -291,6 +291,9 @@ const GamePage: React.FC = () => {
   const confirmEndGame = () => {
     finishGame();
     setShowGameEndConfirmation(false);
+    setTimeout(() => {
+      resetGame();
+    }, 1500);
   };
   
   const cancelEndGame = () => {
