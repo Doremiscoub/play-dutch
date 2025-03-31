@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Player, Game, PlayerStatistics } from '@/types';
@@ -19,12 +18,10 @@ const GamePage: React.FC = () => {
   const [roundHistory, setRoundHistory] = useState<{ scores: number[], dutchPlayerId?: string }[]>([]);
   const navigate = useNavigate();
 
-  // Save games to localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem('dutch_games', JSON.stringify(games));
   }, [games]);
 
-  // Calculate player statistics
   const calculatePlayerStats = useCallback((player: Player): PlayerStatistics => {
     const rounds = player.rounds;
     if (rounds.length === 0) {
@@ -43,7 +40,6 @@ const GamePage: React.FC = () => {
     const dutchCount = rounds.filter(r => r.isDutch).length;
     const nonZeroScores = scores.filter(s => s > 0);
     
-    // Calculate improvement rate (compare last 3 rounds vs first 3)
     let improvementRate = 0;
     if (rounds.length >= 6) {
       const firstThree = scores.slice(0, 3).reduce((a, b) => a + b, 0) / 3;
@@ -51,16 +47,13 @@ const GamePage: React.FC = () => {
       improvementRate = lastThree - firstThree;
     }
 
-    // Calculate consistency (standard deviation)
     const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
     const variance = scores.reduce((a, b) => a + Math.pow(b - avg, 2), 0) / scores.length;
     const consistencyScore = Math.sqrt(variance);
 
-    // Calculate win streak (consecutive rounds with better scores than others)
     let winStreak = 0;
     let currentWinStreak = 0;
     for (let i = 0; i < rounds.length; i++) {
-      // If this player's score is the best in this round among all players
       if (players.every(p => p.id === player.id || (p.rounds[i] && rounds[i].score <= p.rounds[i].score))) {
         currentWinStreak++;
         winStreak = Math.max(winStreak, currentWinStreak);
@@ -72,12 +65,9 @@ const GamePage: React.FC = () => {
     return {
       bestRound: nonZeroScores.length > 0 ? Math.min(...nonZeroScores) : null,
       dutchCount,
-      // Rounded to 1 decimal place
       averageScore: Math.round(avg * 10) / 10,
       worstRound: scores.length > 0 ? Math.max(...scores) : null,
-      // Rounded to 1 decimal place
       improvementRate: Math.round(improvementRate * 10) / 10,
-      // Rounded to 1 decimal place
       consistencyScore: Math.round(consistencyScore * 10) / 10,
       winStreak
     };
@@ -92,7 +82,6 @@ const GamePage: React.FC = () => {
     });
   }, [calculatePlayerStats]);
 
-  // Update stats whenever rounds change
   useEffect(() => {
     if (players.length > 0 && players[0].rounds.length > 0) {
       updatePlayerStats();
@@ -114,7 +103,6 @@ const GamePage: React.FC = () => {
   };
 
   const handleAddRound = (scores: number[], dutchPlayerId?: string) => {
-    // Store the round info for potential undo
     setRoundHistory(prev => [...prev, { scores, dutchPlayerId }]);
     
     setPlayers(prevPlayers => {
@@ -134,14 +122,12 @@ const GamePage: React.FC = () => {
       });
     });
     
-    // Play round sound
     if (window.localStorage.getItem('dutch_sound_enabled') !== 'false') {
       new Audio('/sounds/card-sound.mp3').play().catch(err => console.error("Sound error:", err));
     }
     
     toast.success('Manche ajoutée !');
     
-    // Check if game is over
     const gameOver = players.some(player => (player.totalScore + scores[players.indexOf(player)]) >= 100);
     
     if (gameOver) {
@@ -150,7 +136,6 @@ const GamePage: React.FC = () => {
   };
   
   const finishGame = (finalScores: number[], dutchPlayerId?: string) => {
-    // Save game to history
     const sortedPlayers = [...players].map((player, index) => ({
       ...player,
       totalScore: player.totalScore + finalScores[index],
@@ -174,10 +159,8 @@ const GamePage: React.FC = () => {
     setGames(prev => [...prev, newGame]);
     toast.success(`Partie terminée ! ${winner} gagne !`);
     
-    // Launch confetti for the winner
     launchConfetti();
     
-    // Play winning sound
     if (window.localStorage.getItem('dutch_sound_enabled') !== 'false') {
       new Audio('/sounds/win-sound.mp3').play().catch(err => console.error("Sound error:", err));
     }
@@ -201,7 +184,6 @@ const GamePage: React.FC = () => {
 
       const particleCount = 50 * (timeLeft / duration);
       
-      // Since particles fall down, start from the top
       confetti({
         ...defaults,
         particleCount,
@@ -223,7 +205,6 @@ const GamePage: React.FC = () => {
       return;
     }
     
-    // Remove the last round from history
     setRoundHistory(prev => prev.slice(0, -1));
     
     setPlayers(prevPlayers => {
@@ -241,7 +222,6 @@ const GamePage: React.FC = () => {
       });
     });
     
-    // Play undo sound
     if (window.localStorage.getItem('dutch_sound_enabled') !== 'false') {
       new Audio('/sounds/undo-sound.mp3').play().catch(err => console.error("Sound error:", err));
     }
