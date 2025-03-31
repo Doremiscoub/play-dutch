@@ -7,8 +7,9 @@ import { motion } from 'framer-motion';
 import GameInvitation from './GameInvitation';
 import { joinGameSession, getGameSession } from '@/utils/gameInvitation';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card } from '@/components/ui/card';
-import { Users, User } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Users, User, Gamepad2, Globe, Share2 } from 'lucide-react';
+import LocalGameSetup from './LocalGameSetup';
 
 interface MultiplayerGameSetupProps {
   onStartLocalGame: (playerNames: string[]) => void;
@@ -59,65 +60,140 @@ const MultiplayerGameSetup: React.FC<MultiplayerGameSetupProps> = ({
 
   return (
     <div className="w-full max-w-xl mx-auto">
-      <Tabs 
-        defaultValue="local" 
-        value={activeTab} 
-        onValueChange={setActiveTab}
-        className="w-full"
+      <motion.div 
+        className="w-full max-w-xl mx-auto p-6 relative z-10"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
       >
-        <TabsList className="grid grid-cols-2 mb-6 glassmorphism">
-          <TabsTrigger value="local" className="flex items-center space-x-2">
-            <User className="w-4 h-4" />
-            <span>Solo/Local</span>
-          </TabsTrigger>
-          <TabsTrigger value="multiplayer" className="flex items-center space-x-2">
-            <Users className="w-4 h-4" />
-            <span>Multijoueur</span>
-          </TabsTrigger>
-        </TabsList>
+        {/* Background elements */}
+        <div className="absolute inset-0 bg-gradient-to-br from-ios-background/80 to-white/80 -z-10 rounded-3xl" />
+        
+        <motion.div
+          className="absolute top-10 left-[10%] w-40 h-40 rounded-full bg-ios-blue/10 blur-3xl -z-5"
+          animate={{ 
+            scale: [1, 1.2, 1],
+            opacity: [0.4, 0.6, 0.4],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            repeatType: "reverse"
+          }}
+        />
+        
+        <motion.div
+          className="absolute bottom-20 right-[5%] w-48 h-48 rounded-full bg-ios-orange/10 blur-3xl -z-5"
+          animate={{ 
+            scale: [1, 1.3, 1],
+            opacity: [0.3, 0.5, 0.3],
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            repeatType: "reverse"
+          }}
+        />
       
-        <TabsContent value="local">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-          >
-            <Card className="p-6 visionos-card">
-              {/* Ici, on garde le contenu original de GameSetup */}
-              <p className="text-sm text-gray-600 mb-4">
-                Configurez une partie locale où les joueurs partagent le même appareil
-              </p>
-            </Card>
-          </motion.div>
-        </TabsContent>
-      
-        <TabsContent value="multiplayer">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-          >
-            {isSignedIn ? (
-              <GameInvitation 
-                userId={user?.id || ''}
-                userName={userName}
-                onStartMultiplayerGame={onStartMultiplayerGame}
-              />
-            ) : (
-              <Card className="p-6 visionos-card">
-                <div className="text-center">
-                  <p className="text-lg font-medium text-dutch-purple mb-4">
-                    Connectez-vous pour jouer en multijoueur
-                  </p>
-                  <p className="text-sm text-gray-600">
-                    Le mode multijoueur nécessite une connexion pour inviter vos amis
-                  </p>
-                </div>
+        <h1 className="text-3xl font-bold text-center mb-6 bg-gradient-to-r from-ios-blue via-ios-purple to-ios-pink bg-clip-text text-transparent">
+          Nouvelle Partie
+        </h1>
+
+        <Tabs 
+          defaultValue="local" 
+          value={activeTab} 
+          onValueChange={setActiveTab}
+          className="w-full"
+        >
+          <TabsList className="grid grid-cols-2 mb-6 rounded-full border border-white/40 bg-white/50 backdrop-blur-md p-1 shadow-sm">
+            <TabsTrigger 
+              value="local" 
+              className="rounded-full data-[state=active]:bg-white data-[state=active]:shadow flex items-center space-x-2 py-2.5"
+            >
+              <User className="w-4 h-4" />
+              <span>Solo/Local</span>
+            </TabsTrigger>
+            <TabsTrigger 
+              value="multiplayer" 
+              className="rounded-full data-[state=active]:bg-white data-[state=active]:shadow flex items-center space-x-2 py-2.5"
+            >
+              <Users className="w-4 h-4" />
+              <span>Multijoueur</span>
+            </TabsTrigger>
+          </TabsList>
+        
+          <TabsContent value="local">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+            >
+              <Card className="rounded-3xl border border-white/50 bg-white/70 backdrop-blur-md shadow-md hover:shadow-lg transition-all duration-300">
+                <CardHeader>
+                  <CardTitle className="text-xl font-semibold text-ios-blue flex items-center gap-2">
+                    <Gamepad2 className="h-5 w-5" />
+                    Partie Locale
+                  </CardTitle>
+                  <CardDescription>
+                    Configurez une partie locale où les joueurs partagent le même appareil
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <LocalGameSetup onStartGame={handleLocalStart} />
+                </CardContent>
               </Card>
-            )}
-          </motion.div>
-        </TabsContent>
-      </Tabs>
+            </motion.div>
+          </TabsContent>
+        
+          <TabsContent value="multiplayer">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+            >
+              {isSignedIn ? (
+                <Card className="rounded-3xl border border-white/50 bg-white/70 backdrop-blur-md shadow-md hover:shadow-lg transition-all duration-300">
+                  <CardHeader>
+                    <CardTitle className="text-xl font-semibold text-ios-purple flex items-center gap-2">
+                      <Globe className="h-5 w-5" />
+                      Partie Multijoueur
+                    </CardTitle>
+                    <CardDescription>
+                      Créez une partie en ligne pour jouer avec vos amis
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <GameInvitation 
+                      userId={user?.id || ''}
+                      userName={userName}
+                      onStartMultiplayerGame={onStartMultiplayerGame}
+                    />
+                  </CardContent>
+                </Card>
+              ) : (
+                <Card className="rounded-3xl border border-white/50 bg-white/70 backdrop-blur-md shadow-md hover:shadow-lg transition-all duration-300">
+                  <CardHeader>
+                    <CardTitle className="text-xl font-semibold text-ios-purple">
+                      Connectez-vous pour jouer en multijoueur
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-center py-8">
+                      <Share2 className="h-16 w-16 mx-auto text-ios-purple/50 mb-4" />
+                      <p className="text-gray-600 mb-4">
+                        Le mode multijoueur nécessite une connexion pour inviter vos amis et gérer vos parties.
+                      </p>
+                      <p className="text-sm text-gray-500">
+                        Connectez-vous pour créer ou rejoindre une partie multijoueur.
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+            </motion.div>
+          </TabsContent>
+        </Tabs>
+      </motion.div>
     </div>
   );
 };

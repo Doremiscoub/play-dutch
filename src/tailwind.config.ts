@@ -86,6 +86,12 @@ export default {
 					yellow: '#FFCC00',
 					gray: '#8E8E93',
 					background: '#F2F2F7',
+					card: '#FFFFFF',
+					'dark-blue': '#0A84FF',
+					'light-blue': '#64D2FF',
+					'light-gray': '#E5E5EA',
+					'ultra-light-gray': '#F2F2F7',
+					'dark-gray': '#8E8E93',
 				}
 			},
 			borderRadius: {
@@ -147,6 +153,28 @@ export default {
 						transform: 'translateY(-10px)',
 					},
 				},
+				'ios-bounce': {
+					'0%, 100%': {
+						transform: 'translateY(0)',
+					},
+					'50%': {
+						transform: 'translateY(-5px)',
+					},
+				},
+				'ios-pop': {
+					'0%': {
+						transform: 'scale(0.95)',
+						opacity: '0.7',
+					},
+					'70%': {
+						transform: 'scale(1.05)',
+						opacity: '1',
+					},
+					'100%': {
+						transform: 'scale(1)',
+						opacity: '1',
+					},
+				},
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
@@ -155,6 +183,8 @@ export default {
 				'pulse-soft': 'pulse-soft 2s infinite ease-in-out',
 				'scale': 'scale 0.2s ease-out',
 				'float': 'float 6s infinite ease-in-out',
+				'ios-bounce': 'ios-bounce 2s infinite ease-in-out',
+				'ios-pop': 'ios-pop 0.3s ease-out',
 			},
 			backdropBlur: {
 				xs: '2px',

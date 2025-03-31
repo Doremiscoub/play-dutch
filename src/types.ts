@@ -1,35 +1,34 @@
 
-// This should include any existing types, with additions for game invitation
-export type Round = {
+export interface PlayerRound {
   score: number;
   isDutch: boolean;
-};
+}
 
-export type Player = {
-  id: string;
-  name: string;
-  totalScore: number;
-  rounds: Round[];
-  stats?: PlayerStatistics;
-};
-
-export type PlayerStatistics = {
+export interface PlayerStatistics {
   bestRound: number | null;
-  worstRound: number | null;
-  averageScore: number;
   dutchCount: number;
+  averageScore: number;
+  worstRound: number | null;
   improvementRate: number;
   consistencyScore: number;
   winStreak: number;
-};
+}
 
-export type GamePlayer = {
+export interface Player {
+  id: string;
+  name: string;
+  totalScore: number;
+  rounds: PlayerRound[];
+  stats?: PlayerStatistics;
+}
+
+export interface GamePlayer {
   name: string;
   score: number;
   isDutch: boolean;
-};
+}
 
-export type Game = {
+export interface Game {
   id: string;
   date: Date;
   rounds: number;
@@ -37,22 +36,13 @@ export type Game = {
   winner: string;
   isMultiplayer?: boolean;
   gameCode?: string;
-};
+}
 
 export interface ScoreBoardProps {
   players: Player[];
   onAddRound: (scores: number[], dutchPlayerId?: string) => void;
   onEndGame: () => void;
   onUndoLastRound: () => void;
-  roundHistory: { scores: number[], dutchPlayerId?: string }[];
+  roundHistory?: { scores: number[], dutchPlayerId?: string }[];
   isMultiplayer?: boolean;
 }
-
-// Ajoutons des types spécifiques pour l'invitation de jeu
-export type GameInvitation = {
-  gameId: string;
-  hostName: string;
-  createdAt: Date;
-  link: string;
-  playerCount: number;
-};
