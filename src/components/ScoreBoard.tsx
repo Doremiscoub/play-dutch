@@ -25,6 +25,7 @@ import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import ScoreTableView from './ScoreTableView';
 import GameSettings from './GameSettings';
 import ThemeSelector from './ThemeSelector';
+import { useUser } from '@clerk/clerk-react';
 
 const ScoreBoard: React.FC<ScoreBoardProps> = ({ 
   players, 
@@ -42,6 +43,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
   });
   const [view, setView] = useState<'podium' | 'table'>('podium');
   const navigate = useNavigate();
+  const { user, isSignedIn } = useUser();
   
   const totalRounds = players.length > 0 ? players[0].rounds.length : 0;
   
@@ -117,6 +119,28 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
               soundEnabled={soundEnabled} 
               setSoundEnabled={handleToggleSound} 
             />
+            
+            {isSignedIn && user && (
+              <motion.div 
+                className="relative"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Avatar className="h-10 w-10 border-2 border-white/50 shadow-md hover:border-white/70">
+                  {user.hasImage ? (
+                    <img 
+                      src={user.imageUrl} 
+                      alt={user.fullName || 'Utilisateur'} 
+                      className="h-full w-full rounded-full object-cover"
+                    />
+                  ) : (
+                    <AvatarFallback className="bg-gradient-to-br from-dutch-blue to-dutch-purple text-white">
+                      {user.firstName?.charAt(0) || user.username?.charAt(0) || '?'}
+                    </AvatarFallback>
+                  )}
+                </Avatar>
+              </motion.div>
+            )}
           </div>
         </div>
         
