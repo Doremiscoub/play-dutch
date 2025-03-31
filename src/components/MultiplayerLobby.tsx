@@ -22,6 +22,7 @@ import {
   generateGameLink
 } from '@/utils/gameInvitation';
 import MultiplayerStats from './MultiplayerStats';
+import { useUser } from '@clerk/clerk-react';
 
 interface MultiplayerLobbyProps {
   gameId: string;
@@ -39,6 +40,7 @@ const MultiplayerLobby: React.FC<MultiplayerLobbyProps> = ({
   const [countdown, setCountdown] = useState<number | null>(null);
   const [isHost, setIsHost] = useState<boolean>(false);
   const [refreshingPlayers, setRefreshingPlayers] = useState<boolean>(false);
+  const { user } = useUser();
   
   // Initial data fetch
   useEffect(() => {
@@ -48,8 +50,9 @@ const MultiplayerLobby: React.FC<MultiplayerLobbyProps> = ({
     setGameLink(link);
     
     const gameSession = getGameSession(gameId);
-    if (gameSession) {
-      setIsHost(gameSession.hostId === gameSession.currentUserId);
+    if (gameSession && user) {
+      // Check if current user is the host by comparing IDs
+      setIsHost(gameSession.hostId === user.id);
     }
     
     refreshPlayerList();
@@ -57,7 +60,7 @@ const MultiplayerLobby: React.FC<MultiplayerLobbyProps> = ({
     // Poll for player updates
     const interval = setInterval(refreshPlayerList, 5000);
     return () => clearInterval(interval);
-  }, [gameId]);
+  }, [gameId, user]);
   
   const refreshPlayerList = () => {
     if (!gameId) return;
