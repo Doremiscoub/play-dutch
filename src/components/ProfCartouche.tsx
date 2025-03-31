@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Lightbulb, Brain, Trophy, Flag, Sparkles } from 'lucide-react';
 import { Player } from '@/types';
@@ -13,8 +13,11 @@ interface ProfCartoucheProps {
 const ProfCartouche: React.FC<ProfCartoucheProps> = ({ players, roundNumber, view }) => {
   const [comment, setComment] = useState<string>('');
   const [icon, setIcon] = useState<React.ReactNode>(<Lightbulb className="h-5 w-5 text-dutch-yellow" />);
+  const lastUpdateRef = useRef<{ players: Player[], roundNumber: number }>({ players: [], roundNumber: 0 });
+  const commentTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  useEffect(() => {
+  // Fonction pour générer un commentaire aléatoire
+  const generateComment = () => {
     if (players.length === 0 || roundNumber === 0) {
       setComment("Allez, on se bouge le popotin ! Faut jouer pour que je puisse te clasher !");
       setIcon(<Lightbulb className="h-5 w-5 text-dutch-yellow" />);
@@ -93,6 +96,43 @@ const ProfCartouche: React.FC<ProfCartoucheProps> = ({ players, roundNumber, vie
     }
     
     setComment(selectedComment);
+  };
+
+  // Vérifier si les propriétés ont changé significativement
+  const shouldUpdateComment = () => {
+    if (players.length !== lastUpdateRef.current.players.length) return true;
+    if (roundNumber !== lastUpdateRef.current.roundNumber) return true;
+
+    const currentLeader = [...players].sort((a, b) => a.totalScore - b.totalScore)[0]?.id;
+    const previousLeader = [...lastUpdateRef.current.players].sort((a, b) => a.totalScore - b.totalScore)[0]?.id;
+
+    return currentLeader !== previousLeader;
+  };
+
+  // Effet pour générer un nouveau commentaire quand les données changent significativement
+  useEffect(() => {
+    // Nettoyer les timeouts existants
+    if (commentTimeoutRef.current) {
+      clearTimeout(commentTimeoutRef.current);
+    }
+
+    // Générer un nouveau commentaire seulement si nécessaire
+    if (shouldUpdateComment()) {
+      generateComment();
+      lastUpdateRef.current = { players: [...players], roundNumber };
+    }
+
+    // Programmer une mise à jour occasionnelle (environ toutes les 45-75 secondes)
+    commentTimeoutRef.current = setTimeout(() => {
+      generateComment();
+    }, 45000 + Math.random() * 30000);
+
+    // Nettoyage au démontage
+    return () => {
+      if (commentTimeoutRef.current) {
+        clearTimeout(commentTimeoutRef.current);
+      }
+    };
   }, [players, roundNumber, view]);
 
   return (

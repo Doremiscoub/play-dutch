@@ -14,6 +14,10 @@ export interface PlayerStatistics {
   improvementRate: number;
   consistencyScore: number;
   winStreak: number;
+  playStyle?: string;
+  dutchSuccessRate?: number;
+  roundsWon?: number;
+  wins?: number;
 }
 
 export interface Game {
@@ -26,7 +30,6 @@ export interface Game {
   gameCode?: string;
 }
 
-// Add these new props to the ScoreBoardProps interface
 export interface ScoreBoardProps {
   players: Player[];
   onAddRound: (scores: number[], dutchPlayerId?: string) => void;

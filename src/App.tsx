@@ -1,4 +1,3 @@
-
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from "@/components/ui/sonner";
 import Home from '@/pages/Home';
@@ -11,6 +10,7 @@ import RulesPage from '@/pages/RulesPage';
 import SettingsPage from '@/pages/SettingsPage';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import AuthStatus from '@/components/AuthStatus';
+import TournamentPage from './pages/TournamentPage';
 
 function App() {
   return (
@@ -38,6 +38,7 @@ function App() {
             </ProtectedRoute>
           } 
         />
+        <Route path="/tournament" element={<TournamentPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Toaster />
