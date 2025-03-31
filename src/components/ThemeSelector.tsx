@@ -12,35 +12,35 @@ const themes = [
     primary: '#1EAEDB',
     secondary: '#F97316',
     accent: '#8B5CF6',
-    id: 'blue'
+    id: 'blue' as const
   },
   {
     name: 'Vert Émeraude',
     primary: '#10B981',
     secondary: '#FBBF24',
     accent: '#3B82F6',
-    id: 'green'
+    id: 'green' as const
   },
   {
     name: 'Rose Vif',
     primary: '#D946EF',
     secondary: '#F97316',
     accent: '#6366F1',
-    id: 'pink'
+    id: 'pink' as const
   },
   {
     name: 'Rouge Passion',
     primary: '#EF4444',
     secondary: '#F59E0B',
     accent: '#8B5CF6',
-    id: 'red'
+    id: 'red' as const
   },
   {
     name: 'Violet Royal',
     primary: '#8B5CF6',
     secondary: '#10B981',
     accent: '#F97316',
-    id: 'purple'
+    id: 'purple' as const
   }
 ];
 

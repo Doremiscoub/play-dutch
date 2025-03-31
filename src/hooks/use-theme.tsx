@@ -2,7 +2,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-type ThemeId = 'blue' | 'green' | 'pink' | 'red' | 'purple';
+export type ThemeId = 'blue' | 'green' | 'pink' | 'red' | 'purple';
 
 interface ThemeState {
   currentTheme: ThemeId;
