@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { 
   Plus, Trophy, BarChart3, Flag, Home, RotateCcw, Clock, 
-  LineChart, TableIcon, Medal, ArrowRight
+  LineChart, TableIcon, Medal, ArrowRight, Check, X, PlusCircle
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Player, ScoreBoardProps } from '@/types';
@@ -12,7 +12,7 @@ import PlayerScoreCard from './PlayerScoreCard';
 import PodiumView from './PodiumView';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { cn } from '@/lib/utils';
@@ -21,6 +21,7 @@ import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import ScoreTableView from './ScoreTableView';
 import GameSettings from './GameSettings';
 import { useUser } from '@clerk/clerk-react';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 
 const ScoreBoard: React.FC<ScoreBoardProps> = ({ 
   players, 
@@ -28,10 +29,14 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
   onEndGame, 
   onUndoLastRound,
   roundHistory = [],
-  isMultiplayer = false
+  isMultiplayer = false,
+  showGameEndConfirmation = false,
+  onConfirmEndGame,
+  onCancelEndGame
 }) => {
   const [showNewRoundModal, setShowNewRoundModal] = useState(false);
   const [showStatsDialog, setShowStatsDialog] = useState(false);
+  const [showPodium, setShowPodium] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(() => {
     const savedSetting = localStorage.getItem('dutch_sound_enabled');
     return savedSetting !== 'false'; // default to true if not set
@@ -65,9 +70,10 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
   };
   
   const handleClosePodium = () => {
+    setShowPodium(false);
   };
   
-  const showPodium = totalRounds > 0;
+  const shouldShowPodiumButton = totalRounds > 0;
   
   return (
     <div className="w-full max-w-4xl mx-auto p-4 pb-24 md:pb-4">
@@ -219,18 +225,11 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
             </motion.div>
             
             {showPodium && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                className="mt-8"
-              >
-                <PodiumView 
-                  players={sortedPlayers.slice(0, 3)}
-                  onClose={handleClosePodium}
-                  isMultiplayer={isMultiplayer}
-                />
-              </motion.div>
+              <PodiumView 
+                players={sortedPlayers.slice(0, 3)}
+                onClose={handleClosePodium}
+                isMultiplayer={isMultiplayer}
+              />
             )}
           </div>
         ) : (
@@ -246,6 +245,27 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
           </motion.div>
         )}
       </div>
+      
+      {/* Alert Dialog for game end confirmation */}
+      <AlertDialog open={showGameEndConfirmation} onOpenChange={onCancelEndGame}>
+        <AlertDialogContent className="bg-white/90 backdrop-blur-md rounded-xl border border-white/30">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Terminer la partie ?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Êtes-vous sûr de vouloir terminer cette partie ? Le podium sera affiché et les résultats seront enregistrés.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="rounded-full">Annuler</AlertDialogCancel>
+            <AlertDialogAction 
+              className="bg-dutch-blue text-white hover:bg-dutch-blue/90 rounded-full"
+              onClick={onConfirmEndGame}
+            >
+              Terminer la partie
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
       
       {/* Action buttons */}
       <motion.div
@@ -321,6 +341,21 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
           </Dialog>
         </motion.div>
         
+        {/* Show Podium Button */}
+        {shouldShowPodiumButton && (
+          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <Button 
+              onClick={() => setShowPodium(true)}
+              size="icon"
+              variant="game-control"
+              className="shadow-lg"
+              aria-label="Afficher le podium"
+            >
+              <Trophy className="h-5 w-5" />
+            </Button>
+          </motion.div>
+        )}
+        
         {/* New Round Button */}
         <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
           <Button 
@@ -337,7 +372,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
               }}
               transition={{ duration: 4, repeat: Infinity }}
             />
-            <Plus className="h-5 w-5 z-10" />
+            <PlusCircle className="h-5 w-5 z-10 mr-1" />
             <span className="text-sm font-medium z-10">Nouvelle manche</span>
           </Button>
         </motion.div>

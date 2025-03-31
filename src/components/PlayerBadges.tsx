@@ -1,15 +1,18 @@
+
 import React from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Player } from '@/types';
 import { Flame, Award, Zap, TrendingUp, TrendingDown, Shield, Target } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { cn } from '@/lib/utils';
 
 export interface PlayerBadgesProps {
   player: Player;
   compact?: boolean;
+  className?: string;
 }
 
-const PlayerBadges: React.FC<PlayerBadgesProps> = ({ player, compact = false }) => {
+const PlayerBadges: React.FC<PlayerBadgesProps> = ({ player, compact = false, className }) => {
   const bestRoundBadge = player.stats?.bestRound !== null ? (
     <TooltipProvider>
       <Tooltip>
@@ -123,7 +126,7 @@ const PlayerBadges: React.FC<PlayerBadgesProps> = ({ player, compact = false }) 
   ) : null;
   
   return (
-    <div className="flex flex-wrap items-center">
+    <div className={cn("flex flex-wrap items-center", className)}>
       {averageScoreBadge}
       {bestRoundBadge}
       {dutchCountBadge}

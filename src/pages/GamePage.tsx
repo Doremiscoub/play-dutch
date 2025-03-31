@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Player, Game, PlayerStatistics } from '@/types';
@@ -22,6 +21,7 @@ const GamePage: React.FC = () => {
   const [roundHistory, setRoundHistory] = useState<{ scores: number[], dutchPlayerId?: string }[]>([]);
   const [isMultiplayer, setIsMultiplayer] = useState<boolean>(false);
   const [currentGameId, setCurrentGameId] = useState<string | null>(null);
+  const [showGameEndConfirmation, setShowGameEndConfirmation] = useState<boolean>(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { user } = useUser();
@@ -178,37 +178,20 @@ const GamePage: React.FC = () => {
     }
     
     toast.success('Manche ajoutée !');
-    
-    // Check if any player has reached 100 points or more after adding new scores
-    const playersTotalWithNewScores = players.map((player, index) => ({
-      ...player,
-      newTotalScore: player.totalScore + scores[index]
-    }));
-    
-    const gameOver = playersTotalWithNewScores.some(p => p.newTotalScore >= 100);
-    
-    if (gameOver) {
-      finishGame(scores, dutchPlayerId);
-    }
   };
   
-  const finishGame = (finalScores: number[], dutchPlayerId?: string) => {
-    const sortedPlayers = [...players].map((player, index) => ({
-      ...player,
-      totalScore: player.totalScore + finalScores[index],
-      isDutch: player.id === dutchPlayerId
-    })).sort((a, b) => a.totalScore - b.totalScore);
-    
+  const finishGame = () => {
+    const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
     const winner = sortedPlayers[0].name;
     
     const newGame: Game = {
       id: uuidv4(),
       date: new Date(),
-      rounds: players[0].rounds.length + 1,
+      rounds: players[0].rounds.length,
       players: sortedPlayers.map(player => ({
         name: player.name,
         score: player.totalScore,
-        isDutch: player.id === dutchPlayerId
+        isDutch: player.rounds.some(r => r.isDutch)
       })),
       winner,
       isMultiplayer,
@@ -298,6 +281,23 @@ const GamePage: React.FC = () => {
   };
 
   const handleEndGame = () => {
+    if (players.length > 0 && players[0].rounds.length > 0) {
+      setShowGameEndConfirmation(true);
+    } else {
+      resetGame();
+    }
+  };
+  
+  const confirmEndGame = () => {
+    finishGame();
+    setShowGameEndConfirmation(false);
+  };
+  
+  const cancelEndGame = () => {
+    setShowGameEndConfirmation(false);
+  };
+  
+  const resetGame = () => {
     setGameState('setup');
     setPlayers([]);
     setRoundHistory([]);
@@ -355,6 +355,9 @@ const GamePage: React.FC = () => {
               onUndoLastRound={handleUndoLastRound}
               roundHistory={roundHistory}
               isMultiplayer={isMultiplayer}
+              showGameEndConfirmation={showGameEndConfirmation}
+              onConfirmEndGame={confirmEndGame}
+              onCancelEndGame={cancelEndGame}
             />
           </motion.div>
         )}
