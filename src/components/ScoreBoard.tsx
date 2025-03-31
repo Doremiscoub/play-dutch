@@ -1,9 +1,8 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Plus, Trophy, BarChart3, History, Home, Crown, Trash2, Music, Bell, VolumeX, ArrowRight, RotateCcw, Clock, Award, LineChart, TrendingDown, TrendingUp, Heart, Medal, Flag } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Player, PlayerStatistics } from '@/types';
+import { Player, PlayerStatistics, ScoreBoardProps } from '@/types';
 import PlayerScoreCard from './PlayerScoreCard';
 import NewRoundModal from './NewRoundModal';
 import PodiumView from './PodiumView';
@@ -21,20 +20,13 @@ import ThemeSelector from './ThemeSelector';
 import PlayerBadges from './PlayerBadges';
 import QuickGuide from './QuickGuide';
 
-interface ScoreBoardProps {
-  players: Player[];
-  onAddRound: (scores: number[], dutchPlayerId?: string) => void;
-  onEndGame: () => void;
-  onUndoLastRound: () => void;
-  roundHistory?: { scores: number[], dutchPlayerId?: string }[];
-}
-
 const ScoreBoard: React.FC<ScoreBoardProps> = ({ 
   players, 
   onAddRound, 
   onEndGame, 
   onUndoLastRound,
-  roundHistory = [] 
+  roundHistory = [],
+  isMultiplayer = false
 }) => {
   const [showNewRoundModal, setShowNewRoundModal] = useState(false);
   const [sortBy, setSortBy] = useState<'position' | 'name'>('position');
