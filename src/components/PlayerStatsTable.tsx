@@ -2,7 +2,7 @@
 import React from 'react';
 import { Player } from '@/types';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Trophy, Target, Flame, Gauge, TrendingDown } from 'lucide-react';
+import { Trophy, Target, Fire, Gauge, Flame, TrendingDown } from 'lucide-react';
 
 interface PlayerStatsTableProps {
   players: Player[];
@@ -41,7 +41,7 @@ const PlayerStatsTable: React.FC<PlayerStatsTableProps> = ({ players }) => {
             </TableHead>
             <TableHead className="text-center whitespace-nowrap">
               <div className="flex items-center justify-center gap-1">
-                <Target className="h-4 w-4 text-dutch-orange" />
+                <Fire className="h-4 w-4 text-dutch-orange" />
                 <span>Dutch</span>
               </div>
             </TableHead>

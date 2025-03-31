@@ -1,7 +1,8 @@
+
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Player } from '@/types';
-import { Trophy, Target, Zap, Gauge, Star, TrendingDown, ChevronDown, ChevronUp, Flame } from 'lucide-react';
+import { Trophy, Target, Zap, Gauge, Star, TrendingDown, ChevronDown, ChevronUp, Flame, Fire } from 'lucide-react';
 import ProfCartouche from './ProfCartouche';
 
 interface DetailedPlayerStatsProps {
