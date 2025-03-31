@@ -1,9 +1,8 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { 
   Plus, Trophy, BarChart3, Flag, Home, RotateCcw, Clock, Award, 
-  LineChart, TrendingDown, TrendingUp, Heart, Settings, Table as TableIcon, Medal
+  LineChart, TrendingDown, TrendingUp, Heart, Settings, Table as TableIcon, Medal, ArrowRight
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Player, ScoreBoardProps } from '@/types';
@@ -12,18 +11,19 @@ import NewRoundModal from './NewRoundModal';
 import PodiumView from './PodiumView';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { cn } from '@/lib/utils';
 import PlayerBadges from './PlayerBadges';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import ScoreTableView from './ScoreTableView';
 import GameSettings from './GameSettings';
+import ThemeSelector from './ThemeSelector';
 
 const ScoreBoard: React.FC<ScoreBoardProps> = ({ 
   players, 
