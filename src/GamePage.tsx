@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Player, Game, PlayerStatistics } from '@/types';
@@ -199,7 +198,7 @@ const GamePage: React.FC = () => {
       });
     }, 250);
   };
-  
+
   const handleUndoLastRound = () => {
     if (players.length === 0 || players[0].rounds.length === 0) {
       toast.error('Pas de manche à annuler !');

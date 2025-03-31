@@ -5,7 +5,7 @@ import Home from '@/pages/Home';
 import NotFound from '@/pages/NotFound';
 import SignIn from '@/pages/SignIn';
 import SignUp from '@/pages/SignUp';
-import GamePage from '@/pages/GamePage';
+import GamePage from '@/GamePage';
 import HistoryPage from '@/pages/HistoryPage';
 import RulesPage from '@/pages/RulesPage';
 import SettingsPage from '@/pages/SettingsPage';
