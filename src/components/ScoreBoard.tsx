@@ -1,4 +1,3 @@
-
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Player } from '@/types';
@@ -143,7 +142,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                   <PlayerScoreCard
                     player={player}
                     position={index + 1}
-                    isLeader={index === 0}
+                    isWinner={index === 0}
                     totalPlayers={players.length}
                   />
                 </motion.div>
