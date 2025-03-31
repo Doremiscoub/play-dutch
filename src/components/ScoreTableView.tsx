@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Player } from '@/types';
@@ -75,12 +74,12 @@ const ScoreTableView: React.FC<ScoreTableViewProps> = ({ players, roundHistory }
   
   return (
     <div className={cn(
-      "bg-white/80 backdrop-blur-md border border-white/30 rounded-2xl shadow-md p-4 overflow-hidden transition-all duration-300",
+      "bg-white/80 backdrop-blur-md border border-white/30 rounded-2xl shadow-md p-4 overflow-hidden transition-all duration-300 w-full",
       `data-theme-${currentTheme}`
     )}>
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto w-full">
         <TooltipProvider>
-          <Table>
+          <Table className="w-full">
             <TableHeader className="bg-gradient-to-r from-dutch-blue/10 to-dutch-purple/10">
               <TableRow>
                 <TableHead className="w-12 text-center font-semibold">
@@ -222,7 +221,6 @@ const ScoreTableView: React.FC<ScoreTableViewProps> = ({ players, roundHistory }
                     : '-';
                   const dutchCount = player.rounds.filter(r => r.isDutch).length;
                   
-                  // Get last 5 rounds (or fewer if not available)
                   const lastRounds = player.rounds.slice(-Math.min(5, roundCount));
                   
                   return (
@@ -295,11 +293,9 @@ const ScoreTableView: React.FC<ScoreTableViewProps> = ({ players, roundHistory }
                         
                         if (!round) return <TableCell key={i} />;
                         
-                        // Check if this is the best score for this player
                         const isPlayerBestScore = round.score > 0 && 
                           round.score === Math.min(...player.rounds.map(r => r.score).filter(s => s > 0));
                         
-                        // Check if this round is "Dutch"
                         const isDutch = round.isDutch;
                         
                         return (

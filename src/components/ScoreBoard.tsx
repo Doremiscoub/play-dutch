@@ -1,553 +1,470 @@
-
-import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { 
-  Plus, Flag, BarChart3, Home, RotateCcw, Clock, 
-  LineChart, TableIcon, Medal, PlusCircle
-} from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Player, ScoreBoardProps } from '@/types';
+import React, { useState, useEffect, useRef } from 'react';
+import { Player } from '@/types';
 import NewRoundModal from './NewRoundModal';
-import PlayerScoreCard from './PlayerScoreCard';
-import PodiumView from './PodiumView';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'sonner';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription, DialogFooter } from '@/components/ui/dialog';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { motion } from 'framer-motion';
+import { Flag, BarChart2, List, Award, Activity } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import PlayerBadges from './PlayerBadges';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import ScoreTableView from './ScoreTableView';
-import GameSettings from './GameSettings';
-import { useUser } from '@clerk/clerk-react';
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
-import AnimatedBackground from './AnimatedBackground';
 import { useMediaQuery } from '@/hooks/use-mobile';
 import PlayerStatsChart from './PlayerStatsChart';
+import ScoreTableView from './ScoreTableView';
+import PodiumView from './PodiumView';
 import AICommentator from './AICommentator';
+
+interface ScoreBoardProps {
+  players: Player[];
+  onAddRound: (scores: number[], dutchPlayerId?: string) => void;
+  onEndGame: () => void;
+  onUndoLastRound: () => void;
+  roundHistory: { scores: number[], dutchPlayerId?: string }[];
+  showGameEndConfirmation: boolean;
+  onConfirmEndGame: () => void;
+  onCancelEndGame: () => void;
+  isMultiplayer: boolean;
+}
 
 const ScoreBoard: React.FC<ScoreBoardProps> = ({ 
   players, 
   onAddRound, 
   onEndGame, 
-  onUndoLastRound,
-  roundHistory = [],
-  isMultiplayer = false,
-  showGameEndConfirmation = false,
+  onUndoLastRound, 
+  roundHistory,
+  showGameEndConfirmation,
   onConfirmEndGame,
-  onCancelEndGame
+  onCancelEndGame,
+  isMultiplayer
 }) => {
-  const [showNewRoundModal, setShowNewRoundModal] = useState(false);
-  const [showStatsDialog, setShowStatsDialog] = useState(false);
-  const [soundEnabled, setSoundEnabled] = useState(() => {
-    const savedSetting = localStorage.getItem('dutch_sound_enabled');
-    return savedSetting !== 'false'; // default to true if not set
-  });
-  const [view, setView] = useState<'podium' | 'table'>('podium');
-  const [statsTab, setStatsTab] = useState<'overview' | 'charts'>('overview');
-  const navigate = useNavigate();
-  const { user, isSignedIn } = useUser();
-  const isMobile = useMediaQuery("(max-width: 768px)");
-  
-  const totalRounds = players.length > 0 ? players[0].rounds.length : 0;
-  
-  const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
-  
-  const handleAddRound = (scores: number[], dutchPlayerId?: string) => {
+  const [isNewRoundModalOpen, setIsNewRoundModalOpen] = useState(false);
+  const [scores, setScores] = useState<number[]>([]);
+  const [dutchPlayerId, setDutchPlayerId] = useState<string | undefined>(undefined);
+  const [isEndingGame, setIsEndingGame] = useState(false);
+  const newRoundModalRef = useRef<HTMLDialogElement>(null);
+
+  useEffect(() => {
+    if (isNewRoundModalOpen && newRoundModalRef.current) {
+      newRoundModalRef.current.showModal();
+    } else if (newRoundModalRef.current) {
+      newRoundModalRef.current.close();
+    }
+  }, [isNewRoundModalOpen]);
+
+  const onAddRoundHandler = () => {
+    setIsNewRoundModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsNewRoundModalOpen(false);
+  };
+
+  const handleAddRound = () => {
     onAddRound(scores, dutchPlayerId);
-    setShowNewRoundModal(false);
+    setIsNewRoundModalOpen(false);
+    setScores([]);
+    setDutchPlayerId(undefined);
   };
-  
-  const handleCloseNewRoundModal = () => {
-    setShowNewRoundModal(false);
-  };
-  
-  const handleUndoLastRound = () => {
-    onUndoLastRound();
-  };
-  
-  const handleToggleSound = () => {
-    const newSetting = !soundEnabled;
-    setSoundEnabled(newSetting);
-    localStorage.setItem('dutch_sound_enabled', newSetting.toString());
-    toast.success(newSetting ? 'Sons activés' : 'Sons désactivés');
-  };
-  
+
+  const isMobile = useMediaQuery("(max-width: 768px)");
+
   return (
-    <div className="min-h-screen w-full relative pb-24 md:pb-4">
-      {/* Animated background for full width */}
-      <div className="fixed inset-0 -z-10">
-        <AnimatedBackground variant="default" />
-      </div>
-      
-      <div className={cn("mx-auto px-4", isMobile ? "max-w-4xl" : "max-w-7xl")}>
-        <AnimatePresence>
-          {showNewRoundModal && (
-            <NewRoundModal 
-              players={players}
-              onClose={handleCloseNewRoundModal}
-              onSave={handleAddRound}
-            />
-          )}
-        </AnimatePresence>
+    <div className="p-4 md:p-6 container max-w-7xl mx-auto">
+      <div className="flex flex-col gap-6">
         
-        <motion.div 
-          className="mb-6 relative"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-        >
-          <div className="flex items-center justify-between mb-2 bg-white/70 backdrop-blur-md shadow-sm rounded-xl p-3 border border-white/30">
-            <div className="flex items-center">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="rounded-full bg-white/80 hover:bg-white/90 backdrop-blur-sm border border-white/30 shadow-sm mr-3"
-                onClick={() => navigate('/')}
+        <AlertDialog open={showGameEndConfirmation}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Êtes-vous sûr(e) ?</AlertDialogTitle>
+              <AlertDialogDescription>
+                Terminer la partie maintenant réinitialisera le jeu. Êtes-vous sûr de vouloir continuer ?
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel onClick={onCancelEndGame}>Annuler</AlertDialogCancel>
+              <AlertDialogAction onClick={onConfirmEndGame}>Oui, terminer</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+        
+        {isMobile ? (
+          <div className="flex flex-col gap-6">
+            {/* Mobile Layout */}
+            <Tabs defaultValue="scores" className="w-full">
+              <TabsList className="grid grid-cols-2 mb-4">
+                <TabsTrigger value="scores" className="flex items-center gap-2">
+                  <List className="h-4 w-4" />
+                  Scores
+                </TabsTrigger>
+                <TabsTrigger value="podium" className="flex items-center gap-2">
+                  <Award className="h-4 w-4" />
+                  Podium
+                </TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="scores" className="mt-0">
+                <ScoreTableView players={players} roundHistory={roundHistory} />
+              </TabsContent>
+              
+              <TabsContent value="podium" className="mt-0">
+                <PodiumView players={players} />
+              </TabsContent>
+            </Tabs>
+            
+            <AICommentator players={players} roundHistory={roundHistory} className="mb-4" />
+            
+            <div className="grid grid-cols-2 gap-4">
+              <Button 
+                variant="default" 
+                className="w-full bg-dutch-blue text-white hover:bg-dutch-blue/90" 
+                onClick={onAddRoundHandler}
               >
-                <Home className="h-5 w-5 text-dutch-blue" />
+                Nouvelle Manche
               </Button>
               
-              <h1 className="text-xl font-bold bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">
-                Score
-              </h1>
-            </div>
-            
-            <div className="flex items-center gap-3">
-              {isSignedIn && user && (
-                <Avatar className="h-9 w-9 border-2 border-white/50 bg-white/50 backdrop-blur-sm hover:shadow-md transition-all">
-                  {user.hasImage ? (
-                    <img src={user.imageUrl} alt={user.fullName || "User"} className="rounded-full" />
-                  ) : (
-                    <AvatarFallback className="bg-gradient-to-br from-dutch-blue to-dutch-purple text-white text-xs">
-                      {user.fullName?.split(' ').map(name => name[0]).join('') || user.username?.substring(0, 2) || "U"}
-                    </AvatarFallback>
-                  )}
-                </Avatar>
-              )}
-              
-              <GameSettings 
-                soundEnabled={soundEnabled} 
-                setSoundEnabled={handleToggleSound} 
-              />
-            </div>
-          </div>
-          
-          <motion.div 
-            className="flex items-center justify-between mb-4 px-2"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2 }}
-          >
-            <div className="flex items-center bg-white/60 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-sm border border-white/20">
-              <Clock className="h-4 w-4 text-dutch-blue mr-2" />
-              <span className="text-sm text-gray-700 font-medium">
-                {totalRounds} {totalRounds <= 1 ? 'manche' : 'manches'}
-              </span>
-            </div>
-            
-            <AnimatePresence>
-              {totalRounds > 0 && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.8 }}
-                >
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="px-3 py-1.5 rounded-full bg-white/60 hover:bg-white/70 backdrop-blur-sm border border-white/30 shadow-sm"
-                    onClick={handleUndoLastRound}
-                  >
-                    <RotateCcw className="h-3.5 w-3.5 mr-1.5 text-dutch-blue" />
-                    <span className="text-xs text-gray-700 font-medium">Annuler dernière manche</span>
-                  </Button>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </motion.div>
-          
-          <motion.div 
-            className="flex items-center justify-between mb-4"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-          >
-            <div className="px-2 w-full">
-              <ToggleGroup 
-                type="single" 
-                value={view} 
-                onValueChange={(value) => value && setView(value as 'podium' | 'table')} 
-                className="w-full bg-white/60 backdrop-blur-sm rounded-xl p-1.5 shadow-sm border border-white/20"
+              <Button 
+                variant="outline" 
+                className="w-full border-dutch-orange text-dutch-orange hover:bg-dutch-orange/10" 
+                onClick={onUndoLastRound}
               >
-                <ToggleGroupItem 
-                  value="podium" 
-                  className={cn(
-                    "flex-1 data-[state=on]:bg-white data-[state=on]:shadow-sm rounded-lg text-sm py-2 font-medium",
-                    view === "podium" ? "text-dutch-blue" : "text-gray-600"
-                  )}
-                >
-                  <Medal className="h-4 w-4 mr-1.5" />
-                  Podium
-                </ToggleGroupItem>
-                <ToggleGroupItem 
-                  value="table" 
-                  className={cn(
-                    "flex-1 data-[state=on]:bg-white data-[state=on]:shadow-sm rounded-lg text-sm py-2 font-medium",
-                    view === "table" ? "text-dutch-blue" : "text-gray-600"
-                  )}
-                >
-                  <TableIcon className="h-4 w-4 mr-1.5" />
-                  Tableau
-                </ToggleGroupItem>
-              </ToggleGroup>
+                Annuler Dernière
+              </Button>
             </div>
-          </motion.div>
-          
-          {/* AI Commentator - visible on all layouts */}
-          <AICommentator 
-            players={players} 
-            roundHistory={roundHistory} 
-            className="mb-6"
-          />
-        </motion.div>
-        
-        {/* Desktop layout with side-by-side scores and stats */}
-        {!isMobile ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <motion.div 
-              className="dutch-card backdrop-blur-md border border-white/40 bg-white/80 hover:shadow-lg transition-all duration-300 rounded-2xl overflow-hidden p-6"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-            >
-              {view === 'podium' ? (
-                <div>
-                  <motion.div 
-                    className="space-y-4 mb-6"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ staggerChildren: 0.1 }}
-                  >
-                    {sortedPlayers.map((player, index) => (
-                      <PlayerScoreCard 
-                        key={player.id}
-                        player={player}
-                        position={index + 1}
-                        showRounds={true}
-                      />
-                    ))}
-                  </motion.div>
-                </div>
-              ) : (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <ScoreTableView 
-                    players={players} 
-                    roundHistory={roundHistory}
-                  />
-                </motion.div>
-              )}
-              
-              <div className="mt-6">
-                <Button
-                  onClick={() => setShowNewRoundModal(true)} 
-                  className="w-full h-12 bg-gradient-to-r from-dutch-orange via-dutch-pink to-dutch-orange text-white rounded-xl font-medium relative overflow-hidden"
-                >
-                  <motion.div 
-                    className="absolute inset-0 bg-gradient-to-r from-dutch-orange via-dutch-pink to-dutch-orange bg-[length:200%_100%]"
-                    animate={{ backgroundPosition: ['0% 0%', '100% 0%', '0% 0%'] }}
-                    transition={{ duration: 8, repeat: Infinity }}
-                  />
-                  <span className="absolute inset-0 flex items-center justify-center gap-2">
-                    <Plus className="h-5 w-5" />
-                    Nouvelle manche
-                  </span>
-                </Button>
-              </div>
-            </motion.div>
             
-            {/* Stats panel - always visible on desktop */}
-            <motion.div
-              className="dutch-card backdrop-blur-md border border-white/40 bg-white/80 hover:shadow-lg transition-all duration-300 rounded-2xl overflow-hidden p-6"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-            >
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-bold text-dutch-purple flex items-center">
-                  <BarChart3 className="h-5 w-5 mr-2" />
-                  Statistiques
-                </h2>
-                
-                <ToggleGroup 
-                  type="single" 
-                  value={statsTab} 
-                  onValueChange={(value) => value && setStatsTab(value as 'overview' | 'charts')} 
-                  className="bg-white/60 backdrop-blur-sm rounded-lg p-1 shadow-sm border border-white/20"
-                  size="sm"
-                >
-                  <ToggleGroupItem 
-                    value="overview" 
-                    className={cn(
-                      "data-[state=on]:bg-white data-[state=on]:shadow-sm rounded-md text-xs py-1.5 px-2.5",
-                      statsTab === "overview" ? "text-dutch-blue" : "text-gray-600"
-                    )}
-                  >
-                    <Activity className="h-3.5 w-3.5 mr-1" />
-                    Aperçu
-                  </ToggleGroupItem>
-                  <ToggleGroupItem 
-                    value="charts" 
-                    className={cn(
-                      "data-[state=on]:bg-white data-[state=on]:shadow-sm rounded-md text-xs py-1.5 px-2.5",
-                      statsTab === "charts" ? "text-dutch-blue" : "text-gray-600"
-                    )}
-                  >
-                    <LineChart className="h-3.5 w-3.5 mr-1" />
-                    Graphiques
-                  </ToggleGroupItem>
-                </ToggleGroup>
-              </div>
-              
-              <AnimatePresence mode="wait">
-                {statsTab === 'overview' ? (
-                  <motion.div 
-                    key="overview"
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 20 }}
-                    transition={{ duration: 0.3 }}
-                    className="space-y-4"
-                  >
-                    {sortedPlayers.map((player) => (
-                      <div key={player.id} className="bg-white/60 p-4 rounded-xl shadow-sm border border-white/30">
-                        <h3 className="font-medium text-lg mb-1">{player.name}</h3>
-                        <div className="grid grid-cols-2 gap-2 mt-3">
-                          <div className="text-sm">
-                            <p className="text-gray-500">Moyenne</p>
-                            <p className="font-medium">{player.stats?.averageScore || '-'} pts</p>
-                          </div>
-                          <div className="text-sm">
-                            <p className="text-gray-500">Dutch</p>
-                            <p className="font-medium">{player.stats?.dutchCount || 0} fois</p>
-                          </div>
-                          <div className="text-sm">
-                            <p className="text-gray-500">Meilleur score</p>
-                            <p className="font-medium">{player.stats?.bestRound !== null ? `${player.stats?.bestRound} pts` : '-'}</p>
-                          </div>
-                          <div className="text-sm">
-                            <p className="text-gray-500">Pire score</p>
-                            <p className="font-medium">{player.stats?.worstRound !== null ? `${player.stats?.worstRound} pts` : '-'}</p>
-                          </div>
-                        </div>
-                        
-                        <div className="mt-3">
-                          <PlayerBadges player={player} />
-                        </div>
-                      </div>
-                    ))}
-                  </motion.div>
-                ) : (
-                  <motion.div 
-                    key="charts"
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <PlayerStatsChart players={players} />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-              
-              <div className="mt-4">
-                <Button
-                  onClick={onEndGame}
-                  variant="outline"
-                  className="w-full bg-white/60 border-dutch-blue/20 text-dutch-blue hover:bg-white/80"
-                >
-                  <Flag className="h-4 w-4 mr-2" />
-                  Terminer la partie
-                </Button>
-              </div>
-            </motion.div>
-          </div>
-        ) : (
-          // Mobile layout - just the scores card
-          <motion.div 
-            className="dutch-card backdrop-blur-md border border-white/40 bg-white/80 hover:shadow-lg transition-all duration-300 rounded-2xl overflow-hidden p-6"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
-            {view === 'podium' ? (
-              <div>
-                <motion.div 
-                  className="space-y-4 mb-6"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ staggerChildren: 0.1 }}
-                >
-                  {sortedPlayers.map((player, index) => (
-                    <PlayerScoreCard 
-                      key={player.id}
-                      player={player}
-                      position={index + 1}
-                      showRounds={true}
-                    />
-                  ))}
-                </motion.div>
-              </div>
-            ) : (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                <ScoreTableView 
-                  players={players} 
-                  roundHistory={roundHistory}
-                />
-              </motion.div>
-            )}
-          </motion.div>
-        )}
-      </div>
-      
-      {/* Alert Dialog for game end confirmation */}
-      <AlertDialog open={showGameEndConfirmation} onOpenChange={onCancelEndGame}>
-        <AlertDialogContent className="bg-white/90 backdrop-blur-md rounded-xl border border-white/30">
-          <AlertDialogHeader>
-            <AlertDialogTitle>Terminer la partie ?</AlertDialogTitle>
-            <AlertDialogDescription>
-              Êtes-vous sûr de vouloir terminer cette partie ? Le podium sera affiché et les résultats seront enregistrés.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel className="rounded-full">Annuler</AlertDialogCancel>
-            <AlertDialogAction 
-              className="bg-dutch-blue text-white hover:bg-dutch-blue/90 rounded-full"
-              onClick={onConfirmEndGame}
-            >
-              Terminer la partie
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-      
-      {/* Mobile-only Stats Dialog and Floating Action Buttons */}
-      {isMobile && (
-        <motion.div
-          className="fixed bottom-6 right-6 flex flex-col items-end gap-3 z-50"
-          initial={{ scale: 0, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ delay: 0.3, type: "spring" }}
-        >
-          {/* Stats Button (mobile only) */}
-          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            <Dialog open={showStatsDialog} onOpenChange={setShowStatsDialog}>
+            <Dialog>
               <DialogTrigger asChild>
                 <Button 
-                  size="icon"
-                  variant="floating"
-                  className="shadow-lg bg-gradient-to-r from-dutch-blue/90 via-dutch-purple/90 to-dutch-blue/90 border border-white/20"
-                  aria-label="Statistiques"
+                  variant="outline" 
+                  className="relative overflow-hidden border-dutch-purple text-dutch-purple hover:bg-dutch-purple/10 w-full"
                 >
-                  <BarChart3 className="h-5 w-5" />
+                  <span className="relative z-10 flex items-center justify-center gap-2">
+                    <BarChart2 className="h-4 w-4" />
+                    Statistiques
+                  </span>
                 </Button>
               </DialogTrigger>
-              <DialogContent className="sm:max-w-md rounded-3xl bg-white/80 backdrop-blur-md border border-white/30">
+              <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
-                  <DialogTitle>Statistiques de la partie</DialogTitle>
-                  <DialogDescription>
-                    Détails et performances des joueurs
-                  </DialogDescription>
+                  <DialogTitle className="flex items-center gap-2 text-dutch-purple">
+                    <BarChart2 className="h-5 w-5" />
+                    Statistiques Détaillées
+                  </DialogTitle>
                 </DialogHeader>
-                
-                <Tabs defaultValue="overview">
-                  <TabsList className="grid grid-cols-2 mb-4">
-                    <TabsTrigger value="overview" className="text-xs">Aperçu</TabsTrigger>
-                    <TabsTrigger value="charts" className="text-xs">Graphiques</TabsTrigger>
-                  </TabsList>
-                  
-                  <TabsContent value="overview" className="space-y-4 mt-4 max-h-[60vh] overflow-y-auto pr-1">
-                    {sortedPlayers.map((player) => (
-                      <div key={player.id} className="bg-white/60 p-4 rounded-xl shadow-sm border border-white/30">
-                        <h3 className="font-medium text-lg mb-1">{player.name}</h3>
-                        <div className="grid grid-cols-2 gap-2 mt-3">
-                          <div className="text-sm">
-                            <p className="text-gray-500">Moyenne</p>
-                            <p className="font-medium">{player.stats?.averageScore || '-'} pts</p>
-                          </div>
-                          <div className="text-sm">
-                            <p className="text-gray-500">Dutch</p>
-                            <p className="font-medium">{player.stats?.dutchCount || 0} fois</p>
-                          </div>
-                          <div className="text-sm">
-                            <p className="text-gray-500">Meilleur score</p>
-                            <p className="font-medium">{player.stats?.bestRound !== null ? `${player.stats?.bestRound} pts` : '-'}</p>
-                          </div>
-                          <div className="text-sm">
-                            <p className="text-gray-500">Pire score</p>
-                            <p className="font-medium">{player.stats?.worstRound !== null ? `${player.stats?.worstRound} pts` : '-'}</p>
-                          </div>
-                        </div>
-                        
-                        <div className="mt-3">
-                          <PlayerBadges player={player} />
-                        </div>
-                      </div>
-                    ))}
-                  </TabsContent>
-                  
-                  <TabsContent value="charts" className="max-h-[60vh] overflow-y-auto pr-1">
-                    <PlayerStatsChart players={players} />
-                  </TabsContent>
-                </Tabs>
-
-                <DialogFooter className="mt-4">
-                  <Button
-                    onClick={() => {
-                      setShowStatsDialog(false);
-                      onEndGame();
-                    }}
-                    className="w-full bg-gradient-to-r from-dutch-blue/90 via-dutch-purple/90 to-dutch-blue/90 text-white hover:opacity-90"
-                  >
-                    <Flag className="h-4 w-4 mr-2" />
-                    Terminer la partie
-                  </Button>
-                </DialogFooter>
+                <div className="space-y-4 py-4">
+                  <Tabs defaultValue="overview" className="w-full">
+                    <TabsList className="grid grid-cols-2 mb-4">
+                      <TabsTrigger value="overview" className="flex items-center gap-2">
+                        <Activity className="h-4 w-4" />
+                        Aperçu
+                      </TabsTrigger>
+                      <TabsTrigger value="charts" className="flex items-center gap-2">
+                        <BarChart2 className="h-4 w-4" />
+                        Graphiques
+                      </TabsTrigger>
+                    </TabsList>
+                    
+                    <TabsContent value="overview" className="mt-0 space-y-4">
+                      <FifaStyleStats players={players} />
+                    </TabsContent>
+                    
+                    <TabsContent value="charts" className="mt-0">
+                      <PlayerStatsChart players={players} />
+                    </TabsContent>
+                  </Tabs>
+                </div>
               </DialogContent>
             </Dialog>
-          </motion.div>
-          
-          {/* New Round Button */}
-          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            
             <Button 
-              onClick={() => setShowNewRoundModal(true)}
-              size="lg"
-              variant="game-action"
-              className="rounded-full shadow-xl flex items-center justify-center gap-2 px-5 py-3 pr-6"
-              aria-label="Nouvelle manche"
+              variant="destructive" 
+              className="w-full" 
+              onClick={onEndGame}
             >
-              <motion.div 
-                className="absolute inset-0 bg-gradient-to-r from-dutch-orange via-dutch-pink to-dutch-orange rounded-full"
-                animate={{ 
-                  backgroundPosition: ['0% 0%', '100% 0%', '0% 0%'] 
-                }}
-                transition={{ duration: 4, repeat: Infinity }}
-              />
-              <PlusCircle className="h-5 w-5 z-10 mr-1" />
-              <span className="text-sm font-medium z-10">Nouvelle manche</span>
+              Terminer la Partie
             </Button>
-          </motion.div>
-        </motion.div>
+          </div>
+        ) : (
+          /* Desktop Layout */
+          <div className="grid grid-cols-12 gap-6">
+            <div className="col-span-12">
+              <Tabs defaultValue="scores" className="w-full">
+                <TabsList className="grid grid-cols-2 mb-4 max-w-md mx-auto">
+                  <TabsTrigger value="scores" className="flex items-center gap-2">
+                    <List className="h-4 w-4" />
+                    Tableau de Score
+                  </TabsTrigger>
+                  <TabsTrigger value="podium" className="flex items-center gap-2">
+                    <Award className="h-4 w-4" />
+                    Podium
+                  </TabsTrigger>
+                </TabsList>
+                
+                <TabsContent value="scores" className="mt-0">
+                  <div className="grid grid-cols-12 gap-6">
+                    <div className="col-span-12">
+                      <ScoreTableView players={players} roundHistory={roundHistory} />
+                    </div>
+                    <div className="col-span-6">
+                      <AICommentator players={players} roundHistory={roundHistory} className="h-full" />
+                    </div>
+                    <div className="col-span-6">
+                      <FifaStyleStats players={players} />
+                    </div>
+                  </div>
+                </TabsContent>
+                
+                <TabsContent value="podium" className="mt-0">
+                  <div className="grid grid-cols-12 gap-6">
+                    <div className="col-span-7">
+                      <PodiumView players={players} />
+                    </div>
+                    <div className="col-span-5">
+                      <Tabs defaultValue="overview" className="w-full">
+                        <TabsList className="grid grid-cols-2 mb-4">
+                          <TabsTrigger value="overview" className="flex items-center gap-2">
+                            <Activity className="h-4 w-4" />
+                            Aperçu
+                          </TabsTrigger>
+                          <TabsTrigger value="charts" className="flex items-center gap-2">
+                            <BarChart2 className="h-4 w-4" />
+                            Graphiques
+                          </TabsTrigger>
+                        </TabsList>
+                        
+                        <TabsContent value="overview" className="mt-0">
+                          <FifaStyleStats players={players} />
+                        </TabsContent>
+                        
+                        <TabsContent value="charts" className="mt-0">
+                          <PlayerStatsChart players={players} />
+                        </TabsContent>
+                      </Tabs>
+                    </div>
+                  </div>
+                </TabsContent>
+              </Tabs>
+            </div>
+            
+            <div className="col-span-12 flex justify-between gap-4">
+              <Button 
+                variant="default" 
+                className="bg-dutch-blue text-white hover:bg-dutch-blue/90 px-8" 
+                onClick={onAddRoundHandler}
+              >
+                Nouvelle Manche
+              </Button>
+              
+              <div className="flex gap-4">
+                <Button 
+                  variant="outline" 
+                  className="border-dutch-orange text-dutch-orange hover:bg-dutch-orange/10" 
+                  onClick={onUndoLastRound}
+                >
+                  Annuler Dernière
+                </Button>
+                
+                <Button 
+                  variant="destructive" 
+                  onClick={onEndGame}
+                >
+                  Terminer la Partie
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+        
+        <NewRoundModal
+          isOpen={isNewRoundModalOpen}
+          onClose={handleCloseModal}
+          players={players}
+          onAddRound={handleAddRound}
+          setScores={setScores}
+          setDutchPlayerId={setDutchPlayerId}
+          scores={scores}
+          dutchPlayerId={dutchPlayerId}
+          modalRef={newRoundModalRef}
+        />
+      </div>
+    </div>
+  );
+};
+
+interface FifaStyleStatsProps {
+  players: Player[];
+}
+
+const FifaStyleStats: React.FC<FifaStyleStatsProps> = ({ players }) => {
+  // Sort players by total score (lowest to highest)
+  const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
+  
+  // Get best and worst players
+  const bestPlayer = sortedPlayers[0];
+  const worstPlayer = sortedPlayers[sortedPlayers.length - 1];
+  
+  if (!bestPlayer || !worstPlayer) return null;
+  
+  // Calculate key stats for all players
+  const allStats = players.map(player => {
+    const avgScore = player.rounds.length 
+      ? (player.rounds.reduce((sum, r) => sum + r.score, 0) / player.rounds.length)
+      : 0;
+    
+    const bestRound = player.rounds.length 
+      ? Math.min(...player.rounds.map(r => r.score).filter(s => s > 0))
+      : null;
+    
+    const worstRound = player.rounds.length 
+      ? Math.max(...player.rounds.map(r => r.score))
+      : null;
+    
+    const dutchCount = player.rounds.filter(r => r.isDutch).length;
+    
+    return {
+      id: player.id,
+      name: player.name,
+      avgScore,
+      bestRound,
+      worstRound,
+      dutchCount,
+      totalScore: player.totalScore
+    };
+  });
+  
+  // Find player with best stats in each category
+  const bestAvg = [...allStats].sort((a, b) => a.avgScore - b.avgScore)[0];
+  const bestBestRound = [...allStats]
+    .filter(s => s.bestRound !== null)
+    .sort((a, b) => (a.bestRound || Infinity) - (b.bestRound || Infinity))[0];
+  const mostDutch = [...allStats].sort((a, b) => b.dutchCount - a.dutchCount)[0];
+  
+  // Calculate leader gap (points difference between first and second place)
+  const leaderGap = sortedPlayers.length > 1 
+    ? sortedPlayers[1].totalScore - sortedPlayers[0].totalScore 
+    : 0;
+  
+  return (
+    <div className="bg-white/80 backdrop-blur-md border border-white/30 rounded-2xl shadow-md p-4 overflow-hidden">
+      <h3 className="text-lg font-semibold mb-4 text-dutch-purple">Statistiques du Match</h3>
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <StatCard 
+          title="Meilleur Joueur" 
+          value={bestPlayer.name} 
+          subvalue={`${bestPlayer.totalScore} points`}
+          icon={<Award className="h-5 w-5 text-dutch-green" />}
+          color="bg-dutch-green/10 text-dutch-green"
+        />
+        
+        <StatCard 
+          title="Meilleure Moyenne" 
+          value={bestAvg.name} 
+          subvalue={`${bestAvg.avgScore.toFixed(1)} pts/manche`}
+          icon={<Activity className="h-5 w-5 text-dutch-blue" />}
+          color="bg-dutch-blue/10 text-dutch-blue"
+        />
+        
+        {bestBestRound && (
+          <StatCard 
+            title="Meilleur Score" 
+            value={bestBestRound.name} 
+            subvalue={`${bestBestRound.bestRound} points`}
+            icon={<BarChart2 className="h-5 w-5 text-dutch-purple" />}
+            color="bg-dutch-purple/10 text-dutch-purple"
+          />
+        )}
+        
+        <StatCard 
+          title="Plus de Dutch" 
+          value={mostDutch.name} 
+          subvalue={`${mostDutch.dutchCount} fois`}
+          icon={<Flag className="h-5 w-5 text-dutch-orange" />}
+          color="bg-dutch-orange/10 text-dutch-orange"
+        />
+      </div>
+      
+      <div className="mt-6">
+        <h4 className="text-sm font-medium text-gray-500 mb-3">Comparaison Joueurs</h4>
+        <div className="space-y-3">
+          {allStats.map((stat, index) => (
+            <div key={stat.id} className="relative">
+              <div className="flex justify-between items-center mb-1">
+                <div className="flex items-center">
+                  <span className={`flex items-center justify-center h-5 w-5 rounded-full text-xs font-bold ${index === 0 ? 'bg-dutch-green/20 text-dutch-green' : index === 1 ? 'bg-dutch-blue/20 text-dutch-blue' : index === 2 ? 'bg-dutch-purple/20 text-dutch-purple' : 'bg-gray-200 text-gray-700'}`}>
+                    {index + 1}
+                  </span>
+                  <span className="ml-2 font-medium">
+                    {stat.name}
+                  </span>
+                </div>
+                <span className="font-bold">
+                  {stat.totalScore}
+                </span>
+              </div>
+              
+              <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                <div 
+                  className={`h-full rounded-full ${index === 0 ? 'bg-dutch-green' : index === 1 ? 'bg-dutch-blue' : index === 2 ? 'bg-dutch-purple' : 'bg-gray-400'}`}
+                  style={{ 
+                    width: `${Math.max(5, 100 - (stat.totalScore / (worstPlayer.totalScore || 1)) * 100)}%` 
+                  }}
+                ></div>
+              </div>
+              
+              <div className="flex justify-between text-xs text-gray-500 mt-1">
+                <span>{stat.dutchCount} Dutch</span>
+                <span>{stat.avgScore.toFixed(1)} moy.</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      
+      {leaderGap > 0 && (
+        <div className="mt-6 p-3 bg-dutch-green/10 rounded-lg">
+          <div className="flex items-center gap-2">
+            <Award className="h-4 w-4 text-dutch-green" />
+            <span className="text-sm font-medium text-dutch-green">
+              {bestPlayer.name} mène par {leaderGap} points !
+            </span>
+          </div>
+        </div>
       )}
+    </div>
+  );
+};
+
+interface StatCardProps {
+  title: string;
+  value: string;
+  subvalue: string;
+  icon: React.ReactNode;
+  color: string;
+}
+
+const StatCard: React.FC<StatCardProps> = ({ title, value, subvalue, icon, color }) => {
+  return (
+    <div className="p-3 border border-white/50 rounded-xl bg-white/80 shadow-sm">
+      <div className="flex items-center gap-3">
+        <div className={`flex items-center justify-center h-10 w-10 rounded-full ${color}`}>
+          {icon}
+        </div>
+        <div>
+          <p className="text-sm text-gray-500">{title}</p>
+          <p className="font-bold text-gray-900">{value}</p>
+          <p className="text-xs text-gray-600">{subvalue}</p>
+        </div>
+      </div>
     </div>
   );
 };
