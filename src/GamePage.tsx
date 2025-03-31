@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Player, Game, PlayerStatistics } from '@/types';
-import GameSetup from '@/components/GameSetup';
+import LocalGameSetup from '@/components/LocalGameSetup';
 import ScoreBoard from '@/components/ScoreBoard';
 import { v4 as uuidv4 } from 'uuid';
 import { toast } from 'sonner';
@@ -265,7 +265,7 @@ const GamePage: React.FC = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <GameSetup onStartGame={handleStartGame} />
+            <LocalGameSetup onStartGame={handleStartGame} />
           </motion.div>
         ) : (
           <motion.div
