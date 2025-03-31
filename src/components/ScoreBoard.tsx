@@ -112,12 +112,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
           </div>
           
           <div className="flex items-center space-x-3">
-            {/* Theme Selector */}
-            <div>
-              <ThemeSelector />
-            </div>
-            
-            {/* Settings Button */}
+            <ThemeSelector />
             <GameSettings 
               soundEnabled={soundEnabled} 
               setSoundEnabled={handleToggleSound} 
@@ -126,10 +121,15 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
         </div>
         
         {/* Round Information */}
-        <div className="flex items-center justify-between mb-4 px-2">
-          <div className="flex items-center">
-            <Clock className="h-4 w-4 text-gray-500 mr-1" />
-            <span className="text-sm text-gray-600">
+        <motion.div 
+          className="flex items-center justify-between mb-4 px-2"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2 }}
+        >
+          <div className="flex items-center bg-white/50 backdrop-blur-sm px-3 py-1 rounded-full shadow-sm">
+            <Clock className="h-4 w-4 text-dutch-blue mr-1" />
+            <span className="text-sm text-gray-700 font-medium">
               {totalRounds} {totalRounds <= 1 ? 'manche' : 'manches'}
             </span>
           </div>
@@ -144,31 +144,53 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                 <Button 
                   variant="ghost" 
                   size="sm" 
-                  className="px-2 rounded-full bg-white/50 hover:bg-white/70 backdrop-blur-sm border border-white/30"
+                  className="px-3 py-1 rounded-full bg-white/50 hover:bg-white/70 backdrop-blur-sm border border-white/30 shadow-sm"
                   onClick={handleUndoLastRound}
                 >
-                  <RotateCcw className="h-3.5 w-3.5 mr-1 text-gray-500" />
-                  <span className="text-xs text-gray-600">Annuler dernière manche</span>
+                  <RotateCcw className="h-3.5 w-3.5 mr-1.5 text-dutch-blue" />
+                  <span className="text-xs text-gray-700 font-medium">Annuler dernière manche</span>
                 </Button>
               </motion.div>
             )}
           </AnimatePresence>
-        </div>
+        </motion.div>
         
-        <div className="flex items-center justify-between mb-2">
-          <div className="px-2">
-            <ToggleGroup type="single" value={view} onValueChange={(value) => value && setView(value as 'podium' | 'table')} className="h-8">
-              <ToggleGroupItem value="podium" className="text-xs px-3 py-1">
-                <Medal className="h-3 w-3 mr-1" />
+        <motion.div 
+          className="flex items-center justify-between mb-4"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+        >
+          <div className="px-2 w-full">
+            <ToggleGroup 
+              type="single" 
+              value={view} 
+              onValueChange={(value) => value && setView(value as 'podium' | 'table')} 
+              className="w-full bg-white/50 backdrop-blur-sm rounded-xl p-1 shadow-sm border border-white/20"
+            >
+              <ToggleGroupItem 
+                value="podium" 
+                className={cn(
+                  "flex-1 data-[state=on]:bg-white data-[state=on]:shadow-sm rounded-lg text-sm py-2",
+                  view === "podium" ? "text-dutch-blue font-medium" : "text-gray-600"
+                )}
+              >
+                <Medal className="h-4 w-4 mr-1.5" />
                 Podium
               </ToggleGroupItem>
-              <ToggleGroupItem value="table" className="text-xs px-3 py-1">
-                <TableIcon className="h-3 w-3 mr-1" />
+              <ToggleGroupItem 
+                value="table" 
+                className={cn(
+                  "flex-1 data-[state=on]:bg-white data-[state=on]:shadow-sm rounded-lg text-sm py-2",
+                  view === "table" ? "text-dutch-blue font-medium" : "text-gray-600"
+                )}
+              >
+                <TableIcon className="h-4 w-4 mr-1.5" />
                 Tableau
               </ToggleGroupItem>
             </ToggleGroup>
           </div>
-        </div>
+        </motion.div>
         
         {/* Alert Dialogs */}
         <div className="hidden">
@@ -196,7 +218,12 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
           // Podium View
           <div>
             {/* Player Cards */}
-            <div className="space-y-4 mb-6">
+            <motion.div 
+              className="space-y-4 mb-6"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ staggerChildren: 0.1 }}
+            >
               {sortedPlayers.map((player, index) => (
                 <PlayerScoreCard 
                   key={player.id}
@@ -205,7 +232,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                   showRounds={true}
                 />
               ))}
-            </div>
+            </motion.div>
             
             {/* Podium visualization after first round */}
             {showPodium && (
@@ -225,10 +252,16 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
           </div>
         ) : (
           // Table View
-          <ScoreTableView 
-            players={players} 
-            roundHistory={roundHistory || []}
-          />
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <ScoreTableView 
+              players={players} 
+              roundHistory={roundHistory}
+            />
+          </motion.div>
         )}
       </div>
       
