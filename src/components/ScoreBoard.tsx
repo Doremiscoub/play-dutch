@@ -120,6 +120,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
               setSoundEnabled={handleToggleSound} 
             />
             
+            {/* Afficher l'avatar une seule fois si l'utilisateur est connecté */}
             {isSignedIn && user && (
               <motion.div 
                 className="relative"

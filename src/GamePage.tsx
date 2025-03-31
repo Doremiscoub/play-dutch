@@ -128,7 +128,12 @@ const GamePage: React.FC = () => {
     
     toast.success('Manche ajoutée !');
     
-    const gameOver = players.some(player => (player.totalScore + scores[players.indexOf(player)]) >= 100);
+    const playersTotalWithNewScores = players.map((player, index) => ({
+      player,
+      newTotal: player.totalScore + scores[index]
+    }));
+
+    const gameOver = playersTotalWithNewScores.some(p => p.newTotal >= 100);
     
     if (gameOver) {
       finishGame(scores, dutchPlayerId);
