@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { Share2, Copy, Users, RefreshCw, ChevronRight, Link as LinkIcon, QrCode, Loader2 } from "lucide-react";
+import { Share2, Copy, Users, RefreshCw, ChevronRight, Link as LinkIcon, QrCode, Loader2, MapPin, Info } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { 
@@ -25,17 +25,20 @@ import {
   getPublicGames
 } from '@/utils/gameInvitation';
 import MultiplayerLobby from './MultiplayerLobby';
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface GameInvitationProps {
   userId: string;
   userName: string;
   onStartMultiplayerGame: (gameId: string) => void;
+  mode?: 'dashboard' | 'online';
 }
 
 const GameInvitation: React.FC<GameInvitationProps> = ({ 
   userId, 
   userName, 
-  onStartMultiplayerGame 
+  onStartMultiplayerGame,
+  mode = 'dashboard'
 }) => {
   const [gameId, setGameId] = useState<string>("");
   const [gameLink, setGameLink] = useState<string>("");
@@ -176,12 +179,23 @@ const GameInvitation: React.FC<GameInvitationProps> = ({
         gameId={gameId}
         onStartGame={startGame}
         onLeaveGame={handleLeaveGame}
+        mode={mode}
       />
     );
   }
 
   return (
     <>
+      <Alert className="mb-4 bg-dutch-purple/10 border-dutch-purple/20 text-dutch-purple">
+        <Info className="h-4 w-4" />
+        <AlertDescription>
+          {mode === 'dashboard' ? 
+            "Ces fonctionnalités permettent de partager un tableau de scores entre plusieurs personnes physiquement présentes. Les joueurs jouent avec de vraies cartes et l'application sert uniquement à suivre les scores."
+            : 
+            "Mode en ligne en développement. À venir prochainement !"}
+        </AlertDescription>
+      </Alert>
+      
       <div className="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0 md:h-[400px]">
         <motion.div 
           className="flex-1"
@@ -191,11 +205,11 @@ const GameInvitation: React.FC<GameInvitationProps> = ({
           <Card className="h-full border border-white/50 bg-gradient-to-br from-white/90 to-white/70 backdrop-blur-md shadow-md hover:shadow-lg transition-all duration-300 flex flex-col">
             <CardHeader className="pb-2">
               <CardTitle className="text-xl font-semibold text-dutch-blue flex items-center gap-2">
-                <Users className="w-5 h-5" />
-                Créer une partie
+                <MapPin className="w-5 h-5" />
+                Créer un tableau de bord
               </CardTitle>
               <CardDescription className="text-gray-600">
-                Créez une nouvelle partie et invitez vos amis à vous rejoindre
+                Créez un tableau de scores partagé que vos amis peuvent rejoindre
               </CardDescription>
             </CardHeader>
             <CardContent className="flex-grow flex flex-col items-center justify-center space-y-6">
@@ -228,7 +242,7 @@ const GameInvitation: React.FC<GameInvitationProps> = ({
                     Création...
                   </>
                 ) : (
-                  "Créer une partie multijoueur"
+                  "Créer un tableau de scores partagé"
                 )}
               </Button>
             </CardFooter>
@@ -245,11 +259,11 @@ const GameInvitation: React.FC<GameInvitationProps> = ({
               <Card className="h-full cursor-pointer border border-white/50 bg-gradient-to-br from-white/90 to-white/70 backdrop-blur-md shadow-md hover:shadow-lg transition-all duration-300 flex flex-col">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-xl font-semibold text-dutch-purple flex items-center gap-2">
-                    <LinkIcon className="w-5 h-5" />
-                    Rejoindre une partie
+                    <LinkIcon className="w-5 w-5" />
+                    Rejoindre un tableau de bord
                   </CardTitle>
                   <CardDescription className="text-gray-600">
-                    Rejoignez une partie existante avec un code d'invitation
+                    Rejoignez un tableau de scores créé par un ami
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="flex-grow flex flex-col items-center justify-center">
@@ -272,7 +286,7 @@ const GameInvitation: React.FC<GameInvitationProps> = ({
           <SheetContent side="bottom" className="rounded-t-3xl bg-white/95 backdrop-blur-lg border-t border-white/50">
             <SheetHeader>
               <SheetTitle className="text-2xl font-bold text-dutch-purple">
-                Rejoindre une partie
+                Rejoindre un tableau de scores
               </SheetTitle>
             </SheetHeader>
             <div className="space-y-6 py-6">
@@ -303,7 +317,7 @@ const GameInvitation: React.FC<GameInvitationProps> = ({
               
               {publicGames.length > 0 && (
                 <div className="space-y-3">
-                  <h3 className="text-sm font-medium text-gray-700">Parties publiques disponibles</h3>
+                  <h3 className="text-sm font-medium text-gray-700">Tableaux de scores disponibles</h3>
                   <div className="max-h-60 overflow-y-auto space-y-2">
                     <AnimatePresence>
                       {publicGames.map(game => (
@@ -333,7 +347,7 @@ const GameInvitation: React.FC<GameInvitationProps> = ({
               )}
               
               <p className="text-sm text-gray-500 text-center">
-                Demandez le code à la personne qui a créé la partie
+                Demandez le code à la personne qui a créé le tableau de bord
               </p>
             </div>
           </SheetContent>

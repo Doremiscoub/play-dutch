@@ -8,8 +8,9 @@ import GameInvitation from './GameInvitation';
 import { joinGameSession, getGameSession } from '@/utils/gameInvitation';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Users, User, Gamepad2, Globe, LogIn } from 'lucide-react';
+import { Users, User, Gamepad2, Globe, LogIn, Github, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import LocalGameSetup from './LocalGameSetup';
 
 interface MultiplayerGameSetupProps {
@@ -111,7 +112,7 @@ const MultiplayerGameSetup: React.FC<MultiplayerGameSetupProps> = ({
           onValueChange={setActiveTab}
           className="w-full"
         >
-          <TabsList className="grid grid-cols-2 mb-6 rounded-full border border-white/40 bg-white/70 backdrop-blur-md p-1 shadow-sm w-full max-w-full overflow-hidden">
+          <TabsList className="grid grid-cols-3 mb-6 rounded-full border border-white/40 bg-white/70 backdrop-blur-md p-1 shadow-sm w-full max-w-full overflow-hidden">
             <TabsTrigger 
               value="local" 
               className="rounded-full data-[state=active]:bg-white data-[state=active]:shadow-md flex items-center justify-center space-x-1 py-2.5 text-dutch-blue data-[state=active]:text-dutch-blue data-[state=inactive]:text-dutch-blue/70 px-2 truncate"
@@ -120,11 +121,19 @@ const MultiplayerGameSetup: React.FC<MultiplayerGameSetupProps> = ({
               <span className="truncate">Solo/Local</span>
             </TabsTrigger>
             <TabsTrigger 
-              value="multiplayer" 
+              value="tablette" 
               className="rounded-full data-[state=active]:bg-white data-[state=active]:shadow-md flex items-center justify-center space-x-1 py-2.5 text-dutch-purple data-[state=active]:text-dutch-purple data-[state=inactive]:text-dutch-purple/70 px-2 truncate"
             >
-              <Users className="w-4 h-4 flex-shrink-0 mr-1" />
-              <span className="truncate">Multijoueur</span>
+              <MapPin className="w-4 h-4 flex-shrink-0 mr-1" />
+              <span className="truncate">Tableau de bord</span>
+            </TabsTrigger>
+            <TabsTrigger 
+              value="online" 
+              className="rounded-full data-[state=active]:bg-white data-[state=active]:shadow-md flex items-center justify-center space-x-1 py-2.5 text-dutch-orange data-[state=active]:text-dutch-orange data-[state=inactive]:text-dutch-orange/70 px-2 truncate"
+              disabled
+            >
+              <Globe className="w-4 h-4 flex-shrink-0 mr-1" />
+              <span className="truncate">En ligne</span>
             </TabsTrigger>
           </TabsList>
         
@@ -151,27 +160,37 @@ const MultiplayerGameSetup: React.FC<MultiplayerGameSetupProps> = ({
             </motion.div>
           </TabsContent>
         
-          <TabsContent value="multiplayer">
+          <TabsContent value="tablette">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4 }}
             >
+              <Alert className="mb-4 bg-dutch-purple/10 border-dutch-purple/20 text-dutch-purple">
+                <MapPin className="h-4 w-4" />
+                <AlertTitle>Mode Tableau de Bord</AlertTitle>
+                <AlertDescription>
+                  Ce mode permet à chaque joueur de suivre les scores sur son propre appareil pendant une partie physique.
+                  Tous les joueurs doivent être ensemble dans la même pièce pour jouer aux cartes, l'application sert uniquement de tableau de bord.
+                </AlertDescription>
+              </Alert>
+            
               {isSignedIn ? (
                 <GameInvitation 
                   userId={user?.id || ''}
                   userName={userName}
                   onStartMultiplayerGame={onStartMultiplayerGame}
+                  mode="dashboard"
                 />
               ) : (
                 <Card className="rounded-3xl border border-white/50 bg-white/80 backdrop-blur-md shadow-md hover:shadow-lg transition-all duration-300">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-xl font-semibold text-dutch-purple flex items-center gap-2">
                       <LogIn className="h-5 w-5 text-dutch-purple" />
-                      Connectez-vous pour jouer en multijoueur
+                      Connectez-vous pour partager le tableau de bord
                     </CardTitle>
                     <CardDescription className="text-gray-600">
-                      Le mode multijoueur nécessite une connexion pour inviter vos amis
+                      Le mode tableau de bord nécessite une connexion pour inviter vos amis
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -180,7 +199,7 @@ const MultiplayerGameSetup: React.FC<MultiplayerGameSetupProps> = ({
                         <Users className="h-10 w-10 text-dutch-purple/70" />
                       </div>
                       <p className="text-gray-600 mb-4">
-                        Le mode multijoueur nécessite une connexion pour inviter vos amis et gérer vos parties.
+                        Ce mode permet à chaque joueur de suivre les scores sur son propre appareil pendant une partie physique.
                       </p>
                       <Button className="bg-dutch-purple text-white hover:bg-dutch-purple/90 rounded-xl shadow-md hover:shadow-lg">
                         Se connecter
@@ -189,6 +208,39 @@ const MultiplayerGameSetup: React.FC<MultiplayerGameSetupProps> = ({
                   </CardContent>
                 </Card>
               )}
+            </motion.div>
+          </TabsContent>
+          
+          <TabsContent value="online">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+            >
+              <Card className="rounded-3xl border border-white/50 bg-white/80 backdrop-blur-md shadow-md hover:shadow-lg transition-all duration-300">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-xl font-semibold text-dutch-orange flex items-center gap-2">
+                    <Globe className="h-5 w-5" />
+                    Multijoueur En Ligne
+                  </CardTitle>
+                  <CardDescription className="text-gray-600">
+                    Jouer en ligne avec d'autres personnes, chacun depuis son propre appareil
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-center py-8">
+                    <div className="w-20 h-20 mx-auto rounded-full bg-dutch-orange/10 flex items-center justify-center mb-4">
+                      <Github className="h-10 w-10 text-dutch-orange/70" />
+                    </div>
+                    <p className="text-gray-600 mb-4">
+                      Le mode en ligne est en cours de développement et sera bientôt disponible.
+                    </p>
+                    <Button disabled className="bg-dutch-orange/70 text-white hover:bg-dutch-orange/90 rounded-xl shadow-md hover:shadow-lg">
+                      Bientôt disponible
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
             </motion.div>
           </TabsContent>
         </Tabs>

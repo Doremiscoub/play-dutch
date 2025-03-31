@@ -1,6 +1,6 @@
 
 import * as React from "react"
-import { ArrowDown, ArrowUp } from "lucide-react"
+import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
@@ -88,6 +88,7 @@ const TableHead = React.forwardRef<
     {onSort ? (
       <div className="flex items-center gap-1">
         <span>{children}</span>
+        {sortDirection === null && <ArrowUpDown className="h-3 w-3 opacity-50" />}
         {sortDirection === 'asc' && <ArrowUp className="h-3 w-3" />}
         {sortDirection === 'desc' && <ArrowDown className="h-3 w-3" />}
       </div>

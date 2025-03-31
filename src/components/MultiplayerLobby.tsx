@@ -13,7 +13,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { motion, AnimatePresence } from "framer-motion";
-import { Share2, Copy, Clock, Users, Play, ArrowLeft, QrCode } from "lucide-react";
+import { Share2, Copy, Clock, Users, Play, ArrowLeft, QrCode, MapPin, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
 import { 
   getGameSession, 
@@ -21,6 +21,7 @@ import {
   shareGameInvitation, 
   generateGameLink
 } from '@/utils/gameInvitation';
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import MultiplayerStats from './MultiplayerStats';
 import { useUser } from '@clerk/clerk-react';
 
@@ -28,12 +29,14 @@ interface MultiplayerLobbyProps {
   gameId: string;
   onStartGame: () => void;
   onLeaveGame: () => void;
+  mode?: 'dashboard' | 'online';
 }
 
 const MultiplayerLobby: React.FC<MultiplayerLobbyProps> = ({ 
   gameId,
   onStartGame,
-  onLeaveGame
+  onLeaveGame,
+  mode = 'dashboard'
 }) => {
   const [players, setPlayers] = useState<{id: string; name: string; online: boolean}[]>([]);
   const [gameLink, setGameLink] = useState<string>("");
@@ -117,8 +120,11 @@ const MultiplayerLobby: React.FC<MultiplayerLobbyProps> = ({
         <CardHeader className="pb-2">
           <div className="flex justify-between items-center">
             <CardTitle className="text-xl font-semibold text-dutch-blue flex items-center gap-2">
-              <Users className="w-5 h-5" />
-              Salle d'attente
+              {mode === 'dashboard' ? (
+                <><MapPin className="h-5 w-5" /> Tableau de scores partagé</>
+              ) : (
+                <><Users className="h-5 w-5" /> Salle d'attente</>
+              )}
             </CardTitle>
             <Badge variant="outline" className="bg-white/50 text-dutch-blue">
               Code: {gameId}
@@ -130,6 +136,16 @@ const MultiplayerLobby: React.FC<MultiplayerLobbyProps> = ({
         </CardHeader>
         
         <CardContent className="space-y-4">
+          {mode === 'dashboard' && (
+            <Alert className="mb-4 bg-dutch-purple/10 border-dutch-purple/20 text-dutch-purple">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>
+                Les joueurs doivent être physiquement présents pour jouer avec de vraies cartes. 
+                Cette application sert uniquement à suivre les scores ensemble.
+              </AlertDescription>
+            </Alert>
+          )}
+        
           <div className="flex flex-wrap items-center gap-2 justify-center">
             <Button 
               variant="outline" 
@@ -261,7 +277,7 @@ const MultiplayerLobby: React.FC<MultiplayerLobbyProps> = ({
             ) : (
               <>
                 <Play className="w-4 h-4 mr-2" />
-                Démarrer la partie
+                {mode === 'dashboard' ? 'Démarrer le tableau de scores' : 'Démarrer la partie'}
               </>
             )}
           </Button>
@@ -272,7 +288,7 @@ const MultiplayerLobby: React.FC<MultiplayerLobbyProps> = ({
         {players.length < 2 ? (
           <div className="animate-pulse">En attente d'autres joueurs...</div>
         ) : (
-          <div>Prêt à jouer ! Cliquez sur "Démarrer la partie" quand tout le monde est là.</div>
+          <div>Prêt à jouer ! Cliquez sur "Démarrer" quand tout le monde est là.</div>
         )}
       </div>
     </div>
