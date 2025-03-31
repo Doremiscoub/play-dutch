@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { VolumeX, Volume2, ArrowLeft, Moon, Sun, PaintBrush, Palette } from 'lucide-react';
+import { VolumeX, Volume2, ArrowLeft, Moon, Sun, Paintbrush, Palette } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import ThemeSelector from '@/components/ThemeSelector';
 import { useToast } from '@/hooks/use-toast';
