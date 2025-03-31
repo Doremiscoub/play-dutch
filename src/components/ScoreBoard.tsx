@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Plus, Trophy, BarChart3, History, Home, Crown, Trash2, Music, Bell, VolumeX, ArrowRight, RotateCcw, Clock, Award, LineChart, TrendingDown, TrendingUp, Heart, Medal, Flag } from 'lucide-react';
@@ -350,14 +351,34 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
           </DialogContent>
         </Dialog>
         
-        <AlertDialogTrigger asChild>
-          <Button 
-            className="w-12 h-12 rounded-full shadow-lg bg-dutch-blue/90 text-white hover:bg-dutch-blue flex items-center justify-center backdrop-blur-md"
-            aria-label="Terminer la partie"
-          >
-            <Flag className="h-5 w-5" aria-hidden="true" />
-          </Button>
-        </AlertDialogTrigger>
+        {/* Wrap the AlertDialogTrigger with AlertDialog */}
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button 
+              className="w-12 h-12 rounded-full shadow-lg bg-dutch-blue/90 text-white hover:bg-dutch-blue flex items-center justify-center backdrop-blur-md"
+              aria-label="Terminer la partie"
+            >
+              <Flag className="h-5 w-5" aria-hidden="true" />
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent className="rounded-3xl bg-white/60 backdrop-blur-md border border-white/20">
+            <AlertDialogHeader>
+              <AlertDialogTitle>Terminer la partie</AlertDialogTitle>
+              <AlertDialogDescription>
+                Êtes-vous sûr de vouloir terminer cette partie avant la fin naturelle ? Vous pourrez voir le podium et les statistiques finales.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel className="rounded-full">Annuler</AlertDialogCancel>
+              <AlertDialogAction 
+                onClick={handleEndGame}
+                className="rounded-full bg-dutch-blue hover:bg-dutch-blue/90"
+              >
+                Voir le podium
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
         
         <Sheet>
           <SheetTrigger asChild>
