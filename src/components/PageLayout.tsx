@@ -71,7 +71,15 @@ const PageLayout: React.FC<PageLayoutProps> = ({
     >
       {/* Background elements */}
       {backgroundVariant !== 'none' && (
-        <AnimatedBackground variant={backgroundVariant === 'subtle' ? 'subtle' : backgroundVariant === 'game' ? 'game' : 'default'} />
+        <AnimatedBackground 
+          variant={
+            backgroundVariant === 'subtle' 
+              ? 'subtle' 
+              : backgroundVariant === 'game' 
+                ? 'default' // Change this to match the allowed types in AnimatedBackground
+                : 'default'
+          } 
+        />
       )}
       
       {/* Header with navigation */}
