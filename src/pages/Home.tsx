@@ -1,12 +1,25 @@
-
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { PlayCircle, History, Info, Sparkles, User, Settings } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { SignedIn, SignedOut } from '@clerk/clerk-react';
+import BrickBreaker from '@/components/EasterEgg/BrickBreaker';
 
 const Home: React.FC = () => {
+  const [versionClickCount, setVersionClickCount] = useState(0);
+  const [showEasterEgg, setShowEasterEgg] = useState(false);
+
+  const handleVersionClick = () => {
+    const newCount = versionClickCount + 1;
+    setVersionClickCount(newCount);
+    
+    if (newCount >= 10) {
+      setShowEasterEgg(true);
+      setVersionClickCount(0);
+    }
+  };
+
   return (
     <motion.div 
       className="min-h-screen flex flex-col items-center justify-center p-6 relative overflow-hidden"
@@ -254,10 +267,12 @@ const Home: React.FC = () => {
         </div>
         
         <motion.div 
-          className="mt-16 text-center text-gray-500 text-sm backdrop-blur-md px-4 py-2 rounded-full bg-white/40 border border-white/20 mx-auto w-max shadow-sm"
+          className="mt-16 text-center text-gray-500 text-sm backdrop-blur-md px-4 py-2 rounded-full bg-white/40 border border-white/20 mx-auto w-max shadow-sm cursor-pointer hover:bg-white/50 transition-colors"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.7, duration: 0.5 }}
+          onClick={handleVersionClick}
+          whileTap={{ scale: 0.98 }}
         >
           <p>Version 1.0</p>
         </motion.div>
@@ -326,6 +341,13 @@ const Home: React.FC = () => {
           repeatType: "reverse"
         }}
       />
+      
+      {/* Easter Egg */}
+      <AnimatePresence>
+        {showEasterEgg && (
+          <BrickBreaker onClose={() => setShowEasterEgg(false)} />
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 };
