@@ -2,7 +2,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Player } from '@/types';
-import { Trophy, Star, TrendingUp, TrendingDown } from 'lucide-react';
+import { Trophy, Star, TrendingUp, TrendingDown, Award } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 
 interface PlayerScoreCardProps {
@@ -11,6 +11,7 @@ interface PlayerScoreCardProps {
   isWinner?: boolean;
   showRounds?: boolean;
   lastRoundScore?: number;
+  onRoundClick?: (roundIndex: number) => void;
 }
 
 const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({ 
@@ -18,7 +19,8 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
   position, 
   isWinner = false,
   showRounds = true,
-  lastRoundScore
+  lastRoundScore,
+  onRoundClick
 }) => {
   // Calculate progress percentage (max score is 100)
   const progressPercentage = Math.min(player.totalScore, 100);
@@ -44,6 +46,10 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
     player.rounds[player.rounds.length - 1].score === lastRoundScore && 
     lastRoundScore === Math.min(...player.rounds.map(r => r.score).filter(s => s > 0));
 
+  // Get player statistics to display
+  const stats = player.stats;
+  const hasImprovement = stats?.improvementRate !== undefined && stats.improvementRate < 0;
+  
   return (
     <motion.div 
       className={cardClasses}
@@ -65,6 +71,11 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
                 <div className="px-2 py-0.5 bg-dutch-orange/20 text-dutch-orange text-xs font-medium rounded-full">
                   Dutch
                 </div>
+              </div>
+            )}
+            {stats && hasImprovement && (
+              <div className="ml-1">
+                <Award className="h-3 w-3 text-dutch-blue" title="S'améliore" />
               </div>
             )}
           </div>
@@ -91,16 +102,28 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
       
       {showRounds && player.rounds.length > 0 && (
         <div className="mt-2 flex gap-2 overflow-x-auto py-1 scrollbar-none">
-          {player.rounds.map((round, index) => (
-            <div 
-              key={index} 
-              className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium
-                ${isLastRoundHighScore && index === player.rounds.length - 1 ? 'bg-green-100 text-green-800 ring-1 ring-green-400' :
-                  round.isDutch ? 'bg-dutch-orange text-white' : 'bg-gray-100'}`}
-            >
-              {round.score}
-            </div>
-          ))}
+          {player.rounds.map((round, index) => {
+            // Check if this is the best score for this player
+            const isPlayerBestScore = stats?.bestRound === round.score || 
+              (round.score > 0 && round.score === Math.min(...player.rounds.map(r => r.score).filter(s => s > 0)));
+            
+            return (
+              <div 
+                key={index} 
+                className={`
+                  flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium
+                  transition-transform hover:scale-110 cursor-pointer
+                  ${isLastRoundHighScore && index === player.rounds.length - 1 ? 'bg-green-100 text-green-800 ring-1 ring-green-400' :
+                    round.isDutch ? 'bg-dutch-orange text-white' : 
+                    isPlayerBestScore ? 'bg-blue-100 text-blue-800 ring-1 ring-blue-300' : 'bg-gray-100'}
+                `}
+                onClick={() => onRoundClick?.(index)}
+                title={`Manche ${index + 1}: ${round.score} points${round.isDutch ? ' (Dutch)' : ''}`}
+              >
+                {round.score}
+              </div>
+            );
+          })}
         </div>
       )}
     </motion.div>

@@ -1,9 +1,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Plus, Trophy, BarChart3, History, Home, Crown, Trash2, Music, Bell, VolumeX } from 'lucide-react';
+import { Plus, Trophy, BarChart3, History, Home, Crown, Trash2, Music, Bell, VolumeX, ArrowRight, RotateCcw, Clock, Award, LineChart, TrendingDown, TrendingUp, Heart } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Player, GameRound } from '@/types';
+import { Player, GameRound, PlayerStatistics } from '@/types';
 import PlayerScoreCard from './PlayerScoreCard';
 import NewRoundModal from './NewRoundModal';
 import { useNavigate } from 'react-router-dom';
@@ -12,15 +12,24 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/co
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 interface ScoreBoardProps {
   players: Player[];
   onAddRound: (scores: number[], dutchPlayerId?: string) => void;
   onEndGame: () => void;
   onUndoLastRound: () => void;
+  roundHistory?: { scores: number[], dutchPlayerId?: string }[];
 }
 
-const ScoreBoard: React.FC<ScoreBoardProps> = ({ players, onAddRound, onEndGame, onUndoLastRound }) => {
+const ScoreBoard: React.FC<ScoreBoardProps> = ({ 
+  players, 
+  onAddRound, 
+  onEndGame, 
+  onUndoLastRound,
+  roundHistory = [] 
+}) => {
   const [showNewRoundModal, setShowNewRoundModal] = useState(false);
   const [sortBy, setSortBy] = useState<'position' | 'name'>('position');
   const [showRounds, setShowRounds] = useState<boolean>(true);
@@ -30,6 +39,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({ players, onAddRound, onEndGame,
     const saved = localStorage.getItem('dutch_sound_enabled');
     return saved !== null ? JSON.parse(saved) : true;
   });
+  const [showRoundDetails, setShowRoundDetails] = useState<number | null>(null);
   const navigate = useNavigate();
   
   useEffect(() => {
@@ -96,6 +106,18 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({ players, onAddRound, onEndGame,
     playSound('undo');
   };
 
+  // Get round details for a specific round index
+  const getRoundDetails = (roundIndex: number) => {
+    if (roundIndex < 0 || roundIndex >= roundCount) return null;
+    
+    return players.map(player => ({
+      playerName: player.name,
+      score: player.rounds[roundIndex].score,
+      isDutch: player.rounds[roundIndex].isDutch,
+      totalScoreAfter: player.rounds.slice(0, roundIndex + 1).reduce((sum, r) => sum + r.score, 0)
+    }));
+  };
+
   return (
     <motion.div 
       className="w-full max-w-md mx-auto p-4 pb-24"
@@ -138,7 +160,9 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({ players, onAddRound, onEndGame,
 
       {roundCount > 0 && (
         <div className="mb-4 flex items-center justify-between">
-          <span className="bg-dutch-blue text-white text-sm font-medium px-4 py-1 rounded-full">
+          <span className="bg-dutch-blue text-white text-sm font-medium px-4 py-1 rounded-full 
+                         flex items-center">
+            <Clock className="h-3 w-3 mr-1" />
             Manche {roundCount}
           </span>
           
@@ -149,7 +173,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({ players, onAddRound, onEndGame,
               className="text-dutch-orange border-dutch-orange/30 text-xs hover:bg-dutch-orange/10"
               onClick={handleUndoLastRound}
             >
-              <Trash2 className="h-3 w-3 mr-1" />
+              <RotateCcw className="h-3 w-3 mr-1" />
               Annuler dernière manche
             </Button>
           )}
@@ -200,9 +224,36 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({ players, onAddRound, onEndGame,
             isWinner={gameOver && index === 0}
             showRounds={showRounds}
             lastRoundScore={lastRoundScores[player.id]}
+            onRoundClick={(roundIndex) => setShowRoundDetails(roundIndex)}
           />
         ))}
       </div>
+
+      {/* Round details dialog */}
+      <Dialog open={showRoundDetails !== null} onOpenChange={() => setShowRoundDetails(null)}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Détails de la manche {showRoundDetails !== null ? showRoundDetails + 1 : ''}</DialogTitle>
+          </DialogHeader>
+          <div className="mt-4 space-y-4">
+            {showRoundDetails !== null && getRoundDetails(showRoundDetails)?.map((detail, index) => (
+              <div key={index} className="flex justify-between items-center py-2 border-b border-gray-100 last:border-0">
+                <div className="flex items-center gap-2">
+                  <Avatar className={`h-8 w-8 ${detail.isDutch ? 'bg-dutch-orange' : 'bg-gray-200'}`}>
+                    <AvatarFallback>{detail.playerName.charAt(0)}</AvatarFallback>
+                  </Avatar>
+                  <span className="font-medium">{detail.playerName}</span>
+                  {detail.isDutch && <span className="text-xs bg-dutch-orange/20 text-dutch-orange px-2 py-0.5 rounded-full">Dutch</span>}
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="font-bold text-lg">{detail.score}</span>
+                  <span className="text-xs text-gray-500">Total: {detail.totalScoreAfter}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </DialogContent>
+      </Dialog>
 
       <div className="fixed bottom-6 left-0 right-0 flex justify-center">
         <Button 
@@ -263,50 +314,186 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({ players, onAddRound, onEndGame,
               <BarChart3 className="h-5 w-5" />
             </Button>
           </SheetTrigger>
-          <SheetContent>
+          <SheetContent className="overflow-y-auto">
             <SheetHeader>
               <SheetTitle>Statistiques de la partie</SheetTitle>
             </SheetHeader>
-            <div className="mt-6 space-y-4">
-              <div className="dutch-card">
-                <h3 className="text-sm font-medium mb-2">Meilleur score par manche</h3>
-                {players.map(player => {
-                  const bestRound = player.rounds.length > 0 
-                    ? Math.min(...player.rounds.map(r => r.score).filter(s => s > 0))
-                    : null;
-                  return (
-                    <div key={player.id} className="flex justify-between items-center mb-1">
-                      <span className="text-sm">{player.name}</span>
-                      <span className="font-medium">
-                        {bestRound !== null ? bestRound : '-'}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
+            <Tabs defaultValue="stats" className="mt-6">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="stats">Joueurs</TabsTrigger>
+                <TabsTrigger value="trends">Tendances</TabsTrigger>
+              </TabsList>
               
-              <div className="dutch-card">
-                <h3 className="text-sm font-medium mb-2">Nombre de fois "Dutch"</h3>
-                {players.map(player => {
-                  const dutchCount = player.rounds.filter(r => r.isDutch).length;
-                  return (
-                    <div key={player.id} className="flex justify-between items-center mb-1">
-                      <span className="text-sm">{player.name}</span>
-                      <span className="font-medium">{dutchCount}</span>
-                    </div>
-                  );
-                })}
-              </div>
-              
-              <div className="dutch-card">
-                <h3 className="text-sm font-medium mb-2">Progression des scores</h3>
-                <div className="h-40 overflow-hidden">
-                  {players.length > 0 && (
-                    <PlayerScoreProgress players={players} />
-                  )}
+              <TabsContent value="stats" className="space-y-4 mt-4">
+                <div className="dutch-card">
+                  <h3 className="text-sm font-medium mb-2 flex items-center">
+                    <Award className="h-4 w-4 mr-1 text-dutch-blue" />
+                    Meilleur score par manche
+                  </h3>
+                  {players.map(player => {
+                    const bestRound = player.stats?.bestRound || (player.rounds.length > 0 
+                      ? Math.min(...player.rounds.map(r => r.score).filter(s => s > 0))
+                      : null);
+                    return (
+                      <div key={player.id} className="flex justify-between items-center mb-1">
+                        <span className="text-sm">{player.name}</span>
+                        <span className="font-medium">
+                          {bestRound !== null ? bestRound : '-'}
+                        </span>
+                      </div>
+                    );
+                  })}
                 </div>
-              </div>
-            </div>
+                
+                <div className="dutch-card">
+                  <h3 className="text-sm font-medium mb-2 flex items-center">
+                    <TrendingDown className="h-4 w-4 mr-1 text-dutch-orange" />
+                    Nombre de fois "Dutch"
+                  </h3>
+                  {players.map(player => {
+                    const dutchCount = player.stats?.dutchCount || player.rounds.filter(r => r.isDutch).length;
+                    return (
+                      <div key={player.id} className="flex justify-between items-center mb-1">
+                        <span className="text-sm">{player.name}</span>
+                        <span className="font-medium">{dutchCount}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+                
+                <div className="dutch-card">
+                  <h3 className="text-sm font-medium mb-2 flex items-center">
+                    <TrendingUp className="h-4 w-4 mr-1 text-dutch-purple" />
+                    Pire score par manche
+                  </h3>
+                  {players.map(player => {
+                    const worstRound = player.stats?.worstRound || (player.rounds.length > 0 
+                      ? Math.max(...player.rounds.map(r => r.score))
+                      : null);
+                    return (
+                      <div key={player.id} className="flex justify-between items-center mb-1">
+                        <span className="text-sm">{player.name}</span>
+                        <span className="font-medium">
+                          {worstRound !== null ? worstRound : '-'}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+                
+                <div className="dutch-card">
+                  <h3 className="text-sm font-medium mb-2 flex items-center">
+                    <LineChart className="h-4 w-4 mr-1 text-dutch-blue" />
+                    Score moyen par manche
+                  </h3>
+                  {players.map(player => {
+                    const avgScore = player.stats?.averageScore || (player.rounds.length > 0 
+                      ? Math.round(player.rounds.reduce((sum, r) => sum + r.score, 0) / player.rounds.length * 10) / 10
+                      : 0);
+                    return (
+                      <div key={player.id} className="flex justify-between items-center mb-1">
+                        <span className="text-sm">{player.name}</span>
+                        <span className="font-medium">
+                          {player.rounds.length > 0 ? avgScore : '-'}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+                
+                {players.some(p => p.stats?.improvementRate !== undefined) && (
+                  <div className="dutch-card">
+                    <h3 className="text-sm font-medium mb-2 flex items-center">
+                      <Heart className="h-4 w-4 mr-1 text-dutch-pink" />
+                      Tendance d'amélioration
+                    </h3>
+                    {players.map(player => {
+                      if (!player.stats?.improvementRate) return null;
+                      
+                      return (
+                        <div key={player.id} className="flex justify-between items-center mb-1">
+                          <span className="text-sm">{player.name}</span>
+                          <div className="flex items-center gap-1">
+                            {player.stats.improvementRate < 0 ? (
+                              <TrendingDown className="h-3 w-3 text-green-500" />
+                            ) : player.stats.improvementRate > 0 ? (
+                              <TrendingUp className="h-3 w-3 text-red-500" />
+                            ) : (
+                              <span>-</span>
+                            )}
+                            <span className={`font-medium ${player.stats.improvementRate < 0 ? 'text-green-600' : 'text-red-600'}`}>
+                              {player.stats.improvementRate !== 0 ? Math.abs(Math.round(player.stats.improvementRate * 10) / 10) : '-'}
+                            </span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </TabsContent>
+              
+              <TabsContent value="trends" className="mt-4">
+                <div className="dutch-card">
+                  <h3 className="text-sm font-medium mb-2">Progression des scores</h3>
+                  <div className="h-40 overflow-hidden">
+                    {players.length > 0 && (
+                      <PlayerScoreProgress players={players} />
+                    )}
+                  </div>
+                </div>
+                
+                <div className="dutch-card mt-4">
+                  <h3 className="text-sm font-medium mb-2">Historique des manches</h3>
+                  <div className="space-y-2 max-h-60 overflow-y-auto pr-2">
+                    {Array.from({length: roundCount}).map((_, roundIndex) => {
+                      const roundNumber = roundIndex + 1;
+                      const roundDetails = getRoundDetails(roundIndex);
+                      const bestScore = roundDetails ? Math.min(...roundDetails.map(d => d.score)) : 0;
+                      const worstScore = roundDetails ? Math.max(...roundDetails.map(d => d.score)) : 0;
+                      
+                      return (
+                        <div 
+                          key={roundIndex} 
+                          className="p-2 border border-gray-100 rounded-lg cursor-pointer hover:bg-gray-50"
+                          onClick={() => setShowRoundDetails(roundIndex)}
+                        >
+                          <div className="flex justify-between mb-1">
+                            <span className="text-xs font-medium text-gray-500">Manche {roundNumber}</span>
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              className="h-5 w-5 p-0"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setShowRoundDetails(roundIndex);
+                              }}
+                            >
+                              <ArrowRight className="h-3 w-3" />
+                            </Button>
+                          </div>
+                          <div className="flex gap-2">
+                            {roundDetails?.map((detail, i) => (
+                              <div 
+                                key={i} 
+                                className={`
+                                  w-6 h-6 rounded-full flex items-center justify-center text-xs
+                                  ${detail.isDutch ? 'bg-dutch-orange text-white' : 
+                                    detail.score === bestScore ? 'bg-green-100 text-green-800 ring-1 ring-green-400' :
+                                    detail.score === worstScore ? 'bg-red-100 text-red-800' : 'bg-gray-100'}
+                                `}
+                                title={`${detail.playerName}: ${detail.score}`}
+                              >
+                                {detail.score}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </TabsContent>
+            </Tabs>
           </SheetContent>
         </Sheet>
       </div>

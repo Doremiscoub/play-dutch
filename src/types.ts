@@ -4,6 +4,7 @@ export interface Player {
   name: string;
   totalScore: number;
   rounds: GameRound[];
+  stats?: PlayerStatistics;
 }
 
 export interface GameRound {
@@ -28,4 +29,7 @@ export interface PlayerStatistics {
   dutchCount: number;
   averageScore: number;
   worstRound: number | null;
+  improvementRate?: number; // Negative is improvement, positive is getting worse
+  consistencyScore?: number; // Lower variance is more consistent
+  winStreak?: number;
 }
