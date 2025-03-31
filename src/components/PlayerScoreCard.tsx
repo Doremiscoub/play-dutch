@@ -2,7 +2,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Player } from '@/types';
-import { Trophy, Star } from 'lucide-react';
+import { Trophy, Star, TrendingUp, TrendingDown } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 
 interface PlayerScoreCardProps {
@@ -10,13 +10,15 @@ interface PlayerScoreCardProps {
   position: number;
   isWinner?: boolean;
   showRounds?: boolean;
+  lastRoundScore?: number;
 }
 
 const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({ 
   player, 
   position, 
   isWinner = false,
-  showRounds = true 
+  showRounds = true,
+  lastRoundScore
 }) => {
   // Calculate progress percentage (max score is 100)
   const progressPercentage = Math.min(player.totalScore, 100);
@@ -35,6 +37,12 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
   const cardClasses = isWinner
     ? 'dutch-card border-2 border-dutch-yellow bg-gradient-to-r from-dutch-purple/10 to-dutch-blue/10'
     : 'dutch-card';
+
+  // Determine if this is the last round score
+  const isLastRoundHighScore = lastRoundScore !== undefined && 
+    player.rounds.length > 0 && 
+    player.rounds[player.rounds.length - 1].score === lastRoundScore && 
+    lastRoundScore === Math.min(...player.rounds.map(r => r.score).filter(s => s > 0));
 
   return (
     <motion.div 
@@ -63,7 +71,20 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
           
           <div className="flex items-center gap-2 mt-1">
             <Progress value={progressPercentage} className="h-2" />
-            <span className="text-lg font-bold">{player.totalScore}</span>
+            <div className="flex items-center">
+              <span className="text-lg font-bold">{player.totalScore}</span>
+              {lastRoundScore !== undefined && (
+                <span className="ml-2 text-xs text-gray-500 flex items-center">
+                  +{lastRoundScore}
+                  {player.rounds.length > 1 && player.rounds[player.rounds.length - 1].score < player.rounds[player.rounds.length - 2].score && (
+                    <TrendingDown className="h-3 w-3 ml-0.5 text-green-500" />
+                  )}
+                  {player.rounds.length > 1 && player.rounds[player.rounds.length - 1].score > player.rounds[player.rounds.length - 2].score && (
+                    <TrendingUp className="h-3 w-3 ml-0.5 text-red-500" />
+                  )}
+                </span>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -74,7 +95,8 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
             <div 
               key={index} 
               className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium
-                ${round.isDutch ? 'bg-dutch-orange text-white' : 'bg-gray-100'}`}
+                ${isLastRoundHighScore && index === player.rounds.length - 1 ? 'bg-green-100 text-green-800 ring-1 ring-green-400' :
+                  round.isDutch ? 'bg-dutch-orange text-white' : 'bg-gray-100'}`}
             >
               {round.score}
             </div>

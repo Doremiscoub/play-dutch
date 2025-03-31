@@ -6,6 +6,7 @@ import GameSetup from '@/components/GameSetup';
 import ScoreBoard from '@/components/ScoreBoard';
 import { v4 as uuidv4 } from 'uuid';
 import { toast } from 'sonner';
+import { AnimatePresence, motion } from 'framer-motion';
 
 const GamePage: React.FC = () => {
   const [gameState, setGameState] = useState<'setup' | 'playing'>('setup');
@@ -91,15 +92,31 @@ const GamePage: React.FC = () => {
 
   return (
     <div className="min-h-screen">
-      {gameState === 'setup' ? (
-        <GameSetup onStartGame={handleStartGame} />
-      ) : (
-        <ScoreBoard 
-          players={players}
-          onAddRound={handleAddRound}
-          onEndGame={handleEndGame}
-        />
-      )}
+      <AnimatePresence mode="wait">
+        {gameState === 'setup' ? (
+          <motion.div
+            key="setup"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <GameSetup onStartGame={handleStartGame} />
+          </motion.div>
+        ) : (
+          <motion.div
+            key="playing"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <ScoreBoard 
+              players={players}
+              onAddRound={handleAddRound}
+              onEndGame={handleEndGame}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

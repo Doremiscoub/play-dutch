@@ -1,13 +1,14 @@
 
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Plus, Trophy, BarChart3, History, Home } from 'lucide-react';
+import { Plus, Trophy, BarChart3, History, Home, Crown, Trash2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Player, GameRound } from '@/types';
 import PlayerScoreCard from './PlayerScoreCard';
 import NewRoundModal from './NewRoundModal';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 
 interface ScoreBoardProps {
   players: Player[];
@@ -19,11 +20,25 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({ players, onAddRound, onEndGame 
   const [showNewRoundModal, setShowNewRoundModal] = useState(false);
   const [sortBy, setSortBy] = useState<'position' | 'name'>('position');
   const [showRounds, setShowRounds] = useState<boolean>(true);
+  const [lastRoundScores, setLastRoundScores] = useState<{[key: string]: number}>({});
   const navigate = useNavigate();
   
   // Calculate the round count based on the first player (all players have the same number of rounds)
   const roundCount = players.length > 0 ? players[0].rounds.length : 0;
   
+  // Update last round scores whenever players change
+  useEffect(() => {
+    if (roundCount > 0) {
+      const newLastRoundScores: {[key: string]: number} = {};
+      players.forEach(player => {
+        if (player.rounds.length > 0) {
+          newLastRoundScores[player.id] = player.rounds[player.rounds.length - 1].score;
+        }
+      });
+      setLastRoundScores(newLastRoundScores);
+    }
+  }, [players, roundCount]);
+
   const sortedPlayers = [...players].sort((a, b) => {
     if (sortBy === 'position') {
       return a.totalScore - b.totalScore;
@@ -37,6 +52,13 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({ players, onAddRound, onEndGame 
   const winner = gameOver 
     ? sortedPlayers[0] 
     : null;
+    
+  const handleUndoLastRound = () => {
+    if (window.confirm("Êtes-vous sûr de vouloir annuler la dernière manche ?")) {
+      // This is just a stub - the actual functionality would need to be implemented in the parent component
+      toast.error("Cette fonctionnalité n'est pas encore implémentée");
+    }
+  };
 
   return (
     <motion.div 
@@ -79,10 +101,22 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({ players, onAddRound, onEndGame 
       </div>
 
       {roundCount > 0 && (
-        <div className="mb-4 text-center">
+        <div className="mb-4 flex items-center justify-between">
           <span className="bg-dutch-blue text-white text-sm font-medium px-4 py-1 rounded-full">
             Manche {roundCount}
           </span>
+          
+          {roundCount > 0 && (
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="text-dutch-orange border-dutch-orange/30 text-xs hover:bg-dutch-orange/10"
+              onClick={handleUndoLastRound}
+            >
+              <Trash2 className="h-3 w-3 mr-1" />
+              Annuler dernière manche
+            </Button>
+          )}
         </div>
       )}
 
@@ -129,6 +163,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({ players, onAddRound, onEndGame 
             position={index + 1}
             isWinner={gameOver && index === 0}
             showRounds={showRounds}
+            lastRoundScore={lastRoundScores[player.id]}
           />
         ))}
       </div>
@@ -143,17 +178,66 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({ players, onAddRound, onEndGame 
         </Button>
       </div>
 
-      {showNewRoundModal && (
-        <NewRoundModal 
-          players={players}
-          onClose={() => setShowNewRoundModal(false)}
-          onSave={(scores, dutchPlayerId) => {
-            onAddRound(scores, dutchPlayerId);
-            setShowNewRoundModal(false);
-            toast.success('Manche ajoutée !');
-          }}
-        />
-      )}
+      <AnimatePresence>
+        {showNewRoundModal && (
+          <NewRoundModal 
+            players={players}
+            onClose={() => setShowNewRoundModal(false)}
+            onSave={(scores, dutchPlayerId) => {
+              onAddRound(scores, dutchPlayerId);
+              setShowNewRoundModal(false);
+              toast.success('Manche ajoutée !');
+            }}
+          />
+        )}
+      </AnimatePresence>
+      
+      <Sheet>
+        <SheetTrigger asChild>
+          <Button 
+            className="fixed right-4 bottom-20 w-12 h-12 rounded-full shadow-lg bg-dutch-blue text-white hover:bg-dutch-blue/90 flex items-center justify-center"
+            title="Statistiques"
+          >
+            <BarChart3 className="h-5 w-5" />
+          </Button>
+        </SheetTrigger>
+        <SheetContent>
+          <SheetHeader>
+            <SheetTitle>Statistiques de la partie</SheetTitle>
+          </SheetHeader>
+          <div className="mt-6 space-y-4">
+            <div className="dutch-card">
+              <h3 className="text-sm font-medium mb-2">Meilleur score par manche</h3>
+              {players.map(player => {
+                const bestRound = player.rounds.length > 0 
+                  ? Math.min(...player.rounds.map(r => r.score).filter(s => s > 0))
+                  : null;
+                return (
+                  <div key={player.id} className="flex justify-between items-center mb-1">
+                    <span className="text-sm">{player.name}</span>
+                    <span className="font-medium">
+                      {bestRound !== null ? bestRound : '-'}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+            
+            <div className="dutch-card">
+              <h3 className="text-sm font-medium mb-2">Nombre de fois "Dutch"</h3>
+              {players.map(player => {
+                const dutchCount = player.rounds.filter(r => r.isDutch).length;
+                return (
+                  <div key={player.id} className="flex justify-between items-center mb-1">
+                    <span className="text-sm">{player.name}</span>
+                    <span className="font-medium">{dutchCount}</span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </SheetContent>
+      </Sheet>
     </motion.div>
   );
 };
