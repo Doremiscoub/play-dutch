@@ -1,12 +1,13 @@
 
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useRef, useEffect } from 'react';
+import { motion, AnimatePresence, useAnimation } from 'framer-motion';
 import { Player } from '@/types';
-import { Trophy, Medal, Award, Share2, Copy, X, Twitter, Facebook, Camera, Download } from 'lucide-react';
+import { Trophy, Medal, Award, Share2, Copy, X, Twitter, Facebook, Camera, Download, Instagram, Video, Film, Youtube } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogTrigger, DialogClose } from '@/components/ui/dialog';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import html2canvas from 'html2canvas';
@@ -20,6 +21,12 @@ interface PodiumViewProps {
 const PodiumView: React.FC<PodiumViewProps> = ({ players, onClose, isMultiplayer = false }) => {
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const [isCapturing, setIsCapturing] = useState(false);
+  const [reelMode, setReelMode] = useState<'image' | 'animated'>('image');
+  const [activeTab, setActiveTab] = useState('share');
+  const confettiCanvasRef = useRef<HTMLCanvasElement>(null);
+  const reelPreviewRef = useRef<HTMLDivElement>(null);
+  const [isGeneratingReel, setIsGeneratingReel] = useState(false);
+  const animationControls = useAnimation();
   
   // Sort players by score (ascending is better in Dutch)
   const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
@@ -71,7 +78,7 @@ const PodiumView: React.FC<PodiumViewProps> = ({ players, onClose, isMultiplayer
     }
   };
   
-  const handleShareOnSocial = (platform: 'twitter' | 'facebook') => {
+  const handleShareOnSocial = (platform: 'twitter' | 'facebook' | 'instagram') => {
     const text = `Je viens de jouer à Dutch! ${topPlayers[0]?.name} a gagné avec ${topPlayers[0]?.totalScore} points!`;
     const url = window.location.href;
     
@@ -81,6 +88,13 @@ const PodiumView: React.FC<PodiumViewProps> = ({ players, onClose, isMultiplayer
       shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
     } else if (platform === 'facebook') {
       shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(text)}`;
+    } else if (platform === 'instagram') {
+      // For Instagram, we'll need to download the image first and then suggest manual sharing
+      captureAndDownloadResults();
+      toast.info("Instagram ne permet pas le partage direct via le web", {
+        description: "Téléchargez l'image et partagez-la manuellement sur Instagram"
+      });
+      return;
     }
     
     window.open(shareUrl, '_blank', 'width=600,height=400');
@@ -105,14 +119,58 @@ const PodiumView: React.FC<PodiumViewProps> = ({ players, onClose, isMultiplayer
       link.click();
       
       toast.success("Capture d'écran téléchargée!", {
-        description: "Vous pouvez maintenant partager cette image",
+        description: "Vous pouvez maintenant partager cette image"
       });
     } catch (error) {
       toast.error("Impossible de capturer les résultats", {
-        description: "Veuillez essayer à nouveau",
+        description: "Veuillez essayer à nouveau"
       });
     } finally {
       setIsCapturing(false);
+    }
+  };
+
+  // New function to generate a social media reel
+  const generateSocialReel = async () => {
+    setIsGeneratingReel(true);
+    
+    try {
+      // In a real implementation, this would create a video from animation frames
+      // For now, we'll just create a fancy image with more visual effects
+      
+      // Start animation sequence
+      await animationControls.start({
+        scale: [1, 1.05, 1],
+        transition: { duration: 1.5 }
+      });
+      
+      // Capture the animated result
+      setTimeout(async () => {
+        const reelElement = reelPreviewRef.current;
+        if (!reelElement) return;
+        
+        const canvas = await html2canvas(reelElement, {
+          backgroundColor: null,
+          scale: 2,
+        });
+        
+        const image = canvas.toDataURL('image/png');
+        const link = document.createElement('a');
+        link.href = image;
+        link.download = 'dutch-game-reel.png';
+        link.click();
+        
+        toast.success("Reel généré!", {
+          description: "Téléchargez et partagez sur Instagram ou TikTok"
+        });
+        setIsGeneratingReel(false);
+      }, 1500);
+      
+    } catch (error) {
+      toast.error("Impossible de générer le reel", {
+        description: "Veuillez essayer à nouveau"
+      });
+      setIsGeneratingReel(false);
     }
   };
 
@@ -126,12 +184,17 @@ const PodiumView: React.FC<PodiumViewProps> = ({ players, onClose, isMultiplayer
         id="game-results"
       >
         <div className="text-center mb-8">
-          <div className="flex justify-end">
-            <Badge variant="outline" className="bg-dutch-purple/10 text-dutch-purple mb-4">
+          <div className="flex justify-between items-center mb-4">
+            <Badge variant="outline" className="bg-dutch-purple/10 text-dutch-purple">
               {isMultiplayer ? 'Partie multijoueur' : 'Partie locale'}
             </Badge>
+            <Badge variant="outline" className="bg-dutch-blue/10 text-dutch-blue">
+              {new Date().toLocaleDateString()}
+            </Badge>
           </div>
-          <h2 className="text-2xl font-bold text-dutch-blue mb-2">Résultats de la partie</h2>
+          <h2 className="text-2xl font-bold bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-pink bg-clip-text text-transparent mb-2">
+            Résultats de la partie
+          </h2>
           <p className="text-gray-600">
             {topPlayers[0]?.name} remporte la partie avec {topPlayers[0]?.totalScore} points !
           </p>
@@ -210,8 +273,15 @@ const PodiumView: React.FC<PodiumViewProps> = ({ players, onClose, isMultiplayer
                     animate={{ scale: 1, opacity: 1 }}
                     transition={{ delay: animDelays[podiumPosition] + 0.4, duration: 0.3 }}
                   >
-                    <div className="w-16 h-16 rounded-full bg-white/80 flex items-center justify-center mb-1 border border-white/30 shadow-md">
-                      <span className="text-xl font-bold">{player.totalScore}</span>
+                    <div className="w-16 h-16 rounded-full bg-white/80 flex items-center justify-center mb-1 border border-white/30 shadow-md overflow-hidden group">
+                      <motion.span 
+                        className="text-xl font-bold"
+                        whileHover={{ scale: 1.2, rotate: 5 }}
+                      >{player.totalScore}</motion.span>
+                      <motion.div 
+                        className="absolute inset-0 bg-gradient-to-r from-dutch-purple/0 to-dutch-pink/0 opacity-0 group-hover:opacity-100" 
+                        whileHover={{ opacity: 0.2 }}
+                      />
                     </div>
                     <span className="text-sm font-semibold max-w-20 truncate">{player.name}</span>
                     <span className="text-xs text-gray-500">{getPlayerStat(player)}</span>
@@ -230,10 +300,11 @@ const PodiumView: React.FC<PodiumViewProps> = ({ players, onClose, isMultiplayer
               {otherPlayers.map((player, index) => (
                 <motion.div
                   key={player.id}
-                  className="p-3 rounded-xl bg-white/50 border border-white/30 flex justify-between items-center"
+                  className="p-3 rounded-xl bg-white/50 border border-white/30 flex justify-between items-center hover:bg-white/80 transition-colors"
                   initial={{ x: -20, opacity: 0 }}
                   animate={{ x: 0, opacity: 1 }}
                   transition={{ delay: index * 0.1 + 0.5, duration: 0.3 }}
+                  whileHover={{ y: -2, boxShadow: "0 6px 20px -5px rgba(0,0,0,0.1)" }}
                 >
                   <div className="flex items-center gap-2">
                     <div className="w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center text-xs font-medium">
@@ -278,51 +349,194 @@ const PodiumView: React.FC<PodiumViewProps> = ({ players, onClose, isMultiplayer
                     </DialogClose>
                   </div>
                   
-                  <div className="grid grid-cols-2 gap-3">
-                    <Button 
-                      className="bg-[#1DA1F2] text-white hover:bg-[#1DA1F2]/90"
-                      onClick={() => handleShareOnSocial('twitter')}
-                    >
-                      <Twitter className="w-4 h-4 mr-2" />
-                      Twitter
-                    </Button>
+                  <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+                    <TabsList className="w-full grid grid-cols-2 mb-4">
+                      <TabsTrigger value="share" className="rounded-l-lg">Partage Simple</TabsTrigger>
+                      <TabsTrigger value="reel" className="rounded-r-lg">Créer un Reel</TabsTrigger>
+                    </TabsList>
                     
-                    <Button 
-                      className="bg-[#4267B2] text-white hover:bg-[#4267B2]/90"
-                      onClick={() => handleShareOnSocial('facebook')}
-                    >
-                      <Facebook className="w-4 h-4 mr-2" />
-                      Facebook
-                    </Button>
-                  </div>
-                  
-                  <Button 
-                    variant="outline" 
-                    className="w-full"
-                    onClick={handleCopyInviteLink}
-                  >
-                    <Copy className="w-4 h-4 mr-2" />
-                    Copier le lien
-                  </Button>
-                  
-                  <Button 
-                    variant="outline" 
-                    className="w-full"
-                    onClick={captureAndDownloadResults}
-                    disabled={isCapturing}
-                  >
-                    {isCapturing ? (
-                      <>Création de l'image...</>
-                    ) : (
-                      <>
-                        <Camera className="w-4 h-4 mr-2" />
-                        Capture d'écran
-                      </>
-                    )}
-                  </Button>
+                    <TabsContent value="share" className="space-y-4">
+                      <div className="grid grid-cols-3 gap-3">
+                        <Button 
+                          className="bg-[#1DA1F2] text-white hover:bg-[#1DA1F2]/90"
+                          onClick={() => handleShareOnSocial('twitter')}
+                        >
+                          <Twitter className="w-4 h-4 mr-2" />
+                          Twitter
+                        </Button>
+                        
+                        <Button 
+                          className="bg-[#4267B2] text-white hover:bg-[#4267B2]/90"
+                          onClick={() => handleShareOnSocial('facebook')}
+                        >
+                          <Facebook className="w-4 h-4 mr-2" />
+                          Facebook
+                        </Button>
+                        
+                        <Button 
+                          className="bg-gradient-to-r from-[#833AB4] via-[#FD1D1D] to-[#FCAF45] text-white hover:opacity-90"
+                          onClick={() => handleShareOnSocial('instagram')}
+                        >
+                          <Instagram className="w-4 h-4 mr-2" />
+                          Insta
+                        </Button>
+                      </div>
+                      
+                      <Button 
+                        variant="outline" 
+                        className="w-full"
+                        onClick={handleCopyInviteLink}
+                      >
+                        <Copy className="w-4 h-4 mr-2" />
+                        Copier le lien
+                      </Button>
+                      
+                      <Button 
+                        variant="outline" 
+                        className="w-full"
+                        onClick={captureAndDownloadResults}
+                        disabled={isCapturing}
+                      >
+                        {isCapturing ? (
+                          <>Création de l'image...</>
+                        ) : (
+                          <>
+                            <Camera className="w-4 h-4 mr-2" />
+                            Capture d'écran
+                          </>
+                        )}
+                      </Button>
+                    </TabsContent>
+                    
+                    <TabsContent value="reel" className="space-y-4">
+                      <div className="bg-gray-100 p-4 rounded-xl">
+                        <p className="text-sm text-gray-700 mb-3">
+                          Créez un reel à partager sur Instagram ou TikTok !
+                        </p>
+                        
+                        {/* Reel preview area */}
+                        <div 
+                          ref={reelPreviewRef}
+                          className="aspect-[9/16] max-h-[400px] overflow-hidden rounded-xl bg-gradient-to-r from-dutch-purple/10 via-dutch-blue/10 to-dutch-pink/10 flex flex-col items-center justify-center p-6 relative mb-4"
+                        >
+                          <motion.div 
+                            className="absolute inset-0 bg-gradient-to-br from-dutch-purple/30 via-dutch-blue/20 to-dutch-pink/30 z-0"
+                            animate={{ 
+                              backgroundPosition: ['0% 0%', '100% 100%'], 
+                            }}
+                            transition={{ 
+                              duration: 15, 
+                              repeat: Infinity, 
+                              repeatType: 'reverse' 
+                            }}
+                          />
+                          
+                          <motion.div 
+                            className="absolute -top-5 -left-5 -right-5 -bottom-5 blur-2xl bg-gradient-to-br from-dutch-yellow/20 via-dutch-blue/10 to-dutch-purple/20 z-0 opacity-70"
+                            animate={{ 
+                              rotate: [0, 360],
+                            }}
+                            transition={{ 
+                              duration: 20, 
+                              repeat: Infinity, 
+                              ease: "linear" 
+                            }}
+                          />
+
+                          <motion.div
+                            className="relative z-10 bg-white/70 backdrop-blur-md rounded-2xl p-4 w-full max-w-[80%] text-center border border-white/50 shadow-lg"
+                            animate={animationControls}
+                          >
+                            <h3 className="text-xl font-bold bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent mb-2">
+                              Dutch Card Game
+                            </h3>
+                            
+                            <div className="flex justify-center mb-4">
+                              <div className="bg-white/80 rounded-full p-2 shadow-md">
+                                <Trophy className="h-8 w-8 text-dutch-yellow" />
+                              </div>
+                            </div>
+                            
+                            <p className="font-bold text-lg mb-1">
+                              {topPlayers[0]?.name} gagne!
+                            </p>
+                            <p className="text-sm text-gray-700 mb-3">
+                              avec {topPlayers[0]?.totalScore} points
+                            </p>
+                            
+                            <div className="flex justify-around mb-2">
+                              {topPlayers.slice(0, 3).map((player, idx) => (
+                                <div key={player.id} className="text-center">
+                                  <div className={`w-8 h-8 rounded-full flex items-center justify-center mx-auto mb-1 ${
+                                    idx === 0 
+                                      ? "bg-gradient-to-r from-yellow-200 to-yellow-400 text-yellow-900" 
+                                      : idx === 1 
+                                        ? "bg-gradient-to-r from-gray-200 to-gray-400 text-gray-900"
+                                        : "bg-gradient-to-r from-orange-200 to-orange-400 text-orange-900"
+                                  }`}>
+                                    {idx + 1}
+                                  </div>
+                                  <p className="text-xs font-medium">{player.name}</p>
+                                  <p className="text-xs">{player.totalScore}</p>
+                                </div>
+                              ))}
+                            </div>
+                          </motion.div>
+                          
+                          <div className="absolute bottom-4 left-0 right-0 text-center text-xs text-white/70 font-medium z-10">
+                            #DutchCardGame
+                          </div>
+                        </div>
+                        
+                        <div className="flex gap-2">
+                          <Button 
+                            className="w-full bg-gradient-to-r from-[#833AB4] via-[#FD1D1D] to-[#FCAF45] text-white hover:opacity-90"
+                            onClick={generateSocialReel}
+                            disabled={isGeneratingReel}
+                          >
+                            {isGeneratingReel ? (
+                              <>Génération en cours...</>
+                            ) : (
+                              <>
+                                <Instagram className="w-4 h-4 mr-2" />
+                                Pour Instagram
+                              </>
+                            )}
+                          </Button>
+                          
+                          <Button 
+                            className="w-full bg-black text-white hover:bg-black/90"
+                            onClick={generateSocialReel}
+                            disabled={isGeneratingReel}
+                          >
+                            {isGeneratingReel ? (
+                              <>Génération en cours...</>
+                            ) : (
+                              <>
+                                <Video className="w-4 h-4 mr-2" />
+                                Pour TikTok
+                              </>
+                            )}
+                          </Button>
+                        </div>
+                      </div>
+                    </TabsContent>
+                  </Tabs>
                 </div>
               </DialogContent>
             </Dialog>
+            
+            <Button 
+              variant="default"
+              className="bg-gradient-to-r from-dutch-purple to-dutch-pink text-white hover:opacity-90"
+              onClick={() => {
+                setActiveTab('reel');
+                setShareDialogOpen(true);
+              }}
+            >
+              <Film className="w-4 h-4 mr-2" />
+              Créer un Reel
+            </Button>
             
             <Button 
               variant="outline"
