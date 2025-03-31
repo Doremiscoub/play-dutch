@@ -2,7 +2,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-export type ThemeId = 'blue' | 'green' | 'pink' | 'red' | 'purple';
+export type ThemeId = 'blue' | 'green' | 'pink' | 'red' | 'purple' | string;
 
 // Theme configuration with consistent color palettes
 export const themeConfig = {
@@ -54,7 +54,31 @@ export const useTheme = create<ThemeState>()(
       },
       getThemeColors: () => {
         const { currentTheme } = get();
-        return themeConfig[currentTheme];
+        // For built-in themes, return from themeConfig
+        if (themeConfig[currentTheme]) {
+          return themeConfig[currentTheme];
+        }
+        
+        // For custom themes, check localStorage
+        if (typeof window !== 'undefined') {
+          try {
+            const customThemes = JSON.parse(localStorage.getItem('dutch_custom_themes') || '[]');
+            const customTheme = customThemes.find((theme: any) => theme.id === currentTheme);
+            if (customTheme) {
+              return {
+                primary: customTheme.primary,
+                secondary: customTheme.secondary,
+                accent: customTheme.accent,
+                name: customTheme.name
+              };
+            }
+          } catch (error) {
+            console.error('Error retrieving custom theme', error);
+          }
+        }
+        
+        // Fallback to default theme
+        return themeConfig.blue;
       }
     }),
     {

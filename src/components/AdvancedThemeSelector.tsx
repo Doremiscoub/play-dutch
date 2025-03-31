@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -123,7 +122,7 @@ const AdvancedThemeSelector = () => {
     
     // If we're deleting the current theme, switch to default
     if (currentTheme === themeId) {
-      setTheme('default');
+      setTheme('blue');
     }
     
     toast.success('Thème supprimé');
