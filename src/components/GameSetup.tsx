@@ -127,7 +127,7 @@ const GameSetup: React.FC<GameSetupProps> = ({ onStartGame, onJoinGame }) => {
 
   return (
     <motion.div 
-      className="w-full max-w-md mx-auto p-6 relative z-10"
+      className="w-full max-w-md mx-auto p-6 relative z-10 pb-24"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
@@ -322,33 +322,6 @@ const GameSetup: React.FC<GameSetupProps> = ({ onStartGame, onJoinGame }) => {
         </div>
       </motion.div>
       
-      <motion.div
-        initial={{ scale: 0.95, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ ...transitionProps, delay: 0.4 }}
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
-      >
-        <Button 
-          onClick={handleStartGame}
-          variant="floating"
-          size="2xl"
-          glassmorphism
-          elevated
-          animated
-          className="w-full shadow-md hover:shadow-lg transition-all duration-300 relative overflow-hidden"
-        >
-          <motion.div 
-            className="absolute inset-0 bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-blue bg-[length:200%_100%]"
-            animate={{ backgroundPosition: ['0% 0%', '100% 0%', '0% 0%'] }}
-            transition={{ duration: 10, repeat: Infinity }}
-          />
-          <span className="absolute inset-0 flex items-center justify-center">
-            <Play className="mr-2 h-5 w-5" /> Commencer la partie
-          </span>
-        </Button>
-      </motion.div>
-      
       {/* Floating elements similaires à la page d'accueil */}
       <motion.div
         className="absolute bottom-[30%] left-12 w-4 h-4 rounded-full bg-dutch-blue/30 -z-5"
@@ -385,6 +358,39 @@ const GameSetup: React.FC<GameSetupProps> = ({ onStartGame, onJoinGame }) => {
           repeatType: "reverse"
         }}
       />
+      
+      {/* Bouton Commencer flottant */}
+      <motion.div
+        className="fixed left-0 right-0 bottom-8 flex justify-center z-50 px-6"
+        initial={{ y: 100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.5, type: "spring", stiffness: 260, damping: 20 }}
+      >
+        <motion.div
+          whileHover={{ scale: 1.05, y: -3 }}
+          whileTap={{ scale: 0.98 }}
+          className="w-full max-w-md"
+        >
+          <Button 
+            onClick={handleStartGame}
+            variant="floating"
+            size="game-action"
+            glassmorphism
+            elevated
+            animated
+            className="w-full shadow-lg transition-all relative overflow-hidden rounded-2xl border border-white/20 backdrop-blur-md bg-gradient-to-r from-dutch-blue/90 via-dutch-purple/90 to-dutch-blue/90"
+          >
+            <motion.div 
+              className="absolute inset-0 bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-blue bg-[length:200%_100%]"
+              animate={{ backgroundPosition: ['0% 0%', '100% 0%', '0% 0%'] }}
+              transition={{ duration: 10, repeat: Infinity }}
+            />
+            <span className="absolute inset-0 flex items-center justify-center gap-2 text-lg font-medium">
+              <Play className="h-5 w-5" /> Commencer la partie
+            </span>
+          </Button>
+        </motion.div>
+      </motion.div>
     </motion.div>
   );
 };

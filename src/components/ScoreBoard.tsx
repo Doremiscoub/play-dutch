@@ -137,55 +137,67 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-dutch-blue">Tableau des scores</h1>
-        <div className="flex gap-2">
-          <ToggleGroup 
-            type="single" 
-            value={viewMode} 
-            onValueChange={(value) => {
-              if (value) setViewMode(value as 'cards' | 'table');
-            }}
-            className="bg-white/80 border border-white/30 rounded-lg p-1"
-          >
-            <ToggleGroupItem value="cards" aria-label="Vue cartes" className="h-8 w-8 p-0">
-              <Layers className="h-4 w-4" />
-            </ToggleGroupItem>
-            <ToggleGroupItem value="table" aria-label="Vue tableau" className="h-8 w-8 p-0">
-              <TableIcon className="h-4 w-4" />
-            </ToggleGroupItem>
-          </ToggleGroup>
-          
-          <ThemeSelector />
-          <QuickGuide />
-          <GameSettings 
-            soundEnabled={soundEnabled}
-            setSoundEnabled={setSoundEnabled}
-          />
-        </div>
-      </div>
-
-      {roundCount > 0 && (
-        <div className="mb-4 flex items-center justify-between">
-          <span className="bg-dutch-blue/80 backdrop-blur text-white text-sm font-medium px-4 py-1 rounded-full 
-                         flex items-center shadow-md">
-            <Clock className="h-3 w-3 mr-1" aria-hidden="true" />
-            Manche {roundCount}
-          </span>
-          
-          {roundCount > 0 && (
+      <div className="flex flex-col mb-6 space-y-3">
+        <div className="flex justify-between items-center">
+          <div className="flex items-center space-x-2">
             <Button 
-              variant="outline" 
-              size="sm"
-              className="text-dutch-orange border-dutch-orange/30 text-xs bg-dutch-orange/5 hover:bg-dutch-orange/10 shadow-sm"
-              onClick={handleUndoLastRound}
+              onClick={() => navigate('/')}
+              variant="game-control" 
+              size="icon-sm"
+              className="rounded-full"
+              aria-label="Retour à l'accueil"
             >
-              <RotateCcw className="h-3 w-3 mr-1" aria-hidden="true" />
-              Annuler dernière manche
+              <Home className="h-4 w-4" />
             </Button>
-          )}
+            <h1 className="text-2xl font-bold text-dutch-blue ml-1">Tableau des scores</h1>
+          </div>
+          
+          <div className="flex items-center gap-2">
+            <ToggleGroup 
+              type="single" 
+              value={viewMode} 
+              onValueChange={(value) => {
+                if (value) setViewMode(value as 'cards' | 'table');
+              }}
+              className="bg-white/80 border border-white/30 rounded-lg p-1"
+            >
+              <ToggleGroupItem value="cards" aria-label="Vue cartes" className="h-8 w-8 p-0">
+                <Layers className="h-4 w-4" />
+              </ToggleGroupItem>
+              <ToggleGroupItem value="table" aria-label="Vue tableau" className="h-8 w-8 p-0">
+                <TableIcon className="h-4 w-4" />
+              </ToggleGroupItem>
+            </ToggleGroup>
+            
+            <GameSettings 
+              soundEnabled={soundEnabled}
+              setSoundEnabled={setSoundEnabled}
+            />
+          </div>
         </div>
-      )}
+        
+        {roundCount > 0 && (
+          <div className="flex items-center justify-between">
+            <span className="bg-dutch-blue/80 backdrop-blur text-white text-sm font-medium px-4 py-1 rounded-full 
+                         flex items-center shadow-md">
+              <Clock className="h-3 w-3 mr-1" aria-hidden="true" />
+              Manche {roundCount}
+            </span>
+            
+            {roundCount > 0 && (
+              <Button 
+                variant="outline" 
+                size="sm"
+                className="text-dutch-orange border-dutch-orange/30 text-xs bg-dutch-orange/5 hover:bg-dutch-orange/10 shadow-sm"
+                onClick={handleUndoLastRound}
+              >
+                <RotateCcw className="h-3 w-3 mr-1" aria-hidden="true" />
+                Annuler dernière manche
+              </Button>
+            )}
+          </div>
+        )}
+      </div>
 
       <AnimatePresence>
         {gameOver && (
@@ -402,131 +414,167 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
               
             {statsTabView === 'stats' ? (
               <div className="space-y-4 mt-4">
-                <div className="dutch-card bg-white/60 backdrop-blur-sm border border-white/30 shadow-sm rounded-2xl p-4">
+                <div className="dutch-card bg-gradient-to-br from-white/80 to-dutch-blue/5 backdrop-blur-sm border border-white/50 shadow-md rounded-2xl p-4 overflow-hidden relative">
+                  <div className="absolute -right-10 -top-10 w-40 h-40 bg-dutch-blue/10 rounded-full blur-2xl"></div>
                   <h3 className="text-sm font-medium mb-3 flex items-center">
                     <Award className="h-4 w-4 mr-1 text-dutch-blue" aria-hidden="true" />
-                    Meilleur score par manche
+                    <span className="relative z-10">Meilleur score par manche</span>
                   </h3>
                   {players.map(player => {
                     const bestRound = player.stats?.bestRound || (player.rounds.length > 0 
                       ? Math.min(...player.rounds.map(r => r.score).filter(s => s > 0))
                       : null);
                     return (
-                      <div key={player.id} className="flex justify-between items-center py-2 border-b border-gray-100/50 last:border-0">
+                      <div key={player.id} className="flex justify-between items-center py-2 border-b border-dutch-blue/10 last:border-0">
                         <div className="flex items-center gap-2">
-                          <Avatar className="h-6 w-6 bg-dutch-blue/10">
-                            <AvatarFallback className="text-dutch-blue text-xs">{player.name.charAt(0)}</AvatarFallback>
+                          <Avatar className="h-7 w-7 bg-gradient-to-br from-dutch-blue to-dutch-purple shadow-sm">
+                            <AvatarFallback className="text-white text-xs">{player.name.charAt(0)}</AvatarFallback>
                           </Avatar>
-                          <span className="text-sm">{player.name}</span>
+                          <span className="text-sm font-medium">{player.name}</span>
                           <PlayerBadges player={player} />
                         </div>
-                        <span className="font-medium">
+                        <motion.span 
+                          initial={{ scale: 0.8, opacity: 0 }}
+                          animate={{ scale: 1, opacity: 1 }}
+                          transition={{ delay: 0.2 }}
+                          className="font-bold text-lg bg-dutch-blue/10 px-3 py-1 rounded-full"
+                        >
                           {bestRound !== null ? bestRound : '-'}
-                        </span>
+                        </motion.span>
                       </div>
                     );
                   })}
                 </div>
                 
-                <div className="dutch-card bg-white/60 backdrop-blur-sm border border-white/30 shadow-sm rounded-2xl p-4">
+                <div className="dutch-card bg-gradient-to-br from-white/80 to-dutch-orange/5 backdrop-blur-sm border border-white/50 shadow-md rounded-2xl p-4 overflow-hidden relative">
+                  <div className="absolute -left-10 -bottom-10 w-40 h-40 bg-dutch-orange/10 rounded-full blur-2xl"></div>
                   <h3 className="text-sm font-medium mb-3 flex items-center">
                     <TrendingDown className="h-4 w-4 mr-1 text-dutch-orange" aria-hidden="true" />
-                    Nombre de fois "Dutch"
+                    <span className="relative z-10">Nombre de fois "Dutch"</span>
                   </h3>
                   {players.map(player => {
                     const dutchCount = player.stats?.dutchCount || player.rounds.filter(r => r.isDutch).length;
                     return (
-                      <div key={player.id} className="flex justify-between items-center py-2 border-b border-gray-100/50 last:border-0">
+                      <div key={player.id} className="flex justify-between items-center py-2 border-b border-dutch-orange/10 last:border-0">
                         <div className="flex items-center gap-2">
-                          <Avatar className="h-6 w-6 bg-dutch-orange/10">
-                            <AvatarFallback className="text-dutch-orange text-xs">{player.name.charAt(0)}</AvatarFallback>
+                          <Avatar className="h-7 w-7 bg-gradient-to-br from-dutch-orange to-dutch-pink shadow-sm">
+                            <AvatarFallback className="text-white text-xs">{player.name.charAt(0)}</AvatarFallback>
                           </Avatar>
-                          <span className="text-sm">{player.name}</span>
+                          <span className="text-sm font-medium">{player.name}</span>
                         </div>
-                        <span className="font-medium text-dutch-orange">{dutchCount}</span>
+                        <motion.div 
+                          initial={{ scale: 0.8, opacity: 0 }}
+                          animate={{ scale: 1, opacity: 1 }}
+                          transition={{ delay: 0.3 }}
+                          className="flex items-center"
+                        >
+                          <span className="font-bold text-lg bg-dutch-orange/10 text-dutch-orange px-3 py-1 rounded-full">
+                            {dutchCount}
+                          </span>
+                        </motion.div>
                       </div>
                     );
                   })}
                 </div>
                 
-                <div className="dutch-card bg-white/60 backdrop-blur-sm border border-white/30 shadow-sm rounded-2xl p-4">
+                <div className="dutch-card bg-gradient-to-br from-white/80 to-dutch-purple/5 backdrop-blur-sm border border-white/50 shadow-md rounded-2xl p-4 overflow-hidden relative">
+                  <div className="absolute -right-10 -bottom-10 w-40 h-40 bg-dutch-purple/10 rounded-full blur-2xl"></div>
                   <h3 className="text-sm font-medium mb-3 flex items-center">
                     <TrendingUp className="h-4 w-4 mr-1 text-dutch-purple" aria-hidden="true" />
-                    Pire score par manche
+                    <span className="relative z-10">Pire score par manche</span>
                   </h3>
                   {players.map(player => {
                     const worstRound = player.stats?.worstRound || (player.rounds.length > 0 
                       ? Math.max(...player.rounds.map(r => r.score))
                       : null);
                     return (
-                      <div key={player.id} className="flex justify-between items-center py-2 border-b border-gray-100/50 last:border-0">
+                      <div key={player.id} className="flex justify-between items-center py-2 border-b border-dutch-purple/10 last:border-0">
                         <div className="flex items-center gap-2">
-                          <Avatar className="h-6 w-6 bg-dutch-purple/10">
-                            <AvatarFallback className="text-dutch-purple text-xs">{player.name.charAt(0)}</AvatarFallback>
+                          <Avatar className="h-7 w-7 bg-gradient-to-br from-dutch-purple to-dutch-blue shadow-sm">
+                            <AvatarFallback className="text-white text-xs">{player.name.charAt(0)}</AvatarFallback>
                           </Avatar>
-                          <span className="text-sm">{player.name}</span>
+                          <span className="text-sm font-medium">{player.name}</span>
                         </div>
-                        <span className="font-medium text-dutch-purple">
+                        <motion.span 
+                          initial={{ scale: 0.8, opacity: 0 }}
+                          animate={{ scale: 1, opacity: 1 }}
+                          transition={{ delay: 0.4 }}
+                          className="font-bold text-lg bg-dutch-purple/10 text-dutch-purple px-3 py-1 rounded-full"
+                        >
                           {worstRound !== null ? worstRound : '-'}
-                        </span>
+                        </motion.span>
                       </div>
                     );
                   })}
                 </div>
                 
-                <div className="dutch-card bg-white/60 backdrop-blur-sm border border-white/30 shadow-sm rounded-2xl p-4">
+                <div className="dutch-card bg-gradient-to-br from-white/80 to-dutch-blue/5 backdrop-blur-sm border border-white/50 shadow-md rounded-2xl p-4 overflow-hidden relative">
+                  <div className="absolute -left-10 -top-10 w-40 h-40 bg-dutch-blue/10 rounded-full blur-2xl"></div>
                   <h3 className="text-sm font-medium mb-3 flex items-center">
                     <LineChart className="h-4 w-4 mr-1 text-dutch-blue" aria-hidden="true" />
-                    Score moyen par manche
+                    <span className="relative z-10">Score moyen par manche</span>
                   </h3>
                   {players.map(player => {
                     const avgScore = player.stats?.averageScore || (player.rounds.length > 0 
                       ? Math.round(player.rounds.reduce((sum, r) => sum + r.score, 0) / player.rounds.length * 10) / 10
                       : 0);
                     return (
-                      <div key={player.id} className="flex justify-between items-center py-2 border-b border-gray-100/50 last:border-0">
+                      <div key={player.id} className="flex justify-between items-center py-2 border-b border-dutch-blue/10 last:border-0">
                         <div className="flex items-center gap-2">
-                          <Avatar className="h-6 w-6 bg-dutch-blue/10">
-                            <AvatarFallback className="text-dutch-blue text-xs">{player.name.charAt(0)}</AvatarFallback>
+                          <Avatar className="h-7 w-7 bg-gradient-to-br from-dutch-blue to-dutch-purple shadow-sm">
+                            <AvatarFallback className="text-white text-xs">{player.name.charAt(0)}</AvatarFallback>
                           </Avatar>
-                          <span className="text-sm">{player.name}</span>
+                          <span className="text-sm font-medium">{player.name}</span>
                         </div>
-                        <span className="font-medium text-dutch-blue">
+                        <motion.span 
+                          initial={{ scale: 0.8, opacity: 0 }}
+                          animate={{ scale: 1, opacity: 1 }}
+                          transition={{ delay: 0.5 }}
+                          className="font-bold text-lg bg-dutch-blue/10 text-dutch-blue px-3 py-1 rounded-full"
+                        >
                           {player.rounds.length > 0 ? avgScore.toFixed(1) : '-'}
-                        </span>
+                        </motion.span>
                       </div>
                     );
                   })}
                 </div>
                 
                 {players.some(p => p.stats?.improvementRate !== undefined) && (
-                  <div className="dutch-card bg-white/60 backdrop-blur-sm border border-white/30 shadow-sm rounded-2xl p-4">
+                  <div className="dutch-card bg-gradient-to-br from-white/80 to-dutch-pink/5 backdrop-blur-sm border border-white/50 shadow-md rounded-2xl p-4 overflow-hidden relative">
+                    <div className="absolute -right-10 -top-10 w-40 h-40 bg-dutch-pink/10 rounded-full blur-2xl"></div>
                     <h3 className="text-sm font-medium mb-3 flex items-center">
                       <Heart className="h-4 w-4 mr-1 text-dutch-pink" aria-hidden="true" />
-                      Tendance d'amélioration
+                      <span className="relative z-10">Tendance d'amélioration</span>
                     </h3>
                     {players.map(player => {
                       if (!player.stats?.improvementRate) return null;
                       
                       return (
-                        <div key={player.id} className="flex justify-between items-center py-2 border-b border-gray-100/50 last:border-0">
+                        <div key={player.id} className="flex justify-between items-center py-2 border-b border-dutch-pink/10 last:border-0">
                           <div className="flex items-center gap-2">
-                            <Avatar className="h-6 w-6 bg-dutch-pink/10">
-                              <AvatarFallback className="text-dutch-pink text-xs">{player.name.charAt(0)}</AvatarFallback>
+                            <Avatar className="h-7 w-7 bg-gradient-to-br from-dutch-pink to-dutch-purple shadow-sm">
+                              <AvatarFallback className="text-white text-xs">{player.name.charAt(0)}</AvatarFallback>
                             </Avatar>
-                            <span className="text-sm">{player.name}</span>
+                            <span className="text-sm font-medium">{player.name}</span>
                           </div>
                           <div className="flex items-center gap-1">
                             {player.stats.improvementRate < 0 ? (
-                              <TrendingDown className="h-3 w-3 text-green-500" />
+                              <div className="flex items-center gap-1 bg-green-100 text-green-600 px-3 py-1 rounded-full">
+                                <TrendingDown className="h-3 w-3" />
+                                <span className="font-bold">
+                                  {Math.abs(Math.round(player.stats.improvementRate * 10) / 10).toFixed(1)}
+                                </span>
+                              </div>
                             ) : player.stats.improvementRate > 0 ? (
-                              <TrendingUp className="h-3 w-3 text-red-500" />
+                              <div className="flex items-center gap-1 bg-red-100 text-red-600 px-3 py-1 rounded-full">
+                                <TrendingUp className="h-3 w-3" />
+                                <span className="font-bold">
+                                  {Math.abs(Math.round(player.stats.improvementRate * 10) / 10).toFixed(1)}
+                                </span>
+                              </div>
                             ) : (
-                              <span>-</span>
+                              <span className="px-3 py-1">-</span>
                             )}
-                            <span className={`font-medium ${player.stats.improvementRate < 0 ? 'text-green-600' : 'text-red-600'}`}>
-                              {player.stats.improvementRate !== 0 ? Math.abs(Math.round(player.stats.improvementRate * 10) / 10).toFixed(1) : '-'}
-                            </span>
                           </div>
                         </div>
                       );
@@ -536,18 +584,20 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
               </div>
             ) : (
               <div className="space-y-4 mt-4">
-                <div className="dutch-card bg-white/60 backdrop-blur-sm border border-white/30 shadow-sm rounded-2xl p-4">
-                  <h3 className="text-sm font-medium mb-3">Progression des scores</h3>
-                  <div className="h-40 overflow-hidden">
+                <div className="dutch-card bg-gradient-to-br from-white/80 to-dutch-blue/5 backdrop-blur-sm border border-white/50 shadow-md rounded-2xl p-4 overflow-hidden relative">
+                  <div className="absolute -right-10 -top-10 w-40 h-40 bg-dutch-blue/10 rounded-full blur-2xl"></div>
+                  <h3 className="text-sm font-medium mb-3 relative z-10">Progression des scores</h3>
+                  <div className="h-40 overflow-hidden relative z-10">
                     {players.length > 0 && (
                       <PlayerScoreProgress players={players} />
                     )}
                   </div>
                 </div>
                 
-                <div className="dutch-card mt-4 bg-white/60 backdrop-blur-sm border border-white/30 shadow-sm rounded-2xl p-4">
-                  <h3 className="text-sm font-medium mb-3">Historique des manches</h3>
-                  <div className="space-y-2 max-h-60 overflow-y-auto pr-2">
+                <div className="dutch-card mt-4 bg-gradient-to-br from-white/80 to-dutch-purple/5 backdrop-blur-sm border border-white/50 shadow-md rounded-2xl p-4 overflow-hidden relative">
+                  <div className="absolute -left-10 -bottom-10 w-40 h-40 bg-dutch-purple/10 rounded-full blur-2xl"></div>
+                  <h3 className="text-sm font-medium mb-3 relative z-10">Historique des manches</h3>
+                  <div className="space-y-2 max-h-60 overflow-y-auto pr-2 relative z-10">
                     {Array.from({length: roundCount}).map((_, roundIndex) => {
                       const roundNumber = roundIndex + 1;
                       const roundDetails = getRoundDetails(roundIndex);
@@ -575,15 +625,16 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                               <ArrowRight className="h-3 w-3" />
                             </Button>
                           </div>
-                          <div className="flex gap-2">
+                          <div className="flex gap-2 flex-wrap">
                             {roundDetails?.map((detail, i) => (
                               <div 
                                 key={i} 
                                 className={`
-                                  w-7 h-7 rounded-full flex items-center justify-center text-xs font-medium
-                                  ${detail.isDutch ? 'bg-dutch-orange text-white shadow-md' : 
-                                    detail.score === bestScore ? 'bg-green-100 text-green-800 ring-1 ring-green-400' :
-                                    detail.score === worstScore ? 'bg-red-100 text-red-800' : 'bg-white/70 shadow-sm'}
+                                  w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium shadow-md
+                                  ${detail.isDutch ? 'bg-dutch-orange text-white' : 
+                                    detail.score === bestScore ? 'bg-gradient-to-br from-green-400 to-green-500 text-white' :
+                                    detail.score === worstScore ? 'bg-gradient-to-br from-red-400 to-red-500 text-white' : 
+                                    'bg-gradient-to-br from-dutch-blue/70 to-dutch-purple/70 text-white'}
                                 `}
                                 title={`${detail.playerName}: ${detail.score}`}
                               >
