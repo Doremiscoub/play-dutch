@@ -55,6 +55,7 @@ const Index = () => {
       </motion.div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl w-full mb-10 relative z-10">
+        {/* All cards now have a fixed width in md screens */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
