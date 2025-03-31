@@ -8,10 +8,11 @@ import GameInvitation from './GameInvitation';
 import { joinGameSession, getGameSession } from '@/utils/gameInvitation';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Users, User, Gamepad2, Globe, LogIn, Github, MapPin } from 'lucide-react';
+import { Users, User, Gamepad2, Globe, LogIn, Github, MapPin, Smartphone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import LocalGameSetup from './LocalGameSetup';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
 interface MultiplayerGameSetupProps {
   onStartLocalGame: (playerNames: string[]) => void;
@@ -26,6 +27,8 @@ const MultiplayerGameSetup: React.FC<MultiplayerGameSetupProps> = ({
   const location = useLocation();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<string>("local");
+  const [localMode, setLocalMode] = useState<string | null>(null);
+  const [showLocalSetup, setShowLocalSetup] = useState(false);
   
   // Check for join code in URL
   useEffect(() => {
@@ -56,6 +59,7 @@ const MultiplayerGameSetup: React.FC<MultiplayerGameSetupProps> = ({
   
   const handleLocalStart = (playerNames: string[]) => {
     onStartLocalGame(playerNames);
+    setShowLocalSetup(false);
   };
   
   const userName = user?.fullName || user?.username || 'Joueur';
@@ -112,20 +116,13 @@ const MultiplayerGameSetup: React.FC<MultiplayerGameSetupProps> = ({
           onValueChange={setActiveTab}
           className="w-full"
         >
-          <TabsList className="grid grid-cols-3 mb-6 rounded-full border border-white/40 bg-white/70 backdrop-blur-md p-1 shadow-sm w-full max-w-full overflow-hidden">
+          <TabsList className="grid grid-cols-2 mb-6 rounded-full border border-white/40 bg-white/70 backdrop-blur-md p-1 shadow-sm w-full max-w-full overflow-hidden">
             <TabsTrigger 
               value="local" 
               className="rounded-full data-[state=active]:bg-white data-[state=active]:shadow-md flex items-center justify-center space-x-1 py-2.5 text-dutch-blue data-[state=active]:text-dutch-blue data-[state=inactive]:text-dutch-blue/70 px-2 truncate"
             >
               <User className="w-4 h-4 flex-shrink-0 mr-1" />
-              <span className="truncate">Solo/Local</span>
-            </TabsTrigger>
-            <TabsTrigger 
-              value="tablette" 
-              className="rounded-full data-[state=active]:bg-white data-[state=active]:shadow-md flex items-center justify-center space-x-1 py-2.5 text-dutch-purple data-[state=active]:text-dutch-purple data-[state=inactive]:text-dutch-purple/70 px-2 truncate"
-            >
-              <MapPin className="w-4 h-4 flex-shrink-0 mr-1" />
-              <span className="truncate">Tableau de bord</span>
+              <span className="truncate">Local</span>
             </TabsTrigger>
             <TabsTrigger 
               value="online" 
@@ -142,19 +139,53 @@ const MultiplayerGameSetup: React.FC<MultiplayerGameSetupProps> = ({
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4 }}
+              className="grid grid-cols-1 gap-4"
             >
-              <Card className="rounded-3xl border border-white/50 bg-white/80 backdrop-blur-md shadow-md hover:shadow-lg transition-all duration-300">
+              {/* Option 1: Un seul téléphone */}
+              <Card 
+                className="rounded-3xl border border-white/50 bg-white/80 backdrop-blur-md shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer"
+                onClick={() => {
+                  setLocalMode("single");
+                  setShowLocalSetup(true);
+                }}
+              >
                 <CardHeader className="pb-2">
                   <CardTitle className="text-xl font-semibold text-dutch-blue flex items-center gap-2">
-                    <Gamepad2 className="h-5 w-5" />
-                    Partie Locale
+                    <Smartphone className="h-5 w-5" />
+                    Un seul téléphone
                   </CardTitle>
                   <CardDescription className="text-gray-600">
-                    Configurez une partie locale où les joueurs partagent le même appareil
+                    Tous les joueurs partagent le même appareil pour suivre les scores
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <LocalGameSetup onStartGame={handleLocalStart} />
+                  <div className="bg-dutch-blue/5 rounded-xl p-4 text-sm text-gray-600">
+                    <p>Parfait pour jouer ensemble autour d'une table. Chaque joueur entre son score à son tour sur cet appareil.</p>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              {/* Option 2: Chacun son téléphone */}
+              <Card 
+                className="rounded-3xl border border-white/50 bg-white/80 backdrop-blur-md shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer"
+                onClick={() => {
+                  setLocalMode("multi");
+                  setActiveTab("tablette");
+                }}
+              >
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-xl font-semibold text-dutch-purple flex items-center gap-2">
+                    <Users className="h-5 w-5" />
+                    Chacun son téléphone
+                  </CardTitle>
+                  <CardDescription className="text-gray-600">
+                    Chaque joueur suit la partie sur son propre appareil
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="bg-dutch-purple/5 rounded-xl p-4 text-sm text-gray-600">
+                    <p>Permet à chacun de voir les scores en temps réel sur son propre appareil. Idéal pour ne pas avoir à se passer le téléphone.</p>
+                  </div>
                 </CardContent>
               </Card>
             </motion.div>
@@ -168,10 +199,10 @@ const MultiplayerGameSetup: React.FC<MultiplayerGameSetupProps> = ({
             >
               <Alert className="mb-4 bg-dutch-purple/10 border-dutch-purple/20 text-dutch-purple">
                 <MapPin className="h-4 w-4" />
-                <AlertTitle>Mode Tableau de Bord</AlertTitle>
+                <AlertTitle>Mode multitéléphone</AlertTitle>
                 <AlertDescription>
                   Ce mode permet à chaque joueur de suivre les scores sur son propre appareil pendant une partie physique.
-                  Tous les joueurs doivent être ensemble dans la même pièce pour jouer aux cartes, l'application sert uniquement de tableau de bord.
+                  Tous les joueurs doivent être ensemble dans la même pièce pour jouer aux cartes.
                 </AlertDescription>
               </Alert>
             
@@ -190,7 +221,7 @@ const MultiplayerGameSetup: React.FC<MultiplayerGameSetupProps> = ({
                       Connectez-vous pour partager le tableau de bord
                     </CardTitle>
                     <CardDescription className="text-gray-600">
-                      Le mode tableau de bord nécessite une connexion pour inviter vos amis
+                      Le mode multitéléphone nécessite une connexion pour inviter vos amis
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -245,6 +276,19 @@ const MultiplayerGameSetup: React.FC<MultiplayerGameSetupProps> = ({
           </TabsContent>
         </Tabs>
       </motion.div>
+
+      {/* Dialog pour le mode "un seul téléphone" */}
+      <Dialog open={showLocalSetup} onOpenChange={setShowLocalSetup}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Configuration de la partie</DialogTitle>
+            <DialogDescription>
+              Configurer les joueurs pour une partie locale
+            </DialogDescription>
+          </DialogHeader>
+          <LocalGameSetup onStartGame={handleLocalStart} />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
