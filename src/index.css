@@ -4,7 +4,8 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
+  :root,
+  [data-theme="blue"] {
     --background: 210 40% 98%;
     --foreground: 222.2 84% 4.9%;
 
@@ -34,6 +35,50 @@
     --ring: 196 73% 49%;
 
     --radius: 1rem;
+  }
+
+  [data-theme="green"] {
+    --primary: 160 64% 40%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 48 96% 53%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --accent: 217 91% 60%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+  }
+
+  [data-theme="pink"] {
+    --primary: 322 80% 60%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 25 95% 53%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --accent: 250 91% 65%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+  }
+
+  [data-theme="red"] {
+    --primary: 0 84% 60%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 30 95% 52%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --accent: 265 84% 63%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+  }
+
+  [data-theme="purple"] {
+    --primary: 265 84% 63%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 160 64% 40%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --accent: 25 95% 53%;
+    --accent-foreground: 222.2 47.4% 11.2%;
   }
 
   .dark {
@@ -168,5 +213,23 @@
     0% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
     50% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
     100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+  }
+
+  /* Gradient animation for buttons */
+  .gradient-animate {
+    background-size: 200% 200%;
+    animation: gradient-shift 3s ease infinite;
+  }
+  
+  @keyframes gradient-shift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  
+  /* Badge styles */
+  .player-badge {
+    @apply inline-flex items-center rounded-full text-xs font-medium;
+    padding: 0.125rem 0.5rem;
   }
 }

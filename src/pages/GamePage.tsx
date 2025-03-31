@@ -72,10 +72,13 @@ const GamePage: React.FC = () => {
     return {
       bestRound: nonZeroScores.length > 0 ? Math.min(...nonZeroScores) : null,
       dutchCount,
-      averageScore: avg,
+      // Arrondir à 1 décimale maximum
+      averageScore: Math.round(avg * 10) / 10,
       worstRound: scores.length > 0 ? Math.max(...scores) : null,
-      improvementRate,
-      consistencyScore,
+      // Arrondir à 1 décimale maximum
+      improvementRate: Math.round(improvementRate * 10) / 10,
+      // Arrondir à 1 décimale maximum
+      consistencyScore: Math.round(consistencyScore * 10) / 10,
       winStreak
     };
   }, [players]);

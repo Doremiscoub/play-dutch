@@ -17,6 +17,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { cn } from '@/lib/utils';
+import ThemeSelector from './ThemeSelector';
+import PlayerBadges from './PlayerBadges';
+import QuickGuide from './QuickGuide';
 
 interface ScoreBoardProps {
   players: Player[];
@@ -143,10 +146,13 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-dutch-blue">Tableau des scores</h1>
         <div className="flex gap-2">
+          <ThemeSelector />
+          <QuickGuide />
           <Button 
             variant="outline" 
             size="icon"
-            className="rounded-full bg-white/80 backdrop-blur border-white/30 shadow-sm hover:bg-white/90"
+            rounded="full"
+            className="bg-white/80 backdrop-blur border-white/30 shadow-md hover:shadow-lg"
             onClick={() => setSortBy(sortBy === 'position' ? 'name' : 'position')}
             aria-label={sortBy === 'position' ? 'Trier par nom' : 'Trier par score'}
           >
@@ -155,7 +161,8 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
           <Button 
             variant="outline" 
             size="icon"
-            className="rounded-full bg-white/80 backdrop-blur border-white/30 shadow-sm hover:bg-white/90"
+            rounded="full"
+            className="bg-white/80 backdrop-blur border-white/30 shadow-md hover:shadow-lg"
             onClick={() => setShowRounds(!showRounds)}
             aria-label={showRounds ? 'Masquer les manches' : 'Afficher les manches'}
           >
@@ -164,7 +171,8 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
           <Button 
             variant="outline" 
             size="icon"
-            className="rounded-full bg-white/80 backdrop-blur border-white/30 shadow-sm hover:bg-white/90"
+            rounded="full"
+            className="bg-white/80 backdrop-blur border-white/30 shadow-md hover:shadow-lg"
             onClick={() => navigate('/')}
             aria-label="Retour à l'accueil"
           >
@@ -176,7 +184,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
       {roundCount > 0 && (
         <div className="mb-4 flex items-center justify-between">
           <span className="bg-dutch-blue/80 backdrop-blur text-white text-sm font-medium px-4 py-1 rounded-full 
-                         flex items-center">
+                         flex items-center shadow-md">
             <Clock className="h-3 w-3 mr-1" aria-hidden="true" />
             Manche {roundCount}
           </span>
@@ -184,8 +192,9 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
           {roundCount > 0 && (
             <Button 
               variant="outline" 
-              size="sm" 
-              className="text-dutch-orange border-dutch-orange/30 text-xs bg-dutch-orange/5 hover:bg-dutch-orange/10"
+              size="sm"
+              rounded="full"
+              className="text-dutch-orange border-dutch-orange/30 text-xs bg-dutch-orange/5 hover:bg-dutch-orange/10 shadow-sm"
               onClick={handleUndoLastRound}
             >
               <RotateCcw className="h-3 w-3 mr-1" aria-hidden="true" />
@@ -215,13 +224,15 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
             <div className="grid grid-cols-2 gap-2 mt-4">
               <Button 
                 onClick={() => setShowPodium(true)}
-                className="bg-white text-dutch-blue hover:bg-white/90"
+                className="bg-white text-dutch-blue hover:bg-white/90 shadow-md"
+                rounded="full"
               >
                 Voir le podium
               </Button>
               <Button 
                 onClick={onEndGame}
-                className="bg-dutch-orange text-white hover:bg-dutch-orange/90"
+                className="bg-dutch-orange text-white hover:bg-dutch-orange/90 shadow-md"
+                rounded="full"
               >
                 Nouvelle partie
               </Button>
@@ -246,7 +257,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
 
       {/* Round details dialog */}
       <Dialog open={showRoundDetails !== null} onOpenChange={() => setShowRoundDetails(null)}>
-        <DialogContent className="sm:max-w-md rounded-3xl bg-white/60 backdrop-blur-md border border-white/20">
+        <DialogContent className="sm:max-w-md rounded-3xl bg-white/80 backdrop-blur-md border border-white/30 shadow-xl">
           <DialogHeader>
             <DialogTitle>Détails de la manche {showRoundDetails !== null ? showRoundDetails + 1 : ''}</DialogTitle>
           </DialogHeader>
@@ -272,7 +283,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
 
       {/* End game confirmation dialog */}
       <AlertDialog open={showEndGameDialog} onOpenChange={setShowEndGameDialog}>
-        <AlertDialogContent className="rounded-3xl bg-white/60 backdrop-blur-md border border-white/20">
+        <AlertDialogContent className="rounded-3xl bg-white/80 backdrop-blur-md border border-white/30 shadow-xl">
           <AlertDialogHeader>
             <AlertDialogTitle>Terminer la partie</AlertDialogTitle>
             <AlertDialogDescription>
@@ -283,7 +294,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
             <AlertDialogCancel className="rounded-full">Annuler</AlertDialogCancel>
             <AlertDialogAction 
               onClick={handleEndGame}
-              className="rounded-full bg-dutch-blue hover:bg-dutch-blue/90"
+              className="rounded-full bg-dutch-blue hover:bg-dutch-blue/90 shadow-md"
             >
               Voir le podium
             </AlertDialogAction>
@@ -305,7 +316,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
         <Button 
           onClick={() => setShowNewRoundModal(true)}
           disabled={gameOver}
-          className="dutch-button bg-dutch-orange hover:bg-dutch-orange/90 px-6 py-6 backdrop-blur-md shadow-lg"
+          className="dutch-button bg-gradient-to-r from-dutch-orange to-dutch-pink hover:bg-dutch-orange/90 px-6 py-6 backdrop-blur-md shadow-lg rounded-full"
         >
           <Plus className="mr-2 h-5 w-5" aria-hidden="true" /> Nouvelle manche
         </Button>
@@ -334,7 +345,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
               {soundEnabled ? <Bell className="h-5 w-5" aria-hidden="true" /> : <VolumeX className="h-5 w-5" aria-hidden="true" />}
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-md rounded-3xl bg-white/60 backdrop-blur-md border border-white/20">
+          <DialogContent className="sm:max-w-md rounded-3xl bg-white/80 backdrop-blur-md border border-white/30 shadow-xl">
             <DialogHeader>
               <DialogTitle>Paramètres de la partie</DialogTitle>
             </DialogHeader>
@@ -361,7 +372,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
               <Flag className="h-5 w-5" aria-hidden="true" />
             </Button>
           </AlertDialogTrigger>
-          <AlertDialogContent className="rounded-3xl bg-white/60 backdrop-blur-md border border-white/20">
+          <AlertDialogContent className="rounded-3xl bg-white/80 backdrop-blur-md border border-white/30 shadow-xl">
             <AlertDialogHeader>
               <AlertDialogTitle>Terminer la partie</AlertDialogTitle>
               <AlertDialogDescription>
@@ -372,7 +383,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
               <AlertDialogCancel className="rounded-full">Annuler</AlertDialogCancel>
               <AlertDialogAction 
                 onClick={handleEndGame}
-                className="rounded-full bg-dutch-blue hover:bg-dutch-blue/90"
+                className="rounded-full bg-dutch-blue hover:bg-dutch-blue/90 shadow-md"
               >
                 Voir le podium
               </AlertDialogAction>
@@ -389,18 +400,18 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
               <BarChart3 className="h-5 w-5" aria-hidden="true" />
             </Button>
           </SheetTrigger>
-          <SheetContent className="overflow-y-auto rounded-l-3xl bg-white/60 backdrop-blur-md border border-white/20">
+          <SheetContent className="overflow-y-auto rounded-l-3xl bg-white/80 backdrop-blur-md border border-white/30 shadow-xl">
             <SheetHeader>
               <SheetTitle>Statistiques de la partie</SheetTitle>
             </SheetHeader>
             <Tabs defaultValue="stats" className="mt-6">
-              <TabsList className="grid w-full grid-cols-2 bg-white/20 backdrop-blur-sm">
+              <TabsList className="grid w-full grid-cols-2 bg-white/20 backdrop-blur-sm rounded-full">
                 <TabsTrigger value="stats" className="rounded-full data-[state=active]:bg-white/80">Joueurs</TabsTrigger>
                 <TabsTrigger value="trends" className="rounded-full data-[state=active]:bg-white/80">Tendances</TabsTrigger>
               </TabsList>
               
               <TabsContent value="stats" className="space-y-4 mt-4">
-                <div className="dutch-card bg-white/50 backdrop-blur-sm border border-white/30 shadow-sm">
+                <div className="dutch-card bg-white/60 backdrop-blur-sm border border-white/30 shadow-sm rounded-2xl">
                   <h3 className="text-sm font-medium mb-2 flex items-center">
                     <Award className="h-4 w-4 mr-1 text-dutch-blue" aria-hidden="true" />
                     Meilleur score par manche
@@ -411,7 +422,10 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                       : null);
                     return (
                       <div key={player.id} className="flex justify-between items-center mb-1">
-                        <span className="text-sm">{player.name}</span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm">{player.name}</span>
+                          <PlayerBadges player={player} />
+                        </div>
                         <span className="font-medium">
                           {bestRound !== null ? bestRound : '-'}
                         </span>
@@ -420,7 +434,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                   })}
                 </div>
                 
-                <div className="dutch-card bg-white/50 backdrop-blur-sm border border-white/30 shadow-sm">
+                <div className="dutch-card bg-white/60 backdrop-blur-sm border border-white/30 shadow-sm rounded-2xl">
                   <h3 className="text-sm font-medium mb-2 flex items-center">
                     <TrendingDown className="h-4 w-4 mr-1 text-dutch-orange" aria-hidden="true" />
                     Nombre de fois "Dutch"
@@ -436,7 +450,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                   })}
                 </div>
                 
-                <div className="dutch-card bg-white/50 backdrop-blur-sm border border-white/30 shadow-sm">
+                <div className="dutch-card bg-white/60 backdrop-blur-sm border border-white/30 shadow-sm rounded-2xl">
                   <h3 className="text-sm font-medium mb-2 flex items-center">
                     <TrendingUp className="h-4 w-4 mr-1 text-dutch-purple" aria-hidden="true" />
                     Pire score par manche
@@ -456,7 +470,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                   })}
                 </div>
                 
-                <div className="dutch-card bg-white/50 backdrop-blur-sm border border-white/30 shadow-sm">
+                <div className="dutch-card bg-white/60 backdrop-blur-sm border border-white/30 shadow-sm rounded-2xl">
                   <h3 className="text-sm font-medium mb-2 flex items-center">
                     <LineChart className="h-4 w-4 mr-1 text-dutch-blue" aria-hidden="true" />
                     Score moyen par manche
@@ -469,7 +483,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                       <div key={player.id} className="flex justify-between items-center mb-1">
                         <span className="text-sm">{player.name}</span>
                         <span className="font-medium">
-                          {player.rounds.length > 0 ? avgScore : '-'}
+                          {player.rounds.length > 0 ? avgScore.toFixed(1) : '-'}
                         </span>
                       </div>
                     );
@@ -477,7 +491,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                 </div>
                 
                 {players.some(p => p.stats?.improvementRate !== undefined) && (
-                  <div className="dutch-card bg-white/50 backdrop-blur-sm border border-white/30 shadow-sm">
+                  <div className="dutch-card bg-white/60 backdrop-blur-sm border border-white/30 shadow-sm rounded-2xl">
                     <h3 className="text-sm font-medium mb-2 flex items-center">
                       <Heart className="h-4 w-4 mr-1 text-dutch-pink" aria-hidden="true" />
                       Tendance d'amélioration
@@ -497,7 +511,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                               <span>-</span>
                             )}
                             <span className={`font-medium ${player.stats.improvementRate < 0 ? 'text-green-600' : 'text-red-600'}`}>
-                              {player.stats.improvementRate !== 0 ? Math.abs(Math.round(player.stats.improvementRate * 10) / 10) : '-'}
+                              {player.stats.improvementRate !== 0 ? Math.abs(Math.round(player.stats.improvementRate * 10) / 10).toFixed(1) : '-'}
                             </span>
                           </div>
                         </div>
@@ -508,7 +522,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
               </TabsContent>
               
               <TabsContent value="trends" className="mt-4">
-                <div className="dutch-card bg-white/50 backdrop-blur-sm border border-white/30 shadow-sm">
+                <div className="dutch-card bg-white/60 backdrop-blur-sm border border-white/30 shadow-sm rounded-2xl">
                   <h3 className="text-sm font-medium mb-2">Progression des scores</h3>
                   <div className="h-40 overflow-hidden">
                     {players.length > 0 && (
@@ -517,7 +531,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                   </div>
                 </div>
                 
-                <div className="dutch-card mt-4 bg-white/50 backdrop-blur-sm border border-white/30 shadow-sm">
+                <div className="dutch-card mt-4 bg-white/60 backdrop-blur-sm border border-white/30 shadow-sm rounded-2xl">
                   <h3 className="text-sm font-medium mb-2">Historique des manches</h3>
                   <div className="space-y-2 max-h-60 overflow-y-auto pr-2">
                     {Array.from({length: roundCount}).map((_, roundIndex) => {
