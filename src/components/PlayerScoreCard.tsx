@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Player } from '@/types';
@@ -27,10 +26,8 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
 }) => {
   const { currentTheme } = useTheme();
   
-  // Calculate progress percentage (max score is 100)
   const progressPercentage = Math.min(player.totalScore, 100);
   
-  // Determine position-based styling
   const getPositionStyles = () => {
     switch(position) {
       case 1:
@@ -62,13 +59,11 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
   
   const styles = getPositionStyles();
 
-  // Determine if this is the last round score
   const isLastRoundHighScore = lastRoundScore !== undefined && 
     player.rounds.length > 0 && 
     player.rounds[player.rounds.length - 1].score === lastRoundScore && 
     lastRoundScore === Math.min(...player.rounds.map(r => r.score).filter(s => s > 0));
 
-  // Get player statistics to display
   const stats = player.stats;
   const hasImprovement = stats?.improvementRate !== undefined && stats.improvementRate < 0;
   
@@ -134,10 +129,8 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
             </div>
           </div>
           
-          {/* Player badges below score */}
           <PlayerBadges player={player} className="mt-1.5" />
           
-          {/* Player stats (only show if available) */}
           {stats && (
             <div className="mt-1 text-xs text-gray-600 flex flex-wrap gap-x-3">
               {stats.averageScore > 0 && (
@@ -163,7 +156,6 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
       {showRounds && player.rounds.length > 0 && (
         <div className="mt-3 flex gap-2 overflow-x-auto py-1 scrollbar-none">
           {player.rounds.map((round, index) => {
-            // Check if this is the best score for this player
             const isPlayerBestScore = stats?.bestRound === round.score || 
               (round.score > 0 && round.score === Math.min(...player.rounds.map(r => r.score).filter(s => s > 0)));
             

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useUser } from '@clerk/clerk-react';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -13,7 +12,6 @@ import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import LocalGameSetup from './LocalGameSetup';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Sign } from '@/components/ui/sign';
 
 interface MultiplayerGameSetupProps {
   onStartLocalGame: (playerNames: string[]) => void;
@@ -32,13 +30,11 @@ const MultiplayerGameSetup: React.FC<MultiplayerGameSetupProps> = ({
   const [showLocalSetup, setShowLocalSetup] = useState(false);
   const [showLoginPrompt, setShowLoginPrompt] = useState(false);
   
-  // Check for join code in URL
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const joinCode = params.get('join');
     
     if (joinCode && isSignedIn && user) {
-      // Try to join the game
       const gameSession = joinGameSession(
         joinCode.toUpperCase(), 
         user.id, 
@@ -46,12 +42,8 @@ const MultiplayerGameSetup: React.FC<MultiplayerGameSetupProps> = ({
       );
       
       if (gameSession) {
-        // Clear the URL parameter
         navigate('/game', { replace: true });
-        
-        // Join the game
         onStartMultiplayerGame(joinCode);
-        
         toast.success(`Vous avez rejoint la partie de ${gameSession.hostName}`);
       } else {
         toast.error("Cette partie n'existe plus ou le code est invalide");
@@ -83,7 +75,6 @@ const MultiplayerGameSetup: React.FC<MultiplayerGameSetupProps> = ({
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        {/* Background elements */}
         <div className="absolute inset-0 bg-gradient-to-br from-dutch-background/80 to-white/80 -z-10 rounded-3xl" />
         
         <motion.div
@@ -152,7 +143,6 @@ const MultiplayerGameSetup: React.FC<MultiplayerGameSetupProps> = ({
               transition={{ duration: 0.4 }}
               className="grid grid-cols-1 gap-4"
             >
-              {/* Option 1: Un seul téléphone */}
               <Card 
                 className="rounded-3xl border border-white/50 bg-white/80 backdrop-blur-md shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer"
                 onClick={() => {
@@ -176,7 +166,6 @@ const MultiplayerGameSetup: React.FC<MultiplayerGameSetupProps> = ({
                 </CardContent>
               </Card>
               
-              {/* Option 2: Chacun son téléphone */}
               <Card 
                 className="rounded-3xl border border-white/50 bg-white/80 backdrop-blur-md shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer relative overflow-hidden"
                 onClick={handleMultiTelephoneClick}
@@ -207,7 +196,6 @@ const MultiplayerGameSetup: React.FC<MultiplayerGameSetupProps> = ({
                   </div>
                 </CardContent>
                 
-                {/* Overlay for login required */}
                 {!isSignedIn && (
                   <div className="absolute inset-0 bg-black/5 backdrop-blur-[1px] flex items-center justify-center">
                     <Button 
@@ -316,7 +304,6 @@ const MultiplayerGameSetup: React.FC<MultiplayerGameSetupProps> = ({
         </Tabs>
       </motion.div>
 
-      {/* Dialog pour le mode "un seul téléphone" */}
       <Dialog open={showLocalSetup} onOpenChange={setShowLocalSetup}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
@@ -329,7 +316,6 @@ const MultiplayerGameSetup: React.FC<MultiplayerGameSetupProps> = ({
         </DialogContent>
       </Dialog>
       
-      {/* Dialog pour la connexion */}
       <Dialog open={showLoginPrompt} onOpenChange={setShowLoginPrompt}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
@@ -359,12 +345,8 @@ const MultiplayerGameSetup: React.FC<MultiplayerGameSetupProps> = ({
               </Button>
               <Button 
                 className="bg-dutch-purple text-white hover:bg-dutch-purple/90"
-                // Pour l'instant, nous fermons simplement la boîte de dialogue
-                // Dans une implémentation réelle, ce bouton redirigerait vers la page de connexion
                 onClick={() => {
                   setShowLoginPrompt(false);
-                  // Ici, vous pourriez ajouter une redirection vers la page de connexion
-                  // navigate('/sign-in');
                 }}
               >
                 <LogIn className="h-4 w-4 mr-2" />
