@@ -1,49 +1,33 @@
 
-import { useTheme } from "@/hooks/use-theme";
-import { Button } from "@/components/ui/button";
-import { Sun, Moon, Laptop } from "lucide-react";
-import { 
-  DropdownMenu, 
-  DropdownMenuContent, 
-  DropdownMenuItem, 
-  DropdownMenuTrigger 
-} from "@/components/ui/dropdown-menu";
+import React from 'react';
+import { Button } from '@/components/ui/button';
+import { Palette } from 'lucide-react';
+import { useTheme } from '@/hooks/use-theme';
+import { motion } from 'framer-motion';
 
-const ThemeSelector = () => {
-  const { themeMode, setThemeMode } = useTheme();
+// Composant simplifié pour le sélecteur de thème qui ne cause pas d'erreur React.Children.only
+const ThemeSelector: React.FC = () => {
+  const { currentTheme, setTheme, availableThemes } = useTheme();
+
+  const handleThemeChange = () => {
+    // Rotation simple entre les thèmes disponibles
+    const currentIndex = availableThemes.findIndex(theme => theme.name === currentTheme);
+    const nextIndex = (currentIndex + 1) % availableThemes.length;
+    setTheme(availableThemes[nextIndex].name);
+  };
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button 
-          variant="ghost"
-          size="icon"
-          className="rounded-full bg-white/80 hover:bg-white/90 backdrop-blur-sm border border-white/30 shadow-sm"
-        >
-          {themeMode === "light" ? (
-            <Sun className="h-5 w-5 text-dutch-orange" />
-          ) : themeMode === "dark" ? (
-            <Moon className="h-5 w-5 text-dutch-blue" />
-          ) : (
-            <Laptop className="h-5 w-5 text-dutch-purple" />
-          )}
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="bg-white/80 backdrop-blur-sm border border-white/30">
-        <DropdownMenuItem onClick={() => setThemeMode("light")}>
-          <Sun className="h-4 w-4 mr-2 text-dutch-orange" />
-          <span>Light</span>
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setThemeMode("dark")}>
-          <Moon className="h-4 w-4 mr-2 text-dutch-blue" />
-          <span>Dark</span>
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setThemeMode("system")}>
-          <Laptop className="h-4 w-4 mr-2 text-dutch-purple" />
-          <span>System</span>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={handleThemeChange}
+        className="rounded-full bg-white/80 hover:bg-white/90 backdrop-blur-sm border border-white/30 shadow-sm"
+        aria-label="Changer de thème"
+      >
+        <Palette className="h-5 w-5 text-dutch-blue" />
+      </Button>
+    </motion.div>
   );
 };
 
