@@ -19,6 +19,7 @@ const buttonVariants = cva(
         link: "text-dutch-blue underline-offset-4 hover:underline bg-transparent",
         "primary-gradient": "bg-gradient-to-r from-dutch-blue to-dutch-purple text-white hover:opacity-90 shadow-sm",
         gradient: "bg-gradient-to-r from-dutch-blue to-dutch-purple text-white hover:opacity-90 shadow-sm",
+        dropdown: "bg-gray-100/80 backdrop-blur-sm hover:bg-gray-100 shadow-sm",
       },
       size: {
         default: "h-10 px-4 py-2 rounded-full",
