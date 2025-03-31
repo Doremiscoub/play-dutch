@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Player } from '@/types';
 import { Trophy, Star, TrendingUp, TrendingDown, Award } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
+import { cn } from '@/lib/utils';
 
 interface PlayerScoreCardProps {
   player: Player;
@@ -37,8 +38,8 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
     : 'bg-gray-200 text-gray-700';
   
   const cardClasses = isWinner
-    ? 'dutch-card border-2 border-dutch-yellow bg-gradient-to-r from-dutch-purple/10 to-dutch-blue/10'
-    : 'dutch-card';
+    ? 'border-2 border-dutch-yellow bg-gradient-to-r from-dutch-purple/10 to-dutch-blue/10 backdrop-blur-sm'
+    : 'bg-white/60 backdrop-blur-sm border border-white/20';
 
   // Determine if this is the last round score
   const isLastRoundHighScore = lastRoundScore !== undefined && 
@@ -52,7 +53,10 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
   
   return (
     <motion.div 
-      className={cardClasses}
+      className={cn(
+        "rounded-3xl p-5 shadow-sm transition-all hover:shadow-md",
+        cardClasses
+      )}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: position * 0.05 }}
@@ -60,7 +64,7 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
     >
       <div className="flex items-center gap-3">
         <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-bold ${positionColor}`}>
-          {isWinner ? <Trophy className="h-4 w-4" /> : position}
+          {isWinner ? <Trophy className="h-4 w-4" aria-hidden="true" /> : position}
         </div>
         
         <div className="flex-grow overflow-hidden">
@@ -75,23 +79,23 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
             )}
             {stats && hasImprovement && (
               <div className="ml-1">
-                <Award className="h-3 w-3 text-dutch-blue" title="S'améliore" />
+                <Award className="h-3 w-3 text-dutch-blue" aria-hidden="true" />
               </div>
             )}
           </div>
           
           <div className="flex items-center gap-2 mt-1">
-            <Progress value={progressPercentage} className="h-2" />
+            <Progress value={progressPercentage} className="h-2 bg-gray-100/50" />
             <div className="flex items-center">
               <span className="text-lg font-bold">{player.totalScore}</span>
               {lastRoundScore !== undefined && (
                 <span className="ml-2 text-xs text-gray-500 flex items-center">
                   +{lastRoundScore}
                   {player.rounds.length > 1 && player.rounds[player.rounds.length - 1].score < player.rounds[player.rounds.length - 2].score && (
-                    <TrendingDown className="h-3 w-3 ml-0.5 text-green-500" />
+                    <TrendingDown className="h-3 w-3 ml-0.5 text-green-500" aria-hidden="true" />
                   )}
                   {player.rounds.length > 1 && player.rounds[player.rounds.length - 1].score > player.rounds[player.rounds.length - 2].score && (
-                    <TrendingUp className="h-3 w-3 ml-0.5 text-red-500" />
+                    <TrendingUp className="h-3 w-3 ml-0.5 text-red-500" aria-hidden="true" />
                   )}
                 </span>
               )}
@@ -110,15 +114,15 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
             return (
               <div 
                 key={index} 
-                className={`
-                  flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium
-                  transition-transform hover:scale-110 cursor-pointer
-                  ${isLastRoundHighScore && index === player.rounds.length - 1 ? 'bg-green-100 text-green-800 ring-1 ring-green-400' :
+                className={cn(
+                  `flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium
+                  transition-transform hover:scale-110 cursor-pointer`,
+                  isLastRoundHighScore && index === player.rounds.length - 1 ? 'bg-green-100 text-green-800 ring-1 ring-green-400' :
                     round.isDutch ? 'bg-dutch-orange text-white' : 
-                    isPlayerBestScore ? 'bg-blue-100 text-blue-800 ring-1 ring-blue-300' : 'bg-gray-100'}
-                `}
+                    isPlayerBestScore ? 'bg-blue-100 text-blue-800 ring-1 ring-blue-300' : 'bg-gray-100'
+                )}
                 onClick={() => onRoundClick?.(index)}
-                title={`Manche ${index + 1}: ${round.score} points${round.isDutch ? ' (Dutch)' : ''}`}
+                aria-label={`Manche ${index + 1}: ${round.score} points${round.isDutch ? ' (Dutch)' : ''}`}
               >
                 {round.score}
               </div>

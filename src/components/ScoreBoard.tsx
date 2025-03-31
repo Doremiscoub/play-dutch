@@ -1,19 +1,21 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Plus, Trophy, BarChart3, History, Home, Crown, Trash2, Music, Bell, VolumeX, ArrowRight, RotateCcw, Clock, Award, LineChart, TrendingDown, TrendingUp, Heart } from 'lucide-react';
+import { Plus, Trophy, BarChart3, History, Home, Crown, Trash2, Music, Bell, VolumeX, ArrowRight, RotateCcw, Clock, Award, LineChart, TrendingDown, TrendingUp, Heart, Medal, Flag } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Player, GameRound, PlayerStatistics } from '@/types';
 import PlayerScoreCard from './PlayerScoreCard';
 import NewRoundModal from './NewRoundModal';
+import PodiumView from './PodiumView';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { cn } from '@/lib/utils';
 
 interface ScoreBoardProps {
   players: Player[];
@@ -40,6 +42,8 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
     return saved !== null ? JSON.parse(saved) : true;
   });
   const [showRoundDetails, setShowRoundDetails] = useState<number | null>(null);
+  const [showPodium, setShowPodium] = useState(false);
+  const [showEndGameDialog, setShowEndGameDialog] = useState(false);
   const navigate = useNavigate();
   
   useEffect(() => {
@@ -106,6 +110,16 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
     playSound('undo');
   };
 
+  const handleEndGame = () => {
+    setShowEndGameDialog(false);
+    setShowPodium(true);
+  };
+
+  const handleFinishGame = () => {
+    setShowPodium(false);
+    onEndGame();
+  };
+
   // Get round details for a specific round index
   const getRoundDetails = (roundIndex: number) => {
     if (roundIndex < 0 || roundIndex >= roundCount) return null;
@@ -131,38 +145,38 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
           <Button 
             variant="outline" 
             size="icon"
-            className="rounded-full"
+            className="rounded-full bg-white/80 backdrop-blur border-white/30 shadow-sm hover:bg-white/90"
             onClick={() => setSortBy(sortBy === 'position' ? 'name' : 'position')}
-            title={sortBy === 'position' ? 'Trier par nom' : 'Trier par score'}
+            aria-label={sortBy === 'position' ? 'Trier par nom' : 'Trier par score'}
           >
-            <BarChart3 className="h-4 w-4" />
+            <BarChart3 className="h-4 w-4" aria-hidden="true" />
           </Button>
           <Button 
             variant="outline" 
             size="icon"
-            className="rounded-full"
+            className="rounded-full bg-white/80 backdrop-blur border-white/30 shadow-sm hover:bg-white/90"
             onClick={() => setShowRounds(!showRounds)}
-            title={showRounds ? 'Masquer les manches' : 'Afficher les manches'}
+            aria-label={showRounds ? 'Masquer les manches' : 'Afficher les manches'}
           >
-            <History className="h-4 w-4" />
+            <History className="h-4 w-4" aria-hidden="true" />
           </Button>
           <Button 
             variant="outline" 
             size="icon"
-            className="rounded-full"
+            className="rounded-full bg-white/80 backdrop-blur border-white/30 shadow-sm hover:bg-white/90"
             onClick={() => navigate('/')}
-            title="Retour à l'accueil"
+            aria-label="Retour à l'accueil"
           >
-            <Home className="h-4 w-4" />
+            <Home className="h-4 w-4" aria-hidden="true" />
           </Button>
         </div>
       </div>
 
       {roundCount > 0 && (
         <div className="mb-4 flex items-center justify-between">
-          <span className="bg-dutch-blue text-white text-sm font-medium px-4 py-1 rounded-full 
+          <span className="bg-dutch-blue/80 backdrop-blur text-white text-sm font-medium px-4 py-1 rounded-full 
                          flex items-center">
-            <Clock className="h-3 w-3 mr-1" />
+            <Clock className="h-3 w-3 mr-1" aria-hidden="true" />
             Manche {roundCount}
           </span>
           
@@ -170,10 +184,10 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
             <Button 
               variant="outline" 
               size="sm" 
-              className="text-dutch-orange border-dutch-orange/30 text-xs hover:bg-dutch-orange/10"
+              className="text-dutch-orange border-dutch-orange/30 text-xs bg-dutch-orange/5 hover:bg-dutch-orange/10"
               onClick={handleUndoLastRound}
             >
-              <RotateCcw className="h-3 w-3 mr-1" />
+              <RotateCcw className="h-3 w-3 mr-1" aria-hidden="true" />
               Annuler dernière manche
             </Button>
           )}
@@ -183,13 +197,13 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
       <AnimatePresence>
         {gameOver && (
           <motion.div 
-            className="dutch-card mb-6 bg-gradient-to-r from-dutch-purple to-dutch-blue text-white"
+            className="mb-6 rounded-3xl bg-gradient-to-r from-dutch-purple/80 to-dutch-blue/80 backdrop-blur-md border border-white/20 p-6 text-white shadow-lg"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
           >
             <div className="flex items-center gap-3">
-              <Trophy className="h-10 w-10 text-dutch-yellow" />
+              <Trophy className="h-10 w-10 text-dutch-yellow" aria-hidden="true" />
               <div>
                 <h2 className="text-xl font-bold">Partie terminée !</h2>
                 <p className="text-white/90">
@@ -199,16 +213,16 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
             </div>
             <div className="grid grid-cols-2 gap-2 mt-4">
               <Button 
-                onClick={onEndGame}
+                onClick={() => setShowPodium(true)}
                 className="bg-white text-dutch-blue hover:bg-white/90"
               >
-                Nouvelle partie
+                Voir le podium
               </Button>
               <Button 
-                onClick={() => navigate('/history')}
+                onClick={onEndGame}
                 className="bg-dutch-orange text-white hover:bg-dutch-orange/90"
               >
-                Historique
+                Nouvelle partie
               </Button>
             </div>
           </motion.div>
@@ -231,7 +245,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
 
       {/* Round details dialog */}
       <Dialog open={showRoundDetails !== null} onOpenChange={() => setShowRoundDetails(null)}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md rounded-3xl bg-white/60 backdrop-blur-md border border-white/20">
           <DialogHeader>
             <DialogTitle>Détails de la manche {showRoundDetails !== null ? showRoundDetails + 1 : ''}</DialogTitle>
           </DialogHeader>
@@ -255,13 +269,44 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
         </DialogContent>
       </Dialog>
 
+      {/* End game confirmation dialog */}
+      <AlertDialog open={showEndGameDialog} onOpenChange={setShowEndGameDialog}>
+        <AlertDialogContent className="rounded-3xl bg-white/60 backdrop-blur-md border border-white/20">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Terminer la partie</AlertDialogTitle>
+            <AlertDialogDescription>
+              Êtes-vous sûr de vouloir terminer cette partie avant la fin naturelle ? Vous pourrez voir le podium et les statistiques finales.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="rounded-full">Annuler</AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={handleEndGame}
+              className="rounded-full bg-dutch-blue hover:bg-dutch-blue/90"
+            >
+              Voir le podium
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Podium view */}
+      <AnimatePresence>
+        {showPodium && (
+          <PodiumView 
+            players={players} 
+            onClose={handleFinishGame}
+          />
+        )}
+      </AnimatePresence>
+
       <div className="fixed bottom-6 left-0 right-0 flex justify-center">
         <Button 
           onClick={() => setShowNewRoundModal(true)}
           disabled={gameOver}
-          className="dutch-button bg-dutch-orange hover:bg-dutch-orange/90 px-6 py-6"
+          className="dutch-button bg-dutch-orange hover:bg-dutch-orange/90 px-6 py-6 backdrop-blur-md shadow-lg"
         >
-          <Plus className="mr-2 h-5 w-5" /> Nouvelle manche
+          <Plus className="mr-2 h-5 w-5" aria-hidden="true" /> Nouvelle manche
         </Button>
       </div>
 
@@ -282,13 +327,13 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
         <Dialog open={showSettings} onOpenChange={setShowSettings}>
           <DialogTrigger asChild>
             <Button 
-              className="w-12 h-12 rounded-full shadow-lg bg-dutch-pink text-white hover:bg-dutch-pink/90 flex items-center justify-center"
-              title="Paramètres"
+              className="w-12 h-12 rounded-full shadow-lg bg-dutch-pink text-white hover:bg-dutch-pink/90 flex items-center justify-center backdrop-blur-md"
+              aria-label="Paramètres"
             >
-              {soundEnabled ? <Bell className="h-5 w-5" /> : <VolumeX className="h-5 w-5" />}
+              {soundEnabled ? <Bell className="h-5 w-5" aria-hidden="true" /> : <VolumeX className="h-5 w-5" aria-hidden="true" />}
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-md">
+          <DialogContent className="sm:max-w-md rounded-3xl bg-white/60 backdrop-blur-md border border-white/20">
             <DialogHeader>
               <DialogTitle>Paramètres de la partie</DialogTitle>
             </DialogHeader>
@@ -305,29 +350,38 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
           </DialogContent>
         </Dialog>
         
+        <AlertDialogTrigger asChild>
+          <Button 
+            className="w-12 h-12 rounded-full shadow-lg bg-dutch-blue/90 text-white hover:bg-dutch-blue flex items-center justify-center backdrop-blur-md"
+            aria-label="Terminer la partie"
+          >
+            <Flag className="h-5 w-5" aria-hidden="true" />
+          </Button>
+        </AlertDialogTrigger>
+        
         <Sheet>
           <SheetTrigger asChild>
             <Button 
-              className="w-12 h-12 rounded-full shadow-lg bg-dutch-blue text-white hover:bg-dutch-blue/90 flex items-center justify-center"
-              title="Statistiques"
+              className="w-12 h-12 rounded-full shadow-lg bg-dutch-purple/90 text-white hover:bg-dutch-purple flex items-center justify-center backdrop-blur-md"
+              aria-label="Statistiques"
             >
-              <BarChart3 className="h-5 w-5" />
+              <BarChart3 className="h-5 w-5" aria-hidden="true" />
             </Button>
           </SheetTrigger>
-          <SheetContent className="overflow-y-auto">
+          <SheetContent className="overflow-y-auto rounded-l-3xl bg-white/60 backdrop-blur-md border border-white/20">
             <SheetHeader>
               <SheetTitle>Statistiques de la partie</SheetTitle>
             </SheetHeader>
             <Tabs defaultValue="stats" className="mt-6">
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="stats">Joueurs</TabsTrigger>
-                <TabsTrigger value="trends">Tendances</TabsTrigger>
+              <TabsList className="grid w-full grid-cols-2 bg-white/20 backdrop-blur-sm">
+                <TabsTrigger value="stats" className="rounded-full data-[state=active]:bg-white/80">Joueurs</TabsTrigger>
+                <TabsTrigger value="trends" className="rounded-full data-[state=active]:bg-white/80">Tendances</TabsTrigger>
               </TabsList>
               
               <TabsContent value="stats" className="space-y-4 mt-4">
-                <div className="dutch-card">
+                <div className="dutch-card bg-white/50 backdrop-blur-sm border border-white/30 shadow-sm">
                   <h3 className="text-sm font-medium mb-2 flex items-center">
-                    <Award className="h-4 w-4 mr-1 text-dutch-blue" />
+                    <Award className="h-4 w-4 mr-1 text-dutch-blue" aria-hidden="true" />
                     Meilleur score par manche
                   </h3>
                   {players.map(player => {
@@ -345,9 +399,9 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                   })}
                 </div>
                 
-                <div className="dutch-card">
+                <div className="dutch-card bg-white/50 backdrop-blur-sm border border-white/30 shadow-sm">
                   <h3 className="text-sm font-medium mb-2 flex items-center">
-                    <TrendingDown className="h-4 w-4 mr-1 text-dutch-orange" />
+                    <TrendingDown className="h-4 w-4 mr-1 text-dutch-orange" aria-hidden="true" />
                     Nombre de fois "Dutch"
                   </h3>
                   {players.map(player => {
@@ -361,9 +415,9 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                   })}
                 </div>
                 
-                <div className="dutch-card">
+                <div className="dutch-card bg-white/50 backdrop-blur-sm border border-white/30 shadow-sm">
                   <h3 className="text-sm font-medium mb-2 flex items-center">
-                    <TrendingUp className="h-4 w-4 mr-1 text-dutch-purple" />
+                    <TrendingUp className="h-4 w-4 mr-1 text-dutch-purple" aria-hidden="true" />
                     Pire score par manche
                   </h3>
                   {players.map(player => {
@@ -381,9 +435,9 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                   })}
                 </div>
                 
-                <div className="dutch-card">
+                <div className="dutch-card bg-white/50 backdrop-blur-sm border border-white/30 shadow-sm">
                   <h3 className="text-sm font-medium mb-2 flex items-center">
-                    <LineChart className="h-4 w-4 mr-1 text-dutch-blue" />
+                    <LineChart className="h-4 w-4 mr-1 text-dutch-blue" aria-hidden="true" />
                     Score moyen par manche
                   </h3>
                   {players.map(player => {
@@ -402,9 +456,9 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                 </div>
                 
                 {players.some(p => p.stats?.improvementRate !== undefined) && (
-                  <div className="dutch-card">
+                  <div className="dutch-card bg-white/50 backdrop-blur-sm border border-white/30 shadow-sm">
                     <h3 className="text-sm font-medium mb-2 flex items-center">
-                      <Heart className="h-4 w-4 mr-1 text-dutch-pink" />
+                      <Heart className="h-4 w-4 mr-1 text-dutch-pink" aria-hidden="true" />
                       Tendance d'amélioration
                     </h3>
                     {players.map(player => {
@@ -433,7 +487,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
               </TabsContent>
               
               <TabsContent value="trends" className="mt-4">
-                <div className="dutch-card">
+                <div className="dutch-card bg-white/50 backdrop-blur-sm border border-white/30 shadow-sm">
                   <h3 className="text-sm font-medium mb-2">Progression des scores</h3>
                   <div className="h-40 overflow-hidden">
                     {players.length > 0 && (
@@ -442,7 +496,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                   </div>
                 </div>
                 
-                <div className="dutch-card mt-4">
+                <div className="dutch-card mt-4 bg-white/50 backdrop-blur-sm border border-white/30 shadow-sm">
                   <h3 className="text-sm font-medium mb-2">Historique des manches</h3>
                   <div className="space-y-2 max-h-60 overflow-y-auto pr-2">
                     {Array.from({length: roundCount}).map((_, roundIndex) => {
@@ -501,11 +555,9 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
   );
 };
 
-// Create a new PlayerScoreProgress component to show the progression of scores
 const PlayerScoreProgress: React.FC<{ players: Player[] }> = ({ players }) => {
   const colors = ['#1EAEDB', '#F97316', '#8B5CF6', '#D946EF', '#10B981', '#FBBF24'];
   
-  // Calculate cumulative scores for each player at each round
   const roundData = [];
   const maxRounds = Math.max(...players.map(p => p.rounds.length));
   
@@ -525,21 +577,18 @@ const PlayerScoreProgress: React.FC<{ players: Player[] }> = ({ players }) => {
     roundData.push({ round: i + 1, ...roundScores });
   }
   
-  // If no rounds, display a message
   if (roundData.length === 0) {
     return <div className="flex items-center justify-center h-full text-gray-400">Pas encore de manches jouées</div>;
   }
   
   return (
     <div className="relative h-full">
-      {/* X-axis (rounds) */}
       <div className="absolute bottom-0 left-0 w-full flex justify-between text-xs text-gray-500">
         {roundData.map((data, i) => (
           <div key={i} className="text-center">{data.round}</div>
         ))}
       </div>
       
-      {/* Y-axis lines */}
       <div className="absolute top-0 left-0 h-full w-full">
         {[0, 25, 50, 75, 100].map((value, i) => (
           <div 
@@ -552,10 +601,8 @@ const PlayerScoreProgress: React.FC<{ players: Player[] }> = ({ players }) => {
         ))}
       </div>
       
-      {/* Players lines */}
       <svg className="w-full h-[90%]" viewBox={`0 0 ${roundData.length - 1} 100`} preserveAspectRatio="none">
         {players.map((player, playerIndex) => {
-          // Create the path
           let path = `M 0 ${100 - Math.min((roundData[0]?.[player.name] || 0), 100)}`;
           
           for (let i = 1; i < roundData.length; i++) {
@@ -585,7 +632,6 @@ const PlayerScoreProgress: React.FC<{ players: Player[] }> = ({ players }) => {
         })}
       </svg>
       
-      {/* Legend */}
       <div className="absolute top-0 right-0 flex flex-col gap-1">
         {players.map((player, index) => (
           <div key={player.id} className="flex items-center gap-1 text-xs">

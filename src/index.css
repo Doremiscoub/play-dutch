@@ -73,7 +73,7 @@
   }
 
   body {
-    @apply bg-dutch-background text-foreground antialiased;
+    @apply bg-gradient-to-br from-white to-gray-50 text-foreground antialiased min-h-screen;
   }
 }
 
@@ -83,14 +83,40 @@
   }
 
   .dutch-button {
-    @apply rounded-full px-6 py-3 font-semibold text-white shadow-md transition-all hover:translate-y-[-2px] hover:shadow-lg active:translate-y-0 active:shadow-md;
+    @apply rounded-full px-6 py-3 font-semibold text-white shadow-md transition-all hover:translate-y-[-2px] hover:shadow-lg active:translate-y-0 active:shadow-md backdrop-blur-sm;
   }
 
   .dutch-card {
-    @apply rounded-3xl bg-white p-5 shadow-md transition-all hover:shadow-lg;
+    @apply rounded-3xl bg-white/60 backdrop-blur-sm p-5 shadow-md transition-all hover:shadow-lg border border-white/20;
   }
 
   .dutch-input {
-    @apply rounded-full border border-gray-200 bg-white px-4 py-2 focus:border-dutch-blue focus:outline-none focus:ring-2 focus:ring-dutch-blue/20;
+    @apply rounded-full border border-gray-200/60 bg-white/80 backdrop-blur-sm px-4 py-2 focus:border-dutch-blue focus:outline-none focus:ring-2 focus:ring-dutch-blue/20;
+  }
+  
+  /* VisionOS-inspired style */
+  .glassmorphism {
+    @apply bg-white/60 backdrop-blur-md border border-white/20 shadow-sm;
+  }
+  
+  .visionos-button {
+    @apply rounded-full bg-white/80 backdrop-blur-sm border border-white/30 shadow-sm hover:bg-white/90 transition-all;
+  }
+  
+  .visionos-card {
+    @apply rounded-3xl bg-white/60 backdrop-blur-md border border-white/20 shadow-sm hover:shadow-md transition-all;
+  }
+  
+  .visionos-input {
+    @apply rounded-full bg-white/70 backdrop-blur-sm border border-white/30 focus:ring-2 focus:ring-white/50 focus:outline-none;
+  }
+  
+  .scrollbar-none {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+  
+  .scrollbar-none::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
   }
 }
