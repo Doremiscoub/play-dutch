@@ -160,9 +160,9 @@ const LocalGameSetup: React.FC<LocalGameSetupProps> = ({ onStartGame }) => {
         </motion.div>
       </motion.div>
       
-      {/* Bouton Commencer flottant */}
+      {/* Bouton Commencer flottant - moved up to avoid wave overlap */}
       <motion.div
-        className="fixed left-0 right-0 bottom-8 flex justify-center z-50 px-6"
+        className="fixed left-0 right-0 bottom-10 flex justify-center z-50 px-6"
         initial={{ y: 100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.5, type: "spring", stiffness: 260, damping: 20 }}
