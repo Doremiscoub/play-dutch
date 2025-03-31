@@ -13,7 +13,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { motion, AnimatePresence } from "framer-motion";
-import { Share2, Copy, Clock, Users, Play, ArrowLeft, QrCode, MapPin, AlertCircle } from "lucide-react";
+import { Share2, Copy, Clock, Users, Play, ArrowLeft, QrCode, MapPin, AlertCircle, Wifi, WifiOff } from "lucide-react";
 import { toast } from "sonner";
 import { 
   getGameSession, 
@@ -24,6 +24,7 @@ import {
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import MultiplayerStats from './MultiplayerStats';
 import { useUser } from '@clerk/clerk-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface MultiplayerLobbyProps {
   gameId: string;
@@ -43,6 +44,7 @@ const MultiplayerLobby: React.FC<MultiplayerLobbyProps> = ({
   const [countdown, setCountdown] = useState<number | null>(null);
   const [isHost, setIsHost] = useState<boolean>(false);
   const [refreshingPlayers, setRefreshingPlayers] = useState<boolean>(false);
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'online'>(mode);
   const { user } = useUser();
   
   // Initial data fetch
@@ -119,13 +121,16 @@ const MultiplayerLobby: React.FC<MultiplayerLobbyProps> = ({
       <Card className="border border-white/50 bg-gradient-to-br from-white/90 to-white/70 backdrop-blur-md rounded-3xl shadow-md">
         <CardHeader className="pb-2">
           <div className="flex justify-between items-center">
-            <CardTitle className="text-xl font-semibold text-dutch-blue flex items-center gap-2">
-              {mode === 'dashboard' ? (
-                <><MapPin className="h-5 w-5" /> Tableau de scores partagé</>
-              ) : (
-                <><Users className="h-5 w-5" /> Salle d'attente</>
-              )}
-            </CardTitle>
+            <Tabs defaultValue={activeTab} onValueChange={(value) => setActiveTab(value as 'dashboard' | 'online')} className="w-full">
+              <TabsList className="grid grid-cols-2 mb-2">
+                <TabsTrigger value="dashboard" className="flex items-center gap-1">
+                  <MapPin className="h-4 w-4" /> Tableau de score
+                </TabsTrigger>
+                <TabsTrigger value="online" className="flex items-center gap-1" disabled>
+                  <Wifi className="h-4 w-4" /> En ligne <Badge className="ml-1 text-[10px]">Bientôt</Badge>
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
             <Badge variant="outline" className="bg-white/50 text-dutch-blue">
               Code: {gameId}
             </Badge>
@@ -136,15 +141,21 @@ const MultiplayerLobby: React.FC<MultiplayerLobbyProps> = ({
         </CardHeader>
         
         <CardContent className="space-y-4">
-          {mode === 'dashboard' && (
-            <Alert className="mb-4 bg-dutch-purple/10 border-dutch-purple/20 text-dutch-purple">
-              <AlertCircle className="h-4 w-4" />
-              <AlertDescription>
-                Les joueurs doivent être physiquement présents pour jouer avec de vraies cartes. 
-                Cette application sert uniquement à suivre les scores ensemble.
-              </AlertDescription>
-            </Alert>
-          )}
+          <Alert className="mb-4 bg-dutch-purple/10 border-dutch-purple/20 text-dutch-purple">
+            <AlertCircle className="h-4 w-4" />
+            <AlertDescription>
+              {activeTab === 'dashboard' ? (
+                <>
+                  Les joueurs doivent être <strong>physiquement présents</strong> pour jouer avec de vraies cartes. 
+                  Cette application sert uniquement à suivre les scores ensemble.
+                </>
+              ) : (
+                <>
+                  Mode en ligne (à distance). Chaque joueur peut jouer depuis son propre appareil, où qu'il soit.
+                </>
+              )}
+            </AlertDescription>
+          </Alert>
         
           <div className="flex flex-wrap items-center gap-2 justify-center">
             <Button 
@@ -277,7 +288,7 @@ const MultiplayerLobby: React.FC<MultiplayerLobbyProps> = ({
             ) : (
               <>
                 <Play className="w-4 h-4 mr-2" />
-                {mode === 'dashboard' ? 'Démarrer le tableau de scores' : 'Démarrer la partie'}
+                {activeTab === 'dashboard' ? 'Démarrer le tableau de scores' : 'Démarrer la partie en ligne'}
               </>
             )}
           </Button>

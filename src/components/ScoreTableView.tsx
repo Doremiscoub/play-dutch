@@ -2,170 +2,191 @@
 import React, { useState } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Player } from '@/types';
+import { Badge } from '@/components/ui/badge';
 import { motion } from 'framer-motion';
-import { Trophy, Heart, Medal, Award } from 'lucide-react';
-import { Button } from './ui/button';
-import { cn } from '@/lib/utils';
-import { useTheme } from '@/hooks/use-theme';
+import { Crown, TrendingDown, TrendingUp } from 'lucide-react';
 
 interface ScoreTableViewProps {
   players: Player[];
   roundHistory: { scores: number[], dutchPlayerId?: string }[];
 }
 
-// Type for sorting state
-type SortField = 'name' | 'totalScore' | number; // number is for round index
-type SortDirection = 'asc' | 'desc';
-
 const ScoreTableView: React.FC<ScoreTableViewProps> = ({ players, roundHistory }) => {
-  const [sortField, setSortField] = useState<SortField>('totalScore');
-  const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
-  const { getThemeColors } = useTheme();
-  const themeColors = getThemeColors();
-
-  const handleSort = (field: SortField) => {
-    if (sortField === field) {
-      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+  const [sortColumn, setSortColumn] = useState<'name' | 'score' | 'avgScore' | 'bestRound' | 'worstRound' | 'dutch'>('score');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc' | null>('asc');
+  
+  const handleSort = (column: 'name' | 'score' | 'avgScore' | 'bestRound' | 'worstRound' | 'dutch') => {
+    if (sortColumn === column) {
+      setSortDirection(prev => prev === 'asc' ? 'desc' : prev === 'desc' ? null : 'asc');
+      if (sortDirection === null) {
+        setSortColumn('score');
+      }
     } else {
-      setSortField(field);
+      setSortColumn(column);
       setSortDirection('asc');
     }
   };
-
-  // Sort players based on current sort settings
-  const sortedPlayers = [...players].sort((a, b) => {
-    const multiplier = sortDirection === 'asc' ? 1 : -1;
-    
-    if (sortField === 'name') {
-      return multiplier * a.name.localeCompare(b.name);
-    } else if (sortField === 'totalScore') {
-      return multiplier * (a.totalScore - b.totalScore);
-    } else if (typeof sortField === 'number') {
-      // Sort by specific round score
-      const roundIndex = sortField;
-      const scoreA = a.rounds[roundIndex]?.score || 0;
-      const scoreB = b.rounds[roundIndex]?.score || 0;
-      return multiplier * (scoreA - scoreB);
-    }
-    return 0;
-  });
-
-  const maxRounds = Math.max(...players.map(p => p.rounds.length));
   
-  // Generate table columns
-  const columns = [
-    { field: 'name', label: 'Joueur' },
-    ...Array.from({ length: maxRounds }, (_, i) => ({ 
-      field: i, 
-      label: `Manche ${i + 1}` 
-    })),
-    { field: 'totalScore', label: 'Total' },
-  ];
-
+  const sortedPlayers = [...players].sort((a, b) => {
+    if (sortDirection === null) return 0;
+    
+    let compareA, compareB;
+    
+    switch (sortColumn) {
+      case 'name':
+        compareA = a.name;
+        compareB = b.name;
+        break;
+      case 'score':
+        compareA = a.totalScore;
+        compareB = b.totalScore;
+        break;
+      case 'avgScore':
+        compareA = a.rounds.length ? a.rounds.reduce((sum, r) => sum + r.score, 0) / a.rounds.length : 0;
+        compareB = b.rounds.length ? b.rounds.reduce((sum, r) => sum + r.score, 0) / b.rounds.length : 0;
+        break;
+      case 'bestRound':
+        compareA = a.rounds.length ? Math.min(...a.rounds.map(r => r.score)) : Infinity;
+        compareB = b.rounds.length ? Math.min(...b.rounds.map(r => r.score)) : Infinity;
+        break;
+      case 'worstRound':
+        compareA = a.rounds.length ? Math.max(...a.rounds.map(r => r.score)) : 0;
+        compareB = b.rounds.length ? Math.max(...b.rounds.map(r => r.score)) : 0;
+        break;
+      case 'dutch':
+        compareA = a.rounds.filter(r => r.isDutch).length;
+        compareB = b.rounds.filter(r => r.isDutch).length;
+        break;
+      default:
+        return 0;
+    }
+    
+    if (compareA === compareB) return 0;
+    
+    const comparison = compareA > compareB ? 1 : -1;
+    return sortDirection === 'asc' ? comparison : -comparison;
+  });
+  
+  const getPosition = (player: Player) => {
+    const sorted = [...players].sort((a, b) => a.totalScore - b.totalScore);
+    return sorted.findIndex(p => p.id === player.id) + 1;
+  };
+  
+  const roundCount = players.length > 0 ? players[0].rounds.length : 0;
+  
   return (
-    <motion.div
-      className="w-full rounded-xl bg-white/80 backdrop-blur-md border border-white/40 shadow-md overflow-hidden"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
-    >
+    <div className="bg-white/70 backdrop-blur-md border border-white/30 rounded-3xl shadow-md p-1 overflow-hidden">
       <div className="overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow>
-              {columns.map((column) => (
-                <TableHead 
-                  key={column.field.toString()} 
-                  className={cn(
-                    "font-semibold whitespace-nowrap",
-                    column.field === 'name' ? 'sticky left-0 bg-white/90 z-10' : '',
-                    column.field === 'totalScore' ? 'font-bold bg-dutch-blue/5' : ''
-                  )}
-                  sortDirection={sortField === column.field ? sortDirection : null}
-                  onSort={() => handleSort(column.field as SortField)}
-                >
-                  {column.label}
+              <TableHead className="w-10">Pos</TableHead>
+              <TableHead 
+                className="cursor-pointer" 
+                onClick={() => handleSort('name')}
+                sortDirection={sortColumn === 'name' ? sortDirection : null}
+                onSort={() => handleSort('name')}
+              >
+                Joueur
+              </TableHead>
+              <TableHead 
+                className="cursor-pointer text-right" 
+                onClick={() => handleSort('score')}
+                sortDirection={sortColumn === 'score' ? sortDirection : null}
+                onSort={() => handleSort('score')}
+              >
+                Score
+              </TableHead>
+              <TableHead 
+                className="cursor-pointer text-right" 
+                onClick={() => handleSort('avgScore')}
+                sortDirection={sortColumn === 'avgScore' ? sortDirection : null}
+                onSort={() => handleSort('avgScore')}
+              >
+                Moy.
+              </TableHead>
+              <TableHead 
+                className="cursor-pointer text-right" 
+                onClick={() => handleSort('bestRound')}
+                sortDirection={sortColumn === 'bestRound' ? sortDirection : null}
+                onSort={() => handleSort('bestRound')}
+              >
+                Min
+              </TableHead>
+              <TableHead 
+                className="cursor-pointer text-right" 
+                onClick={() => handleSort('worstRound')}
+                sortDirection={sortColumn === 'worstRound' ? sortDirection : null}
+                onSort={() => handleSort('worstRound')}
+              >
+                Max
+              </TableHead>
+              <TableHead 
+                className="cursor-pointer text-right" 
+                onClick={() => handleSort('dutch')}
+                sortDirection={sortColumn === 'dutch' ? sortDirection : null}
+                onSort={() => handleSort('dutch')}
+              >
+                Dutch
+              </TableHead>
+              {Array.from({ length: Math.min(roundCount, 5) }).map((_, i) => (
+                <TableHead key={i} className="text-center">
+                  M{roundCount - Math.min(roundCount, 5) + i + 1}
                 </TableHead>
               ))}
             </TableRow>
           </TableHeader>
           <TableBody>
-            {sortedPlayers.map((player, playerIndex) => (
-              <TableRow key={player.id}>
-                <TableCell className="sticky left-0 bg-white/90 font-medium z-10 flex items-center gap-2">
-                  <div 
-                    className="w-6 h-6 rounded-full flex items-center justify-center text-xs text-white"
-                    style={{ backgroundColor: playerIndex === 0 
-                      ? themeColors.primary 
-                      : playerIndex === 1 
-                        ? themeColors.secondary 
-                        : themeColors.accent 
-                    }}
-                  >
-                    {playerIndex + 1}
-                  </div>
-                  {player.name}
-                </TableCell>
-                {Array.from({ length: maxRounds }, (_, roundIndex) => {
-                  const round = player.rounds[roundIndex];
-                  const isDutch = round?.isDutch;
-                  const score = round?.score;
+            {sortedPlayers.map((player) => {
+              const position = getPosition(player);
+              const avgScore = player.rounds.length
+                ? (player.rounds.reduce((sum, r) => sum + r.score, 0) / player.rounds.length).toFixed(1)
+                : '-';
+              const bestRound = player.rounds.length 
+                ? Math.min(...player.rounds.map(r => r.score)) 
+                : '-';
+              const worstRound = player.rounds.length 
+                ? Math.max(...player.rounds.map(r => r.score)) 
+                : '-';
+              const dutchCount = player.rounds.filter(r => r.isDutch).length;
+              
+              // Get last 5 rounds (or fewer if not available)
+              const lastRounds = player.rounds.slice(-Math.min(5, roundCount));
+              
+              return (
+                <TableRow key={player.id}>
+                  <TableCell className="font-medium bg-dutch-blue/10 text-dutch-blue text-center">
+                    {position === 1 ? <Crown className="h-4 w-4 text-dutch-yellow mx-auto" /> : position}
+                  </TableCell>
+                  <TableCell className="font-medium">{player.name}</TableCell>
+                  <TableCell className="font-bold text-right">{player.totalScore}</TableCell>
+                  <TableCell className="text-right">{avgScore}</TableCell>
+                  <TableCell className="text-right text-green-600">{bestRound}</TableCell>
+                  <TableCell className="text-right text-red-600">{worstRound}</TableCell>
+                  <TableCell className="text-right text-dutch-orange">{dutchCount}</TableCell>
                   
-                  // Find if this was the best score in this round
-                  const bestScoreInRound = Math.min(...players
-                    .filter(p => p.rounds.length > roundIndex)
-                    .map(p => p.rounds[roundIndex].score));
-                  
-                  // Find if this was the worst score in this round
-                  const worstScoreInRound = Math.max(...players
-                    .filter(p => p.rounds.length > roundIndex)
-                    .map(p => p.rounds[roundIndex].score));
-                  
-                  return (
-                    <TableCell 
-                      key={roundIndex}
-                      className={cn(
-                        "text-center",
-                        isDutch ? "font-bold text-dutch-orange" : "",
-                        score === bestScoreInRound ? "text-dutch-blue font-semibold" : "",
-                        score === worstScoreInRound ? "text-dutch-red" : ""
-                      )}
-                    >
-                      {score !== undefined ? (
-                        <div className="flex items-center justify-center gap-1">
-                          {score}
-                          {isDutch && <span className="text-xs bg-dutch-orange/20 text-dutch-orange px-1 rounded-full">D</span>}
-                          {score === bestScoreInRound && !isDutch && <Medal className="h-3 w-3 text-dutch-blue" />}
-                        </div>
-                      ) : "-"}
-                    </TableCell>
-                  );
-                })}
-                <TableCell className="font-bold text-center bg-dutch-blue/5">
-                  {player.totalScore}
-                </TableCell>
-              </TableRow>
-            ))}
+                  {Array.from({ length: Math.min(roundCount, 5) }).map((_, i) => {
+                    const roundIndex = roundCount - Math.min(roundCount, 5) + i;
+                    const round = lastRounds[i];
+                    
+                    if (!round) return <TableCell key={i} />;
+                    
+                    return (
+                      <TableCell 
+                        key={i} 
+                        className={`text-center ${round.isDutch ? 'bg-dutch-orange/20 text-dutch-orange font-medium' : ''}`}
+                      >
+                        {round.score}
+                      </TableCell>
+                    );
+                  })}
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </div>
-      
-      {/* Legend */}
-      <div className="p-3 bg-white/60 border-t border-white/40 flex flex-wrap gap-3 text-xs">
-        <div className="flex items-center gap-1">
-          <Trophy className="h-3 w-3 text-dutch-blue" /> 
-          <span>Leader du classement</span>
-        </div>
-        <div className="flex items-center gap-1">
-          <Medal className="h-3 w-3 text-dutch-blue" /> 
-          <span>Meilleur score de la manche</span>
-        </div>
-        <div className="flex items-center gap-1">
-          <span className="text-xs bg-dutch-orange/20 text-dutch-orange px-1 rounded-full">D</span>
-          <span>Manche Dutch</span>
-        </div>
-      </div>
-    </motion.div>
+    </div>
   );
 };
 
