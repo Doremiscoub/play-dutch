@@ -8,7 +8,6 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
-import ThemeSelector from './ThemeSelector';
 import ColorThemeSelector from './ColorThemeSelector';
 import { useTheme } from '@/hooks/use-theme';
 
@@ -56,14 +55,29 @@ const GameSettings: React.FC<GameSettingsProps> = ({
         </DialogHeader>
 
         <Tabs defaultValue="general" className="mt-4">
-          <TabsList className="grid grid-cols-3 mb-4">
-            <TabsTrigger value="general">Général</TabsTrigger>
-            <TabsTrigger value="appearance">Apparence</TabsTrigger>
-            <TabsTrigger value="about">À propos</TabsTrigger>
+          <TabsList className="grid grid-cols-3 mb-4 rounded-xl bg-white/50 backdrop-blur-md p-1 shadow-sm">
+            <TabsTrigger 
+              value="general" 
+              className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm py-2.5"
+            >
+              Général
+            </TabsTrigger>
+            <TabsTrigger 
+              value="appearance" 
+              className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm py-2.5"
+            >
+              Apparence
+            </TabsTrigger>
+            <TabsTrigger 
+              value="about" 
+              className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm py-2.5"
+            >
+              À propos
+            </TabsTrigger>
           </TabsList>
           
           <TabsContent value="general" className="space-y-4">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between p-4 bg-white/50 rounded-xl shadow-sm border border-white/30">
               <Label htmlFor="sound-toggle" className="font-medium flex items-center gap-2">
                 {soundEnabled ? <Bell className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
                 Sons
@@ -77,8 +91,8 @@ const GameSettings: React.FC<GameSettingsProps> = ({
             
             <div className="flex flex-col gap-2 mt-6">
               <Button 
-                variant="outline" 
-                className="justify-start rounded-xl bg-white hover:bg-gray-50"
+                variant="dutch-glass" 
+                className="justify-start rounded-xl"
                 onClick={() => navigate('/')}
               >
                 <Home className="h-4 w-4 mr-2" aria-hidden="true" />
@@ -96,21 +110,14 @@ const GameSettings: React.FC<GameSettingsProps> = ({
           </TabsContent>
           
           <TabsContent value="appearance" className="space-y-4">
-            <div className="mb-4">
+            <div className="bg-white/50 p-4 rounded-xl shadow-sm border border-white/30">
               <Label className="font-medium mb-3 block">Thème de couleur</Label>
               <ColorThemeSelector />
-            </div>
-            
-            <div className="mb-4">
-              <Label className="font-medium mb-3 block">Mode d'affichage</Label>
-              <div className="flex justify-center">
-                <ThemeSelector />
-              </div>
             </div>
           </TabsContent>
           
           <TabsContent value="about" className="space-y-4">
-            <div className="space-y-2">
+            <div className="bg-white/50 p-4 rounded-xl shadow-sm border border-white/30 space-y-2">
               <h3 className="font-medium flex items-center gap-1">
                 <Info className="h-4 w-4" />
                 Dutch Blitz Scoreboard

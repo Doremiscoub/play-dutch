@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { 
@@ -23,7 +24,6 @@ import PlayerBadges from './PlayerBadges';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import ScoreTableView from './ScoreTableView';
 import GameSettings from './GameSettings';
-import ThemeSelector from './ThemeSelector';
 import { useUser } from '@clerk/clerk-react';
 
 const ScoreBoard: React.FC<ScoreBoardProps> = ({ 
@@ -35,6 +35,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
   isMultiplayer = false
 }) => {
   const [showNewRoundModal, setShowNewRoundModal] = useState(false);
+  const [showStatsDialog, setShowStatsDialog] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(() => {
     const savedSetting = localStorage.getItem('dutch_sound_enabled');
@@ -108,7 +109,6 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
           </div>
           
           <div className="flex items-center gap-3">
-            <ThemeSelector />
             <GameSettings 
               soundEnabled={soundEnabled} 
               setSoundEnabled={handleToggleSound} 
@@ -202,24 +202,6 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
             </ToggleGroup>
           </div>
         </motion.div>
-        
-        <div className="hidden">
-          <AlertDialog>
-            <AlertDialogTrigger>
-              Open
-            </AlertDialogTrigger>
-            <AlertDialogContent>Test</AlertDialogContent>
-          </AlertDialog>
-        </div>
-        
-        <div className="hidden">
-          <Sheet>
-            <SheetTrigger>
-              Open
-            </SheetTrigger>
-            <SheetContent>Test</SheetContent>
-          </Sheet>
-        </div>
       </motion.div>
       
       <div>
@@ -270,28 +252,99 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
         )}
       </div>
       
+      {/* Action buttons */}
       <motion.div
-        className="fixed bottom-6 right-6 z-50"
+        className="fixed bottom-6 right-6 flex flex-col items-end gap-3 z-50"
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ delay: 0.3, type: "spring" }}
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
       >
-        <Button 
-          onClick={() => setShowNewRoundModal(true)}
-          size="lg"
-          className="rounded-full shadow-lg group relative overflow-hidden w-14 h-14 flex items-center justify-center"
-        >
-          <motion.div 
-            className="absolute inset-0 bg-gradient-to-r from-dutch-orange via-dutch-pink to-dutch-orange"
-            animate={{ 
-              backgroundPosition: ['0% 0%', '100% 0%', '0% 0%'] 
-            }}
-            transition={{ duration: 4, repeat: Infinity }}
-          />
-          <Plus className="h-6 w-6 z-10 group-hover:rotate-180 transition-transform duration-300" />
-        </Button>
+        {/* End Game Button */}
+        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+          <Button 
+            onClick={onEndGame}
+            size="icon"
+            variant="game-control"
+            className="shadow-lg"
+            aria-label="Terminer la partie"
+          >
+            <Flag className="h-5 w-5" />
+          </Button>
+        </motion.div>
+        
+        {/* Stats Button */}
+        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+          <Dialog open={showStatsDialog} onOpenChange={setShowStatsDialog}>
+            <DialogTrigger asChild>
+              <Button 
+                size="icon"
+                variant="game-control"
+                className="shadow-lg"
+                aria-label="Statistiques"
+              >
+                <BarChart3 className="h-5 w-5" />
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-md rounded-3xl bg-white/80 backdrop-blur-md border border-white/30">
+              <DialogHeader>
+                <DialogTitle>Statistiques de la partie</DialogTitle>
+                <DialogDescription>
+                  Détails et performances des joueurs
+                </DialogDescription>
+              </DialogHeader>
+              
+              <div className="space-y-4 mt-4">
+                {sortedPlayers.map((player) => (
+                  <div key={player.id} className="bg-white/60 p-4 rounded-xl shadow-sm border border-white/30">
+                    <h3 className="font-medium text-lg mb-1">{player.name}</h3>
+                    <div className="grid grid-cols-2 gap-2 mt-3">
+                      <div className="text-sm">
+                        <p className="text-gray-500">Moyenne</p>
+                        <p className="font-medium">{player.stats?.averageScore || '-'} pts</p>
+                      </div>
+                      <div className="text-sm">
+                        <p className="text-gray-500">Dutch</p>
+                        <p className="font-medium">{player.stats?.dutchCount || 0} fois</p>
+                      </div>
+                      <div className="text-sm">
+                        <p className="text-gray-500">Meilleur score</p>
+                        <p className="font-medium">{player.stats?.bestRound !== null ? `${player.stats?.bestRound} pts` : '-'}</p>
+                      </div>
+                      <div className="text-sm">
+                        <p className="text-gray-500">Pire score</p>
+                        <p className="font-medium">{player.stats?.worstRound !== null ? `${player.stats?.worstRound} pts` : '-'}</p>
+                      </div>
+                    </div>
+                    
+                    <div className="mt-3">
+                      <PlayerBadges player={player} compact={true} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </DialogContent>
+          </Dialog>
+        </motion.div>
+        
+        {/* New Round Button */}
+        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+          <Button 
+            onClick={() => setShowNewRoundModal(true)}
+            size="lg"
+            variant="game-action"
+            className="rounded-full shadow-xl w-14 h-14 flex items-center justify-center"
+            aria-label="Nouvelle manche"
+          >
+            <motion.div 
+              className="absolute inset-0 bg-gradient-to-r from-dutch-orange via-dutch-pink to-dutch-orange rounded-full"
+              animate={{ 
+                backgroundPosition: ['0% 0%', '100% 0%', '0% 0%'] 
+              }}
+              transition={{ duration: 4, repeat: Infinity }}
+            />
+            <Plus className="h-6 w-6 z-10" />
+          </Button>
+        </motion.div>
       </motion.div>
     </div>
   );
