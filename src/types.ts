@@ -47,3 +47,12 @@ export interface ScoreBoardProps {
   roundHistory: { scores: number[], dutchPlayerId?: string }[];
   isMultiplayer?: boolean;
 }
+
+// Ajoutons des types spécifiques pour l'invitation de jeu
+export type GameInvitation = {
+  gameId: string;
+  hostName: string;
+  createdAt: Date;
+  link: string;
+  playerCount: number;
+};
