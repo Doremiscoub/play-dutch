@@ -73,7 +73,7 @@
   }
 
   body {
-    @apply bg-gradient-to-br from-white to-gray-50 text-foreground antialiased min-h-screen;
+    @apply bg-gradient-to-br from-gray-100 to-gray-200 text-foreground antialiased min-h-screen;
   }
 }
 
@@ -96,19 +96,19 @@
   
   /* VisionOS-inspired style */
   .glassmorphism {
-    @apply bg-white/60 backdrop-blur-md border border-white/20 shadow-sm;
+    @apply bg-white/60 backdrop-blur-md border border-white/30 shadow-sm;
   }
   
   .visionos-button {
-    @apply rounded-full bg-white/80 backdrop-blur-sm border border-white/30 shadow-sm hover:bg-white/90 transition-all;
+    @apply rounded-2xl bg-white/70 backdrop-blur-md border border-white/40 shadow-sm hover:bg-white/80 transition-all;
   }
   
   .visionos-card {
-    @apply rounded-3xl bg-white/60 backdrop-blur-md border border-white/20 shadow-sm hover:shadow-md transition-all;
+    @apply rounded-3xl bg-white/60 backdrop-blur-md border border-white/30 shadow-sm hover:shadow-md transition-all;
   }
   
   .visionos-input {
-    @apply rounded-full bg-white/70 backdrop-blur-sm border border-white/30 focus:ring-2 focus:ring-white/50 focus:outline-none;
+    @apply rounded-full bg-white/70 backdrop-blur-md border border-white/40 focus:ring-2 focus:ring-white/60 focus:outline-none;
   }
   
   .scrollbar-none {

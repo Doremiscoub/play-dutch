@@ -78,7 +78,10 @@ export default {
 			borderRadius: {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
-				sm: 'calc(var(--radius) - 4px)'
+				sm: 'calc(var(--radius) - 4px)',
+				'2xl': '1.5rem',
+				'3xl': '2rem',
+				'4xl': '2.5rem',
 			},
 			keyframes: {
 				'accordion-down': {
@@ -123,6 +126,14 @@ export default {
 						transform: 'scale(1)',
 					},
 				},
+				'float': {
+					'0%, 100%': {
+						transform: 'translateY(0)',
+					},
+					'50%': {
+						transform: 'translateY(-10px)',
+					},
+				},
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
@@ -130,6 +141,10 @@ export default {
 				'fade-in': 'fade-in 0.4s ease-out',
 				'pulse-soft': 'pulse-soft 2s infinite ease-in-out',
 				'scale': 'scale 0.2s ease-out',
+				'float': 'float 6s infinite ease-in-out',
+			},
+			backdropBlur: {
+				xs: '2px',
 			}
 		}
 	},
