@@ -1,6 +1,5 @@
-
 import React, { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Player, Game, PlayerStatistics } from '@/types';
 import GameSetup from '@/components/GameSetup';
 import ScoreBoard from '@/components/ScoreBoard';
@@ -8,23 +7,33 @@ import { v4 as uuidv4 } from 'uuid';
 import { toast } from 'sonner';
 import { AnimatePresence, motion } from 'framer-motion';
 import confetti from 'canvas-confetti';
+import { useUser } from '@clerk/clerk-react';
+import { joinGameSession, getGameSession, updateGameState } from '@/utils/gameInvitation';
 
 const GamePage: React.FC = () => {
-  const [gameState, setGameState] = useState<'setup' | 'playing'>('setup');
+  const [gameState, setGameState] = useState<'setup' | 'playing' | 'joining'>('setup');
   const [players, setPlayers] = useState<Player[]>([]);
   const [games, setGames] = useState<Game[]>(() => {
     const savedGames = localStorage.getItem('dutch_games');
     return savedGames ? JSON.parse(savedGames) : [];
   });
   const [roundHistory, setRoundHistory] = useState<{ scores: number[], dutchPlayerId?: string }[]>([]);
+  const [currentGameId, setCurrentGameId] = useState<string | null>(null);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const { user, isSignedIn } = useUser();
 
-  // Save games to localStorage whenever it changes
+  useEffect(() => {
+    const joinCode = searchParams.get('join');
+    if (joinCode && isSignedIn && user) {
+      handleJoinGame(joinCode);
+    }
+  }, [searchParams, isSignedIn, user]);
+
   useEffect(() => {
     localStorage.setItem('dutch_games', JSON.stringify(games));
   }, [games]);
 
-  // Calculate player statistics
   const calculatePlayerStats = useCallback((player: Player): PlayerStatistics => {
     const rounds = player.rounds;
     if (rounds.length === 0) {
@@ -43,7 +52,6 @@ const GamePage: React.FC = () => {
     const dutchCount = rounds.filter(r => r.isDutch).length;
     const nonZeroScores = scores.filter(s => s > 0);
     
-    // Calculate improvement rate (compare last 3 rounds vs first 3)
     let improvementRate = 0;
     if (rounds.length >= 6) {
       const firstThree = scores.slice(0, 3).reduce((a, b) => a + b, 0) / 3;
@@ -51,16 +59,13 @@ const GamePage: React.FC = () => {
       improvementRate = lastThree - firstThree;
     }
 
-    // Calculate consistency (standard deviation)
     const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
     const variance = scores.reduce((a, b) => a + Math.pow(b - avg, 2), 0) / scores.length;
     const consistencyScore = Math.sqrt(variance);
 
-    // Calculate win streak (consecutive rounds with better scores than others)
     let winStreak = 0;
     let currentWinStreak = 0;
     for (let i = 0; i < rounds.length; i++) {
-      // If this player's score is the best in this round among all players
       if (players.every(p => p.id === player.id || (p.rounds[i] && rounds[i].score <= p.rounds[i].score))) {
         currentWinStreak++;
         winStreak = Math.max(winStreak, currentWinStreak);
@@ -72,12 +77,9 @@ const GamePage: React.FC = () => {
     return {
       bestRound: nonZeroScores.length > 0 ? Math.min(...nonZeroScores) : null,
       dutchCount,
-      // Arrondir à 1 décimale maximum
       averageScore: Math.round(avg * 10) / 10,
       worstRound: scores.length > 0 ? Math.max(...scores) : null,
-      // Arrondir à 1 décimale maximum
       improvementRate: Math.round(improvementRate * 10) / 10,
-      // Arrondir à 1 décimale maximum
       consistencyScore: Math.round(consistencyScore * 10) / 10,
       winStreak
     };
@@ -92,7 +94,6 @@ const GamePage: React.FC = () => {
     });
   }, [calculatePlayerStats]);
 
-  // Update stats whenever rounds change
   useEffect(() => {
     if (players.length > 0 && players[0].rounds.length > 0) {
       updatePlayerStats();
@@ -110,15 +111,53 @@ const GamePage: React.FC = () => {
     setPlayers(newPlayers);
     setGameState('playing');
     setRoundHistory([]);
+    
+    if (currentGameId) {
+      updateGameState(currentGameId, {
+        players: newPlayers,
+        gameState: 'playing',
+        roundHistory: []
+      });
+    }
+    
     toast.success('La partie commence !');
   };
 
+  const handleJoinGame = (gameId: string) => {
+    setGameState('joining');
+    
+    if (!isSignedIn || !user) {
+      toast.error('Vous devez être connecté pour rejoindre une partie');
+      navigate('/sign-in');
+      return;
+    }
+    
+    const game = joinGameSession(gameId, user.id);
+    
+    if (!game) {
+      toast.error('Partie introuvable');
+      setGameState('setup');
+      return;
+    }
+    
+    setCurrentGameId(gameId);
+    
+    if (game.gameState) {
+      setPlayers(game.gameState.players || []);
+      setGameState(game.gameState.gameState || 'setup');
+      setRoundHistory(game.gameState.roundHistory || []);
+      toast.success('Vous avez rejoint la partie !');
+    } else {
+      setGameState('setup');
+      toast.success('Vous avez rejoint le salon. En attente du démarrage de la partie...');
+    }
+  };
+
   const handleAddRound = (scores: number[], dutchPlayerId?: string) => {
-    // Store the round info for potential undo
     setRoundHistory(prev => [...prev, { scores, dutchPlayerId }]);
     
     setPlayers(prevPlayers => {
-      return prevPlayers.map((player, index) => {
+      const updatedPlayers = prevPlayers.map((player, index) => {
         const isDutch = player.id === dutchPlayerId;
         const newRound = { 
           score: scores[index],
@@ -132,16 +171,24 @@ const GamePage: React.FC = () => {
           totalScore: newTotalScore
         };
       });
+      
+      if (currentGameId) {
+        updateGameState(currentGameId, {
+          players: updatedPlayers,
+          gameState: 'playing',
+          roundHistory: [...roundHistory, { scores, dutchPlayerId }]
+        });
+      }
+      
+      return updatedPlayers;
     });
     
-    // Play round sound
     if (window.localStorage.getItem('dutch_sound_enabled') !== 'false') {
       new Audio('/sounds/card-sound.mp3').play().catch(err => console.error("Sound error:", err));
     }
     
     toast.success('Manche ajoutée !');
     
-    // Check if game is over
     const gameOver = players.some(player => (player.totalScore + scores[players.indexOf(player)]) >= 100);
     
     if (gameOver) {
@@ -150,7 +197,6 @@ const GamePage: React.FC = () => {
   };
   
   const finishGame = (finalScores: number[], dutchPlayerId?: string) => {
-    // Save game to history
     const sortedPlayers = [...players].map((player, index) => ({
       ...player,
       totalScore: player.totalScore + finalScores[index],
@@ -174,10 +220,8 @@ const GamePage: React.FC = () => {
     setGames(prev => [...prev, newGame]);
     toast.success(`Partie terminée ! ${winner} gagne !`);
     
-    // Launch confetti for the winner
     launchConfetti();
     
-    // Play winning sound
     if (window.localStorage.getItem('dutch_sound_enabled') !== 'false') {
       new Audio('/sounds/win-sound.mp3').play().catch(err => console.error("Sound error:", err));
     }
@@ -201,7 +245,6 @@ const GamePage: React.FC = () => {
 
       const particleCount = 50 * (timeLeft / duration);
       
-      // Since particles fall down, start from the top
       confetti({
         ...defaults,
         particleCount,
@@ -223,11 +266,20 @@ const GamePage: React.FC = () => {
       return;
     }
     
-    // Remove the last round from history
-    setRoundHistory(prev => prev.slice(0, -1));
+    setRoundHistory(prev => {
+      const newHistory = prev.slice(0, -1);
+      
+      if (currentGameId) {
+        updateGameState(currentGameId, {
+          roundHistory: newHistory
+        });
+      }
+      
+      return newHistory;
+    });
     
     setPlayers(prevPlayers => {
-      return prevPlayers.map(player => {
+      const updatedPlayers = prevPlayers.map(player => {
         if (player.rounds.length === 0) return player;
         
         const lastRound = player.rounds[player.rounds.length - 1];
@@ -239,9 +291,16 @@ const GamePage: React.FC = () => {
           totalScore: newTotalScore
         };
       });
+      
+      if (currentGameId) {
+        updateGameState(currentGameId, {
+          players: updatedPlayers
+        });
+      }
+      
+      return updatedPlayers;
     });
     
-    // Play undo sound
     if (window.localStorage.getItem('dutch_sound_enabled') !== 'false') {
       new Audio('/sounds/undo-sound.mp3').play().catch(err => console.error("Sound error:", err));
     }
@@ -253,6 +312,7 @@ const GamePage: React.FC = () => {
     setGameState('setup');
     setPlayers([]);
     setRoundHistory([]);
+    setCurrentGameId(null);
   };
 
   return (
@@ -265,7 +325,24 @@ const GamePage: React.FC = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <GameSetup onStartGame={handleStartGame} />
+            <GameSetup 
+              onStartGame={handleStartGame}
+              onJoinGame={handleJoinGame}
+            />
+          </motion.div>
+        ) : gameState === 'joining' ? (
+          <motion.div
+            key="joining"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="flex flex-col items-center justify-center min-h-screen p-6"
+          >
+            <div className="dutch-card backdrop-blur-md border border-white/40 bg-white/80 p-8 text-center">
+              <h2 className="text-2xl font-bold text-dutch-blue mb-4">Connexion à la partie...</h2>
+              <p className="text-gray-600 mb-4">En attente de la connexion à la partie</p>
+              <div className="w-16 h-16 border-4 border-dutch-blue border-t-transparent rounded-full animate-spin mx-auto"></div>
+            </div>
           </motion.div>
         ) : (
           <motion.div
@@ -280,6 +357,7 @@ const GamePage: React.FC = () => {
               onEndGame={handleEndGame}
               onUndoLastRound={handleUndoLastRound}
               roundHistory={roundHistory}
+              isMultiplayer={!!currentGameId}
             />
           </motion.div>
         )}

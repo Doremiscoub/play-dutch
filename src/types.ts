@@ -1,35 +1,49 @@
 
-export interface Player {
+// This should include any existing types, with additions for game invitation
+export type Round = {
+  score: number;
+  isDutch: boolean;
+};
+
+export type Player = {
   id: string;
   name: string;
   totalScore: number;
-  rounds: GameRound[];
+  rounds: Round[];
   stats?: PlayerStatistics;
-}
+};
 
-export interface GameRound {
+export type PlayerStatistics = {
+  bestRound: number | null;
+  worstRound: number | null;
+  averageScore: number;
+  dutchCount: number;
+  improvementRate: number;
+  consistencyScore: number;
+  winStreak: number;
+};
+
+export type GamePlayer = {
+  name: string;
   score: number;
-  isDutch?: boolean;
-}
+  isDutch: boolean;
+};
 
-export interface Game {
+export type Game = {
   id: string;
   date: Date;
   rounds: number;
-  players: {
-    name: string;
-    score: number;
-    isDutch?: boolean;
-  }[];
-  winner?: string;
-}
+  players: GamePlayer[];
+  winner: string;
+  isMultiplayer?: boolean;
+  gameCode?: string;
+};
 
-export interface PlayerStatistics {
-  bestRound: number | null;
-  dutchCount: number;
-  averageScore: number;
-  worstRound: number | null;
-  improvementRate?: number; // Negative is improvement, positive is getting worse
-  consistencyScore?: number; // Lower variance is more consistent
-  winStreak?: number;
+export interface ScoreBoardProps {
+  players: Player[];
+  onAddRound: (scores: number[], dutchPlayerId?: string) => void;
+  onEndGame: () => void;
+  onUndoLastRound: () => void;
+  roundHistory: { scores: number[], dutchPlayerId?: string }[];
+  isMultiplayer?: boolean;
 }
