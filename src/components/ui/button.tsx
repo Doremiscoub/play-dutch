@@ -18,6 +18,7 @@ const buttonVariants = cva(
         destructive: "bg-red-500 text-white hover:bg-red-600 shadow-sm",
         link: "text-dutch-blue underline-offset-4 hover:underline bg-transparent",
         "primary-gradient": "bg-gradient-to-r from-dutch-blue to-dutch-purple text-white hover:opacity-90 shadow-sm",
+        gradient: "bg-gradient-to-r from-dutch-blue to-dutch-purple text-white hover:opacity-90 shadow-sm",
       },
       size: {
         default: "h-10 px-4 py-2 rounded-full",
@@ -40,6 +41,17 @@ const buttonVariants = cva(
       elevated: {
         true: "shadow-md hover:shadow-lg active:shadow-sm transition-shadow",
       },
+      rounded: {
+        default: "rounded-full",
+        none: "rounded-none",
+        sm: "rounded-sm",
+        md: "rounded-md",
+        lg: "rounded-lg",
+        xl: "rounded-xl",
+        "2xl": "rounded-2xl",
+        "3xl": "rounded-3xl",
+        full: "rounded-full",
+      },
     },
     compoundVariants: [
       {
@@ -58,6 +70,7 @@ const buttonVariants = cva(
       iconPosition: "left",
       glassmorphism: false,
       elevated: false,
+      rounded: "default",
     },
   }
 )
@@ -69,11 +82,11 @@ export interface ButtonProps
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, iconPosition, glassmorphism, elevated, asChild = false, ...props }, ref) => {
+  ({ className, variant, size, iconPosition, glassmorphism, elevated, rounded, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "button"
     return (
       <Comp
-        className={cn(buttonVariants({ variant, size, iconPosition, glassmorphism, elevated, className }))}
+        className={cn(buttonVariants({ variant, size, iconPosition, glassmorphism, elevated, rounded, className }))}
         ref={ref}
         {...props}
       />

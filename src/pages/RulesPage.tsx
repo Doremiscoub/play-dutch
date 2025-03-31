@@ -48,7 +48,6 @@ const RulesPage: React.FC = () => {
           variant="outline" 
           size="icon" 
           onClick={() => navigate('/')} 
-          rounded="full"
           className="shadow-md hover:shadow-lg"
         >
           <ArrowLeft className="h-5 w-5" />
@@ -271,7 +270,7 @@ const RulesPage: React.FC = () => {
           <Button
             onClick={() => navigate('/')}
             className="rounded-full"
-            variant="gradient"
+            variant="primary-gradient"
             size="lg"
           >
             Retour à l'accueil

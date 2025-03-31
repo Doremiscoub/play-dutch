@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Plus, Trophy, BarChart3, History, Home, Crown, Trash2, Music, Bell, VolumeX, ArrowRight, RotateCcw, Clock, Award, LineChart, TrendingDown, TrendingUp, Heart, Medal, Flag } from 'lucide-react';
@@ -54,10 +53,8 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
     localStorage.setItem('dutch_sound_enabled', JSON.stringify(soundEnabled));
   }, [soundEnabled]);
   
-  // Calculate the round count based on the first player (all players have the same number of rounds)
   const roundCount = players.length > 0 ? players[0].rounds.length : 0;
   
-  // Update last round scores whenever players change
   useEffect(() => {
     if (roundCount > 0) {
       const newLastRoundScores: {[key: string]: number} = {};
@@ -124,7 +121,6 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
     onEndGame();
   };
 
-  // Get round details for a specific round index
   const getRoundDetails = (roundIndex: number) => {
     if (roundIndex < 0 || roundIndex >= roundCount) return null;
     
@@ -151,7 +147,6 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
           <Button 
             variant="outline" 
             size="icon"
-            rounded="full"
             className="bg-white/80 backdrop-blur border-white/30 shadow-md hover:shadow-lg"
             onClick={() => setSortBy(sortBy === 'position' ? 'name' : 'position')}
             aria-label={sortBy === 'position' ? 'Trier par nom' : 'Trier par score'}
@@ -161,7 +156,6 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
           <Button 
             variant="outline" 
             size="icon"
-            rounded="full"
             className="bg-white/80 backdrop-blur border-white/30 shadow-md hover:shadow-lg"
             onClick={() => setShowRounds(!showRounds)}
             aria-label={showRounds ? 'Masquer les manches' : 'Afficher les manches'}
@@ -171,7 +165,6 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
           <Button 
             variant="outline" 
             size="icon"
-            rounded="full"
             className="bg-white/80 backdrop-blur border-white/30 shadow-md hover:shadow-lg"
             onClick={() => navigate('/')}
             aria-label="Retour à l'accueil"
@@ -193,7 +186,6 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
             <Button 
               variant="outline" 
               size="sm"
-              rounded="full"
               className="text-dutch-orange border-dutch-orange/30 text-xs bg-dutch-orange/5 hover:bg-dutch-orange/10 shadow-sm"
               onClick={handleUndoLastRound}
             >
@@ -225,14 +217,12 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
               <Button 
                 onClick={() => setShowPodium(true)}
                 className="bg-white text-dutch-blue hover:bg-white/90 shadow-md"
-                rounded="full"
               >
                 Voir le podium
               </Button>
               <Button 
                 onClick={onEndGame}
                 className="bg-dutch-orange text-white hover:bg-dutch-orange/90 shadow-md"
-                rounded="full"
               >
                 Nouvelle partie
               </Button>
@@ -255,7 +245,6 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
         ))}
       </div>
 
-      {/* Round details dialog */}
       <Dialog open={showRoundDetails !== null} onOpenChange={() => setShowRoundDetails(null)}>
         <DialogContent className="sm:max-w-md rounded-3xl bg-white/80 backdrop-blur-md border border-white/30 shadow-xl">
           <DialogHeader>
@@ -281,7 +270,6 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
         </DialogContent>
       </Dialog>
 
-      {/* End game confirmation dialog */}
       <AlertDialog open={showEndGameDialog} onOpenChange={setShowEndGameDialog}>
         <AlertDialogContent className="rounded-3xl bg-white/80 backdrop-blur-md border border-white/30 shadow-xl">
           <AlertDialogHeader>
@@ -302,7 +290,6 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
         </AlertDialogContent>
       </AlertDialog>
 
-      {/* Podium view */}
       <AnimatePresence>
         {showPodium && (
           <PodiumView 
@@ -362,7 +349,6 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
           </DialogContent>
         </Dialog>
         
-        {/* Wrap the AlertDialogTrigger with AlertDialog */}
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <Button 

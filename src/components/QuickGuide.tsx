@@ -15,7 +15,6 @@ const QuickGuide = () => {
         <Button 
           variant="outline" 
           size="icon" 
-          rounded="full"
           className="shadow-md hover:shadow-lg"
         >
           <HelpCircle className="h-5 w-5" />
