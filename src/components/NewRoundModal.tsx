@@ -1,7 +1,6 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Check, AlertTriangle, Crown } from 'lucide-react';
+import { X, Check, AlertTriangle, Crown, Gamepad } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Player } from '@/types';
@@ -135,7 +134,7 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({ players, onClose, onSave 
   
   return (
     <motion.div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -148,21 +147,27 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({ players, onClose, onSave 
       >
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">Scores de la manche</h2>
-          <Button variant="ghost" size="icon" onClick={onClose} className="rounded-full">
-            <X className="h-5 w-5" />
-          </Button>
+          <motion.div whileHover={{ rotate: 90 }} transition={{ duration: 0.2 }}>
+            <Button variant="ghost" size="icon" onClick={onClose} className="rounded-full hover:bg-gray-100/50">
+              <X className="h-5 w-5" />
+            </Button>
+          </motion.div>
         </div>
+        
+        <div className="absolute -z-10 top-20 left-10 w-32 h-32 bg-dutch-blue/10 rounded-full blur-3xl opacity-60"></div>
+        <div className="absolute -z-10 bottom-10 right-10 w-32 h-32 bg-dutch-orange/10 rounded-full blur-3xl opacity-60"></div>
         
         <AnimatePresence>
           {showDutchWarning && (
             <motion.div 
-              className="bg-orange-50 border border-dutch-orange/30 rounded-xl p-3 mb-4 flex items-start gap-2"
+              className="relative bg-orange-50 border border-dutch-orange/30 rounded-xl p-3 mb-4 flex items-start gap-2 overflow-hidden"
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
             >
+              <div className="absolute inset-0 bg-gradient-to-r from-dutch-orange/5 to-dutch-pink/5 opacity-40"></div>
               <AlertTriangle className="h-5 w-5 text-dutch-orange flex-shrink-0 mt-0.5" />
-              <p className="text-sm text-dutch-orange/90">
+              <p className="text-sm text-dutch-orange/90 relative z-10">
                 Le joueur Dutch n'a pas le score le plus bas. 
                 Une pénalité de +10 points a été appliquée.
               </p>
@@ -172,13 +177,20 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({ players, onClose, onSave 
         
         <div className="space-y-4 my-4">
           {players.map((player, index) => (
-            <div key={player.id} className="flex items-center gap-3">
+            <motion.div 
+              key={player.id} 
+              className="flex items-center gap-3 bg-white/40 p-3 rounded-xl border border-white/30"
+              initial={{ x: -10, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ delay: index * 0.05 }}
+              whileHover={{ backgroundColor: "rgba(255, 255, 255, 0.6)" }}
+            >
               <div className="flex items-center">
                 <Switch
                   id={`dutch-${player.id}`}
                   checked={dutchPlayer === index}
                   onCheckedChange={() => handleDutchPlayerClick(index)}
-                  className={dutchPlayer === index ? "bg-dutch-orange" : ""}
+                  className={dutchPlayer === index ? "bg-dutch-orange data-[state=checked]:bg-dutch-orange" : ""}
                 />
                 <Label 
                   htmlFor={`dutch-${player.id}`}
@@ -192,30 +204,67 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({ players, onClose, onSave 
                 <p className="text-sm font-medium flex items-center gap-1">
                   {player.name}
                   {lowestScorePlayer === index && scores[index] !== 0 && (
-                    <Crown className="h-3 w-3 text-dutch-yellow" />
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: "spring", stiffness: 500, damping: 10 }}
+                    >
+                      <Crown className="h-3 w-3 text-dutch-yellow" />
+                    </motion.div>
                   )}
                 </p>
                 {dutchPlayer === index && dutchPenaltyApplied && (
-                  <p className="text-xs text-dutch-orange">+10 points de pénalité</p>
+                  <motion.p 
+                    className="text-xs text-dutch-orange"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.2 }}
+                  >
+                    +10 points de pénalité
+                  </motion.p>
                 )}
               </div>
               
-              <Input
-                type="number"
-                value={scores[index] || ''}
-                onChange={(e) => handleScoreChange(index, e.target.value)}
-                className={`w-16 text-center dutch-input ${lowestScorePlayer === index && scores[index] !== 0 ? 'ring-2 ring-dutch-yellow/50' : ''}`}
-              />
-            </div>
+              <div className="relative">
+                <motion.div
+                  className={`absolute -inset-1 ${lowestScorePlayer === index && scores[index] !== 0 ? 'bg-dutch-yellow/20' : 'bg-dutch-blue/10'} rounded-lg blur-sm opacity-70`}
+                  animate={{ opacity: [0.4, 0.7, 0.4] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                ></motion.div>
+                <Input
+                  type="number"
+                  value={scores[index] || ''}
+                  onChange={(e) => handleScoreChange(index, e.target.value)}
+                  className={`w-16 text-center dutch-input relative z-10 bg-white/80 border border-white/50 ${
+                    lowestScorePlayer === index && scores[index] !== 0 ? 'ring-2 ring-dutch-yellow/50' : ''
+                  }`}
+                />
+              </div>
+            </motion.div>
           ))}
         </div>
         
-        <Button 
-          onClick={handleSave}
-          className="w-full dutch-button bg-gradient-to-r from-dutch-blue to-dutch-purple hover:bg-dutch-blue/90"
+        <motion.div
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
         >
-          <Check className="mr-2 h-5 w-5" /> Sauvegarder
-        </Button>
+          <Button 
+            onClick={handleSave}
+            variant="game-action"
+            size="game-action"
+            className="w-full relative overflow-hidden group"
+          >
+            <motion.div 
+              className="absolute inset-0 bg-gradient-to-r from-dutch-orange via-dutch-pink to-dutch-orange bg-[length:200%_100%]"
+              animate={{ backgroundPosition: ['0% 0%', '100% 0%', '0% 0%'] }}
+              transition={{ duration: 10, repeat: Infinity }}
+            />
+            <span className="relative flex items-center justify-center z-10">
+              <Gamepad className="mr-2 h-5 w-5 group-hover:rotate-12 transition-transform" /> 
+              <span>Sauvegarder</span>
+            </span>
+          </Button>
+        </motion.div>
       </motion.div>
     </motion.div>
   );

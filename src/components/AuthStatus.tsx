@@ -3,7 +3,7 @@ import React from 'react';
 import { SignedIn, SignedOut, UserButton } from '@clerk/clerk-react';
 import { Button } from './ui/button';
 import { Link, useLocation } from 'react-router-dom';
-import { User, LogIn, Home } from 'lucide-react';
+import { User, LogIn, Home, Gamepad } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export const AuthStatus: React.FC = () => {
@@ -54,8 +54,8 @@ export const AuthStatus: React.FC = () => {
     );
   }
   
-  // Hide UserButton during gameplay to prevent overlaps with UI elements
-  if (isGamePage && location.pathname === '/game') {
+  // Special style for game page
+  if (isGamePage) {
     return (
       <motion.div 
         className="fixed top-4 left-4 z-40"
@@ -69,15 +69,33 @@ export const AuthStatus: React.FC = () => {
             whileTap={{ scale: 0.95 }}
           >
             <Button 
-              size="icon" 
-              variant="pill-glass" 
+              size="game-icon" 
+              variant="game-control" 
               elevated
-              className="w-10 h-10 flex items-center justify-center"
+              animated
+              className="flex items-center justify-center"
             >
               <Home className="w-5 h-5" />
             </Button>
           </motion.div>
         </Link>
+        <SignedIn>
+          <motion.div
+            className="fixed top-4 right-4 z-40"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-dutch-blue/20 via-dutch-purple/20 to-dutch-pink/20 rounded-full blur-md animate-pulse-slow"></div>
+            <UserButton 
+              afterSignOutUrl="/"
+              appearance={{
+                elements: {
+                  userButtonAvatarBox: 'w-10 h-10 rounded-full border-2 border-white/50 shadow-md transition-all hover:scale-105 hover:border-white/70 active:scale-95',
+                }
+              }}
+            />
+          </motion.div>
+        </SignedIn>
       </motion.div>
     );
   }

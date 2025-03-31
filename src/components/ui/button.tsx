@@ -34,6 +34,9 @@ const buttonVariants = cva(
         "pill-purple": "bg-dutch-purple text-white hover:bg-dutch-purple/90 rounded-full shadow-md",
         "pill-glass": "bg-white/40 backdrop-blur-sm border border-white/30 text-gray-700 hover:bg-white/50 rounded-full shadow-md",
         "floating": "bg-gradient-to-r from-dutch-blue to-dutch-purple text-white hover:bg-dutch-blue/90 rounded-full shadow-lg",
+        "game-action": "bg-gradient-to-r from-dutch-orange to-dutch-pink text-white hover:from-dutch-orange/90 hover:to-dutch-pink/90 rounded-full shadow-lg backdrop-blur-sm border border-white/20",
+        "game-control": "bg-white/60 backdrop-blur-sm border border-white/30 text-dutch-blue hover:bg-white/70 rounded-full shadow-md transition-all",
+        "game-card": "bg-white/80 backdrop-blur-md border border-white/40 hover:shadow-lg transition-all duration-300 rounded-2xl shadow-sm hover:bg-white/90",
       },
       size: {
         default: "h-10 px-4 py-2",
@@ -46,6 +49,8 @@ const buttonVariants = cva(
         "pill-sm": "h-8 px-4 py-1 text-xs rounded-full",
         "pill-lg": "h-12 px-8 py-3 text-lg rounded-full",
         "floating": "h-14 w-14 rounded-full",
+        "game-action": "h-14 px-8 py-4 text-base font-medium",
+        "game-icon": "h-12 w-12 rounded-full",
       },
       glassmorphism: {
         true: "backdrop-blur-md bg-white/10 border border-white/30",
