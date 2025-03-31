@@ -153,24 +153,11 @@ const MultiplayerGameSetup: React.FC<MultiplayerGameSetupProps> = ({
               transition={{ duration: 0.4 }}
             >
               {isSignedIn ? (
-                <Card className="rounded-3xl border border-white/50 bg-white/80 backdrop-blur-md shadow-md hover:shadow-lg transition-all duration-300">
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-xl font-semibold text-dutch-purple flex items-center gap-2">
-                      <Globe className="h-5 w-5" />
-                      Partie Multijoueur
-                    </CardTitle>
-                    <CardDescription className="text-gray-600">
-                      Créez une partie en ligne pour jouer avec vos amis
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <GameInvitation 
-                      userId={user?.id || ''}
-                      userName={userName}
-                      onStartMultiplayerGame={onStartMultiplayerGame}
-                    />
-                  </CardContent>
-                </Card>
+                <GameInvitation 
+                  userId={user?.id || ''}
+                  userName={userName}
+                  onStartMultiplayerGame={onStartMultiplayerGame}
+                />
               ) : (
                 <Card className="rounded-3xl border border-white/50 bg-white/80 backdrop-blur-md shadow-md hover:shadow-lg transition-all duration-300">
                   <CardHeader className="pb-2">

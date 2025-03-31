@@ -11,18 +11,20 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Switch } from "@/components/ui/switch";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Share2, Copy, Users, RefreshCw, ChevronRight, Link as LinkIcon, QrCode, Loader2 } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { 
   createGameSession,
   generateGameLink,
   joinGameSession,
   shareGameInvitation,
-  getGamePlayers
-} from "@/utils/gameInvitation";
+  getGamePlayers,
+  getPublicGames
+} from '@/utils/gameInvitation';
+import MultiplayerLobby from './MultiplayerLobby';
 
 interface GameInvitationProps {
   userId: string;
@@ -38,25 +40,37 @@ const GameInvitation: React.FC<GameInvitationProps> = ({
   const [gameId, setGameId] = useState<string>("");
   const [gameLink, setGameLink] = useState<string>("");
   const [joinCode, setJoinCode] = useState<string>("");
-  const [players, setPlayers] = useState<{id: string; name: string}[]>([]);
+  const [players, setPlayers] = useState<{id: string; name: string; online: boolean}[]>([]);
   const [isCreatingGame, setIsCreatingGame] = useState(false);
   const [isJoiningGame, setIsJoiningGame] = useState(false);
   const [gameCreated, setGameCreated] = useState(false);
   const [showJoinSheet, setShowJoinSheet] = useState(false);
   const [refreshingPlayers, setRefreshingPlayers] = useState(false);
+  const [isPublic, setIsPublic] = useState(false);
+  const [publicGames, setPublicGames] = useState<{id: string; hostName: string; playerCount: number}[]>([]);
+  const [showLobby, setShowLobby] = useState(false);
+  
+  // Fetch public games
+  useEffect(() => {
+    if (!gameCreated) {
+      const games = getPublicGames();
+      setPublicGames(games);
+    }
+  }, [gameCreated]);
 
   const handleCreateGame = () => {
     setIsCreatingGame(true);
     
     try {
       // Create a new game session
-      const newGameId = createGameSession(userId, userName);
+      const newGameId = createGameSession(userId, userName, isPublic);
       const link = generateGameLink(newGameId);
       
       setGameId(newGameId);
       setGameLink(link);
-      setPlayers([{ id: userId, name: userName }]);
+      setPlayers([{ id: userId, name: userName, online: true }]);
       setGameCreated(true);
+      setShowLobby(true);
       
       toast.success(`Partie créée avec le code ${newGameId}`, {
         description: "Partagez ce code avec vos amis pour qu'ils puissent vous rejoindre",
@@ -72,8 +86,8 @@ const GameInvitation: React.FC<GameInvitationProps> = ({
     }
   };
   
-  const handleJoinGame = () => {
-    if (!joinCode || joinCode.length < 4) {
+  const handleJoinGame = (code: string = joinCode) => {
+    if (!code || code.length < 4) {
       toast.error("Code invalide", {
         description: "Veuillez entrer un code de partie valide",
         duration: 3000,
@@ -84,16 +98,14 @@ const GameInvitation: React.FC<GameInvitationProps> = ({
     setIsJoiningGame(true);
     
     try {
-      const gameSession = joinGameSession(joinCode.toUpperCase(), userId, userName);
+      const gameSession = joinGameSession(code.toUpperCase(), userId, userName);
       
       if (gameSession) {
         setGameId(gameSession.id);
         setPlayers(gameSession.players);
         setGameCreated(true);
         setShowJoinSheet(false);
-        
-        // Redirect to the game
-        onStartMultiplayerGame(gameSession.id);
+        setShowLobby(true);
         
         toast.success(`Partie rejointe!`, {
           description: `Vous avez rejoint la partie de ${gameSession.hostName}`,
@@ -146,23 +158,27 @@ const GameInvitation: React.FC<GameInvitationProps> = ({
     }
   };
   
-  // Automatically refresh player list every 10 seconds
-  useEffect(() => {
-    if (gameId) {
-      const intervalId = setInterval(() => {
-        const currentPlayers = getGamePlayers(gameId);
-        setPlayers(currentPlayers);
-      }, 10000);
-      
-      return () => clearInterval(intervalId);
-    }
-  }, [gameId]);
+  const handleLeaveGame = () => {
+    setGameCreated(false);
+    setGameId("");
+    setShowLobby(false);
+  };
   
   const startGame = () => {
     if (gameId) {
       onStartMultiplayerGame(gameId);
     }
   };
+
+  if (showLobby) {
+    return (
+      <MultiplayerLobby 
+        gameId={gameId}
+        onStartGame={startGame}
+        onLeaveGame={handleLeaveGame}
+      />
+    );
+  }
 
   return (
     <>
@@ -181,11 +197,22 @@ const GameInvitation: React.FC<GameInvitationProps> = ({
                 Créez une nouvelle partie et invitez vos amis à vous rejoindre
               </CardDescription>
             </CardHeader>
-            <CardContent className="flex-grow">
+            <CardContent className="flex-grow space-y-4">
               <div className="flex items-center justify-center h-16">
                 <div className="w-12 h-12 rounded-full bg-dutch-blue/10 flex items-center justify-center">
                   <Users className="w-6 h-6 text-dutch-blue" />
                 </div>
+              </div>
+              
+              <div className="flex items-center space-x-2">
+                <Switch
+                  id="public-game"
+                  checked={isPublic}
+                  onCheckedChange={setIsPublic}
+                />
+                <Label htmlFor="public-game" className="text-sm text-gray-700">
+                  Partie publique (visible par tous)
+                </Label>
               </div>
             </CardContent>
             <CardFooter>
@@ -259,7 +286,7 @@ const GameInvitation: React.FC<GameInvitationProps> = ({
                     maxLength={6}
                   />
                   <Button 
-                    onClick={handleJoinGame} 
+                    onClick={() => handleJoinGame()}
                     disabled={isJoiningGame || !joinCode}
                     className="bg-dutch-purple text-white hover:bg-dutch-purple/90"
                   >
@@ -271,6 +298,38 @@ const GameInvitation: React.FC<GameInvitationProps> = ({
                   </Button>
                 </div>
               </div>
+              
+              {publicGames.length > 0 && (
+                <div className="space-y-3">
+                  <h3 className="text-sm font-medium text-gray-700">Parties publiques disponibles</h3>
+                  <div className="max-h-60 overflow-y-auto space-y-2">
+                    <AnimatePresence>
+                      {publicGames.map(game => (
+                        <motion.div
+                          key={game.id}
+                          initial={{ opacity: 0, y: 5 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -5 }}
+                          className="bg-white/70 rounded-xl p-3 border border-white/50 shadow-sm flex justify-between items-center"
+                        >
+                          <div>
+                            <p className="font-medium text-gray-800">Partie de {game.hostName}</p>
+                            <p className="text-xs text-gray-500">{game.playerCount} joueur{game.playerCount > 1 ? 's' : ''} • Code: {game.id}</p>
+                          </div>
+                          <Button 
+                            size="sm" 
+                            onClick={() => handleJoinGame(game.id)}
+                            className="bg-dutch-purple text-white hover:bg-dutch-purple/90"
+                          >
+                            Rejoindre
+                          </Button>
+                        </motion.div>
+                      ))}
+                    </AnimatePresence>
+                  </div>
+                </div>
+              )}
+              
               <p className="text-sm text-gray-500 text-center">
                 Demandez le code à la personne qui a créé la partie
               </p>
@@ -278,110 +337,6 @@ const GameInvitation: React.FC<GameInvitationProps> = ({
           </SheetContent>
         </Sheet>
       </div>
-
-      {/* Game invitation dialog */}
-      {gameCreated && (
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button 
-              className="mt-6 w-full bg-gradient-to-r from-dutch-blue to-dutch-purple text-white hover:opacity-90"
-            >
-              <Share2 className="w-4 h-4 mr-2" />
-              Inviter des joueurs à votre partie
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="bg-white/95 backdrop-blur-lg border border-white/50 shadow-xl rounded-3xl sm:max-w-md">
-            <DialogHeader>
-              <DialogTitle className="text-2xl font-bold text-center bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">
-                Invitation à votre partie
-              </DialogTitle>
-            </DialogHeader>
-
-            <div className="space-y-6 py-4">
-              <div className="flex flex-col items-center justify-center">
-                <div className="flex items-center justify-center w-32 h-32 rounded-3xl bg-gradient-to-br from-dutch-blue/10 to-dutch-purple/10 shadow-inner mb-4 relative overflow-hidden">
-                  <span className="text-3xl font-bold tracking-wider text-center text-dutch-blue">
-                    {gameId}
-                  </span>
-                </div>
-                <p className="text-sm text-gray-600 text-center mb-2">
-                  Partagez ce code avec vos amis
-                </p>
-              </div>
-
-              <div className="flex flex-col space-y-3">
-                <div className="flex items-center justify-between p-3 bg-white/70 rounded-xl border border-white/50 shadow-sm">
-                  <div className="flex items-center">
-                    <LinkIcon className="w-4 h-4 text-dutch-blue mr-2" />
-                    <span className="text-sm text-gray-600 truncate max-w-[200px]">
-                      {gameLink}
-                    </span>
-                  </div>
-                  <Button size="icon-sm" variant="ghost" onClick={handleCopyLink}>
-                    <Copy className="h-4 w-4" />
-                  </Button>
-                </div>
-
-                <Button 
-                  variant="outline" 
-                  onClick={handleShareInvitation}
-                  className="w-full border border-dutch-blue/20 text-dutch-blue hover:bg-dutch-blue/10"
-                >
-                  <Share2 className="w-4 h-4 mr-2" />
-                  Partager l'invitation
-                </Button>
-              </div>
-
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-medium text-gray-700">
-                    Joueurs connectés ({players.length})
-                  </h3>
-                  <Button 
-                    size="icon-sm" 
-                    variant="ghost" 
-                    onClick={refreshPlayerList}
-                    disabled={refreshingPlayers}
-                  >
-                    <RefreshCw className={`h-3 w-3 ${refreshingPlayers ? 'animate-spin' : ''}`} />
-                  </Button>
-                </div>
-                <div className="border border-white/50 rounded-xl bg-white/50 backdrop-blur-sm p-2 max-h-32 overflow-y-auto shadow-inner">
-                  {players.map((player) => (
-                    <div 
-                      key={player.id} 
-                      className="flex items-center p-2 rounded-lg hover:bg-white/60 transition-colors"
-                    >
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-dutch-blue/20 to-dutch-purple/20 flex items-center justify-center mr-2">
-                        <Users className="w-4 h-4 text-dutch-blue" />
-                      </div>
-                      <span className="text-sm font-medium text-gray-700">
-                        {player.name}
-                        {player.id === userId && " (vous)"}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="pt-2">
-                <Button 
-                  onClick={startGame} 
-                  className="w-full bg-gradient-to-r from-dutch-blue to-dutch-purple text-white hover:opacity-90"
-                >
-                  Démarrer la partie
-                  <ChevronRight className="w-4 h-4 ml-1" />
-                </Button>
-                <p className="text-xs text-center mt-2 text-gray-500">
-                  {players.length < 2 
-                    ? "En attente d'autres joueurs..." 
-                    : `${players.length} joueurs prêts`}
-                </p>
-              </div>
-            </div>
-          </DialogContent>
-        </Dialog>
-      )}
     </>
   );
 };
