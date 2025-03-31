@@ -31,7 +31,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
   onAddRound, 
   onEndGame, 
   onUndoLastRound,
-  roundHistory,
+  roundHistory = [],
   isMultiplayer = false
 }) => {
   const [showNewRoundModal, setShowNewRoundModal] = useState(false);
@@ -66,6 +66,11 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
     setSoundEnabled(newSetting);
     localStorage.setItem('dutch_sound_enabled', newSetting.toString());
     toast.success(newSetting ? 'Sons activés' : 'Sons désactivés');
+  };
+  
+  // Function to close podium view (required by PodiumView component)
+  const handleClosePodium = () => {
+    // No action needed in this context, but required by the component
   };
   
   // Show the podium only after the first round
@@ -106,9 +111,9 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
             </h1>
           </div>
           
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-3">
             {/* Theme Selector */}
-            <div className="mr-1">
+            <div>
               <ThemeSelector />
             </div>
             
@@ -118,9 +123,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                 <Button 
                   variant="ghost" 
                   size="icon-sm" 
-                  glassmorphism
-                  elevated
-                  className="shadow-md hover:shadow-lg rounded-full"
+                  className="shadow-md hover:shadow-lg rounded-full bg-white/70 hover:bg-white/90 backdrop-blur-sm"
                 >
                   <Settings className="h-4 w-4" />
                 </Button>
@@ -247,7 +250,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                   key={player.id}
                   player={player}
                   position={index + 1}
-                  rounds={totalRounds}
+                  showRounds={true}
                 />
               ))}
             </div>
@@ -260,13 +263,20 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                 transition={{ delay: 0.2 }}
                 className="mt-8"
               >
-                <PodiumView players={sortedPlayers.slice(0, 3)} />
+                <PodiumView 
+                  players={sortedPlayers.slice(0, 3)}
+                  onClose={handleClosePodium}
+                  isMultiplayer={isMultiplayer}
+                />
               </motion.div>
             )}
           </div>
         ) : (
           // Table View
-          <ScoreTableView players={players} />
+          <ScoreTableView 
+            players={players} 
+            roundHistory={roundHistory || []}
+          />
         )}
       </div>
       
