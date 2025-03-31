@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, BookOpen, Users, Gamepad2, Clock, Target, Award, CopyCheck, Crown, ScrollText } from 'lucide-react';
@@ -38,7 +37,7 @@ const RulesPage: React.FC = () => {
 
   return (
     <motion.div 
-      className="w-full max-w-lg mx-auto p-4 pb-16 pt-20" // Ajout d'un padding-top de 20 (pt-20)
+      className="w-full max-w-lg mx-auto p-4 pb-16 pt-20"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
@@ -270,8 +269,7 @@ const RulesPage: React.FC = () => {
           <Button
             onClick={() => navigate('/')}
             className="rounded-full"
-            variant="primary-gradient"
-            size="lg"
+            variant="gradient"
           >
             Retour à l'accueil
           </Button>

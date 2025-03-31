@@ -2,7 +2,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { PlayCircle, History, Info, Sparkles, User, LogIn } from 'lucide-react';
+import { PlayCircle, History, Info, Sparkles, User } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { SignedIn, SignedOut } from '@clerk/clerk-react';
 
@@ -17,9 +17,9 @@ const Home: React.FC = () => {
       {/* Background blur elements */}
       <div className="absolute inset-0 bg-gradient-to-br from-gray-100/60 to-gray-200/60 z-0" />
       
-      {/* Animated background elements */}
+      {/* Enhanced animated background elements */}
       <motion.div
-        className="absolute top-20 left-[15%] w-36 h-36 rounded-full bg-dutch-blue/10 blur-3xl"
+        className="absolute top-20 left-[15%] w-56 h-56 rounded-full bg-dutch-blue/10 blur-3xl"
         animate={{ 
           scale: [1, 1.2, 1],
           opacity: [0.4, 0.6, 0.4],
@@ -32,7 +32,7 @@ const Home: React.FC = () => {
       />
       
       <motion.div
-        className="absolute bottom-24 right-[10%] w-48 h-48 rounded-full bg-dutch-orange/10 blur-3xl"
+        className="absolute bottom-24 right-[10%] w-64 h-64 rounded-full bg-dutch-orange/10 blur-3xl"
         animate={{ 
           scale: [1, 1.3, 1],
           opacity: [0.3, 0.5, 0.3],
@@ -45,7 +45,7 @@ const Home: React.FC = () => {
       />
       
       <motion.div
-        className="absolute -top-10 right-[20%] w-32 h-32 rounded-full bg-dutch-purple/10 blur-3xl"
+        className="absolute -top-10 right-[20%] w-48 h-48 rounded-full bg-dutch-purple/10 blur-3xl"
         animate={{ 
           scale: [1, 1.4, 1],
           opacity: [0.2, 0.4, 0.2],
@@ -56,6 +56,31 @@ const Home: React.FC = () => {
           repeatType: "reverse"
         }}
       />
+      
+      {/* New decorative elements */}
+      <motion.div 
+        className="absolute top-[30%] left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-dutch-blue/20 to-transparent"
+        animate={{ opacity: [0.3, 0.7, 0.3] }}
+        transition={{ duration: 5, repeat: Infinity }}
+      />
+      
+      <motion.div 
+        className="absolute bottom-[25%] left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-dutch-purple/20 to-transparent"
+        animate={{ opacity: [0.4, 0.8, 0.4] }}
+        transition={{ duration: 6, repeat: Infinity, delay: 1 }}
+      />
+      
+      {/* Animated patterns */}
+      <div className="absolute inset-0 z-0 opacity-5">
+        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="smallGrid" width="20" height="20" patternUnits="userSpaceOnUse">
+              <path d="M 20 0 L 0 0 0 20" fill="none" stroke="currentColor" strokeWidth="0.5" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#smallGrid)" />
+        </svg>
+      </div>
       
       <motion.div 
         className="w-full max-w-md z-10"
@@ -107,33 +132,20 @@ const Home: React.FC = () => {
           </SignedIn>
           
           <SignedOut>
-            <div className="space-y-3">
-              <Link to="/sign-in" className="block">
-                <motion.div 
-                  whileHover={{ scale: 1.03 }}
-                  whileTap={{ scale: 0.98 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+            <Link to="/sign-in" className="block">
+              <motion.div 
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.98 }}
+                transition={{ type: "spring", stiffness: 400, damping: 17 }}
+              >
+                <Button 
+                  className="w-full h-16 rounded-2xl bg-gradient-to-r from-dutch-blue to-dutch-purple text-white text-lg font-semibold border border-white/40 shadow-lg hover:shadow-xl backdrop-blur-md transition-all"
                 >
-                  <Button className="w-full h-14 rounded-2xl glassmorphism bg-white/50 hover:bg-white/60 text-dutch-blue border border-white/40 shadow-md backdrop-blur-md transition-all">
-                    <LogIn className="mr-2 h-5 w-5 text-dutch-blue" aria-hidden="true" /> 
-                    Connexion
-                  </Button>
-                </motion.div>
-              </Link>
-              
-              <Link to="/sign-up" className="block">
-                <motion.div 
-                  whileHover={{ scale: 1.03 }}
-                  whileTap={{ scale: 0.98 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                >
-                  <Button variant="primary" className="w-full h-14 rounded-2xl glassmorphism hover:bg-dutch-blue/90 text-white border border-white/40 shadow-md backdrop-blur-md transition-all">
-                    <User className="mr-2 h-5 w-5" aria-hidden="true" /> 
-                    Inscription
-                  </Button>
-                </motion.div>
-              </Link>
-            </div>
+                  <User className="mr-2 h-6 w-6" aria-hidden="true" /> 
+                  <span className="text-white">Connexion / Inscription</span>
+                </Button>
+              </motion.div>
+            </Link>
           </SignedOut>
           
           <Link to="/history" className="block">
@@ -171,7 +183,7 @@ const Home: React.FC = () => {
         </motion.div>
       </motion.div>
       
-      {/* Small floating elements */}
+      {/* Enhanced floating elements */}
       <motion.div
         className="absolute bottom-[30%] left-12 w-4 h-4 rounded-full bg-dutch-blue/30"
         animate={{ 
@@ -203,6 +215,33 @@ const Home: React.FC = () => {
         }}
         transition={{
           duration: 2,
+          repeat: Infinity,
+          repeatType: "reverse"
+        }}
+      />
+      
+      {/* Additional floating elements */}
+      <motion.div
+        className="absolute top-[60%] right-28 w-3 h-3 rounded-full bg-dutch-pink/30"
+        animate={{ 
+          y: [0, -12, 0],
+          x: [0, 5, 0],
+        }}
+        transition={{
+          duration: 4,
+          repeat: Infinity,
+          repeatType: "reverse"
+        }}
+      />
+      
+      <motion.div
+        className="absolute bottom-[20%] left-32 w-2 h-2 rounded-full bg-dutch-green/40"
+        animate={{ 
+          y: [0, -9, 0],
+          x: [0, -4, 0],
+        }}
+        transition={{
+          duration: 3.5,
           repeat: Infinity,
           repeatType: "reverse"
         }}
