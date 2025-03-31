@@ -29,6 +29,11 @@ const buttonVariants = cva(
         "dutch-purple": "bg-dutch-purple text-white hover:bg-dutch-purple/90 rounded-xl shadow-sm",
         "dutch-outline": "border border-gray-200/60 bg-white/80 text-dutch-blue hover:bg-gray-100/50 rounded-xl shadow-sm",
         "dutch-glass": "bg-white/40 backdrop-blur-sm border border-white/30 text-gray-700 hover:bg-white/50 rounded-xl shadow-sm",
+        "pill-blue": "bg-dutch-blue text-white hover:bg-dutch-blue/90 rounded-full shadow-md",
+        "pill-orange": "bg-dutch-orange text-white hover:bg-dutch-orange/90 rounded-full shadow-md",
+        "pill-purple": "bg-dutch-purple text-white hover:bg-dutch-purple/90 rounded-full shadow-md",
+        "pill-glass": "bg-white/40 backdrop-blur-sm border border-white/30 text-gray-700 hover:bg-white/50 rounded-full shadow-md",
+        "floating": "bg-gradient-to-r from-dutch-blue to-dutch-purple text-white hover:bg-dutch-blue/90 rounded-full shadow-lg",
       },
       size: {
         default: "h-10 px-4 py-2",
@@ -37,6 +42,10 @@ const buttonVariants = cva(
         icon: "h-10 w-10",
         "icon-sm": "h-8 w-8 rounded-md",
         "2xl": "h-14 rounded-md px-8 text-lg",
+        "pill": "h-10 px-6 py-2 rounded-full",
+        "pill-sm": "h-8 px-4 py-1 text-xs rounded-full",
+        "pill-lg": "h-12 px-8 py-3 text-lg rounded-full",
+        "floating": "h-14 w-14 rounded-full",
       },
       glassmorphism: {
         true: "backdrop-blur-md bg-white/10 border border-white/30",

@@ -3,7 +3,7 @@ import React from 'react';
 import { SignedIn, SignedOut, UserButton } from '@clerk/clerk-react';
 import { Button } from './ui/button';
 import { Link, useLocation } from 'react-router-dom';
-import { User, LogIn } from 'lucide-react';
+import { User, LogIn, Home } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export const AuthStatus: React.FC = () => {
@@ -37,7 +37,9 @@ export const AuthStatus: React.FC = () => {
           <motion.div
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+            className="relative"
           >
+            <div className="absolute inset-0 bg-gradient-to-r from-dutch-blue/20 via-dutch-purple/20 to-dutch-pink/20 rounded-full blur-md animate-pulse-slow"></div>
             <UserButton 
               afterSignOutUrl="/"
               appearance={{
@@ -54,7 +56,30 @@ export const AuthStatus: React.FC = () => {
   
   // Hide UserButton during gameplay to prevent overlaps with UI elements
   if (isGamePage && location.pathname === '/game') {
-    return null;
+    return (
+      <motion.div 
+        className="fixed top-4 left-4 z-40"
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.3 }}
+      >
+        <Link to="/">
+          <motion.div 
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Button 
+              size="icon" 
+              variant="pill-glass" 
+              elevated
+              className="w-10 h-10 flex items-center justify-center"
+            >
+              <Home className="w-5 h-5" />
+            </Button>
+          </motion.div>
+        </Link>
+      </motion.div>
+    );
   }
   
   // Calculate the optimal position based on the page
@@ -71,7 +96,9 @@ export const AuthStatus: React.FC = () => {
         <motion.div
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
+          className="relative"
         >
+          <div className="absolute inset-0 bg-gradient-to-r from-dutch-blue/20 via-dutch-purple/20 to-dutch-pink/20 rounded-full blur-md animate-pulse-slow"></div>
           <UserButton 
             afterSignOutUrl="/"
             appearance={{
@@ -91,10 +118,10 @@ export const AuthStatus: React.FC = () => {
               transition={{ type: "spring", stiffness: 400, damping: 17 }}
             >
               <Button 
-                size="sm" 
-                variant="secondary" 
-                glassmorphism 
+                size="pill-sm" 
+                variant="pill-glass" 
                 elevated
+                animated
                 className="transition-all shadow-sm hover:shadow-md active:shadow-sm"
               >
                 <LogIn className="w-4 h-4 mr-1" /> Connexion
@@ -108,10 +135,10 @@ export const AuthStatus: React.FC = () => {
               transition={{ type: "spring", stiffness: 400, damping: 17 }}
             >
               <Button 
-                size="sm" 
-                variant="ios-blue" 
-                glassmorphism 
+                size="pill-sm" 
+                variant="pill-blue" 
                 elevated
+                animated
                 className="transition-all shadow-sm hover:shadow-md active:shadow-sm"
               >
                 <User className="w-4 h-4 mr-1" /> Inscription
