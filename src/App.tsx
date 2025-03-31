@@ -9,6 +9,10 @@ import GamePage from "./pages/GamePage";
 import HistoryPage from "./pages/HistoryPage";
 import RulesPage from "./pages/RulesPage";
 import NotFound from "./pages/NotFound";
+import SignIn from "./pages/SignIn";
+import SignUp from "./pages/SignUp";
+import AuthStatus from "./components/AuthStatus";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient();
 
@@ -18,10 +22,21 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <AuthStatus />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/game" element={<GamePage />} />
-          <Route path="/history" element={<HistoryPage />} />
+          <Route path="/sign-in/*" element={<SignIn />} />
+          <Route path="/sign-up/*" element={<SignUp />} />
+          <Route path="/game" element={
+            <ProtectedRoute>
+              <GamePage />
+            </ProtectedRoute>
+          } />
+          <Route path="/history" element={
+            <ProtectedRoute>
+              <HistoryPage />
+            </ProtectedRoute>
+          } />
           <Route path="/rules" element={<RulesPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
