@@ -1,35 +1,47 @@
 
-import { useLocation, Link } from "react-router-dom";
-import { useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Home } from "lucide-react";
+import React from 'react';
+import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft } from 'lucide-react';
+import PageLayout from '@/components/PageLayout';
 
-const NotFound = () => {
-  const location = useLocation();
-
-  useEffect(() => {
-    console.error(
-      "404 Error: User attempted to access non-existent route:",
-      location.pathname
-    );
-  }, [location.pathname]);
-
+const NotFound: React.FC = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-      <div className="dutch-card max-w-md text-center">
-        <div className="mb-6">
-          <h1 className="text-6xl font-bold text-dutch-blue mb-2">404</h1>
-          <p className="text-xl text-gray-600 mb-6">
-            Cette page n'existe pas
-          </p>
-        </div>
-        <Link to="/">
-          <Button className="dutch-button bg-dutch-blue hover:bg-dutch-blue/90">
-            <Home className="mr-2 h-5 w-5" /> Retour à l'accueil
-          </Button>
-        </Link>
+    <PageLayout
+      title="Page non trouvée"
+      subtitle="La page que vous recherchez n'existe pas ou a été déplacée."
+    >
+      <div className="flex flex-col items-center justify-center">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+          className="text-center"
+        >
+          <div className="bg-white/70 backdrop-blur-md rounded-3xl border border-white/40 p-10 shadow-md mb-8 text-center">
+            <div className="text-9xl font-bold mb-4 bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">
+              404
+            </div>
+            <p className="text-gray-600 mb-8">
+              Désolé, nous ne trouvons pas cette page. Vous pourriez vouloir retourner à l'accueil.
+            </p>
+            <Link to="/">
+              <Button 
+                variant="dutch-blue" 
+                size="lg" 
+                elevated 
+                animated 
+                className="rounded-xl"
+              >
+                <ArrowLeft className="mr-2 h-5 w-5" />
+                Retour à l'accueil
+              </Button>
+            </Link>
+          </div>
+        </motion.div>
       </div>
-    </div>
+    </PageLayout>
   );
 };
 
