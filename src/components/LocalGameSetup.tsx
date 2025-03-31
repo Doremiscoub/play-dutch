@@ -13,7 +13,8 @@ interface LocalGameSetupProps {
 const LocalGameSetup: React.FC<LocalGameSetupProps> = ({ onStartGame }) => {
   const [numPlayers, setNumPlayers] = useState(4);
   const [playerNames, setPlayerNames] = useState<string[]>(Array(4).fill('').map((_, i) => `Joueur ${i + 1}`));
-  const { colors } = useTheme();
+  const { getThemeColors } = useTheme();
+  const colors = getThemeColors();
 
   const handleNumPlayersChange = (increment: boolean) => {
     const newNum = increment 
