@@ -136,6 +136,41 @@
 }
 
 @layer components {
+  /* iOS-inspired design elements */
+  .ios-card {
+    @apply rounded-2xl bg-white/80 backdrop-blur-md shadow-md border border-white/40 p-5;
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
+  }
+  
+  .ios-button {
+    @apply rounded-full px-6 py-3 font-medium text-white shadow-sm transition-all;
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+  }
+  
+  .ios-input {
+    @apply rounded-xl border border-gray-200/60 bg-white/70 backdrop-blur-sm px-4 py-2 focus:outline-none focus:ring-2 focus:ring-dutch-blue/20;
+  }
+  
+  .ios-glass {
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    @apply rounded-3xl;
+  }
+  
+  .ios-blur-bg {
+    @apply relative overflow-hidden;
+  }
+  
+  .ios-blur-bg::before {
+    content: '';
+    @apply absolute inset-0 -z-10 bg-gradient-to-b from-white/80 to-white/40 backdrop-blur-xl;
+  }
+
   .card-gradient {
     @apply bg-gradient-to-br from-white to-gray-50 shadow-md;
   }

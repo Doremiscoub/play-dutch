@@ -20,6 +20,7 @@ const buttonVariants = cva(
         primary_gradient: "bg-gradient-to-r from-dutch-blue to-dutch-purple text-white hover:opacity-90 shadow-sm",
         gradient: "bg-gradient-to-r from-dutch-blue to-dutch-purple text-white hover:opacity-90 shadow-sm",
         dropdown: "bg-white/80 backdrop-blur-sm hover:bg-white/90 shadow-sm",
+        ios: "bg-white/70 backdrop-blur-md border border-white/40 text-gray-800 shadow-sm hover:bg-white/80",
       },
       size: {
         default: "h-10 px-4 py-2 rounded-xl",
