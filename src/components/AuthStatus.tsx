@@ -11,9 +11,10 @@ export const AuthStatus: React.FC = () => {
   // Détermine sur quelle page nous sommes pour ajuster le positionnement
   const isRulesPage = location.pathname === '/rules';
   const isHomePage = location.pathname === '/' || location.pathname === '/index';
+  const isHistoryPage = location.pathname === '/history';
   
   // Calculer la position optimale en fonction de la page
-  const topPosition = isRulesPage ? 'top-20' : isHomePage ? 'top-16' : 'top-4';
+  const topPosition = isRulesPage ? 'top-20' : isHomePage ? 'top-16' : isHistoryPage ? 'top-20' : 'top-4';
   
   return (
     <div className={`fixed ${topPosition} right-4 z-50`}>
@@ -30,12 +31,22 @@ export const AuthStatus: React.FC = () => {
       <SignedOut>
         <div className="flex gap-2">
           <Link to="/sign-in">
-            <Button size="sm" variant="outline" className="bg-white/80 backdrop-blur-sm">
+            <Button 
+              size="sm" 
+              variant="secondary" 
+              glassmorphism 
+              elevated
+            >
               <LogIn className="w-4 h-4 mr-1" /> Connexion
             </Button>
           </Link>
           <Link to="/sign-up">
-            <Button size="sm" variant="default" className="bg-primary/90 backdrop-blur-sm">
+            <Button 
+              size="sm" 
+              variant="primary" 
+              glassmorphism 
+              elevated
+            >
               <User className="w-4 h-4 mr-1" /> Inscription
             </Button>
           </Link>

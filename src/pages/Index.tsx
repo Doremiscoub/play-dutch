@@ -38,7 +38,13 @@ const Index = () => {
               </div>
               <h2 className="text-xl font-semibold mb-2">Jouer</h2>
               <p className="text-gray-600 mb-4 flex-grow">Commencez une nouvelle partie avec vos amis</p>
-              <Button onClick={() => navigate('/game')} className="w-full" variant="default">
+              <Button 
+                onClick={() => navigate('/game')} 
+                variant="primary" 
+                glassmorphism 
+                elevated 
+                className="w-full"
+              >
                 Démarrer
               </Button>
             </CardContent>
@@ -57,7 +63,13 @@ const Index = () => {
               </div>
               <h2 className="text-xl font-semibold mb-2">Règles du jeu</h2>
               <p className="text-gray-600 mb-4 flex-grow">Apprenez à jouer avec les règles complètes</p>
-              <Button onClick={() => navigate('/rules')} className="w-full" variant="outline">
+              <Button 
+                onClick={() => navigate('/rules')} 
+                variant="outline" 
+                glassmorphism 
+                elevated 
+                className="w-full"
+              >
                 Consulter
               </Button>
             </CardContent>
@@ -76,7 +88,13 @@ const Index = () => {
               </div>
               <h2 className="text-xl font-semibold mb-2">Historique</h2>
               <p className="text-gray-600 mb-4 flex-grow">Consultez l'historique de vos parties</p>
-              <Button onClick={() => navigate('/history')} className="w-full" variant="outline">
+              <Button 
+                onClick={() => navigate('/history')} 
+                variant="outline" 
+                glassmorphism 
+                elevated 
+                className="w-full"
+              >
                 Voir
               </Button>
             </CardContent>

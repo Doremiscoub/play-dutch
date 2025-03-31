@@ -53,9 +53,10 @@ const GameSetup: React.FC<GameSetupProps> = ({ onStartGame }) => {
         <h2 className="text-xl font-semibold mb-4">Nombre de joueurs</h2>
         <div className="flex items-center justify-center gap-4">
           <Button 
-            variant="outline" 
+            variant="secondary" 
             size="icon" 
-            className="rounded-full h-12 w-12 border-2 border-dutch-blue text-dutch-blue"
+            glassmorphism
+            elevated
             onClick={() => handleNumPlayersChange(false)}
             disabled={numPlayers <= 2}
           >
@@ -63,9 +64,10 @@ const GameSetup: React.FC<GameSetupProps> = ({ onStartGame }) => {
           </Button>
           <span className="text-3xl font-bold text-dutch-blue w-10 text-center">{numPlayers}</span>
           <Button 
-            variant="outline" 
+            variant="secondary" 
             size="icon"
-            className="rounded-full h-12 w-12 border-2 border-dutch-blue text-dutch-blue"
+            glassmorphism
+            elevated
             onClick={() => handleNumPlayersChange(true)}
             disabled={numPlayers >= 10}
           >
@@ -96,7 +98,11 @@ const GameSetup: React.FC<GameSetupProps> = ({ onStartGame }) => {
       
       <Button 
         onClick={handleStartGame}
-        className="w-full py-6 text-lg bg-dutch-blue hover:bg-dutch-blue/90 dutch-button"
+        variant="primary"
+        size="2xl"
+        glassmorphism
+        elevated
+        className="w-full"
       >
         <Play className="mr-2 h-5 w-5" /> Commencer la partie
       </Button>

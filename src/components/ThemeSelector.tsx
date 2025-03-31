@@ -22,13 +22,14 @@ const ThemeSelector = () => {
     <Dialog>
       <DialogTrigger asChild>
         <Button 
-          variant="outline" 
-          size="icon" 
-          rounded="full"
+          variant="ghost" 
+          size="icon-sm" 
+          glassmorphism
+          elevated
           className="shadow-md hover:shadow-lg"
         >
           <div className="relative">
-            <Paintbrush className="h-5 w-5" />
+            <Paintbrush className="h-4 w-4" />
             <div 
               className="absolute -top-1 -right-1 w-2 h-2 rounded-full"
               style={{ backgroundColor: themeConfig[currentTheme].primary }}
