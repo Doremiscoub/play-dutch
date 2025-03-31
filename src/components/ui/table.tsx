@@ -1,4 +1,6 @@
+
 import * as React from "react"
+import { ArrowDown, ArrowUp } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
@@ -68,16 +70,31 @@ TableRow.displayName = "TableRow"
 
 const TableHead = React.forwardRef<
   HTMLTableCellElement,
-  React.ThHTMLAttributes<HTMLTableCellElement>
->(({ className, ...props }, ref) => (
+  React.ThHTMLAttributes<HTMLTableCellElement> & {
+    sortDirection?: 'asc' | 'desc' | null;
+    onSort?: () => void;
+  }
+>(({ className, sortDirection, onSort, children, ...props }, ref) => (
   <th
     ref={ref}
     className={cn(
       "h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0",
+      onSort && "cursor-pointer select-none",
       className
     )}
+    onClick={onSort}
     {...props}
-  />
+  >
+    {onSort ? (
+      <div className="flex items-center gap-1">
+        <span>{children}</span>
+        {sortDirection === 'asc' && <ArrowUp className="h-3 w-3" />}
+        {sortDirection === 'desc' && <ArrowDown className="h-3 w-3" />}
+      </div>
+    ) : (
+      children
+    )}
+  </th>
 ))
 TableHead.displayName = "TableHead"
 

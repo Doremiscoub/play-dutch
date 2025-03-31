@@ -1,7 +1,6 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Plus, Trophy, BarChart3, History, Home, Crown, Trash2, Music, Bell, VolumeX, ArrowRight, RotateCcw, Clock, Award, LineChart, TrendingDown, TrendingUp, Heart, Medal, Flag } from 'lucide-react';
+import { Plus, Trophy, BarChart3, History, Home, Crown, Trash2, Music, Bell, VolumeX, ArrowRight, RotateCcw, Clock, Award, LineChart, TrendingDown, TrendingUp, Heart, Medal, Flag, Settings, Table as TableIcon, Layers, ViewIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Player, PlayerStatistics, ScoreBoardProps } from '@/types';
 import PlayerScoreCard from './PlayerScoreCard';
@@ -21,6 +20,8 @@ import ThemeSelector from './ThemeSelector';
 import PlayerBadges from './PlayerBadges';
 import QuickGuide from './QuickGuide';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import ScoreTableView from './ScoreTableView';
+import GameSettings from './GameSettings';
 
 const ScoreBoard: React.FC<ScoreBoardProps> = ({ 
   players, 
@@ -43,6 +44,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
   const [showPodium, setShowPodium] = useState(false);
   const [showEndGameDialog, setShowEndGameDialog] = useState(false);
   const [statsTabView, setStatsTabView] = useState<'stats' | 'trends'>('stats');
+  const [viewMode, setViewMode] = useState<'cards' | 'table'>('cards');
   const navigate = useNavigate();
   
   useEffect(() => {
@@ -138,68 +140,28 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-dutch-blue">Tableau des scores</h1>
         <div className="flex gap-2">
+          <ToggleGroup 
+            type="single" 
+            value={viewMode} 
+            onValueChange={(value) => {
+              if (value) setViewMode(value as 'cards' | 'table');
+            }}
+            className="bg-white/80 border border-white/30 rounded-lg p-1"
+          >
+            <ToggleGroupItem value="cards" aria-label="Vue cartes" className="h-8 w-8 p-0">
+              <Layers className="h-4 w-4" />
+            </ToggleGroupItem>
+            <ToggleGroupItem value="table" aria-label="Vue tableau" className="h-8 w-8 p-0">
+              <TableIcon className="h-4 w-4" />
+            </ToggleGroupItem>
+          </ToggleGroup>
+          
           <ThemeSelector />
           <QuickGuide />
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button 
-                variant="outline" 
-                size="icon"
-                className="bg-white/80 backdrop-blur border-white/30 shadow-md hover:shadow-lg"
-                aria-label="Réglages du jeu"
-              >
-                {soundEnabled ? <Bell className="h-4 w-4" aria-hidden="true" /> : <VolumeX className="h-4 w-4" aria-hidden="true" />}
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-md rounded-3xl bg-white/80 backdrop-blur-md border border-white/30 shadow-xl">
-              <DialogHeader>
-                <DialogTitle>Réglages du jeu</DialogTitle>
-                <DialogDescription>
-                  Personnalisez votre expérience de jeu
-                </DialogDescription>
-              </DialogHeader>
-              <div className="mt-4 space-y-4">
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="sound-toggle" className="font-medium">Sons activés</Label>
-                  <Switch 
-                    id="sound-toggle" 
-                    checked={soundEnabled} 
-                    onCheckedChange={setSoundEnabled} 
-                  />
-                </div>
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="sort-toggle" className="font-medium">Tri des joueurs</Label>
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm text-gray-500">Nom</span>
-                    <Switch 
-                      id="sort-toggle" 
-                      checked={sortBy === 'position'} 
-                      onCheckedChange={(checked) => setSortBy(checked ? 'position' : 'name')} 
-                    />
-                    <span className="text-sm text-gray-500">Score</span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="rounds-toggle" className="font-medium">Afficher les manches</Label>
-                  <Switch 
-                    id="rounds-toggle" 
-                    checked={showRounds} 
-                    onCheckedChange={setShowRounds} 
-                  />
-                </div>
-              </div>
-              <DialogFooter className="mt-6">
-                <Button 
-                  variant="outline" 
-                  className="w-full rounded-xl bg-white hover:bg-gray-50"
-                  onClick={() => navigate('/')}
-                >
-                  <Home className="h-4 w-4 mr-2" aria-hidden="true" />
-                  Retour à l'accueil
-                </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
+          <GameSettings 
+            soundEnabled={soundEnabled}
+            setSoundEnabled={setSoundEnabled}
+          />
         </div>
       </div>
 
@@ -260,19 +222,44 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
         )}
       </AnimatePresence>
 
-      <div className="space-y-3 mb-6">
-        {sortedPlayers.map((player, index) => (
-          <PlayerScoreCard 
-            key={player.id}
-            player={player}
-            position={index + 1}
-            isWinner={gameOver && index === 0}
-            showRounds={showRounds}
-            lastRoundScore={lastRoundScores[player.id]}
-            onRoundClick={(roundIndex) => setShowRoundDetails(roundIndex)}
-          />
-        ))}
-      </div>
+      <AnimatePresence mode="wait">
+        {viewMode === 'cards' ? (
+          <motion.div 
+            className="space-y-3 mb-6"
+            key="cards-view"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 20 }}
+            transition={{ duration: 0.3 }}
+          >
+            {sortedPlayers.map((player, index) => (
+              <PlayerScoreCard 
+                key={player.id}
+                player={player}
+                position={index + 1}
+                isWinner={gameOver && index === 0}
+                showRounds={showRounds}
+                lastRoundScore={lastRoundScores[player.id]}
+                onRoundClick={(roundIndex) => setShowRoundDetails(roundIndex)}
+              />
+            ))}
+          </motion.div>
+        ) : (
+          <motion.div
+            key="table-view"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.3 }}
+            className="mb-6"
+          >
+            <ScoreTableView 
+              players={sortedPlayers} 
+              roundHistory={roundHistory}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <Dialog open={showRoundDetails !== null} onOpenChange={() => setShowRoundDetails(null)}>
         <DialogContent className="sm:max-w-md rounded-3xl bg-white/80 backdrop-blur-md border border-white/30 shadow-xl">
