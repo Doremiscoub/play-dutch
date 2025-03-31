@@ -105,20 +105,20 @@ const MultiplayerGameSetup: React.FC<MultiplayerGameSetupProps> = ({
           onValueChange={setActiveTab}
           className="w-full"
         >
-          <TabsList className="grid grid-cols-2 mb-6 rounded-full border border-white/40 bg-white/50 backdrop-blur-md p-1 shadow-sm">
+          <TabsList className="grid grid-cols-2 mb-6 rounded-full border border-white/40 bg-white/50 backdrop-blur-md p-1 shadow-sm w-full max-w-full overflow-hidden">
             <TabsTrigger 
               value="local" 
-              className="rounded-full data-[state=active]:bg-white data-[state=active]:shadow-md flex items-center space-x-2 py-2.5 text-dutch-blue data-[state=active]:text-dutch-blue data-[state=inactive]:text-dutch-blue/70"
+              className="rounded-full data-[state=active]:bg-white data-[state=active]:shadow-md flex items-center justify-center space-x-1 py-2.5 text-dutch-blue data-[state=active]:text-dutch-blue data-[state=inactive]:text-dutch-blue/70 px-2 truncate"
             >
-              <User className="w-4 h-4" />
-              <span>Solo/Local</span>
+              <User className="w-4 h-4 flex-shrink-0 mr-1" />
+              <span className="truncate">Solo/Local</span>
             </TabsTrigger>
             <TabsTrigger 
               value="multiplayer" 
-              className="rounded-full data-[state=active]:bg-white data-[state=active]:shadow-md flex items-center space-x-2 py-2.5 text-dutch-purple data-[state=active]:text-dutch-purple data-[state=inactive]:text-dutch-purple/70"
+              className="rounded-full data-[state=active]:bg-white data-[state=active]:shadow-md flex items-center justify-center space-x-1 py-2.5 text-dutch-purple data-[state=active]:text-dutch-purple data-[state=inactive]:text-dutch-purple/70 px-2 truncate"
             >
-              <Users className="w-4 h-4" />
-              <span>Multijoueur</span>
+              <Users className="w-4 h-4 flex-shrink-0 mr-1" />
+              <span className="truncate">Multijoueur</span>
             </TabsTrigger>
           </TabsList>
         
