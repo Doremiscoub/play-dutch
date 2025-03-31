@@ -8,11 +8,12 @@ import GameInvitation from './GameInvitation';
 import { joinGameSession, getGameSession } from '@/utils/gameInvitation';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Users, User, Gamepad2, Globe, LogIn, Github, MapPin, Smartphone } from 'lucide-react';
+import { Users, User, Gamepad2, Globe, LogIn, Github, MapPin, Smartphone, Lock, LockOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import LocalGameSetup from './LocalGameSetup';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Sign } from '@/components/ui/sign';
 
 interface MultiplayerGameSetupProps {
   onStartLocalGame: (playerNames: string[]) => void;
@@ -29,6 +30,7 @@ const MultiplayerGameSetup: React.FC<MultiplayerGameSetupProps> = ({
   const [activeTab, setActiveTab] = useState<string>("local");
   const [localMode, setLocalMode] = useState<string | null>(null);
   const [showLocalSetup, setShowLocalSetup] = useState(false);
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
   
   // Check for join code in URL
   useEffect(() => {
@@ -60,6 +62,15 @@ const MultiplayerGameSetup: React.FC<MultiplayerGameSetupProps> = ({
   const handleLocalStart = (playerNames: string[]) => {
     onStartLocalGame(playerNames);
     setShowLocalSetup(false);
+  };
+  
+  const handleMultiTelephoneClick = () => {
+    if (isSignedIn) {
+      setLocalMode("multi");
+      setActiveTab("tablette");
+    } else {
+      setShowLoginPrompt(true);
+    }
   };
   
   const userName = user?.fullName || user?.username || 'Joueur';
@@ -167,11 +178,8 @@ const MultiplayerGameSetup: React.FC<MultiplayerGameSetupProps> = ({
               
               {/* Option 2: Chacun son téléphone */}
               <Card 
-                className="rounded-3xl border border-white/50 bg-white/80 backdrop-blur-md shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer"
-                onClick={() => {
-                  setLocalMode("multi");
-                  setActiveTab("tablette");
-                }}
+                className="rounded-3xl border border-white/50 bg-white/80 backdrop-blur-md shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer relative overflow-hidden"
+                onClick={handleMultiTelephoneClick}
               >
                 <CardHeader className="pb-2">
                   <CardTitle className="text-xl font-semibold text-dutch-purple flex items-center gap-2">
@@ -184,9 +192,37 @@ const MultiplayerGameSetup: React.FC<MultiplayerGameSetupProps> = ({
                 </CardHeader>
                 <CardContent>
                   <div className="bg-dutch-purple/5 rounded-xl p-4 text-sm text-gray-600">
-                    <p>Permet à chacun de voir les scores en temps réel sur son propre appareil. Idéal pour ne pas avoir à se passer le téléphone.</p>
+                    <p>Permet à chacun de voir les scores en temps réel sur son propre appareil. Parfait pour jouer à table sans avoir à se passer le téléphone.</p>
+                    <div className="mt-2 flex items-center text-xs text-dutch-purple/80">
+                      {isSignedIn ? (
+                        <span className="flex items-center">
+                          <LockOpen className="h-3 w-3 mr-1" /> Vous êtes connecté, vous pouvez utiliser cette fonctionnalité
+                        </span>
+                      ) : (
+                        <span className="flex items-center">
+                          <Lock className="h-3 w-3 mr-1" /> Connexion requise
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </CardContent>
+                
+                {/* Overlay for login required */}
+                {!isSignedIn && (
+                  <div className="absolute inset-0 bg-black/5 backdrop-blur-[1px] flex items-center justify-center">
+                    <Button 
+                      variant="secondary" 
+                      className="bg-white shadow-md hover:bg-white/90"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setShowLoginPrompt(true);
+                      }}
+                    >
+                      <LogIn className="h-4 w-4 mr-2" />
+                      Se connecter pour débloquer
+                    </Button>
+                  </div>
+                )}
               </Card>
             </motion.div>
           </TabsContent>
@@ -232,7 +268,10 @@ const MultiplayerGameSetup: React.FC<MultiplayerGameSetupProps> = ({
                       <p className="text-gray-600 mb-4">
                         Ce mode permet à chaque joueur de suivre les scores sur son propre appareil pendant une partie physique.
                       </p>
-                      <Button className="bg-dutch-purple text-white hover:bg-dutch-purple/90 rounded-xl shadow-md hover:shadow-lg">
+                      <Button 
+                        className="bg-dutch-purple text-white hover:bg-dutch-purple/90 rounded-xl shadow-md hover:shadow-lg"
+                        onClick={() => setShowLoginPrompt(true)}
+                      >
                         Se connecter
                       </Button>
                     </div>
@@ -287,6 +326,52 @@ const MultiplayerGameSetup: React.FC<MultiplayerGameSetupProps> = ({
             </DialogDescription>
           </DialogHeader>
           <LocalGameSetup onStartGame={handleLocalStart} />
+        </DialogContent>
+      </Dialog>
+      
+      {/* Dialog pour la connexion */}
+      <Dialog open={showLoginPrompt} onOpenChange={setShowLoginPrompt}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Connexion requise</DialogTitle>
+            <DialogDescription>
+              Le mode multitéléphone nécessite une connexion pour créer et partager des parties.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="bg-dutch-purple/5 rounded-xl p-4 text-sm text-gray-600">
+              <p>
+                En vous connectant, vous pourrez :
+              </p>
+              <ul className="list-disc ml-5 mt-2 space-y-1">
+                <li>Créer un tableau de scores partagé</li>
+                <li>Inviter vos amis avec un code unique</li>
+                <li>Suivre les scores en temps réel sur plusieurs appareils</li>
+              </ul>
+            </div>
+            
+            <div className="flex justify-end gap-2">
+              <Button 
+                variant="outline" 
+                onClick={() => setShowLoginPrompt(false)}
+              >
+                Plus tard
+              </Button>
+              <Button 
+                className="bg-dutch-purple text-white hover:bg-dutch-purple/90"
+                // Pour l'instant, nous fermons simplement la boîte de dialogue
+                // Dans une implémentation réelle, ce bouton redirigerait vers la page de connexion
+                onClick={() => {
+                  setShowLoginPrompt(false);
+                  // Ici, vous pourriez ajouter une redirection vers la page de connexion
+                  // navigate('/sign-in');
+                }}
+              >
+                <LogIn className="h-4 w-4 mr-2" />
+                Se connecter
+              </Button>
+            </div>
+          </div>
         </DialogContent>
       </Dialog>
     </div>

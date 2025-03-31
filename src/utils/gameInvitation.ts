@@ -1,4 +1,3 @@
-
 import { v4 as uuidv4 } from 'uuid';
 import { toast } from 'sonner';
 
@@ -13,6 +12,7 @@ type GameSession = {
     avatar?: string;
     online: boolean;
     lastActivity: Date;
+    reconnectAttempts?: number;
   }[];
   createdAt: Date;
   gameState: any; // Will contain the current game state
@@ -28,9 +28,10 @@ type GameSession = {
 // In-memory storage for active games (in a real app, this would be in a database)
 const activeGames: Record<string, GameSession> = {};
 
-// Polling interval for real-time updates (milliseconds)
-const POLLING_INTERVAL = 3000;
-const PLAYER_TIMEOUT = 60000; // 1 minute of inactivity to mark player as offline
+// Online status constants
+const PLAYER_TIMEOUT = 30000; // 30 seconds of inactivity to mark player as offline (reduced for better UX)
+const MAX_RECONNECT_ATTEMPTS = 5;
+const RECONNECT_WINDOW = 5 * 60 * 1000; // 5 minutes to allow reconnection
 
 // Purge old game sessions (older than 24 hours)
 const purgeOldSessions = () => {
@@ -50,10 +51,19 @@ const updatePlayerStatus = (gameId: string) => {
   if (!game) return;
   
   const now = new Date();
-  game.players = game.players.map(player => ({
-    ...player,
-    online: now.getTime() - player.lastActivity.getTime() < PLAYER_TIMEOUT
-  }));
+  game.players = game.players.map(player => {
+    const timeElapsed = now.getTime() - player.lastActivity.getTime();
+    const isOnline = timeElapsed < PLAYER_TIMEOUT;
+    
+    return {
+      ...player,
+      online: isOnline,
+      // If player was online but is now offline, initialize reconnect attempts
+      reconnectAttempts: player.online && !isOnline 
+        ? (player.reconnectAttempts || 0) 
+        : player.reconnectAttempts
+    };
+  });
 };
 
 /**
@@ -71,7 +81,8 @@ export const createGameSession = (hostId: string, hostName: string, isPublic: bo
       id: hostId, 
       name: hostName, 
       online: true,
-      lastActivity: new Date()
+      lastActivity: new Date(),
+      reconnectAttempts: 0
     }],
     createdAt: new Date(),
     gameState: null,
@@ -103,6 +114,12 @@ export const updatePlayerActivity = (gameId: string, playerId: string): boolean 
   
   game.players[playerIndex].lastActivity = new Date();
   game.players[playerIndex].online = true;
+  
+  // Reset reconnect attempts on successful activity update
+  if (game.players[playerIndex].reconnectAttempts !== undefined) {
+    game.players[playerIndex].reconnectAttempts = 0;
+  }
+  
   game.lastActivity = new Date();
   
   return true;
@@ -119,24 +136,36 @@ export const joinGameSession = (gameId: string, playerId: string, playerName: st
     return null; // Game not found
   }
   
-  // Add player if not already in the game
-  if (!game.players.some(p => p.id === playerId)) {
+  // Check if player was previously in the game but disconnected
+  const existingPlayerIndex = game.players.findIndex(p => p.id === playerId);
+  
+  if (existingPlayerIndex !== -1) {
+    // Update existing player's status to online
+    game.players[existingPlayerIndex].online = true;
+    game.players[existingPlayerIndex].lastActivity = new Date();
+    game.players[existingPlayerIndex].reconnectAttempts = 0;
+    if (avatar) game.players[existingPlayerIndex].avatar = avatar;
+    
+    // Maybe the name has changed
+    if (playerName && playerName !== game.players[existingPlayerIndex].name) {
+      game.players[existingPlayerIndex].name = playerName;
+    }
+    
+    // Notify about reconnection
+    toast.success(`Reconnecté en tant que ${playerName}`);
+  } else {
+    // Add player if not already in the game
     game.players.push({ 
       id: playerId, 
       name: playerName, 
       avatar,
       online: true,
-      lastActivity: new Date()
+      lastActivity: new Date(),
+      reconnectAttempts: 0
     });
     
     // Notify other players (in a real app, this would use WebSockets)
     toast.success(`${playerName} a rejoint la partie!`);
-  } else {
-    // Update existing player's status to online
-    const playerIndex = game.players.findIndex(p => p.id === playerId);
-    game.players[playerIndex].online = true;
-    game.players[playerIndex].lastActivity = new Date();
-    if (avatar) game.players[playerIndex].avatar = avatar;
   }
   
   game.lastActivity = new Date();
@@ -159,95 +188,36 @@ export const getGameSession = (gameId: string): GameSession | null => {
 };
 
 /**
- * Update game state
+ * Attempt to reconnect a player
  */
-export const updateGameState = (gameId: string, gameState: any): boolean => {
+export const attemptReconnect = (gameId: string, playerId: string): boolean => {
   const game = activeGames[gameId];
   
-  if (!game) {
+  if (!game) return false;
+  
+  const playerIndex = game.players.findIndex(p => p.id === playerId);
+  if (playerIndex === -1) return false;
+  
+  const player = game.players[playerIndex];
+  
+  // If player has exceeded max reconnect attempts, reject
+  if (player.reconnectAttempts !== undefined && 
+      player.reconnectAttempts >= MAX_RECONNECT_ATTEMPTS) {
     return false;
   }
   
-  game.gameState = gameState;
-  game.lastActivity = new Date();
-  return true;
-};
-
-/**
- * Update game settings
- */
-export const updateGameSettings = (gameId: string, settings: Partial<GameSession['settings']>): boolean => {
-  const game = activeGames[gameId];
-  
-  if (!game) {
+  // If player has been offline for too long, reject
+  const now = new Date();
+  const timeOffline = now.getTime() - player.lastActivity.getTime();
+  if (timeOffline > RECONNECT_WINDOW) {
     return false;
   }
   
-  game.settings = {
-    ...game.settings,
-    ...settings
-  };
+  // Increment reconnect attempts
+  player.reconnectAttempts = (player.reconnectAttempts || 0) + 1;
   
-  game.lastActivity = new Date();
-  return true;
-};
-
-/**
- * Generate shareable game link
- */
-export const generateGameLink = (gameId: string): string => {
-  const baseUrl = window.location.origin;
-  return `${baseUrl}/game?join=${gameId}`;
-};
-
-/**
- * Generate download app link with game code
- */
-export const generateAppDownloadLink = (gameId: string): string => {
-  // This would link to the app store with a deep link to the game
-  return `https://dutchgame.app/download?join=${gameId}`;
-};
-
-/**
- * Generate QR code data for game invitation
- */
-export const generateQRCodeData = (gameId: string): string => {
-  return generateGameLink(gameId);
-};
-
-/**
- * Share game invitation via native sharing if available
- */
-export const shareGameInvitation = async (gameId: string, hostName: string): Promise<boolean> => {
-  const shareLink = generateGameLink(gameId);
-  const shareText = `${hostName} vous invite à rejoindre une partie de Dutch Card Game ! Utilisez le code ${gameId} ou cliquez sur le lien.`;
-  
-  try {
-    if (navigator.share) {
-      await navigator.share({
-        title: 'Invitation à Dutch Card Game',
-        text: shareText,
-        url: shareLink
-      });
-      return true;
-    } else {
-      // Fallback to copying to clipboard
-      await navigator.clipboard.writeText(`${shareText} ${shareLink}`);
-      toast.success("Lien copié dans le presse-papier !");
-      return true;
-    }
-  } catch (error) {
-    console.error("Erreur lors du partage:", error);
-    // Fallback to copying to clipboard
-    try {
-      await navigator.clipboard.writeText(`${shareText} ${shareLink}`);
-      toast.success("Lien copié dans le presse-papier !");
-      return true;
-    } catch (err) {
-      toast.error("Impossible de partager l'invitation");
-      return false;
-    }
-  }
+  // Try to update activity
+  return updatePlayerActivity(gameId, playerId);
 };
 
 /**
@@ -385,5 +355,35 @@ export const getGamePlayerStats = (gameId: string) => {
   });
 };
 
+// Setup automatic cleanup of disconnected players
+const cleanupDisconnectedPlayers = () => {
+  const now = new Date();
+  
+  Object.keys(activeGames).forEach(gameId => {
+    const game = activeGames[gameId];
+    
+    // Remove players who have been offline for too long and exceeded reconnection attempts
+    const activePlayers = game.players.filter(player => {
+      if (player.online) return true;
+      
+      const timeOffline = now.getTime() - player.lastActivity.getTime();
+      const tooManyAttempts = (player.reconnectAttempts || 0) >= MAX_RECONNECT_ATTEMPTS;
+      
+      return !(timeOffline > RECONNECT_WINDOW && tooManyAttempts);
+    });
+    
+    // Update the player list
+    if (activePlayers.length !== game.players.length) {
+      game.players = activePlayers;
+    }
+    
+    // If no players left, remove the game
+    if (game.players.length === 0) {
+      delete activeGames[gameId];
+    }
+  });
+};
+
 // Set up periodic cleanup of inactive sessions
 setInterval(purgeOldSessions, 3600000); // Every hour
+setInterval(cleanupDisconnectedPlayers, 300000); // Every 5 minutes
