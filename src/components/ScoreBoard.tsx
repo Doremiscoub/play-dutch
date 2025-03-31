@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Plus, Trophy, BarChart3, History, Home, Crown, Trash2, Music, Bell, VolumeX, ArrowRight, RotateCcw, Clock, Award, LineChart, TrendingDown, TrendingUp, Heart, Medal, Flag, Settings, Table as TableIcon, Layers, ViewIcon } from 'lucide-react';
@@ -137,67 +138,76 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="flex flex-col mb-6 space-y-3">
-        <div className="flex justify-between items-center">
-          <div className="flex items-center space-x-2">
-            <Button 
-              onClick={() => navigate('/')}
-              variant="game-control" 
-              size="icon-sm"
-              className="rounded-full"
-              aria-label="Retour à l'accueil"
-            >
-              <Home className="h-4 w-4" />
-            </Button>
-            <h1 className="text-2xl font-bold text-dutch-blue ml-1">Tableau des scores</h1>
+      <motion.div 
+        className="mb-6 bg-white/80 backdrop-blur-md shadow-md rounded-2xl border border-white/30 overflow-hidden"
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.3 }}
+      >
+        <div className="p-4">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <Button 
+                onClick={() => navigate('/')}
+                variant="outline" 
+                size="icon-sm"
+                className="rounded-full bg-white/70 border border-white/40 shadow-sm"
+                aria-label="Retour à l'accueil"
+              >
+                <Home className="h-4 w-4 text-dutch-blue" />
+              </Button>
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">
+                Tableau des scores
+              </h1>
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <ToggleGroup 
+                type="single" 
+                value={viewMode} 
+                onValueChange={(value) => {
+                  if (value) setViewMode(value as 'cards' | 'table');
+                }}
+                className="bg-white/80 border border-white/30 rounded-lg p-1 shadow-sm"
+              >
+                <ToggleGroupItem value="cards" aria-label="Vue cartes" className="h-8 w-8 p-0">
+                  <Layers className="h-4 w-4" />
+                </ToggleGroupItem>
+                <ToggleGroupItem value="table" aria-label="Vue tableau" className="h-8 w-8 p-0">
+                  <TableIcon className="h-4 w-4" />
+                </ToggleGroupItem>
+              </ToggleGroup>
+              
+              <GameSettings 
+                soundEnabled={soundEnabled}
+                setSoundEnabled={setSoundEnabled}
+              />
+            </div>
           </div>
           
-          <div className="flex items-center gap-2">
-            <ToggleGroup 
-              type="single" 
-              value={viewMode} 
-              onValueChange={(value) => {
-                if (value) setViewMode(value as 'cards' | 'table');
-              }}
-              className="bg-white/80 border border-white/30 rounded-lg p-1"
-            >
-              <ToggleGroupItem value="cards" aria-label="Vue cartes" className="h-8 w-8 p-0">
-                <Layers className="h-4 w-4" />
-              </ToggleGroupItem>
-              <ToggleGroupItem value="table" aria-label="Vue tableau" className="h-8 w-8 p-0">
-                <TableIcon className="h-4 w-4" />
-              </ToggleGroupItem>
-            </ToggleGroup>
-            
-            <GameSettings 
-              soundEnabled={soundEnabled}
-              setSoundEnabled={setSoundEnabled}
-            />
-          </div>
+          {roundCount > 0 && (
+            <div className="flex items-center justify-between px-1">
+              <span className="bg-dutch-blue/80 backdrop-blur text-white text-sm font-medium px-4 py-1 rounded-full 
+                         flex items-center shadow-sm">
+                <Clock className="h-3 w-3 mr-1.5" aria-hidden="true" />
+                Manche {roundCount}
+              </span>
+              
+              {roundCount > 0 && (
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  className="text-dutch-orange border-dutch-orange/30 text-xs bg-dutch-orange/5 hover:bg-dutch-orange/10 shadow-sm"
+                  onClick={handleUndoLastRound}
+                >
+                  <RotateCcw className="h-3 w-3 mr-1.5" aria-hidden="true" />
+                  Annuler dernière manche
+                </Button>
+              )}
+            </div>
+          )}
         </div>
-        
-        {roundCount > 0 && (
-          <div className="flex items-center justify-between">
-            <span className="bg-dutch-blue/80 backdrop-blur text-white text-sm font-medium px-4 py-1 rounded-full 
-                         flex items-center shadow-md">
-              <Clock className="h-3 w-3 mr-1" aria-hidden="true" />
-              Manche {roundCount}
-            </span>
-            
-            {roundCount > 0 && (
-              <Button 
-                variant="outline" 
-                size="sm"
-                className="text-dutch-orange border-dutch-orange/30 text-xs bg-dutch-orange/5 hover:bg-dutch-orange/10 shadow-sm"
-                onClick={handleUndoLastRound}
-              >
-                <RotateCcw className="h-3 w-3 mr-1" aria-hidden="true" />
-                Annuler dernière manche
-              </Button>
-            )}
-          </div>
-        )}
-      </div>
+      </motion.div>
 
       <AnimatePresence>
         {gameOver && (
