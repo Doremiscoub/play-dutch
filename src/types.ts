@@ -22,3 +22,10 @@ export interface Game {
   }[];
   winner?: string;
 }
+
+export interface PlayerStatistics {
+  bestRound: number | null;
+  dutchCount: number;
+  averageScore: number;
+  worstRound: number | null;
+}

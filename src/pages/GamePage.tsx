@@ -7,6 +7,7 @@ import ScoreBoard from '@/components/ScoreBoard';
 import { v4 as uuidv4 } from 'uuid';
 import { toast } from 'sonner';
 import { AnimatePresence, motion } from 'framer-motion';
+import confetti from 'canvas-confetti';
 
 const GamePage: React.FC = () => {
   const [gameState, setGameState] = useState<'setup' | 'playing'>('setup');
@@ -82,7 +83,68 @@ const GamePage: React.FC = () => {
       
       setGames(prev => [...prev, newGame]);
       toast.success(`Partie terminée ! ${winner} gagne !`);
+      
+      // Launch confetti for the winner
+      launchConfetti();
     }
+  };
+  
+  const launchConfetti = () => {
+    const duration = 3000;
+    const animationEnd = Date.now() + duration;
+    const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+    function randomInRange(min: number, max: number) {
+      return Math.random() * (max - min) + min;
+    }
+
+    const interval = setInterval(() => {
+      const timeLeft = animationEnd - Date.now();
+
+      if (timeLeft <= 0) {
+        return clearInterval(interval);
+      }
+
+      const particleCount = 50 * (timeLeft / duration);
+      
+      // Since particles fall down, start from the top
+      confetti({
+        ...defaults,
+        particleCount,
+        origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
+        colors: ['#1EAEDB', '#F97316', '#8B5CF6'],
+      });
+      confetti({
+        ...defaults,
+        particleCount,
+        origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
+        colors: ['#1EAEDB', '#F97316', '#8B5CF6'],
+      });
+    }, 250);
+  };
+  
+  const handleUndoLastRound = () => {
+    if (players.length === 0 || players[0].rounds.length === 0) {
+      toast.error('Pas de manche à annuler !');
+      return;
+    }
+    
+    setPlayers(prevPlayers => {
+      return prevPlayers.map(player => {
+        if (player.rounds.length === 0) return player;
+        
+        const lastRound = player.rounds[player.rounds.length - 1];
+        const newTotalScore = player.totalScore - lastRound.score;
+        
+        return {
+          ...player,
+          rounds: player.rounds.slice(0, -1),
+          totalScore: newTotalScore
+        };
+      });
+    });
+    
+    toast.success('Dernière manche annulée !');
   };
 
   const handleEndGame = () => {
@@ -113,6 +175,7 @@ const GamePage: React.FC = () => {
               players={players}
               onAddRound={handleAddRound}
               onEndGame={handleEndGame}
+              onUndoLastRound={handleUndoLastRound}
             />
           </motion.div>
         )}
