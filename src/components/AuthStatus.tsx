@@ -77,7 +77,7 @@ export const AuthStatus: React.FC = () => {
           <Link to="/sign-up">
             <Button 
               size="sm" 
-              variant="primary" 
+              variant="ios-blue" 
               glassmorphism 
               elevated
             >

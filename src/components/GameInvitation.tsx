@@ -181,7 +181,7 @@ const GameInvitation: React.FC<GameInvitationProps> = ({
               onClick={handleCreateGame} 
               disabled={isCreatingGame}
               className="w-full"
-              variant="primary"
+              variant="ios-blue"
               glassmorphism
               elevated
             >
@@ -240,7 +240,7 @@ const GameInvitation: React.FC<GameInvitationProps> = ({
                     onClick={handleJoinGame} 
                     disabled={isJoiningGame || !joinCode}
                     className="visionos-button"
-                    variant="primary"
+                    variant="ios-blue"
                   >
                     {isJoiningGame ? "..." : "Rejoindre"}
                   </Button>
@@ -260,7 +260,7 @@ const GameInvitation: React.FC<GameInvitationProps> = ({
           <DialogTrigger asChild>
             <Button 
               className="mt-6 w-full"
-              variant="primary"
+              variant="ios-blue"
               glassmorphism
               elevated
             >
@@ -302,7 +302,7 @@ const GameInvitation: React.FC<GameInvitationProps> = ({
                 </div>
 
                 <Button 
-                  variant="primary" 
+                  variant="ios-blue" 
                   onClick={handleShareInvitation}
                   className="w-full"
                   glassmorphism
@@ -344,7 +344,7 @@ const GameInvitation: React.FC<GameInvitationProps> = ({
                 <Button 
                   onClick={startGame} 
                   className="w-full"
-                  variant="primary"
+                  variant="ios-blue"
                   glassmorphism
                   elevated
                 >

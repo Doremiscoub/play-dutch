@@ -69,8 +69,7 @@ const Index = () => {
               <p className="text-gray-600 mb-4 flex-grow">Commencez une nouvelle partie avec vos amis</p>
               <Button 
                 onClick={() => navigate('/game')} 
-                variant="ios" 
-                rounded="full"
+                variant="ios-blue" 
                 elevated 
                 className="w-full"
               >
@@ -95,7 +94,6 @@ const Index = () => {
               <Button 
                 onClick={() => navigate('/rules')} 
                 variant="outline" 
-                rounded="full"
                 glassmorphism 
                 elevated 
                 className="w-full"
@@ -121,7 +119,6 @@ const Index = () => {
               <Button 
                 onClick={() => navigate('/history')} 
                 variant="outline" 
-                rounded="full"
                 glassmorphism 
                 elevated 
                 className="w-full"
