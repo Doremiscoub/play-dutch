@@ -24,6 +24,8 @@ import { useUser } from '@clerk/clerk-react';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import AnimatedBackground from './AnimatedBackground';
 import { useMediaQuery } from '@/hooks/use-mobile';
+import PlayerStatsChart from './PlayerStatsChart';
+import AICommentator from './AICommentator';
 
 const ScoreBoard: React.FC<ScoreBoardProps> = ({ 
   players, 
@@ -43,6 +45,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
     return savedSetting !== 'false'; // default to true if not set
   });
   const [view, setView] = useState<'podium' | 'table'>('podium');
+  const [statsTab, setStatsTab] = useState<'overview' | 'charts'>('overview');
   const navigate = useNavigate();
   const { user, isSignedIn } = useUser();
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -201,6 +204,13 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
               </ToggleGroup>
             </div>
           </motion.div>
+          
+          {/* AI Commentator - visible on all layouts */}
+          <AICommentator 
+            players={players} 
+            roundHistory={roundHistory} 
+            className="mb-6"
+          />
         </motion.div>
         
         {/* Desktop layout with side-by-side scores and stats */}
@@ -242,6 +252,23 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                   />
                 </motion.div>
               )}
+              
+              <div className="mt-6">
+                <Button
+                  onClick={() => setShowNewRoundModal(true)} 
+                  className="w-full h-12 bg-gradient-to-r from-dutch-orange via-dutch-pink to-dutch-orange text-white rounded-xl font-medium relative overflow-hidden"
+                >
+                  <motion.div 
+                    className="absolute inset-0 bg-gradient-to-r from-dutch-orange via-dutch-pink to-dutch-orange bg-[length:200%_100%]"
+                    animate={{ backgroundPosition: ['0% 0%', '100% 0%', '0% 0%'] }}
+                    transition={{ duration: 8, repeat: Infinity }}
+                  />
+                  <span className="absolute inset-0 flex items-center justify-center gap-2">
+                    <Plus className="h-5 w-5" />
+                    Nouvelle manche
+                  </span>
+                </Button>
+              </div>
             </motion.div>
             
             {/* Stats panel - always visible on desktop */}
@@ -251,40 +278,92 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
             >
-              <h2 className="text-xl font-bold text-dutch-purple mb-4 flex items-center">
-                <BarChart3 className="h-5 w-5 mr-2" />
-                Statistiques
-              </h2>
-              
-              <div className="space-y-4">
-                {sortedPlayers.map((player) => (
-                  <div key={player.id} className="bg-white/60 p-4 rounded-xl shadow-sm border border-white/30">
-                    <h3 className="font-medium text-lg mb-1">{player.name}</h3>
-                    <div className="grid grid-cols-2 gap-2 mt-3">
-                      <div className="text-sm">
-                        <p className="text-gray-500">Moyenne</p>
-                        <p className="font-medium">{player.stats?.averageScore || '-'} pts</p>
-                      </div>
-                      <div className="text-sm">
-                        <p className="text-gray-500">Dutch</p>
-                        <p className="font-medium">{player.stats?.dutchCount || 0} fois</p>
-                      </div>
-                      <div className="text-sm">
-                        <p className="text-gray-500">Meilleur score</p>
-                        <p className="font-medium">{player.stats?.bestRound !== null ? `${player.stats?.bestRound} pts` : '-'}</p>
-                      </div>
-                      <div className="text-sm">
-                        <p className="text-gray-500">Pire score</p>
-                        <p className="font-medium">{player.stats?.worstRound !== null ? `${player.stats?.worstRound} pts` : '-'}</p>
-                      </div>
-                    </div>
-                    
-                    <div className="mt-3">
-                      <PlayerBadges player={player} />
-                    </div>
-                  </div>
-                ))}
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-bold text-dutch-purple flex items-center">
+                  <BarChart3 className="h-5 w-5 mr-2" />
+                  Statistiques
+                </h2>
+                
+                <ToggleGroup 
+                  type="single" 
+                  value={statsTab} 
+                  onValueChange={(value) => value && setStatsTab(value as 'overview' | 'charts')} 
+                  className="bg-white/60 backdrop-blur-sm rounded-lg p-1 shadow-sm border border-white/20"
+                  size="sm"
+                >
+                  <ToggleGroupItem 
+                    value="overview" 
+                    className={cn(
+                      "data-[state=on]:bg-white data-[state=on]:shadow-sm rounded-md text-xs py-1.5 px-2.5",
+                      statsTab === "overview" ? "text-dutch-blue" : "text-gray-600"
+                    )}
+                  >
+                    <Activity className="h-3.5 w-3.5 mr-1" />
+                    Aperçu
+                  </ToggleGroupItem>
+                  <ToggleGroupItem 
+                    value="charts" 
+                    className={cn(
+                      "data-[state=on]:bg-white data-[state=on]:shadow-sm rounded-md text-xs py-1.5 px-2.5",
+                      statsTab === "charts" ? "text-dutch-blue" : "text-gray-600"
+                    )}
+                  >
+                    <LineChart className="h-3.5 w-3.5 mr-1" />
+                    Graphiques
+                  </ToggleGroupItem>
+                </ToggleGroup>
               </div>
+              
+              <AnimatePresence mode="wait">
+                {statsTab === 'overview' ? (
+                  <motion.div 
+                    key="overview"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 20 }}
+                    transition={{ duration: 0.3 }}
+                    className="space-y-4"
+                  >
+                    {sortedPlayers.map((player) => (
+                      <div key={player.id} className="bg-white/60 p-4 rounded-xl shadow-sm border border-white/30">
+                        <h3 className="font-medium text-lg mb-1">{player.name}</h3>
+                        <div className="grid grid-cols-2 gap-2 mt-3">
+                          <div className="text-sm">
+                            <p className="text-gray-500">Moyenne</p>
+                            <p className="font-medium">{player.stats?.averageScore || '-'} pts</p>
+                          </div>
+                          <div className="text-sm">
+                            <p className="text-gray-500">Dutch</p>
+                            <p className="font-medium">{player.stats?.dutchCount || 0} fois</p>
+                          </div>
+                          <div className="text-sm">
+                            <p className="text-gray-500">Meilleur score</p>
+                            <p className="font-medium">{player.stats?.bestRound !== null ? `${player.stats?.bestRound} pts` : '-'}</p>
+                          </div>
+                          <div className="text-sm">
+                            <p className="text-gray-500">Pire score</p>
+                            <p className="font-medium">{player.stats?.worstRound !== null ? `${player.stats?.worstRound} pts` : '-'}</p>
+                          </div>
+                        </div>
+                        
+                        <div className="mt-3">
+                          <PlayerBadges player={player} />
+                        </div>
+                      </div>
+                    ))}
+                  </motion.div>
+                ) : (
+                  <motion.div 
+                    key="charts"
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <PlayerStatsChart players={players} />
+                  </motion.div>
+                )}
+              </AnimatePresence>
               
               <div className="mt-4">
                 <Button
@@ -379,7 +458,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                   className="shadow-lg bg-gradient-to-r from-dutch-blue/90 via-dutch-purple/90 to-dutch-blue/90 border border-white/20"
                   aria-label="Statistiques"
                 >
-                  <Flag className="h-5 w-5" />
+                  <BarChart3 className="h-5 w-5" />
                 </Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-md rounded-3xl bg-white/80 backdrop-blur-md border border-white/30">
@@ -390,35 +469,46 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                   </DialogDescription>
                 </DialogHeader>
                 
-                <div className="space-y-4 mt-4">
-                  {sortedPlayers.map((player) => (
-                    <div key={player.id} className="bg-white/60 p-4 rounded-xl shadow-sm border border-white/30">
-                      <h3 className="font-medium text-lg mb-1">{player.name}</h3>
-                      <div className="grid grid-cols-2 gap-2 mt-3">
-                        <div className="text-sm">
-                          <p className="text-gray-500">Moyenne</p>
-                          <p className="font-medium">{player.stats?.averageScore || '-'} pts</p>
+                <Tabs defaultValue="overview">
+                  <TabsList className="grid grid-cols-2 mb-4">
+                    <TabsTrigger value="overview" className="text-xs">Aperçu</TabsTrigger>
+                    <TabsTrigger value="charts" className="text-xs">Graphiques</TabsTrigger>
+                  </TabsList>
+                  
+                  <TabsContent value="overview" className="space-y-4 mt-4 max-h-[60vh] overflow-y-auto pr-1">
+                    {sortedPlayers.map((player) => (
+                      <div key={player.id} className="bg-white/60 p-4 rounded-xl shadow-sm border border-white/30">
+                        <h3 className="font-medium text-lg mb-1">{player.name}</h3>
+                        <div className="grid grid-cols-2 gap-2 mt-3">
+                          <div className="text-sm">
+                            <p className="text-gray-500">Moyenne</p>
+                            <p className="font-medium">{player.stats?.averageScore || '-'} pts</p>
+                          </div>
+                          <div className="text-sm">
+                            <p className="text-gray-500">Dutch</p>
+                            <p className="font-medium">{player.stats?.dutchCount || 0} fois</p>
+                          </div>
+                          <div className="text-sm">
+                            <p className="text-gray-500">Meilleur score</p>
+                            <p className="font-medium">{player.stats?.bestRound !== null ? `${player.stats?.bestRound} pts` : '-'}</p>
+                          </div>
+                          <div className="text-sm">
+                            <p className="text-gray-500">Pire score</p>
+                            <p className="font-medium">{player.stats?.worstRound !== null ? `${player.stats?.worstRound} pts` : '-'}</p>
+                          </div>
                         </div>
-                        <div className="text-sm">
-                          <p className="text-gray-500">Dutch</p>
-                          <p className="font-medium">{player.stats?.dutchCount || 0} fois</p>
-                        </div>
-                        <div className="text-sm">
-                          <p className="text-gray-500">Meilleur score</p>
-                          <p className="font-medium">{player.stats?.bestRound !== null ? `${player.stats?.bestRound} pts` : '-'}</p>
-                        </div>
-                        <div className="text-sm">
-                          <p className="text-gray-500">Pire score</p>
-                          <p className="font-medium">{player.stats?.worstRound !== null ? `${player.stats?.worstRound} pts` : '-'}</p>
+                        
+                        <div className="mt-3">
+                          <PlayerBadges player={player} />
                         </div>
                       </div>
-                      
-                      <div className="mt-3">
-                        <PlayerBadges player={player} />
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </TabsContent>
+                  
+                  <TabsContent value="charts" className="max-h-[60vh] overflow-y-auto pr-1">
+                    <PlayerStatsChart players={players} />
+                  </TabsContent>
+                </Tabs>
 
                 <DialogFooter className="mt-4">
                   <Button
