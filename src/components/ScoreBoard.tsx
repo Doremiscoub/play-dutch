@@ -1,25 +1,26 @@
 
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Plus, Trophy, BarChart3, History, Home, Crown, Trash2, Music, Bell, VolumeX, ArrowRight, RotateCcw, Clock, Award, LineChart, TrendingDown, TrendingUp, Heart, Medal, Flag, Settings, Table as TableIcon, Layers, ViewIcon } from 'lucide-react';
+import { 
+  Plus, Trophy, BarChart3, Flag, Home, RotateCcw, Clock, Award, 
+  LineChart, TrendingDown, TrendingUp, Heart, Settings, Table as TableIcon, Medal
+} from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Player, PlayerStatistics, ScoreBoardProps } from '@/types';
+import { Player, ScoreBoardProps } from '@/types';
 import PlayerScoreCard from './PlayerScoreCard';
 import NewRoundModal from './NewRoundModal';
 import PodiumView from './PodiumView';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { cn } from '@/lib/utils';
-import ThemeSelector from './ThemeSelector';
 import PlayerBadges from './PlayerBadges';
-import QuickGuide from './QuickGuide';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import ScoreTableView from './ScoreTableView';
 import GameSettings from './GameSettings';
@@ -146,7 +147,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
       >
         <div className="p-4">
           <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-4">
               <Button 
                 onClick={() => navigate('/')}
                 variant="outline" 
@@ -170,18 +171,109 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                 }}
                 className="bg-white/80 border border-white/30 rounded-lg p-1 shadow-sm"
               >
-                <ToggleGroupItem value="cards" aria-label="Vue cartes" className="h-8 w-8 p-0">
-                  <Layers className="h-4 w-4" />
+                <ToggleGroupItem value="cards" aria-label="Vue classement" className="h-8 w-8 p-0">
+                  <Medal className="h-4 w-4" />
                 </ToggleGroupItem>
                 <ToggleGroupItem value="table" aria-label="Vue tableau" className="h-8 w-8 p-0">
                   <TableIcon className="h-4 w-4" />
                 </ToggleGroupItem>
               </ToggleGroup>
               
-              <GameSettings 
-                soundEnabled={soundEnabled}
-                setSoundEnabled={setSoundEnabled}
-              />
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button 
+                    variant="ghost" 
+                    size="icon"
+                    className="bg-white/80 backdrop-blur border-white/30 shadow-md hover:shadow-lg"
+                    aria-label="Réglages du jeu"
+                  >
+                    <Settings className="h-4 w-4" aria-hidden="true" />
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-md rounded-3xl bg-white/80 backdrop-blur-md border border-white/30 shadow-xl">
+                  <DialogHeader>
+                    <DialogTitle>Paramètres</DialogTitle>
+                    <DialogDescription>
+                      Personnalisez votre expérience de jeu
+                    </DialogDescription>
+                  </DialogHeader>
+
+                  <Tabs defaultValue="general" className="mt-4">
+                    <TabsList className="grid grid-cols-3 mb-4">
+                      <TabsTrigger value="general">Général</TabsTrigger>
+                      <TabsTrigger value="appearance">Apparence</TabsTrigger>
+                      <TabsTrigger value="about">À propos</TabsTrigger>
+                    </TabsList>
+                    
+                    <TabsContent value="general" className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <Label htmlFor="sound-toggle" className="font-medium flex items-center gap-2">
+                          {soundEnabled ? 
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-bell"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg> : 
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-volume-x"><path d="M11 5 6 9H2v6h4l5 4V5Z"/><line x1="22" x2="16" y1="9" y2="15"/><line x1="16" x2="22" y1="9" y2="15"/></svg>
+                          }
+                          Sons
+                        </Label>
+                        <Switch 
+                          id="sound-toggle" 
+                          checked={soundEnabled} 
+                          onCheckedChange={setSoundEnabled} 
+                        />
+                      </div>
+                      
+                      <div className="flex flex-col gap-2 mt-6">
+                        <Button 
+                          variant="outline" 
+                          className="justify-start rounded-xl bg-white hover:bg-gray-50"
+                          onClick={() => navigate('/')}
+                        >
+                          <Home className="h-4 w-4 mr-2" aria-hidden="true" />
+                          Accueil
+                        </Button>
+                        
+                        <Button 
+                          variant="destructive" 
+                          className="justify-start rounded-xl mt-4"
+                          onClick={() => {
+                            if (window.confirm('Êtes-vous sûr de vouloir effacer toutes les données ? Cette action est irréversible.')) {
+                              localStorage.clear();
+                              toast.success('Toutes les données ont été effacées. Retour à l\'accueil...');
+                              setTimeout(() => {
+                                navigate('/');
+                                window.location.reload();
+                              }, 1500);
+                            }
+                          }}
+                        >
+                          Effacer toutes les données
+                        </Button>
+                      </div>
+                    </TabsContent>
+                    
+                    <TabsContent value="appearance" className="space-y-4">
+                      <div className="mb-4">
+                        <Label className="font-medium mb-3 block">Thème de couleur</Label>
+                        <ThemeSelector />
+                      </div>
+                    </TabsContent>
+                    
+                    <TabsContent value="about" className="space-y-4">
+                      <div className="space-y-2">
+                        <h3 className="font-medium flex items-center gap-1">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-info"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                          Dutch Blitz Scoreboard
+                        </h3>
+                        <p className="text-sm text-gray-600">
+                          Version 1.0.0
+                        </p>
+                        <p className="text-sm text-gray-600 mt-4">
+                          Une application pour suivre les scores de vos parties de Dutch Blitz.
+                        </p>
+                      </div>
+                    </TabsContent>
+                  </Tabs>
+                </DialogContent>
+              </Dialog>
             </div>
           </div>
           
