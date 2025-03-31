@@ -59,8 +59,9 @@ const GameSetup: React.FC<GameSetupProps> = ({ onStartGame, onJoinGame }) => {
       return;
     }
 
-    // Create a new game session
-    const newGameId = createGameSession(user.id);
+    // Create a new game session with the user's name (needed second argument)
+    const userName = user.fullName || user.username || 'Joueur';
+    const newGameId = createGameSession(user.id, userName);
     setGameId(newGameId);
     
     // Generate a shareable link

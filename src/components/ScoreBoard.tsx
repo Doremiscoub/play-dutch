@@ -1,8 +1,9 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Plus, Trophy, BarChart3, History, Home, Crown, Trash2, Music, Bell, VolumeX, ArrowRight, RotateCcw, Clock, Award, LineChart, TrendingDown, TrendingUp, Heart, Medal, Flag } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Player, GameRound, PlayerStatistics } from '@/types';
+import { Player, PlayerStatistics } from '@/types';
 import PlayerScoreCard from './PlayerScoreCard';
 import NewRoundModal from './NewRoundModal';
 import PodiumView from './PodiumView';
