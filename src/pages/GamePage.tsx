@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Player, Game, PlayerStatistics } from '@/types';
@@ -178,12 +179,13 @@ const GamePage: React.FC = () => {
     
     toast.success('Manche ajoutée !');
     
-    const updatedPlayers = players.map((player, index) => ({
+    // Check if any player has reached 100 points or more after adding new scores
+    const playersTotalWithNewScores = players.map((player, index) => ({
       ...player,
       newTotalScore: player.totalScore + scores[index]
     }));
     
-    const gameOver = updatedPlayers.some(player => player.newTotalScore >= 100);
+    const gameOver = playersTotalWithNewScores.some(p => p.newTotalScore >= 100);
     
     if (gameOver) {
       finishGame(scores, dutchPlayerId);

@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { 
-  Plus, Trophy, BarChart3, Flag, Home, RotateCcw, Clock, Award, 
-  LineChart, TrendingDown, TrendingUp, Heart, Settings, Table as TableIcon, Medal, ArrowRight
+  Plus, Trophy, BarChart3, Flag, Home, RotateCcw, Clock, 
+  LineChart, TableIcon, Medal, ArrowRight
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Player, ScoreBoardProps } from '@/types';
@@ -12,13 +12,9 @@ import PlayerScoreCard from './PlayerScoreCard';
 import PodiumView from './PodiumView';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription, DialogFooter } from '@/components/ui/dialog';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { cn } from '@/lib/utils';
 import PlayerBadges from './PlayerBadges';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
@@ -36,7 +32,6 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
 }) => {
   const [showNewRoundModal, setShowNewRoundModal] = useState(false);
   const [showStatsDialog, setShowStatsDialog] = useState(false);
-  const [showSettings, setShowSettings] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(() => {
     const savedSetting = localStorage.getItem('dutch_sound_enabled');
     return savedSetting !== 'false'; // default to true if not set
@@ -317,7 +312,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                     </div>
                     
                     <div className="mt-3">
-                      <PlayerBadges player={player} compact={true} />
+                      <PlayerBadges player={player} />
                     </div>
                   </div>
                 ))}
@@ -332,7 +327,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
             onClick={() => setShowNewRoundModal(true)}
             size="lg"
             variant="game-action"
-            className="rounded-full shadow-xl w-14 h-14 flex items-center justify-center"
+            className="rounded-full shadow-xl flex items-center justify-center gap-2 px-5 py-3 pr-6"
             aria-label="Nouvelle manche"
           >
             <motion.div 
@@ -342,7 +337,8 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
               }}
               transition={{ duration: 4, repeat: Infinity }}
             />
-            <Plus className="h-6 w-6 z-10" />
+            <Plus className="h-5 w-5 z-10" />
+            <span className="text-sm font-medium z-10">Nouvelle manche</span>
           </Button>
         </motion.div>
       </motion.div>
