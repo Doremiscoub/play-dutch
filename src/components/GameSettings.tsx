@@ -39,8 +39,8 @@ const GameSettings: React.FC<GameSettingsProps> = ({
       <DialogTrigger asChild>
         <Button 
           variant="ghost" 
-          size="icon"
-          className="bg-white/80 backdrop-blur border-white/30 shadow-md hover:shadow-lg"
+          size="icon-sm"
+          className="shadow-md hover:shadow-lg rounded-full bg-white/70 hover:bg-white/90 backdrop-blur-sm"
           aria-label="Réglages du jeu"
         >
           <Settings className="h-4 w-4" aria-hidden="true" />

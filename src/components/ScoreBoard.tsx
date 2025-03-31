@@ -118,73 +118,10 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
             </div>
             
             {/* Settings Button */}
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button 
-                  variant="ghost" 
-                  size="icon-sm" 
-                  className="shadow-md hover:shadow-lg rounded-full bg-white/70 hover:bg-white/90 backdrop-blur-sm"
-                >
-                  <Settings className="h-4 w-4" />
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-md rounded-3xl bg-white/90 backdrop-blur-md border border-white/40 shadow-xl">
-                <DialogHeader>
-                  <DialogTitle>Réglages</DialogTitle>
-                  <DialogDescription>
-                    Personnalisez votre expérience de jeu
-                  </DialogDescription>
-                </DialogHeader>
-                <div className="grid gap-4 py-4">
-                  <div className="flex items-center justify-between p-4 rounded-xl bg-white/70 backdrop-blur-sm border border-white/30">
-                    <div className="flex flex-col">
-                      <Label htmlFor="sound-toggle" className="font-medium">Sons du jeu</Label>
-                      <p className="text-sm text-gray-500">Effets sonores lors des actions</p>
-                    </div>
-                    <Switch 
-                      id="sound-toggle" 
-                      checked={soundEnabled}
-                      onCheckedChange={handleToggleSound}
-                      className="data-[state=checked]:bg-dutch-blue"
-                    />
-                  </div>
-                  
-                  <div className="flex items-center justify-between p-4 rounded-xl bg-white/70 backdrop-blur-sm border border-white/30">
-                    <div className="flex flex-col">
-                      <Label htmlFor="view-toggle" className="font-medium">Affichage des scores</Label>
-                      <p className="text-sm text-gray-500">Choisissez votre mode d'affichage préféré</p>
-                    </div>
-                    <ToggleGroup type="single" value={view} onValueChange={(value) => value && setView(value as 'podium' | 'table')}>
-                      <ToggleGroupItem value="podium" className="data-[state=on]:bg-dutch-blue data-[state=on]:text-white">
-                        <Medal className="h-4 w-4 mr-1" />
-                        <span className="sr-only">Podium</span>
-                      </ToggleGroupItem>
-                      <ToggleGroupItem value="table" className="data-[state=on]:bg-dutch-blue data-[state=on]:text-white">
-                        <TableIcon className="h-4 w-4 mr-1" />
-                        <span className="sr-only">Tableau</span>
-                      </ToggleGroupItem>
-                    </ToggleGroup>
-                  </div>
-                  
-                  {isMultiplayer && (
-                    <div className="flex items-center justify-between p-4 rounded-xl bg-white/70 backdrop-blur-sm border border-white/30">
-                      <div className="flex flex-col">
-                        <Label className="font-medium">Partie multijoueur</Label>
-                        <p className="text-sm text-gray-500">Cette partie est connectée</p>
-                      </div>
-                      <div className="px-3 py-1 bg-dutch-green/20 text-dutch-green text-xs font-medium rounded-full">
-                        Active
-                      </div>
-                    </div>
-                  )}
-                </div>
-                <DialogFooter>
-                  <Button type="button" variant="outline" onClick={() => onEndGame()}>
-                    Terminer la partie
-                  </Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
+            <GameSettings 
+              soundEnabled={soundEnabled} 
+              setSoundEnabled={handleToggleSound} 
+            />
           </div>
         </div>
         
@@ -216,6 +153,21 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
               </motion.div>
             )}
           </AnimatePresence>
+        </div>
+        
+        <div className="flex items-center justify-between mb-2">
+          <div className="px-2">
+            <ToggleGroup type="single" value={view} onValueChange={(value) => value && setView(value as 'podium' | 'table')} className="h-8">
+              <ToggleGroupItem value="podium" className="text-xs px-3 py-1">
+                <Medal className="h-3 w-3 mr-1" />
+                Podium
+              </ToggleGroupItem>
+              <ToggleGroupItem value="table" className="text-xs px-3 py-1">
+                <TableIcon className="h-3 w-3 mr-1" />
+                Tableau
+              </ToggleGroupItem>
+            </ToggleGroup>
+          </div>
         </div>
         
         {/* Alert Dialogs */}
