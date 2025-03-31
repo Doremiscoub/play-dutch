@@ -96,9 +96,14 @@ const MultiplayerGameSetup: React.FC<MultiplayerGameSetupProps> = ({
           }}
         />
       
-        <h1 className="text-3xl font-bold text-center mb-6 bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-pink bg-clip-text text-transparent">
+        <motion.h1 
+          className="text-3xl font-bold text-center mb-6 bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-pink bg-clip-text text-transparent"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+        >
           Nouvelle Partie
-        </h1>
+        </motion.h1>
 
         <Tabs 
           defaultValue="local" 
@@ -177,7 +182,7 @@ const MultiplayerGameSetup: React.FC<MultiplayerGameSetupProps> = ({
                       <p className="text-gray-600 mb-4">
                         Le mode multijoueur nécessite une connexion pour inviter vos amis et gérer vos parties.
                       </p>
-                      <Button className="bg-dutch-purple text-white hover:bg-dutch-purple/90">
+                      <Button className="bg-dutch-purple text-white hover:bg-dutch-purple/90 rounded-xl shadow-md hover:shadow-lg">
                         Se connecter
                       </Button>
                     </div>

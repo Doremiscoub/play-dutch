@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -5,6 +6,7 @@ import { PlayCircle, History, Info, Sparkles, User, Settings } from 'lucide-reac
 import { Link } from 'react-router-dom';
 import { SignedIn, SignedOut } from '@clerk/clerk-react';
 import BrickBreaker from '@/components/EasterEgg/BrickBreaker';
+import AnimatedBackground from '@/components/AnimatedBackground';
 
 const Home: React.FC = () => {
   const [versionClickCount, setVersionClickCount] = useState(0);
@@ -27,48 +29,8 @@ const Home: React.FC = () => {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
     >
-      {/* Background blur elements */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-100/60 to-gray-200/60 z-0" />
-      
-      {/* Enhanced animated background elements */}
-      <motion.div
-        className="absolute top-20 left-[15%] w-56 h-56 rounded-full bg-dutch-blue/10 blur-3xl"
-        animate={{ 
-          scale: [1, 1.2, 1],
-          opacity: [0.4, 0.6, 0.4],
-        }}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          repeatType: "reverse"
-        }}
-      />
-      
-      <motion.div
-        className="absolute bottom-24 right-[10%] w-64 h-64 rounded-full bg-dutch-orange/10 blur-3xl"
-        animate={{ 
-          scale: [1, 1.3, 1],
-          opacity: [0.3, 0.5, 0.3],
-        }}
-        transition={{
-          duration: 10,
-          repeat: Infinity,
-          repeatType: "reverse"
-        }}
-      />
-      
-      <motion.div
-        className="absolute -top-10 right-[20%] w-48 h-48 rounded-full bg-dutch-purple/10 blur-3xl"
-        animate={{ 
-          scale: [1, 1.4, 1],
-          opacity: [0.2, 0.4, 0.2],
-        }}
-        transition={{
-          duration: 12,
-          repeat: Infinity,
-          repeatType: "reverse"
-        }}
-      />
+      {/* Background elements */}
+      <AnimatedBackground />
       
       {/* New decorative elements */}
       <motion.div 
@@ -233,7 +195,7 @@ const Home: React.FC = () => {
               whileTap={{ scale: 0.98 }}
               transition={{ type: "spring", stiffness: 400, damping: 17 }}
             >
-              <Button variant="outline" className="w-full h-14 rounded-2xl glassmorphism bg-white/40 text-gray-700 border border-white/30 hover:bg-white/50 backdrop-blur-md transition-all">
+              <Button variant="outline" className="w-full h-14 rounded-2xl glassmorphism bg-white/50 text-gray-700 border border-white/30 hover:bg-white/60 backdrop-blur-md transition-all">
                 <History className="mr-2 h-5 w-5 text-dutch-purple" aria-hidden="true" /> Historique
               </Button>
             </motion.div>
@@ -246,7 +208,7 @@ const Home: React.FC = () => {
                 whileTap={{ scale: 0.98 }}
                 transition={{ type: "spring", stiffness: 400, damping: 17 }}
               >
-                <Button variant="ghost" className="w-full h-14 rounded-2xl glassmorphism bg-white/30 text-gray-600 hover:bg-white/40 border border-white/20 backdrop-blur-md transition-all">
+                <Button variant="ghost" className="w-full h-14 rounded-2xl glassmorphism bg-white/40 text-gray-600 hover:bg-white/50 border border-white/20 backdrop-blur-md transition-all">
                   <Info className="mr-2 h-5 w-5 text-dutch-orange" aria-hidden="true" /> Règles
                 </Button>
               </motion.div>
@@ -258,7 +220,7 @@ const Home: React.FC = () => {
                 whileTap={{ scale: 0.98 }}
                 transition={{ type: "spring", stiffness: 400, damping: 17 }}
               >
-                <Button variant="ghost" className="w-full h-14 rounded-2xl glassmorphism bg-white/30 text-gray-600 hover:bg-white/40 border border-white/20 backdrop-blur-md transition-all">
+                <Button variant="ghost" className="w-full h-14 rounded-2xl glassmorphism bg-white/40 text-gray-600 hover:bg-white/50 border border-white/20 backdrop-blur-md transition-all">
                   <Settings className="mr-2 h-5 w-5 text-dutch-blue" aria-hidden="true" /> Réglages
                 </Button>
               </motion.div>
@@ -267,7 +229,7 @@ const Home: React.FC = () => {
         </div>
         
         <motion.div 
-          className="mt-16 text-center text-gray-500 text-sm backdrop-blur-md px-4 py-2 rounded-full bg-white/40 border border-white/20 mx-auto w-max shadow-sm cursor-pointer hover:bg-white/50 transition-colors"
+          className="mt-16 text-center text-gray-500 text-sm backdrop-blur-md px-4 py-2 rounded-full bg-white/50 border border-white/30 mx-auto w-max shadow-sm cursor-pointer hover:bg-white/60 transition-colors"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.7, duration: 0.5 }}
@@ -277,70 +239,6 @@ const Home: React.FC = () => {
           <p>Version 1.0</p>
         </motion.div>
       </motion.div>
-      
-      {/* Enhanced floating elements */}
-      <motion.div
-        className="absolute bottom-[30%] left-12 w-4 h-4 rounded-full bg-dutch-blue/30"
-        animate={{ 
-          y: [0, -15, 0],
-        }}
-        transition={{
-          duration: 3,
-          repeat: Infinity,
-          repeatType: "reverse"
-        }}
-      />
-      
-      <motion.div
-        className="absolute top-[25%] right-14 w-3 h-3 rounded-full bg-dutch-orange/40"
-        animate={{ 
-          y: [0, -10, 0],
-        }}
-        transition={{
-          duration: 2.5,
-          repeat: Infinity,
-          repeatType: "reverse"
-        }}
-      />
-      
-      <motion.div
-        className="absolute top-[40%] left-20 w-2 h-2 rounded-full bg-dutch-purple/40"
-        animate={{ 
-          y: [0, -8, 0],
-        }}
-        transition={{
-          duration: 2,
-          repeat: Infinity,
-          repeatType: "reverse"
-        }}
-      />
-      
-      {/* Additional floating elements */}
-      <motion.div
-        className="absolute top-[60%] right-28 w-3 h-3 rounded-full bg-dutch-pink/30"
-        animate={{ 
-          y: [0, -12, 0],
-          x: [0, 5, 0],
-        }}
-        transition={{
-          duration: 4,
-          repeat: Infinity,
-          repeatType: "reverse"
-        }}
-      />
-      
-      <motion.div
-        className="absolute bottom-[20%] left-32 w-2 h-2 rounded-full bg-dutch-green/40"
-        animate={{ 
-          y: [0, -9, 0],
-          x: [0, -4, 0],
-        }}
-        transition={{
-          duration: 3.5,
-          repeat: Infinity,
-          repeatType: "reverse"
-        }}
-      />
       
       {/* Easter Egg */}
       <AnimatePresence>

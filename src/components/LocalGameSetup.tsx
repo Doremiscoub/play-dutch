@@ -43,7 +43,7 @@ const LocalGameSetup: React.FC<LocalGameSetupProps> = ({ onStartGame }) => {
   return (
     <div className="space-y-6">
       <motion.div 
-        className="bg-white/70 backdrop-blur-md rounded-2xl p-5 border border-white/40 shadow-sm hover:shadow-lg transition-all"
+        className="bg-white/80 backdrop-blur-md rounded-2xl p-5 border border-white/40 shadow-sm hover:shadow-lg transition-all"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
@@ -85,7 +85,7 @@ const LocalGameSetup: React.FC<LocalGameSetupProps> = ({ onStartGame }) => {
       </motion.div>
       
       <motion.div 
-        className="bg-white/70 backdrop-blur-md rounded-2xl p-5 border border-white/40 shadow-sm hover:shadow-lg transition-all"
+        className="bg-white/80 backdrop-blur-md rounded-2xl p-5 border border-white/40 shadow-sm hover:shadow-lg transition-all"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.1 }}
@@ -137,9 +137,6 @@ const LocalGameSetup: React.FC<LocalGameSetupProps> = ({ onStartGame }) => {
         <Button 
           onClick={handleStartGame}
           size="lg"
-          variant="floating"
-          elevated
-          animated
           className="w-full py-6 rounded-xl text-white shadow-md hover:shadow-lg transition-all duration-300 relative overflow-hidden"
         >
           <motion.div 

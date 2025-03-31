@@ -5,40 +5,15 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { PlayCircle, ClipboardList, BookOpen } from 'lucide-react';
+import AnimatedBackground from '@/components/AnimatedBackground';
 
 const Index = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 pt-24 pb-10">
-      {/* Animated background elements */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-100/80 to-gray-200/80 z-0" />
-      
-      <motion.div
-        className="absolute top-20 left-[15%] w-60 h-60 rounded-full bg-dutch-blue/10 blur-3xl -z-5"
-        animate={{ 
-          scale: [1, 1.2, 1],
-          opacity: [0.4, 0.6, 0.4],
-        }}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          repeatType: "reverse"
-        }}
-      />
-      
-      <motion.div
-        className="absolute bottom-20 right-[10%] w-72 h-72 rounded-full bg-dutch-orange/10 blur-3xl -z-5"
-        animate={{ 
-          scale: [1, 1.3, 1],
-          opacity: [0.3, 0.5, 0.3],
-        }}
-        transition={{
-          duration: 10,
-          repeat: Infinity,
-          repeatType: "reverse"
-        }}
-      />
+    <div className="min-h-screen flex flex-col items-center justify-center px-4 pt-24 pb-10 relative overflow-hidden">
+      {/* Background elements */}
+      <AnimatedBackground />
       
       <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -55,14 +30,13 @@ const Index = () => {
       </motion.div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl w-full mb-10 relative z-10">
-        {/* All cards now have a fixed width in md screens */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="h-full flex"
+          className="flex"
         >
-          <Card className="h-full ios-card hover-lift flex flex-col w-full">
+          <Card className="w-full ios-card hover-lift flex flex-col">
             <CardContent className="p-6 flex flex-col items-center text-center h-full">
               <div className="h-12 w-12 rounded-full bg-dutch-blue/10 flex items-center justify-center mb-4">
                 <PlayCircle className="h-6 w-6 text-dutch-blue" />
@@ -71,9 +45,7 @@ const Index = () => {
               <p className="text-gray-600 mb-4 flex-grow">Commencez une nouvelle partie avec vos amis</p>
               <Button 
                 onClick={() => navigate('/game')} 
-                variant="ios-blue" 
-                elevated 
-                className="w-full mt-auto"
+                className="w-full mt-auto bg-dutch-blue text-white hover:bg-dutch-blue/90 rounded-xl shadow-md hover:shadow-lg"
               >
                 Démarrer
               </Button>
@@ -85,9 +57,9 @@ const Index = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="h-full flex"
+          className="flex"
         >
-          <Card className="h-full ios-card hover-lift flex flex-col w-full">
+          <Card className="w-full ios-card hover-lift flex flex-col">
             <CardContent className="p-6 flex flex-col items-center text-center h-full">
               <div className="h-12 w-12 rounded-full bg-dutch-purple/10 flex items-center justify-center mb-4">
                 <BookOpen className="h-6 w-6 text-dutch-purple" />
@@ -97,9 +69,7 @@ const Index = () => {
               <Button 
                 onClick={() => navigate('/rules')} 
                 variant="outline" 
-                glassmorphism 
-                elevated 
-                className="w-full mt-auto"
+                className="w-full mt-auto glassmorphism bg-white/70 hover:bg-white/80 text-dutch-purple border-dutch-purple/20 rounded-xl"
               >
                 Consulter
               </Button>
@@ -111,9 +81,9 @@ const Index = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
-          className="h-full flex"
+          className="flex"
         >
-          <Card className="h-full ios-card hover-lift flex flex-col w-full">
+          <Card className="w-full ios-card hover-lift flex flex-col">
             <CardContent className="p-6 flex flex-col items-center text-center h-full">
               <div className="h-12 w-12 rounded-full bg-dutch-orange/10 flex items-center justify-center mb-4">
                 <ClipboardList className="h-6 w-6 text-dutch-orange" />
@@ -123,9 +93,7 @@ const Index = () => {
               <Button 
                 onClick={() => navigate('/history')} 
                 variant="outline" 
-                glassmorphism 
-                elevated 
-                className="w-full mt-auto"
+                className="w-full mt-auto glassmorphism bg-white/70 hover:bg-white/80 text-dutch-orange border-dutch-orange/20 rounded-xl"
               >
                 Voir
               </Button>
@@ -142,43 +110,6 @@ const Index = () => {
       >
         <p>© {new Date().getFullYear()} Dutch Card Game</p>
       </motion.div>
-      
-      {/* Floating elements */}
-      <motion.div
-        className="absolute bottom-[30%] left-12 w-4 h-4 rounded-full bg-dutch-blue/30 z-0"
-        animate={{ 
-          y: [0, -15, 0],
-        }}
-        transition={{
-          duration: 3,
-          repeat: Infinity,
-          repeatType: "reverse"
-        }}
-      />
-      
-      <motion.div
-        className="absolute top-[25%] right-14 w-3 h-3 rounded-full bg-dutch-orange/40 z-0"
-        animate={{ 
-          y: [0, -10, 0],
-        }}
-        transition={{
-          duration: 2.5,
-          repeat: Infinity,
-          repeatType: "reverse"
-        }}
-      />
-      
-      <motion.div
-        className="absolute top-[40%] left-20 w-2 h-2 rounded-full bg-dutch-purple/40 z-0"
-        animate={{ 
-          y: [0, -8, 0],
-        }}
-        transition={{
-          duration: 2,
-          repeat: Infinity,
-          repeatType: "reverse"
-        }}
-      />
     </div>
   );
 };

@@ -8,8 +8,8 @@ import { Clock, Trophy, Users } from 'lucide-react';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import GameHistory from '@/components/GameHistory';
-
-// Add the section for the fix here - will be part of commit
+import AnimatedBackground from '@/components/AnimatedBackground';
+import PageLayout from '@/components/PageLayout';
 
 const HistoryPage: React.FC = () => {
   const [games, setGames] = useState<Game[]>([]);
@@ -63,25 +63,18 @@ const HistoryPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="container max-w-4xl mx-auto p-4">
-      <motion.div 
-        className="mb-8 text-center"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <h1 className="text-3xl font-bold bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">
-          Historique des parties
-        </h1>
-      </motion.div>
-      
+    <PageLayout
+      title="Historique des parties"
+      subtitle="Consultez toutes vos parties terminées"
+      showThemeSelector={true}
+    >
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.1 }}
         >
-          <Card className="bg-white/80 backdrop-blur-md rounded-xl border border-white/50 shadow-sm">
+          <Card className="bg-white/80 backdrop-blur-md rounded-xl border border-white/50 shadow-sm hover:shadow-md transition-all">
             <CardHeader className="pb-1 pt-4">
               <CardTitle className="text-lg font-semibold text-dutch-blue flex items-center gap-2">
                 <Trophy className="h-5 w-5 text-dutch-orange" />
@@ -103,7 +96,7 @@ const HistoryPage: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.2 }}
         >
-          <Card className="bg-white/80 backdrop-blur-md rounded-xl border border-white/50 shadow-sm">
+          <Card className="bg-white/80 backdrop-blur-md rounded-xl border border-white/50 shadow-sm hover:shadow-md transition-all">
             <CardHeader className="pb-1 pt-4">
               <CardTitle className="text-lg font-semibold text-dutch-blue flex items-center gap-2">
                 <Clock className="h-5 w-5 text-dutch-purple" />
@@ -125,7 +118,7 @@ const HistoryPage: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.3 }}
         >
-          <Card className="bg-white/80 backdrop-blur-md rounded-xl border border-white/50 shadow-sm">
+          <Card className="bg-white/80 backdrop-blur-md rounded-xl border border-white/50 shadow-sm hover:shadow-md transition-all">
             <CardHeader className="pb-1 pt-4">
               <CardTitle className="text-lg font-semibold text-dutch-blue flex items-center gap-2">
                 <Users className="h-5 w-5 text-dutch-blue" />
@@ -149,10 +142,10 @@ const HistoryPage: React.FC = () => {
         transition={{ duration: 0.5, delay: 0.4 }}
       >
         <Tabs defaultValue="all" className="w-full">
-          <TabsList className="w-full max-w-md mx-auto flex justify-center mb-6 bg-white/50 backdrop-blur-md border border-white/40 rounded-full p-1">
-            <TabsTrigger value="all" className="rounded-full flex-1">Toutes les parties</TabsTrigger>
-            <TabsTrigger value="multiplayer" className="rounded-full flex-1">Multijoueur</TabsTrigger>
-            <TabsTrigger value="local" className="rounded-full flex-1">Local</TabsTrigger>
+          <TabsList className="w-full max-w-md mx-auto flex justify-center mb-6 bg-white/60 backdrop-blur-md border border-white/40 rounded-full p-1 shadow-sm">
+            <TabsTrigger value="all" className="rounded-full flex-1 data-[state=active]:bg-white data-[state=active]:shadow-sm">Toutes les parties</TabsTrigger>
+            <TabsTrigger value="multiplayer" className="rounded-full flex-1 data-[state=active]:bg-white data-[state=active]:shadow-sm">Multijoueur</TabsTrigger>
+            <TabsTrigger value="local" className="rounded-full flex-1 data-[state=active]:bg-white data-[state=active]:shadow-sm">Local</TabsTrigger>
           </TabsList>
           
           <TabsContent value="all">
@@ -168,7 +161,7 @@ const HistoryPage: React.FC = () => {
           </TabsContent>
         </Tabs>
       </motion.div>
-    </div>
+    </PageLayout>
   );
 };
 

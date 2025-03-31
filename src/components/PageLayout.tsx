@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Home } from 'lucide-react';
 import ThemeSelector from './ThemeSelector';
+import AnimatedBackground from './AnimatedBackground';
 
 interface PageLayoutProps {
   title: string;
@@ -23,59 +24,19 @@ const PageLayout: React.FC<PageLayoutProps> = ({
 }) => {
   return (
     <motion.div 
-      className="min-h-screen flex flex-col items-center justify-start p-6"
+      className="min-h-screen flex flex-col items-center justify-start p-6 relative overflow-hidden"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
-      {/* Background blur elements */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-100/60 to-gray-200/60 z-0" />
-      
-      {/* Background animated elements similar to home page */}
-      <motion.div
-        className="absolute top-20 left-[15%] w-56 h-56 rounded-full bg-dutch-blue/10 blur-3xl z-0"
-        animate={{ 
-          scale: [1, 1.2, 1],
-          opacity: [0.4, 0.6, 0.4],
-        }}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          repeatType: "reverse"
-        }}
-      />
-      
-      <motion.div
-        className="absolute bottom-24 right-[10%] w-64 h-64 rounded-full bg-dutch-orange/10 blur-3xl z-0"
-        animate={{ 
-          scale: [1, 1.3, 1],
-          opacity: [0.3, 0.5, 0.3],
-        }}
-        transition={{
-          duration: 10,
-          repeat: Infinity,
-          repeatType: "reverse"
-        }}
-      />
-      
-      <motion.div
-        className="absolute -top-10 right-[20%] w-48 h-48 rounded-full bg-dutch-purple/10 blur-3xl z-0"
-        animate={{ 
-          scale: [1, 1.4, 1],
-          opacity: [0.2, 0.4, 0.2],
-        }}
-        transition={{
-          duration: 12,
-          repeat: Infinity,
-          repeatType: "reverse"
-        }}
-      />
+      {/* Background elements */}
+      <AnimatedBackground />
       
       {/* Header with navigation */}
       <div className="w-full max-w-4xl flex justify-between items-center mb-8 z-10">
         {showHomeButton ? (
           <Link to="/">
-            <Button variant="ghost" size="icon" className="rounded-full bg-white/50 hover:bg-white/70 backdrop-blur-sm border border-white/30 shadow-sm">
+            <Button variant="ghost" size="icon" className="rounded-full bg-white/60 hover:bg-white/80 backdrop-blur-sm border border-white/30 shadow-sm">
               <Home className="h-5 w-5 text-dutch-blue" />
             </Button>
           </Link>

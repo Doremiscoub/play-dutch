@@ -19,7 +19,7 @@ const NotFound: React.FC = () => {
           transition={{ duration: 0.5 }}
           className="text-center"
         >
-          <div className="bg-white/70 backdrop-blur-md rounded-3xl border border-white/40 p-10 shadow-md mb-8 text-center">
+          <div className="bg-white/80 backdrop-blur-md rounded-3xl border border-white/40 p-10 shadow-md hover:shadow-lg transition-all mb-8 text-center">
             <div className="text-9xl font-bold mb-4 bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">
               404
             </div>
@@ -30,9 +30,7 @@ const NotFound: React.FC = () => {
               <Button 
                 variant="dutch-blue" 
                 size="lg" 
-                elevated 
-                animated 
-                className="rounded-xl"
+                className="rounded-xl bg-gradient-to-r from-dutch-blue to-dutch-purple text-white hover:opacity-90 transition-all shadow-md hover:shadow-lg"
               >
                 <ArrowLeft className="mr-2 h-5 w-5" />
                 Retour à l'accueil

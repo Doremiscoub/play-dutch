@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { SignIn as ClerkSignIn } from '@clerk/clerk-react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Sparkles } from 'lucide-react';
+import AnimatedBackground from '@/components/AnimatedBackground';
 
 const SignIn: React.FC = () => {
   return (
@@ -14,21 +15,7 @@ const SignIn: React.FC = () => {
       transition={{ duration: 0.6 }}
     >
       {/* Background elements */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-100/60 to-gray-200/60 z-0" />
-      
-      {/* Animated background elements */}
-      <motion.div
-        className="absolute top-20 left-[15%] w-36 h-36 rounded-full bg-dutch-blue/10 blur-3xl"
-        animate={{ 
-          scale: [1, 1.2, 1],
-          opacity: [0.4, 0.6, 0.4],
-        }}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          repeatType: "reverse"
-        }}
-      />
+      <AnimatedBackground variant="subtle" />
       
       <Link to="/" className="absolute top-6 left-6 z-10 flex items-center text-gray-700 hover:text-dutch-blue transition-colors">
         <ArrowLeft className="w-5 h-5 mr-1" />
@@ -58,7 +45,12 @@ const SignIn: React.FC = () => {
         <p className="text-gray-600 text-lg">Accédez à votre compte Dutch</p>
       </div>
       
-      <div className="w-full max-w-md">
+      <motion.div 
+        className="w-full max-w-md"
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+      >
         <ClerkSignIn 
           path="/sign-in"
           routing="path"
@@ -67,13 +59,18 @@ const SignIn: React.FC = () => {
           appearance={{
             elements: {
               formButtonPrimary: 'bg-primary hover:bg-primary/90 text-white',
-              card: 'backdrop-blur-md bg-white/80 shadow-xl border border-gray-100',
+              card: 'backdrop-blur-md bg-white/90 shadow-xl border border-white/50 rounded-2xl',
               headerTitle: 'text-dutch-blue text-xl',
               footerAction: 'text-dutch-purple hover:text-dutch-blue',
+              socialButtonsBlockButton: 'border-white/20 bg-white/80 hover:bg-white/90',
+              socialButtonsBlockButtonText: 'text-gray-700',
+              formFieldInput: 'bg-white/80 border-white/30',
+              formFieldInputShowPasswordButton: 'text-gray-500',
+              otpCodeFieldInput: 'bg-white/80 border-white/30',
             }
           }}
         />
-      </div>
+      </motion.div>
     </motion.div>
   );
 };

@@ -18,7 +18,7 @@ const RulesPage: React.FC = () => {
         transition={{ duration: 0.5 }}
         className="w-full mx-auto"
       >
-        <Card className="rounded-3xl bg-white/70 backdrop-blur-md border border-white/40 shadow-md hover:shadow-lg transition-all">
+        <Card className="rounded-3xl bg-white/80 backdrop-blur-md border border-white/40 shadow-md hover:shadow-lg transition-all">
           <CardContent className="pt-6">
             <ScrollArea className="h-[calc(100vh-280px)] pr-4">
               <div className="space-y-8">
@@ -30,12 +30,41 @@ const RulesPage: React.FC = () => {
                 
                 <section>
                   <h2 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">Préparation</h2>
-                  <ul className="list-disc list-inside text-gray-700 space-y-2">
-                    <li>Le jeu se joue avec un paquet standard de 52 cartes.</li>
-                    <li>Il peut être joué de 2 à 7 joueurs.</li>
-                    <li>Chaque joueur reçoit le même nombre de cartes à chaque manche.</li>
-                    <li>Le nombre de cartes distribuées change à chaque manche selon un schéma prédéfini.</li>
-                  </ul>
+                  <motion.ul 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ staggerChildren: 0.1, delayChildren: 0.2 }}
+                    className="list-disc list-inside text-gray-700 space-y-2"
+                  >
+                    <motion.li
+                      initial={{ x: -10, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      Le jeu se joue avec un paquet standard de 52 cartes.
+                    </motion.li>
+                    <motion.li
+                      initial={{ x: -10, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      transition={{ duration: 0.3, delay: 0.1 }}
+                    >
+                      Il peut être joué de 2 à 7 joueurs.
+                    </motion.li>
+                    <motion.li
+                      initial={{ x: -10, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      transition={{ duration: 0.3, delay: 0.2 }}
+                    >
+                      Chaque joueur reçoit le même nombre de cartes à chaque manche.
+                    </motion.li>
+                    <motion.li
+                      initial={{ x: -10, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      transition={{ duration: 0.3, delay: 0.3 }}
+                    >
+                      Le nombre de cartes distribuées change à chaque manche selon un schéma prédéfini.
+                    </motion.li>
+                  </motion.ul>
                 </section>
                 
                 <section>
