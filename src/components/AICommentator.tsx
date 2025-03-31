@@ -29,16 +29,24 @@ const AICommentator: React.FC<AICommentatorProps> = ({ players, roundHistory, cl
     // Récupérer le dernier round
     const lastRound = roundHistory[roundHistory.length - 1];
     const dutchPlayerId = lastRound.dutchPlayerId;
-    const dutchPlayer = players.find(p => p.id === dutchPlayerId);
+    const dutchPlayer = dutchPlayerId ? players.find(p => p.id === dutchPlayerId) : null;
     
     // Trouver le joueur avec le score le plus bas et le plus élevé du dernier tour
     const lastRoundScores = lastRound.scores;
     const minScore = Math.min(...lastRoundScores);
     const maxScore = Math.max(...lastRoundScores);
-    const minScorePlayer = players[lastRoundScores.indexOf(minScore)];
-    const maxScorePlayer = players[lastRoundScores.indexOf(maxScore)];
+    const minScoreIndex = lastRoundScores.indexOf(minScore);
+    const maxScoreIndex = lastRoundScores.indexOf(maxScore);
+    
+    // Check if these indices are valid before accessing players
+    const minScorePlayer = minScoreIndex >= 0 && minScoreIndex < players.length ? players[minScoreIndex] : null;
+    const maxScorePlayer = maxScoreIndex >= 0 && maxScoreIndex < players.length ? players[maxScoreIndex] : null;
     
     // Trouver le joueur en tête au classement général
+    if (players.length === 0) {
+      return "En attente des joueurs...";
+    }
+    
     const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
     const leadingPlayer = sortedPlayers[0];
     const lastPlayer = sortedPlayers[sortedPlayers.length - 1];
@@ -46,37 +54,38 @@ const AICommentator: React.FC<AICommentatorProps> = ({ players, roundHistory, cl
     // Commentaires possibles selon le type
     const comments = {
       info: [
-        `${leadingPlayer.name} est en tête avec ${leadingPlayer.totalScore} points. La tension monte !`,
-        `Cette partie est très serrée, tout peut encore changer !`,
-        `${minScorePlayer.name} a réalisé un excellent score de ${minScore} points ! Continuez comme ça !`,
+        leadingPlayer ? `${leadingPlayer.name} est en tête avec ${leadingPlayer.totalScore} points. La tension monte !` : "La partie est très serrée !",
+        "Cette partie est très serrée, tout peut encore changer !",
+        minScorePlayer ? `${minScorePlayer.name} a réalisé un excellent score de ${minScore} points ! Continuez comme ça !` : "Excellent score le plus bas de cette manche !",
         `Déjà ${roundHistory.length} manches jouées. La partie bat son plein !`,
-        `L'écart entre le 1er et le dernier est de ${lastPlayer.totalScore - leadingPlayer.totalScore} points.`
+        leadingPlayer && lastPlayer ? `L'écart entre le 1er et le dernier est de ${lastPlayer.totalScore - leadingPlayer.totalScore} points.` : "Les scores sont très rapprochés !"
       ],
       joke: [
         dutchPlayer ? `${dutchPlayer.name} a fait Dutch ! C'était prévisible, vu comment il/elle tient ses cartes...` : `Personne n'a fait Dutch ce tour-ci... vous êtes tous trop prudents ou simplement chanceux ?`,
-        `${maxScorePlayer.name} avec ${maxScore} points ? Je dirais que quelqu'un a besoin de lunettes pour mieux lire ses cartes !`,
-        `Si ${lastPlayer.name} continue comme ça, il/elle va bientôt pouvoir prendre sa retraite... du jeu !`,
+        maxScorePlayer ? `${maxScorePlayer.name} avec ${maxScore} points ? Je dirais que quelqu'un a besoin de lunettes pour mieux lire ses cartes !` : "Quelqu'un a besoin de lunettes pour mieux lire ses cartes !",
+        lastPlayer ? `Si ${lastPlayer.name} continue comme ça, il/elle va bientôt pouvoir prendre sa retraite... du jeu !` : "Certains joueurs devraient peut-être envisager une retraite anticipée du jeu !",
         `J'ai vu des escargots distribuer les cartes plus rapidement que vous !`,
-        `${minScorePlayer.name} joue comme un pro ! Ou alors c'est juste un coup de chance incroyable...`
+        minScorePlayer ? `${minScorePlayer.name} joue comme un pro ! Ou alors c'est juste un coup de chance incroyable...` : "Il y a des pros parmi nous ! Ou juste beaucoup de chance..."
       ],
       sarcasm: [
-        `Wow, ${maxScorePlayer.name}, ${maxScore} points ! Impressionnant... si l'objectif était de marquer le PLUS de points.`,
-        `Je vois que ${leadingPlayer.name} est en tête. Quelqu'un veut lui rappeler que c'est celui qui a le MOINS de points qui gagne ?`,
+        maxScorePlayer ? `Wow, ${maxScorePlayer.name}, ${maxScore} points ! Impressionnant... si l'objectif était de marquer le PLUS de points.` : "Des scores impressionnants... si l'objectif était de marquer le PLUS de points.",
+        leadingPlayer ? `Je vois que ${leadingPlayer.name} est en tête. Quelqu'un veut lui rappeler que c'est celui qui a le MOINS de points qui gagne ?` : "Quelqu'un veut rappeler aux joueurs que c'est celui qui a le MOINS de points qui gagne ?",
         `À ce stade, je me demande si certains d'entre vous connaissent vraiment les règles du jeu.`,
-        `${lastPlayer.name} semble avoir une stratégie très... intéressante. On appelle ça "perdre avec style" ?`,
+        lastPlayer ? `${lastPlayer.name} semble avoir une stratégie très... intéressante. On appelle ça "perdre avec style" ?` : "Certains semblent avoir une stratégie très... intéressante. Perdre avec style ?",
         dutchPlayer ? `${dutchPlayer.name} a fait Dutch. Quelle surprise... dit personne jamais.` : `Pas de Dutch ce tour-ci ? Vous commencez enfin à comprendre comment jouer !`
       ],
       encouragement: [
-        `Ne désespérez pas ${lastPlayer.name} ! Même les plus grands champions ont connu des moments difficiles.`,
-        `${minScorePlayer.name} montre une excellente maîtrise du jeu avec un score de ${minScore} !`,
+        lastPlayer ? `Ne désespérez pas ${lastPlayer.name} ! Même les plus grands champions ont connu des moments difficiles.` : "Ne désespérez pas ! Même les plus grands champions ont connu des moments difficiles.",
+        minScorePlayer ? `${minScorePlayer.name} montre une excellente maîtrise du jeu avec un score de ${minScore} !` : "Excellent jeu de la part du meilleur joueur ce tour-ci !",
         `Tout peut encore changer ! Un bon Dutch et les scores seront bouleversés.`,
         `Restez concentrés, la partie est encore longue !`,
-        `${leadingPlayer.name} est en tête, mais rien n'est joué ! Gardez votre sang-froid et prenez les bonnes décisions.`
+        leadingPlayer ? `${leadingPlayer.name} est en tête, mais rien n'est joué ! Gardez votre sang-froid et prenez les bonnes décisions.` : "La tête du classement peut encore changer ! Gardez votre sang-froid."
       ]
     };
     
     // Sélectionner un commentaire aléatoire du type choisi
-    const randomComment = comments[randomType][Math.floor(Math.random() * comments[randomType].length)];
+    const commentsList = comments[randomType];
+    const randomComment = commentsList[Math.floor(Math.random() * commentsList.length)];
     return randomComment;
   }, [players, roundHistory]);
   
