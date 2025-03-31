@@ -10,8 +10,6 @@ import { toast } from 'sonner';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
-import useTournamentStore from '@/store/tournamentStore';
-import { useNavigate } from 'react-router-dom';
 
 interface TournamentModeProps {
   onStartTournament: (tournamentName: string, players: string[], rounds: number) => void;
@@ -23,8 +21,6 @@ const TournamentMode: React.FC<TournamentModeProps> = ({ onStartTournament }) =>
   const [newPlayer, setNewPlayer] = useState('');
   const [rounds, setRounds] = useState(3);
   const [showDialog, setShowDialog] = useState(false);
-  const navigate = useNavigate();
-  const { createTournament } = useTournamentStore();
 
   const handleAddPlayer = () => {
     if (!newPlayer.trim()) {
@@ -56,14 +52,8 @@ const TournamentMode: React.FC<TournamentModeProps> = ({ onStartTournament }) =>
       return;
     }
 
-    // Créer le tournoi dans le store
-    createTournament(tournamentName, players, rounds);
-    
-    // Démarrer la première partie
     onStartTournament(tournamentName, players, rounds);
     setShowDialog(false);
-    
-    toast.success('Tournoi créé ! Première partie lancée');
   };
 
   return (

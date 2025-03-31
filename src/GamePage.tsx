@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Player, Game, PlayerStatistics } from '@/types';
@@ -7,7 +8,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { toast } from 'sonner';
 import { AnimatePresence, motion } from 'framer-motion';
 import confetti from 'canvas-confetti';
-import useTournamentStore from '@/store/tournamentStore';
 
 const GamePage: React.FC = () => {
   const [gameState, setGameState] = useState<'setup' | 'playing'>(() => {
@@ -34,15 +34,11 @@ const GamePage: React.FC = () => {
   const [showPodium, setShowPodium] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  const { 
-    currentTournament, 
-    updateTournamentWithGameResult 
-  } = useTournamentStore();
-
   useEffect(() => {
     localStorage.setItem('dutch_games', JSON.stringify(games));
   }, [games]);
   
+  // Sauvegarder l'état actuel du jeu à chaque modification
   useEffect(() => {
     if (gameState === 'playing' && players.length > 0) {
       const currentGame = {
@@ -132,6 +128,7 @@ const GamePage: React.FC = () => {
     setGameState('playing');
     setRoundHistory([]);
     
+    // Clear any previous saved game
     localStorage.removeItem('current_dutch_game');
     
     toast.success('La partie commence !');
@@ -213,6 +210,7 @@ const GamePage: React.FC = () => {
     
     launchConfetti();
     
+    // Supprimer la partie en cours une fois terminée
     localStorage.removeItem('current_dutch_game');
     
     if (window.localStorage.getItem('dutch_sound_enabled') !== 'false') {
@@ -223,17 +221,10 @@ const GamePage: React.FC = () => {
       }
     }
     
-    if (currentTournament) {
-      updateTournamentWithGameResult(newGame);
-      
-      setTimeout(() => {
-        navigate('/tournament');
-      }, 2000);
-    } else {
-      setTimeout(() => {
-        navigate('/history');
-      }, 2000);
-    }
+    // Rediriger vers le podium
+    setTimeout(() => {
+      navigate('/history');
+    }, 2000);
   };
   
   const launchConfetti = () => {
