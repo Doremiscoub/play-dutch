@@ -71,7 +71,7 @@ const LocalGameSetup: React.FC<LocalGameSetupProps> = ({ onStartGame }) => {
         
         {/* Mode de jeu - avec les options multijoueur grisées */}
         <motion.div 
-          className="dutch-card mb-8 backdrop-blur-md border border-white/40 bg-white/80 hover:shadow-lg transition-all duration-300 rounded-2xl overflow-hidden p-6"
+          className="dutch-card mb-4 backdrop-blur-md border border-white/40 bg-white/80 hover:shadow-lg transition-all duration-300 rounded-2xl overflow-hidden p-6"
           initial={{ scale: 0.95, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ ...transitionProps, delay: 0.1 }}
@@ -125,11 +125,25 @@ const LocalGameSetup: React.FC<LocalGameSetupProps> = ({ onStartGame }) => {
           </div>
         </motion.div>
         
+        {/* Information à venir - Moved here directly after game mode selection */}
+        <motion.div
+          className="mb-8 relative z-10"
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.2, duration: 0.4 }}
+        >
+          <div className="bg-white/80 backdrop-blur-md border border-dutch-purple/20 rounded-xl p-3 shadow-md">
+            <p className="text-sm text-center text-dutch-purple/90">
+              <span className="font-semibold">À venir :</span> Mode multijoueur, connexion multi-appareils, et plus encore !
+            </p>
+          </div>
+        </motion.div>
+        
         <motion.div 
           className="dutch-card mb-8 backdrop-blur-md border border-white/40 bg-white/80 hover:shadow-lg transition-all duration-300 rounded-2xl overflow-hidden p-6"
           initial={{ scale: 0.95, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          transition={{ ...transitionProps, delay: 0.2 }}
+          transition={{ ...transitionProps, delay: 0.3 }}
           whileHover={{ y: -3, boxShadow: "0 15px 30px rgba(0,0,0,0.1)" }}
         >
           <h2 className="text-xl font-semibold mb-4 text-dutch-blue">Nombre de joueurs</h2>
@@ -172,7 +186,7 @@ const LocalGameSetup: React.FC<LocalGameSetupProps> = ({ onStartGame }) => {
           className="dutch-card mb-8 backdrop-blur-md border border-white/40 bg-white/80 hover:shadow-lg transition-all duration-300 rounded-2xl overflow-hidden p-6"
           initial={{ scale: 0.95, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          transition={{ ...transitionProps, delay: 0.3 }}
+          transition={{ ...transitionProps, delay: 0.4 }}
           whileHover={{ y: -3, boxShadow: "0 15px 30px rgba(0,0,0,0.1)" }}
         >
           <h2 className="text-xl font-semibold mb-4 text-dutch-blue">Noms des joueurs</h2>
@@ -206,20 +220,6 @@ const LocalGameSetup: React.FC<LocalGameSetupProps> = ({ onStartGame }) => {
             ))}
           </div>
         </motion.div>
-      </motion.div>
-      
-      {/* Information à venir */}
-      <motion.div
-        className="fixed bottom-28 left-0 right-0 flex justify-center p-4 z-20"
-        initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.6, duration: 0.5 }}
-      >
-        <div className="bg-white/80 backdrop-blur-md border border-dutch-purple/20 rounded-xl p-3 shadow-md max-w-md">
-          <p className="text-sm text-center text-dutch-purple/90">
-            <span className="font-semibold">À venir :</span> Mode multijoueur, connexion multi-appareils, et plus encore !
-          </p>
-        </div>
       </motion.div>
       
       {/* Bouton Commencer flottant */}

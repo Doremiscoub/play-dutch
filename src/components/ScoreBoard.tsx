@@ -17,13 +17,248 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { motion } from 'framer-motion';
-import { Flag, BarChart2, List, Award, Activity, Clock } from 'lucide-react';
+import { Flag, BarChart2, List, Award, Activity, Clock, Table2, Sparkles, LightbulbIcon, BrainIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useMediaQuery } from '@/hooks/use-mobile';
 import PlayerStatsChart from './PlayerStatsChart';
 import ScoreTableView from './ScoreTableView';
 import PodiumView from './PodiumView';
-import AICommentator from './AICommentator';
+import { Switch } from './ui/switch';
+
+const AICommentator: React.FC<{
+  players: Player[];
+  roundHistory: { scores: number[], dutchPlayerId?: string }[];
+  className?: string;
+}> = ({ players, roundHistory, className }) => {
+  const [comment, setComment] = useState<string | null>(null);
+  const [commentType, setCommentType] = useState<'info' | 'joke' | 'sarcasm' | 'encouragement'>('info');
+  const [isExpanded, setIsExpanded] = useState(false);
+  const isMobile = useMediaQuery("(max-width: 768px)");
+  
+  const generateComment = () => {
+    if (!players.length || !roundHistory.length) {
+      return "La partie vient de commencer ! Qui sera le champion aujourd'hui ?";
+    }
+    
+    const commentTypes: Array<'info' | 'joke' | 'sarcasm' | 'encouragement'> = ['info', 'joke', 'sarcasm', 'encouragement'];
+    const randomType = commentTypes[Math.floor(Math.random() * commentTypes.length)];
+    setCommentType(randomType);
+    
+    // Récupérer le dernier round
+    const lastRound = roundHistory[roundHistory.length - 1];
+    const dutchPlayerId = lastRound.dutchPlayerId;
+    const dutchPlayer = dutchPlayerId ? players.find(p => p.id === dutchPlayerId) : null;
+    
+    // Trouver le joueur avec le score le plus bas et le plus élevé du dernier tour
+    const lastRoundScores = lastRound.scores;
+    const minScore = Math.min(...lastRoundScores);
+    const maxScore = Math.max(...lastRoundScores);
+    const minScoreIndex = lastRoundScores.indexOf(minScore);
+    const maxScoreIndex = lastRoundScores.indexOf(maxScore);
+    
+    const minScorePlayer = minScoreIndex >= 0 && minScoreIndex < players.length ? players[minScoreIndex] : null;
+    const maxScorePlayer = maxScoreIndex >= 0 && maxScoreIndex < players.length ? players[maxScoreIndex] : null;
+    
+    // Trouver le joueur en tête au classement général
+    if (players.length === 0) {
+      return "En attente des joueurs...";
+    }
+    
+    const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
+    const leadingPlayer = sortedPlayers[0];
+    const lastPlayer = sortedPlayers[sortedPlayers.length - 1];
+    
+    // Commentaires possibles selon le type
+    const comments = {
+      info: [
+        leadingPlayer ? `${leadingPlayer.name} est en tête avec ${leadingPlayer.totalScore} points. La tension monte !` : "La partie est très serrée !",
+        "Cette partie est très serrée, tout peut encore changer !",
+        minScorePlayer ? `${minScorePlayer.name} a réalisé un excellent score de ${minScore} points ! Continuez comme ça !` : "Excellent score le plus bas de cette manche !",
+        `Déjà ${roundHistory.length} manches jouées. La partie bat son plein !`,
+        leadingPlayer && lastPlayer ? `L'écart entre le 1er et le dernier est de ${lastPlayer.totalScore - leadingPlayer.totalScore} points.` : "Les scores sont très rapprochés !"
+      ],
+      joke: [
+        dutchPlayer ? `${dutchPlayer.name} a fait Dutch ! C'était prévisible, vu comment il/elle tient ses cartes...` : `Personne n'a fait Dutch ce tour-ci... vous êtes tous trop prudents ou simplement chanceux ?`,
+        maxScorePlayer ? `${maxScorePlayer.name} avec ${maxScore} points ? Je dirais que quelqu'un a besoin de lunettes pour mieux lire ses cartes !` : "Quelqu'un a besoin de lunettes pour mieux lire ses cartes !",
+        lastPlayer ? `Si ${lastPlayer.name} continue comme ça, il/elle va bientôt pouvoir prendre sa retraite... du jeu !` : "Certains joueurs devraient peut-être envisager une retraite anticipée du jeu !",
+        `J'ai vu des escargots distribuer les cartes plus rapidement que vous !`,
+        minScorePlayer ? `${minScorePlayer.name} joue comme un pro ! Ou alors c'est juste un coup de chance incroyable...` : "Il y a des pros parmi nous ! Ou juste beaucoup de chance..."
+      ],
+      sarcasm: [
+        maxScorePlayer ? `Wow, ${maxScorePlayer.name}, ${maxScore} points ! Impressionnant... si l'objectif était de marquer le PLUS de points.` : "Des scores impressionnants... si l'objectif était de marquer le PLUS de points.",
+        leadingPlayer ? `Je vois que ${leadingPlayer.name} est en tête. Quelqu'un veut lui rappeler que c'est celui qui a le MOINS de points qui gagne ?` : "Quelqu'un veut rappeler aux joueurs que c'est celui qui a le MOINS de points qui gagne ?",
+        `À ce stade, je me demande si certains d'entre vous connaissent vraiment les règles du jeu.`,
+        lastPlayer ? `${lastPlayer.name} semble avoir une stratégie très... intéressante. On appelle ça "perdre avec style" ?` : "Certains semblent avoir une stratégie très... intéressante. Perdre avec style ?",
+        dutchPlayer ? `${dutchPlayer.name} a fait Dutch. Quelle surprise... dit personne jamais.` : `Pas de Dutch ce tour-ci ? Vous commencez enfin à comprendre comment jouer !`
+      ],
+      encouragement: [
+        lastPlayer ? `Ne désespérez pas ${lastPlayer.name} ! Même les plus grands champions ont connu des moments difficiles.` : "Ne désespérez pas ! Même les plus grands champions ont connu des moments difficiles.",
+        minScorePlayer ? `${minScorePlayer.name} montre une excellente maîtrise du jeu avec un score de ${minScore} !` : "Excellent jeu de la part du meilleur joueur ce tour-ci !",
+        `Tout peut encore changer ! Un bon Dutch et les scores seront bouleversés.`,
+        `Restez concentrés, la partie est encore longue !`,
+        leadingPlayer ? `${leadingPlayer.name} est en tête, mais rien n'est joué ! Gardez votre sang-froid et prenez les bonnes décisions.` : "La tête du classement peut encore changer ! Gardez votre sang-froid."
+      ]
+    };
+    
+    // Sélectionner un commentaire aléatoire du type choisi
+    const commentsList = comments[randomType];
+    const randomComment = commentsList[Math.floor(Math.random() * commentsList.length)];
+    return randomComment;
+  };
+  
+  useEffect(() => {
+    if (roundHistory.length > 0) {
+      setComment(generateComment());
+    } else {
+      setComment("Bienvenue ! La partie n'a pas encore commencé. Prêts à jouer ?");
+    }
+    
+    // Générer un nouveau commentaire toutes les 20 secondes ou après un nouveau round
+    const intervalId = setInterval(() => {
+      setComment(generateComment());
+    }, 20000);
+    
+    return () => clearInterval(intervalId);
+  }, [roundHistory.length]);
+  
+  // Styles différents selon le type de commentaire
+  const getCommentStyle = () => {
+    switch (commentType) {
+      case 'info':
+        return 'border-dutch-blue/30 bg-dutch-blue/10';
+      case 'joke':
+        return 'border-dutch-orange/30 bg-dutch-orange/10';
+      case 'sarcasm':
+        return 'border-dutch-purple/30 bg-dutch-purple/10';
+      case 'encouragement':
+        return 'border-dutch-green/30 bg-dutch-green/10';
+      default:
+        return 'border-dutch-blue/30 bg-dutch-blue/10';
+    }
+  };
+  
+  const getCommentIcon = () => {
+    switch (commentType) {
+      case 'info':
+        return <LightbulbIcon className="h-5 w-5 text-dutch-blue" />;
+      case 'joke':
+        return <Sparkles className="h-5 w-5 text-dutch-orange" />;
+      case 'sarcasm':
+        return <BrainIcon className="h-5 w-5 text-dutch-purple" />;
+      case 'encouragement':
+        return <Award className="h-5 w-5 text-dutch-green" />;
+      default:
+        return <LightbulbIcon className="h-5 w-5 text-dutch-blue" />;
+    }
+  };
+
+  const commentatorNames = [
+    "Prof. Cartouche",
+    "Maestro Dutch",
+    "Docteur Score",
+    "L'Oracle des cartes",
+    "Coach Zéro"
+  ];
+  
+  const commentatorName = commentatorNames[Math.floor(Math.random() * commentatorNames.length)];
+
+  return (
+    <motion.div 
+      className={`${className} rounded-xl overflow-hidden shadow-lg`}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      layout
+    >
+      <div className="flex flex-col">
+        <div 
+          className={`p-4 border ${getCommentStyle()} backdrop-blur-sm flex items-start gap-3 cursor-pointer rounded-xl`}
+          onClick={() => setIsExpanded(!isExpanded)}
+        >
+          <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center ${commentType === 'info' ? 'bg-dutch-blue/20' : commentType === 'joke' ? 'bg-dutch-orange/20' : commentType === 'sarcasm' ? 'bg-dutch-purple/20' : 'bg-dutch-green/20'} shadow-md`}>
+            {getCommentIcon()}
+          </div>
+          
+          <div className="flex-grow">
+            <div className="flex flex-col">
+              <h3 className="text-base font-bold bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">
+                {commentatorName}
+              </h3>
+              <span className="text-xs text-gray-600 -mt-1 mb-1">Analyste de jeu</span>
+            </div>
+            
+            <motion.p 
+              className="text-gray-700 text-sm"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              key={comment}
+            >
+              {comment}
+            </motion.p>
+            
+            {isMobile && !isExpanded && (
+              <p className="text-xs text-gray-400 mt-1 italic">Appuyez pour d'autres commentaires</p>
+            )}
+          </div>
+        </div>
+        
+        {isExpanded && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="overflow-hidden"
+          >
+            <div className="p-4 bg-white/80 border-t border-x border-b rounded-b-xl shadow-sm space-y-3">
+              <div className="grid grid-cols-2 gap-2">
+                <button 
+                  className="py-2 px-3 text-sm bg-dutch-blue/10 hover:bg-dutch-blue/20 text-dutch-blue rounded-lg transition-colors flex items-center justify-center gap-2"
+                  onClick={() => {
+                    setCommentType('info');
+                    setComment(generateComment());
+                  }}
+                >
+                  <LightbulbIcon className="h-4 w-4" /> Analyse
+                </button>
+                
+                <button 
+                  className="py-2 px-3 text-sm bg-dutch-orange/10 hover:bg-dutch-orange/20 text-dutch-orange rounded-lg transition-colors flex items-center justify-center gap-2"
+                  onClick={() => {
+                    setCommentType('joke');
+                    setComment(generateComment());
+                  }}
+                >
+                  <Sparkles className="h-4 w-4" /> Humour
+                </button>
+                
+                <button 
+                  className="py-2 px-3 text-sm bg-dutch-purple/10 hover:bg-dutch-purple/20 text-dutch-purple rounded-lg transition-colors flex items-center justify-center gap-2"
+                  onClick={() => {
+                    setCommentType('sarcasm');
+                    setComment(generateComment());
+                  }}
+                >
+                  <BrainIcon className="h-4 w-4" /> Piquant
+                </button>
+                
+                <button 
+                  className="py-2 px-3 text-sm bg-dutch-green/10 hover:bg-dutch-green/20 text-dutch-green rounded-lg transition-colors flex items-center justify-center gap-2"
+                  onClick={() => {
+                    setCommentType('encouragement');
+                    setComment(generateComment());
+                  }}
+                >
+                  <Award className="h-4 w-4" /> Motivation
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </div>
+    </motion.div>
+  );
+};
 
 const ScoreBoard: React.FC<ScoreBoardProps> = ({ 
   players, 
@@ -39,11 +274,9 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
   const [isNewRoundModalOpen, setIsNewRoundModalOpen] = useState(false);
   const [scores, setScores] = useState<number[]>([]);
   const [dutchPlayerId, setDutchPlayerId] = useState<string | undefined>(undefined);
+  const [showTableView, setShowTableView] = useState(false);
   const newRoundModalRef = useRef<HTMLDialogElement>(null);
-
-  const handleClosePodium = () => {
-    console.log('Close podium requested');
-  };
+  const isMobile = useMediaQuery("(max-width: 768px)");
 
   const onAddRoundHandler = () => {
     setIsNewRoundModalOpen(true);
@@ -61,63 +294,82 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
     setDutchPlayerId(undefined);
   };
 
-  const isMobile = useMediaQuery("(max-width: 768px)");
-
   return (
     <div className="p-4 md:p-6 container max-w-7xl mx-auto">
-      <div className="flex flex-col gap-6">
+      <AlertDialog open={showGameEndConfirmation}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Êtes-vous sûr(e) ?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Terminer la partie maintenant réinitialisera le jeu. Êtes-vous sûr de vouloir continuer ?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={onCancelEndGame}>Annuler</AlertDialogCancel>
+            <AlertDialogAction onClick={onConfirmEndGame}>Oui, terminer</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+      
+      <motion.div
+        className="mb-6 flex items-center justify-between"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+      >
+        <h1 className="text-2xl font-bold bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-pink text-transparent bg-clip-text">
+          Tableau des scores
+        </h1>
         
-        <AlertDialog open={showGameEndConfirmation}>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Êtes-vous sûr(e) ?</AlertDialogTitle>
-              <AlertDialogDescription>
-                Terminer la partie maintenant réinitialisera le jeu. Êtes-vous sûr de vouloir continuer ?
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel onClick={onCancelEndGame}>Annuler</AlertDialogCancel>
-              <AlertDialogAction onClick={onConfirmEndGame}>Oui, terminer</AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
-        
-        {isMobile ? (
-          <div className="flex flex-col gap-6">
-            <Tabs defaultValue="scores" className="w-full">
-              <TabsList className="grid grid-cols-2 mb-4">
-                <TabsTrigger value="scores" className="flex items-center gap-2">
-                  <List className="h-4 w-4" />
-                  Scores
-                </TabsTrigger>
-                <TabsTrigger value="podium" className="flex items-center gap-2">
-                  <Award className="h-4 w-4" />
-                  Podium
-                </TabsTrigger>
-              </TabsList>
-              
-              <TabsContent value="scores" className="mt-0">
-                <ScoreTableView players={players} roundHistory={roundHistory} />
-              </TabsContent>
-              
-              <TabsContent value="podium" className="mt-0">
-                <PodiumView players={players} onClose={handleClosePodium} isMultiplayer={isMultiplayer} />
-              </TabsContent>
-            </Tabs>
-            
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-gray-500">Vue classique</span>
+            <Switch 
+              checked={showTableView} 
+              onCheckedChange={setShowTableView}
+            />
+            <span className="text-sm text-gray-500">Vue tableau</span>
+          </div>
+        </div>
+      </motion.div>
+      
+      {isMobile ? (
+        // Mobile layout
+        <div className="flex flex-col gap-6">
+          <div className="mb-4">
             {players && players.length > 0 && (
-              <AICommentator players={players} roundHistory={roundHistory} className="mb-4" />
+              <AICommentator players={players} roundHistory={roundHistory} className="w-full" />
             )}
+          </div>
+          
+          <div className="flex-1">
+            {showTableView ? (
+              <ScoreTableView players={players} roundHistory={roundHistory} />
+            ) : (
+              <div className="space-y-3">
+                {players.sort((a, b) => a.totalScore - b.totalScore).map((player, index) => (
+                  <PlayerScoreCard 
+                    key={player.id} 
+                    player={player} 
+                    position={index + 1} 
+                    isWinner={index === 0}
+                    lastRoundScore={player.rounds.length > 0 ? player.rounds[player.rounds.length - 1].score : undefined}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+          
+          <div className="grid grid-cols-1 gap-3 mt-4">
+            <Button 
+              variant="default" 
+              className="w-full bg-dutch-blue text-white hover:bg-dutch-blue/90" 
+              onClick={onAddRoundHandler}
+            >
+              Nouvelle Manche
+            </Button>
             
-            <div className="grid grid-cols-2 gap-4">
-              <Button 
-                variant="default" 
-                className="w-full bg-dutch-blue text-white hover:bg-dutch-blue/90" 
-                onClick={onAddRoundHandler}
-              >
-                Nouvelle Manche
-              </Button>
-              
+            <div className="grid grid-cols-2 gap-3">
               <Button 
                 variant="outline" 
                 className="w-full border-dutch-orange text-dutch-orange hover:bg-dutch-orange/10" 
@@ -125,51 +377,25 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
               >
                 Annuler Dernière
               </Button>
+              
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button 
+                    variant="outline" 
+                    className="w-full border-dutch-purple text-dutch-purple hover:bg-dutch-purple/10"
+                  >
+                    <BarChart2 className="h-4 w-4 mr-2" /> Statistiques
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Statistiques du jeu</DialogTitle>
+                  </DialogHeader>
+                  <PlayerStatsChart players={players} />
+                  <FunStats players={players} />
+                </DialogContent>
+              </Dialog>
             </div>
-            
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button 
-                  variant="outline" 
-                  className="relative overflow-hidden border-dutch-purple text-dutch-purple hover:bg-dutch-purple/10 w-full"
-                >
-                  <span className="relative z-10 flex items-center justify-center gap-2">
-                    <BarChart2 className="h-4 w-4" />
-                    Statistiques
-                  </span>
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto">
-                <DialogHeader>
-                  <DialogTitle className="flex items-center gap-2 text-dutch-purple">
-                    <BarChart2 className="h-5 w-5" />
-                    Statistiques Détaillées
-                  </DialogTitle>
-                </DialogHeader>
-                <div className="space-y-4 py-4">
-                  <Tabs defaultValue="overview" className="w-full">
-                    <TabsList className="grid grid-cols-2 mb-4">
-                      <TabsTrigger value="overview" className="flex items-center gap-2">
-                        <Activity className="h-4 w-4" />
-                        Aperçu
-                      </TabsTrigger>
-                      <TabsTrigger value="charts" className="flex items-center gap-2">
-                        <BarChart2 className="h-4 w-4" />
-                        Graphiques
-                      </TabsTrigger>
-                    </TabsList>
-                    
-                    <TabsContent value="overview" className="mt-0 space-y-4">
-                      <FifaStyleStats players={players} />
-                    </TabsContent>
-                    
-                    <TabsContent value="charts" className="mt-0">
-                      <PlayerStatsChart players={players} />
-                    </TabsContent>
-                  </Tabs>
-                </div>
-              </DialogContent>
-            </Dialog>
             
             <Button 
               variant="destructive" 
@@ -178,93 +404,92 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
             >
               Terminer la Partie
             </Button>
-            
-            <div className="mt-2 p-3 bg-gray-100 rounded-xl border border-gray-200 opacity-80 flex items-center justify-center">
-              <div className="flex items-center gap-1.5 text-gray-600 text-sm">
-                <Clock className="h-3.5 w-3.5" />
-                <span>Mode multijoueur bientôt disponible</span>
-              </div>
+          </div>
+          
+          <div className="mt-2 p-3 bg-gray-100 rounded-xl border border-gray-200 opacity-80 flex items-center justify-center">
+            <div className="flex items-center gap-1.5 text-gray-600 text-sm">
+              <Clock className="h-3.5 w-3.5" />
+              <span>Mode multijoueur bientôt disponible</span>
             </div>
           </div>
-        ) : (
-          <div className="grid grid-cols-12 gap-6">
-            <div className="col-span-12">
-              <Tabs defaultValue="scores" className="w-full">
-                <TabsList className="grid grid-cols-2 mb-4 max-w-md mx-auto">
-                  <TabsTrigger value="scores" className="flex items-center gap-2">
-                    <List className="h-4 w-4" />
-                    Tableau de Score
-                  </TabsTrigger>
-                  <TabsTrigger value="podium" className="flex items-center gap-2">
-                    <Award className="h-4 w-4" />
-                    Podium
-                  </TabsTrigger>
-                </TabsList>
-                
-                <TabsContent value="scores" className="mt-0">
-                  <div className="grid grid-cols-12 gap-6">
-                    <div className="col-span-12">
-                      <ScoreTableView players={players} roundHistory={roundHistory} />
-                    </div>
-                    <div className="col-span-6">
-                      {players && players.length > 0 && (
-                        <AICommentator players={players} roundHistory={roundHistory} className="h-full" />
-                      )}
-                    </div>
-                    <div className="col-span-6">
-                      <FifaStyleStats players={players} />
-                    </div>
+        </div>
+      ) : (
+        // Desktop layout
+        <div className="grid grid-cols-12 gap-6">
+          <div className="col-span-12">
+            {showTableView ? (
+              <div className="grid grid-cols-12 gap-6">
+                <div className="col-span-9">
+                  <ScoreTableView players={players} roundHistory={roundHistory} />
+                </div>
+                <div className="col-span-3">
+                  {players && players.length > 0 && (
+                    <AICommentator players={players} roundHistory={roundHistory} className="h-full" />
+                  )}
+                </div>
+              </div>
+            ) : (
+              <div className="grid grid-cols-12 gap-6">
+                <div className="col-span-8">
+                  <div className="space-y-3 pr-4">
+                    {players.sort((a, b) => a.totalScore - b.totalScore).map((player, index) => (
+                      <PlayerScoreCard 
+                        key={player.id} 
+                        player={player} 
+                        position={index + 1} 
+                        isWinner={index === 0}
+                        lastRoundScore={player.rounds.length > 0 ? player.rounds[player.rounds.length - 1].score : undefined}
+                      />
+                    ))}
                   </div>
-                </TabsContent>
-                
-                <TabsContent value="podium" className="mt-0">
-                  <div className="grid grid-cols-12 gap-6">
-                    <div className="col-span-7">
-                      <PodiumView players={players} onClose={handleClosePodium} isMultiplayer={isMultiplayer} />
-                    </div>
-                    <div className="col-span-5">
-                      <Tabs defaultValue="overview" className="w-full">
-                        <TabsList className="grid grid-cols-2 mb-4">
-                          <TabsTrigger value="overview" className="flex items-center gap-2">
-                            <Activity className="h-4 w-4" />
-                            Aperçu
-                          </TabsTrigger>
-                          <TabsTrigger value="charts" className="flex items-center gap-2">
-                            <BarChart2 className="h-4 w-4" />
-                            Graphiques
-                          </TabsTrigger>
-                        </TabsList>
-                        
-                        <TabsContent value="overview" className="mt-0">
-                          <FifaStyleStats players={players} />
-                        </TabsContent>
-                        
-                        <TabsContent value="charts" className="mt-0">
-                          <PlayerStatsChart players={players} />
-                        </TabsContent>
-                      </Tabs>
-                    </div>
-                  </div>
-                </TabsContent>
-              </Tabs>
-            </div>
-            
-            <div className="col-span-12 flex justify-between gap-4">
-              <Button 
-                variant="default" 
-                className="bg-dutch-blue text-white hover:bg-dutch-blue/90 px-8" 
-                onClick={onAddRoundHandler}
-              >
-                Nouvelle Manche
-              </Button>
+                </div>
+                <div className="col-span-4 flex flex-col gap-4">
+                  {players && players.length > 0 && (
+                    <AICommentator players={players} roundHistory={roundHistory} className="h-auto" />
+                  )}
+                  <FunStats players={players} />
+                </div>
+              </div>
+            )}
+          </div>
+          
+          <div className="col-span-12 mt-4">
+            <div className="flex justify-between items-center">
+              <div>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button 
+                      variant="outline" 
+                      className="border-dutch-purple text-dutch-purple hover:bg-dutch-purple/10"
+                    >
+                      <BarChart2 className="h-4 w-4 mr-2" /> Statistiques détaillées
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-4xl">
+                    <DialogHeader>
+                      <DialogTitle>Statistiques détaillées</DialogTitle>
+                    </DialogHeader>
+                    <PlayerStatsChart players={players} />
+                    <FunStats players={players} showExtended={true} />
+                  </DialogContent>
+                </Dialog>
+              </div>
               
-              <div className="flex gap-4">
+              <div className="flex gap-3">
                 <Button 
                   variant="outline" 
                   className="border-dutch-orange text-dutch-orange hover:bg-dutch-orange/10" 
                   onClick={onUndoLastRound}
                 >
                   Annuler Dernière
+                </Button>
+                
+                <Button 
+                  variant="default" 
+                  className="bg-dutch-blue text-white hover:bg-dutch-blue/90" 
+                  onClick={onAddRoundHandler}
+                >
+                  Nouvelle Manche
                 </Button>
                 
                 <Button 
@@ -275,198 +500,285 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                 </Button>
               </div>
             </div>
-            
-            <div className="col-span-12 mt-2 p-3 bg-gray-100 rounded-xl border border-gray-200 opacity-80 flex items-center justify-center">
-              <div className="flex items-center gap-2 text-gray-600">
-                <Clock className="h-4 w-4" />
-                <span>Mode multijoueur bientôt disponible</span>
-              </div>
+          </div>
+          
+          <div className="col-span-12 mt-2 p-3 bg-gray-100 rounded-xl border border-gray-200 opacity-80 flex items-center justify-center">
+            <div className="flex items-center gap-2 text-gray-600">
+              <Clock className="h-4 w-4" />
+              <span>Mode multijoueur bientôt disponible</span>
             </div>
           </div>
-        )}
-        
-        {isNewRoundModalOpen && (
-          <NewRoundModal
-            players={players}
-            onClose={handleCloseModal}
-            onAddRound={handleAddRound}
-            setScores={setScores}
-            setDutchPlayerId={setDutchPlayerId}
-            scores={scores}
-            dutchPlayerId={dutchPlayerId}
-            modalRef={newRoundModalRef}
-          />
-        )}
-      </div>
-    </div>
-  );
-};
-
-interface FifaStyleStatsProps {
-  players: Player[];
-}
-
-const FifaStyleStats: React.FC<FifaStyleStatsProps> = ({ players }) => {
-  if (!players || players.length === 0) {
-    return <div className="p-4 text-center">Aucune donnée disponible</div>;
-  }
-  
-  const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
-  
-  const bestPlayer = sortedPlayers[0];
-  const worstPlayer = sortedPlayers[sortedPlayers.length - 1];
-  
-  if (!bestPlayer || !worstPlayer) return null;
-  
-  const allStats = players.map(player => {
-    const avgScore = player.rounds.length 
-      ? (player.rounds.reduce((sum, r) => sum + r.score, 0) / player.rounds.length)
-      : 0;
-    
-    const bestRound = player.rounds.length 
-      ? Math.min(...player.rounds.map(r => r.score).filter(s => s > 0))
-      : null;
-    
-    const worstRound = player.rounds.length 
-      ? Math.max(...player.rounds.map(r => r.score))
-      : null;
-    
-    const dutchCount = player.rounds.filter(r => r.isDutch).length;
-    
-    return {
-      id: player.id,
-      name: player.name,
-      avgScore,
-      bestRound,
-      worstRound,
-      dutchCount,
-      totalScore: player.totalScore
-    };
-  });
-  
-  const bestAvg = [...allStats].sort((a, b) => a.avgScore - b.avgScore)[0];
-  const bestBestRound = [...allStats]
-    .filter(s => s.bestRound !== null)
-    .sort((a, b) => (a.bestRound || Infinity) - (b.bestRound || Infinity))[0];
-  const mostDutch = [...allStats].sort((a, b) => b.dutchCount - a.dutchCount)[0];
-  
-  const leaderGap = sortedPlayers.length > 1 
-    ? sortedPlayers[1].totalScore - sortedPlayers[0].totalScore 
-    : 0;
-  
-  return (
-    <div className="bg-white/80 backdrop-blur-md border border-white/30 rounded-2xl shadow-md p-4 overflow-hidden">
-      <h3 className="text-lg font-semibold mb-4 text-dutch-purple">Statistiques du Match</h3>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <StatCard 
-          title="Meilleur Joueur" 
-          value={bestPlayer.name} 
-          subvalue={`${bestPlayer.totalScore} points`}
-          icon={<Award className="h-5 w-5 text-dutch-green" />}
-          color="bg-dutch-green/10 text-dutch-green"
-        />
-        
-        <StatCard 
-          title="Meilleure Moyenne" 
-          value={bestAvg.name} 
-          subvalue={`${bestAvg.avgScore.toFixed(1)} pts/manche`}
-          icon={<Activity className="h-5 w-5 text-dutch-blue" />}
-          color="bg-dutch-blue/10 text-dutch-blue"
-        />
-        
-        {bestBestRound && (
-          <StatCard 
-            title="Meilleur Score" 
-            value={bestBestRound.name} 
-            subvalue={`${bestBestRound.bestRound} points`}
-            icon={<BarChart2 className="h-5 w-5 text-dutch-purple" />}
-            color="bg-dutch-purple/10 text-dutch-purple"
-          />
-        )}
-        
-        <StatCard 
-          title="Plus de Dutch" 
-          value={mostDutch.name} 
-          subvalue={`${mostDutch.dutchCount} fois`}
-          icon={<Flag className="h-5 w-5 text-dutch-orange" />}
-          color="bg-dutch-orange/10 text-dutch-orange"
-        />
-      </div>
-      
-      <div className="mt-6">
-        <h4 className="text-sm font-medium text-gray-500 mb-3">Comparaison Joueurs</h4>
-        <div className="space-y-3">
-          {allStats.map((stat, index) => (
-            <div key={stat.id} className="relative">
-              <div className="flex justify-between items-center mb-1">
-                <div className="flex items-center">
-                  <span className={`flex items-center justify-center h-5 w-5 rounded-full text-xs font-bold ${index === 0 ? 'bg-dutch-green/20 text-dutch-green' : index === 1 ? 'bg-dutch-blue/20 text-dutch-blue' : index === 2 ? 'bg-dutch-purple/20 text-dutch-purple' : 'bg-gray-200 text-gray-700'}`}>
-                    {index + 1}
-                  </span>
-                  <span className="ml-2 font-medium">
-                    {stat.name}
-                  </span>
-                </div>
-                <span className="font-bold">
-                  {stat.totalScore}
-                </span>
-              </div>
-              
-              <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
-                <div 
-                  className={`h-full rounded-full ${index === 0 ? 'bg-dutch-green' : index === 1 ? 'bg-dutch-blue' : index === 2 ? 'bg-dutch-purple' : 'bg-gray-400'}`}
-                  style={{ 
-                    width: `${Math.max(5, 100 - (stat.totalScore / (worstPlayer.totalScore || 1)) * 100)}%` 
-                  }}
-                ></div>
-              </div>
-              
-              <div className="flex justify-between text-xs text-gray-500 mt-1">
-                <span>{stat.dutchCount} Dutch</span>
-                <span>{stat.avgScore.toFixed(1)} moy.</span>
-              </div>
-            </div>
-          ))}
         </div>
-      </div>
+      )}
       
-      {leaderGap > 0 && (
-        <div className="mt-6 p-3 bg-dutch-green/10 rounded-lg">
-          <div className="flex items-center gap-2">
-            <Award className="h-4 w-4 text-dutch-green" />
-            <span className="text-sm font-medium text-dutch-green">
-              {bestPlayer.name} mène par {leaderGap} points !
-            </span>
-          </div>
-        </div>
+      {isNewRoundModalOpen && (
+        <NewRoundModal
+          players={players}
+          onClose={handleCloseModal}
+          onAddRound={handleAddRound}
+          setScores={setScores}
+          setDutchPlayerId={setDutchPlayerId}
+          scores={scores}
+          dutchPlayerId={dutchPlayerId}
+          modalRef={newRoundModalRef}
+        />
       )}
     </div>
   );
 };
 
-interface StatCardProps {
-  title: string;
-  value: string;
-  subvalue: string;
-  icon: React.ReactNode;
-  color: string;
-}
-
-const StatCard: React.FC<StatCardProps> = ({ title, value, subvalue, icon, color }) => {
+// Let's create an updated player score card component inline
+const PlayerScoreCard: React.FC<{
+  player: Player;
+  position: number;
+  isWinner?: boolean;
+  lastRoundScore?: number;
+}> = ({ player, position, isWinner = false, lastRoundScore }) => {
+  const progressPercentage = Math.min(player.totalScore, 100);
+  
+  const getPositionStyles = () => {
+    switch(position) {
+      case 1:
+        return {
+          card: 'border-2 border-dutch-yellow shadow-md shadow-dutch-yellow/10 bg-gradient-to-r from-dutch-blue/10 to-dutch-purple/10',
+          badge: 'bg-gradient-to-r from-dutch-blue to-dutch-purple text-white',
+          progress: 'from-dutch-blue to-dutch-purple'
+        };
+      case 2:
+        return {
+          card: 'border border-dutch-purple/30 shadow-sm bg-dutch-purple/5',
+          badge: 'bg-gradient-to-r from-dutch-purple to-dutch-pink text-white',
+          progress: 'from-dutch-purple to-dutch-pink'
+        };
+      case 3:
+        return {
+          card: 'border border-dutch-orange/30 shadow-sm bg-dutch-orange/5',
+          badge: 'bg-gradient-to-r from-dutch-orange to-dutch-pink text-white',
+          progress: 'from-dutch-orange to-dutch-pink'
+        };
+      default:
+        return {
+          card: 'bg-white/60 backdrop-blur-sm border border-white/20',
+          badge: 'bg-gradient-to-r from-gray-200 to-gray-300 text-gray-700',
+          progress: 'from-gray-300 to-gray-400'
+        };
+    }
+  };
+  
+  const styles = getPositionStyles();
+  const stats = player.stats;
+  
   return (
-    <div className="p-3 border border-white/50 rounded-xl bg-white/80 shadow-sm">
+    <motion.div 
+      className={`rounded-2xl p-5 transition-all backdrop-blur-sm ${styles.card}`}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, delay: position * 0.05 }}
+      layout
+      whileHover={{ y: -3, boxShadow: "0 12px 25px -5px rgba(0,0,0,0.08)" }}
+    >
       <div className="flex items-center gap-3">
-        <div className={`flex items-center justify-center h-10 w-10 rounded-full ${color}`}>
-          {icon}
+        <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center font-bold ${styles.badge} shadow-md`}>
+          {isWinner || position === 1 ? <Award className="h-5 w-5" aria-hidden="true" /> : position}
         </div>
-        <div>
-          <p className="text-sm text-gray-500">{title}</p>
-          <p className="font-bold text-gray-900">{value}</p>
-          <p className="text-xs text-gray-600">{subvalue}</p>
+        
+        <div className="flex-grow overflow-hidden">
+          <div className="flex items-center">
+            <h3 className="font-semibold truncate text-lg">{player.name}</h3>
+            {player.rounds.some(round => round.isDutch) && (
+              <div className="ml-2 flex-shrink-0">
+                <motion.div 
+                  className="px-2 py-0.5 bg-dutch-orange/20 text-dutch-orange text-xs font-medium rounded-full"
+                  whileHover={{ scale: 1.05 }}
+                >
+                  Dutch
+                </motion.div>
+              </div>
+            )}
+          </div>
+          
+          <div className="flex items-center gap-2 mt-1.5">
+            <div className="relative w-full">
+              <div className="h-3 bg-gray-100/50 rounded-full overflow-hidden">
+                <motion.div 
+                  className={`h-full rounded-full bg-gradient-to-r ${styles.progress}`}
+                  style={{ width: `${progressPercentage}%` }}
+                  initial={{ width: 0 }}
+                  animate={{ width: `${progressPercentage}%` }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                />
+              </div>
+              <motion.div 
+                className={`absolute bottom-0 h-3 rounded-full bg-gradient-to-r ${styles.progress} blur-sm w-full opacity-30`}
+                animate={{ opacity: [0.2, 0.5, 0.2] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              />
+            </div>
+            <div className="flex items-center">
+              <span className="text-xl font-bold">{player.totalScore}</span>
+              {lastRoundScore !== undefined && (
+                <span className="ml-2 text-xs text-gray-500 flex items-center">
+                  +{lastRoundScore}
+                </span>
+              )}
+            </div>
+          </div>
+          
+          {stats && (
+            <div className="mt-3 grid grid-cols-3 gap-x-2 gap-y-1">
+              <div className="text-center bg-dutch-blue/5 rounded-lg p-1.5">
+                <div className="text-xs text-gray-500">Moy</div>
+                <div className="font-bold text-dutch-blue">{stats.averageScore.toFixed(1)}</div>
+              </div>
+              <div className="text-center bg-dutch-green/5 rounded-lg p-1.5">
+                <div className="text-xs text-gray-500">Min</div>
+                <div className="font-bold text-dutch-green">{stats.bestRound || '-'}</div>
+              </div>
+              <div className="text-center bg-dutch-orange/5 rounded-lg p-1.5">
+                <div className="text-xs text-gray-500">Dutch</div>
+                <div className="font-bold text-dutch-orange">{stats.dutchCount}</div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
-    </div>
+      
+      {player.rounds.length > 0 && (
+        <div className="mt-3 flex gap-2 overflow-x-auto py-1 scrollbar-none">
+          {player.rounds.map((round, index) => {
+            const isPlayerBestScore = stats?.bestRound === round.score;
+            
+            return (
+              <motion.div 
+                key={index} 
+                className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium
+                  transition-transform shadow-sm ${
+                    round.isDutch ? 'bg-gradient-to-br from-dutch-orange to-dutch-pink text-white' : 
+                    isPlayerBestScore ? 'bg-gradient-to-br from-dutch-green to-dutch-blue/50 text-white' : 'bg-gray-100'
+                  }`}
+                whileHover={{ scale: 1.15, rotate: [-1, 1, -1, 0] }}
+                transition={{ scale: { duration: 0.2 }, rotate: { duration: 0.3 } }}
+              >
+                {round.score}
+              </motion.div>
+            );
+          })}
+        </div>
+      )}
+    </motion.div>
+  );
+};
+
+// Fun statistics component to make stats more engaging
+const FunStats: React.FC<{
+  players: Player[];
+  showExtended?: boolean;
+}> = ({ players, showExtended = false }) => {
+  if (!players || players.length === 0) {
+    return null;
+  }
+  
+  const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
+  
+  // Get various fun statistics
+  const bestPlayer = sortedPlayers[0];
+  const worstPlayer = sortedPlayers[sortedPlayers.length - 1];
+  
+  const mostDutchs = [...players].sort((a, b) => 
+    (b.rounds.filter(r => r.isDutch).length) - 
+    (a.rounds.filter(r => r.isDutch).length)
+  )[0];
+  
+  const mostConsistent = [...players].sort((a, b) => {
+    if (!a.stats?.consistencyScore || !b.stats?.consistencyScore) return 0;
+    return a.stats.consistencyScore - b.stats.consistencyScore;
+  })[0];
+  
+  const bestImprovement = [...players].sort((a, b) => {
+    if (!a.stats?.improvementRate || !b.stats?.improvementRate) return 0;
+    return a.stats.improvementRate - b.stats.improvementRate;
+  })[0];
+  
+  return (
+    <motion.div
+      className="bg-white/80 backdrop-blur-md border border-white/30 rounded-2xl shadow-md p-4 overflow-hidden"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, delay: 0.2 }}
+    >
+      <h3 className="text-lg font-semibold mb-4 bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">
+        Stats du match
+      </h3>
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div className="p-3 border border-white/50 rounded-xl bg-gradient-to-br from-dutch-blue/5 to-dutch-purple/5 shadow-sm">
+          <div className="flex items-center gap-3">
+            <div className="flex items-center justify-center h-10 w-10 rounded-full bg-dutch-blue/20 text-dutch-blue shadow-sm">
+              <Award className="h-5 w-5" />
+            </div>
+            <div>
+              <p className="text-sm text-gray-500">En tête</p>
+              <p className="font-bold text-gray-900">{bestPlayer.name}</p>
+              <p className="text-xs text-green-600">{bestPlayer.totalScore} points</p>
+            </div>
+          </div>
+        </div>
+        
+        <div className="p-3 border border-white/50 rounded-xl bg-gradient-to-br from-dutch-orange/5 to-dutch-pink/5 shadow-sm">
+          <div className="flex items-center gap-3">
+            <div className="flex items-center justify-center h-10 w-10 rounded-full bg-dutch-orange/20 text-dutch-orange shadow-sm">
+              <Flag className="h-5 w-5" />
+            </div>
+            <div>
+              <p className="text-sm text-gray-500">Le plus de Dutch</p>
+              <p className="font-bold text-gray-900">{mostDutchs.name}</p>
+              <p className="text-xs text-orange-600">{mostDutchs.rounds.filter(r => r.isDutch).length} fois</p>
+            </div>
+          </div>
+        </div>
+        
+        {showExtended && (
+          <>
+            <div className="p-3 border border-white/50 rounded-xl bg-gradient-to-br from-dutch-green/5 to-dutch-blue/5 shadow-sm">
+              <div className="flex items-center gap-3">
+                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-dutch-green/20 text-dutch-green shadow-sm">
+                  <Activity className="h-5 w-5" />
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">Plus constant</p>
+                  <p className="font-bold text-gray-900">{mostConsistent?.name || "N/A"}</p>
+                  <p className="text-xs text-blue-600">{mostConsistent?.stats?.consistencyScore?.toFixed(1) || "N/A"}</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="p-3 border border-white/50 rounded-xl bg-gradient-to-br from-dutch-purple/5 to-dutch-pink/5 shadow-sm">
+              <div className="flex items-center gap-3">
+                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-dutch-purple/20 text-dutch-purple shadow-sm">
+                  <BarChart2 className="h-5 w-5" />
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">Meilleure progression</p>
+                  <p className="font-bold text-gray-900">{bestImprovement?.name || "N/A"}</p>
+                  <p className="text-xs text-purple-600">{bestImprovement?.stats?.improvementRate?.toFixed(1) || "N/A"}</p>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+      </div>
+      
+      {players.length > 1 && (
+        <div className="mt-4 p-3 bg-dutch-blue/10 rounded-xl border border-dutch-blue/20">
+          <div className="flex items-center gap-2">
+            <Award className="h-4 w-4 text-dutch-blue" />
+            <span className="text-sm text-dutch-blue font-medium">
+              {bestPlayer.name} mène de {worstPlayer.totalScore - bestPlayer.totalScore} pts !
+            </span>
+          </div>
+        </div>
+      )}
+    </motion.div>
   );
 };
 
