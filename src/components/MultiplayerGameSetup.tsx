@@ -8,7 +8,8 @@ import GameInvitation from './GameInvitation';
 import { joinGameSession, getGameSession } from '@/utils/gameInvitation';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Users, User, Gamepad2, Globe, Share2 } from 'lucide-react';
+import { Users, User, Gamepad2, Globe, LogIn } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import LocalGameSetup from './LocalGameSetup';
 
 interface MultiplayerGameSetupProps {
@@ -105,7 +106,7 @@ const MultiplayerGameSetup: React.FC<MultiplayerGameSetupProps> = ({
           onValueChange={setActiveTab}
           className="w-full"
         >
-          <TabsList className="grid grid-cols-2 mb-6 rounded-full border border-white/40 bg-white/50 backdrop-blur-md p-1 shadow-sm w-full max-w-full overflow-hidden">
+          <TabsList className="grid grid-cols-2 mb-6 rounded-full border border-white/40 bg-white/70 backdrop-blur-md p-1 shadow-sm w-full max-w-full overflow-hidden">
             <TabsTrigger 
               value="local" 
               className="rounded-full data-[state=active]:bg-white data-[state=active]:shadow-md flex items-center justify-center space-x-1 py-2.5 text-dutch-blue data-[state=active]:text-dutch-blue data-[state=inactive]:text-dutch-blue/70 px-2 truncate"
@@ -128,7 +129,7 @@ const MultiplayerGameSetup: React.FC<MultiplayerGameSetupProps> = ({
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4 }}
             >
-              <Card className="rounded-3xl border border-white/50 bg-white/70 backdrop-blur-md shadow-md hover:shadow-lg transition-all duration-300">
+              <Card className="rounded-3xl border border-white/50 bg-white/80 backdrop-blur-md shadow-md hover:shadow-lg transition-all duration-300">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-xl font-semibold text-dutch-blue flex items-center gap-2">
                     <Gamepad2 className="h-5 w-5" />
@@ -152,7 +153,7 @@ const MultiplayerGameSetup: React.FC<MultiplayerGameSetupProps> = ({
               transition={{ duration: 0.4 }}
             >
               {isSignedIn ? (
-                <Card className="rounded-3xl border border-white/50 bg-white/70 backdrop-blur-md shadow-md hover:shadow-lg transition-all duration-300">
+                <Card className="rounded-3xl border border-white/50 bg-white/80 backdrop-blur-md shadow-md hover:shadow-lg transition-all duration-300">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-xl font-semibold text-dutch-purple flex items-center gap-2">
                       <Globe className="h-5 w-5" />
@@ -171,9 +172,10 @@ const MultiplayerGameSetup: React.FC<MultiplayerGameSetupProps> = ({
                   </CardContent>
                 </Card>
               ) : (
-                <Card className="rounded-3xl border border-white/50 bg-white/70 backdrop-blur-md shadow-md hover:shadow-lg transition-all duration-300">
+                <Card className="rounded-3xl border border-white/50 bg-white/80 backdrop-blur-md shadow-md hover:shadow-lg transition-all duration-300">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-xl font-semibold text-dutch-purple">
+                    <CardTitle className="text-xl font-semibold text-dutch-purple flex items-center gap-2">
+                      <LogIn className="h-5 w-5 text-dutch-purple" />
                       Connectez-vous pour jouer en multijoueur
                     </CardTitle>
                     <CardDescription className="text-gray-600">
@@ -182,13 +184,15 @@ const MultiplayerGameSetup: React.FC<MultiplayerGameSetupProps> = ({
                   </CardHeader>
                   <CardContent>
                     <div className="text-center py-8">
-                      <Share2 className="h-16 w-16 mx-auto text-dutch-purple/50 mb-4" />
+                      <div className="w-20 h-20 mx-auto rounded-full bg-dutch-purple/10 flex items-center justify-center mb-4">
+                        <Users className="h-10 w-10 text-dutch-purple/70" />
+                      </div>
                       <p className="text-gray-600 mb-4">
                         Le mode multijoueur nécessite une connexion pour inviter vos amis et gérer vos parties.
                       </p>
-                      <p className="text-sm text-gray-500">
-                        Connectez-vous pour créer ou rejoindre une partie multijoueur.
-                      </p>
+                      <Button className="bg-dutch-purple text-white hover:bg-dutch-purple/90">
+                        Se connecter
+                      </Button>
                     </div>
                   </CardContent>
                 </Card>

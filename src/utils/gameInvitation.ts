@@ -65,6 +65,9 @@ export const joinGameSession = (gameId: string, playerId: string, playerName: st
   // Add player if not already in the game
   if (!game.players.some(p => p.id === playerId)) {
     game.players.push({ id: playerId, name: playerName });
+    
+    // Notify other players (in a real app, this would use WebSockets)
+    toast.success(`${playerName} a rejoint la partie!`);
   }
   
   game.lastActivity = new Date();
@@ -153,7 +156,15 @@ export const leaveGameSession = (gameId: string, playerId: string): boolean => {
     return false;
   }
   
+  const leavingPlayer = game.players.find(p => p.id === playerId);
+  const playerName = leavingPlayer ? leavingPlayer.name : 'Un joueur';
+  
   game.players = game.players.filter(p => p.id !== playerId);
+  
+  // Notify other players (in a real app, this would use WebSockets)
+  if (game.players.length > 0 && leavingPlayer) {
+    toast.info(`${playerName} a quitté la partie`);
+  }
   
   // If no players left, remove the game
   if (game.players.length === 0) {
@@ -163,6 +174,9 @@ export const leaveGameSession = (gameId: string, playerId: string): boolean => {
     if (playerId === game.hostId && game.players.length > 0) {
       game.hostId = game.players[0].id;
       game.hostName = game.players[0].name;
+      
+      // Notify new host (in a real app, this would use WebSockets)
+      toast.info(`${game.hostName} est maintenant l'hôte de la partie`);
     }
     
     game.lastActivity = new Date();
@@ -184,4 +198,28 @@ export const getGamePlayers = (gameId: string): { id: string; name: string }[] =
  */
 export const gameExists = (gameId: string): boolean => {
   return !!activeGames[gameId];
+};
+
+/**
+ * Get a list of all active games
+ */
+export const getAllActiveGames = (): { id: string; hostName: string; playerCount: number }[] => {
+  return Object.values(activeGames).map(game => ({
+    id: game.id,
+    hostName: game.hostName,
+    playerCount: game.players.length
+  }));
+};
+
+/**
+ * Create an invitation link with additional metadata
+ */
+export const createDeepLink = (gameId: string, hostName: string): string => {
+  const baseLink = generateGameLink(gameId);
+  const queryParams = new URLSearchParams();
+  
+  queryParams.set('join', gameId);
+  queryParams.set('host', hostName);
+  
+  return `${baseLink}&${queryParams.toString()}`;
 };

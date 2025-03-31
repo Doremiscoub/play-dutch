@@ -1,138 +1,174 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { Game } from '@/types';
 import { motion } from 'framer-motion';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { SignedIn, SignedOut } from '@clerk/clerk-react';
-import { Button } from '@/components/ui/button';
-import { History, User, Calendar, Users, Trophy } from 'lucide-react';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Badge } from '@/components/ui/badge';
-import PageLayout from '@/components/PageLayout';
+import { Clock, Trophy, Users } from 'lucide-react';
+import { format } from 'date-fns';
+import { fr } from 'date-fns/locale';
 import GameHistory from '@/components/GameHistory';
 
+// Add the section for the fix here - will be part of commit
+
 const HistoryPage: React.FC = () => {
+  const [games, setGames] = useState<Game[]>([]);
+  const [stats, setStats] = useState<{
+    totalGames: number;
+    totalRounds: number;
+    totalPlayers: number;
+    mostFrequentWinner: { name: string; wins: number } | null;
+  }>({
+    totalGames: 0,
+    totalRounds: 0,
+    totalPlayers: 0,
+    mostFrequentWinner: null,
+  });
+
+  useEffect(() => {
+    // Load games from localStorage
+    const savedGames = localStorage.getItem('dutch_games');
+    const parsedGames: Game[] = savedGames ? JSON.parse(savedGames) : [];
+    
+    setGames(parsedGames);
+    
+    // Calculate stats
+    if (parsedGames.length > 0) {
+      const totalRounds = parsedGames.reduce((sum, game) => sum + game.rounds, 0);
+      
+      const playerSet = new Set<string>();
+      parsedGames.forEach(game => {
+        game.players.forEach(player => {
+          playerSet.add(player.name);
+        });
+      });
+      
+      // Find most frequent winner
+      const winnerCount: Record<string, number> = {};
+      parsedGames.forEach(game => {
+        winnerCount[game.winner] = (winnerCount[game.winner] || 0) + 1;
+      });
+      
+      const mostFrequentWinner = Object.entries(winnerCount).sort((a, b) => b[1] - a[1])[0];
+      
+      setStats({
+        totalGames: parsedGames.length,
+        totalRounds,
+        totalPlayers: playerSet.size,
+        mostFrequentWinner: mostFrequentWinner 
+          ? { name: mostFrequentWinner[0], wins: mostFrequentWinner[1] }
+          : null,
+      });
+    }
+  }, []);
+
   return (
-    <PageLayout
-      title="Historique"
-      subtitle="Consultez l'historique de vos parties"
-      showThemeSelector={true}
-    >
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
+    <div className="container max-w-4xl mx-auto p-4">
+      <motion.div 
+        className="mb-8 text-center"
+        initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="w-full mx-auto"
       >
-        <SignedIn>
-          <Tabs defaultValue="recent" className="w-full">
-            <TabsList className="grid grid-cols-3 mb-6 rounded-xl bg-white/50 backdrop-blur-md border border-white/40 p-1 shadow-sm">
-              <TabsTrigger value="recent" className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm py-2.5 text-dutch-blue">
-                <History className="h-4 w-4 mr-2" />
-                Récentes
-              </TabsTrigger>
-              <TabsTrigger value="stats" className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm py-2.5 text-dutch-blue">
-                <Trophy className="h-4 w-4 mr-2" />
-                Statistiques
-              </TabsTrigger>
-              <TabsTrigger value="all" className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm py-2.5 text-dutch-blue">
-                <Calendar className="h-4 w-4 mr-2" />
-                Toutes
-              </TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="recent">
-              <Card className="rounded-3xl bg-white/70 backdrop-blur-md border border-white/40 shadow-md hover:shadow-lg transition-all">
-                <CardHeader>
-                  <CardTitle>Parties récentes</CardTitle>
-                  <CardDescription>Vos 5 dernières parties</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <GameHistory limit={5} />
-                </CardContent>
-              </Card>
-            </TabsContent>
-            
-            <TabsContent value="stats">
-              <Card className="rounded-3xl bg-white/70 backdrop-blur-md border border-white/40 shadow-md hover:shadow-lg transition-all">
-                <CardHeader>
-                  <CardTitle>Statistiques de jeu</CardTitle>
-                  <CardDescription>Votre performance et vos accomplissements</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                    <Card className="rounded-xl bg-white/60 border border-white/40">
-                      <CardContent className="p-4 flex flex-col items-center">
-                        <Trophy className="h-10 w-10 text-dutch-orange mt-2 mb-2" />
-                        <p className="text-sm text-gray-500">Parties gagnées</p>
-                        <p className="text-3xl font-bold text-dutch-blue">12</p>
-                      </CardContent>
-                    </Card>
-                    
-                    <Card className="rounded-xl bg-white/60 border border-white/40">
-                      <CardContent className="p-4 flex flex-col items-center">
-                        <Users className="h-10 w-10 text-dutch-purple mt-2 mb-2" />
-                        <p className="text-sm text-gray-500">Parties jouées</p>
-                        <p className="text-3xl font-bold text-dutch-blue">24</p>
-                      </CardContent>
-                    </Card>
-                    
-                    <Card className="rounded-xl bg-white/60 border border-white/40">
-                      <CardContent className="p-4 flex flex-col items-center">
-                        <Badge className="h-10 w-10 text-dutch-blue mt-2 mb-2 flex items-center justify-center">
-                          <span className="text-lg font-bold">50%</span>
-                        </Badge>
-                        <p className="text-sm text-gray-500">Taux de victoire</p>
-                        <p className="text-3xl font-bold text-dutch-blue">50%</p>
-                      </CardContent>
-                    </Card>
-                  </div>
-                  
-                  <p className="text-center text-gray-500 text-sm">
-                    D'autres statistiques détaillées seront disponibles prochainement.
-                  </p>
-                </CardContent>
-              </Card>
-            </TabsContent>
-            
-            <TabsContent value="all">
-              <Card className="rounded-3xl bg-white/70 backdrop-blur-md border border-white/40 shadow-md hover:shadow-lg transition-all">
-                <CardHeader>
-                  <CardTitle>Historique complet</CardTitle>
-                  <CardDescription>Toutes vos parties enregistrées</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <ScrollArea className="h-[400px] pr-4">
-                    <GameHistory limit={20} />
-                  </ScrollArea>
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
-        </SignedIn>
-        
-        <SignedOut>
-          <Card className="rounded-3xl bg-white/70 backdrop-blur-md border border-white/40 shadow-md hover:shadow-lg transition-all">
-            <CardHeader>
-              <CardTitle>Historique des parties</CardTitle>
-              <CardDescription>Connectez-vous pour voir votre historique</CardDescription>
+        <h1 className="text-3xl font-bold bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">
+          Historique des parties
+        </h1>
+      </motion.div>
+      
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
+        >
+          <Card className="bg-white/80 backdrop-blur-md rounded-xl border border-white/50 shadow-sm">
+            <CardHeader className="pb-1 pt-4">
+              <CardTitle className="text-lg font-semibold text-dutch-blue flex items-center gap-2">
+                <Trophy className="h-5 w-5 text-dutch-orange" />
+                {stats.totalGames} parties
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-center py-8">
-                <User className="h-16 w-16 mx-auto text-dutch-blue/50 mb-4" />
-                <h3 className="text-lg font-semibold mb-2">Vous n'êtes pas connecté</h3>
-                <p className="text-gray-600 mb-6">
-                  Connectez-vous pour accéder à l'historique de vos parties et voir vos statistiques.
-                </p>
-                <Button variant="dutch-blue" className="w-full sm:w-auto" size="lg" asChild>
-                  <a href="/sign-in">Se connecter</a>
-                </Button>
-              </div>
+              <p className="text-sm text-gray-600">
+                {stats.mostFrequentWinner 
+                  ? `Champion: ${stats.mostFrequentWinner.name} (${stats.mostFrequentWinner.wins} victoires)`
+                  : "Aucun champion pour le moment"}
+              </p>
             </CardContent>
           </Card>
-        </SignedOut>
+        </motion.div>
+        
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.2 }}
+        >
+          <Card className="bg-white/80 backdrop-blur-md rounded-xl border border-white/50 shadow-sm">
+            <CardHeader className="pb-1 pt-4">
+              <CardTitle className="text-lg font-semibold text-dutch-blue flex items-center gap-2">
+                <Clock className="h-5 w-5 text-dutch-purple" />
+                {stats.totalRounds} manches
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-gray-600">
+                Moyenne: {stats.totalGames > 0 
+                  ? Math.round(stats.totalRounds / stats.totalGames) 
+                  : 0} manches par partie
+              </p>
+            </CardContent>
+          </Card>
+        </motion.div>
+        
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.3 }}
+        >
+          <Card className="bg-white/80 backdrop-blur-md rounded-xl border border-white/50 shadow-sm">
+            <CardHeader className="pb-1 pt-4">
+              <CardTitle className="text-lg font-semibold text-dutch-blue flex items-center gap-2">
+                <Users className="h-5 w-5 text-dutch-blue" />
+                {stats.totalPlayers} joueurs
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-gray-600">
+                {stats.totalGames > 0 
+                  ? `Moyenne: ${(games.reduce((sum, game) => sum + game.players.length, 0) / games.length).toFixed(1)} joueurs par partie`
+                  : "Aucune partie enregistrée"}
+              </p>
+            </CardContent>
+          </Card>
+        </motion.div>
+      </div>
+      
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5, delay: 0.4 }}
+      >
+        <Tabs defaultValue="all" className="w-full">
+          <TabsList className="w-full max-w-md mx-auto flex justify-center mb-6 bg-white/50 backdrop-blur-md border border-white/40 rounded-full p-1">
+            <TabsTrigger value="all" className="rounded-full flex-1">Toutes les parties</TabsTrigger>
+            <TabsTrigger value="multiplayer" className="rounded-full flex-1">Multijoueur</TabsTrigger>
+            <TabsTrigger value="local" className="rounded-full flex-1">Local</TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="all">
+            <GameHistory games={games} />
+          </TabsContent>
+          
+          <TabsContent value="multiplayer">
+            <GameHistory games={games.filter(game => game.isMultiplayer)} />
+          </TabsContent>
+          
+          <TabsContent value="local">
+            <GameHistory games={games.filter(game => !game.isMultiplayer)} />
+          </TabsContent>
+        </Tabs>
       </motion.div>
-    </PageLayout>
+    </div>
   );
 };
 
