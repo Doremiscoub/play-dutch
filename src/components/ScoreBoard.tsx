@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Player } from '@/types';
+import { Player, ScoreBoardProps } from '@/types';
 import NewRoundModal from './NewRoundModal';
 import {
   AlertDialog,
@@ -24,18 +24,6 @@ import ScoreTableView from './ScoreTableView';
 import PodiumView from './PodiumView';
 import AICommentator from './AICommentator';
 
-interface ScoreBoardProps {
-  players: Player[];
-  onAddRound: (scores: number[], dutchPlayerId?: string) => void;
-  onEndGame: () => void;
-  onUndoLastRound: () => void;
-  roundHistory: { scores: number[], dutchPlayerId?: string }[];
-  showGameEndConfirmation: boolean;
-  onConfirmEndGame: () => void;
-  onCancelEndGame: () => void;
-  isMultiplayer: boolean;
-}
-
 const ScoreBoard: React.FC<ScoreBoardProps> = ({ 
   players, 
   onAddRound, 
@@ -53,6 +41,10 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
   const [isEndingGame, setIsEndingGame] = useState(false);
   const newRoundModalRef = useRef<HTMLDialogElement>(null);
 
+  const handleClosePodium = () => {
+    console.log('Close podium requested');
+  };
+
   useEffect(() => {
     if (isNewRoundModalOpen && newRoundModalRef.current) {
       newRoundModalRef.current.showModal();
@@ -63,6 +55,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
 
   const onAddRoundHandler = () => {
     setIsNewRoundModalOpen(true);
+    setScores(Array(players.length).fill(0));
   };
 
   const handleCloseModal = () => {
@@ -99,7 +92,6 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
         
         {isMobile ? (
           <div className="flex flex-col gap-6">
-            {/* Mobile Layout */}
             <Tabs defaultValue="scores" className="w-full">
               <TabsList className="grid grid-cols-2 mb-4">
                 <TabsTrigger value="scores" className="flex items-center gap-2">
@@ -117,7 +109,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
               </TabsContent>
               
               <TabsContent value="podium" className="mt-0">
-                <PodiumView players={players} />
+                <PodiumView players={players} onClose={handleClosePodium} isMultiplayer={isMultiplayer} />
               </TabsContent>
             </Tabs>
             
@@ -194,7 +186,6 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
             </Button>
           </div>
         ) : (
-          /* Desktop Layout */
           <div className="grid grid-cols-12 gap-6">
             <div className="col-span-12">
               <Tabs defaultValue="scores" className="w-full">
@@ -226,7 +217,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                 <TabsContent value="podium" className="mt-0">
                   <div className="grid grid-cols-12 gap-6">
                     <div className="col-span-7">
-                      <PodiumView players={players} />
+                      <PodiumView players={players} onClose={handleClosePodium} isMultiplayer={isMultiplayer} />
                     </div>
                     <div className="col-span-5">
                       <Tabs defaultValue="overview" className="w-full">
@@ -285,9 +276,8 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
         )}
         
         <NewRoundModal
-          isOpen={isNewRoundModalOpen}
-          onClose={handleCloseModal}
           players={players}
+          onClose={handleCloseModal}
           onAddRound={handleAddRound}
           setScores={setScores}
           setDutchPlayerId={setDutchPlayerId}
@@ -305,16 +295,13 @@ interface FifaStyleStatsProps {
 }
 
 const FifaStyleStats: React.FC<FifaStyleStatsProps> = ({ players }) => {
-  // Sort players by total score (lowest to highest)
   const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
   
-  // Get best and worst players
   const bestPlayer = sortedPlayers[0];
   const worstPlayer = sortedPlayers[sortedPlayers.length - 1];
   
   if (!bestPlayer || !worstPlayer) return null;
   
-  // Calculate key stats for all players
   const allStats = players.map(player => {
     const avgScore = player.rounds.length 
       ? (player.rounds.reduce((sum, r) => sum + r.score, 0) / player.rounds.length)
@@ -341,14 +328,12 @@ const FifaStyleStats: React.FC<FifaStyleStatsProps> = ({ players }) => {
     };
   });
   
-  // Find player with best stats in each category
   const bestAvg = [...allStats].sort((a, b) => a.avgScore - b.avgScore)[0];
   const bestBestRound = [...allStats]
     .filter(s => s.bestRound !== null)
     .sort((a, b) => (a.bestRound || Infinity) - (b.bestRound || Infinity))[0];
   const mostDutch = [...allStats].sort((a, b) => b.dutchCount - a.dutchCount)[0];
   
-  // Calculate leader gap (points difference between first and second place)
   const leaderGap = sortedPlayers.length > 1 
     ? sortedPlayers[1].totalScore - sortedPlayers[0].totalScore 
     : 0;

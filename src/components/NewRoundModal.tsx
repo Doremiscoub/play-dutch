@@ -10,11 +10,24 @@ import { Label } from '@/components/ui/label';
 interface NewRoundModalProps {
   players: Player[];
   onClose: () => void;
-  onSave: (scores: number[], dutchPlayerId?: string) => void;
+  onAddRound: () => void;
+  setScores: React.Dispatch<React.SetStateAction<number[]>>;
+  setDutchPlayerId: React.Dispatch<React.SetStateAction<string | undefined>>;
+  scores: number[];
+  dutchPlayerId: string | undefined;
+  modalRef: React.RefObject<HTMLDialogElement>;
 }
 
-const NewRoundModal: React.FC<NewRoundModalProps> = ({ players, onClose, onSave }) => {
-  const [scores, setScores] = useState<number[]>(Array(players.length).fill(0));
+const NewRoundModal: React.FC<NewRoundModalProps> = ({ 
+  players, 
+  onClose, 
+  onAddRound,
+  setScores,
+  setDutchPlayerId,
+  scores,
+  dutchPlayerId,
+  modalRef
+}) => {
   const [dutchPlayer, setDutchPlayer] = useState<number | null>(null);
   const [dutchPenaltyApplied, setDutchPenaltyApplied] = useState(false);
   const [showDutchWarning, setShowDutchWarning] = useState(false);
@@ -87,6 +100,7 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({ players, onClose, onSave 
     if (dutchPlayer === index) {
       // Remove Dutch player status
       setDutchPlayer(null);
+      setDutchPlayerId(undefined);
       if (dutchPenaltyApplied) {
         const newScores = [...scores];
         newScores[index] -= 10;
@@ -103,6 +117,7 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({ players, onClose, onSave 
       }
       
       setDutchPlayer(index);
+      setDutchPlayerId(players[index].id);
       
       // Check if new Dutch player needs penalty
       const newScores = [...scores];
@@ -125,11 +140,6 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({ players, onClose, onSave 
         }
       }
     }
-  };
-  
-  const handleSave = () => {
-    const dutchPlayerId = dutchPlayer !== null ? players[dutchPlayer].id : undefined;
-    onSave(scores, dutchPlayerId);
   };
   
   return (
@@ -249,7 +259,7 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({ players, onClose, onSave 
           whileTap={{ scale: 0.98 }}
         >
           <Button 
-            onClick={handleSave}
+            onClick={onAddRound}
             variant="game-action"
             size="game-action"
             className="w-full relative overflow-hidden group"

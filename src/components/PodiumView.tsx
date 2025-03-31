@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence, useAnimation } from 'framer-motion';
 import { Player } from '@/types';
@@ -12,7 +11,7 @@ import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import html2canvas from 'html2canvas';
 
-interface PodiumViewProps {
+export interface PodiumViewProps {
   players: Player[];
   onClose: () => void;
   isMultiplayer?: boolean;
@@ -28,16 +27,10 @@ const PodiumView: React.FC<PodiumViewProps> = ({ players, onClose, isMultiplayer
   const [isGeneratingReel, setIsGeneratingReel] = useState(false);
   const animationControls = useAnimation();
   
-  // Sort players by score (ascending is better in Dutch)
   const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
-  
-  // Get top 3 players (or less if fewer players)
   const topPlayers = sortedPlayers.slice(0, Math.min(3, sortedPlayers.length));
-  
-  // Get remaining players
   const otherPlayers = sortedPlayers.slice(Math.min(3, sortedPlayers.length));
   
-  // Calculate player statistics for display
   const getPlayerStat = (player: Player) => {
     const stats = player.stats || {
       bestRound: null,
@@ -46,7 +39,6 @@ const PodiumView: React.FC<PodiumViewProps> = ({ players, onClose, isMultiplayer
       worstRound: null
     };
     
-    // Calculate the most common statistic
     const bestStat = stats.bestRound !== null
       ? `Meilleur manche: ${stats.bestRound}`
       : stats.dutchCount > 0
@@ -56,7 +48,6 @@ const PodiumView: React.FC<PodiumViewProps> = ({ players, onClose, isMultiplayer
     return bestStat;
   };
   
-  // Determine podium heights
   const getPodiumHeight = (position: number) => {
     if (position === 0) return 'h-36';
     if (position === 1) return 'h-28';
@@ -65,7 +56,6 @@ const PodiumView: React.FC<PodiumViewProps> = ({ players, onClose, isMultiplayer
 
   const handleCopyInviteLink = async () => {
     try {
-      // In a real app, this would be a dynamic link to the game results
       const gameLink = window.location.href;
       await navigator.clipboard.writeText(gameLink);
       toast.success("Lien copié!", {
@@ -89,7 +79,6 @@ const PodiumView: React.FC<PodiumViewProps> = ({ players, onClose, isMultiplayer
     } else if (platform === 'facebook') {
       shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(text)}`;
     } else if (platform === 'instagram') {
-      // For Instagram, we'll need to download the image first and then suggest manual sharing
       captureAndDownloadResults();
       toast.info("Instagram ne permet pas le partage direct via le web", {
         description: "Téléchargez l'image et partagez-la manuellement sur Instagram"
@@ -130,21 +119,15 @@ const PodiumView: React.FC<PodiumViewProps> = ({ players, onClose, isMultiplayer
     }
   };
 
-  // New function to generate a social media reel
   const generateSocialReel = async () => {
     setIsGeneratingReel(true);
     
     try {
-      // In a real implementation, this would create a video from animation frames
-      // For now, we'll just create a fancy image with more visual effects
-      
-      // Start animation sequence
       await animationControls.start({
         scale: [1, 1.05, 1],
         transition: { duration: 1.5 }
       });
       
-      // Capture the animated result
       setTimeout(async () => {
         const reelElement = reelPreviewRef.current;
         if (!reelElement) return;
@@ -200,43 +183,35 @@ const PodiumView: React.FC<PodiumViewProps> = ({ players, onClose, isMultiplayer
           </p>
         </div>
         
-        {/* Podium section */}
         <div className="flex items-end justify-center gap-4 mb-10 h-48">
           {topPlayers.map((player, index) => {
-            // Determine which position (0 = winner, so needs to be in center)
             let podiumPosition = index;
             if (topPlayers.length === 3) {
-              // For 3 players: Shift positions to make winner in center
-              if (index === 0) podiumPosition = 1; // Winner in center
-              else if (index === 1) podiumPosition = 0; // 2nd place on left
-              else podiumPosition = 2; // 3rd place on right
+              if (index === 0) podiumPosition = 1;
+              else if (index === 1) podiumPosition = 0;
+              else podiumPosition = 2;
             } else if (topPlayers.length === 2) {
-              // For 2 players: Have winner on left and 2nd on right
               podiumPosition = index;
             }
             
-            // Position-specific styling
             const positionClasses = [
-              "order-1", // 2nd place (left)
-              "order-2", // 1st place (middle)
-              "order-3", // 3rd place (right)
+              "order-1",
+              "order-2",
+              "order-3"
             ];
             
-            // Position-specific icons
             const positionIcons = [
               <Medal key="silver" className="h-7 w-7 text-gray-400" aria-hidden="true" />,
               <Trophy key="gold" className="h-8 w-8 text-dutch-yellow" aria-hidden="true" />,
               <Award key="bronze" className="h-7 w-7 text-dutch-orange" aria-hidden="true" />
             ];
             
-            // Color classes for each position
             const colorClasses = [
-              "from-gray-100 to-gray-300 border-gray-400", // 2nd
-              "from-yellow-50 to-yellow-200 border-dutch-yellow", // 1st
-              "from-orange-50 to-orange-200 border-dutch-orange", // 3rd
+              "from-gray-100 to-gray-300 border-gray-400",
+              "from-yellow-50 to-yellow-200 border-dutch-yellow",
+              "from-orange-50 to-orange-200 border-dutch-orange"
             ];
             
-            // Animation delays
             const animDelays = [0.3, 0.1, 0.5];
             
             return (
@@ -292,7 +267,6 @@ const PodiumView: React.FC<PodiumViewProps> = ({ players, onClose, isMultiplayer
           })}
         </div>
         
-        {/* Other players */}
         {otherPlayers.length > 0 && (
           <div className="mt-10">
             <h3 className="text-sm font-medium text-gray-500 mb-3">Autres joueurs</h3>
@@ -319,7 +293,6 @@ const PodiumView: React.FC<PodiumViewProps> = ({ players, onClose, isMultiplayer
           </div>
         )}
         
-        {/* Share banner */}
         <motion.div 
           className="mt-8 rounded-xl bg-gradient-to-r from-dutch-blue/20 to-dutch-purple/20 p-4 border border-white/50 text-center"
           initial={{ opacity: 0, y: 10 }}
@@ -414,7 +387,6 @@ const PodiumView: React.FC<PodiumViewProps> = ({ players, onClose, isMultiplayer
                           Créez un reel à partager sur Instagram ou TikTok !
                         </p>
                         
-                        {/* Reel preview area */}
                         <div 
                           ref={reelPreviewRef}
                           className="aspect-[9/16] max-h-[400px] overflow-hidden rounded-xl bg-gradient-to-r from-dutch-purple/10 via-dutch-blue/10 to-dutch-pink/10 flex flex-col items-center justify-center p-6 relative mb-4"
@@ -557,7 +529,6 @@ const PodiumView: React.FC<PodiumViewProps> = ({ players, onClose, isMultiplayer
         </motion.div>
       </motion.div>
       
-      {/* Action buttons */}
       <div className="flex gap-3 mt-6 w-full max-w-xl">
         <motion.button
           className="flex-1 rounded-full px-4 py-3 bg-dutch-purple/10 hover:bg-dutch-purple/20 text-dutch-purple border border-dutch-purple/20"

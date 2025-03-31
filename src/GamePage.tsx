@@ -16,6 +16,7 @@ const GamePage: React.FC = () => {
     return savedGames ? JSON.parse(savedGames) : [];
   });
   const [roundHistory, setRoundHistory] = useState<{ scores: number[], dutchPlayerId?: string }[]>([]);
+  const [showGameEndConfirmation, setShowGameEndConfirmation] = useState<boolean>(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -235,9 +236,18 @@ const GamePage: React.FC = () => {
   };
 
   const handleEndGame = () => {
+    setShowGameEndConfirmation(true);
+  };
+
+  const handleConfirmEndGame = () => {
+    setShowGameEndConfirmation(false);
     setGameState('setup');
     setPlayers([]);
     setRoundHistory([]);
+  };
+
+  const handleCancelEndGame = () => {
+    setShowGameEndConfirmation(false);
   };
 
   return (
@@ -265,6 +275,10 @@ const GamePage: React.FC = () => {
               onEndGame={handleEndGame}
               onUndoLastRound={handleUndoLastRound}
               roundHistory={roundHistory}
+              showGameEndConfirmation={showGameEndConfirmation}
+              onConfirmEndGame={handleConfirmEndGame}
+              onCancelEndGame={handleCancelEndGame}
+              isMultiplayer={false}
             />
           </motion.div>
         )}
