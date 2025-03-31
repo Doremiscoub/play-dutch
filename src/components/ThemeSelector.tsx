@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const ThemeSelector = () => {
-  const { theme, setTheme } = useTheme();
+  const { currentTheme, setTheme } = useTheme();
 
   return (
     <DropdownMenu>
@@ -20,9 +20,9 @@ const ThemeSelector = () => {
           size="icon"
           className="rounded-full bg-white/80 hover:bg-white/90 backdrop-blur-sm border border-white/30 shadow-sm"
         >
-          {theme === "light" ? (
+          {currentTheme === "light" ? (
             <Sun className="h-5 w-5 text-dutch-orange" />
-          ) : theme === "dark" ? (
+          ) : currentTheme === "dark" ? (
             <Moon className="h-5 w-5 text-dutch-blue" />
           ) : (
             <Laptop className="h-5 w-5 text-dutch-purple" />
