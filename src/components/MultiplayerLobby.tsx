@@ -1,44 +1,27 @@
 
 import React, { useState, useEffect } from 'react';
-import { useUser } from '@clerk/clerk-react';
 import { 
   Card, 
   CardContent, 
-  CardHeader, 
-  CardTitle, 
-  CardDescription, 
-  CardFooter 
+  CardFooter,
+  CardHeader,
+  CardTitle,
+  CardDescription
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { 
-  Users, 
-  User, 
-  MessageCircle, 
-  ChevronRight, 
-  Copy, 
-  QrCode, 
-  Link as LinkIcon, 
-  Share2, 
-  Settings
-} from "lucide-react";
-import { motion } from "framer-motion";
+import { Badge } from "@/components/ui/badge";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { motion, AnimatePresence } from "framer-motion";
+import { Share2, Copy, Clock, Users, Play, ArrowLeft, QrCode } from "lucide-react";
 import { toast } from "sonner";
-import {
-  getGameSession,
-  getGamePlayers,
-  updatePlayerActivity,
-  updateGameSettings,
-  generateGameLink,
-  generateQRCodeData,
-  shareGameInvitation,
-  sendGameMessage
+import { 
+  getGameSession, 
+  getGamePlayers, 
+  shareGameInvitation, 
+  generateGameLink
 } from '@/utils/gameInvitation';
+import MultiplayerStats from './MultiplayerStats';
 
 interface MultiplayerLobbyProps {
   gameId: string;
@@ -47,307 +30,249 @@ interface MultiplayerLobbyProps {
 }
 
 const MultiplayerLobby: React.FC<MultiplayerLobbyProps> = ({ 
-  gameId, 
-  onStartGame, 
-  onLeaveGame 
+  gameId,
+  onStartGame,
+  onLeaveGame
 }) => {
-  const { user } = useUser();
-  const [gameSession, setGameSession] = useState<any>(null);
-  const [players, setPlayers] = useState<any[]>([]);
-  const [isHost, setIsHost] = useState(false);
-  const [message, setMessage] = useState('');
-  const [activeTab, setActiveTab] = useState('players');
-  const [targetScore, setTargetScore] = useState(100);
+  const [players, setPlayers] = useState<{id: string; name: string; online: boolean}[]>([]);
+  const [gameLink, setGameLink] = useState<string>("");
+  const [countdown, setCountdown] = useState<number | null>(null);
+  const [isHost, setIsHost] = useState<boolean>(false);
+  const [refreshingPlayers, setRefreshingPlayers] = useState<boolean>(false);
   
-  // Fetch game session and update player activity
+  // Initial data fetch
   useEffect(() => {
-    const fetchGameData = () => {
-      if (!gameId || !user) return;
-      
-      // Mark player as active
-      updatePlayerActivity(gameId, user.id);
-      
-      // Get updated game data
-      const session = getGameSession(gameId);
-      if (session) {
-        setGameSession(session);
-        setPlayers(session.players);
-        setIsHost(session.hostId === user.id);
-        
-        // Update target score from settings
-        if (session.settings?.targetScore) {
-          setTargetScore(session.settings.targetScore);
-        }
-      }
-    };
+    if (!gameId) return;
     
-    // Initial fetch
-    fetchGameData();
-    
-    // Set up polling for real-time updates
-    const intervalId = setInterval(fetchGameData, 3000);
-    
-    return () => clearInterval(intervalId);
-  }, [gameId, user]);
-  
-  const handleSendMessage = () => {
-    if (!message.trim() || !user) return;
-    
-    sendGameMessage(gameId, user.id, message);
-    setMessage('');
-  };
-  
-  const handleCopyGameCode = () => {
-    navigator.clipboard.writeText(gameId);
-    toast.success("Code copié dans le presse-papier");
-  };
-  
-  const handleCopyGameLink = () => {
     const link = generateGameLink(gameId);
-    navigator.clipboard.writeText(link);
-    toast.success("Lien copié dans le presse-papier");
+    setGameLink(link);
+    
+    const gameSession = getGameSession(gameId);
+    if (gameSession) {
+      setIsHost(gameSession.hostId === gameSession.currentUserId);
+    }
+    
+    refreshPlayerList();
+    
+    // Poll for player updates
+    const interval = setInterval(refreshPlayerList, 5000);
+    return () => clearInterval(interval);
+  }, [gameId]);
+  
+  const refreshPlayerList = () => {
+    if (!gameId) return;
+    
+    setRefreshingPlayers(true);
+    const currentPlayers = getGamePlayers(gameId);
+    setPlayers(currentPlayers);
+    setTimeout(() => setRefreshingPlayers(false), 500);
+  };
+  
+  const handleCopyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(gameLink);
+      toast.success("Lien copié!", {
+        description: "Le lien a été copié dans le presse-papier",
+        duration: 2000,
+      });
+    } catch (error) {
+      toast.error("Impossible de copier le lien", {
+        description: "Veuillez copier le lien manuellement",
+        duration: 3000,
+      });
+    }
   };
   
   const handleShareInvitation = async () => {
-    if (!user) return;
+    const gameSession = getGameSession(gameId);
+    const hostName = gameSession?.hostName || "quelqu'un";
     
-    const userName = user.fullName || user.username || 'Joueur';
-    await shareGameInvitation(gameId, userName);
+    const success = await shareGameInvitation(gameId, hostName);
+    if (!success) {
+      handleCopyLink();
+    }
   };
   
-  const handleUpdateSettings = () => {
-    if (!isHost) return;
+  const startGameWithCountdown = () => {
+    setCountdown(3);
     
-    updateGameSettings(gameId, {
-      targetScore
-    });
-    
-    toast.success("Paramètres mis à jour");
+    const countdownInterval = setInterval(() => {
+      setCountdown(prev => {
+        if (prev === null || prev <= 1) {
+          clearInterval(countdownInterval);
+          onStartGame();
+          return null;
+        }
+        return prev - 1;
+      });
+    }, 1000);
   };
   
-  const handleTargetScoreChange = (value: string) => {
-    setTargetScore(parseInt(value) || 100);
-  };
-  
-  if (!gameSession) {
-    return (
-      <div className="p-8 text-center">
-        <p>Chargement de la partie...</p>
-      </div>
-    );
-  }
-
   return (
-    <Card className="border border-white/50 bg-gradient-to-br from-white/80 to-white/60 backdrop-blur-md shadow-md rounded-3xl max-w-xl mx-auto">
-      <CardHeader>
-        <div className="flex justify-between items-center">
-          <div>
-            <CardTitle className="text-2xl font-bold bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">
+    <div className="space-y-6">
+      <Card className="border border-white/50 bg-gradient-to-br from-white/90 to-white/70 backdrop-blur-md rounded-3xl shadow-md">
+        <CardHeader className="pb-2">
+          <div className="flex justify-between items-center">
+            <CardTitle className="text-xl font-semibold text-dutch-blue flex items-center gap-2">
+              <Users className="w-5 h-5" />
               Salle d'attente
             </CardTitle>
-            <CardDescription className="text-gray-600">
-              {players.length} joueur{players.length > 1 ? 's' : ''} dans la partie
-            </CardDescription>
-          </div>
-          <div className="flex items-center space-x-2">
-            <Badge variant="outline" className="border-dutch-blue/30 text-dutch-blue flex items-center gap-1 py-2">
-              <span className="font-mono tracking-wider">{gameId}</span>
-              <Button 
-                size="icon-sm" 
-                variant="ghost" 
-                onClick={handleCopyGameCode}
-                className="ml-1 h-5 w-5 rounded-full"
-              >
-                <Copy className="h-3 w-3" />
-              </Button>
+            <Badge variant="outline" className="bg-white/50 text-dutch-blue">
+              Code: {gameId}
             </Badge>
           </div>
-        </div>
-      </CardHeader>
-      
-      <CardContent className="pb-2">
-        <Tabs defaultValue="players" value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid grid-cols-3 mb-6 rounded-xl border border-white/40 bg-white/70 backdrop-blur-md p-1">
-            <TabsTrigger 
-              value="players" 
-              className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm flex items-center justify-center gap-1 py-2 text-dutch-blue"
-            >
-              <Users className="w-4 h-4 mr-1" />
-              Joueurs
-            </TabsTrigger>
-            <TabsTrigger 
-              value="chat" 
-              className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm flex items-center justify-center gap-1 py-2 text-dutch-purple"
-            >
-              <MessageCircle className="w-4 h-4 mr-1" />
-              Chat
-            </TabsTrigger>
-            <TabsTrigger 
-              value="settings" 
-              className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm flex items-center justify-center gap-1 py-2 text-dutch-orange"
-              disabled={!isHost}
-            >
-              <Settings className="w-4 h-4 mr-1" />
-              Options
-            </TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="players" className="space-y-4">
-            <div className="grid grid-cols-2 gap-3">
-              {players.map((player) => (
-                <motion.div 
-                  key={player.id}
-                  initial={{ opacity: 0, y: 5 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.2 }}
-                  className={`flex items-center p-3 rounded-xl ${player.online 
-                    ? 'bg-white/70 shadow-sm border border-white/50' 
-                    : 'bg-white/30 border border-white/20'}`}
-                >
-                  <Avatar className="h-10 w-10 mr-3">
-                    <AvatarImage src={player.avatar} />
-                    <AvatarFallback className="bg-dutch-blue/10 text-dutch-blue">
-                      {player.name.substring(0, 2).toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <p className="font-medium text-gray-800 flex items-center">
-                      {player.name}
-                      {player.id === gameSession.hostId && (
-                        <Badge className="ml-2 bg-dutch-blue/10 text-dutch-blue border-none text-xs py-0">Hôte</Badge>
-                      )}
-                      {player.id === user?.id && (
-                        <Badge className="ml-2 bg-dutch-purple/10 text-dutch-purple border-none text-xs py-0">Vous</Badge>
-                      )}
-                    </p>
-                    <p className={`text-xs ${player.online ? 'text-green-600' : 'text-gray-400'}`}>
-                      {player.online ? 'En ligne' : 'Hors ligne'}
-                    </p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-            
-            <div className="flex justify-center mt-6">
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button variant="outline" className="border-dutch-blue/30 text-dutch-blue">
-                    <Share2 className="w-4 h-4 mr-2" />
-                    Inviter des amis
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="bg-white/95 backdrop-blur-lg border border-white/50 shadow-xl rounded-3xl sm:max-w-md">
-                  <DialogHeader>
-                    <DialogTitle className="text-2xl font-bold text-center bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">
-                      Inviter des amis
-                    </DialogTitle>
-                  </DialogHeader>
-                  
-                  <div className="space-y-6 py-4">
-                    <div className="flex flex-col items-center justify-center">
-                      <div className="flex items-center justify-center w-32 h-32 rounded-3xl bg-gradient-to-br from-dutch-blue/10 to-dutch-purple/10 shadow-inner mb-4 relative overflow-hidden">
-                        <span className="text-3xl font-bold tracking-wider text-center text-dutch-blue">
-                          {gameId}
-                        </span>
-                      </div>
-                      <p className="text-sm text-gray-600 text-center mb-4">
-                        Partagez ce code avec vos amis
-                      </p>
-                    </div>
-                    
-                    <div className="flex flex-col space-y-3">
-                      <div className="flex items-center justify-between p-3 bg-white/70 rounded-xl border border-white/50 shadow-sm">
-                        <div className="flex items-center">
-                          <LinkIcon className="w-4 h-4 text-dutch-blue mr-2" />
-                          <span className="text-sm text-gray-600 truncate max-w-[200px]">
-                            {generateGameLink(gameId)}
-                          </span>
-                        </div>
-                        <Button size="icon-sm" variant="ghost" onClick={handleCopyGameLink}>
-                          <Copy className="h-4 w-4" />
-                        </Button>
-                      </div>
-                      
-                      <Button 
-                        variant="outline" 
-                        onClick={handleShareInvitation}
-                        className="w-full border border-dutch-blue/20 text-dutch-blue hover:bg-dutch-blue/10"
-                      >
-                        <Share2 className="w-4 h-4 mr-2" />
-                        Partager l'invitation
-                      </Button>
-                    </div>
-                  </div>
-                </DialogContent>
-              </Dialog>
-            </div>
-          </TabsContent>
-          
-          <TabsContent value="chat">
-            <div className="h-60 overflow-y-auto bg-white/50 rounded-xl border border-white/30 p-3 mb-3">
-              <div className="flex flex-col space-y-2">
-                <div className="bg-dutch-blue/10 text-dutch-blue p-2 rounded-lg text-sm self-center">
-                  Bienvenue dans le chat de la partie !
-                </div>
-                {/* Chat messages would appear here in a real implementation */}
-              </div>
-            </div>
-            
-            <div className="flex gap-2">
-              <Input
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                placeholder="Tapez votre message..."
-                className="bg-white/50 border border-white/30"
-              />
-              <Button onClick={handleSendMessage}>
-                Envoyer
-              </Button>
-            </div>
-          </TabsContent>
-          
-          <TabsContent value="settings">
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <h3 className="text-sm font-medium text-gray-700">Score cible pour gagner</h3>
-                <ToggleGroup type="single" value={targetScore.toString()} onValueChange={handleTargetScoreChange}>
-                  <ToggleGroupItem value="50">50</ToggleGroupItem>
-                  <ToggleGroupItem value="100">100</ToggleGroupItem>
-                  <ToggleGroupItem value="200">200</ToggleGroupItem>
-                </ToggleGroup>
-              </div>
-              
-              <Button 
-                onClick={handleUpdateSettings} 
-                className="w-full bg-dutch-orange text-white hover:bg-dutch-orange/90"
-              >
-                Sauvegarder les options
-              </Button>
-            </div>
-          </TabsContent>
-        </Tabs>
-      </CardContent>
-      
-      <CardFooter className="flex justify-between pt-4 pb-4">
-        <Button 
-          variant="outline" 
-          onClick={onLeaveGame}
-          className="border-red-300 text-red-500 hover:bg-red-50"
-        >
-          Quitter la partie
-        </Button>
+          <CardDescription className="text-gray-600">
+            Partagez le code ou le lien avec vos amis pour qu'ils puissent vous rejoindre
+          </CardDescription>
+        </CardHeader>
         
-        {isHost && (
+        <CardContent className="space-y-4">
+          <div className="flex flex-wrap items-center gap-2 justify-center">
+            <Button 
+              variant="outline" 
+              className="bg-white/50 text-dutch-blue border-dutch-blue/20 hover:bg-white/80"
+              onClick={handleCopyLink}
+            >
+              <Copy className="w-4 h-4 mr-2" />
+              Copier le lien
+            </Button>
+            
+            <Button 
+              variant="outline"
+              className="bg-white/50 text-dutch-purple border-dutch-purple/20 hover:bg-white/80"
+              onClick={handleShareInvitation}
+            >
+              <Share2 className="w-4 h-4 mr-2" />
+              Partager
+            </Button>
+            
+            <Button 
+              variant="outline"
+              className="bg-white/50 text-dutch-orange border-dutch-orange/20 hover:bg-white/80"
+              onClick={refreshPlayerList}
+              disabled={refreshingPlayers}
+            >
+              <motion.div
+                animate={{ rotate: refreshingPlayers ? 360 : 0 }}
+                transition={{ duration: 1, repeat: refreshingPlayers ? Infinity : 0 }}
+              >
+                <Users className="w-4 h-4 mr-2" />
+              </motion.div>
+              Actualiser
+            </Button>
+          </div>
+          
+          <div className="bg-white/60 backdrop-blur-sm rounded-2xl border border-white/30 p-4">
+            <h3 className="text-sm font-medium text-gray-700 mb-3 flex items-center justify-between">
+              <span>Joueurs ({players.length})</span>
+              {isHost && (
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Badge variant="outline" className="bg-dutch-blue/10 text-dutch-blue text-xs">
+                        Hôte
+                      </Badge>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Vous êtes l'hôte de cette partie</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              )}
+            </h3>
+            
+            <div className="space-y-2 max-h-52 overflow-y-auto pr-2">
+              <AnimatePresence>
+                {players.map((player, index) => (
+                  <motion.div
+                    key={player.id}
+                    initial={{ opacity: 0, y: 5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -5 }}
+                    transition={{ duration: 0.2, delay: index * 0.05 }}
+                    className="flex items-center justify-between bg-white/70 rounded-xl p-3 border border-white/50 shadow-sm"
+                  >
+                    <div className="flex items-center">
+                      <Avatar className="h-8 w-8 mr-3">
+                        <AvatarFallback className="bg-dutch-blue/10 text-dutch-blue">
+                          {player.name.substring(0, 2).toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <p className="font-medium text-gray-800 flex items-center">
+                          {player.name}
+                          {player.id === getGameSession(gameId)?.hostId && (
+                            <Badge className="ml-2 bg-dutch-blue/10 text-dutch-blue border-none text-xs py-0">
+                              Hôte
+                            </Badge>
+                          )}
+                        </p>
+                      </div>
+                    </div>
+                    <div>
+                      {player.online ? (
+                        <Badge className="bg-dutch-green/10 text-dutch-green border-none">
+                          En ligne
+                        </Badge>
+                      ) : (
+                        <Badge className="bg-gray-100 text-gray-500 border-none">
+                          Hors ligne
+                        </Badge>
+                      )}
+                    </div>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+              
+              {players.length === 0 && (
+                <div className="text-center py-4 text-gray-500">
+                  Aucun joueur connecté pour le moment
+                </div>
+              )}
+            </div>
+          </div>
+          
+          {players.length > 1 && <MultiplayerStats gameId={gameId} />}
+        </CardContent>
+        
+        <CardFooter className="flex justify-between gap-2 pt-0">
           <Button 
-            onClick={onStartGame}
-            className="bg-gradient-to-r from-dutch-blue to-dutch-purple text-white hover:opacity-90"
+            variant="outline"
+            className="bg-white/50 text-gray-600 border-gray-300/50 hover:bg-white/80"
+            onClick={onLeaveGame}
           >
-            Démarrer la partie
-            <ChevronRight className="ml-1 h-4 w-4" />
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Retour
           </Button>
+          
+          <Button 
+            className="bg-gradient-to-r from-dutch-blue to-dutch-purple text-white hover:opacity-90 px-8"
+            onClick={startGameWithCountdown}
+            disabled={!!countdown || players.length < 1}
+          >
+            {countdown ? (
+              <div className="flex items-center">
+                <Clock className="w-4 h-4 mr-2 animate-pulse" />
+                Démarrage dans {countdown}...
+              </div>
+            ) : (
+              <>
+                <Play className="w-4 h-4 mr-2" />
+                Démarrer la partie
+              </>
+            )}
+          </Button>
+        </CardFooter>
+      </Card>
+      
+      <div className="text-center text-sm text-gray-500">
+        {players.length < 2 ? (
+          <div className="animate-pulse">En attente d'autres joueurs...</div>
+        ) : (
+          <div>Prêt à jouer ! Cliquez sur "Démarrer la partie" quand tout le monde est là.</div>
         )}
-      </CardFooter>
-    </Card>
+      </div>
+    </div>
   );
 };
 

@@ -182,29 +182,30 @@ const GameInvitation: React.FC<GameInvitationProps> = ({
 
   return (
     <>
-      <div className="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0">
+      <div className="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0 md:h-[400px]">
         <motion.div 
           className="flex-1"
           whileHover={{ scale: 1.02 }}
           transition={{ duration: 0.2 }}
         >
-          <Card className="h-full border border-white/50 bg-gradient-to-br from-white/80 to-white/60 backdrop-blur-md shadow-md hover:shadow-lg transition-all duration-300">
-            <CardHeader>
+          <Card className="h-full border border-white/50 bg-gradient-to-br from-white/90 to-white/70 backdrop-blur-md shadow-md hover:shadow-lg transition-all duration-300">
+            <CardHeader className="md:pb-2">
               <CardTitle className="text-xl font-semibold text-dutch-blue flex items-center gap-2">
+                <Users className="w-5 h-5" />
                 Créer une partie
               </CardTitle>
               <CardDescription className="text-gray-600">
                 Créez une nouvelle partie et invitez vos amis à vous rejoindre
               </CardDescription>
             </CardHeader>
-            <CardContent className="flex-grow space-y-4">
+            <CardContent className="flex-grow flex flex-col justify-center space-y-6">
               <div className="flex items-center justify-center h-16">
-                <div className="w-12 h-12 rounded-full bg-dutch-blue/10 flex items-center justify-center">
-                  <Users className="w-6 h-6 text-dutch-blue" />
+                <div className="w-16 h-16 rounded-full bg-dutch-blue/10 flex items-center justify-center">
+                  <Users className="w-8 h-8 text-dutch-blue" />
                 </div>
               </div>
               
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center justify-center space-x-2">
                 <Switch
                   id="public-game"
                   checked={isPublic}
@@ -241,19 +242,20 @@ const GameInvitation: React.FC<GameInvitationProps> = ({
               whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.2 }}
             >
-              <Card className="h-full cursor-pointer border border-white/50 bg-gradient-to-br from-white/80 to-white/60 backdrop-blur-md shadow-md hover:shadow-lg transition-all duration-300">
-                <CardHeader>
+              <Card className="h-full cursor-pointer border border-white/50 bg-gradient-to-br from-white/90 to-white/70 backdrop-blur-md shadow-md hover:shadow-lg transition-all duration-300">
+                <CardHeader className="md:pb-2">
                   <CardTitle className="text-xl font-semibold text-dutch-purple flex items-center gap-2">
+                    <LinkIcon className="w-5 h-5" />
                     Rejoindre une partie
                   </CardTitle>
                   <CardDescription className="text-gray-600">
                     Rejoignez une partie existante avec un code d'invitation
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="flex-grow">
+                <CardContent className="flex-grow flex flex-col justify-center">
                   <div className="flex items-center justify-center h-16">
-                    <div className="w-12 h-12 rounded-full bg-dutch-purple/10 flex items-center justify-center">
-                      <LinkIcon className="w-6 h-6 text-dutch-purple" />
+                    <div className="w-16 h-16 rounded-full bg-dutch-purple/10 flex items-center justify-center">
+                      <LinkIcon className="w-8 h-8 text-dutch-purple" />
                     </div>
                   </div>
                 </CardContent>
