@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Player, Game, PlayerStatistics } from '@/types';
@@ -71,10 +72,13 @@ const GamePage: React.FC = () => {
     return {
       bestRound: nonZeroScores.length > 0 ? Math.min(...nonZeroScores) : null,
       dutchCount,
-      averageScore: avg,
+      // Rounded to 1 decimal place
+      averageScore: Math.round(avg * 10) / 10,
       worstRound: scores.length > 0 ? Math.max(...scores) : null,
-      improvementRate,
-      consistencyScore,
+      // Rounded to 1 decimal place
+      improvementRate: Math.round(improvementRate * 10) / 10,
+      // Rounded to 1 decimal place
+      consistencyScore: Math.round(consistencyScore * 10) / 10,
       winStreak
     };
   }, [players]);

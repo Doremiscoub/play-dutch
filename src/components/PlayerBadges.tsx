@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Trophy, Star, Target, Zap, Award, Heart, Crown, Medal } from 'lucide-react';
+import { Trophy, Star, Target, Zap, Award, Medal, Crown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Player } from '@/types';
 

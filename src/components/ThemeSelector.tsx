@@ -4,45 +4,16 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Button } from '@/components/ui/button';
 import { Paintbrush, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useTheme } from '@/hooks/use-theme';
+import { useTheme, ThemeId, themeConfig } from '@/hooks/use-theme';
 
-const themes = [
-  {
-    name: 'Bleu Classique',
-    primary: '#1EAEDB',
-    secondary: '#F97316',
-    accent: '#8B5CF6',
-    id: 'blue' as const
-  },
-  {
-    name: 'Vert Émeraude',
-    primary: '#10B981',
-    secondary: '#FBBF24',
-    accent: '#3B82F6',
-    id: 'green' as const
-  },
-  {
-    name: 'Rose Vif',
-    primary: '#D946EF',
-    secondary: '#F97316',
-    accent: '#6366F1',
-    id: 'pink' as const
-  },
-  {
-    name: 'Rouge Passion',
-    primary: '#EF4444',
-    secondary: '#F59E0B',
-    accent: '#8B5CF6',
-    id: 'red' as const
-  },
-  {
-    name: 'Violet Royal',
-    primary: '#8B5CF6',
-    secondary: '#10B981',
-    accent: '#F97316',
-    id: 'purple' as const
-  }
-];
+// Convert theme config to array for rendering
+const themes = Object.entries(themeConfig).map(([id, theme]) => ({
+  id: id as ThemeId,
+  name: theme.name,
+  primary: theme.primary,
+  secondary: theme.secondary,
+  accent: theme.accent
+}));
 
 const ThemeSelector = () => {
   const { currentTheme, setTheme } = useTheme();
@@ -56,7 +27,13 @@ const ThemeSelector = () => {
           rounded="full"
           className="shadow-md hover:shadow-lg"
         >
-          <Paintbrush className="h-5 w-5" />
+          <div className="relative">
+            <Paintbrush className="h-5 w-5" />
+            <div 
+              className="absolute -top-1 -right-1 w-2 h-2 rounded-full"
+              style={{ backgroundColor: themeConfig[currentTheme].primary }}
+            ></div>
+          </div>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md rounded-3xl bg-white/90 backdrop-blur-md border border-white/40 shadow-xl">

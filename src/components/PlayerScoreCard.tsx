@@ -2,9 +2,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Player } from '@/types';
-import { Trophy, Star, TrendingUp, TrendingDown, Award } from 'lucide-react';
+import { Trophy, TrendingUp, TrendingDown } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import { cn } from '@/lib/utils';
+import PlayerBadges from './PlayerBadges';
+import { useTheme } from '@/hooks/use-theme';
 
 interface PlayerScoreCardProps {
   player: Player;
@@ -23,6 +25,8 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
   lastRoundScore,
   onRoundClick
 }) => {
+  const { currentTheme } = useTheme();
+  
   // Calculate progress percentage (max score is 100)
   const progressPercentage = Math.min(player.totalScore, 100);
   
@@ -55,7 +59,8 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
     <motion.div 
       className={cn(
         "rounded-3xl p-5 shadow-sm transition-all hover:shadow-md",
-        cardClasses
+        cardClasses,
+        `data-theme-${currentTheme}`
       )}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -77,15 +82,10 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
                 </div>
               </div>
             )}
-            {stats && hasImprovement && (
-              <div className="ml-1">
-                <Award className="h-3 w-3 text-dutch-blue" aria-hidden="true" />
-              </div>
-            )}
           </div>
           
           <div className="flex items-center gap-2 mt-1">
-            <Progress value={progressPercentage} className="h-2 bg-gray-100/50" />
+            <Progress value={progressPercentage} className="h-2.5 bg-gray-100/50" />
             <div className="flex items-center">
               <span className="text-lg font-bold">{player.totalScore}</span>
               {lastRoundScore !== undefined && (
@@ -101,11 +101,29 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
               )}
             </div>
           </div>
+          
+          {/* Player badges below score */}
+          <PlayerBadges player={player} className="mt-1.5" />
+          
+          {/* Player stats (only show if available) */}
+          {stats && (
+            <div className="mt-1 text-xs text-gray-600 flex flex-wrap gap-x-3">
+              {stats.averageScore > 0 && (
+                <span title="Score moyen">Moy: {stats.averageScore.toFixed(1)}</span>
+              )}
+              {stats.bestRound && (
+                <span title="Meilleur score">Min: {stats.bestRound}</span>
+              )}
+              {hasImprovement && (
+                <span className="text-green-600" title="Amélioration">↑ {Math.abs(stats.improvementRate).toFixed(1)}</span>
+              )}
+            </div>
+          )}
         </div>
       </div>
       
       {showRounds && player.rounds.length > 0 && (
-        <div className="mt-2 flex gap-2 overflow-x-auto py-1 scrollbar-none">
+        <div className="mt-3 flex gap-2 overflow-x-auto py-1 scrollbar-none">
           {player.rounds.map((round, index) => {
             // Check if this is the best score for this player
             const isPlayerBestScore = stats?.bestRound === round.score || 
@@ -116,7 +134,7 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
                 key={index} 
                 className={cn(
                   `flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium
-                  transition-transform hover:scale-110 cursor-pointer`,
+                  transition-transform hover:scale-110 cursor-pointer shadow-sm`,
                   isLastRoundHighScore && index === player.rounds.length - 1 ? 'bg-green-100 text-green-800 ring-1 ring-green-400' :
                     round.isDutch ? 'bg-dutch-orange text-white' : 
                     isPlayerBestScore ? 'bg-blue-100 text-blue-800 ring-1 ring-blue-300' : 'bg-gray-100'
