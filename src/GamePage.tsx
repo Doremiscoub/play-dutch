@@ -129,7 +129,7 @@ const GamePage: React.FC = () => {
     toast.success('Manche ajoutée !');
     
     const playersTotalWithNewScores = players.map((player, index) => ({
-      player,
+      ...player,
       newTotal: player.totalScore + scores[index]
     }));
 

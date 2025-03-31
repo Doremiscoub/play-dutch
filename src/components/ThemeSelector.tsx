@@ -7,13 +7,15 @@ import { motion } from 'framer-motion';
 
 // Composant simplifié pour le sélecteur de thème qui ne cause pas d'erreur React.Children.only
 const ThemeSelector: React.FC = () => {
-  const { currentTheme, setTheme, themes } = useTheme();
+  const { currentTheme, setTheme, getThemeColors } = useTheme();
+  const themeConfig = Object.entries(require('@/hooks/use-theme').themeConfig);
 
   const handleThemeChange = () => {
     // Rotation simple entre les thèmes disponibles
-    const currentIndex = themes.findIndex(theme => theme.name === currentTheme);
-    const nextIndex = (currentIndex + 1) % themes.length;
-    setTheme(themes[nextIndex].name);
+    const themeIds = themeConfig.map(([id]) => id);
+    const currentIndex = themeIds.indexOf(currentTheme);
+    const nextIndex = (currentIndex + 1) % themeIds.length;
+    setTheme(themeIds[nextIndex]);
   };
 
   return (

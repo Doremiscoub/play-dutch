@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { 
@@ -47,7 +46,6 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
   
   const totalRounds = players.length > 0 ? players[0].rounds.length : 0;
   
-  // Get the current sort order of players (by total score)
   const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
   
   const handleAddRound = (scores: number[], dutchPlayerId?: string) => {
@@ -70,12 +68,9 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
     toast.success(newSetting ? 'Sons activés' : 'Sons désactivés');
   };
   
-  // Function to close podium view (required by PodiumView component)
   const handleClosePodium = () => {
-    // No action needed in this context, but required by the component
   };
   
-  // Show the podium only after the first round
   const showPodium = totalRounds > 0;
   
   return (
@@ -90,7 +85,6 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
         )}
       </AnimatePresence>
       
-      {/* Header with navigation and options - Improved style */}
       <motion.div 
         className="mb-6 relative"
         initial={{ opacity: 0, y: -20 }}
@@ -120,32 +114,24 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
               setSoundEnabled={handleToggleSound} 
             />
             
-            {/* Afficher l'avatar une seule fois si l'utilisateur est connecté */}
             {isSignedIn && user && (
-              <motion.div 
-                className="relative"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Avatar className="h-10 w-10 border-2 border-white/50 shadow-md hover:border-white/70">
-                  {user.hasImage ? (
-                    <img 
-                      src={user.imageUrl} 
-                      alt={user.fullName || 'Utilisateur'} 
-                      className="h-full w-full rounded-full object-cover"
-                    />
-                  ) : (
-                    <AvatarFallback className="bg-gradient-to-br from-dutch-blue to-dutch-purple text-white">
-                      {user.firstName?.charAt(0) || user.username?.charAt(0) || '?'}
-                    </AvatarFallback>
-                  )}
-                </Avatar>
-              </motion.div>
+              <Avatar className="h-10 w-10 border-2 border-white/50 shadow-md hover:border-white/70">
+                {user.hasImage ? (
+                  <img 
+                    src={user.imageUrl} 
+                    alt={user.fullName || 'Utilisateur'} 
+                    className="h-full w-full rounded-full object-cover"
+                  />
+                ) : (
+                  <AvatarFallback className="bg-gradient-to-br from-dutch-blue to-dutch-purple text-white">
+                    {user.firstName?.charAt(0) || user.username?.charAt(0) || '?'}
+                  </AvatarFallback>
+                )}
+              </Avatar>
             )}
           </div>
         </div>
         
-        {/* Round Information - Improved style */}
         <motion.div 
           className="flex items-center justify-between mb-4 px-2"
           initial={{ opacity: 0 }}
@@ -217,7 +203,6 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
           </div>
         </motion.div>
         
-        {/* Alert Dialogs */}
         <div className="hidden">
           <AlertDialog>
             <AlertDialogTrigger>
@@ -237,12 +222,9 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
         </div>
       </motion.div>
       
-      {/* Game Content */}
       <div>
         {view === 'podium' ? (
-          // Podium View
           <div>
-            {/* Player Cards */}
             <motion.div 
               className="space-y-4 mb-6"
               initial={{ opacity: 0 }}
@@ -259,7 +241,6 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
               ))}
             </motion.div>
             
-            {/* Podium visualization after first round */}
             {showPodium && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -276,7 +257,6 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
             )}
           </div>
         ) : (
-          // Table View
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -290,9 +270,8 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
         )}
       </div>
       
-      {/* Floating Action Button - Improved style */}
       <motion.div
-        className="fixed bottom-6 right-6 z-20"
+        className="fixed bottom-6 right-6 z-50"
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ delay: 0.3, type: "spring" }}
