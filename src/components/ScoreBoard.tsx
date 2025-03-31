@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Plus, Trophy, BarChart3, History, Home, Crown, Trash2, Music, Bell, VolumeX, ArrowRight, RotateCcw, Clock, Award, LineChart, TrendingDown, TrendingUp, Heart, Medal, Flag } from 'lucide-react';
@@ -19,6 +20,7 @@ import { cn } from '@/lib/utils';
 import ThemeSelector from './ThemeSelector';
 import PlayerBadges from './PlayerBadges';
 import QuickGuide from './QuickGuide';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 
 const ScoreBoard: React.FC<ScoreBoardProps> = ({ 
   players, 
@@ -40,6 +42,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
   const [showRoundDetails, setShowRoundDetails] = useState<number | null>(null);
   const [showPodium, setShowPodium] = useState(false);
   const [showEndGameDialog, setShowEndGameDialog] = useState(false);
+  const [statsTabView, setStatsTabView] = useState<'stats' | 'trends'>('stats');
   const navigate = useNavigate();
   
   useEffect(() => {
@@ -137,33 +140,66 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
         <div className="flex gap-2">
           <ThemeSelector />
           <QuickGuide />
-          <Button 
-            variant="outline" 
-            size="icon"
-            className="bg-white/80 backdrop-blur border-white/30 shadow-md hover:shadow-lg"
-            onClick={() => setSortBy(sortBy === 'position' ? 'name' : 'position')}
-            aria-label={sortBy === 'position' ? 'Trier par nom' : 'Trier par score'}
-          >
-            <BarChart3 className="h-4 w-4" aria-hidden="true" />
-          </Button>
-          <Button 
-            variant="outline" 
-            size="icon"
-            className="bg-white/80 backdrop-blur border-white/30 shadow-md hover:shadow-lg"
-            onClick={() => setShowRounds(!showRounds)}
-            aria-label={showRounds ? 'Masquer les manches' : 'Afficher les manches'}
-          >
-            <History className="h-4 w-4" aria-hidden="true" />
-          </Button>
-          <Button 
-            variant="outline" 
-            size="icon"
-            className="bg-white/80 backdrop-blur border-white/30 shadow-md hover:shadow-lg"
-            onClick={() => navigate('/')}
-            aria-label="Retour à l'accueil"
-          >
-            <Home className="h-4 w-4" aria-hidden="true" />
-          </Button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button 
+                variant="outline" 
+                size="icon"
+                className="bg-white/80 backdrop-blur border-white/30 shadow-md hover:shadow-lg"
+                aria-label="Réglages du jeu"
+              >
+                {soundEnabled ? <Bell className="h-4 w-4" aria-hidden="true" /> : <VolumeX className="h-4 w-4" aria-hidden="true" />}
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-md rounded-3xl bg-white/80 backdrop-blur-md border border-white/30 shadow-xl">
+              <DialogHeader>
+                <DialogTitle>Réglages du jeu</DialogTitle>
+                <DialogDescription>
+                  Personnalisez votre expérience de jeu
+                </DialogDescription>
+              </DialogHeader>
+              <div className="mt-4 space-y-4">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="sound-toggle" className="font-medium">Sons activés</Label>
+                  <Switch 
+                    id="sound-toggle" 
+                    checked={soundEnabled} 
+                    onCheckedChange={setSoundEnabled} 
+                  />
+                </div>
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="sort-toggle" className="font-medium">Tri des joueurs</Label>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-gray-500">Nom</span>
+                    <Switch 
+                      id="sort-toggle" 
+                      checked={sortBy === 'position'} 
+                      onCheckedChange={(checked) => setSortBy(checked ? 'position' : 'name')} 
+                    />
+                    <span className="text-sm text-gray-500">Score</span>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="rounds-toggle" className="font-medium">Afficher les manches</Label>
+                  <Switch 
+                    id="rounds-toggle" 
+                    checked={showRounds} 
+                    onCheckedChange={setShowRounds} 
+                  />
+                </div>
+              </div>
+              <DialogFooter className="mt-6">
+                <Button 
+                  variant="outline" 
+                  className="w-full rounded-xl bg-white hover:bg-gray-50"
+                  onClick={() => navigate('/')}
+                >
+                  <Home className="h-4 w-4 mr-2" aria-hidden="true" />
+                  Retour à l'accueil
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
 
@@ -315,33 +351,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
         )}
       </AnimatePresence>
       
-      <div className="fixed right-4 bottom-20 flex flex-col gap-2">
-        <Dialog open={showSettings} onOpenChange={setShowSettings}>
-          <DialogTrigger asChild>
-            <Button 
-              className="w-12 h-12 rounded-full shadow-lg bg-dutch-pink text-white hover:bg-dutch-pink/90 flex items-center justify-center backdrop-blur-md"
-              aria-label="Paramètres"
-            >
-              {soundEnabled ? <Bell className="h-5 w-5" aria-hidden="true" /> : <VolumeX className="h-5 w-5" aria-hidden="true" />}
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-md rounded-3xl bg-white/80 backdrop-blur-md border border-white/30 shadow-xl">
-            <DialogHeader>
-              <DialogTitle>Paramètres de la partie</DialogTitle>
-            </DialogHeader>
-            <div className="mt-4 space-y-4">
-              <div className="flex items-center justify-between">
-                <Label htmlFor="sound-toggle">Sons activés</Label>
-                <Switch 
-                  id="sound-toggle" 
-                  checked={soundEnabled} 
-                  onCheckedChange={setSoundEnabled} 
-                />
-              </div>
-            </div>
-          </DialogContent>
-        </Dialog>
-        
+      <div className="fixed right-4 bottom-20 flex flex-col gap-2">        
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <Button 
@@ -380,18 +390,33 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
             </Button>
           </SheetTrigger>
           <SheetContent className="overflow-y-auto rounded-l-3xl bg-white/80 backdrop-blur-md border border-white/30 shadow-xl">
-            <SheetHeader>
-              <SheetTitle>Statistiques de la partie</SheetTitle>
+            <SheetHeader className="pb-2">
+              <SheetTitle className="text-xl font-bold text-dutch-blue">Statistiques de la partie</SheetTitle>
             </SheetHeader>
-            <Tabs defaultValue="stats" className="mt-6">
-              <TabsList className="grid w-full grid-cols-2 bg-white/20 backdrop-blur-sm rounded-full">
-                <TabsTrigger value="stats" className="rounded-full data-[state=active]:bg-white/80">Joueurs</TabsTrigger>
-                <TabsTrigger value="trends" className="rounded-full data-[state=active]:bg-white/80">Tendances</TabsTrigger>
-              </TabsList>
+            
+            <ToggleGroup 
+              type="single" 
+              defaultValue="stats" 
+              value={statsTabView}
+              onValueChange={(value) => {
+                if (value) setStatsTabView(value as 'stats' | 'trends');
+              }}
+              className="mt-4 mb-6"
+            >
+              <ToggleGroupItem value="stats" className="flex-1 py-2.5">
+                <Award className="h-4 w-4 mr-2" />
+                Joueurs
+              </ToggleGroupItem>
+              <ToggleGroupItem value="trends" className="flex-1 py-2.5">
+                <LineChart className="h-4 w-4 mr-2" />
+                Tendances
+              </ToggleGroupItem>
+            </ToggleGroup>
               
-              <TabsContent value="stats" className="space-y-4 mt-4">
-                <div className="dutch-card bg-white/60 backdrop-blur-sm border border-white/30 shadow-sm rounded-2xl">
-                  <h3 className="text-sm font-medium mb-2 flex items-center">
+            {statsTabView === 'stats' ? (
+              <div className="space-y-4 mt-4">
+                <div className="dutch-card bg-white/60 backdrop-blur-sm border border-white/30 shadow-sm rounded-2xl p-4">
+                  <h3 className="text-sm font-medium mb-3 flex items-center">
                     <Award className="h-4 w-4 mr-1 text-dutch-blue" aria-hidden="true" />
                     Meilleur score par manche
                   </h3>
@@ -400,8 +425,11 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                       ? Math.min(...player.rounds.map(r => r.score).filter(s => s > 0))
                       : null);
                     return (
-                      <div key={player.id} className="flex justify-between items-center mb-1">
+                      <div key={player.id} className="flex justify-between items-center py-2 border-b border-gray-100/50 last:border-0">
                         <div className="flex items-center gap-2">
+                          <Avatar className="h-6 w-6 bg-dutch-blue/10">
+                            <AvatarFallback className="text-dutch-blue text-xs">{player.name.charAt(0)}</AvatarFallback>
+                          </Avatar>
                           <span className="text-sm">{player.name}</span>
                           <PlayerBadges player={player} />
                         </div>
@@ -413,24 +441,29 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                   })}
                 </div>
                 
-                <div className="dutch-card bg-white/60 backdrop-blur-sm border border-white/30 shadow-sm rounded-2xl">
-                  <h3 className="text-sm font-medium mb-2 flex items-center">
+                <div className="dutch-card bg-white/60 backdrop-blur-sm border border-white/30 shadow-sm rounded-2xl p-4">
+                  <h3 className="text-sm font-medium mb-3 flex items-center">
                     <TrendingDown className="h-4 w-4 mr-1 text-dutch-orange" aria-hidden="true" />
                     Nombre de fois "Dutch"
                   </h3>
                   {players.map(player => {
                     const dutchCount = player.stats?.dutchCount || player.rounds.filter(r => r.isDutch).length;
                     return (
-                      <div key={player.id} className="flex justify-between items-center mb-1">
-                        <span className="text-sm">{player.name}</span>
-                        <span className="font-medium">{dutchCount}</span>
+                      <div key={player.id} className="flex justify-between items-center py-2 border-b border-gray-100/50 last:border-0">
+                        <div className="flex items-center gap-2">
+                          <Avatar className="h-6 w-6 bg-dutch-orange/10">
+                            <AvatarFallback className="text-dutch-orange text-xs">{player.name.charAt(0)}</AvatarFallback>
+                          </Avatar>
+                          <span className="text-sm">{player.name}</span>
+                        </div>
+                        <span className="font-medium text-dutch-orange">{dutchCount}</span>
                       </div>
                     );
                   })}
                 </div>
                 
-                <div className="dutch-card bg-white/60 backdrop-blur-sm border border-white/30 shadow-sm rounded-2xl">
-                  <h3 className="text-sm font-medium mb-2 flex items-center">
+                <div className="dutch-card bg-white/60 backdrop-blur-sm border border-white/30 shadow-sm rounded-2xl p-4">
+                  <h3 className="text-sm font-medium mb-3 flex items-center">
                     <TrendingUp className="h-4 w-4 mr-1 text-dutch-purple" aria-hidden="true" />
                     Pire score par manche
                   </h3>
@@ -439,9 +472,14 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                       ? Math.max(...player.rounds.map(r => r.score))
                       : null);
                     return (
-                      <div key={player.id} className="flex justify-between items-center mb-1">
-                        <span className="text-sm">{player.name}</span>
-                        <span className="font-medium">
+                      <div key={player.id} className="flex justify-between items-center py-2 border-b border-gray-100/50 last:border-0">
+                        <div className="flex items-center gap-2">
+                          <Avatar className="h-6 w-6 bg-dutch-purple/10">
+                            <AvatarFallback className="text-dutch-purple text-xs">{player.name.charAt(0)}</AvatarFallback>
+                          </Avatar>
+                          <span className="text-sm">{player.name}</span>
+                        </div>
+                        <span className="font-medium text-dutch-purple">
                           {worstRound !== null ? worstRound : '-'}
                         </span>
                       </div>
@@ -449,8 +487,8 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                   })}
                 </div>
                 
-                <div className="dutch-card bg-white/60 backdrop-blur-sm border border-white/30 shadow-sm rounded-2xl">
-                  <h3 className="text-sm font-medium mb-2 flex items-center">
+                <div className="dutch-card bg-white/60 backdrop-blur-sm border border-white/30 shadow-sm rounded-2xl p-4">
+                  <h3 className="text-sm font-medium mb-3 flex items-center">
                     <LineChart className="h-4 w-4 mr-1 text-dutch-blue" aria-hidden="true" />
                     Score moyen par manche
                   </h3>
@@ -459,9 +497,14 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                       ? Math.round(player.rounds.reduce((sum, r) => sum + r.score, 0) / player.rounds.length * 10) / 10
                       : 0);
                     return (
-                      <div key={player.id} className="flex justify-between items-center mb-1">
-                        <span className="text-sm">{player.name}</span>
-                        <span className="font-medium">
+                      <div key={player.id} className="flex justify-between items-center py-2 border-b border-gray-100/50 last:border-0">
+                        <div className="flex items-center gap-2">
+                          <Avatar className="h-6 w-6 bg-dutch-blue/10">
+                            <AvatarFallback className="text-dutch-blue text-xs">{player.name.charAt(0)}</AvatarFallback>
+                          </Avatar>
+                          <span className="text-sm">{player.name}</span>
+                        </div>
+                        <span className="font-medium text-dutch-blue">
                           {player.rounds.length > 0 ? avgScore.toFixed(1) : '-'}
                         </span>
                       </div>
@@ -470,8 +513,8 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                 </div>
                 
                 {players.some(p => p.stats?.improvementRate !== undefined) && (
-                  <div className="dutch-card bg-white/60 backdrop-blur-sm border border-white/30 shadow-sm rounded-2xl">
-                    <h3 className="text-sm font-medium mb-2 flex items-center">
+                  <div className="dutch-card bg-white/60 backdrop-blur-sm border border-white/30 shadow-sm rounded-2xl p-4">
+                    <h3 className="text-sm font-medium mb-3 flex items-center">
                       <Heart className="h-4 w-4 mr-1 text-dutch-pink" aria-hidden="true" />
                       Tendance d'amélioration
                     </h3>
@@ -479,8 +522,13 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                       if (!player.stats?.improvementRate) return null;
                       
                       return (
-                        <div key={player.id} className="flex justify-between items-center mb-1">
-                          <span className="text-sm">{player.name}</span>
+                        <div key={player.id} className="flex justify-between items-center py-2 border-b border-gray-100/50 last:border-0">
+                          <div className="flex items-center gap-2">
+                            <Avatar className="h-6 w-6 bg-dutch-pink/10">
+                              <AvatarFallback className="text-dutch-pink text-xs">{player.name.charAt(0)}</AvatarFallback>
+                            </Avatar>
+                            <span className="text-sm">{player.name}</span>
+                          </div>
                           <div className="flex items-center gap-1">
                             {player.stats.improvementRate < 0 ? (
                               <TrendingDown className="h-3 w-3 text-green-500" />
@@ -498,11 +546,11 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                     })}
                   </div>
                 )}
-              </TabsContent>
-              
-              <TabsContent value="trends" className="mt-4">
-                <div className="dutch-card bg-white/60 backdrop-blur-sm border border-white/30 shadow-sm rounded-2xl">
-                  <h3 className="text-sm font-medium mb-2">Progression des scores</h3>
+              </div>
+            ) : (
+              <div className="space-y-4 mt-4">
+                <div className="dutch-card bg-white/60 backdrop-blur-sm border border-white/30 shadow-sm rounded-2xl p-4">
+                  <h3 className="text-sm font-medium mb-3">Progression des scores</h3>
                   <div className="h-40 overflow-hidden">
                     {players.length > 0 && (
                       <PlayerScoreProgress players={players} />
@@ -510,8 +558,8 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                   </div>
                 </div>
                 
-                <div className="dutch-card mt-4 bg-white/60 backdrop-blur-sm border border-white/30 shadow-sm rounded-2xl">
-                  <h3 className="text-sm font-medium mb-2">Historique des manches</h3>
+                <div className="dutch-card mt-4 bg-white/60 backdrop-blur-sm border border-white/30 shadow-sm rounded-2xl p-4">
+                  <h3 className="text-sm font-medium mb-3">Historique des manches</h3>
                   <div className="space-y-2 max-h-60 overflow-y-auto pr-2">
                     {Array.from({length: roundCount}).map((_, roundIndex) => {
                       const roundNumber = roundIndex + 1;
@@ -520,13 +568,14 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                       const worstScore = roundDetails ? Math.max(...roundDetails.map(d => d.score)) : 0;
                       
                       return (
-                        <div 
-                          key={roundIndex} 
-                          className="p-2 border border-gray-100 rounded-lg cursor-pointer hover:bg-gray-50"
+                        <motion.div 
+                          key={roundIndex}
+                          whileHover={{ scale: 1.02 }}
+                          className="p-3 border border-white/50 rounded-xl cursor-pointer hover:bg-white/40 bg-white/20 shadow-sm transition-all"
                           onClick={() => setShowRoundDetails(roundIndex)}
                         >
                           <div className="flex justify-between mb-1">
-                            <span className="text-xs font-medium text-gray-500">Manche {roundNumber}</span>
+                            <span className="text-xs font-medium text-dutch-blue">Manche {roundNumber}</span>
                             <Button 
                               variant="ghost" 
                               size="sm" 
@@ -544,10 +593,10 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                               <div 
                                 key={i} 
                                 className={`
-                                  w-6 h-6 rounded-full flex items-center justify-center text-xs
-                                  ${detail.isDutch ? 'bg-dutch-orange text-white' : 
+                                  w-7 h-7 rounded-full flex items-center justify-center text-xs font-medium
+                                  ${detail.isDutch ? 'bg-dutch-orange text-white shadow-md' : 
                                     detail.score === bestScore ? 'bg-green-100 text-green-800 ring-1 ring-green-400' :
-                                    detail.score === worstScore ? 'bg-red-100 text-red-800' : 'bg-gray-100'}
+                                    detail.score === worstScore ? 'bg-red-100 text-red-800' : 'bg-white/70 shadow-sm'}
                                 `}
                                 title={`${detail.playerName}: ${detail.score}`}
                               >
@@ -555,13 +604,13 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                               </div>
                             ))}
                           </div>
-                        </div>
+                        </motion.div>
                       );
                     })}
                   </div>
                 </div>
-              </TabsContent>
-            </Tabs>
+              </div>
+            )}
           </SheetContent>
         </Sheet>
       </div>

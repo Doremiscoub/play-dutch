@@ -9,7 +9,7 @@ import { fr } from 'date-fns/locale';
 
 interface GameHistoryProps {
   games: Game[];
-  limit?: number; // Add limit as an optional prop
+  limit?: number;
 }
 
 const GameHistory: React.FC<GameHistoryProps> = ({ games, limit }) => {
