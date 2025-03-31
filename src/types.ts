@@ -1,3 +1,4 @@
+
 // This should include any existing types, with additions for game invitation
 export type Round = {
   score: number;
@@ -55,4 +56,3 @@ export type GameInvitation = {
   link: string;
   playerCount: number;
 };
-

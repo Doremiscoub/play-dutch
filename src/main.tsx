@@ -5,16 +5,18 @@ import App from './App.tsx'
 import './index.css'
 
 // Get the publishable key from environment variables
-const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY || "pk_test_placeholder_key";
 
-// Verify the key is available
-if (!PUBLISHABLE_KEY) {
-  console.error("Missing Clerk Publishable Key");
+// Show a warning if using the placeholder key
+if (PUBLISHABLE_KEY === "pk_test_placeholder_key") {
+  console.warn(
+    "⚠️ Using a placeholder Clerk publishable key. To enable authentication features, please add your Clerk publishable key to the environment variables as VITE_CLERK_PUBLISHABLE_KEY."
+  );
 }
 
 createRoot(document.getElementById("root")!).render(
   <ClerkProvider 
-    publishableKey={PUBLISHABLE_KEY || ""}
+    publishableKey={PUBLISHABLE_KEY}
     appearance={{
       elements: {
         formButtonPrimary: 'bg-primary hover:bg-primary/90 text-white',
