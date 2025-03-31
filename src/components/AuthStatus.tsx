@@ -32,7 +32,7 @@ export const AuthStatus: React.FC = () => {
             afterSignOutUrl="/"
             appearance={{
               elements: {
-                userButtonAvatarBox: 'w-10 h-10 rounded-full border-2 border-white/50 shadow-md',
+                userButtonAvatarBox: 'w-10 h-10 rounded-full border-2 border-white/50 shadow-md transition-all hover:scale-105 hover:border-white/70 active:scale-95',
               }
             }}
           />
@@ -42,7 +42,6 @@ export const AuthStatus: React.FC = () => {
   }
   
   // Hide UserButton during gameplay to prevent overlaps with UI elements
-  // Cette partie est cruciale pour résoudre le problème de superposition
   if (isGamePage && location.pathname === '/game') {
     return null;
   }
@@ -57,7 +56,7 @@ export const AuthStatus: React.FC = () => {
           afterSignOutUrl="/"
           appearance={{
             elements: {
-              userButtonAvatarBox: 'w-10 h-10 rounded-full border-2 border-white/50 shadow-md',
+              userButtonAvatarBox: 'w-10 h-10 rounded-full border-2 border-white/50 shadow-md transition-all hover:scale-105 hover:border-white/70 active:scale-95',
             }
           }}
         />
@@ -70,6 +69,7 @@ export const AuthStatus: React.FC = () => {
               variant="secondary" 
               glassmorphism 
               elevated
+              className="transition-all hover:-translate-y-0.5 active:translate-y-0 shadow-sm hover:shadow-md active:shadow-sm"
             >
               <LogIn className="w-4 h-4 mr-1" /> Connexion
             </Button>
@@ -80,6 +80,7 @@ export const AuthStatus: React.FC = () => {
               variant="ios-blue" 
               glassmorphism 
               elevated
+              className="transition-all hover:-translate-y-0.5 active:translate-y-0 shadow-sm hover:shadow-md active:shadow-sm"
             >
               <User className="w-4 h-4 mr-1" /> Inscription
             </Button>

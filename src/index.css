@@ -138,12 +138,12 @@
 @layer components {
   /* iOS-inspired design elements */
   .ios-card {
-    @apply rounded-2xl bg-white/80 backdrop-blur-md shadow-md border border-white/40 p-5;
+    @apply rounded-2xl bg-white/80 backdrop-blur-md shadow-md border border-white/40 p-5 transition-all hover:shadow-lg hover:-translate-y-0.5;
     box-shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
   }
   
   .ios-button {
-    @apply rounded-full px-6 py-3 font-medium text-white shadow-sm transition-all;
+    @apply rounded-full px-6 py-3 font-medium text-white shadow-sm transition-all hover:-translate-y-0.5 active:translate-y-0;
     background: rgba(255, 255, 255, 0.25);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
@@ -151,7 +151,7 @@
   }
   
   .ios-input {
-    @apply rounded-xl border border-gray-200/60 bg-white/70 backdrop-blur-sm px-4 py-2 focus:outline-none focus:ring-2 focus:ring-dutch-blue/20;
+    @apply rounded-xl border border-gray-200/60 bg-white/70 backdrop-blur-sm px-4 py-2 focus:outline-none focus:ring-2 focus:ring-dutch-blue/20 transition-all;
   }
   
   .ios-glass {
@@ -159,7 +159,7 @@
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.18);
-    @apply rounded-3xl;
+    @apply rounded-3xl transition-all;
   }
   
   .ios-blur-bg {
@@ -172,7 +172,7 @@
   }
 
   .card-gradient {
-    @apply bg-gradient-to-br from-white to-gray-50 shadow-md;
+    @apply bg-gradient-to-br from-white to-gray-50 shadow-md transition-all;
   }
 
   .dutch-button {
@@ -190,11 +190,11 @@
   }
 
   .dutch-card {
-    @apply rounded-3xl bg-white/60 backdrop-blur-sm p-5 shadow-md transition-all hover:shadow-lg border border-white/20;
+    @apply rounded-3xl bg-white/60 backdrop-blur-sm p-5 shadow-md transition-all hover:shadow-lg hover:-translate-y-0.5 border border-white/20;
   }
 
   .dutch-input {
-    @apply rounded-full border border-gray-200/60 bg-white/80 backdrop-blur-sm px-4 py-2 focus:border-dutch-blue focus:outline-none focus:ring-2 focus:ring-dutch-blue/20;
+    @apply rounded-full border border-gray-200/60 bg-white/80 backdrop-blur-sm px-4 py-2 focus:border-dutch-blue focus:outline-none focus:ring-2 focus:ring-dutch-blue/20 transition-all;
   }
   
   /* VisionOS-inspired style */
@@ -203,15 +203,15 @@
   }
   
   .visionos-button {
-    @apply rounded-2xl bg-white/70 backdrop-blur-md border border-white/40 shadow-sm hover:bg-white/80 transition-all;
+    @apply rounded-2xl bg-white/70 backdrop-blur-md border border-white/40 shadow-sm hover:bg-white/80 transition-all hover:-translate-y-0.5 active:translate-y-0;
   }
   
   .visionos-card {
-    @apply rounded-3xl bg-white/60 backdrop-blur-md border border-white/30 shadow-sm hover:shadow-md transition-all;
+    @apply rounded-3xl bg-white/60 backdrop-blur-md border border-white/30 shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5;
   }
   
   .visionos-input {
-    @apply rounded-full bg-white/70 backdrop-blur-md border border-white/40 focus:ring-2 focus:ring-white/60 focus:outline-none;
+    @apply rounded-full bg-white/70 backdrop-blur-md border border-white/40 focus:ring-2 focus:ring-white/60 focus:outline-none transition-all;
   }
   
   /* Dialog / Modal styling */
@@ -264,7 +264,43 @@
   
   /* Badge styles */
   .player-badge {
-    @apply inline-flex items-center rounded-full text-xs font-medium;
+    @apply inline-flex items-center rounded-full text-xs font-medium transition-all hover:scale-105;
     padding: 0.125rem 0.5rem;
+  }
+  
+  /* Effet de flottement pour les éléments */
+  .float-element {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  
+  /* Effet de pulsation subtile */
+  .pulse-subtle {
+    animation: pulse-subtle 3s ease-in-out infinite;
+  }
+  
+  @keyframes pulse-subtle {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.03); opacity: 0.9; }
+  }
+  
+  /* Effet d'apparition en fondu */
+  .fade-in-element {
+    animation: fade-in 0.5s ease-out forwards;
+    opacity: 0;
+  }
+  
+  @keyframes fade-in {
+    0% { opacity: 0; transform: translateY(10px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  
+  /* Improved focus styles */
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-white/10;
   }
 }
