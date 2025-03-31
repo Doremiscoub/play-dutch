@@ -2,7 +2,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { PlayCircle, History, Info, Sparkles, User } from 'lucide-react';
+import { PlayCircle, History, Info, Sparkles, User, LogIn } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { SignedIn, SignedOut } from '@clerk/clerk-react';
 
@@ -107,18 +107,33 @@ const Home: React.FC = () => {
           </SignedIn>
           
           <SignedOut>
-            <Link to="/sign-in" className="block">
-              <motion.div 
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.98 }}
-                transition={{ type: "spring", stiffness: 400, damping: 17 }}
-              >
-                <Button className="w-full h-16 rounded-2xl glassmorphism bg-white/50 hover:bg-white/60 text-dutch-blue text-lg font-semibold border border-white/40 shadow-md backdrop-blur-md transition-all">
-                  <User className="mr-2 h-6 w-6 text-dutch-blue" aria-hidden="true" /> 
-                  <span className="bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">Connexion / Inscription</span>
-                </Button>
-              </motion.div>
-            </Link>
+            <div className="space-y-3">
+              <Link to="/sign-in" className="block">
+                <motion.div 
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                >
+                  <Button className="w-full h-14 rounded-2xl glassmorphism bg-white/50 hover:bg-white/60 text-dutch-blue border border-white/40 shadow-md backdrop-blur-md transition-all">
+                    <LogIn className="mr-2 h-5 w-5 text-dutch-blue" aria-hidden="true" /> 
+                    Connexion
+                  </Button>
+                </motion.div>
+              </Link>
+              
+              <Link to="/sign-up" className="block">
+                <motion.div 
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                >
+                  <Button variant="primary" className="w-full h-14 rounded-2xl glassmorphism hover:bg-dutch-blue/90 text-white border border-white/40 shadow-md backdrop-blur-md transition-all">
+                    <User className="mr-2 h-5 w-5" aria-hidden="true" /> 
+                    Inscription
+                  </Button>
+                </motion.div>
+              </Link>
+            </div>
           </SignedOut>
           
           <Link to="/history" className="block">

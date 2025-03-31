@@ -21,12 +21,31 @@ export const AuthStatus: React.FC = () => {
   const isRulesPage = location.pathname === '/rules';
   const isHomePage = location.pathname === '/' || location.pathname === '/index';
   const isHistoryPage = location.pathname === '/history';
+  const isGamePage = location.pathname === '/game';
+  
+  // Don't show auth buttons on home page since it already has auth buttons
+  if (isHomePage) {
+    return (
+      <div className="fixed top-4 right-4 z-50">
+        <SignedIn>
+          <UserButton 
+            afterSignOutUrl="/"
+            appearance={{
+              elements: {
+                userButtonAvatarBox: 'w-10 h-10 rounded-full border-2 border-white/50 shadow-md',
+              }
+            }}
+          />
+        </SignedIn>
+      </div>
+    );
+  }
   
   // Calculate the optimal position based on the page
-  const topPosition = isRulesPage ? 'top-20' : isHomePage ? 'top-16' : isHistoryPage ? 'top-20' : 'top-4';
+  const topPosition = isRulesPage ? 'top-20' : isHistoryPage ? 'top-20' : isGamePage ? 'top-20' : 'top-4';
   
   return (
-    <div className={`fixed ${topPosition} right-4 z-50`}>
+    <div className={`fixed ${topPosition} right-4 z-40`}>
       <SignedIn>
         <UserButton 
           afterSignOutUrl="/"
