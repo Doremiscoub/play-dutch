@@ -17,7 +17,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { motion } from 'framer-motion';
-import { Flag, BarChart2, List, Award, Activity } from 'lucide-react';
+import { Flag, BarChart2, List, Award, Activity, Clock } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useMediaQuery } from '@/hooks/use-mobile';
 import PlayerStatsChart from './PlayerStatsChart';
@@ -44,15 +44,6 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
   const handleClosePodium = () => {
     console.log('Close podium requested');
   };
-
-  useEffect(() => {
-    // Ne pas ouvrir automatiquement la modale lors du montage du composant
-    if (isNewRoundModalOpen && newRoundModalRef.current) {
-      newRoundModalRef.current.showModal();
-    } else if (newRoundModalRef.current) {
-      newRoundModalRef.current.close();
-    }
-  }, [isNewRoundModalOpen]);
 
   const onAddRoundHandler = () => {
     setIsNewRoundModalOpen(true);
@@ -187,6 +178,13 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
             >
               Terminer la Partie
             </Button>
+            
+            <div className="mt-2 p-3 bg-gray-100 rounded-xl border border-gray-200 opacity-80 flex items-center justify-center">
+              <div className="flex items-center gap-1.5 text-gray-600 text-sm">
+                <Clock className="h-3.5 w-3.5" />
+                <span>Mode multijoueur bientôt disponible</span>
+              </div>
+            </div>
           </div>
         ) : (
           <div className="grid grid-cols-12 gap-6">
@@ -275,6 +273,13 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                 >
                   Terminer la Partie
                 </Button>
+              </div>
+            </div>
+            
+            <div className="col-span-12 mt-2 p-3 bg-gray-100 rounded-xl border border-gray-200 opacity-80 flex items-center justify-center">
+              <div className="flex items-center gap-2 text-gray-600">
+                <Clock className="h-4 w-4" />
+                <span>Mode multijoueur bientôt disponible</span>
               </div>
             </div>
           </div>

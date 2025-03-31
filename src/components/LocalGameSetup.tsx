@@ -48,14 +48,14 @@ const LocalGameSetup: React.FC<LocalGameSetupProps> = ({ onStartGame }) => {
   };
 
   return (
-    <div className="min-h-screen w-full relative">
+    <div className="min-h-screen w-full relative pb-24">
       {/* Background elements - now full width */}
       <div className="fixed inset-0 -z-10">
         <AnimatedBackground variant="default" />
       </div>
       
       <motion.div 
-        className="w-full max-w-md mx-auto p-6 relative z-10 pb-40"
+        className="w-full max-w-md mx-auto p-6 relative z-10"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -206,6 +206,20 @@ const LocalGameSetup: React.FC<LocalGameSetupProps> = ({ onStartGame }) => {
             ))}
           </div>
         </motion.div>
+      </motion.div>
+      
+      {/* Information à venir */}
+      <motion.div
+        className="fixed bottom-28 left-0 right-0 flex justify-center p-4 z-20"
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.6, duration: 0.5 }}
+      >
+        <div className="bg-white/80 backdrop-blur-md border border-dutch-purple/20 rounded-xl p-3 shadow-md max-w-md">
+          <p className="text-sm text-center text-dutch-purple/90">
+            <span className="font-semibold">À venir :</span> Mode multijoueur, connexion multi-appareils, et plus encore !
+          </p>
+        </div>
       </motion.div>
       
       {/* Bouton Commencer flottant */}
