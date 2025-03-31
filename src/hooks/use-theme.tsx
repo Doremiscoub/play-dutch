@@ -3,6 +3,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 export type ThemeId = 'blue' | 'green' | 'pink' | 'red' | 'purple' | string;
+export type ThemeMode = 'light' | 'dark' | 'system';
 
 // Theme configuration with consistent color palettes
 export const themeConfig = {
@@ -42,15 +43,37 @@ interface ThemeState {
   currentTheme: ThemeId;
   setTheme: (themeId: ThemeId) => void;
   getThemeColors: () => typeof themeConfig.blue;
+  themeMode: ThemeMode;
+  setThemeMode: (mode: ThemeMode) => void;
 }
+
+const applyThemeMode = (mode: ThemeMode) => {
+  if (typeof window === 'undefined') return;
+  
+  const root = window.document.documentElement;
+  
+  if (mode === 'system') {
+    const systemPreference = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    root.classList.remove('dark', 'light');
+    root.classList.add(systemPreference);
+  } else {
+    root.classList.remove('dark', 'light');
+    root.classList.add(mode);
+  }
+};
 
 export const useTheme = create<ThemeState>()(
   persist(
     (set, get) => ({
       currentTheme: 'blue',
+      themeMode: 'light',
       setTheme: (themeId: ThemeId) => {
         document.documentElement.setAttribute('data-theme', themeId);
         set({ currentTheme: themeId });
+      },
+      setThemeMode: (mode: ThemeMode) => {
+        applyThemeMode(mode);
+        set({ themeMode: mode });
       },
       getThemeColors: () => {
         const { currentTheme } = get();
@@ -95,6 +118,10 @@ if (typeof window !== 'undefined') {
       const parsedState = JSON.parse(storedTheme);
       const themeId = parsedState.state?.currentTheme || 'blue';
       document.documentElement.setAttribute('data-theme', themeId);
+      
+      // Apply the theme mode
+      const themeMode = parsedState.state?.themeMode || 'light';
+      applyThemeMode(themeMode as ThemeMode);
     } catch (error) {
       console.error('Error parsing theme from localStorage', error);
       document.documentElement.setAttribute('data-theme', 'blue');

@@ -3,7 +3,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useTheme, themeConfig } from '@/hooks/use-theme';
+import { useTheme } from '@/hooks/use-theme';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { SignedIn, SignedOut, UserButton, useUser } from '@clerk/clerk-react';
 import { Button } from '@/components/ui/button';
@@ -11,15 +11,15 @@ import { Paintbrush, Volume2, VolumeX, Moon, Sun, User } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import ThemeSelector from '@/components/ThemeSelector';
+import ColorThemeSelector from '@/components/ColorThemeSelector';
 import PageLayout from '@/components/PageLayout';
 
 const SettingsPage: React.FC = () => {
-  const { currentTheme } = useTheme();
+  const { themeMode } = useTheme();
   const { user, isSignedIn } = useUser();
   
   // Mock settings state
   const [soundEnabled, setSoundEnabled] = React.useState(true);
-  const [darkMode, setDarkMode] = React.useState(false);
   
   return (
     <PageLayout
@@ -66,65 +66,15 @@ const SettingsPage: React.FC = () => {
               <CardContent className="space-y-6">
                 <div className="space-y-4">
                   <h3 className="text-lg font-medium">Thème de couleur</h3>
-                  <div className="grid grid-cols-1 gap-4">
-                    {Object.entries(themeConfig).map(([id, theme]) => (
-                      <motion.div
-                        key={id}
-                        className="relative"
-                        whileHover={{ scale: 1.02 }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        <Card 
-                          className={`flex items-center p-4 cursor-pointer hover:shadow-md transition-shadow ${
-                            currentTheme === id 
-                              ? 'ring-2 ring-dutch-blue border-transparent' 
-                              : 'border-gray-200/60'
-                          }`}
-                          onClick={() => useTheme.getState().setTheme(id as any)}
-                        >
-                          <div className="flex gap-2 mr-4">
-                            <div 
-                              className="w-6 h-6 rounded-full" 
-                              style={{ backgroundColor: theme.primary }}
-                            ></div>
-                            <div 
-                              className="w-6 h-6 rounded-full" 
-                              style={{ backgroundColor: theme.secondary }}
-                            ></div>
-                            <div 
-                              className="w-6 h-6 rounded-full" 
-                              style={{ backgroundColor: theme.accent }}
-                            ></div>
-                          </div>
-                          <span className="font-medium">{theme.name}</span>
-                          {currentTheme === id && (
-                            <div className="absolute right-4 h-5 w-5 bg-dutch-blue text-white rounded-full flex items-center justify-center">
-                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
-                                <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clipRule="evenodd" />
-                              </svg>
-                            </div>
-                          )}
-                        </Card>
-                      </motion.div>
-                    ))}
-                  </div>
+                  <ColorThemeSelector />
                 </div>
                 
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
-                    <Label htmlFor="dark-mode">Mode sombre</Label>
-                    <p className="text-sm text-gray-500">Pas encore disponible</p>
+                    <Label htmlFor="dark-mode">Mode d'affichage</Label>
+                    <p className="text-sm text-gray-500">Choisissez entre clair, sombre ou automatique</p>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Sun className="h-4 w-4 text-gray-500" />
-                    <Switch 
-                      id="dark-mode" 
-                      checked={darkMode} 
-                      onCheckedChange={setDarkMode}
-                      disabled={true}
-                    />
-                    <Moon className="h-4 w-4 text-gray-500" />
-                  </div>
+                  <ThemeSelector />
                 </div>
               </CardContent>
             </Card>

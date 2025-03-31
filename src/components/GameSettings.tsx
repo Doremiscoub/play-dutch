@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import ThemeSelector from './ThemeSelector';
+import ColorThemeSelector from './ColorThemeSelector';
 import { useTheme } from '@/hooks/use-theme';
 
 interface GameSettingsProps {
@@ -21,7 +22,7 @@ const GameSettings: React.FC<GameSettingsProps> = ({
   setSoundEnabled 
 }) => {
   const navigate = useNavigate();
-  const { currentTheme, setTheme } = useTheme();
+  const { currentTheme } = useTheme();
 
   const handleClearData = () => {
     if (window.confirm('Êtes-vous sûr de vouloir effacer toutes les données ? Cette action est irréversible.')) {
@@ -97,7 +98,14 @@ const GameSettings: React.FC<GameSettingsProps> = ({
           <TabsContent value="appearance" className="space-y-4">
             <div className="mb-4">
               <Label className="font-medium mb-3 block">Thème de couleur</Label>
-              <ThemeSelector />
+              <ColorThemeSelector />
+            </div>
+            
+            <div className="mb-4">
+              <Label className="font-medium mb-3 block">Mode d'affichage</Label>
+              <div className="flex justify-center">
+                <ThemeSelector />
+              </div>
             </div>
           </TabsContent>
           

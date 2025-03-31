@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const ThemeSelector = () => {
-  const { currentTheme, setTheme } = useTheme();
+  const { themeMode, setThemeMode } = useTheme();
 
   return (
     <DropdownMenu>
@@ -20,9 +20,9 @@ const ThemeSelector = () => {
           size="icon"
           className="rounded-full bg-white/80 hover:bg-white/90 backdrop-blur-sm border border-white/30 shadow-sm"
         >
-          {currentTheme === "light" ? (
+          {themeMode === "light" ? (
             <Sun className="h-5 w-5 text-dutch-orange" />
-          ) : currentTheme === "dark" ? (
+          ) : themeMode === "dark" ? (
             <Moon className="h-5 w-5 text-dutch-blue" />
           ) : (
             <Laptop className="h-5 w-5 text-dutch-purple" />
@@ -30,15 +30,15 @@ const ThemeSelector = () => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="bg-white/80 backdrop-blur-sm border border-white/30">
-        <DropdownMenuItem onClick={() => setTheme("light")}>
+        <DropdownMenuItem onClick={() => setThemeMode("light")}>
           <Sun className="h-4 w-4 mr-2 text-dutch-orange" />
           <span>Light</span>
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("dark")}>
+        <DropdownMenuItem onClick={() => setThemeMode("dark")}>
           <Moon className="h-4 w-4 mr-2 text-dutch-blue" />
           <span>Dark</span>
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("system")}>
+        <DropdownMenuItem onClick={() => setThemeMode("system")}>
           <Laptop className="h-4 w-4 mr-2 text-dutch-purple" />
           <span>System</span>
         </DropdownMenuItem>
