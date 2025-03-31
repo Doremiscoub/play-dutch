@@ -23,9 +23,11 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({ players, onClose, onSave 
   
   useEffect(() => {
     // Find player with lowest score after each score update
-    if (scores.some(score => score > 0)) {
-      const lowestScore = Math.min(...scores.filter(score => score > 0));
-      const lowestIndex = scores.findIndex(score => score === lowestScore && score > 0);
+    // For negative scores, the most negative is considered "lowest"
+    const validScores = scores.filter(score => score !== 0);
+    if (validScores.length > 0) {
+      const lowestScore = Math.min(...validScores);
+      const lowestIndex = scores.findIndex(score => score === lowestScore && score !== 0);
       setLowestScorePlayer(lowestIndex >= 0 ? lowestIndex : null);
     } else {
       setLowestScorePlayer(null);
@@ -33,6 +35,7 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({ players, onClose, onSave 
   }, [scores]);
   
   const handleScoreChange = (index: number, value: string) => {
+    // Parse as int, allowing for negative values
     const newScore = parseInt(value) || 0;
     const newScores = [...scores];
     newScores[index] = newScore;
@@ -48,7 +51,7 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({ players, onClose, onSave 
     // Get the lowest score excluding the Dutch player
     const otherScores = [...currentScores];
     otherScores.splice(dutchIndex, 1);
-    const filteredScores = otherScores.filter(score => score > 0);
+    const filteredScores = otherScores.filter(score => score !== 0);
     
     // If no valid scores, don't apply penalty
     if (filteredScores.length === 0) {
@@ -59,9 +62,9 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({ players, onClose, onSave 
     
     const lowestScore = Math.min(...filteredScores);
     
-    // Check if the Dutch player has the lowest score
+    // Check if the Dutch player has the lowest score - for negative values, the most negative is "lowest"
     const dutchPlayerScore = currentScores[dutchIndex];
-    const shouldApplyPenalty = dutchPlayerScore > lowestScore && dutchPlayerScore > 0;
+    const shouldApplyPenalty = dutchPlayerScore > lowestScore && dutchPlayerScore !== 0;
     
     // If we need to apply the penalty but haven't yet
     if (shouldApplyPenalty && !dutchPenaltyApplied) {
@@ -107,9 +110,9 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({ players, onClose, onSave 
       // Get the lowest score excluding the new Dutch player
       const otherScores = [...newScores];
       otherScores.splice(index, 1);
-      const filteredScores = otherScores.filter(score => score > 0);
+      const filteredScores = otherScores.filter(score => score !== 0);
       
-      if (filteredScores.length > 0 && newScores[index] > 0) {
+      if (filteredScores.length > 0 && newScores[index] !== 0) {
         const lowestScore = Math.min(...filteredScores);
         
         if (newScores[index] > lowestScore) {
@@ -138,13 +141,13 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({ players, onClose, onSave 
       exit={{ opacity: 0 }}
     >
       <motion.div 
-        className="w-full max-w-md bg-white rounded-3xl p-6 shadow-xl"
+        className="w-full max-w-md bg-white/90 backdrop-blur-md rounded-3xl p-6 shadow-xl border border-white/40"
         initial={{ scale: 0.9, y: 20 }}
         animate={{ scale: 1, y: 0 }}
         exit={{ scale: 0.9, y: 20 }}
       >
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold text-dutch-blue">Scores de la manche</h2>
+          <h2 className="text-xl font-bold bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">Scores de la manche</h2>
           <Button variant="ghost" size="icon" onClick={onClose} className="rounded-full">
             <X className="h-5 w-5" />
           </Button>
@@ -188,7 +191,7 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({ players, onClose, onSave 
               <div className="flex-grow">
                 <p className="text-sm font-medium flex items-center gap-1">
                   {player.name}
-                  {lowestScorePlayer === index && scores[index] > 0 && (
+                  {lowestScorePlayer === index && scores[index] !== 0 && (
                     <Crown className="h-3 w-3 text-dutch-yellow" />
                   )}
                 </p>
@@ -199,10 +202,9 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({ players, onClose, onSave 
               
               <Input
                 type="number"
-                min="0"
                 value={scores[index] || ''}
                 onChange={(e) => handleScoreChange(index, e.target.value)}
-                className={`w-16 text-center dutch-input ${lowestScorePlayer === index && scores[index] > 0 ? 'ring-2 ring-dutch-yellow/50' : ''}`}
+                className={`w-16 text-center dutch-input ${lowestScorePlayer === index && scores[index] !== 0 ? 'ring-2 ring-dutch-yellow/50' : ''}`}
               />
             </div>
           ))}
@@ -210,7 +212,7 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({ players, onClose, onSave 
         
         <Button 
           onClick={handleSave}
-          className="w-full dutch-button bg-dutch-blue hover:bg-dutch-blue/90"
+          className="w-full dutch-button bg-gradient-to-r from-dutch-blue to-dutch-purple hover:bg-dutch-blue/90"
         >
           <Check className="mr-2 h-5 w-5" /> Sauvegarder
         </Button>

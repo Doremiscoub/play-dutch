@@ -41,8 +41,14 @@ export const AuthStatus: React.FC = () => {
     );
   }
   
+  // Hide UserButton during gameplay to prevent overlaps with UI elements
+  // Cette partie est cruciale pour résoudre le problème de superposition
+  if (isGamePage && location.pathname === '/game') {
+    return null;
+  }
+  
   // Calculate the optimal position based on the page
-  const topPosition = isRulesPage ? 'top-20' : isHistoryPage ? 'top-20' : isGamePage ? 'top-20' : 'top-4';
+  const topPosition = isRulesPage ? 'top-20' : isHistoryPage ? 'top-20' : 'top-4';
   
   return (
     <div className={`fixed ${topPosition} right-4 z-40`}>

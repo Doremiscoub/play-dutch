@@ -42,15 +42,50 @@ const GameSetup: React.FC<GameSetupProps> = ({ onStartGame }) => {
 
   return (
     <motion.div 
-      className="w-full max-w-md mx-auto p-6"
+      className="w-full max-w-md mx-auto p-6 relative z-10"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <h1 className="text-3xl font-bold text-center mb-8 text-dutch-blue">Nouvelle Partie</h1>
+      {/* Background elements similaires à la page d'accueil */}
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-100/60 to-gray-200/60 -z-10" />
       
-      <div className="dutch-card mb-8">
-        <h2 className="text-xl font-semibold mb-4">Nombre de joueurs</h2>
+      <motion.div
+        className="absolute top-10 left-[10%] w-40 h-40 rounded-full bg-dutch-blue/10 blur-3xl -z-5"
+        animate={{ 
+          scale: [1, 1.2, 1],
+          opacity: [0.4, 0.6, 0.4],
+        }}
+        transition={{
+          duration: 8,
+          repeat: Infinity,
+          repeatType: "reverse"
+        }}
+      />
+      
+      <motion.div
+        className="absolute bottom-20 right-[5%] w-48 h-48 rounded-full bg-dutch-orange/10 blur-3xl -z-5"
+        animate={{ 
+          scale: [1, 1.3, 1],
+          opacity: [0.3, 0.5, 0.3],
+        }}
+        transition={{
+          duration: 10,
+          repeat: Infinity,
+          repeatType: "reverse"
+        }}
+      />
+      
+      <motion.div 
+        className="absolute top-[20%] left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-dutch-purple/20 to-transparent -z-5"
+        animate={{ opacity: [0.3, 0.7, 0.3] }}
+        transition={{ duration: 5, repeat: Infinity }}
+      />
+      
+      <h1 className="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-pink bg-clip-text text-transparent">Nouvelle Partie</h1>
+      
+      <div className="dutch-card mb-8 backdrop-blur-md border border-white/40 bg-white/60 hover:shadow-lg transition-all duration-300">
+        <h2 className="text-xl font-semibold mb-4 text-dutch-blue">Nombre de joueurs</h2>
         <div className="flex items-center justify-center gap-4">
           <Button 
             variant="secondary" 
@@ -59,6 +94,7 @@ const GameSetup: React.FC<GameSetupProps> = ({ onStartGame }) => {
             elevated
             onClick={() => handleNumPlayersChange(false)}
             disabled={numPlayers <= 2}
+            className="border border-white/40 shadow-md"
           >
             <Minus className="h-6 w-6" />
           </Button>
@@ -70,25 +106,26 @@ const GameSetup: React.FC<GameSetupProps> = ({ onStartGame }) => {
             elevated
             onClick={() => handleNumPlayersChange(true)}
             disabled={numPlayers >= 10}
+            className="border border-white/40 shadow-md"
           >
             <Plus className="h-6 w-6" />
           </Button>
         </div>
       </div>
       
-      <div className="dutch-card mb-8">
-        <h2 className="text-xl font-semibold mb-4">Noms des joueurs</h2>
+      <div className="dutch-card mb-8 backdrop-blur-md border border-white/40 bg-white/60 hover:shadow-lg transition-all duration-300">
+        <h2 className="text-xl font-semibold mb-4 text-dutch-blue">Noms des joueurs</h2>
         <div className="space-y-3">
           {playerNames.map((name, index) => (
             <div key={index} className="flex items-center gap-3">
-              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-dutch-blue flex items-center justify-center text-white font-bold">
+              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-r from-dutch-blue to-dutch-purple flex items-center justify-center text-white font-bold shadow-md">
                 {index + 1}
               </div>
               <Input
                 value={name}
                 onChange={(e) => handleNameChange(index, e.target.value)}
                 placeholder={`Joueur ${index + 1}`}
-                className="dutch-input"
+                className="dutch-input border border-white/40 shadow-sm"
                 maxLength={20}
               />
             </div>
@@ -98,14 +135,51 @@ const GameSetup: React.FC<GameSetupProps> = ({ onStartGame }) => {
       
       <Button 
         onClick={handleStartGame}
-        variant="primary"
+        variant="gradient"
         size="2xl"
         glassmorphism
         elevated
-        className="w-full"
+        className="w-full shadow-md hover:shadow-lg transition-all duration-300"
       >
         <Play className="mr-2 h-5 w-5" /> Commencer la partie
       </Button>
+      
+      {/* Floating elements similaires à la page d'accueil */}
+      <motion.div
+        className="absolute bottom-[30%] left-12 w-4 h-4 rounded-full bg-dutch-blue/30 -z-5"
+        animate={{ 
+          y: [0, -15, 0],
+        }}
+        transition={{
+          duration: 3,
+          repeat: Infinity,
+          repeatType: "reverse"
+        }}
+      />
+      
+      <motion.div
+        className="absolute top-[25%] right-14 w-3 h-3 rounded-full bg-dutch-orange/40 -z-5"
+        animate={{ 
+          y: [0, -10, 0],
+        }}
+        transition={{
+          duration: 2.5,
+          repeat: Infinity,
+          repeatType: "reverse"
+        }}
+      />
+      
+      <motion.div
+        className="absolute top-[40%] left-20 w-2 h-2 rounded-full bg-dutch-purple/40 -z-5"
+        animate={{ 
+          y: [0, -8, 0],
+        }}
+        transition={{
+          duration: 2,
+          repeat: Infinity,
+          repeatType: "reverse"
+        }}
+      />
     </motion.div>
   );
 };
