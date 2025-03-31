@@ -34,10 +34,14 @@ const GamePage: React.FC = () => {
     toast.success('La partie commence !');
   };
 
-  const handleAddRound = (scores: number[]) => {
+  const handleAddRound = (scores: number[], dutchPlayerId?: string) => {
     setPlayers(prevPlayers => {
       return prevPlayers.map((player, index) => {
-        const newRound = { score: scores[index] };
+        const isDutch = player.id === dutchPlayerId;
+        const newRound = { 
+          score: scores[index],
+          isDutch 
+        };
         const newTotalScore = player.totalScore + scores[index];
         
         return {
@@ -57,8 +61,11 @@ const GamePage: React.FC = () => {
       // Save game to history
       const sortedPlayers = [...players].map((player, index) => ({
         ...player,
-        totalScore: player.totalScore + scores[index]
+        totalScore: player.totalScore + scores[index],
+        isDutch: player.id === dutchPlayerId
       })).sort((a, b) => a.totalScore - b.totalScore);
+      
+      const winner = sortedPlayers[0].name;
       
       const newGame: Game = {
         id: uuidv4(),
@@ -66,12 +73,14 @@ const GamePage: React.FC = () => {
         rounds: players[0].rounds.length + 1,
         players: sortedPlayers.map(player => ({
           name: player.name,
-          score: player.totalScore
-        }))
+          score: player.totalScore,
+          isDutch: player.id === dutchPlayerId
+        })),
+        winner
       };
       
       setGames(prev => [...prev, newGame]);
-      toast.success('Partie terminée !');
+      toast.success(`Partie terminée ! ${winner} gagne !`);
     }
   };
 

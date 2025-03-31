@@ -1,21 +1,28 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Plus, Trophy, BarChart3 } from 'lucide-react';
+import { Plus, Trophy, BarChart3, History, Home } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Player, GameRound } from '@/types';
 import PlayerScoreCard from './PlayerScoreCard';
 import NewRoundModal from './NewRoundModal';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 interface ScoreBoardProps {
   players: Player[];
-  onAddRound: (scores: number[]) => void;
+  onAddRound: (scores: number[], dutchPlayerId?: string) => void;
   onEndGame: () => void;
 }
 
 const ScoreBoard: React.FC<ScoreBoardProps> = ({ players, onAddRound, onEndGame }) => {
   const [showNewRoundModal, setShowNewRoundModal] = useState(false);
   const [sortBy, setSortBy] = useState<'position' | 'name'>('position');
+  const [showRounds, setShowRounds] = useState<boolean>(true);
+  const navigate = useNavigate();
+  
+  // Calculate the round count based on the first player (all players have the same number of rounds)
+  const roundCount = players.length > 0 ? players[0].rounds.length : 0;
   
   const sortedPlayers = [...players].sort((a, b) => {
     if (sortBy === 'position') {
@@ -33,7 +40,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({ players, onAddRound, onEndGame 
 
   return (
     <motion.div 
-      className="w-full max-w-md mx-auto p-4"
+      className="w-full max-w-md mx-auto p-4 pb-24"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
@@ -46,11 +53,38 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({ players, onAddRound, onEndGame 
             size="icon"
             className="rounded-full"
             onClick={() => setSortBy(sortBy === 'position' ? 'name' : 'position')}
+            title={sortBy === 'position' ? 'Trier par nom' : 'Trier par score'}
           >
             <BarChart3 className="h-4 w-4" />
           </Button>
+          <Button 
+            variant="outline" 
+            size="icon"
+            className="rounded-full"
+            onClick={() => setShowRounds(!showRounds)}
+            title={showRounds ? 'Masquer les manches' : 'Afficher les manches'}
+          >
+            <History className="h-4 w-4" />
+          </Button>
+          <Button 
+            variant="outline" 
+            size="icon"
+            className="rounded-full"
+            onClick={() => navigate('/')}
+            title="Retour à l'accueil"
+          >
+            <Home className="h-4 w-4" />
+          </Button>
         </div>
       </div>
+
+      {roundCount > 0 && (
+        <div className="mb-4 text-center">
+          <span className="bg-dutch-blue text-white text-sm font-medium px-4 py-1 rounded-full">
+            Manche {roundCount}
+          </span>
+        </div>
+      )}
 
       <AnimatePresence>
         {gameOver && (
@@ -69,12 +103,20 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({ players, onAddRound, onEndGame 
                 </p>
               </div>
             </div>
-            <Button 
-              onClick={onEndGame}
-              className="w-full mt-4 bg-white text-dutch-blue hover:bg-white/90"
-            >
-              Nouvelle partie
-            </Button>
+            <div className="grid grid-cols-2 gap-2 mt-4">
+              <Button 
+                onClick={onEndGame}
+                className="bg-white text-dutch-blue hover:bg-white/90"
+              >
+                Nouvelle partie
+              </Button>
+              <Button 
+                onClick={() => navigate('/history')}
+                className="bg-dutch-orange text-white hover:bg-dutch-orange/90"
+              >
+                Historique
+              </Button>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -86,6 +128,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({ players, onAddRound, onEndGame 
             player={player}
             position={index + 1}
             isWinner={gameOver && index === 0}
+            showRounds={showRounds}
           />
         ))}
       </div>
@@ -104,9 +147,10 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({ players, onAddRound, onEndGame 
         <NewRoundModal 
           players={players}
           onClose={() => setShowNewRoundModal(false)}
-          onSave={(scores) => {
-            onAddRound(scores);
+          onSave={(scores, dutchPlayerId) => {
+            onAddRound(scores, dutchPlayerId);
             setShowNewRoundModal(false);
+            toast.success('Manche ajoutée !');
           }}
         />
       )}

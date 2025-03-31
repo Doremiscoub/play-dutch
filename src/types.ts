@@ -18,5 +18,7 @@ export interface Game {
   players: {
     name: string;
     score: number;
+    isDutch?: boolean;
   }[];
+  winner?: string;
 }

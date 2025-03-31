@@ -2,16 +2,22 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Player } from '@/types';
-import { Trophy } from 'lucide-react';
+import { Trophy, Star } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 
 interface PlayerScoreCardProps {
   player: Player;
   position: number;
   isWinner?: boolean;
+  showRounds?: boolean;
 }
 
-const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({ player, position, isWinner = false }) => {
+const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({ 
+  player, 
+  position, 
+  isWinner = false,
+  showRounds = true 
+}) => {
   // Calculate progress percentage (max score is 100)
   const progressPercentage = Math.min(player.totalScore, 100);
   
@@ -44,7 +50,16 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({ player, position, isW
         </div>
         
         <div className="flex-grow overflow-hidden">
-          <h3 className="font-semibold truncate">{player.name}</h3>
+          <div className="flex items-center">
+            <h3 className="font-semibold truncate">{player.name}</h3>
+            {player.rounds.some(round => round.isDutch) && (
+              <div className="ml-2 flex-shrink-0">
+                <div className="px-2 py-0.5 bg-dutch-orange/20 text-dutch-orange text-xs font-medium rounded-full">
+                  Dutch
+                </div>
+              </div>
+            )}
+          </div>
           
           <div className="flex items-center gap-2 mt-1">
             <Progress value={progressPercentage} className="h-2" />
@@ -53,12 +68,13 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({ player, position, isW
         </div>
       </div>
       
-      {player.rounds.length > 0 && (
+      {showRounds && player.rounds.length > 0 && (
         <div className="mt-2 flex gap-2 overflow-x-auto py-1 scrollbar-none">
           {player.rounds.map((round, index) => (
             <div 
               key={index} 
-              className="flex-shrink-0 w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-sm font-medium"
+              className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium
+                ${round.isDutch ? 'bg-dutch-orange text-white' : 'bg-gray-100'}`}
             >
               {round.score}
             </div>

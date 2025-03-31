@@ -3,7 +3,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Trophy } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Game } from '@/types';
 
@@ -44,12 +44,21 @@ const GameHistory: React.FC<GameHistoryProps> = ({ games, onBack }) => {
             >
               <div className="flex justify-between items-start mb-2">
                 <h3 className="font-semibold">
-                  {format(game.date, 'dd MMMM yyyy', { locale: fr })}
+                  {format(new Date(game.date), 'dd MMMM yyyy', { locale: fr })}
                 </h3>
                 <span className="text-sm bg-gray-100 px-2 py-1 rounded-full">
                   {game.rounds} manches
                 </span>
               </div>
+              
+              {game.winner && (
+                <div className="flex items-center gap-2 mb-3 bg-dutch-blue/10 p-2 rounded-lg">
+                  <Trophy className="h-4 w-4 text-dutch-blue" />
+                  <span className="text-sm font-medium text-dutch-blue">
+                    {game.winner} gagne !
+                  </span>
+                </div>
+              )}
               
               <div className="space-y-2 mt-3">
                 {game.players.map((player, index) => (
@@ -58,7 +67,14 @@ const GameHistory: React.FC<GameHistoryProps> = ({ games, onBack }) => {
                       <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${index === 0 ? 'bg-dutch-blue text-white' : 'bg-gray-100'}`}>
                         {index + 1}
                       </div>
-                      <span className={index === 0 ? 'font-semibold' : ''}>{player.name}</span>
+                      <div className="flex items-center">
+                        <span className={index === 0 ? 'font-semibold' : ''}>{player.name}</span>
+                        {player.isDutch && (
+                          <span className="ml-2 px-1.5 py-0.5 text-xs bg-dutch-orange/20 text-dutch-orange rounded-full">
+                            D
+                          </span>
+                        )}
+                      </div>
                     </div>
                     <span className="font-semibold">{player.score}</span>
                   </div>
