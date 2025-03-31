@@ -2,12 +2,17 @@
 import React from 'react';
 import { SignedIn, SignedOut, UserButton } from '@clerk/clerk-react';
 import { Button } from './ui/button';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { User, LogIn } from 'lucide-react';
 
 export const AuthStatus: React.FC = () => {
+  const location = useLocation();
+  
+  // Déterminer si nous sommes sur la page des règles
+  const isRulesPage = location.pathname === '/rules';
+  
   return (
-    <div className="fixed top-4 right-4 z-50">
+    <div className={`fixed ${isRulesPage ? 'top-20' : 'top-4'} right-4 z-50`}>
       <SignedIn>
         <UserButton 
           afterSignOutUrl="/"

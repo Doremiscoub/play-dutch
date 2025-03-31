@@ -38,7 +38,7 @@ const RulesPage: React.FC = () => {
 
   return (
     <motion.div 
-      className="w-full max-w-lg mx-auto p-4 pb-16"
+      className="w-full max-w-lg mx-auto p-4 pb-16 pt-20" // Ajout d'un padding-top de 20 (pt-20)
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
