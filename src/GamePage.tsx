@@ -31,6 +31,7 @@ const GamePage: React.FC = () => {
   });
   
   const [showGameEndConfirmation, setShowGameEndConfirmation] = useState<boolean>(false);
+  const [showPodium, setShowPodium] = useState<boolean>(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -159,7 +160,11 @@ const GamePage: React.FC = () => {
     });
     
     if (window.localStorage.getItem('dutch_sound_enabled') !== 'false') {
-      new Audio('/sounds/card-sound.mp3').play().catch(err => console.error("Sound error:", err));
+      try {
+        new Audio('/sounds/card-sound.mp3').play().catch(err => console.error("Sound error:", err));
+      } catch (err) {
+        console.error("Sound error:", err);
+      }
     }
     
     toast.success('Manche ajoutée !');
@@ -176,19 +181,22 @@ const GamePage: React.FC = () => {
     }
   };
   
-  const finishGame = (finalScores: number[], dutchPlayerId?: string) => {
-    const sortedPlayers = [...players].map((player, index) => ({
-      ...player,
-      totalScore: player.totalScore + finalScores[index],
-      isDutch: player.id === dutchPlayerId
-    })).sort((a, b) => a.totalScore - b.totalScore);
+  const finishGame = (finalScores?: number[], dutchPlayerId?: string) => {
+    const updatedPlayers = finalScores 
+      ? [...players].map((player, index) => ({
+          ...player,
+          totalScore: player.totalScore + finalScores[index],
+          isDutch: player.id === dutchPlayerId
+        }))
+      : [...players];
     
+    const sortedPlayers = [...updatedPlayers].sort((a, b) => a.totalScore - b.totalScore);
     const winner = sortedPlayers[0].name;
     
     const newGame: Game = {
       id: uuidv4(),
       date: new Date(),
-      rounds: players[0].rounds.length + 1,
+      rounds: players[0].rounds.length + (finalScores ? 1 : 0),
       players: sortedPlayers.map(player => ({
         name: player.name,
         score: player.totalScore,
@@ -206,8 +214,17 @@ const GamePage: React.FC = () => {
     localStorage.removeItem('current_dutch_game');
     
     if (window.localStorage.getItem('dutch_sound_enabled') !== 'false') {
-      new Audio('/sounds/win-sound.mp3').play().catch(err => console.error("Sound error:", err));
+      try {
+        new Audio('/sounds/win-sound.mp3').play().catch(err => console.error("Sound error:", err));
+      } catch (err) {
+        console.error("Sound error:", err);
+      }
     }
+    
+    // Rediriger vers le podium
+    setTimeout(() => {
+      navigate('/history');
+    }, 2000);
   };
   
   const launchConfetti = () => {
@@ -267,7 +284,11 @@ const GamePage: React.FC = () => {
     });
     
     if (window.localStorage.getItem('dutch_sound_enabled') !== 'false') {
-      new Audio('/sounds/undo-sound.mp3').play().catch(err => console.error("Sound error:", err));
+      try {
+        new Audio('/sounds/undo-sound.mp3').play().catch(err => console.error("Sound error:", err));
+      } catch (err) {
+        console.error("Sound error:", err);
+      }
     }
     
     toast.success('Dernière manche annulée !');
@@ -279,12 +300,7 @@ const GamePage: React.FC = () => {
 
   const handleConfirmEndGame = () => {
     setShowGameEndConfirmation(false);
-    setGameState('setup');
-    setPlayers([]);
-    setRoundHistory([]);
-    
-    // Supprimer la partie en cours
-    localStorage.removeItem('current_dutch_game');
+    finishGame();
   };
 
   const handleCancelEndGame = () => {
