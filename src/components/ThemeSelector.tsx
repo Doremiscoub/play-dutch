@@ -1,74 +1,88 @@
 
-import React from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Paintbrush, Check } from 'lucide-react';
+import { Paintbrush } from 'lucide-react';
+import { useTheme } from '@/hooks/use-theme';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
-import { useTheme, ThemeId, themeConfig } from '@/hooks/use-theme';
-
-// Convert theme config to array for rendering
-const themes = Object.entries(themeConfig).map(([id, theme]) => ({
-  id: id as ThemeId,
-  name: theme.name,
-  primary: theme.primary,
-  secondary: theme.secondary,
-  accent: theme.accent
-}));
+import { motion } from 'framer-motion';
 
 const ThemeSelector = () => {
   const { currentTheme, setTheme } = useTheme();
+  const [isOpen, setIsOpen] = useState(false);
+
+  const themes = [
+    { id: 'blue', color: '#1EAEDB', name: 'Bleu' },
+    { id: 'green', color: '#10B981', name: 'Vert' },
+    { id: 'pink', color: '#D946EF', name: 'Rose' },
+    { id: 'purple', color: '#8B5CF6', name: 'Violet' },
+    { id: 'red', color: '#EF4444', name: 'Rouge' },
+  ];
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button 
-          variant="ghost" 
-          size="icon-sm" 
-          glassmorphism
-          elevated
-          className="shadow-md hover:shadow-lg"
+    <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="rounded-full bg-white/80 hover:bg-white/90 backdrop-blur-sm border border-white/30 shadow-sm relative overflow-hidden"
         >
-          <div className="relative">
-            <Paintbrush className="h-4 w-4" />
-            <div 
-              className="absolute -top-1 -right-1 w-2 h-2 rounded-full"
-              style={{ backgroundColor: themeConfig[currentTheme].primary }}
-            ></div>
-          </div>
+          <motion.div 
+            className="absolute inset-0 rounded-full opacity-30"
+            animate={{ 
+              background: themes.map(theme => theme.color)
+            }}
+            transition={{ 
+              duration: 5, 
+              repeat: Infinity, 
+              repeatType: "reverse"
+            }}
+            style={{ 
+              backgroundSize: '400% 400%',
+              backgroundImage: `linear-gradient(45deg, ${themes.map(t => t.color).join(', ')})` 
+            }}
+          />
+          <Paintbrush className="h-5 w-5 text-dutch-blue z-10" />
         </Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-md rounded-3xl bg-white/90 backdrop-blur-md border border-white/40 shadow-xl">
-        <DialogHeader>
-          <DialogTitle>Thèmes de couleur</DialogTitle>
-        </DialogHeader>
-        <div className="grid grid-cols-1 gap-4 py-4">
-          {themes.map((theme) => (
-            <button
-              key={theme.id}
-              className={cn(
-                "relative flex items-center w-full p-4 rounded-xl transition-all cursor-pointer hover:shadow-md",
-                currentTheme === theme.id ? "ring-2 ring-primary shadow-md" : "bg-white/60 border border-white/30"
-              )}
-              onClick={() => setTheme(theme.id)}
-            >
-              <div className="flex items-center gap-3 flex-1">
-                <div className="flex gap-1">
-                  <div className="w-6 h-6 rounded-full shadow-inner" style={{ backgroundColor: theme.primary }} />
-                  <div className="w-6 h-6 rounded-full shadow-inner" style={{ backgroundColor: theme.secondary }} />
-                  <div className="w-6 h-6 rounded-full shadow-inner" style={{ backgroundColor: theme.accent }} />
-                </div>
-                <span className="font-medium">{theme.name}</span>
-              </div>
-              {currentTheme === theme.id && (
-                <div className="absolute right-4 rounded-full bg-primary w-6 h-6 flex items-center justify-center text-white">
-                  <Check className="h-4 w-4" />
-                </div>
-              )}
-            </button>
-          ))}
-        </div>
-      </DialogContent>
-    </Dialog>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-40 rounded-xl border border-white/30 bg-white/80 backdrop-blur-md shadow-lg p-1">
+        {themes.map((theme) => (
+          <DropdownMenuItem
+            key={theme.id}
+            className={cn(
+              "flex items-center gap-2 rounded-lg px-2 py-1.5 cursor-pointer hover:bg-white focus:bg-white",
+              currentTheme === theme.id && "bg-white shadow-sm"
+            )}
+            onClick={() => setTheme(theme.id)}
+          >
+            <div 
+              className="h-5 w-5 rounded-full"
+              style={{ backgroundColor: theme.color }}
+            />
+            <span className={cn(
+              "font-medium",
+              currentTheme === theme.id ? "text-dutch-blue" : "text-gray-700"
+            )}>
+              {theme.name}
+            </span>
+            {currentTheme === theme.id && (
+              <motion.div 
+                className="ml-auto w-2 h-2 rounded-full bg-dutch-blue" 
+                layoutId="active-theme-indicator"
+                initial={{ scale: 0.8, opacity: 0.5 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ duration: 0.15 }}
+              />
+            )}
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
 

@@ -88,30 +88,30 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
         )}
       </AnimatePresence>
       
-      {/* Header with navigation and options */}
+      {/* Header with navigation and options - Improved style */}
       <motion.div 
         className="mb-6 relative"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
       >
-        <div className="flex items-center justify-between mb-2 bg-white/70 backdrop-blur-md shadow-sm rounded-xl p-2 border border-white/30">
+        <div className="flex items-center justify-between mb-2 bg-white/70 backdrop-blur-md shadow-sm rounded-xl p-3 border border-white/30">
           <div className="flex items-center">
             <Button
               variant="ghost"
               size="icon"
-              className="rounded-full bg-white/70 hover:bg-white/90 backdrop-blur-sm border border-white/30 shadow-sm"
+              className="rounded-full bg-white/80 hover:bg-white/90 backdrop-blur-sm border border-white/30 shadow-sm mr-3"
               onClick={() => navigate('/')}
             >
               <Home className="h-5 w-5 text-dutch-blue" />
             </Button>
             
-            <h1 className="ml-3 text-xl font-bold bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">
+            <h1 className="text-xl font-bold bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">
               Score
             </h1>
           </div>
           
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center gap-3">
             <ThemeSelector />
             <GameSettings 
               soundEnabled={soundEnabled} 
@@ -120,15 +120,15 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
           </div>
         </div>
         
-        {/* Round Information */}
+        {/* Round Information - Improved style */}
         <motion.div 
           className="flex items-center justify-between mb-4 px-2"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
         >
-          <div className="flex items-center bg-white/50 backdrop-blur-sm px-3 py-1 rounded-full shadow-sm">
-            <Clock className="h-4 w-4 text-dutch-blue mr-1" />
+          <div className="flex items-center bg-white/60 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-sm border border-white/20">
+            <Clock className="h-4 w-4 text-dutch-blue mr-2" />
             <span className="text-sm text-gray-700 font-medium">
               {totalRounds} {totalRounds <= 1 ? 'manche' : 'manches'}
             </span>
@@ -144,7 +144,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                 <Button 
                   variant="ghost" 
                   size="sm" 
-                  className="px-3 py-1 rounded-full bg-white/50 hover:bg-white/70 backdrop-blur-sm border border-white/30 shadow-sm"
+                  className="px-3 py-1.5 rounded-full bg-white/60 hover:bg-white/70 backdrop-blur-sm border border-white/30 shadow-sm"
                   onClick={handleUndoLastRound}
                 >
                   <RotateCcw className="h-3.5 w-3.5 mr-1.5 text-dutch-blue" />
@@ -166,13 +166,13 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
               type="single" 
               value={view} 
               onValueChange={(value) => value && setView(value as 'podium' | 'table')} 
-              className="w-full bg-white/50 backdrop-blur-sm rounded-xl p-1 shadow-sm border border-white/20"
+              className="w-full bg-white/60 backdrop-blur-sm rounded-xl p-1.5 shadow-sm border border-white/20"
             >
               <ToggleGroupItem 
                 value="podium" 
                 className={cn(
-                  "flex-1 data-[state=on]:bg-white data-[state=on]:shadow-sm rounded-lg text-sm py-2",
-                  view === "podium" ? "text-dutch-blue font-medium" : "text-gray-600"
+                  "flex-1 data-[state=on]:bg-white data-[state=on]:shadow-sm rounded-lg text-sm py-2 font-medium",
+                  view === "podium" ? "text-dutch-blue" : "text-gray-600"
                 )}
               >
                 <Medal className="h-4 w-4 mr-1.5" />
@@ -181,8 +181,8 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
               <ToggleGroupItem 
                 value="table" 
                 className={cn(
-                  "flex-1 data-[state=on]:bg-white data-[state=on]:shadow-sm rounded-lg text-sm py-2",
-                  view === "table" ? "text-dutch-blue font-medium" : "text-gray-600"
+                  "flex-1 data-[state=on]:bg-white data-[state=on]:shadow-sm rounded-lg text-sm py-2 font-medium",
+                  view === "table" ? "text-dutch-blue" : "text-gray-600"
                 )}
               >
                 <TableIcon className="h-4 w-4 mr-1.5" />
@@ -265,7 +265,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
         )}
       </div>
       
-      {/* Floating Action Button */}
+      {/* Floating Action Button - Improved style */}
       <motion.div
         className="fixed bottom-6 right-6 z-20"
         initial={{ scale: 0, opacity: 0 }}
