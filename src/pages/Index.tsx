@@ -59,8 +59,9 @@ const Index = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
+          className="h-full flex"
         >
-          <Card className="h-full ios-card hover-lift">
+          <Card className="h-full ios-card hover-lift flex flex-col w-full">
             <CardContent className="p-6 flex flex-col items-center text-center h-full">
               <div className="h-12 w-12 rounded-full bg-dutch-blue/10 flex items-center justify-center mb-4">
                 <PlayCircle className="h-6 w-6 text-dutch-blue" />
@@ -71,7 +72,7 @@ const Index = () => {
                 onClick={() => navigate('/game')} 
                 variant="ios-blue" 
                 elevated 
-                className="w-full"
+                className="w-full mt-auto"
               >
                 Démarrer
               </Button>
@@ -83,8 +84,9 @@ const Index = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
+          className="h-full flex"
         >
-          <Card className="h-full ios-card hover-lift">
+          <Card className="h-full ios-card hover-lift flex flex-col w-full">
             <CardContent className="p-6 flex flex-col items-center text-center h-full">
               <div className="h-12 w-12 rounded-full bg-dutch-purple/10 flex items-center justify-center mb-4">
                 <BookOpen className="h-6 w-6 text-dutch-purple" />
@@ -96,7 +98,7 @@ const Index = () => {
                 variant="outline" 
                 glassmorphism 
                 elevated 
-                className="w-full"
+                className="w-full mt-auto"
               >
                 Consulter
               </Button>
@@ -108,8 +110,9 @@ const Index = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
+          className="h-full flex"
         >
-          <Card className="h-full ios-card hover-lift">
+          <Card className="h-full ios-card hover-lift flex flex-col w-full">
             <CardContent className="p-6 flex flex-col items-center text-center h-full">
               <div className="h-12 w-12 rounded-full bg-dutch-orange/10 flex items-center justify-center mb-4">
                 <ClipboardList className="h-6 w-6 text-dutch-orange" />
@@ -121,7 +124,7 @@ const Index = () => {
                 variant="outline" 
                 glassmorphism 
                 elevated 
-                className="w-full"
+                className="w-full mt-auto"
               >
                 Voir
               </Button>

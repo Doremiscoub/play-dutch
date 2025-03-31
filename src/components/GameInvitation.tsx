@@ -188,8 +188,8 @@ const GameInvitation: React.FC<GameInvitationProps> = ({
           whileHover={{ scale: 1.02 }}
           transition={{ duration: 0.2 }}
         >
-          <Card className="h-full border border-white/50 bg-gradient-to-br from-white/90 to-white/70 backdrop-blur-md shadow-md hover:shadow-lg transition-all duration-300">
-            <CardHeader className="md:pb-2">
+          <Card className="h-full border border-white/50 bg-gradient-to-br from-white/90 to-white/70 backdrop-blur-md shadow-md hover:shadow-lg transition-all duration-300 flex flex-col">
+            <CardHeader className="pb-2">
               <CardTitle className="text-xl font-semibold text-dutch-blue flex items-center gap-2">
                 <Users className="w-5 h-5" />
                 Créer une partie
@@ -198,7 +198,7 @@ const GameInvitation: React.FC<GameInvitationProps> = ({
                 Créez une nouvelle partie et invitez vos amis à vous rejoindre
               </CardDescription>
             </CardHeader>
-            <CardContent className="flex-grow flex flex-col justify-center space-y-6">
+            <CardContent className="flex-grow flex flex-col items-center justify-center space-y-6">
               <div className="flex items-center justify-center h-16">
                 <div className="w-16 h-16 rounded-full bg-dutch-blue/10 flex items-center justify-center">
                   <Users className="w-8 h-8 text-dutch-blue" />
@@ -216,7 +216,7 @@ const GameInvitation: React.FC<GameInvitationProps> = ({
                 </Label>
               </div>
             </CardContent>
-            <CardFooter>
+            <CardFooter className="mt-auto pt-4">
               <Button 
                 onClick={handleCreateGame} 
                 disabled={isCreatingGame}
@@ -242,8 +242,8 @@ const GameInvitation: React.FC<GameInvitationProps> = ({
               whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.2 }}
             >
-              <Card className="h-full cursor-pointer border border-white/50 bg-gradient-to-br from-white/90 to-white/70 backdrop-blur-md shadow-md hover:shadow-lg transition-all duration-300">
-                <CardHeader className="md:pb-2">
+              <Card className="h-full cursor-pointer border border-white/50 bg-gradient-to-br from-white/90 to-white/70 backdrop-blur-md shadow-md hover:shadow-lg transition-all duration-300 flex flex-col">
+                <CardHeader className="pb-2">
                   <CardTitle className="text-xl font-semibold text-dutch-purple flex items-center gap-2">
                     <LinkIcon className="w-5 h-5" />
                     Rejoindre une partie
@@ -252,14 +252,14 @@ const GameInvitation: React.FC<GameInvitationProps> = ({
                     Rejoignez une partie existante avec un code d'invitation
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="flex-grow flex flex-col justify-center">
+                <CardContent className="flex-grow flex flex-col items-center justify-center">
                   <div className="flex items-center justify-center h-16">
                     <div className="w-16 h-16 rounded-full bg-dutch-purple/10 flex items-center justify-center">
                       <LinkIcon className="w-8 h-8 text-dutch-purple" />
                     </div>
                   </div>
                 </CardContent>
-                <CardFooter>
+                <CardFooter className="mt-auto pt-4">
                   <Button 
                     className="w-full bg-gradient-to-r from-dutch-purple to-dutch-pink text-white hover:opacity-90"
                   >
