@@ -8,12 +8,21 @@ import { User, LogIn } from 'lucide-react';
 export const AuthStatus: React.FC = () => {
   const location = useLocation();
   
-  // Détermine sur quelle page nous sommes pour ajuster le positionnement
+  // Check if we're on the sign-in or sign-up page, or their sub-routes
+  const isAuthPage = location.pathname.startsWith('/sign-in') || 
+                     location.pathname.startsWith('/sign-up');
+  
+  // If we're on an auth page, don't show the auth buttons
+  if (isAuthPage) {
+    return null;
+  }
+  
+  // Determine which page we're on to adjust positioning
   const isRulesPage = location.pathname === '/rules';
   const isHomePage = location.pathname === '/' || location.pathname === '/index';
   const isHistoryPage = location.pathname === '/history';
   
-  // Calculer la position optimale en fonction de la page
+  // Calculate the optimal position based on the page
   const topPosition = isRulesPage ? 'top-20' : isHomePage ? 'top-16' : isHistoryPage ? 'top-20' : 'top-4';
   
   return (
