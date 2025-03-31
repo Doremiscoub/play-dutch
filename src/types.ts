@@ -1,7 +1,9 @@
-
-export interface PlayerRound {
-  score: number;
-  isDutch: boolean;
+export interface Player {
+  id: string;
+  name: string;
+  totalScore: number;
+  rounds: { score: number; isDutch: boolean }[];
+  stats?: PlayerStatistics;
 }
 
 export interface PlayerStatistics {
@@ -14,30 +16,17 @@ export interface PlayerStatistics {
   winStreak: number;
 }
 
-export interface Player {
-  id: string;
-  name: string;
-  totalScore: number;
-  rounds: PlayerRound[];
-  stats?: PlayerStatistics;
-}
-
-export interface GamePlayer {
-  name: string;
-  score: number;
-  isDutch: boolean;
-}
-
 export interface Game {
   id: string;
   date: Date;
   rounds: number;
-  players: GamePlayer[];
+  players: { name: string; score: number; isDutch: boolean }[];
   winner: string;
   isMultiplayer?: boolean;
   gameCode?: string;
 }
 
+// Add these new props to the ScoreBoardProps interface
 export interface ScoreBoardProps {
   players: Player[];
   onAddRound: (scores: number[], dutchPlayerId?: string) => void;

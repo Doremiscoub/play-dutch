@@ -22,6 +22,7 @@ import ScoreTableView from './ScoreTableView';
 import GameSettings from './GameSettings';
 import { useUser } from '@clerk/clerk-react';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import AnimatedBackground from './AnimatedBackground';
 
 const ScoreBoard: React.FC<ScoreBoardProps> = ({ 
   players, 
@@ -36,7 +37,6 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
 }) => {
   const [showNewRoundModal, setShowNewRoundModal] = useState(false);
   const [showStatsDialog, setShowStatsDialog] = useState(false);
-  const [showPodium, setShowPodium] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(() => {
     const savedSetting = localStorage.getItem('dutch_sound_enabled');
     return savedSetting !== 'false'; // default to true if not set
@@ -70,7 +70,12 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
   };
   
   return (
-    <div className="w-full max-w-4xl mx-auto p-4 pb-24 md:pb-4">
+    <div className="w-full max-w-4xl mx-auto p-4 pb-24 md:pb-4 relative">
+      {/* Animated background similar to LocalGameSetup */}
+      <div className="fixed inset-0 -z-10">
+        <AnimatedBackground variant="subtle" />
+      </div>
+      
       <AnimatePresence>
         {showNewRoundModal && (
           <NewRoundModal 
@@ -183,7 +188,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
         </motion.div>
       </motion.div>
       
-      <div>
+      <div className="dutch-card backdrop-blur-md border border-white/40 bg-white/80 hover:shadow-lg transition-all duration-300 rounded-2xl overflow-hidden p-6">
         {view === 'podium' ? (
           <div>
             <motion.div 
@@ -201,14 +206,6 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                 />
               ))}
             </motion.div>
-            
-            {showPodium && (
-              <PodiumView 
-                players={sortedPlayers.slice(0, 3)}
-                onClose={() => setShowPodium(false)}
-                isMultiplayer={isMultiplayer}
-              />
-            )}
           </div>
         ) : (
           <motion.div
