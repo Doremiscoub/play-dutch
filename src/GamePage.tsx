@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Player, Game, PlayerStatistics } from '@/types';
@@ -9,19 +10,44 @@ import { AnimatePresence, motion } from 'framer-motion';
 import confetti from 'canvas-confetti';
 
 const GamePage: React.FC = () => {
-  const [gameState, setGameState] = useState<'setup' | 'playing'>('setup');
-  const [players, setPlayers] = useState<Player[]>([]);
+  const [gameState, setGameState] = useState<'setup' | 'playing'>(() => {
+    const savedGame = localStorage.getItem('current_dutch_game');
+    return savedGame ? 'playing' : 'setup';
+  });
+  
+  const [players, setPlayers] = useState<Player[]>(() => {
+    const savedGame = localStorage.getItem('current_dutch_game');
+    return savedGame ? JSON.parse(savedGame).players : [];
+  });
+  
   const [games, setGames] = useState<Game[]>(() => {
     const savedGames = localStorage.getItem('dutch_games');
     return savedGames ? JSON.parse(savedGames) : [];
   });
-  const [roundHistory, setRoundHistory] = useState<{ scores: number[], dutchPlayerId?: string }[]>([]);
+  
+  const [roundHistory, setRoundHistory] = useState<{ scores: number[], dutchPlayerId?: string }[]>(() => {
+    const savedGame = localStorage.getItem('current_dutch_game');
+    return savedGame ? JSON.parse(savedGame).roundHistory : [];
+  });
+  
   const [showGameEndConfirmation, setShowGameEndConfirmation] = useState<boolean>(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     localStorage.setItem('dutch_games', JSON.stringify(games));
   }, [games]);
+  
+  // Sauvegarder l'état actuel du jeu à chaque modification
+  useEffect(() => {
+    if (gameState === 'playing' && players.length > 0) {
+      const currentGame = {
+        players,
+        roundHistory,
+        lastUpdated: new Date()
+      };
+      localStorage.setItem('current_dutch_game', JSON.stringify(currentGame));
+    }
+  }, [gameState, players, roundHistory]);
 
   const calculatePlayerStats = useCallback((player: Player): PlayerStatistics => {
     const rounds = player.rounds;
@@ -100,6 +126,10 @@ const GamePage: React.FC = () => {
     setPlayers(newPlayers);
     setGameState('playing');
     setRoundHistory([]);
+    
+    // Clear any previous saved game
+    localStorage.removeItem('current_dutch_game');
+    
     toast.success('La partie commence !');
   };
 
@@ -171,6 +201,9 @@ const GamePage: React.FC = () => {
     toast.success(`Partie terminée ! ${winner} gagne !`);
     
     launchConfetti();
+    
+    // Supprimer la partie en cours une fois terminée
+    localStorage.removeItem('current_dutch_game');
     
     if (window.localStorage.getItem('dutch_sound_enabled') !== 'false') {
       new Audio('/sounds/win-sound.mp3').play().catch(err => console.error("Sound error:", err));
@@ -249,6 +282,9 @@ const GamePage: React.FC = () => {
     setGameState('setup');
     setPlayers([]);
     setRoundHistory([]);
+    
+    // Supprimer la partie en cours
+    localStorage.removeItem('current_dutch_game');
   };
 
   const handleCancelEndGame = () => {

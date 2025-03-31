@@ -17,13 +17,32 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { motion } from 'framer-motion';
-import { Flag, BarChart2, List, Award, Activity, Clock, Table2, Sparkles, LightbulbIcon, BrainIcon } from 'lucide-react';
+import { 
+  Flag, 
+  BarChart2, 
+  List, 
+  Award, 
+  Activity, 
+  Clock, 
+  Table2, 
+  Sparkles, 
+  LightbulbIcon, 
+  BrainIcon, 
+  HomeIcon, 
+  PlusIcon, 
+  UndoIcon, 
+  XIcon,
+  UserIcon,
+  ArrowLeftIcon
+} from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useMediaQuery } from '@/hooks/use-mobile';
 import PlayerStatsChart from './PlayerStatsChart';
 import ScoreTableView from './ScoreTableView';
 import PodiumView from './PodiumView';
 import { Switch } from './ui/switch';
+import { Link } from 'react-router-dom';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table';
 
 const AICommentator: React.FC<{
   players: Player[];
@@ -152,19 +171,9 @@ const AICommentator: React.FC<{
     }
   };
 
-  const commentatorNames = [
-    "Prof. Cartouche",
-    "Maestro Dutch",
-    "Docteur Score",
-    "L'Oracle des cartes",
-    "Coach Zéro"
-  ];
-  
-  const commentatorName = commentatorNames[Math.floor(Math.random() * commentatorNames.length)];
-
   return (
     <motion.div 
-      className={`${className} rounded-xl overflow-hidden shadow-lg`}
+      className={cn(`rounded-xl overflow-hidden shadow-lg ${className}`)}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
@@ -182,7 +191,7 @@ const AICommentator: React.FC<{
           <div className="flex-grow">
             <div className="flex flex-col">
               <h3 className="text-base font-bold bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">
-                {commentatorName}
+                Prof. Cartouche
               </h3>
               <span className="text-xs text-gray-600 -mt-1 mb-1">Analyste de jeu</span>
             </div>
@@ -260,6 +269,214 @@ const AICommentator: React.FC<{
   );
 };
 
+const ScoreHeatmapTable: React.FC<{
+  players: Player[];
+}> = ({ players }) => {
+  if (!players.length || !players[0].rounds.length) {
+    return (
+      <div className="bg-white/90 rounded-xl p-4 border border-gray-200 text-center py-8">
+        <p className="text-gray-500">Aucune manche enregistrée</p>
+      </div>
+    );
+  }
+  
+  const roundCount = players[0].rounds.length;
+  const rounds = Array.from({ length: roundCount }, (_, i) => i + 1);
+  
+  const getScoreColor = (score: number) => {
+    if (score === 0) return 'bg-green-100 text-green-800';
+    if (score <= 5) return 'bg-green-200 text-green-800';
+    if (score <= 10) return 'bg-blue-200 text-blue-800';
+    if (score <= 15) return 'bg-purple-200 text-purple-800';
+    if (score <= 20) return 'bg-orange-200 text-orange-800';
+    return 'bg-red-200 text-red-800';
+  };
+  
+  return (
+    <div className="overflow-x-auto">
+      <Table className="w-full bg-white/90 rounded-xl">
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-[150px]">Joueur</TableHead>
+            {rounds.map(round => (
+              <TableHead key={round} className="text-center font-medium">
+                Manche {round}
+              </TableHead>
+            ))}
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {players.map(player => (
+            <TableRow key={player.id}>
+              <TableCell className="font-medium">{player.name}</TableCell>
+              {player.rounds.map((round, idx) => (
+                <TableCell key={idx} className="text-center">
+                  <span className={`inline-flex items-center justify-center w-8 h-8 rounded-full font-medium ${getScoreColor(round.score)}`}>
+                    {round.score}
+                  </span>
+                </TableCell>
+              ))}
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
+  );
+};
+
+const StatsTable: React.FC<{
+  players: Player[];
+}> = ({ players }) => {
+  if (!players.length) {
+    return null;
+  }
+  
+  return (
+    <div className="overflow-x-auto mt-4">
+      <Table className="w-full bg-white/90 rounded-xl">
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-[150px]">Joueur</TableHead>
+            <TableHead className="text-center">Score</TableHead>
+            <TableHead className="text-center">Moyenne</TableHead>
+            <TableHead className="text-center">Min</TableHead>
+            <TableHead className="text-center">Max</TableHead>
+            <TableHead className="text-center">Dutch</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {players.map(player => (
+            <TableRow key={player.id}>
+              <TableCell className="font-medium">{player.name}</TableCell>
+              <TableCell className="text-center font-bold">{player.totalScore}</TableCell>
+              <TableCell className="text-center">{player.stats?.averageScore.toFixed(1) || '-'}</TableCell>
+              <TableCell className="text-center text-green-600 font-medium">{player.stats?.bestRound || '-'}</TableCell>
+              <TableCell className="text-center text-red-600 font-medium">{player.stats?.worstRound || '-'}</TableCell>
+              <TableCell className="text-center">
+                <span className="inline-flex h-6 items-center justify-center rounded-full bg-dutch-orange/10 px-2 text-xs font-medium text-dutch-orange">
+                  {player.stats?.dutchCount || 0}
+                </span>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
+  );
+};
+
+const FunStats: React.FC<{
+  players: Player[];
+  showExtended?: boolean;
+}> = ({ players, showExtended = false }) => {
+  if (!players || players.length === 0) {
+    return null;
+  }
+  
+  const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
+  
+  // Get various fun statistics
+  const bestPlayer = sortedPlayers[0];
+  const worstPlayer = sortedPlayers[sortedPlayers.length - 1];
+  
+  const mostDutchs = [...players].sort((a, b) => 
+    (b.rounds.filter(r => r.isDutch).length) - 
+    (a.rounds.filter(r => r.isDutch).length)
+  )[0];
+  
+  const mostConsistent = [...players].sort((a, b) => {
+    if (!a.stats?.consistencyScore || !b.stats?.consistencyScore) return 0;
+    return a.stats.consistencyScore - b.stats.consistencyScore;
+  })[0];
+  
+  const bestImprovement = [...players].sort((a, b) => {
+    if (!a.stats?.improvementRate || !b.stats?.improvementRate) return 0;
+    return a.stats.improvementRate - b.stats.improvementRate;
+  })[0];
+  
+  return (
+    <motion.div
+      className="bg-white/80 backdrop-blur-md border border-white/30 rounded-2xl shadow-md p-4 overflow-hidden"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, delay: 0.2 }}
+    >
+      <h3 className="text-lg font-semibold mb-4 bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">
+        Stats du match
+      </h3>
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div className="p-3 border border-white/50 rounded-xl bg-gradient-to-br from-dutch-blue/5 to-dutch-purple/5 shadow-sm">
+          <div className="flex items-center gap-3">
+            <div className="flex items-center justify-center h-10 w-10 rounded-full bg-dutch-blue/20 text-dutch-blue shadow-sm">
+              <Award className="h-5 w-5" />
+            </div>
+            <div>
+              <p className="text-sm text-gray-500">En tête</p>
+              <p className="font-bold text-gray-900">{bestPlayer.name}</p>
+              <p className="text-xs text-green-600">{bestPlayer.totalScore} points</p>
+            </div>
+          </div>
+        </div>
+        
+        <div className="p-3 border border-white/50 rounded-xl bg-gradient-to-br from-dutch-orange/5 to-dutch-pink/5 shadow-sm">
+          <div className="flex items-center gap-3">
+            <div className="flex items-center justify-center h-10 w-10 rounded-full bg-dutch-orange/20 text-dutch-orange shadow-sm">
+              <Flag className="h-5 w-5" />
+            </div>
+            <div>
+              <p className="text-sm text-gray-500">Le plus de Dutch</p>
+              <p className="font-bold text-gray-900">{mostDutchs.name}</p>
+              <p className="text-xs text-orange-600">{mostDutchs.rounds.filter(r => r.isDutch).length} fois</p>
+            </div>
+          </div>
+        </div>
+        
+        {showExtended && (
+          <>
+            <div className="p-3 border border-white/50 rounded-xl bg-gradient-to-br from-dutch-green/5 to-dutch-blue/5 shadow-sm">
+              <div className="flex items-center gap-3">
+                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-dutch-green/20 text-dutch-green shadow-sm">
+                  <Activity className="h-5 w-5" />
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">Plus constant</p>
+                  <p className="font-bold text-gray-900">{mostConsistent?.name || "N/A"}</p>
+                  <p className="text-xs text-blue-600">{mostConsistent?.stats?.consistencyScore?.toFixed(1) || "N/A"}</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="p-3 border border-white/50 rounded-xl bg-gradient-to-br from-dutch-purple/5 to-dutch-pink/5 shadow-sm">
+              <div className="flex items-center gap-3">
+                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-dutch-purple/20 text-dutch-purple shadow-sm">
+                  <BarChart2 className="h-5 w-5" />
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">Meilleure progression</p>
+                  <p className="font-bold text-gray-900">{bestImprovement?.name || "N/A"}</p>
+                  <p className="text-xs text-purple-600">{bestImprovement?.stats?.improvementRate?.toFixed(1) || "N/A"}</p>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+      </div>
+      
+      {players.length > 1 && (
+        <div className="mt-4 p-3 bg-dutch-blue/10 rounded-xl border border-dutch-blue/20">
+          <div className="flex items-center gap-2">
+            <Award className="h-4 w-4 text-dutch-blue" />
+            <span className="text-sm text-dutch-blue font-medium">
+              {bestPlayer.name} mène de {worstPlayer.totalScore - bestPlayer.totalScore} pts !
+            </span>
+          </div>
+        </div>
+      )}
+    </motion.div>
+  );
+};
+
 const ScoreBoard: React.FC<ScoreBoardProps> = ({ 
   players, 
   onAddRound, 
@@ -317,19 +534,29 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
       >
-        <h1 className="text-2xl font-bold bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-pink text-transparent bg-clip-text">
-          Tableau des scores
-        </h1>
+        <div className="flex items-center gap-3">
+          <Link to="/" className="flex-shrink-0">
+            <Button variant="outline" size="icon" className="rounded-full shadow-sm hover:shadow">
+              <ArrowLeftIcon className="h-5 w-5" />
+            </Button>
+          </Link>
+          <h1 className="text-2xl font-bold bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-pink text-transparent bg-clip-text">
+            Tableau des scores
+          </h1>
+        </div>
         
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-500">Vue classique</span>
+            <span className="text-sm text-gray-500 hidden md:inline">Classement</span>
             <Switch 
               checked={showTableView} 
               onCheckedChange={setShowTableView}
             />
-            <span className="text-sm text-gray-500">Vue tableau</span>
+            <span className="text-sm text-gray-500 hidden md:inline">Tableau</span>
           </div>
+          <Button variant="outline" size="icon" className="rounded-full opacity-70">
+            <UserIcon className="h-5 w-5" />
+          </Button>
         </div>
       </motion.div>
       
@@ -344,7 +571,21 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
           
           <div className="flex-1">
             {showTableView ? (
-              <ScoreTableView players={players} roundHistory={roundHistory} />
+              <div className="space-y-6">
+                <div className="bg-white/90 backdrop-blur-sm rounded-xl p-4 shadow-sm border border-white/50">
+                  <h3 className="text-base font-semibold mb-3 flex items-center gap-2">
+                    <Table2 className="h-4 w-4 text-dutch-purple" /> Historique des manches
+                  </h3>
+                  <ScoreHeatmapTable players={players} />
+                </div>
+                
+                <div className="bg-white/90 backdrop-blur-sm rounded-xl p-4 shadow-sm border border-white/50">
+                  <h3 className="text-base font-semibold mb-3 flex items-center gap-2">
+                    <BarChart2 className="h-4 w-4 text-dutch-blue" /> Statistiques des joueurs
+                  </h3>
+                  <StatsTable players={players} />
+                </div>
+              </div>
             ) : (
               <div className="space-y-3">
                 {players.sort((a, b) => a.totalScore - b.totalScore).map((player, index) => (
@@ -360,57 +601,67 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
             )}
           </div>
           
-          <div className="grid grid-cols-1 gap-3 mt-4">
-            <Button 
-              variant="default" 
-              className="w-full bg-dutch-blue text-white hover:bg-dutch-blue/90" 
-              onClick={onAddRoundHandler}
-            >
-              Nouvelle Manche
-            </Button>
-            
-            <div className="grid grid-cols-2 gap-3">
+          <div className="fixed bottom-6 left-0 right-0 px-4 z-10">
+            <div className="bg-white/90 backdrop-blur-md rounded-2xl shadow-lg border border-white/40 p-4">
+              <div className="grid grid-cols-3 gap-3">
+                <Button 
+                  variant="outline" 
+                  className="h-14 rounded-xl border-dutch-orange text-dutch-orange hover:bg-dutch-orange/10 flex flex-col items-center justify-center px-1" 
+                  onClick={onUndoLastRound}
+                >
+                  <UndoIcon className="h-5 w-5 mb-1" />
+                  <span className="text-xs">Annuler</span>
+                </Button>
+                
+                <Button 
+                  variant="dutch-blue" 
+                  className="h-14 rounded-xl shadow-md flex flex-col items-center justify-center px-1"
+                  onClick={onAddRoundHandler}
+                >
+                  <PlusIcon className="h-6 w-6 mb-1" />
+                  <span className="text-xs">Nouvelle manche</span>
+                </Button>
+                
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button 
+                      variant="outline" 
+                      className="h-14 rounded-xl border-dutch-purple text-dutch-purple hover:bg-dutch-purple/10 flex flex-col items-center justify-center px-1"
+                    >
+                      <BarChart2 className="h-5 w-5 mb-1" />
+                      <span className="text-xs">Stats</span>
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Statistiques du jeu</DialogTitle>
+                    </DialogHeader>
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                      <div className="space-y-4">
+                        <h3 className="text-sm font-semibold">Performance par joueur</h3>
+                        <PlayerStatsChart players={players} />
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-semibold mb-4">Points forts</h3>
+                        <FunStats players={players} showExtended={true} />
+                      </div>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              </div>
+              
               <Button 
                 variant="outline" 
-                className="w-full border-dutch-orange text-dutch-orange hover:bg-dutch-orange/10" 
-                onClick={onUndoLastRound}
+                className="w-full mt-3 border-red-300 text-red-500 hover:bg-red-50" 
+                onClick={onEndGame}
               >
-                Annuler Dernière
+                <XIcon className="h-4 w-4 mr-2" /> Terminer la partie
               </Button>
-              
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button 
-                    variant="outline" 
-                    className="w-full border-dutch-purple text-dutch-purple hover:bg-dutch-purple/10"
-                  >
-                    <BarChart2 className="h-4 w-4 mr-2" /> Statistiques
-                  </Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Statistiques du jeu</DialogTitle>
-                  </DialogHeader>
-                  <PlayerStatsChart players={players} />
-                  <FunStats players={players} />
-                </DialogContent>
-              </Dialog>
             </div>
-            
-            <Button 
-              variant="destructive" 
-              className="w-full" 
-              onClick={onEndGame}
-            >
-              Terminer la Partie
-            </Button>
           </div>
           
-          <div className="mt-2 p-3 bg-gray-100 rounded-xl border border-gray-200 opacity-80 flex items-center justify-center">
-            <div className="flex items-center gap-1.5 text-gray-600 text-sm">
-              <Clock className="h-3.5 w-3.5" />
-              <span>Mode multijoueur bientôt disponible</span>
-            </div>
+          <div className="pt-36">
+            {/* Spacer to ensure content isn't hidden behind fixed bottom bar */}
           </div>
         </div>
       ) : (
@@ -420,12 +671,26 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
             {showTableView ? (
               <div className="grid grid-cols-12 gap-6">
                 <div className="col-span-9">
-                  <ScoreTableView players={players} roundHistory={roundHistory} />
+                  <div className="bg-white/90 backdrop-blur-sm rounded-xl p-4 shadow-sm border border-white/50 mb-4">
+                    <h3 className="text-base font-semibold mb-3 flex items-center gap-2">
+                      <Table2 className="h-4 w-4 text-dutch-purple" /> Historique des manches
+                    </h3>
+                    <ScoreHeatmapTable players={players} />
+                  </div>
+                  
+                  <div className="bg-white/90 backdrop-blur-sm rounded-xl p-4 shadow-sm border border-white/50">
+                    <h3 className="text-base font-semibold mb-3 flex items-center gap-2">
+                      <BarChart2 className="h-4 w-4 text-dutch-blue" /> Statistiques des joueurs
+                    </h3>
+                    <StatsTable players={players} />
+                  </div>
                 </div>
-                <div className="col-span-3">
+                
+                <div className="col-span-3 space-y-4">
                   {players && players.length > 0 && (
-                    <AICommentator players={players} roundHistory={roundHistory} className="h-full" />
+                    <AICommentator players={players} roundHistory={roundHistory} className="h-auto" />
                   )}
+                  <FunStats players={players} />
                 </div>
               </div>
             ) : (
@@ -445,7 +710,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                 </div>
                 <div className="col-span-4 flex flex-col gap-4">
                   {players && players.length > 0 && (
-                    <AICommentator players={players} roundHistory={roundHistory} className="h-auto" />
+                    <AICommentator players={players} roundHistory={roundHistory} className="h-auto bg-white/90 shadow-md" />
                   )}
                   <FunStats players={players} />
                 </div>
@@ -460,17 +725,25 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                   <DialogTrigger asChild>
                     <Button 
                       variant="outline" 
-                      className="border-dutch-purple text-dutch-purple hover:bg-dutch-purple/10"
+                      className="rounded-xl border-dutch-purple text-dutch-purple hover:bg-dutch-purple/10 gap-2"
                     >
-                      <BarChart2 className="h-4 w-4 mr-2" /> Statistiques détaillées
+                      <BarChart2 className="h-4 w-4" /> Statistiques détaillées
                     </Button>
                   </DialogTrigger>
                   <DialogContent className="max-w-4xl">
                     <DialogHeader>
                       <DialogTitle>Statistiques détaillées</DialogTitle>
                     </DialogHeader>
-                    <PlayerStatsChart players={players} />
-                    <FunStats players={players} showExtended={true} />
+                    <div className="grid grid-cols-2 gap-6">
+                      <div>
+                        <h3 className="text-sm font-semibold mb-4">Performance par joueur</h3>
+                        <PlayerStatsChart players={players} />
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-semibold mb-4">Points forts</h3>
+                        <FunStats players={players} showExtended={true} />
+                      </div>
+                    </div>
                   </DialogContent>
                 </Dialog>
               </div>
@@ -478,25 +751,26 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
               <div className="flex gap-3">
                 <Button 
                   variant="outline" 
-                  className="border-dutch-orange text-dutch-orange hover:bg-dutch-orange/10" 
+                  className="rounded-xl border-dutch-orange text-dutch-orange hover:bg-dutch-orange/10 gap-2" 
                   onClick={onUndoLastRound}
                 >
-                  Annuler Dernière
+                  <UndoIcon className="h-4 w-4" /> Annuler dernière
                 </Button>
                 
                 <Button 
-                  variant="default" 
-                  className="bg-dutch-blue text-white hover:bg-dutch-blue/90" 
+                  variant="dutch-blue" 
+                  className="rounded-xl shadow-md gap-2" 
                   onClick={onAddRoundHandler}
                 >
-                  Nouvelle Manche
+                  <PlusIcon className="h-4 w-4" /> Nouvelle manche
                 </Button>
                 
                 <Button 
-                  variant="destructive" 
+                  variant="outline"
+                  className="rounded-xl border-red-300 text-red-500 hover:bg-red-50 gap-2"
                   onClick={onEndGame}
                 >
-                  Terminer la Partie
+                  <XIcon className="h-4 w-4" /> Terminer
                 </Button>
               </div>
             </div>
@@ -663,119 +937,6 @@ const PlayerScoreCard: React.FC<{
               </motion.div>
             );
           })}
-        </div>
-      )}
-    </motion.div>
-  );
-};
-
-// Fun statistics component to make stats more engaging
-const FunStats: React.FC<{
-  players: Player[];
-  showExtended?: boolean;
-}> = ({ players, showExtended = false }) => {
-  if (!players || players.length === 0) {
-    return null;
-  }
-  
-  const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
-  
-  // Get various fun statistics
-  const bestPlayer = sortedPlayers[0];
-  const worstPlayer = sortedPlayers[sortedPlayers.length - 1];
-  
-  const mostDutchs = [...players].sort((a, b) => 
-    (b.rounds.filter(r => r.isDutch).length) - 
-    (a.rounds.filter(r => r.isDutch).length)
-  )[0];
-  
-  const mostConsistent = [...players].sort((a, b) => {
-    if (!a.stats?.consistencyScore || !b.stats?.consistencyScore) return 0;
-    return a.stats.consistencyScore - b.stats.consistencyScore;
-  })[0];
-  
-  const bestImprovement = [...players].sort((a, b) => {
-    if (!a.stats?.improvementRate || !b.stats?.improvementRate) return 0;
-    return a.stats.improvementRate - b.stats.improvementRate;
-  })[0];
-  
-  return (
-    <motion.div
-      className="bg-white/80 backdrop-blur-md border border-white/30 rounded-2xl shadow-md p-4 overflow-hidden"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: 0.2 }}
-    >
-      <h3 className="text-lg font-semibold mb-4 bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">
-        Stats du match
-      </h3>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-        <div className="p-3 border border-white/50 rounded-xl bg-gradient-to-br from-dutch-blue/5 to-dutch-purple/5 shadow-sm">
-          <div className="flex items-center gap-3">
-            <div className="flex items-center justify-center h-10 w-10 rounded-full bg-dutch-blue/20 text-dutch-blue shadow-sm">
-              <Award className="h-5 w-5" />
-            </div>
-            <div>
-              <p className="text-sm text-gray-500">En tête</p>
-              <p className="font-bold text-gray-900">{bestPlayer.name}</p>
-              <p className="text-xs text-green-600">{bestPlayer.totalScore} points</p>
-            </div>
-          </div>
-        </div>
-        
-        <div className="p-3 border border-white/50 rounded-xl bg-gradient-to-br from-dutch-orange/5 to-dutch-pink/5 shadow-sm">
-          <div className="flex items-center gap-3">
-            <div className="flex items-center justify-center h-10 w-10 rounded-full bg-dutch-orange/20 text-dutch-orange shadow-sm">
-              <Flag className="h-5 w-5" />
-            </div>
-            <div>
-              <p className="text-sm text-gray-500">Le plus de Dutch</p>
-              <p className="font-bold text-gray-900">{mostDutchs.name}</p>
-              <p className="text-xs text-orange-600">{mostDutchs.rounds.filter(r => r.isDutch).length} fois</p>
-            </div>
-          </div>
-        </div>
-        
-        {showExtended && (
-          <>
-            <div className="p-3 border border-white/50 rounded-xl bg-gradient-to-br from-dutch-green/5 to-dutch-blue/5 shadow-sm">
-              <div className="flex items-center gap-3">
-                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-dutch-green/20 text-dutch-green shadow-sm">
-                  <Activity className="h-5 w-5" />
-                </div>
-                <div>
-                  <p className="text-sm text-gray-500">Plus constant</p>
-                  <p className="font-bold text-gray-900">{mostConsistent?.name || "N/A"}</p>
-                  <p className="text-xs text-blue-600">{mostConsistent?.stats?.consistencyScore?.toFixed(1) || "N/A"}</p>
-                </div>
-              </div>
-            </div>
-            
-            <div className="p-3 border border-white/50 rounded-xl bg-gradient-to-br from-dutch-purple/5 to-dutch-pink/5 shadow-sm">
-              <div className="flex items-center gap-3">
-                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-dutch-purple/20 text-dutch-purple shadow-sm">
-                  <BarChart2 className="h-5 w-5" />
-                </div>
-                <div>
-                  <p className="text-sm text-gray-500">Meilleure progression</p>
-                  <p className="font-bold text-gray-900">{bestImprovement?.name || "N/A"}</p>
-                  <p className="text-xs text-purple-600">{bestImprovement?.stats?.improvementRate?.toFixed(1) || "N/A"}</p>
-                </div>
-              </div>
-            </div>
-          </>
-        )}
-      </div>
-      
-      {players.length > 1 && (
-        <div className="mt-4 p-3 bg-dutch-blue/10 rounded-xl border border-dutch-blue/20">
-          <div className="flex items-center gap-2">
-            <Award className="h-4 w-4 text-dutch-blue" />
-            <span className="text-sm text-dutch-blue font-medium">
-              {bestPlayer.name} mène de {worstPlayer.totalScore - bestPlayer.totalScore} pts !
-            </span>
-          </div>
         </div>
       )}
     </motion.div>
