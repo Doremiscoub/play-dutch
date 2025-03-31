@@ -2,17 +2,17 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Palette } from 'lucide-react';
-import { useTheme } from '@/hooks/use-theme';
+import { useTheme, themeConfig } from '@/hooks/use-theme';
 import { motion } from 'framer-motion';
 
-// Composant simplifié pour le sélecteur de thème qui ne cause pas d'erreur React.Children.only
+// Composant simplifié pour le sélecteur de thème
 const ThemeSelector: React.FC = () => {
-  const { currentTheme, setTheme, getThemeColors } = useTheme();
-  const themeConfig = Object.entries(require('@/hooks/use-theme').themeConfig);
+  const { currentTheme, setTheme } = useTheme();
+  const themeEntries = Object.entries(themeConfig);
 
   const handleThemeChange = () => {
     // Rotation simple entre les thèmes disponibles
-    const themeIds = themeConfig.map(([id]) => id);
+    const themeIds = themeEntries.map(([id]) => id);
     const currentIndex = themeIds.indexOf(currentTheme);
     const nextIndex = (currentIndex + 1) % themeIds.length;
     setTheme(themeIds[nextIndex]);
