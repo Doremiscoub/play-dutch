@@ -45,4 +45,7 @@ export interface ScoreBoardProps {
   onUndoLastRound: () => void;
   roundHistory?: { scores: number[], dutchPlayerId?: string }[];
   isMultiplayer?: boolean;
+  showGameEndConfirmation?: boolean;
+  onConfirmEndGame?: () => void;
+  onCancelEndGame?: () => void;
 }
