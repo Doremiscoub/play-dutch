@@ -1,176 +1,106 @@
 
 import React from 'react';
-import { Player } from '@/types';
 import { motion } from 'framer-motion';
-import { Trophy, Target, Zap, Clock, Star, Flame, TrendingUp, BarChart2 } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Player } from '@/types';
+import { Trophy, Target, Flag, TrendingUp, Star, Gauge, Zap, Award } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface PlayerDetailedStatsProps {
   player: Player;
+  className?: string;
 }
 
-const PlayerDetailedStats: React.FC<PlayerDetailedStatsProps> = ({ player }) => {
+const PlayerDetailedStats: React.FC<PlayerDetailedStatsProps> = ({ player, className }) => {
   const stats = player.stats;
   
   if (!stats) {
-    return (
-      <div className="text-center py-4 text-gray-500">
-        Pas encore de statistiques disponibles
-      </div>
-    );
+    return null;
   }
   
-  const animationVariants = {
-    hidden: { opacity: 0, y: 10 },
-    visible: (custom: number) => ({
-      opacity: 1,
-      y: 0,
-      transition: { delay: custom * 0.1, duration: 0.3 }
-    })
-  };
-  
-  // Calcul d'une note de performance sur 100
-  const performanceScore = Math.max(0, Math.min(100, 100 - (player.totalScore / 2)));
-  
-  // Déterminer le style de la barre de progression
-  const getProgressStyle = (value: number, max: number = 100) => {
-    const percent = Math.min(100, Math.max(0, (value / max) * 100));
-    
-    let color;
-    if (percent >= 70) color = 'bg-green-500';
-    else if (percent >= 40) color = 'bg-yellow-500';
-    else color = 'bg-red-500';
-    
-    return {
-      width: `${percent}%`,
-      className: color
-    };
-  };
-  
-  // Style pour la barre de progression de performance
-  const performanceStyle = getProgressStyle(performanceScore);
-  
-  // Style pour la barre de consistance
-  const consistencyStyle = getProgressStyle(stats.consistencyScore * 10);
-  
-  // Calcul de "tendance" : positif = s'améliore, négatif = se dégrade
-  const trendPercent = stats.improvementRate > 0 
-    ? Math.min(100, stats.improvementRate * 10)  // Valeur positive (s'améliore)
-    : Math.max(-100, stats.improvementRate * 10); // Valeur négative (se dégrade)
-  
-  const getTrendColor = () => {
-    if (trendPercent > 0) return 'text-green-500';
-    if (trendPercent < 0) return 'text-red-500';
-    return 'text-gray-500';
-  };
+  const statItems = [
+    {
+      icon: <Trophy className="h-4 w-4 text-dutch-orange" />,
+      label: "Séries de victoires",
+      value: stats.winStreak || 0,
+      suffix: stats.winStreak === 1 ? "manche" : "manches",
+      color: "text-dutch-orange"
+    },
+    {
+      icon: <Target className="h-4 w-4 text-dutch-blue" />,
+      label: "Meilleure manche",
+      value: stats.bestRound !== null ? stats.bestRound : 'N/A',
+      suffix: stats.bestRound === 1 ? "point" : "points",
+      color: "text-dutch-blue"
+    },
+    {
+      icon: <Flag className="h-4 w-4 text-dutch-pink" />,
+      label: "Pire manche",
+      value: stats.worstRound !== null ? stats.worstRound : 'N/A',
+      suffix: stats.worstRound === 1 ? "point" : "points",
+      color: "text-dutch-pink"
+    },
+    {
+      icon: <TrendingUp className="h-4 w-4 text-dutch-green" />,
+      label: "Progression",
+      value: stats.improvementRate > 0 ? `+${stats.improvementRate.toFixed(1)}` : stats.improvementRate.toFixed(1),
+      suffix: "points/manche",
+      color: stats.improvementRate < 0 ? "text-dutch-green" : "text-dutch-orange"
+    },
+    {
+      icon: <Star className="h-4 w-4 text-purple-500" />,
+      label: "Moyenne",
+      value: stats.averageScore.toFixed(1),
+      suffix: "points/manche",
+      color: "text-purple-500"
+    },
+    {
+      icon: <Gauge className="h-4 w-4 text-blue-500" />,
+      label: "Consistance",
+      value: stats.consistencyScore.toFixed(1),
+      suffix: "",
+      color: "text-blue-500"
+    },
+    {
+      icon: <Zap className="h-4 w-4 text-amber-500" />,
+      label: "Dutch",
+      value: stats.dutchCount,
+      suffix: stats.dutchCount === 1 ? "fois" : "fois",
+      color: "text-amber-500"
+    }
+  ];
 
   return (
-    <div className="space-y-4">
-      {/* Performance globale */}
-      <motion.div 
-        custom={0}
-        variants={animationVariants}
-        initial="hidden"
-        animate="visible"
-        className="bg-white/60 rounded-lg p-3 border border-white/30 shadow-sm"
-      >
-        <div className="flex items-center justify-between mb-1.5">
-          <div className="flex items-center gap-1.5">
-            <Trophy className="h-4 w-4 text-dutch-purple" />
-            <span className="text-sm font-medium text-gray-700">Performance</span>
-          </div>
-          <span className="text-sm font-semibold">{Math.round(performanceScore)}/100</span>
+    <Card className={cn("bg-white/80 backdrop-blur-md border border-white/50 rounded-2xl shadow-sm", className)}>
+      <CardContent className="p-4">
+        <div className="grid grid-cols-2 gap-3">
+          {statItems.map((stat, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: index * 0.05 }}
+              className="bg-white/60 backdrop-blur-sm rounded-xl p-3 border border-white/50 shadow-sm hover:shadow-md transition-all"
+            >
+              <div className="flex items-center gap-2 mb-1">
+                {stat.icon}
+                <span className="text-xs text-gray-600">{stat.label}</span>
+              </div>
+              <div className="flex items-baseline">
+                <span className={cn("text-lg font-bold", stat.color)}>
+                  {typeof stat.value === 'number' ? stat.value.toLocaleString() : stat.value}
+                </span>
+                {stat.value !== 'N/A' && (
+                  <span className="text-xs text-gray-500 ml-1">
+                    {stat.suffix}
+                  </span>
+                )}
+              </div>
+            </motion.div>
+          ))}
         </div>
-        <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-          <div 
-            className={`h-full rounded-full ${performanceStyle.className}`}
-            style={{ width: performanceStyle.width }}
-          ></div>
-        </div>
-      </motion.div>
-      
-      {/* Consistance */}
-      <motion.div 
-        custom={1}
-        variants={animationVariants}
-        initial="hidden"
-        animate="visible"
-        className="bg-white/60 rounded-lg p-3 border border-white/30 shadow-sm"
-      >
-        <div className="flex items-center justify-between mb-1.5">
-          <div className="flex items-center gap-1.5">
-            <BarChart2 className="h-4 w-4 text-dutch-blue" />
-            <span className="text-sm font-medium text-gray-700">Consistance</span>
-          </div>
-          <span className="text-sm font-semibold">{stats.consistencyScore.toFixed(1)}/10</span>
-        </div>
-        <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-          <div 
-            className={`h-full rounded-full ${consistencyStyle.className}`}
-            style={{ width: consistencyStyle.width }}
-          ></div>
-        </div>
-      </motion.div>
-      
-      {/* Tendance */}
-      {stats.improvementRate !== 0 && (
-        <motion.div 
-          custom={2}
-          variants={animationVariants}
-          initial="hidden"
-          animate="visible"
-          className="bg-white/60 rounded-lg p-3 border border-white/30 shadow-sm"
-        >
-          <div className="flex items-center justify-between mb-1">
-            <div className="flex items-center gap-1.5">
-              <TrendingUp className="h-4 w-4 text-dutch-orange" />
-              <span className="text-sm font-medium text-gray-700">Tendance</span>
-            </div>
-            <span className={`text-sm font-semibold ${getTrendColor()}`}>
-              {trendPercent > 0 ? '+' : ''}{trendPercent.toFixed(1)}%
-            </span>
-          </div>
-          <div className="text-xs text-gray-600">
-            {trendPercent > 0 
-              ? 'Amélioration au fil de la partie'
-              : trendPercent < 0 
-                ? 'Performances en baisse'
-                : 'Stable'}
-          </div>
-        </motion.div>
-      )}
-      
-      {/* Statistiques détaillées */}
-      <motion.div 
-        custom={3}
-        variants={animationVariants}
-        initial="hidden"
-        animate="visible"
-        className="bg-white/60 rounded-lg p-3 border border-white/30 shadow-sm"
-      >
-        <div className="text-sm font-medium text-gray-700 mb-2">Détails</div>
-        <div className="grid grid-cols-2 gap-y-2 gap-x-3 text-sm">
-          <div className="flex items-center gap-1.5">
-            <Star className="h-3.5 w-3.5 text-yellow-500" />
-            <span className="text-gray-600">Meilleur: {stats.bestRound ?? "-"}</span>
-          </div>
-          
-          <div className="flex items-center gap-1.5">
-            <Flame className="h-3.5 w-3.5 text-red-500" />
-            <span className="text-gray-600">Pire: {stats.worstRound ?? "-"}</span>
-          </div>
-          
-          <div className="flex items-center gap-1.5">
-            <Zap className="h-3.5 w-3.5 text-dutch-purple" />
-            <span className="text-gray-600">Dutch: {stats.dutchCount}</span>
-          </div>
-          
-          <div className="flex items-center gap-1.5">
-            <Target className="h-3.5 w-3.5 text-dutch-blue" />
-            <span className="text-gray-600">Moy: {stats.averageScore.toFixed(1)}</span>
-          </div>
-        </div>
-      </motion.div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
 

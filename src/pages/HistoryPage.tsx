@@ -8,6 +8,7 @@ import { Clock, Trophy, Users } from 'lucide-react';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import GameHistory from '@/components/GameHistory';
+import AnimatedBackground from '@/components/AnimatedBackground';
 import PageLayout from '@/components/PageLayout';
 
 const HistoryPage: React.FC = () => {
@@ -25,11 +26,13 @@ const HistoryPage: React.FC = () => {
   });
 
   useEffect(() => {
+    // Load games from localStorage
     const savedGames = localStorage.getItem('dutch_games');
     const parsedGames: Game[] = savedGames ? JSON.parse(savedGames) : [];
     
     setGames(parsedGames);
     
+    // Calculate stats
     if (parsedGames.length > 0) {
       const totalRounds = parsedGames.reduce((sum, game) => sum + game.rounds, 0);
       
@@ -40,6 +43,7 @@ const HistoryPage: React.FC = () => {
         });
       });
       
+      // Find most frequent winner
       const winnerCount: Record<string, number> = {};
       parsedGames.forEach(game => {
         winnerCount[game.winner] = (winnerCount[game.winner] || 0) + 1;
@@ -62,7 +66,7 @@ const HistoryPage: React.FC = () => {
     <PageLayout
       title="Historique des parties"
       subtitle="Consultez toutes vos parties terminées"
-      showBackButton={true}
+      showThemeSelector={true}
     >
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <motion.div
