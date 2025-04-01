@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import { Player } from '@/types';
 import { Button } from '@/components/ui/button';
@@ -89,7 +90,7 @@ const GamePodium: React.FC<GamePodiumProps> = ({ players, onNewGame, gameDuratio
                 {player.name}
               </div>
               <div className={`w-24 rounded-t-xl flex items-center justify-center text-white font-bold py-4 ${index === 0 ? 'h-48 bg-dutch-blue shadow-lg' : 'h-32 bg-dutch-purple shadow-md'}`}>
-                {player.score}
+                {player.totalScore}
               </div>
               <div className="text-center mt-2 text-gray-600">
                 {index === 0 && <span className="text-dutch-blue">Vainqueur !</span>}
