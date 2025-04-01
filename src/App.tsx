@@ -13,7 +13,6 @@ import RulesPage from '@/pages/RulesPage';
 import SettingsPage from '@/pages/SettingsPage';
 import BrickBreaker from '@/components/EasterEgg/BrickBreaker';
 import { cleanupOldData } from '@/utils/pwaUtils';
-import { ThemeProvider } from '@/hooks/use-theme';
 
 function App() {
   // Nettoyage des anciennes données au démarrage de l'application
@@ -22,24 +21,22 @@ function App() {
   }, []);
 
   return (
-    <ThemeProvider defaultTheme="default">
-      <Router>
-        <AnimatePresence mode="wait">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/sign-in/*" element={<SignIn />} />
-            <Route path="/sign-up/*" element={<SignUp />} />
-            <Route path="/rules" element={<RulesPage />} />
-            <Route path="/settings" element={<SettingsPage />} />
-            <Route path="/easter-egg" element={<BrickBreaker onClose={() => window.history.back()} />} />
-            <Route path="/game" element={<GamePage />} />
-            <Route path="/history" element={<HistoryPage />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </AnimatePresence>
-        <Toaster />
-      </Router>
-    </ThemeProvider>
+    <Router>
+      <AnimatePresence mode="wait">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/sign-in/*" element={<SignIn />} />
+          <Route path="/sign-up/*" element={<SignUp />} />
+          <Route path="/rules" element={<RulesPage />} />
+          <Route path="/settings" element={<SettingsPage />} />
+          <Route path="/easter-egg" element={<BrickBreaker onClose={() => window.history.back()} />} />
+          <Route path="/game" element={<GamePage />} />
+          <Route path="/history" element={<HistoryPage />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </AnimatePresence>
+      <Toaster />
+    </Router>
   );
 }
 
