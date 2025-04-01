@@ -127,27 +127,26 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
         className="absolute inset-0 z-0"
       />
       
-      {/* Vagues en bas (conditionnelles selon la variante) */}
+      {/* Vagues fluides en bas */}
       {variant !== 'minimal' && (
         <>
           <motion.div 
-            className="absolute bottom-0 left-0 right-0 z-0"
+            className="absolute bottom-0 left-0 right-0 z-0 origin-bottom"
             style={{
-              height: '20vh',
+              height: '30vh',
               background: themeConfig.BACKGROUND_CONFIG.waves.primaryColor,
-              borderTopLeftRadius: '100%',
-              borderTopRightRadius: '100%',
-              transform: 'scaleX(1.5)', // Élargir la vague pour la rendre plus fluide
-              transformOrigin: 'bottom',
-              opacity: 0.4
             }}
-            animate={{
-              y: [0, -10, 0],
-              scaleX: [1.5, 1.6, 1.5], // Animation d'ondulation horizontale
-              scaleY: [1, 1.05, 1]
+            initial={{ 
+              borderTopLeftRadius: '65% 100%',
+              borderTopRightRadius: '35% 100%'
+            }}
+            animate={{ 
+              borderTopLeftRadius: ['65% 100%', '35% 100%', '65% 100%'],
+              borderTopRightRadius: ['35% 100%', '65% 100%', '35% 100%'],
+              y: [0, -5, 0],
             }}
             transition={{
-              duration: 8,
+              duration: 10,
               repeat: Infinity,
               repeatType: 'reverse',
               ease: 'easeInOut'
@@ -155,23 +154,22 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
           />
           
           <motion.div 
-            className="absolute bottom-0 left-0 right-0 z-0"
+            className="absolute bottom-0 left-0 right-0 z-0 origin-bottom"
             style={{
-              height: '15vh',
+              height: '28vh',
               background: themeConfig.BACKGROUND_CONFIG.waves.secondaryColor,
-              borderTopLeftRadius: '100%',
-              borderTopRightRadius: '100%',
-              transform: 'scaleX(1.8) translateY(30%)', // Élargir davantage la deuxième vague
-              transformOrigin: 'bottom',
-              opacity: 0.4
             }}
-            animate={{
-              y: ['30%', '25%', '30%'],
-              scaleX: [1.8, 1.9, 1.8], // Animation d'ondulation horizontale
-              scaleY: [1, 1.07, 1]
+            initial={{ 
+              borderTopLeftRadius: '40% 100%',
+              borderTopRightRadius: '60% 100%'
+            }}
+            animate={{ 
+              borderTopLeftRadius: ['40% 100%', '70% 100%', '40% 100%'],
+              borderTopRightRadius: ['60% 100%', '30% 100%', '60% 100%'],
+              y: [5, 0, 5],
             }}
             transition={{
-              duration: 10,
+              duration: 13,
               repeat: Infinity,
               repeatType: 'reverse',
               ease: 'easeInOut',

@@ -2,10 +2,13 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Plus, Minus, Play, Sparkles } from 'lucide-react';
+import { Plus, Minus, Play, Sparkles, Users, Computer } from 'lucide-react';
 import { motion } from 'framer-motion';
 import AnimatedBackground from './AnimatedBackground';
 import { useNavigate } from 'react-router-dom';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Badge } from '@/components/ui/badge';
+import { toast } from 'sonner';
 
 interface GameSetupProps {
   onStartGame?: (players: string[]) => void;
@@ -15,6 +18,7 @@ const GameSetup: React.FC<GameSetupProps> = ({ onStartGame }) => {
   const navigate = useNavigate();
   const [numPlayers, setNumPlayers] = useState(4);
   const [playerNames, setPlayerNames] = useState<string[]>(Array(4).fill('').map((_, i) => `Joueur ${i + 1}`));
+  const [gameMode, setGameMode] = useState<'local' | 'multiplayer'>('local');
   
   const handleNumPlayersChange = (increment: boolean) => {
     const newNum = increment 
@@ -40,6 +44,11 @@ const GameSetup: React.FC<GameSetupProps> = ({ onStartGame }) => {
   const handleStartGame = () => {
     // Validate player names (ensure no empty names)
     const validPlayerNames = playerNames.map(name => name.trim() === '' ? `Joueur ${playerNames.indexOf(name) + 1}` : name);
+    
+    if (gameMode === 'multiplayer') {
+      toast.info('Le mode multijoueur sera disponible prochainement !');
+      return;
+    }
     
     // Store player names in localStorage to be picked up by GamePage
     localStorage.setItem('dutch_player_setup', JSON.stringify(validPlayerNames));
@@ -80,6 +89,38 @@ const GameSetup: React.FC<GameSetupProps> = ({ onStartGame }) => {
         >
           Nouvelle Partie
         </motion.h1>
+        
+        {/* Sélecteur de mode de jeu */}
+        <motion.div 
+          className="dutch-card mb-8 backdrop-blur-md border border-white/40 bg-white/80 hover:shadow-lg transition-all duration-300 rounded-2xl overflow-hidden p-6"
+          initial={{ scale: 0.95, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ ...transitionProps, delay: 0.1 }}
+          whileHover={{ y: -3, boxShadow: "0 15px 30px rgba(0,0,0,0.1)" }}
+        >
+          <h2 className="text-xl font-semibold mb-4 text-dutch-blue">Mode de jeu</h2>
+          <Tabs 
+            defaultValue="local" 
+            value={gameMode} 
+            onValueChange={(value) => setGameMode(value as 'local' | 'multiplayer')}
+            className="w-full"
+          >
+            <TabsList className="grid grid-cols-2 w-full">
+              <TabsTrigger value="local" className="flex items-center gap-2">
+                <Users className="h-4 w-4" /> Local
+              </TabsTrigger>
+              <TabsTrigger value="multiplayer" className="flex items-center gap-2" disabled>
+                <Computer className="h-4 w-4" /> Multijoueur
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
+          
+          {gameMode === 'multiplayer' && (
+            <div className="mt-4 p-3 bg-dutch-purple/10 text-dutch-purple rounded-lg text-sm">
+              <p>À venir : mode multijoueur, connexion multi-appareil et plus encore.</p>
+            </div>
+          )}
+        </motion.div>
         
         <motion.div 
           className="dutch-card mb-8 backdrop-blur-md border border-white/40 bg-white/80 hover:shadow-lg transition-all duration-300 rounded-2xl overflow-hidden p-6"

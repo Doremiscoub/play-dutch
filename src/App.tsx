@@ -14,6 +14,7 @@ import SettingsPage from '@/pages/SettingsPage';
 import BrickBreaker from '@/components/EasterEgg/BrickBreaker';
 import GameSetup from '@/components/GameSetup';
 import { cleanupOldData } from '@/utils/pwaUtils';
+import AuthStatus from '@/components/AuthStatus';
 
 function App() {
   // Nettoyage des anciennes données au démarrage de l'application
@@ -23,6 +24,7 @@ function App() {
 
   return (
     <Router>
+      <AuthStatus />
       <AnimatePresence mode="wait">
         <Routes>
           <Route path="/" element={<Home />} />

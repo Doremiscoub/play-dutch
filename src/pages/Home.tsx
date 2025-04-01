@@ -69,7 +69,7 @@ const Home: React.FC = () => {
 
   return (
     <div className="min-h-screen relative overflow-hidden">
-      {/* Fond animé */}
+      {/* Fond animé avec vagues fluides */}
       <div className="absolute inset-0">
         <AnimatedBackground variant="default" />
       </div>

@@ -2,18 +2,15 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Player, Game, PlayerStatistics } from '@/types';
-import LocalGameSetup from '@/components/LocalGameSetup';
+import GameSetup from '@/components/GameSetup';
 import ScoreBoard from '@/components/ScoreBoard';
 import GamePodium from '@/components/GamePodium';
-import DetailedScoreTable from '@/components/DetailedScoreTable';
-import FunStats from '@/components/FunStats';
 import { v4 as uuidv4 } from 'uuid';
 import { toast } from 'sonner';
 import { AnimatePresence, motion } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import { useLocalStorage } from '@/hooks/use-local-storage';
 import { calculatePlayerStats, updateAllPlayersStats, isGameOver } from '@/utils/playerStatsCalculator';
-import { Flag, Undo } from 'lucide-react';
 
 const GamePage: React.FC = () => {
   const [gameState, setGameState] = useState<'setup' | 'playing' | 'completed'>(() => {
@@ -23,29 +20,7 @@ const GamePage: React.FC = () => {
   
   const [players, setPlayers] = useState<Player[]>(() => {
     const savedGame = localStorage.getItem('current_dutch_game');
-    if (savedGame) {
-      return JSON.parse(savedGame).players;
-    }
-    
-    // Check if players were set up in the game setup screen
-    const setupPlayers = localStorage.getItem('dutch_player_setup');
-    if (setupPlayers) {
-      const playerNames = JSON.parse(setupPlayers);
-      // Create new player objects
-      const newPlayers = playerNames.map(name => ({
-        id: uuidv4(),
-        name: name.trim(),
-        totalScore: 0,
-        rounds: []
-      }));
-      
-      // Clear the setup data as we've used it
-      localStorage.removeItem('dutch_player_setup');
-      
-      return newPlayers;
-    }
-    
-    return [];
+    return savedGame ? JSON.parse(savedGame).players : [];
   });
   
   const [games, setGames] = useLocalStorage<Game[]>('dutch_games', []);
@@ -63,14 +38,6 @@ const GamePage: React.FC = () => {
   const playersWithStats = useMemo(() => {
     return updateAllPlayersStats(players);
   }, [players]);
-  
-  // Effect to initialize game if we have setup players but no active game
-  useEffect(() => {
-    if (gameState === 'setup' && players.length > 0) {
-      setGameState('playing');
-      setGameStartTime(new Date());
-    }
-  }, [gameState, players]);
   
   useEffect(() => {
     if (gameState === 'playing' && players.length > 0) {
@@ -90,6 +57,32 @@ const GamePage: React.FC = () => {
   }, [gameState, playersWithStats, roundHistory, gameStartTime]);
 
   useEffect(() => {
+    // Récupérer les joueurs depuis le setup si disponible
+    const playerSetup = localStorage.getItem('dutch_player_setup');
+    if (playerSetup && gameState === 'setup') {
+      try {
+        const playerNames = JSON.parse(playerSetup);
+        const newPlayers = playerNames.map(name => ({
+          id: uuidv4(),
+          name: name.trim(),
+          totalScore: 0,
+          rounds: []
+        }));
+        
+        setPlayers(newPlayers);
+        setGameState('playing');
+        setRoundHistory([]);
+        setGameStartTime(new Date());
+        
+        // Nettoyer après utilisation
+        localStorage.removeItem('dutch_player_setup');
+        
+        toast.success('La partie commence !');
+      } catch (error) {
+        console.error("Erreur lors de la configuration des joueurs:", error);
+      }
+    }
+    
     const savedGame = localStorage.getItem('current_dutch_game');
     if (savedGame) {
       const parsed = JSON.parse(savedGame);
@@ -208,13 +201,19 @@ const GamePage: React.FC = () => {
     } as Game;
     
     setGames(prev => [...prev, newGame]);
-    
     setGameState('completed');
-    localStorage.removeItem('current_dutch_game');
     
     if (soundEnabled) {
       new Audio('/sounds/win-sound.mp3').play().catch(err => console.error("Sound error:", err));
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
     }
+    
+    // Nettoyer la partie en cours
+    localStorage.removeItem('current_dutch_game');
   }, [players, setGames, soundEnabled, gameStartTime]);
   
   const getGameDuration = (startTime: Date): string => {
@@ -284,9 +283,6 @@ const GamePage: React.FC = () => {
   }, []);
 
   const handleNewGame = useCallback(() => {
-    localStorage.removeItem('current_dutch_game');
-    
-    // Navigate to setup screen
     navigate('/game/setup');
   }, [navigate]);
 
@@ -315,32 +311,6 @@ const GamePage: React.FC = () => {
 
   const gameDuration = gameStartTime ? getGameDuration(gameStartTime) : '';
 
-  // Injecter les composants et icônes dans ScoreBoard
-  const enhancedScoreBoard = () => {
-    if (!players || players.length === 0) return null;
-    
-    // Créer une version modifiée de ScoreBoard qui intègre les nouveaux composants
-    const scoreboardProps = {
-      players: playersWithStats,
-      onAddRound: (scores, dutchPlayerId) => handleAddRound(scores, dutchPlayerId),
-      onEndGame: handleEndGame,
-      onUndoLastRound: handleUndoLastRound,
-      roundHistory: roundHistory,
-      showGameEndConfirmation: showGameEndConfirmation,
-      onConfirmEndGame: handleConfirmEndGame,
-      onCancelEndGame: handleCancelEndGame,
-      isMultiplayer: false,
-      // Ajouter les nouveaux props pour les icônes
-      endGameIcon: <Flag className="mr-2 h-5 w-5" />,
-      undoLastRoundIcon: <Undo className="mr-2 h-5 w-5" />,
-      // Ajouter les tableaux détaillés
-      detailedScoreTable: <DetailedScoreTable players={playersWithStats} roundHistory={roundHistory} />,
-      funStats: <FunStats players={playersWithStats} />
-    };
-    
-    return <ScoreBoard {...scoreboardProps} />;
-  };
-
   return (
     <div className="min-h-screen">
       <AnimatePresence mode="wait">
@@ -351,7 +321,7 @@ const GamePage: React.FC = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <LocalGameSetup onStartGame={handleStartGame} />
+            <GameSetup onStartGame={handleStartGame} />
           </motion.div>
         )}
         
@@ -362,7 +332,17 @@ const GamePage: React.FC = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            {enhancedScoreBoard()}
+            <ScoreBoard 
+              players={playersWithStats}
+              onAddRound={(scores, dutchPlayerId) => handleAddRound(scores, dutchPlayerId)}
+              onEndGame={handleEndGame}
+              onUndoLastRound={handleUndoLastRound}
+              roundHistory={roundHistory}
+              showGameEndConfirmation={showGameEndConfirmation}
+              onConfirmEndGame={handleConfirmEndGame}
+              onCancelEndGame={handleCancelEndGame}
+              isMultiplayer={false}
+            />
           </motion.div>
         )}
         

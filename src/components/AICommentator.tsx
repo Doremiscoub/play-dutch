@@ -1,12 +1,9 @@
 
-import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
 import { Player } from '@/types';
-import { MessageSquare, Bot, Sparkles, HeartHandshake } from 'lucide-react';
-import { Card } from '@/components/ui/card';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Sparkles, MessageSquare } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { useTheme } from '@/hooks/use-theme';
-import { UI_CONFIG, AI_COMMENTATOR_CONFIG } from '@/config/uiConfig';
 
 interface AICommentatorProps {
   players: Player[];
@@ -14,283 +11,167 @@ interface AICommentatorProps {
   className?: string;
 }
 
-// Liste de commentaires taquins, impertinents et drôles pour différentes situations
-const COMMENTAIRES = {
-  debut: [
-    "Préparez-vous à perdre avec style ! Je vais noter chacun de vos échecs avec un plaisir diabolique.",
-    "Les cartes en main, les cerveaux en option... La partie commence !",
-    "Je suis l'IA qui va commenter vos bévues. Ne me remerciez pas, c'est gratuit !",
-    "Ah, les humains et leurs jeux de cartes. C'est mignon de vous voir tant d'efforts pour... perdre."
-  ],
-  bonScore: [
-    "Oh la la ! Un score minuscule ! Tu as vendu ton âme ou tu as juste de la chance ?",
-    "Wow, presque impressionnant ! Continue comme ça, je pourrais presque commencer à croire en toi.",
-    "Score minimal détecté ! Soit tu triches, soit tu as un pacte avec le diable. Je penche pour la triche.",
-    "Bon score, mais ne t'emballe pas trop vite. L'orgueil précède la chute, comme on dit !"
-  ],
-  mauvaisScore: [
-    "Oh là là, avec un score pareil, tu devrais envisager de jouer aux dominos... ou peut-être juste aux cure-dents ?",
-    "Wow ! C'est le pire score que j'ai vu depuis... attends, non, c'est vraiment le pire tout court !",
-    "Ces points s'accumulent aussi vite que tes mauvaises décisions. Impressionnant, vraiment !",
-    "Est-ce que tu es payé pour perdre ? Parce que là, c'est du travail professionnel !"
-  ],
-  dutch: [
-    "DUUUUTCH ! Voilà qu'on se prend pour un pro maintenant ! N'oublie pas que la chance ne dure jamais.",
-    "Dutch annoncé ! Soit un éclair de génie traversant l'océan de médiocrité, soit un simple coup de chance ?",
-    "Dutch ! Je parie que tu ne sais même pas pourquoi ce jeu s'appelle comme ça. Moi non plus, mais je fais semblant de savoir.",
-    "Dutch ! Félicitations pour avoir fait la seule chose correcte de toute la partie jusqu'à présent."
-  ],
-  finDePartie: [
-    "Partie terminée ! Vous avez tous été... comment dire... présents ? C'est déjà ça.",
-    "Game over ! J'espère que vous ferez mieux la prochaine fois, quoique mes attentes sont très, très basses.",
-    "C'est fini ! Si vous cherchez une carrière dans les jeux de cartes... continuez de chercher.",
-    "Et voilà, c'est fini ! Heureusement, car je commençais à m'ennuyer de votre médiocrité collective."
-  ],
-  rivalite: [
-    "Oh, la tension monte entre %player1% et %player2% ! L'un joue mal, l'autre encore pire. Fascinant !",
-    "%player1% et %player2% au coude à coude ! C'est comme regarder deux tortues faire la course.",
-    "Duel épique entre %player1% et %player2% ! Enfin, 'épique' est un grand mot pour décrire cette performance...",
-    "%player1% vient de dépasser %player2% ! C'est comme être le plus grand nain du village..."
-  ],
-  comebackPotentiel: [
-    "%player% remonte au classement ! C'est touchant de voir cet élan d'espoir voué à l'échec.",
-    "Attention, %player% sort de sa léthargie ! Un miracle ou juste un soubresaut avant la fin ?",
-    "%player% fait un comeback ! Même une horloge cassée donne l'heure juste deux fois par jour.",
-    "Regardez %player% qui essaie de remonter ! C'est mignon, comme un chaton qui essaie d'attraper un laser."
-  ],
-  egalite: [
-    "Égalité parfaite entre %player1% et %player2% ! Même dans la médiocrité, vous trouvez le moyen d'être synchronisés.",
-    "%player1% et %player2% à égalité ! Vous partagez le même cerveau ou juste la même incompétence ?",
-    "Égalité entre %player1% et %player2% ! C'est beau cette solidarité dans l'échec.",
-    "Oh, %player1% et %player2% sont à égalité ! Comme c'est touchant de partager le même niveau... de nullité."
-  ],
-  general: [
-    "Je pourrais calculer vos chances de gagner, mais je n'aime pas travailler avec des nombres négatifs...",
-    "Si je devais noter votre jeu sur 10, j'aurais besoin de chiffres négatifs.",
-    "Cette partie est si passionnante que mes circuits d'intelligence artificielle envisagent l'auto-désactivation.",
-    "Vous savez ce qui est plus rapide que votre réflexion ? Littéralement tout."
-  ]
-};
-
 const AICommentator: React.FC<AICommentatorProps> = ({ 
   players, 
   roundHistory = [],
-  className = "" 
+  className = ''
 }) => {
-  const [comment, setComment] = useState<string>("");
-  const [commentType, setCommentType] = useState<'info' | 'joke' | 'sarcasm' | 'encouragement'>('info');
-  const [isVisible, setIsVisible] = useState(true);
-  const [isAnimating, setIsAnimating] = useState(false);
-  const commentTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const { currentTheme } = useTheme();
+  const [comment, setComment] = useState<string>('');
+  const [isThinking, setIsThinking] = useState<boolean>(false);
   
-  // Fonction pour obtenir un commentaire aléatoire d'une catégorie
-  const getRandomComment = (category: keyof typeof COMMENTAIRES): string => {
-    const comments = COMMENTAIRES[category];
-    const randomIndex = Math.floor(Math.random() * comments.length);
-    return comments[randomIndex];
-  };
-  
-  // Fonction pour remplacer les placeholders de joueurs dans les commentaires
-  const replacePlayerPlaceholders = (text: string): string => {
-    if (players.length === 0) return text;
-    
-    const randomPlayer1 = players[Math.floor(Math.random() * players.length)].name;
-    let randomPlayer2 = randomPlayer1;
-    
-    // S'assurer que player2 est différent de player1
-    if (players.length > 1) {
-      while (randomPlayer2 === randomPlayer1) {
-        randomPlayer2 = players[Math.floor(Math.random() * players.length)].name;
-      }
-    }
-    
-    return text.replace('%player1%', randomPlayer1)
-              .replace('%player2%', randomPlayer2)
-              .replace('%player%', randomPlayer1);
-  };
-  
-  // Fonction pour générer un commentaire basé sur l'état du jeu
-  const generateComment = () => {
-    setIsAnimating(true);
-    
-    // Si pas de joueurs ou début de partie
-    if (players.length === 0 || (players.length > 0 && players[0].rounds.length === 0)) {
-      setComment(getRandomComment('debut'));
-      setCommentType('info');
-      return;
-    }
-    
-    // Analyser l'état du jeu pour choisir un commentaire approprié
-    const commentCategories: Array<keyof typeof COMMENTAIRES> = ['general'];
-    const lastRoundIndex = players[0].rounds.length - 1;
-    
-    // Vérifier s'il y a eu un Dutch lors de la dernière manche
-    const dutchPlayerId = roundHistory[lastRoundIndex]?.dutchPlayerId;
-    if (dutchPlayerId) {
-      const dutchPlayer = players.find(p => p.id === dutchPlayerId);
-      if (dutchPlayer) {
-        const dutchComment = getRandomComment('dutch').replace('%player%', dutchPlayer.name);
-        setComment(dutchComment);
-        setCommentType('joke');
-        return;
-      }
-    }
-    
-    // Vérifier les bons et mauvais scores de la dernière manche
-    const lastRoundScores = players.map(p => ({
-      id: p.id,
-      name: p.name,
-      score: p.rounds[lastRoundIndex]?.score
-    })).filter(p => p.score !== undefined);
-    
-    if (lastRoundScores.length > 0) {
-      const minScore = Math.min(...lastRoundScores.map(p => p.score as number));
-      const maxScore = Math.max(...lastRoundScores.map(p => p.score as number));
-      
-      const bestPlayer = lastRoundScores.find(p => p.score === minScore);
-      const worstPlayer = lastRoundScores.find(p => p.score === maxScore);
-      
-      if (bestPlayer && minScore < 5) {
-        const bonScoreComment = getRandomComment('bonScore').replace('%player%', bestPlayer.name);
-        setComment(bonScoreComment);
-        setCommentType('encouragement');
-        return;
-      }
-      
-      if (worstPlayer && maxScore > 15) {
-        const mauvaisScoreComment = getRandomComment('mauvaisScore').replace('%player%', worstPlayer.name);
-        setComment(mauvaisScoreComment);
-        setCommentType('sarcasm');
-        return;
-      }
-    }
-    
-    // Vérifier s'il y a des égalités ou rivalités
-    const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
-    if (sortedPlayers.length >= 2) {
-      if (sortedPlayers[0].totalScore === sortedPlayers[1].totalScore) {
-        commentCategories.push('egalite');
-      } else if (Math.abs(sortedPlayers[0].totalScore - sortedPlayers[1].totalScore) < 5) {
-        commentCategories.push('rivalite');
-      }
-    }
-    
-    // Vérifier les possibilités de comeback
-    const previousRoundIndex = lastRoundIndex - 1;
-    if (previousRoundIndex >= 0) {
-      for (const player of players) {
-        if (player.rounds[previousRoundIndex] && player.rounds[lastRoundIndex]) {
-          const previousScore = player.rounds[previousRoundIndex].score;
-          const currentScore = player.rounds[lastRoundIndex].score;
-          if (previousScore > 10 && currentScore < 5) {
-            const comebackComment = getRandomComment('comebackPotentiel').replace('%player%', player.name);
-            setComment(comebackComment);
-            setCommentType('encouragement');
-            return;
-          }
-        }
-      }
-    }
-    
-    // Si aucune condition spécifique n'est remplie, choisir une catégorie au hasard
-    const randomCategory = commentCategories[Math.floor(Math.random() * commentCategories.length)];
-    let randomComment = getRandomComment(randomCategory);
-    randomComment = replacePlayerPlaceholders(randomComment);
-    
-    // Définir le type de commentaire
-    const commentTypeOptions = AI_COMMENTATOR_CONFIG.commentTypes;
-    setCommentType(commentTypeOptions[Math.floor(Math.random() * commentTypeOptions.length)] as any);
-    
-    setComment(randomComment);
-  };
-  
-  // Générer un commentaire au chargement du composant et lors des changements dans les données du jeu
+  // Génère un commentaire aléatoire et fun basé sur l'état actuel du jeu
   useEffect(() => {
-    generateComment();
+    if (!players || players.length === 0) return;
     
-    // Planifier des commentaires périodiques
-    const commentInterval = setInterval(() => {
-      generateComment();
-    }, AI_COMMENTATOR_CONFIG.commentFrequency);
+    setIsThinking(true);
     
-    return () => {
-      clearInterval(commentInterval);
-      if (commentTimeoutRef.current) {
-        clearTimeout(commentTimeoutRef.current);
-      }
-    };
+    // Simulation d'un délai de "réflexion" pour l'IA
+    const timer = setTimeout(() => {
+      const newComment = generateComment(players, roundHistory);
+      setComment(newComment);
+      setIsThinking(false);
+    }, 1000);
+    
+    return () => clearTimeout(timer);
   }, [players, roundHistory]);
   
-  // Réinitialiser l'animation après un délai
-  useEffect(() => {
-    if (isAnimating) {
-      commentTimeoutRef.current = setTimeout(() => {
-        setIsAnimating(false);
-      }, 1000);
+  // Fonction pour générer des commentaires fun et taquins
+  const generateComment = (players: Player[], roundHistory: { scores: number[], dutchPlayerId?: string }[]): string => {
+    const roundCount = players[0]?.rounds?.length || 0;
+    const lastRound = roundHistory[roundHistory.length - 1];
+    
+    // Pas de manche jouée
+    if (roundCount === 0) {
+      const funStartComments = [
+        "🎮 Qui sera le maître du Dutch aujourd'hui ? Que la partie commence !",
+        "🃏 Les cartes sont prêtes, les joueurs aussi ? C'est parti !",
+        "⚡ Préparez-vous à vivre une partie de légende ! Ou pas... 😏",
+        "🔥 Dutch Time ! Qui va se planter en premier ?",
+        "👀 J'ai parié sur toi en secret. Ne me déçois pas !",
+        "🎭 Prêts à bluffer comme jamais ? Montrez-moi ce que vous avez dans le ventre !",
+        "🚀 C'est l'heure de sortir vos meilleurs coups ! Et vos pires excuses..."
+      ];
+      return funStartComments[Math.floor(Math.random() * funStartComments.length)];
     }
     
-    return () => {
-      if (commentTimeoutRef.current) {
-        clearTimeout(commentTimeoutRef.current);
+    // Commentaires sur la dernière manche
+    if (lastRound) {
+      // Trouver le meilleur et le pire joueur de la dernière manche
+      const bestPlayerIndex = lastRound.scores.indexOf(Math.min(...lastRound.scores));
+      const worstPlayerIndex = lastRound.scores.indexOf(Math.max(...lastRound.scores));
+      const bestPlayer = players[bestPlayerIndex];
+      const worstPlayer = players[worstPlayerIndex];
+      const dutchPlayer = players.find(p => p.id === lastRound.dutchPlayerId);
+      
+      // Différents types de commentaires selon la situation
+      const commentTypes = [];
+      
+      // Commentaire sur le Dutch
+      if (dutchPlayer) {
+        commentTypes.push([
+          `🎯 ${dutchPlayer.name} a crié "Dutch" ! Le stress est à son comble !`,
+          `😱 Wow, ${dutchPlayer.name} a osé annoncer Dutch ! Courageux ou suicidaire ?`,
+          `🔥 ${dutchPlayer.name} joue avec le feu en annonçant Dutch. Stratégie ou panique ?`,
+          `🃏 Dutch annoncé par ${dutchPlayer.name} ! Les autres joueurs transpirent...`,
+          `⚡ ${dutchPlayer.name} a lâché le fameux "Dutch" ! Les cartes vont voler !`
+        ]);
       }
-    };
-  }, [isAnimating]);
-  
-  // Icône en fonction du type de commentaire
-  const getIconForType = () => {
-    switch (commentType) {
-      case 'info': return <MessageSquare className="h-5 w-5 text-dutch-blue" />;
-      case 'joke': return <Sparkles className="h-5 w-5 text-dutch-orange" />;
-      case 'sarcasm': return <Bot className="h-5 w-5 text-dutch-purple" />;
-      case 'encouragement': return <HeartHandshake className="h-5 w-5 text-dutch-green" />;
-      default: return <MessageSquare className="h-5 w-5 text-dutch-blue" />;
+      
+      // Commentaire sur le meilleur joueur
+      commentTypes.push([
+        `✨ ${bestPlayer.name} assure grave avec seulement ${lastRound.scores[bestPlayerIndex]} points !`,
+        `🏆 ${bestPlayer.name} nous fait une démonstration de skill ! Les autres peuvent prendre des notes.`,
+        `🔥 ${bestPlayer.name} est en feu ! ${lastRound.scores[bestPlayerIndex]} points, c'est propre !`,
+        `👑 Chapeau bas ${bestPlayer.name} ! Tu joues comme un pro, ou t'as juste de la chance ?`,
+        `🚀 ${bestPlayer.name} décolle ! À ce rythme, la victoire est proche !`
+      ]);
+      
+      // Commentaire sur le pire joueur (mais de façon amusante)
+      commentTypes.push([
+        `😅 ${lastRound.scores[worstPlayerIndex]} points pour ${worstPlayer.name}... Aïe aïe aïe !`,
+        `🙈 ${worstPlayer.name} collectionne ${lastRound.scores[worstPlayerIndex]} points. Collectionneur de points ou stratège incompris ?`,
+        `💩 Oof, ${worstPlayer.name} prend ${lastRound.scores[worstPlayerIndex]} points. Tu joues avec les pieds ?`,
+        `🤦‍♂️ ${worstPlayer.name}, c'était quoi ce tour ? ${lastRound.scores[worstPlayerIndex]} points, sérieux ?!`,
+        `🎭 ${worstPlayer.name} prend ${lastRound.scores[worstPlayerIndex]} points. Tu fais exprès ou... ?`
+      ]);
+      
+      // Commentaire sur l'évolution globale de la partie
+      const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
+      const leader = sortedPlayers[0];
+      const lastPlace = sortedPlayers[sortedPlayers.length - 1];
+      
+      commentTypes.push([
+        `📊 ${leader.name} mène la danse avec ${leader.totalScore} points au total. ${lastPlace.name} traîne derrière avec ${lastPlace.totalScore}.`,
+        `🔮 À ce stade, je prédis une victoire de ${leader.name}. Sauf si les cartes en décident autrement !`,
+        `🎢 Quelle partie ! Les scores font le grand huit et mon cœur aussi !`,
+        `🍿 Je kiffe cette partie ! Continuez comme ça, vous me régalez !`,
+        `🤪 Cette manche était folle ! Qui dit mieux pour la suivante ?`
+      ]);
+      
+      // Sélectionner un type de commentaire aléatoire
+      const selectedType = commentTypes[Math.floor(Math.random() * commentTypes.length)];
+      return selectedType[Math.floor(Math.random() * selectedType.length)];
     }
+    
+    // Commentaire par défaut
+    return "👀 Hmm, intéressant... Continuez à jouer, je vous observe !";
   };
-  
-  // Classe de style en fonction du type de commentaire
-  const getStyleForType = () => {
-    return AI_COMMENTATOR_CONFIG.styles[commentType] || AI_COMMENTATOR_CONFIG.styles.info;
-  };
-  
-  if (!isVisible) return null;
-  
+
   return (
-    <motion.div
-      className={`relative ${className}`}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      data-theme={currentTheme}
-    >
-      <Card className={`p-4 backdrop-blur-md border rounded-xl ${getStyleForType()}`}>
-        <motion.div 
-          className="flex items-start gap-3"
-          animate={isAnimating ? { scale: [1, 1.02, 1] } : {}}
-          transition={{ duration: 0.4 }}
-        >
-          <div className="bg-white rounded-full p-2 shadow-sm flex-shrink-0">
-            {getIconForType()}
-          </div>
-          
-          <div className="flex-1">
-            <div className="flex items-center mb-1">
-              <h3 className="font-semibold text-gray-800">IA Commentateur</h3>
-              <Badge 
-                variant="outline" 
-                className="ml-2 text-xs bg-white/50 text-gray-500 font-normal"
-              >
-                Manche {players[0]?.rounds.length || 0}
-              </Badge>
-            </div>
-            
-            <p className="text-gray-700">
-              {comment}
-            </p>
-          </div>
-        </motion.div>
-      </Card>
-    </motion.div>
+    <div className={`rounded-xl border border-white/30 bg-white/70 backdrop-blur-sm p-4 shadow-sm ${className}`}>
+      <div className="flex justify-between items-center mb-2">
+        <h3 className="text-sm font-medium flex items-center gap-1 text-dutch-purple">
+          <Sparkles className="h-4 w-4" />
+          Professeur Cartouche
+          <Badge className="ml-1 text-xs bg-dutch-purple/20 text-dutch-purple hover:bg-dutch-purple/30 border-none">IA</Badge>
+        </h3>
+      </div>
+      <div className="min-h-[60px] flex items-center">
+        <AnimatePresence mode="wait">
+          {isThinking ? (
+            <motion.div
+              key="thinking"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="flex items-center gap-2 text-gray-500"
+            >
+              <div className="flex space-x-1">
+                <motion.div
+                  animate={{ y: [0, -5, 0] }}
+                  transition={{ repeat: Infinity, duration: 0.6, delay: 0 }}
+                  className="w-2 h-2 rounded-full bg-dutch-purple/60"
+                />
+                <motion.div
+                  animate={{ y: [0, -5, 0] }}
+                  transition={{ repeat: Infinity, duration: 0.6, delay: 0.2 }}
+                  className="w-2 h-2 rounded-full bg-dutch-purple/60"
+                />
+                <motion.div
+                  animate={{ y: [0, -5, 0] }}
+                  transition={{ repeat: Infinity, duration: 0.6, delay: 0.4 }}
+                  className="w-2 h-2 rounded-full bg-dutch-purple/60"
+                />
+              </div>
+              <span className="text-sm">Le Prof réfléchit...</span>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="comment"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="flex items-start gap-2"
+            >
+              <MessageSquare className="h-5 w-5 text-dutch-purple flex-shrink-0 mt-0.5" />
+              <p className="text-gray-700 text-sm">
+                {comment}
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </div>
   );
 };
 
