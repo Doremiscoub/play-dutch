@@ -120,25 +120,25 @@ const MultiplayerStats: React.FC<MultiplayerStatsProps> = ({ gameId }) => {
           className="justify-center mt-3 w-full flex flex-wrap gap-1 pb-1"
           size="sm"
         >
-          <ToggleGroupItem value="overview" className="flex-1 rounded-lg text-xs px-2 py-1.5">
-            <Activity className="h-3 w-3 mr-1" />
-            <span className="hidden sm:inline">Aperçu</span>
+          <ToggleGroupItem value="overview" className="flex-1 rounded-lg text-xs px-2 py-1.5 flex items-center justify-center">
+            <Activity className="h-3 w-3 mr-1 sm:mr-1.5" />
+            <span className="hidden xs:inline">Aperçu</span>
           </ToggleGroupItem>
-          <ToggleGroupItem value="dutch" className="flex-1 rounded-lg text-xs px-2 py-1.5">
-            <Zap className="h-3 w-3 mr-1" />
-            <span className="hidden sm:inline">Dutch</span>
+          <ToggleGroupItem value="dutch" className="flex-1 rounded-lg text-xs px-2 py-1.5 flex items-center justify-center">
+            <Zap className="h-3 w-3 mr-1 sm:mr-1.5" />
+            <span className="hidden xs:inline">Dutch</span>
           </ToggleGroupItem>
-          <ToggleGroupItem value="best" className="flex-1 rounded-lg text-xs px-2 py-1.5">
-            <Award className="h-3 w-3 mr-1" />
-            <span className="hidden sm:inline">Meilleur</span>
+          <ToggleGroupItem value="best" className="flex-1 rounded-lg text-xs px-2 py-1.5 flex items-center justify-center">
+            <Award className="h-3 w-3 mr-1 sm:mr-1.5" />
+            <span className="hidden xs:inline">Meilleur</span>
           </ToggleGroupItem>
-          <ToggleGroupItem value="worst" className="flex-1 rounded-lg text-xs px-2 py-1.5">
-            <AlertTriangle className="h-3 w-3 mr-1" />
-            <span className="hidden sm:inline">Pire</span>
+          <ToggleGroupItem value="worst" className="flex-1 rounded-lg text-xs px-2 py-1.5 flex items-center justify-center">
+            <AlertTriangle className="h-3 w-3 mr-1 sm:mr-1.5" />
+            <span className="hidden xs:inline">Pire</span>
           </ToggleGroupItem>
-          <ToggleGroupItem value="streak" className="flex-1 rounded-lg text-xs px-2 py-1.5">
-            <TrendingUp className="h-3 w-3 mr-1" />
-            <span className="hidden sm:inline">Série</span>
+          <ToggleGroupItem value="streak" className="flex-1 rounded-lg text-xs px-2 py-1.5 flex items-center justify-center">
+            <TrendingUp className="h-3 w-3 mr-1 sm:mr-1.5" />
+            <span className="hidden xs:inline">Série</span>
           </ToggleGroupItem>
         </ToggleGroup>
       </CardHeader>

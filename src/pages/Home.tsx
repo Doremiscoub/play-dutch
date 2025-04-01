@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { SignedIn, SignedOut, useUser } from '@clerk/clerk-react';
 import AnimatedBackground from '@/components/AnimatedBackground';
 import { useLocalStorage } from '@/hooks/use-local-storage';
-import { Trophy, History, Book, Settings, PlayCircle, Info, UserPlus, LogIn } from 'lucide-react';
+import { PlayCircle, History, Book, Settings, Info, UserPlus, LogIn } from 'lucide-react';
 
 const Home = () => {
   const { isSignedIn, isLoaded } = useUser();
@@ -34,134 +34,114 @@ const Home = () => {
     }
   };
 
-  // Pour les animations des boutons
-  const buttonVariants = {
-    initial: { opacity: 0, y: 20 },
-    animate: (i: number) => ({ 
-      opacity: 1, 
-      y: 0,
-      transition: { 
-        delay: 0.3 + i * 0.1,
-        duration: 0.5,
-        ease: "easeOut"
-      }
-    }),
-    hover: { 
-      scale: 1.05,
-      boxShadow: "0 10px 20px rgba(0,0,0,0.05)",
-      transition: { 
-        type: "spring", 
-        stiffness: 400, 
-        damping: 10
-      } 
-    },
-    tap: { scale: 0.98 }
-  };
-
   return (
-    <div className="relative min-h-screen">
-      {/* Arrière-plan animé */}
+    <div className="relative min-h-screen overflow-hidden bg-white">
+      {/* Arrière-plan avec vagues en bas */}
       <div className="absolute inset-0 overflow-hidden">
-        <AnimatedBackground variant="smooth" />
+        <div className="absolute inset-0 bg-gradient-to-b from-white via-blue-50/30 to-purple-50/30">
+          <AnimatedBackground variant="smooth" />
+        </div>
+        <div className="absolute bottom-0 left-0 right-0">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" className="w-full">
+            <path fill="#EBE4FF" fillOpacity="0.4" d="M0,224L48,213.3C96,203,192,181,288,154.7C384,128,480,96,576,90.7C672,85,768,107,864,128C960,149,1056,171,1152,165.3C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+            <path fill="#F2D9FF" fillOpacity="0.6" d="M0,288L48,266.7C96,245,192,203,288,160C384,117,480,75,576,74.7C672,75,768,117,864,133.3C960,149,1056,139,1152,144C1248,149,1344,171,1392,181.3L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+            <path fill="#FFE5D9" fillOpacity="0.3" d="M0,192L48,202.7C96,213,192,235,288,213.3C384,192,480,128,576,128C672,128,768,192,864,224C960,256,1056,256,1152,234.7C1248,213,1344,171,1392,149.3L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+          </svg>
+        </div>
       </div>
       
       {/* Contenu principal */}
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen p-6 text-center">
+      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4">
         {/* Logo et titre */}
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="mb-8"
+          transition={{ duration: 0.6 }}
+          className="mb-12 text-center"
           onClick={handleLogoClick}
         >
-          <motion.img 
-            src="/logo.png" 
-            alt="Dutch Logo" 
-            className="w-28 h-28 mx-auto mb-4"
-            whileHover={{ rotate: [0, -10, 10, -10, 0], transition: { duration: 0.5 } }}
-          />
-          <h1 className="text-4xl font-extrabold text-dutch-blue mb-1">Dutch</h1>
-          <p className="text-lg text-gray-600">Votre compagnon de jeu</p>
+          <h1 className="text-6xl font-bold bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange bg-clip-text text-transparent relative inline-block">
+            Dutch
+            <motion.span 
+              className="absolute -top-5 -right-6 text-dutch-orange text-3xl transform rotate-12"
+              animate={{ rotate: [12, 20, 12], scale: [1, 1.1, 1] }}
+              transition={{ duration: 2, repeat: Infinity, repeatType: "reverse" }}
+            >
+              ★
+            </motion.span>
+          </h1>
+          <p className="mt-2 text-lg text-gray-600">Votre compagnon de jeu</p>
         </motion.div>
         
         {/* Boutons d'action */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-lg">
+        <div className="flex flex-col items-center w-full max-w-md gap-3">
           <motion.div
-            custom={0}
-            variants={buttonVariants}
-            initial="initial"
-            animate="animate"
-            whileHover="hover"
-            whileTap="tap"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1, duration: 0.5 }}
+            whileHover={{ y: -3, transition: { duration: 0.2 } }}
+            className="w-full"
           >
             <Button 
-              variant="dutch-blue" 
-              size="xl"
-              className="w-full py-7 rounded-2xl shadow-md text-lg flex items-center justify-center gap-3"
               onClick={() => navigate('/game')}
+              className="w-full py-6 px-4 text-lg font-medium bg-white rounded-2xl shadow-md hover:shadow-lg transition-all relative flex items-center justify-center"
             >
-              <PlayCircle className="h-6 w-6" />
-              Jouer
+              <div className="absolute inset-0 bg-gradient-to-r from-dutch-blue/10 to-dutch-purple/10 rounded-2xl" />
+              <PlayCircle className="mr-2 h-6 w-6 text-dutch-blue" />
+              <span className="text-dutch-blue">Nouvelle partie</span>
             </Button>
           </motion.div>
           
           <motion.div
-            custom={1}
-            variants={buttonVariants}
-            initial="initial"
-            animate="animate"
-            whileHover="hover"
-            whileTap="tap"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.5 }}
+            whileHover={{ y: -3, transition: { duration: 0.2 } }}
+            className="w-full"
           >
             <Button 
-              variant="dutch-glass" 
-              size="xl"
-              className="w-full py-7 rounded-2xl shadow-md text-lg flex items-center justify-center gap-3"
               onClick={() => navigate('/history')}
+              className="w-full py-6 px-4 text-lg font-medium bg-white rounded-2xl shadow-md hover:shadow-lg transition-all relative flex items-center justify-center"
             >
-              <History className="h-6 w-6" />
-              Historique
+              <div className="absolute inset-0 bg-gradient-to-r from-dutch-purple/5 to-dutch-blue/5 rounded-2xl" />
+              <History className="mr-2 h-6 w-6 text-dutch-purple" />
+              <span className="text-dutch-purple">Historique</span>
             </Button>
           </motion.div>
           
-          <motion.div
-            custom={2}
-            variants={buttonVariants}
-            initial="initial"
-            animate="animate"
-            whileHover="hover"
-            whileTap="tap"
-          >
-            <Button 
-              variant="dutch-glass" 
-              size="xl"
-              className="w-full py-7 rounded-2xl shadow-md text-lg flex items-center justify-center gap-3"
-              onClick={() => navigate('/rules')}
+          <div className="grid grid-cols-2 gap-3 w-full mt-1">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.5 }}
+              whileHover={{ y: -3, transition: { duration: 0.2 } }}
             >
-              <Book className="h-6 w-6" />
-              Règles
-            </Button>
-          </motion.div>
-          
-          <motion.div
-            custom={3}
-            variants={buttonVariants}
-            initial="initial"
-            animate="animate"
-            whileHover="hover"
-            whileTap="tap"
-          >
-            <Button 
-              variant="dutch-glass" 
-              size="xl"
-              className="w-full py-7 rounded-2xl shadow-md text-lg flex items-center justify-center gap-3"
-              onClick={() => navigate('/settings')}
+              <Button 
+                onClick={() => navigate('/rules')}
+                className="w-full py-5 px-4 text-base font-medium bg-white rounded-2xl shadow-md hover:shadow-lg transition-all relative flex items-center justify-center"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-dutch-orange/5 to-dutch-orange/10 rounded-2xl" />
+                <Book className="mr-2 h-5 w-5 text-dutch-orange" />
+                <span className="text-dutch-orange">Règles</span>
+              </Button>
+            </motion.div>
+            
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.5 }}
+              whileHover={{ y: -3, transition: { duration: 0.2 } }}
             >
-              <Settings className="h-6 w-6" />
-              Paramètres
-            </Button>
-          </motion.div>
+              <Button 
+                onClick={() => navigate('/settings')}
+                className="w-full py-5 px-4 text-base font-medium bg-white rounded-2xl shadow-md hover:shadow-lg transition-all relative flex items-center justify-center"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-dutch-blue/5 to-dutch-purple/5 rounded-2xl" />
+                <Settings className="mr-2 h-5 w-5 text-gray-500" />
+                <span className="text-gray-500">Réglages</span>
+              </Button>
+            </motion.div>
+          </div>
         </div>
         
         {/* Section connexion/inscription */}
@@ -170,7 +150,7 @@ const Home = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.8, duration: 0.5 }}
-            className="mt-10 flex flex-col sm:flex-row gap-3"
+            className="mt-10 flex flex-row gap-3"
           >
             <Button 
               variant="ghost" 
@@ -196,10 +176,10 @@ const Home = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1, duration: 0.5 }}
-          className="absolute bottom-4 left-1/2 transform -translate-x-1/2"
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
         >
           <span className="bg-white/70 backdrop-blur-sm text-xs text-gray-500 px-3 py-1 rounded-full">
-            Version 1.2
+            Version 1.0
           </span>
         </motion.div>
         

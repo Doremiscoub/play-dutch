@@ -106,7 +106,6 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
               <Progress 
                 value={progressPercentage} 
                 className="h-2.5 bg-gray-100/50"
-                // Using a className pattern that the Progress component will handle internally
                 indicatorClassName={`bg-gradient-to-r ${styles.progress}`}
               />
               <motion.div 
@@ -134,7 +133,7 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
           <PlayerBadges player={player} className="mt-1.5" />
           
           {stats && (
-            <div className="mt-1 text-xs text-gray-600 flex flex-wrap gap-x-3">
+            <div className="mt-1 text-xs text-gray-600 flex flex-wrap gap-x-3 gap-y-1">
               {stats.averageScore > 0 && (
                 <motion.span 
                   title="Score moyen"
