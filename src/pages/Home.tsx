@@ -1,252 +1,343 @@
 
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { 
+  Play, History, Settings as SettingsIcon, BookOpen, Trophy, 
+  Circle, User, Users, Sparkles
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { PlayCircle, History, Info, Sparkles, User, Settings } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { SignedIn, SignedOut } from '@clerk/clerk-react';
-import BrickBreaker from '@/components/EasterEgg/BrickBreaker';
 import AnimatedBackground from '@/components/AnimatedBackground';
+import { toast } from 'sonner';
+import { useUser } from '@clerk/clerk-react';
+import { Badge } from '@/components/ui/badge';
+import useTournamentStore from '@/store/useTournamentStore';
+import useGameStore from '@/store/useGameStore';
+import GameSettings from '@/components/GameSettings';
+import AdBanner from '@/components/AdBanner';
 
+/**
+ * Page d'accueil avec navigation vers les différentes fonctionnalités
+ */
 const Home: React.FC = () => {
-  const [versionClickCount, setVersionClickCount] = useState(0);
+  const navigate = useNavigate();
+  const { isSignedIn } = useUser();
+  const { games } = useGameStore();
+  const { tournaments, currentTournament, setCurrentTournament } = useTournamentStore();
   const [showEasterEgg, setShowEasterEgg] = useState(false);
+  const [soundEnabled, setSoundEnabled] = useState<boolean>(() => {
+    return window.localStorage.getItem('dutch_sound_enabled') !== 'false';
+  });
+  const [clickCount, setClickCount] = useState(0);
 
-  const handleVersionClick = () => {
-    const newCount = versionClickCount + 1;
-    setVersionClickCount(newCount);
-    
-    if (newCount >= 10) {
-      setShowEasterEgg(true);
-      setVersionClickCount(0);
+  useEffect(() => {
+    window.localStorage.setItem('dutch_sound_enabled', String(soundEnabled));
+  }, [soundEnabled]);
+
+  const handleStartGame = () => {
+    navigate('/game');
+  };
+
+  const handleGoToHistory = () => {
+    navigate('/history');
+  };
+
+  const handleGoToSettings = () => {
+    navigate('/settings');
+  };
+
+  const handleGoToRules = () => {
+    navigate('/rules');
+  };
+
+  const handleCircleClick = () => {
+    setClickCount(prev => {
+      const newCount = prev + 1;
+      
+      if (newCount >= 7) {
+        setShowEasterEgg(true);
+        return 0;
+      }
+      
+      if (newCount === 3) {
+        toast.info('Continue d\'appuyer...', {
+          position: 'bottom-center',
+          duration: 1500,
+        });
+      }
+      
+      return newCount;
+    });
+  };
+
+  const handleCloseEasterEgg = () => {
+    setShowEasterEgg(false);
+  };
+
+  const handleStartTournament = () => {
+    if (currentTournament) {
+      navigate('/tournament');
+    } else {
+      // Créer un nouveau tournoi
+      const newTournament = {
+        id: `tournament-${Date.now()}`,
+        name: `Tournoi du ${new Date().toLocaleDateString('fr-FR')}`,
+        players: [],
+        games: [],
+        currentGame: null,
+        completed: false,
+        date: new Date(),
+      };
+      
+      setCurrentTournament(newTournament);
+      navigate('/tournament');
     }
   };
 
+  const mainButtonVariants = {
+    hover: { scale: 1.04, y: -5, boxShadow: "0 10px 25px rgba(0, 0, 0, 0.15)" },
+    tap: { scale: 0.98, y: -2, boxShadow: "0 5px 10px rgba(0, 0, 0, 0.1)" }
+  };
+
+  const iconButtonVariants = {
+    hover: { scale: 1.1, y: -3 },
+    tap: { scale: 0.95, y: 0 }
+  };
+
   return (
-    <motion.div 
-      className="min-h-screen flex flex-col items-center justify-center p-6 relative overflow-hidden"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.8 }}
-    >
-      {/* Background elements */}
-      <AnimatedBackground />
-      
-      {/* New decorative elements */}
-      <motion.div 
-        className="absolute top-[30%] left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-dutch-blue/20 to-transparent"
-        animate={{ opacity: [0.3, 0.7, 0.3] }}
-        transition={{ duration: 5, repeat: Infinity }}
-      />
-      
-      <motion.div 
-        className="absolute bottom-[25%] left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-dutch-purple/20 to-transparent"
-        animate={{ opacity: [0.4, 0.8, 0.4] }}
-        transition={{ duration: 6, repeat: Infinity, delay: 1 }}
-      />
-      
-      {/* Animated patterns */}
-      <div className="absolute inset-0 z-0 opacity-5">
-        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <pattern id="smallGrid" width="20" height="20" patternUnits="userSpaceOnUse">
-              <path d="M 20 0 L 0 0 0 20" fill="none" stroke="currentColor" strokeWidth="0.5" />
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#smallGrid)" />
-        </svg>
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Background design elements */}
+      <div className="fixed inset-0 -z-10">
+        <AnimatedBackground variant="default" />
       </div>
       
-      {/* Particles animation */}
-      <div className="absolute inset-0 z-0">
-        {Array.from({ length: 20 }).map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1 h-1 rounded-full bg-dutch-blue/30"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-            animate={{
-              y: [0, -30, 0],
-              opacity: [0, 0.7, 0],
-            }}
-            transition={{
-              duration: 2 + Math.random() * 3,
-              repeat: Infinity,
-              delay: Math.random() * 5,
-            }}
-          />
-        ))}
-      </div>
-      
-      {/* Subtle wave animation */}
-      <svg className="absolute bottom-0 left-0 right-0 opacity-10" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
-        <motion.path 
-          fill="#8B5CF6" 
-          fillOpacity="1" 
-          d="M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,202.7C672,203,768,181,864,181.3C960,181,1056,203,1152,197.3C1248,192,1344,160,1392,144L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
-          animate={{
-            d: [
-              "M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,202.7C672,203,768,181,864,181.3C960,181,1056,203,1152,197.3C1248,192,1344,160,1392,144L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z",
-              "M0,160L48,181.3C96,203,192,245,288,229.3C384,213,480,139,576,128C672,117,768,171,864,186.7C960,203,1056,181,1152,160C1248,139,1344,117,1392,106.7L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z",
-              "M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,202.7C672,203,768,181,864,181.3C960,181,1056,203,1152,197.3C1248,192,1344,160,1392,144L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z",
-            ],
-          }}
-          transition={{
-            duration: 15,
-            repeat: Infinity,
-            repeatType: "reverse",
-            ease: "easeInOut"
-          }}
-        />
-      </svg>
-      <svg className="absolute bottom-0 left-0 right-0 opacity-10" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
-        <motion.path 
-          fill="#F97316" 
-          fillOpacity="0.6" 
-          d="M0,128L34.3,144C68.6,160,137,192,206,202.7C274.3,213,343,203,411,192C480,181,549,171,617,160C685.7,149,754,139,823,149.3C891.4,160,960,192,1029,208C1097.1,224,1166,224,1234,208C1302.9,192,1371,160,1406,144L1440,128L1440,320L1405.7,320C1371.4,320,1303,320,1234,320C1165.7,320,1097,320,1029,320C960,320,891,320,823,320C754.3,320,686,320,617,320C548.6,320,480,320,411,320C342.9,320,274,320,206,320C137.1,320,69,320,34,320L0,320Z"
-          animate={{
-            d: [
-              "M0,128L34.3,144C68.6,160,137,192,206,202.7C274.3,213,343,203,411,192C480,181,549,171,617,160C685.7,149,754,139,823,149.3C891.4,160,960,192,1029,208C1097.1,224,1166,224,1234,208C1302.9,192,1371,160,1406,144L1440,128L1440,320L1405.7,320C1371.4,320,1303,320,1234,320C1165.7,320,1097,320,1029,320C960,320,891,320,823,320C754.3,320,686,320,617,320C548.6,320,480,320,411,320C342.9,320,274,320,206,320C137.1,320,69,320,34,320L0,320Z",
-              "M0,96L34.3,117.3C68.6,139,137,181,206,208C274.3,235,343,245,411,224C480,203,549,149,617,133.3C685.7,117,754,139,823,170.7C891.4,203,960,245,1029,261.3C1097.1,277,1166,267,1234,234.7C1302.9,203,1371,149,1406,122.7L1440,96L1440,320L1405.7,320C1371.4,320,1303,320,1234,320C1165.7,320,1097,320,1029,320C960,320,891,320,823,320C754.3,320,686,320,617,320C548.6,320,480,320,411,320C342.9,320,274,320,206,320C137.1,320,69,320,34,320L0,320Z",
-              "M0,128L34.3,144C68.6,160,137,192,206,202.7C274.3,213,343,203,411,192C480,181,549,171,617,160C685.7,149,754,139,823,149.3C891.4,160,960,192,1029,208C1097.1,224,1166,224,1234,208C1302.9,192,1371,160,1406,144L1440,128L1440,320L1405.7,320C1371.4,320,1303,320,1234,320C1165.7,320,1097,320,1029,320C960,320,891,320,823,320C754.3,320,686,320,617,320C548.6,320,480,320,411,320C342.9,320,274,320,206,320C137.1,320,69,320,34,320L0,320Z",
-            ],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            repeatType: "reverse",
-            ease: "easeInOut",
-            delay: 1
-          }}
-        />
-      </svg>
-      
-      <motion.div 
-        className="w-full max-w-md z-10"
-        initial={{ y: 30, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.7, delay: 0.1 }}
-      >
-        <motion.div
-          initial={{ y: -20 }}
-          animate={{ y: 0 }}
-          className="text-center mb-14"
-        >
-          <div className="relative inline-block">
-            <h1 className="text-6xl font-bold bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-pink bg-clip-text text-transparent mb-2">
-              Dutch
-            </h1>
-            <motion.div 
-              className="absolute -right-4 -top-3"
-              animate={{ 
-                rotate: [0, 10, 0],
-                scale: [1, 1.1, 1]
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                repeatType: "reverse"
-              }}
-            >
-              <Sparkles className="w-6 h-6 text-dutch-orange" />
-            </motion.div>
-          </div>
-          <p className="text-gray-600 backdrop-blur-sm text-lg">Votre compagnon de jeu</p>
-        </motion.div>
-        
-        <div className="space-y-5">
-          <SignedIn>
-            <Link to="/game" className="block">
-              <motion.div 
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.98 }}
-                transition={{ type: "spring", stiffness: 400, damping: 17 }}
-              >
-                <Button className="w-full h-16 rounded-2xl glassmorphism bg-white/50 hover:bg-white/60 text-dutch-blue text-lg font-semibold border border-white/40 shadow-md backdrop-blur-md transition-all">
-                  <PlayCircle className="mr-2 h-6 w-6 text-dutch-blue" aria-hidden="true" /> 
-                  <span className="bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">Nouvelle partie</span>
-                </Button>
-              </motion.div>
-            </Link>
-          </SignedIn>
-          
-          <SignedOut>
-            <Link to="/sign-in" className="block">
-              <motion.div 
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.98 }}
-                transition={{ type: "spring", stiffness: 400, damping: 17 }}
-              >
-                <Button 
-                  className="w-full h-16 rounded-2xl bg-gradient-to-r from-dutch-blue to-dutch-purple text-white text-lg font-semibold border border-white/40 shadow-lg hover:shadow-xl backdrop-blur-md transition-all"
-                >
-                  <User className="mr-2 h-6 w-6" aria-hidden="true" /> 
-                  <span className="text-white">Connexion / Inscription</span>
-                </Button>
-              </motion.div>
-            </Link>
-          </SignedOut>
-          
-          <Link to="/history" className="block">
-            <motion.div 
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              transition={{ type: "spring", stiffness: 400, damping: 17 }}
-            >
-              <Button variant="outline" className="w-full h-14 rounded-2xl glassmorphism bg-white/50 text-gray-700 border border-white/30 hover:bg-white/60 backdrop-blur-md transition-all">
-                <History className="mr-2 h-5 w-5 text-dutch-purple" aria-hidden="true" /> Historique
-              </Button>
-            </motion.div>
-          </Link>
-          
-          <div className="flex gap-2">
-            <Link to="/rules" className="block flex-1">
-              <motion.div 
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                transition={{ type: "spring", stiffness: 400, damping: 17 }}
-              >
-                <Button variant="ghost" className="w-full h-14 rounded-2xl glassmorphism bg-white/40 text-gray-600 hover:bg-white/50 border border-white/20 backdrop-blur-md transition-all">
-                  <Info className="mr-2 h-5 w-5 text-dutch-orange" aria-hidden="true" /> Règles
-                </Button>
-              </motion.div>
-            </Link>
-            
-            <Link to="/settings" className="block flex-1">
-              <motion.div 
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                transition={{ type: "spring", stiffness: 400, damping: 17 }}
-              >
-                <Button variant="ghost" className="w-full h-14 rounded-2xl glassmorphism bg-white/40 text-gray-600 hover:bg-white/50 border border-white/20 backdrop-blur-md transition-all">
-                  <Settings className="mr-2 h-5 w-5 text-dutch-blue" aria-hidden="true" /> Réglages
-                </Button>
-              </motion.div>
-            </Link>
-          </div>
+      {/* Main Content */}
+      <div className="container max-w-md mx-auto px-4 py-8 min-h-screen flex flex-col">
+        {/* Absolute positioned settings button */}
+        <div className="absolute top-6 right-6 z-30">
+          <GameSettings soundEnabled={soundEnabled} setSoundEnabled={setSoundEnabled} />
         </div>
         
+        {/* Logo and title */}
         <motion.div 
-          className="mt-16 text-center text-gray-500 text-sm backdrop-blur-md px-4 py-2 rounded-full bg-white/50 border border-white/30 mx-auto w-max shadow-sm cursor-pointer hover:bg-white/60 transition-colors"
-          initial={{ opacity: 0, y: 10 }}
+          className="mt-8 mb-12 text-center"
+          initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.7, duration: 0.5 }}
-          onClick={handleVersionClick}
-          whileTap={{ scale: 0.98 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
         >
-          <p>Version 1.0</p>
+          <div className="flex justify-center mb-4">
+            <motion.div
+              className="w-20 h-20 rounded-full bg-gradient-to-br from-dutch-blue to-dutch-purple flex items-center justify-center shadow-lg relative"
+              whileHover={{ rotate: 360 }}
+              transition={{ duration: 1 }}
+              onClick={handleCircleClick}
+            >
+              <motion.div 
+                className="w-16 h-16 rounded-full bg-white flex items-center justify-center text-3xl font-bold relative z-10"
+                whileTap={{ scale: 0.95 }}
+              >
+                <Circle className="h-10 w-10 text-dutch-purple" strokeWidth={3} />
+              </motion.div>
+            </motion.div>
+          </div>
+          
+          <h1 className="text-4xl font-extrabold bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange bg-clip-text text-transparent">
+            Dutch Blitz
+          </h1>
+          <p className="text-gray-600 mt-2 text-sm">
+            Compteur de score facile et fun
+          </p>
         </motion.div>
-      </motion.div>
+        
+        {/* Main Action Buttons */}
+        <div className="space-y-4 flex-grow flex flex-col justify-center mb-12">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+          >
+            <Button 
+              onClick={handleStartGame}
+              className="w-full py-8 text-lg font-semibold rounded-2xl bg-gradient-to-r from-dutch-blue to-dutch-purple hover:from-dutch-blue/90 hover:to-dutch-purple/90 shadow-md hover:shadow-lg transition-all"
+              variants={mainButtonVariants}
+              whileHover="hover"
+              whileTap="tap"
+              as={motion.button}
+            >
+              <Play className="mr-2 h-5 w-5" />
+              Nouvelle Partie
+            </Button>
+          </motion.div>
+          
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            className="relative"
+          >
+            <Button 
+              onClick={handleStartTournament}
+              className="w-full py-6 text-lg font-medium rounded-2xl bg-gradient-to-r from-dutch-orange to-dutch-yellow hover:from-dutch-orange/90 hover:to-dutch-yellow/90 shadow-md hover:shadow-lg transition-all"
+              variants={mainButtonVariants}
+              whileHover="hover"
+              whileTap="tap"
+              as={motion.button}
+            >
+              <Trophy className="mr-2 h-5 w-5" />
+              Mode Tournoi
+            </Button>
+            
+            {currentTournament && !currentTournament.completed && (
+              <Badge className="absolute -top-2 -right-1 bg-dutch-red shadow-sm">En cours</Badge>
+            )}
+          </motion.div>
+          
+          {/* Secondary Buttons */}
+          <motion.div 
+            className="grid grid-cols-3 gap-3 mt-6"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.5 }}
+          >
+            <motion.div variants={iconButtonVariants} whileHover="hover" whileTap="tap">
+              <Button 
+                variant="ghost"
+                className="w-full h-full aspect-square flex flex-col items-center justify-center gap-2 rounded-xl bg-white/70 hover:bg-white/90 backdrop-blur-sm border border-white/40 shadow-sm hover:shadow-md transition-all"
+                onClick={handleGoToHistory}
+              >
+                <History className="h-6 w-6 text-dutch-blue" />
+                <span className="text-xs font-medium text-gray-700">Historique</span>
+              </Button>
+            </motion.div>
+            
+            <motion.div variants={iconButtonVariants} whileHover="hover" whileTap="tap">
+              <Button 
+                variant="ghost"
+                className="w-full h-full aspect-square flex flex-col items-center justify-center gap-2 rounded-xl bg-white/70 hover:bg-white/90 backdrop-blur-sm border border-white/40 shadow-sm hover:shadow-md transition-all"
+                onClick={handleGoToRules}
+              >
+                <BookOpen className="h-6 w-6 text-dutch-orange" />
+                <span className="text-xs font-medium text-gray-700">Règles</span>
+              </Button>
+            </motion.div>
+            
+            <motion.div variants={iconButtonVariants} whileHover="hover" whileTap="tap">
+              <Button 
+                variant="ghost"
+                className="w-full h-full aspect-square flex flex-col items-center justify-center gap-2 rounded-xl bg-white/70 hover:bg-white/90 backdrop-blur-sm border border-white/40 shadow-sm hover:shadow-md transition-all"
+                onClick={handleGoToSettings}
+              >
+                <SettingsIcon className="h-6 w-6 text-dutch-purple" />
+                <span className="text-xs font-medium text-gray-700">Réglages</span>
+              </Button>
+            </motion.div>
+          </motion.div>
+        </div>
+        
+        {/* Stats Summary */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.6 }}
+          className="rounded-2xl p-4 bg-white/80 backdrop-blur-sm border border-white/40 shadow-sm mb-6"
+        >
+          <div className="grid grid-cols-2 gap-3">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-full bg-dutch-blue/10 flex items-center justify-center">
+                <History className="h-4 w-4 text-dutch-blue" />
+              </div>
+              <div>
+                <div className="text-xs text-gray-500">Parties jouées</div>
+                <div className="font-semibold">{games.length}</div>
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-full bg-dutch-orange/10 flex items-center justify-center">
+                <Trophy className="h-4 w-4 text-dutch-orange" />
+              </div>
+              <div>
+                <div className="text-xs text-gray-500">Tournois</div>
+                <div className="font-semibold">{tournaments.length}</div>
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-full bg-dutch-purple/10 flex items-center justify-center">
+                {isSignedIn ? (
+                  <User className="h-4 w-4 text-dutch-purple" />
+                ) : (
+                  <Users className="h-4 w-4 text-dutch-purple" />
+                )}
+              </div>
+              <div>
+                <div className="text-xs text-gray-500">Mode</div>
+                <div className="font-semibold">{isSignedIn ? 'Connecté' : 'Local'}</div>
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-full bg-dutch-green/10 flex items-center justify-center">
+                <Sparkles className="h-4 w-4 text-dutch-green" />
+              </div>
+              <div>
+                <div className="text-xs text-gray-500">Version</div>
+                <div className="font-semibold">1.0.0</div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Ad Banner */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.7 }}
+          className="w-full flex justify-center mb-4"
+        >
+          <AdBanner format="horizontal" position="inline" />
+        </motion.div>
+        
+        {/* Footer */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.7 }}
+          className="text-center text-xs text-gray-500 mt-auto pb-4"
+        >
+          Dutch Blitz Scoreboard © {new Date().getFullYear()}
+        </motion.div>
+      </div>
       
-      {/* Easter Egg */}
-      <AnimatePresence>
-        {showEasterEgg && (
-          <BrickBreaker onClose={() => setShowEasterEgg(false)} />
-        )}
-      </AnimatePresence>
-    </motion.div>
+      {/* Easter Egg Modal */}
+      {showEasterEgg && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="fixed inset-0 bg-black/60" onClick={handleCloseEasterEgg}></div>
+          <div className="bg-white/90 backdrop-blur-lg rounded-3xl p-6 relative z-10 w-[90%] max-w-md mx-auto">
+            <h2 className="text-xl font-bold mb-4 bg-gradient-to-r from-dutch-orange to-dutch-red bg-clip-text text-transparent">
+              Easter Egg découvert !
+            </h2>
+            <p className="text-gray-700 mb-4">
+              Vous avez découvert un mini-jeu caché ! Voulez-vous y jouer ?
+            </p>
+            <div className="flex gap-3 justify-end">
+              <Button 
+                variant="outline" 
+                onClick={handleCloseEasterEgg}
+              >
+                Annuler
+              </Button>
+              <Button 
+                variant="dutch-orange"
+                onClick={() => navigate('/easter-egg')}
+              >
+                Jouer
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 
