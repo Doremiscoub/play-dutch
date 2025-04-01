@@ -5,12 +5,15 @@ import { Player, Game, PlayerStatistics } from '@/types';
 import LocalGameSetup from '@/components/LocalGameSetup';
 import ScoreBoard from '@/components/ScoreBoard';
 import GamePodium from '@/components/GamePodium';
+import DetailedScoreTable from '@/components/DetailedScoreTable';
+import FunStats from '@/components/FunStats';
 import { v4 as uuidv4 } from 'uuid';
 import { toast } from 'sonner';
 import { AnimatePresence, motion } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import { useLocalStorage } from '@/hooks/use-local-storage';
 import { calculatePlayerStats, updateAllPlayersStats, isGameOver } from '@/utils/playerStatsCalculator';
+import { Flag, Undo } from 'lucide-react';
 
 const GamePage: React.FC = () => {
   const [gameState, setGameState] = useState<'setup' | 'playing' | 'completed'>(() => {
@@ -207,6 +210,7 @@ const GamePage: React.FC = () => {
     setGames(prev => [...prev, newGame]);
     
     setGameState('completed');
+    localStorage.removeItem('current_dutch_game');
     
     if (soundEnabled) {
       new Audio('/sounds/win-sound.mp3').play().catch(err => console.error("Sound error:", err));
@@ -282,7 +286,7 @@ const GamePage: React.FC = () => {
   const handleNewGame = useCallback(() => {
     localStorage.removeItem('current_dutch_game');
     
-    // Navigate to setup screen instead of clearing players
+    // Navigate to setup screen
     navigate('/game/setup');
   }, [navigate]);
 
@@ -311,6 +315,32 @@ const GamePage: React.FC = () => {
 
   const gameDuration = gameStartTime ? getGameDuration(gameStartTime) : '';
 
+  // Injecter les composants et icônes dans ScoreBoard
+  const enhancedScoreBoard = () => {
+    if (!players || players.length === 0) return null;
+    
+    // Créer une version modifiée de ScoreBoard qui intègre les nouveaux composants
+    const scoreboardProps = {
+      players: playersWithStats,
+      onAddRound: (scores, dutchPlayerId) => handleAddRound(scores, dutchPlayerId),
+      onEndGame: handleEndGame,
+      onUndoLastRound: handleUndoLastRound,
+      roundHistory: roundHistory,
+      showGameEndConfirmation: showGameEndConfirmation,
+      onConfirmEndGame: handleConfirmEndGame,
+      onCancelEndGame: handleCancelEndGame,
+      isMultiplayer: false,
+      // Ajouter les nouveaux props pour les icônes
+      endGameIcon: <Flag className="mr-2 h-5 w-5" />,
+      undoLastRoundIcon: <Undo className="mr-2 h-5 w-5" />,
+      // Ajouter les tableaux détaillés
+      detailedScoreTable: <DetailedScoreTable players={playersWithStats} roundHistory={roundHistory} />,
+      funStats: <FunStats players={playersWithStats} />
+    };
+    
+    return <ScoreBoard {...scoreboardProps} />;
+  };
+
   return (
     <div className="min-h-screen">
       <AnimatePresence mode="wait">
@@ -332,17 +362,7 @@ const GamePage: React.FC = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <ScoreBoard 
-              players={playersWithStats}
-              onAddRound={(scores, dutchPlayerId) => handleAddRound(scores, dutchPlayerId)}
-              onEndGame={handleEndGame}
-              onUndoLastRound={handleUndoLastRound}
-              roundHistory={roundHistory}
-              showGameEndConfirmation={showGameEndConfirmation}
-              onConfirmEndGame={handleConfirmEndGame}
-              onCancelEndGame={handleCancelEndGame}
-              isMultiplayer={false}
-            />
+            {enhancedScoreBoard()}
           </motion.div>
         )}
         

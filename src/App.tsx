@@ -1,6 +1,6 @@
 
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from '@/components/ui/sonner';
 import { AnimatePresence } from 'framer-motion';
 import Home from '@/pages/Home';
@@ -32,7 +32,7 @@ function App() {
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/easter-egg" element={<BrickBreaker onClose={() => window.history.back()} />} />
           <Route path="/game" element={<GamePage />} />
-          <Route path="/game/setup" element={<GameSetup onStartGame={players => null} />} />
+          <Route path="/game/setup" element={<GameSetup />} />
           <Route path="/history" element={<HistoryPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

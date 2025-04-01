@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { Plus, History, BookOpen, Settings, LogIn, ExternalLink, Trophy, Loader2 } from 'lucide-react';
+import { Plus, History, BookOpen, Settings, LogIn, ExternalLink, Trophy } from 'lucide-react';
 import ThemeSelector from '@/components/ThemeSelector';
 import AnimatedBackground from '@/components/AnimatedBackground';
 import { useUser } from '@clerk/clerk-react';
@@ -34,12 +34,33 @@ const Home: React.FC = () => {
     }
   };
 
+  // Sparkle SVG component
+  const SparkleIcon = () => (
+    <svg 
+      width="16" 
+      height="16" 
+      viewBox="0 0 24 24" 
+      fill="none" 
+      xmlns="http://www.w3.org/2000/svg"
+      className="ml-1 inline-block translate-y-[-2px]"
+    >
+      <path 
+        d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" 
+        fill="#F97316" 
+        stroke="#F97316" 
+        strokeWidth="2" 
+        strokeLinecap="round" 
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+
   // Afficher un loader pendant que Clerk charge
   if (!isLoaded) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="flex flex-col items-center">
-          <Loader2 className="h-12 w-12 text-dutch-blue animate-spin mb-4" />
+          <div className="h-12 w-12 text-dutch-blue animate-spin mb-4 border-4 border-dutch-blue/30 border-t-dutch-blue rounded-full" />
           <div className="text-dutch-blue text-lg">Chargement...</div>
         </div>
       </div>
@@ -70,7 +91,7 @@ const Home: React.FC = () => {
             className="mb-12"
           >
             <h1 className="text-5xl sm:text-6xl font-bold bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent mb-2">
-              Dutch <span className="text-2xl text-dutch-orange">✨</span>
+              Dutch <SparkleIcon />
             </h1>
             <p className="text-gray-600">Votre compagnon de jeu</p>
           </motion.div>
@@ -124,11 +145,34 @@ const Home: React.FC = () => {
                       className="w-full"
                     >
                       <Button 
-                        className="w-full bg-white text-dutch-blue hover:bg-white/90 border border-dutch-blue/20 h-14 rounded-full shadow-md"
+                        className="w-full h-14 rounded-full shadow-md relative overflow-hidden"
+                        onClick={() => navigate('/sign-in')}
+                        style={{
+                          background: "linear-gradient(to right, #3B82F6, #8B5CF6)",
+                          color: "white",
+                          border: "none"
+                        }}
+                      >
+                        <span className="relative z-10 flex items-center">
+                          <LogIn className="mr-2 h-5 w-5" />
+                          Connexion / Inscription
+                        </span>
+                      </Button>
+                    </motion.div>
+                    
+                    <motion.div
+                      variants={buttonVariants}
+                      whileHover="hover"
+                      whileTap="tap"
+                      className="w-full"
+                    >
+                      <Button 
+                        className="w-full bg-white text-dutch-purple hover:bg-white/90 border border-dutch-purple/20 h-14 rounded-full shadow-md"
                         onClick={() => navigate('/game/setup')}
                       >
-                        <Plus className="mr-2 h-5 w-5" />
-                        Nouvelle partie
+                        <ExternalLink className="mr-2 h-5 w-5" />
+                        Jouer sans compte
+                        <Badge className="ml-2 bg-dutch-purple/20 text-dutch-purple border-none text-xs">Rapide</Badge>
                       </Button>
                     </motion.div>
                   </>

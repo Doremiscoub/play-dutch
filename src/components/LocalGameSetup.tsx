@@ -125,7 +125,7 @@ const LocalGameSetup: React.FC<LocalGameSetupProps> = ({ onStartGame }) => {
           </div>
         </motion.div>
         
-        {/* Information à venir - Moved here directly after game mode selection */}
+        {/* Information à venir - Teaser multijoueur */}
         <motion.div
           className="mb-8 relative z-10"
           initial={{ y: 20, opacity: 0 }}
