@@ -6,9 +6,8 @@ import { animationVariants } from '@/utils/animationUtils';
 import { Button } from './ui/button';
 import { ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import themeConfig from '@/config/theme';
 
-interface PageLayoutProps {
+export interface PageLayoutProps {
   children: React.ReactNode;
   title?: string;
   subtitle?: string;
