@@ -71,4 +71,13 @@ export function useDeviceDetect() {
   };
 }
 
-export default useMediaQuery;
+/**
+ * Hook simple pour détecter si l'écran est de taille mobile
+ * Pour compatibilité avec le composant sidebar.tsx
+ */
+function useIsMobile() {
+  const isSm = useMediaQuery(`(max-width: ${UI_CONFIG.breakpoints.sm})`);
+  return isSm;
+}
+
+export default useIsMobile;
