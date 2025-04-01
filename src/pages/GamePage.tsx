@@ -44,11 +44,18 @@ const GamePage: React.FC = () => {
   }, []);
   
   // Effet pour mettre à jour les stats des joueurs quand les rounds changent
+  // FIX: This was causing the infinite loop. We now check if players have rounds
+  // and only call updatePlayerStats when needed.
   useEffect(() => {
-    if (players.length > 0 && players[0].rounds.length > 0) {
+    // Only update stats if there are players with rounds
+    const hasRounds = players.length > 0 && players[0].rounds.length > 0;
+    
+    // We only want to update stats if the rounds actually exist
+    // The players state might already include updated stats from other operations
+    if (hasRounds && !players[0].stats) {
       updatePlayerStats();
     }
-  }, [players, updatePlayerStats]);
+  }, [players.length, players.map(p => p.rounds.length).join(',')]);
   
   // Gestionnaires d'événements
   const handleStartGame = (playerNames: string[]) => {

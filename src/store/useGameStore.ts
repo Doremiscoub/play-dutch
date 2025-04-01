@@ -1,4 +1,3 @@
-
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { v4 as uuidv4 } from 'uuid';
@@ -63,7 +62,16 @@ export const useGameStore = create<GameState>()(
           id: uuidv4(),
           name,
           totalScore: 0,
-          rounds: []
+          rounds: [],
+          stats: {
+            bestRound: null,
+            dutchCount: 0,
+            averageScore: 0,
+            worstRound: null,
+            improvementRate: 0,
+            consistencyScore: 0,
+            winStreak: 0
+          }
         }));
         
         set({
@@ -140,17 +148,38 @@ export const useGameStore = create<GameState>()(
       
       /**
        * Met à jour les statistiques de tous les joueurs
+       * FIX: Modified to avoid unnecessary updates when stats are already current
        */
       updatePlayerStats: () => {
         const { players, calculatePlayerStats } = get();
         
         if (players.length > 0 && players[0].rounds.length > 0) {
-          const updatedPlayers = players.map(player => ({
-            ...player,
-            stats: calculatePlayerStats(player)
-          }));
+          // Compute new stats for all players
+          const updatedPlayers = players.map(player => {
+            const newStats = calculatePlayerStats(player);
+            
+            // Check if we need to update the stats at all
+            if (!player.stats || 
+                player.stats.averageScore !== newStats.averageScore ||
+                player.stats.dutchCount !== newStats.dutchCount ||
+                player.stats.bestRound !== newStats.bestRound ||
+                player.stats.worstRound !== newStats.worstRound ||
+                player.stats.winStreak !== newStats.winStreak) {
+              return { ...player, stats: newStats };
+            }
+            
+            // Return original player if stats haven't changed
+            return player;
+          });
           
-          set({ players: updatedPlayers });
+          // Only update state if something has actually changed
+          const statsChanged = updatedPlayers.some((player, index) => 
+            JSON.stringify(player.stats) !== JSON.stringify(players[index].stats)
+          );
+          
+          if (statsChanged) {
+            set({ players: updatedPlayers });
+          }
         }
       },
       
@@ -199,8 +228,8 @@ export const useGameStore = create<GameState>()(
           }
         }
         
-        // Mettre à jour les stats après avoir ajouté le tour
-        setTimeout(() => updatePlayerStats(), 0);
+        // Mettre à jour les stats après avoir ajouté le tour - mais pas dans un setState
+        updatePlayerStats();
         
         // Vérifier si la partie est terminée
         const playersTotalWithNewScores = updatedPlayers.map(player => ({
@@ -253,8 +282,8 @@ export const useGameStore = create<GameState>()(
           }
         }
         
-        // Mettre à jour les stats après avoir annulé le tour
-        setTimeout(() => updatePlayerStats(), 0);
+        // Mettre à jour les stats après avoir annulé le tour - mais pas dans un setState
+        updatePlayerStats();
       },
       
       /**
