@@ -11,6 +11,7 @@ import RulesPage from '@/pages/RulesPage';
 import SettingsPage from '@/pages/SettingsPage';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import AuthStatus from '@/components/AuthStatus';
+import BrickBreaker from '@/components/EasterEgg/BrickBreaker';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/sign-up/*" element={<SignUp />} />
         <Route path="/rules" element={<RulesPage />} />
         <Route path="/settings" element={<SettingsPage />} />
+        <Route path="/easter-egg" element={<BrickBreaker />} />
         <Route 
           path="/game" 
           element={
