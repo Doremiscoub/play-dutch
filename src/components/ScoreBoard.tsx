@@ -15,13 +15,19 @@ import {
   AlertDialogTitle 
 } from '@/components/ui/alert-dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { LayoutGrid, LayoutList } from 'lucide-react';
+import { LayoutGrid, LayoutList, Info, Settings, ArrowLeft } from 'lucide-react';
 import CustomScoreBoardButtons from './CustomScoreBoardButtons';
 import ScoreTableView from './ScoreTableView';
 import AICommentator from './AICommentator';
 import { Badge } from '@/components/ui/badge';
+import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
+import PlayerDetailedStats from './PlayerDetailedStats';
+import PlayerScoreCard from './PlayerScoreCard';
+import { Link } from 'react-router-dom';
 import PageLayout from './PageLayout';
 import { animationVariants } from '@/utils/animationUtils';
+import { useMediaQuery } from '@/hooks/use-media-query';
+import { UI_CONFIG, COMMON_STYLES } from '@/config/uiConfig';
 
 interface ScoreBoardProps {
   players: Player[];
@@ -48,38 +54,69 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
 }) => {
   const [view, setView] = useState<'list' | 'table'>('list');
   const [showAICommentator, setShowAICommentator] = useState<boolean>(true);
-
+  const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
+  const [showUndoConfirmation, setShowUndoConfirmation] = useState<boolean>(false);
+  const isDesktop = useMediaQuery("(min-width: 768px)");
+  
   // Trier les joueurs par score, du meilleur au pire
   const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
   
-  // Animation d'apparition des éléments de façon staggered
-  const container = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1
-      }
-    }
+  // Gestionnaires pour l'annulation de la dernière manche
+  const handleRequestUndo = () => {
+    setShowUndoConfirmation(true);
   };
   
-  const item = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.3 } }
+  const handleConfirmUndo = () => {
+    onUndoLastRound();
+    setShowUndoConfirmation(false);
+  };
+  
+  const handleCancelUndo = () => {
+    setShowUndoConfirmation(false);
+  };
+  
+  // Gestionnaire pour les stats détaillées d'un joueur
+  const handlePlayerSelect = (player: Player) => {
+    setSelectedPlayer(player);
   };
 
   return (
     <PageLayout backgroundVariant="subtle" className="pb-32">
-      <div className="relative z-10 space-y-4">
+      <div className="relative z-10">
+        <div className="flex justify-between items-center mb-6">
+          <Link to="/">
+            <Button variant="ghost" size="sm" className="flex items-center gap-1 text-gray-600 hover:text-gray-900">
+              <ArrowLeft className="h-4 w-4" />
+              Accueil
+            </Button>
+          </Link>
+          
+          <div className="flex gap-2">
+            <Link to="/rules">
+              <Button variant="outline" size="sm" className="flex items-center gap-1 text-gray-600">
+                <Info className="h-4 w-4" />
+                <span className="hidden sm:inline">Règles</span>
+              </Button>
+            </Link>
+            <Link to="/settings">
+              <Button variant="outline" size="sm" className="flex items-center gap-1 text-gray-600">
+                <Settings className="h-4 w-4" />
+                <span className="hidden sm:inline">Réglages</span>
+              </Button>
+            </Link>
+          </div>
+        </div>
+        
         <div className="text-center mb-6">
           <h1 className="text-2xl font-bold bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">
             Tableau des scores
+            <span className="ml-2 text-sm">✨</span>
           </h1>
           <p className="text-gray-600">Manche {players[0]?.rounds.length || 0}</p>
         </div>
         
-        {/* Onglets pour basculer entre les vues */}
-        <div className="flex justify-center mb-4">
+        {/* Onglets pour basculer entre les vues - toujours visible */}
+        <div className="flex justify-center mb-6">
           <Tabs defaultValue={view} onValueChange={(value) => setView(value as 'list' | 'table')} className="w-full max-w-md">
             <TabsList className="grid grid-cols-2 mb-2">
               <TabsTrigger value="list" className="flex items-center gap-1">
@@ -92,122 +129,138 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
           </Tabs>
         </div>
         
-        {/* Commentateur IA */}
-        {showAICommentator && (
-          <div className="mb-4">
-            <AICommentator 
-              players={players}
-              roundHistory={roundHistory}
-              className="mb-6"
-            />
-          </div>
-        )}
-        
-        {/* Vue Liste (classement) */}
-        <AnimatePresence mode="wait">
-          {view === 'list' && (
-            <motion.div
-              key="list-view"
-              variants={container}
-              initial="hidden"
-              animate="show"
-              exit={{ opacity: 0, transition: { duration: 0.2 } }}
-              className="space-y-4 mb-24"
-            >
-              {sortedPlayers.map((player, index) => (
+        {/* Layout desktop/mobile avec commentateur IA */}
+        <div className={`${isDesktop ? 'md:flex md:gap-6' : ''}`}>
+          {/* Colonne gauche (classement ou tableau) */}
+          <div className={`${isDesktop && view === 'list' ? 'md:w-2/3' : 'w-full'}`}>
+            <AnimatePresence mode="wait">
+              {view === 'list' && (
                 <motion.div
-                  key={player.id}
-                  variants={item}
-                  layoutId={`player-card-${player.id}`}
+                  key="list-view"
+                  initial="hidden"
+                  animate="show"
+                  exit={{ opacity: 0, transition: { duration: 0.2 } }}
+                  variants={animationVariants.staggerChildren}
+                  className="space-y-4"
                 >
-                  <Card className="relative overflow-hidden rounded-2xl p-4 bg-white/80 backdrop-blur-md border border-white/40 shadow-sm">
-                    <div className="flex justify-between items-center">
-                      <div className="flex items-center">
-                        <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-bold ${index === 0 ? 'bg-yellow-400' : index === 1 ? 'bg-gray-400' : index === 2 ? 'bg-amber-600' : 'bg-gray-300'}`}>
-                          {index + 1}
-                        </div>
-                        <h3 className="ml-3 font-semibold text-gray-800">{player.name}</h3>
-                        
-                        {/* Badge Dutch si le joueur a fait Dutch au moins une fois */}
-                        {player.rounds.some(round => round.isDutch) && (
-                          <Badge className="ml-2 bg-dutch-orange/10 text-dutch-orange">Dutch</Badge>
-                        )}
-                      </div>
-                      <div className="font-bold text-2xl bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">
-                        {player.totalScore}
-                      </div>
+                  {/* Commentateur IA pour mobile (dans la vue liste) */}
+                  {!isDesktop && showAICommentator && (
+                    <AICommentator 
+                      players={players}
+                      roundHistory={roundHistory}
+                      className="mb-4"
+                    />
+                  )}
+                
+                  {sortedPlayers.map((player, index) => (
+                    <motion.div
+                      key={player.id}
+                      variants={animationVariants.staggerItem}
+                      layoutId={`player-card-${player.id}`}
+                      whileHover={{ y: -3, boxShadow: "0 10px 25px -5px rgba(0,0,0,0.1)" }}
+                      className="cursor-pointer"
+                      onClick={() => isDesktop ? handlePlayerSelect(player) : null}
+                    >
+                      <PlayerScoreCard 
+                        player={player}
+                        position={index + 1}
+                        isWinner={index === 0}
+                        lastRoundScore={player.rounds.length > 0 ? player.rounds[player.rounds.length - 1].score : undefined}
+                      />
+                    </motion.div>
+                  ))}
+                  
+                  {/* Drawer pour les stats détaillées sur mobile */}
+                  {!isDesktop && (
+                    <div className="mt-8 flex justify-center">
+                      <Drawer>
+                        <DrawerTrigger asChild>
+                          <Button className="bg-white text-dutch-purple border border-dutch-purple/20 hover:bg-dutch-purple/10">
+                            Voir les statistiques détaillées
+                          </Button>
+                        </DrawerTrigger>
+                        <DrawerContent className="bg-white rounded-t-3xl p-4 max-h-[85vh]">
+                          <div className="space-y-6 overflow-y-auto max-h-[80vh] px-1 py-2">
+                            <h3 className="font-bold text-lg text-center text-dutch-purple">Statistiques détaillées</h3>
+                            {sortedPlayers.map((player) => (
+                              <div key={player.id} className="space-y-2">
+                                <h4 className="font-medium text-gray-700">{player.name}</h4>
+                                <PlayerDetailedStats player={player} />
+                              </div>
+                            ))}
+                          </div>
+                        </DrawerContent>
+                      </Drawer>
                     </div>
-                    
-                    {/* Historique des scores du joueur */}
-                    {player.rounds && player.rounds.length > 0 && (
-                      <div className="mt-2 pt-2 border-t border-gray-100">
-                        <div className="flex space-x-2 overflow-x-auto pb-1 scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent">
-                          {player.rounds.map((round, idx) => (
-                            <div 
-                              key={idx} 
-                              className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium ${round.isDutch ? 'bg-dutch-orange/20 text-dutch-orange border border-dutch-orange/30' : (round.score > 0 ? 'bg-dutch-blue/10 text-dutch-blue border border-dutch-blue/30' : 'bg-gray-100 text-gray-500 border border-gray-200')}`}
-                            >
-                              {round.score}
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                    
-                    {/* Statistiques du joueur */}
-                    {player.stats && (
-                      <div className="mt-2 pt-2 border-t border-gray-100 grid grid-cols-3 gap-2 text-xs text-gray-500">
-                        <div className="flex flex-col items-center">
-                          <span>Moy.</span>
-                          <span className="font-medium text-gray-700">{player.stats.averageScore.toFixed(1)}</span>
-                        </div>
-                        <div className="flex flex-col items-center">
-                          <span>Min</span>
-                          <span className="font-medium text-gray-700">{player.stats.bestRound !== null ? player.stats.bestRound : '-'}</span>
-                        </div>
-                        <div className="flex flex-col items-center">
-                          <span>Dutch</span>
-                          <span className="font-medium text-gray-700">{player.stats.dutchCount}</span>
-                        </div>
-                      </div>
-                    )}
-                  </Card>
+                  )}
                 </motion.div>
-              ))}
-            </motion.div>
-          )}
+              )}
+              
+              {view === 'table' && (
+                <motion.div
+                  key="table-view"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <ScoreTableView 
+                    players={players}
+                    roundHistory={roundHistory || []}
+                  />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
           
-          {/* Vue Tableau (détaillée) */}
-          {view === 'table' && (
-            <motion.div
-              key="table-view"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="mb-24"
+          {/* Colonne droite (desktop uniquement - commentateur IA et stats du joueur sélectionné) */}
+          {isDesktop && view === 'list' && (
+            <motion.div 
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.4 }}
+              className="hidden md:block md:w-1/3 space-y-6"
             >
-              <ScoreTableView 
-                players={players}
-                roundHistory={roundHistory || []}
-              />
+              {/* Commentateur IA */}
+              {showAICommentator && (
+                <AICommentator 
+                  players={players}
+                  roundHistory={roundHistory}
+                  className="mb-6"
+                />
+              )}
+              
+              {/* Section stats détaillées pour le joueur sélectionné */}
+              <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-4 border border-white/30 shadow-sm">
+                <h3 className="font-semibold text-gray-800 mb-3">
+                  {selectedPlayer ? `Statistiques de ${selectedPlayer.name}` : 'Sélectionnez un joueur pour voir ses statistiques'}
+                </h3>
+                
+                {selectedPlayer ? (
+                  <PlayerDetailedStats player={selectedPlayer} />
+                ) : (
+                  <div className="text-gray-500 text-sm italic p-4 text-center">
+                    Cliquez sur un joueur dans le classement pour afficher ses statistiques détaillées
+                  </div>
+                )}
+              </div>
             </motion.div>
           )}
-        </AnimatePresence>
+        </div>
       </div>
       
       {/* Boutons d'action */}
       <CustomScoreBoardButtons
         players={players}
         onAddRound={onAddRound}
-        onUndoLastRound={onUndoLastRound}
+        onRequestUndoLastRound={handleRequestUndo}
         onEndGame={onEndGame}
       />
       
       {/* Confirmation de fin de partie */}
       {showGameEndConfirmation && onConfirmEndGame && onCancelEndGame && (
         <AlertDialog open={showGameEndConfirmation}>
-          <AlertDialogContent>
+          <AlertDialogContent className="bg-white rounded-2xl border-white/50">
             <AlertDialogHeader>
               <AlertDialogTitle>Terminer la partie ?</AlertDialogTitle>
               <AlertDialogDescription>
@@ -215,12 +268,28 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel onClick={onCancelEndGame}>Annuler</AlertDialogCancel>
-              <AlertDialogAction onClick={onConfirmEndGame}>Terminer</AlertDialogAction>
+              <AlertDialogCancel onClick={onCancelEndGame} className="bg-gray-100 hover:bg-gray-200 text-gray-700">Annuler</AlertDialogCancel>
+              <AlertDialogAction onClick={onConfirmEndGame} className="bg-dutch-purple hover:bg-dutch-purple/90 text-white">Terminer</AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
       )}
+      
+      {/* Confirmation d'annulation de manche */}
+      <AlertDialog open={showUndoConfirmation}>
+        <AlertDialogContent className="bg-white rounded-2xl border-white/50">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Annuler la dernière manche ?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Êtes-vous sûr de vouloir annuler la dernière manche ? Les scores seront définitivement perdus.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={handleCancelUndo} className="bg-gray-100 hover:bg-gray-200 text-gray-700">Annuler</AlertDialogCancel>
+            <AlertDialogAction onClick={handleConfirmUndo} className="bg-dutch-orange hover:bg-dutch-orange/90 text-white">Confirmer</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </PageLayout>
   );
 };

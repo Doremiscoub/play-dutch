@@ -43,21 +43,21 @@ const PlayerDetailedStats: React.FC<PlayerDetailedStatsProps> = ({ player, class
     {
       icon: <TrendingUp className="h-4 w-4 text-dutch-green" />,
       label: "Progression",
-      value: stats.improvementRate > 0 ? `+${stats.improvementRate}` : stats.improvementRate,
+      value: stats.improvementRate > 0 ? `+${stats.improvementRate.toFixed(1)}` : stats.improvementRate.toFixed(1),
       suffix: "points/manche",
-      color: stats.improvementRate > 0 ? "text-dutch-green" : "text-dutch-orange"
+      color: stats.improvementRate < 0 ? "text-dutch-green" : "text-dutch-orange"
     },
     {
       icon: <Star className="h-4 w-4 text-purple-500" />,
       label: "Moyenne",
-      value: stats.averageScore,
+      value: stats.averageScore.toFixed(1),
       suffix: "points/manche",
       color: "text-purple-500"
     },
     {
       icon: <Gauge className="h-4 w-4 text-blue-500" />,
       label: "Consistance",
-      value: stats.consistencyScore,
+      value: stats.consistencyScore.toFixed(1),
       suffix: "",
       color: "text-blue-500"
     },
@@ -80,7 +80,7 @@ const PlayerDetailedStats: React.FC<PlayerDetailedStatsProps> = ({ player, class
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: index * 0.05 }}
-              className="bg-white/60 backdrop-blur-sm rounded-xl p-3 border border-white/50 shadow-sm"
+              className="bg-white/60 backdrop-blur-sm rounded-xl p-3 border border-white/50 shadow-sm hover:shadow-md transition-all"
             >
               <div className="flex items-center gap-2 mb-1">
                 {stat.icon}

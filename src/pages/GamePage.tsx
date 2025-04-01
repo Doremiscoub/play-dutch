@@ -8,7 +8,7 @@ import GamePodium from '@/components/GamePodium';
 import { v4 as uuidv4 } from 'uuid';
 import { toast } from 'sonner';
 import { AnimatePresence, motion } from 'framer-motion';
-import confetti from 'canvas-confetti';
+import { playConfetti } from '@/utils/animationUtils';
 import { useLocalStorage } from '@/hooks/use-local-storage';
 import { calculatePlayerStats, updateAllPlayersStats, isGameOver } from '@/utils/playerStatsCalculator';
 
@@ -180,6 +180,8 @@ const GamePage: React.FC = () => {
     
     if (soundEnabled) {
       new Audio('/sounds/win-sound.mp3').play().catch(err => console.error("Sound error:", err));
+      // Lancer les confettis lors de la fin de partie
+      playConfetti(5000);
     }
   }, [players, setGames, soundEnabled, gameStartTime]);
   
@@ -283,7 +285,7 @@ const GamePage: React.FC = () => {
   const gameDuration = gameStartTime ? getGameDuration(gameStartTime) : '';
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen w-full">
       <AnimatePresence mode="wait">
         {gameState === 'setup' && (
           <motion.div
@@ -291,6 +293,7 @@ const GamePage: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            className="w-full"
           >
             <GameSetup onStartGame={handleStartGame} />
           </motion.div>
@@ -302,6 +305,7 @@ const GamePage: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            className="w-full"
           >
             <ScoreBoard 
               players={playersWithStats}
@@ -323,6 +327,7 @@ const GamePage: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            className="w-full"
           >
             <GamePodium 
               players={playersWithStats}

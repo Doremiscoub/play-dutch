@@ -1,10 +1,12 @@
+
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Player } from '@/types';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
-import { Home, RotateCcw, Share2, Trophy } from 'lucide-react';
-import confetti from 'canvas-confetti';
+import { Trophy, Calendar, BarChart3 } from 'lucide-react';
+import { playConfetti } from '@/utils/animationUtils';
+import PageLayout from './PageLayout';
 
 interface GamePodiumProps {
   players: Player[];
@@ -12,196 +14,200 @@ interface GamePodiumProps {
   gameDuration?: string;
 }
 
-const GamePodium: React.FC<GamePodiumProps> = ({
-  players,
-  onNewGame,
-  gameDuration
-}) => {
+const GamePodium: React.FC<GamePodiumProps> = ({ players, onNewGame, gameDuration }) => {
   const navigate = useNavigate();
-  const sortedPlayers = [...players].sort((a, b) => b.totalScore - a.totalScore);
+  const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
+  
+  // Définir le vainqueur
   const winner = sortedPlayers[0];
   
-  // Lancez des confettis quand le podium est affiché
+  // Lancer les confettis dès que le composant est monté
   useEffect(() => {
-    const launchConfetti = () => {
-      confetti({
-        particleCount: 100,
-        spread: 70,
-        origin: { y: 0.6 }
-      });
-    };
-    
-    // Lance les confettis à l'affichage et toutes les 2 secondes (3 fois au total)
-    launchConfetti();
-    const interval = setInterval(launchConfetti, 2000);
-    
-    setTimeout(() => {
-      clearInterval(interval);
-    }, 4000);
-    
-    return () => clearInterval(interval);
+    playConfetti(5000);
   }, []);
   
+  // Animations pour les médailles
+  const medalAnimation = {
+    hidden: { y: -100, opacity: 0 },
+    visible: { 
+      y: 0, 
+      opacity: 1,
+      transition: { 
+        type: "spring",
+        stiffness: 300,
+        damping: 10
+      }
+    }
+  };
+  
+  // Animations pour les joueurs
+  const playerAnimation = {
+    hidden: { y: 50, opacity: 0 },
+    visible: (custom: number) => ({
+      y: 0,
+      opacity: 1,
+      transition: { 
+        delay: custom * 0.2,
+        duration: 0.5
+      }
+    })
+  };
+  
+  // Obtenir la position des joueurs sur le podium
+  const getPodiumPosition = (index: number) => {
+    // Position par défaut en fonction du classement
+    switch(index) {
+      case 0: return { order: 2, height: 'h-36 md:h-44', color: 'bg-yellow-400' };
+      case 1: return { order: 1, height: 'h-28 md:h-36', color: 'bg-gray-300' };
+      case 2: return { order: 3, height: 'h-20 md:h-28', color: 'bg-amber-600' };
+      default: return { order: index + 1, height: 'h-16', color: 'bg-gray-200' };
+    }
+  };
+  
   return (
-    <div className="min-h-screen relative">
-      {/* Fond avec quadrillage */}
-      <div 
-        className="absolute inset-0 z-0"
-        style={{ 
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='24' height='24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M 0 0 L 24 0 M 0 0 L 0 24' stroke='%23DADADA' stroke-opacity='0.1' stroke-width='1' fill='none' /%3E%3C/svg%3E")`,
-          backgroundSize: '24px 24px'
-        }}
-      />
-    
-      <div className="flex flex-col items-center justify-center pt-10 px-4 relative z-10">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6 }}
+    <PageLayout backgroundVariant="default">
+      <div className="max-w-3xl mx-auto">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
           className="text-center mb-8"
         >
-          <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-pink">
-            Fin de partie !
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">
+            Partie terminée !
           </h1>
+          <p className="text-lg mt-2 text-gray-600">
+            {winner.name} remporte la partie avec {winner.totalScore} points
+          </p>
           {gameDuration && (
-            <p className="text-gray-600 mt-1">Durée: {gameDuration}</p>
+            <div className="flex items-center justify-center mt-2 text-sm text-gray-500">
+              <Calendar className="h-4 w-4 mr-1" />
+              Durée de la partie: {gameDuration}
+            </div>
           )}
         </motion.div>
         
-        <div className="relative w-full max-w-sm h-60 mb-10">
-          {/* Second place */}
-          {sortedPlayers.length > 1 && (
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.5 }}
-              className="absolute left-0 bottom-0 w-1/3"
-            >
-              <div className="h-28 mx-auto w-24 bg-gradient-to-t from-gray-300 to-gray-200 rounded-t-lg shadow-md flex flex-col items-center justify-end pb-2">
-                <div className="absolute -top-14">
-                  <div className="w-16 h-16 rounded-full bg-white/80 backdrop-blur-md shadow-md border-2 border-gray-300 flex items-center justify-center text-gray-600 font-bold">
-                    2
-                  </div>
+        {/* Affichage du podium */}
+        <div className="relative mb-16 mt-20">
+          {/* Positions des joueurs sur le podium */}
+          <div className="flex items-end justify-center gap-4 md:gap-6 h-52 md:h-72">
+            {sortedPlayers.slice(0, 3).map((player, index) => {
+              const { order, height, color } = getPodiumPosition(index);
+              
+              return (
+                <div key={player.id} className="relative" style={{ order }}>
+                  {/* Médaille */}
+                  <motion.div 
+                    className="absolute -top-16 left-1/2 transform -translate-x-1/2 z-10"
+                    variants={medalAnimation}
+                    initial="hidden"
+                    animate="visible"
+                  >
+                    <div className={`rounded-full ${index === 0 ? 'bg-yellow-500' : index === 1 ? 'bg-gray-400' : 'bg-amber-700'} p-3 shadow-lg`}>
+                      <Trophy className={`h-6 w-6 md:h-8 md:w-8 ${index === 0 ? 'text-yellow-100' : 'text-white'}`} />
+                    </div>
+                    <div className="text-center mt-1 font-bold">
+                      {index === 0 ? '1er' : index === 1 ? '2e' : '3e'}
+                    </div>
+                  </motion.div>
+                  
+                  {/* Joueur */}
+                  <motion.div 
+                    className="relative flex flex-col items-center"
+                    custom={index}
+                    variants={playerAnimation}
+                    initial="hidden"
+                    animate="visible"
+                  >
+                    <div className="flex flex-col items-center absolute -top-12 left-1/2 transform -translate-x-1/2 w-full">
+                      <div className="h-10 w-10 md:h-12 md:w-12 rounded-full bg-white border-2 border-gray-200 flex items-center justify-center mb-1 shadow-md overflow-hidden">
+                        <span className="text-lg font-bold text-gray-800">{player.name.charAt(0)}</span>
+                      </div>
+                      <div className="text-center text-sm font-medium truncate max-w-[80px] md:max-w-[120px]">
+                        {player.name}
+                      </div>
+                      <div className="text-center text-xs font-bold bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">
+                        {player.totalScore} pts
+                      </div>
+                    </div>
+                    
+                    {/* Podium */}
+                    <div className={`${color} ${height} w-20 md:w-28 rounded-t-lg shadow-lg flex items-center justify-center relative z-0`}>
+                      <span className="absolute bottom-2 text-xs text-white font-bold opacity-80">
+                        {index + 1}
+                      </span>
+                    </div>
+                  </motion.div>
                 </div>
-                <p className="text-xs font-medium text-gray-700 mt-4 truncate max-w-full px-2">
-                  {sortedPlayers[1]?.name}
-                </p>
-                <p className="text-gray-800 font-bold">
-                  {sortedPlayers[1]?.totalScore}
-                </p>
-              </div>
-            </motion.div>
-          )}
-          
-          {/* First place */}
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1, duration: 0.5 }}
-            className="absolute left-1/2 transform -translate-x-1/2 bottom-0 w-1/3 z-10"
-          >
-            <div className="h-40 mx-auto w-28 bg-gradient-to-t from-yellow-400 to-yellow-300 rounded-t-lg shadow-lg flex flex-col items-center justify-end pb-2">
-              <div className="absolute -top-16">
-                <div className="w-20 h-20 rounded-full bg-gradient-to-r from-yellow-300 to-yellow-500 shadow-lg border-2 border-yellow-200 flex items-center justify-center">
-                  <Trophy className="h-10 w-10 text-white" />
-                </div>
-              </div>
-              <p className="text-sm font-medium text-yellow-800 mt-6 truncate max-w-full px-2">
-                {winner?.name}
-              </p>
-              <p className="text-yellow-900 text-lg font-bold">
-                {winner?.totalScore}
-              </p>
-            </div>
-          </motion.div>
-          
-          {/* Third place */}
-          {sortedPlayers.length > 2 && (
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5, duration: 0.5 }}
-              className="absolute right-0 bottom-0 w-1/3"
-            >
-              <div className="h-20 mx-auto w-24 bg-gradient-to-t from-amber-700 to-amber-600 rounded-t-lg shadow-md flex flex-col items-center justify-end pb-2">
-                <div className="absolute -top-12">
-                  <div className="w-14 h-14 rounded-full bg-white/80 backdrop-blur-md shadow-md border-2 border-amber-600 flex items-center justify-center text-amber-700 font-bold">
-                    3
-                  </div>
-                </div>
-                <p className="text-xs font-medium text-amber-100 mt-3 truncate max-w-full px-2">
-                  {sortedPlayers[2]?.name}
-                </p>
-                <p className="text-amber-100 font-bold">
-                  {sortedPlayers[2]?.totalScore}
-                </p>
-              </div>
-            </motion.div>
-          )}
+              );
+            })}
+          </div>
         </div>
         
-        {/* Other players */}
+        {/* Affichage des autres joueurs */}
         {sortedPlayers.length > 3 && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.7, duration: 0.5 }}
-            className="w-full max-w-sm bg-white/80 backdrop-blur-md rounded-xl shadow-md p-4 mb-8 border border-white/40"
-          >
-            <h3 className="text-sm font-medium text-gray-500 mb-2">Autres joueurs</h3>
-            <div className="space-y-2">
+          <div className="mt-12 px-4">
+            <h3 className="text-lg font-semibold text-gray-700 mb-4">Autres participants</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {sortedPlayers.slice(3).map((player, index) => (
-                <div key={player.id} className="flex justify-between items-center">
-                  <div className="flex items-center">
-                    <div className="w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center text-gray-600 text-xs font-medium">
-                      {index + 4}
+                <motion.div
+                  key={player.id}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.1 + 0.5 }}
+                  className="bg-white/70 backdrop-blur-sm rounded-xl p-4 border border-white/30 shadow-sm"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <div className="h-8 w-8 rounded-full bg-gray-100 flex items-center justify-center mr-3">
+                        <span className="font-medium text-gray-500">{index + 4}</span>
+                      </div>
+                      <div>
+                        <div className="font-medium">{player.name}</div>
+                        {player.stats && (
+                          <div className="text-xs text-gray-500 mt-1">
+                            Moyenne: {player.stats.averageScore.toFixed(1)} pts/manche
+                          </div>
+                        )}
+                      </div>
                     </div>
-                    <span className="ml-2 text-gray-700">{player.name}</span>
+                    <div className="text-lg font-bold bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">
+                      {player.totalScore}
+                    </div>
                   </div>
-                  <span className="font-semibold text-gray-800">{player.totalScore}</span>
-                </div>
+                </motion.div>
               ))}
             </div>
-          </motion.div>
+          </div>
         )}
         
-        {/* Actions */}
-        <div className="w-full max-w-sm space-y-3 mt-4">
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.9, duration: 0.3 }}
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
+        {/* Boutons d'action */}
+        <motion.div 
+          className="mt-12 flex flex-col md:flex-row gap-4 justify-center"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8 }}
+        >
+          <Button 
+            onClick={onNewGame}
+            className="bg-gradient-to-r from-dutch-purple to-dutch-blue text-white rounded-full px-8 py-6 shadow-lg hover:shadow-xl transition-all"
+            size="lg"
           >
-            <Button 
-              onClick={onNewGame}
-              className="w-full rounded-xl bg-gradient-to-r from-dutch-blue to-dutch-purple text-white shadow-md hover:shadow-lg py-6"
-            >
-              <RotateCcw className="mr-2 h-5 w-5" />
-              Nouvelle partie
-            </Button>
-          </motion.div>
+            Nouvelle partie
+          </Button>
           
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.0, duration: 0.3 }}
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
+          <Button 
+            onClick={() => navigate('/history')}
+            className="bg-white text-dutch-orange border border-dutch-orange/20 hover:bg-dutch-orange/10 rounded-full px-8 py-6"
+            variant="outline"
+            size="lg"
           >
-            <Button 
-              onClick={() => navigate('/')}
-              variant="outline"
-              className="w-full rounded-xl bg-white text-dutch-blue border-dutch-blue/20 shadow-sm py-6"
-            >
-              <Home className="mr-2 h-5 w-5" />
-              Retour à l'accueil
-            </Button>
-          </motion.div>
-        </div>
+            <BarChart3 className="h-5 w-5 mr-2" />
+            Voir l'historique
+          </Button>
+        </motion.div>
       </div>
-    </div>
+    </PageLayout>
   );
 };
 

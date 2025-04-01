@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, MessageCircle, SendHorizontal } from 'lucide-react';
+import { ArrowLeft, MessageCircle, SendHorizontal, Info, BookOpen, Heart } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import PageLayout from '@/components/PageLayout';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -94,70 +94,114 @@ const RulesPage: React.FC = () => {
         >
           <h1 className="text-3xl font-bold bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent mb-2">
             Règles du Dutch
+            <span className="ml-2 text-sm">✨</span>
           </h1>
-          <p className="text-gray-600">
-            Tout ce que vous devez savoir pour jouer comme un pro
+          <p className="text-gray-600 max-w-xl mx-auto">
+            Le Dutch est un jeu de cartes passionnant et stratégique qui se joue entre amis. 
+            L'objectif est simple : être le premier à se débarrasser de toutes ses cartes ! 
+            Découvrez ci-dessous tout ce que vous devez savoir pour devenir un maître du Dutch.
           </p>
         </motion.div>
         
         <Tabs defaultValue={activeTab} onValueChange={setActiveTab} className="mb-6">
           <TabsList className="grid grid-cols-3 mb-4">
-            <TabsTrigger value="basic">Règles de base</TabsTrigger>
-            <TabsTrigger value="special">Cartes spéciales</TabsTrigger>
-            <TabsTrigger value="assistant">Assistant de règles</TabsTrigger>
+            <TabsTrigger value="basic" className="flex items-center gap-1">
+              <BookOpen className="h-4 w-4" /> Règles de base
+            </TabsTrigger>
+            <TabsTrigger value="special" className="flex items-center gap-1">
+              <Info className="h-4 w-4" /> Cartes spéciales
+            </TabsTrigger>
+            <TabsTrigger value="assistant" className="flex items-center gap-1">
+              <MessageCircle className="h-4 w-4" /> Assistant
+            </TabsTrigger>
           </TabsList>
           
           <TabsContent value="basic" className="mt-4">
-            <Card className="bg-white/80 backdrop-blur-md">
+            <Card className="bg-white/80 backdrop-blur-md rounded-2xl border border-white/50">
               <CardContent className="pt-6">
                 <motion.div 
                   variants={animationVariants.staggerChildren}
                   initial="hidden"
                   animate="visible"
-                  className="space-y-6"
+                  className="space-y-8"
                 >
-                  <motion.div variants={animationVariants.staggerItem}>
-                    <h2 className="text-xl font-semibold text-dutch-blue mb-2">Objectif du jeu</h2>
-                    <p className="text-gray-700">
-                      Le but du Dutch est d'être le premier à se débarrasser de toutes ses cartes. 
-                      Le joueur qui gagne une manche ne reçoit aucun point, tandis que les autres joueurs 
-                      marquent des points en fonction des cartes qu'ils ont encore en main.
-                      Le joueur avec le moins de points à la fin de la partie est déclaré vainqueur.
-                    </p>
+                  <motion.div variants={animationVariants.staggerItem} className="space-y-4">
+                    <div className="flex items-center gap-2">
+                      <Heart className="h-5 w-5 text-dutch-blue" />
+                      <h2 className="text-xl font-semibold text-dutch-blue">Objectif du jeu</h2>
+                    </div>
+                    <div className="bg-dutch-blue/5 border border-dutch-blue/10 rounded-xl p-4">
+                      <p className="text-gray-700">
+                        Le but du Dutch est d'être le premier à se débarrasser de toutes ses cartes. 
+                        Le joueur qui gagne une manche ne reçoit aucun point, tandis que les autres joueurs 
+                        marquent des points en fonction des cartes qu'ils ont encore en main.
+                        <strong className="block mt-2">Le joueur avec le moins de points à la fin de la partie est déclaré vainqueur.</strong>
+                      </p>
+                    </div>
                   </motion.div>
                   
-                  <motion.div variants={animationVariants.staggerItem}>
-                    <h2 className="text-xl font-semibold text-dutch-blue mb-2">Préparation</h2>
-                    <p className="text-gray-700">
-                      Utilisez un jeu de 52 cartes plus les jokers. Chaque joueur reçoit 7 cartes.
-                      Le reste des cartes forme une pioche. Retournez la première carte de la pioche 
-                      pour commencer la pile de défausse.
-                    </p>
+                  <motion.div variants={animationVariants.staggerItem} className="space-y-4">
+                    <div className="flex items-center gap-2">
+                      <BookOpen className="h-5 w-5 text-dutch-purple" />
+                      <h2 className="text-xl font-semibold text-dutch-purple">Préparation</h2>
+                    </div>
+                    <div className="bg-dutch-purple/5 border border-dutch-purple/10 rounded-xl p-4">
+                      <ul className="list-disc pl-5 space-y-2 text-gray-700">
+                        <li>Utilisez un jeu de 52 cartes plus les 2 jokers.</li>
+                        <li>Chaque joueur reçoit 7 cartes.</li>
+                        <li>Le reste des cartes forme une pioche.</li>
+                        <li>Retournez la première carte de la pioche pour commencer la pile de défausse.</li>
+                      </ul>
+                    </div>
                   </motion.div>
                   
-                  <motion.div variants={animationVariants.staggerItem}>
-                    <h2 className="text-xl font-semibold text-dutch-blue mb-2">Déroulement du jeu</h2>
-                    <ol className="list-decimal pl-5 space-y-2 text-gray-700">
-                      <li>Les joueurs jouent à tour de rôle dans le sens des aiguilles d'une montre.</li>
-                      <li>À votre tour, vous devez jouer une carte de même couleur ou de même valeur que la carte du dessus de la défausse.</li>
-                      <li>Si vous ne pouvez pas jouer, vous devez piocher une carte. Si cette carte peut être jouée, vous pouvez la poser immédiatement.</li>
-                      <li>Quand vous n'avez plus qu'une seule carte en main, vous devez annoncer "Dutch!". Si vous oubliez et qu'un autre joueur le remarque, vous devez piocher 2 cartes de pénalité.</li>
-                      <li>Le premier joueur à se débarrasser de toutes ses cartes gagne la manche.</li>
-                    </ol>
+                  <motion.div variants={animationVariants.staggerItem} className="space-y-4">
+                    <div className="flex items-center gap-2">
+                      <Info className="h-5 w-5 text-dutch-orange" />
+                      <h2 className="text-xl font-semibold text-dutch-orange">Déroulement du jeu</h2>
+                    </div>
+                    <div className="bg-dutch-orange/5 border border-dutch-orange/10 rounded-xl p-4">
+                      <ol className="list-decimal pl-5 space-y-3 text-gray-700">
+                        <li className="p-2 bg-white/50 rounded-lg">Les joueurs jouent à tour de rôle dans le sens des aiguilles d'une montre.</li>
+                        <li className="p-2 bg-white/50 rounded-lg">À votre tour, vous devez jouer une carte de même couleur ou de même valeur que la carte du dessus de la défausse.</li>
+                        <li className="p-2 bg-white/50 rounded-lg">Si vous ne pouvez pas jouer, vous devez piocher une carte. Si cette carte peut être jouée, vous pouvez la poser immédiatement.</li>
+                        <li className="p-2 bg-white/50 rounded-lg transition-colors hover:bg-dutch-orange/10">
+                          <span className="font-medium">Règle du Dutch :</span> Quand vous n'avez plus qu'une seule carte en main, vous devez annoncer "Dutch!". Si vous oubliez et qu'un autre joueur le remarque, vous devez piocher 2 cartes de pénalité.
+                        </li>
+                        <li className="p-2 bg-white/50 rounded-lg">Le premier joueur à se débarrasser de toutes ses cartes gagne la manche.</li>
+                      </ol>
+                    </div>
                   </motion.div>
                   
-                  <motion.div variants={animationVariants.staggerItem}>
-                    <h2 className="text-xl font-semibold text-dutch-blue mb-2">Calcul des points</h2>
-                    <p className="text-gray-700">
-                      À la fin de chaque manche, les joueurs qui ont encore des cartes en main 
-                      reçoivent des points selon les valeurs suivantes :
-                    </p>
-                    <ul className="list-disc pl-5 mt-2 text-gray-700">
-                      <li>Cartes numérotées (2-10) : Valeur faciale</li>
-                      <li>Valet, Dame, Roi : 10 points chacun</li>
-                      <li>As : 11 points</li>
-                      <li>Joker : 20 points</li>
-                    </ul>
+                  <motion.div variants={animationVariants.staggerItem} className="space-y-4">
+                    <div className="flex items-center gap-2">
+                      <MessageCircle className="h-5 w-5 text-green-600" />
+                      <h2 className="text-xl font-semibold text-green-600">Calcul des points</h2>
+                    </div>
+                    <div className="bg-green-50 border border-green-100 rounded-xl p-4">
+                      <p className="text-gray-700 mb-3">
+                        À la fin de chaque manche, les joueurs qui ont encore des cartes en main 
+                        reçoivent des points selon les valeurs suivantes :
+                      </p>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div className="bg-white rounded-lg p-3 shadow-sm">
+                          <h4 className="font-medium text-gray-800 mb-1">Cartes numérotées (2-10)</h4>
+                          <p className="text-gray-600">Valeur faciale (2 = 2 points, etc.)</p>
+                        </div>
+                        <div className="bg-white rounded-lg p-3 shadow-sm">
+                          <h4 className="font-medium text-gray-800 mb-1">Valet, Dame, Roi</h4>
+                          <p className="text-gray-600">10 points chacun</p>
+                        </div>
+                        <div className="bg-white rounded-lg p-3 shadow-sm">
+                          <h4 className="font-medium text-gray-800 mb-1">As</h4>
+                          <p className="text-gray-600">11 points</p>
+                        </div>
+                        <div className="bg-white rounded-lg p-3 shadow-sm">
+                          <h4 className="font-medium text-gray-800 mb-1">Joker</h4>
+                          <p className="text-gray-600">20 points</p>
+                        </div>
+                      </div>
+                    </div>
                   </motion.div>
                 </motion.div>
               </CardContent>
@@ -165,93 +209,147 @@ const RulesPage: React.FC = () => {
           </TabsContent>
           
           <TabsContent value="special" className="mt-4">
-            <Card className="bg-white/80 backdrop-blur-md">
+            <Card className="bg-white/80 backdrop-blur-md rounded-2xl border border-white/50">
               <CardContent className="pt-6">
                 <motion.div 
                   variants={animationVariants.staggerChildren}
                   initial="hidden"
                   animate="visible"
-                  className="space-y-6"
+                  className="space-y-8"
                 >
                   <motion.div variants={animationVariants.staggerItem}>
-                    <h2 className="text-xl font-semibold text-dutch-orange mb-2">Cartes à effets spéciaux</h2>
-                    <p className="text-gray-700 mb-4">
-                      Certaines cartes ont des effets spéciaux qui s'activent quand elles sont jouées :
+                    <h2 className="text-xl font-semibold text-dutch-purple mb-4 flex items-center gap-2">
+                      <Info className="h-5 w-5" />
+                      Cartes à effets spéciaux
+                    </h2>
+                    <p className="text-gray-700 mb-6">
+                      Le Dutch est rendu plus stratégique et amusant grâce aux effets spéciaux de certaines cartes.
+                      Maîtrisez-les pour prendre l'avantage sur vos adversaires !
                     </p>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="p-3 bg-white/60 rounded-lg border border-gray-100">
-                        <div className="flex items-center gap-2 mb-1">
-                          <Badge className="bg-dutch-blue/10 text-dutch-blue">2</Badge>
-                          <h3 className="font-medium">Deux</h3>
+                      <motion.div 
+                        variants={animationVariants.staggerItem}
+                        className="bg-white/60 backdrop-blur-sm rounded-xl p-4 border border-white/50 shadow-sm hover:shadow-md transition-shadow"
+                      >
+                        <div className="flex items-center gap-3 mb-3">
+                          <div className="w-12 h-16 bg-white rounded-lg shadow-sm flex items-center justify-center font-bold text-2xl text-dutch-blue border border-dutch-blue/20">
+                            2
+                          </div>
+                          <div>
+                            <h3 className="font-semibold text-gray-800">Deux</h3>
+                            <p className="text-sm text-gray-600">Pioche +2</p>
+                          </div>
                         </div>
                         <p className="text-sm text-gray-600">
-                          Le joueur suivant doit piocher 2 cartes et passer son tour.
+                          Le joueur suivant doit piocher 2 cartes et passer son tour, sauf s'il possède également un 2 qu'il peut jouer pour cumuler l'effet (le joueur d'après piochera alors 4 cartes).
                         </p>
-                      </div>
+                      </motion.div>
                       
-                      <div className="p-3 bg-white/60 rounded-lg border border-gray-100">
-                        <div className="flex items-center gap-2 mb-1">
-                          <Badge className="bg-dutch-purple/10 text-dutch-purple">8</Badge>
-                          <h3 className="font-medium">Huit</h3>
+                      <motion.div 
+                        variants={animationVariants.staggerItem}
+                        className="bg-white/60 backdrop-blur-sm rounded-xl p-4 border border-white/50 shadow-sm hover:shadow-md transition-shadow"
+                      >
+                        <div className="flex items-center gap-3 mb-3">
+                          <div className="w-12 h-16 bg-white rounded-lg shadow-sm flex items-center justify-center font-bold text-2xl text-dutch-purple border border-dutch-purple/20">
+                            8
+                          </div>
+                          <div>
+                            <h3 className="font-semibold text-gray-800">Huit</h3>
+                            <p className="text-sm text-gray-600">Passe tour</p>
+                          </div>
                         </div>
                         <p className="text-sm text-gray-600">
-                          Le joueur suivant passe son tour.
+                          Le joueur suivant passe son tour. Cette carte est particulièrement utile quand vous avez peu de cartes et souhaitez accélérer votre victoire.
                         </p>
-                      </div>
+                      </motion.div>
                       
-                      <div className="p-3 bg-white/60 rounded-lg border border-gray-100">
-                        <div className="flex items-center gap-2 mb-1">
-                          <Badge className="bg-dutch-orange/10 text-dutch-orange">J</Badge>
-                          <h3 className="font-medium">Valet</h3>
+                      <motion.div 
+                        variants={animationVariants.staggerItem}
+                        className="bg-white/60 backdrop-blur-sm rounded-xl p-4 border border-white/50 shadow-sm hover:shadow-md transition-shadow"
+                      >
+                        <div className="flex items-center gap-3 mb-3">
+                          <div className="w-12 h-16 bg-white rounded-lg shadow-sm flex items-center justify-center font-bold text-2xl text-dutch-orange border border-dutch-orange/20">
+                            J
+                          </div>
+                          <div>
+                            <h3 className="font-semibold text-gray-800">Valet</h3>
+                            <p className="text-sm text-gray-600">Inversement</p>
+                          </div>
                         </div>
                         <p className="text-sm text-gray-600">
-                          Change le sens du jeu (horaire à anti-horaire ou inversement).
+                          Change le sens du jeu (horaire à anti-horaire ou inversement). Stratégique si le joueur après vous a peu de cartes ou si vous voulez éviter qu'un joueur fort joue trop vite.
                         </p>
-                      </div>
+                      </motion.div>
                       
-                      <div className="p-3 bg-white/60 rounded-lg border border-gray-100">
-                        <div className="flex items-center gap-2 mb-1">
-                          <Badge className="bg-dutch-green/10 text-dutch-green">A</Badge>
-                          <h3 className="font-medium">As</h3>
+                      <motion.div 
+                        variants={animationVariants.staggerItem}
+                        className="bg-white/60 backdrop-blur-sm rounded-xl p-4 border border-white/50 shadow-sm hover:shadow-md transition-shadow"
+                      >
+                        <div className="flex items-center gap-3 mb-3">
+                          <div className="w-12 h-16 bg-white rounded-lg shadow-sm flex items-center justify-center font-bold text-2xl text-green-600 border border-green-200">
+                            A
+                          </div>
+                          <div>
+                            <h3 className="font-semibold text-gray-800">As</h3>
+                            <p className="text-sm text-gray-600">Changement de couleur</p>
+                          </div>
                         </div>
                         <p className="text-sm text-gray-600">
-                          Jouer un As permet de changer la couleur demandée.
+                          Jouer un As permet de changer la couleur demandée. Vous annoncez la nouvelle couleur et le joueur suivant doit jouer cette couleur ou un autre As.
                         </p>
-                      </div>
+                      </motion.div>
                       
-                      <div className="p-3 bg-white/60 rounded-lg border border-gray-100 md:col-span-2">
-                        <div className="flex items-center gap-2 mb-1">
-                          <Badge className="bg-dutch-red/10 text-dutch-red">Joker</Badge>
-                          <h3 className="font-medium">Joker</h3>
+                      <motion.div 
+                        variants={animationVariants.staggerItem}
+                        className="bg-white/60 backdrop-blur-sm rounded-xl p-4 border border-white/50 shadow-sm hover:shadow-md transition-shadow md:col-span-2"
+                      >
+                        <div className="flex items-center gap-3 mb-3">
+                          <div className="w-12 h-16 bg-white rounded-lg shadow-sm flex items-center justify-center font-bold text-xl text-red-500 border border-red-200">
+                            <span className="transform rotate-90">&#x1F0DF;</span>
+                          </div>
+                          <div>
+                            <h3 className="font-semibold text-gray-800">Joker</h3>
+                            <p className="text-sm text-gray-600">Pioche +5 et changement de couleur</p>
+                          </div>
                         </div>
                         <p className="text-sm text-gray-600">
-                          Le joueur suivant doit piocher 5 cartes et passer son tour. Le joueur qui pose le Joker choisit la couleur.
+                          La carte la plus puissante ! Le joueur suivant doit piocher 5 cartes et passer son tour. Le joueur qui pose le Joker choisit également la couleur pour le joueur d'après.
                         </p>
-                      </div>
+                      </motion.div>
                     </div>
                   </motion.div>
                   
-                  <motion.div variants={animationVariants.staggerItem}>
-                    <h2 className="text-xl font-semibold text-dutch-orange mb-2">Combinaisons spéciales</h2>
-                    <p className="text-gray-700 mb-4">
-                      Le Dutch permet aussi certaines combinaisons de cartes pour des stratégies avancées :
-                    </p>
+                  <motion.div variants={animationVariants.staggerItem} className="mt-8">
+                    <h2 className="text-xl font-semibold text-dutch-orange mb-4 flex items-center gap-2">
+                      <BookOpen className="h-5 w-5" />
+                      Combinaisons et stratégies avancées
+                    </h2>
                     
-                    <div className="space-y-3">
-                      <div className="p-3 bg-white/60 rounded-lg border border-gray-100">
-                        <h3 className="font-medium mb-1">Cumul des effets "Pioche"</h3>
-                        <p className="text-sm text-gray-600">
+                    <div className="space-y-4">
+                      <div className="bg-dutch-orange/5 border border-dutch-orange/10 rounded-xl p-4">
+                        <h3 className="font-medium text-dutch-orange mb-2">Cumul des effets "Pioche"</h3>
+                        <p className="text-gray-700">
                           Si un joueur pose un 2 et que le joueur suivant a également un 2, il peut le jouer, 
-                          et le joueur d'après devra alors piocher 4 cartes (2 + 2).
+                          et le joueur d'après devra alors piocher 4 cartes (2 + 2). Ce principe s'applique aussi aux Jokers !
                         </p>
                       </div>
                       
-                      <div className="p-3 bg-white/60 rounded-lg border border-gray-100">
-                        <h3 className="font-medium mb-1">Cartes identiques</h3>
-                        <p className="text-sm text-gray-600">
+                      <div className="bg-dutch-purple/5 border border-dutch-purple/10 rounded-xl p-4">
+                        <h3 className="font-medium text-dutch-purple mb-2">Cartes identiques</h3>
+                        <p className="text-gray-700">
                           Vous pouvez jouer plusieurs cartes de même valeur en un seul tour, 
                           quelle que soit leur couleur (exemple : tous les Rois ou tous les 5).
+                          C'est une excellente façon de se débarrasser rapidement de plusieurs cartes.
+                        </p>
+                      </div>
+                      
+                      <div className="bg-dutch-blue/5 border border-dutch-blue/10 rounded-xl p-4">
+                        <h3 className="font-medium text-dutch-blue mb-2">Tactique du Dutch</h3>
+                        <p className="text-gray-700">
+                          N'oubliez jamais d'annoncer "Dutch" quand il ne vous reste qu'une seule carte !
+                          En même temps, surveillez attentivement vos adversaires - si l'un d'eux oublie d'annoncer "Dutch",
+                          faites-le remarquer immédiatement pour lui faire piocher 2 cartes supplémentaires.
                         </p>
                       </div>
                     </div>
@@ -262,7 +360,7 @@ const RulesPage: React.FC = () => {
           </TabsContent>
           
           <TabsContent value="assistant" className="mt-4">
-            <Card className="bg-white/80 backdrop-blur-md">
+            <Card className="bg-white/80 backdrop-blur-md rounded-2xl border border-white/50">
               <CardContent className="pt-6">
                 <div className="flex items-center gap-2 mb-4">
                   <MessageCircle className="text-dutch-purple h-5 w-5" />
@@ -270,7 +368,8 @@ const RulesPage: React.FC = () => {
                 </div>
                 
                 <p className="text-gray-700 mb-6">
-                  Vous avez une question sur les règles ? Posez-la ici et l'assistant vous répondra.
+                  Vous avez une question spécifique sur les règles ? Posez-la ici et l'assistant vous répondra immédiatement.
+                  Essayez par exemple de demander "Comment fonctionne le Dutch ?" ou "Que valent les cartes spéciales ?".
                 </p>
                 
                 <div className="bg-white/60 rounded-xl border border-gray-200 p-4 mb-4 h-64 overflow-y-auto">
@@ -278,7 +377,16 @@ const RulesPage: React.FC = () => {
                     <div className="h-full flex flex-col items-center justify-center text-gray-400">
                       <MessageCircle className="h-10 w-10 mb-2 opacity-20" />
                       <p>Posez une question sur les règles du Dutch</p>
-                      <p className="text-xs mt-2">Exemple : "Comment fonctionne le Dutch ?"</p>
+                      <div className="flex gap-2 mt-4 text-xs">
+                        <Badge variant="outline" className="cursor-pointer hover:bg-gray-100 transition-colors" onClick={() => {
+                          setInputValue("Qu'est-ce que le Dutch ?");
+                          handleSendMessage();
+                        }}>Qu'est-ce que le Dutch ?</Badge>
+                        <Badge variant="outline" className="cursor-pointer hover:bg-gray-100 transition-colors" onClick={() => {
+                          setInputValue("Comment calculer les scores ?");
+                          handleSendMessage();
+                        }}>Calcul des scores</Badge>
+                      </div>
                     </div>
                   ) : (
                     <div className="space-y-3">
@@ -318,7 +426,7 @@ const RulesPage: React.FC = () => {
                     placeholder="Posez votre question sur les règles..."
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
-                    className="flex-1"
+                    className="flex-1 bg-white border-gray-200 focus:border-dutch-purple/50"
                     disabled={isProcessing}
                   />
                   <Button 

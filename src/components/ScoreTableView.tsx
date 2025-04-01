@@ -1,335 +1,266 @@
-import React, { useState } from 'react';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+
+import React, { useState, useMemo } from 'react';
+import { motion } from 'framer-motion';
 import { Player } from '@/types';
+import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '@/components/ui/table';
+import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Crown, ArrowUpDown, ArrowUp, ArrowDown, Medal, Star, TrendingUp, TrendingDown, HeartPulse } from 'lucide-react';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { TrendingUp, TrendingDown, Trophy, Star, ArrowDown, ArrowUp } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useTheme } from '@/hooks/use-theme';
 
 interface ScoreTableViewProps {
   players: Player[];
   roundHistory: { scores: number[], dutchPlayerId?: string }[];
 }
 
+type SortField = 'name' | 'total' | 'avg' | 'best' | 'dutch';
+type SortDirection = 'asc' | 'desc' | null;
+
 const ScoreTableView: React.FC<ScoreTableViewProps> = ({ players, roundHistory }) => {
-  const [sortColumn, setSortColumn] = useState<'name' | 'score' | 'avgScore' | 'bestRound' | 'worstRound' | 'dutch'>('score');
-  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
-  const { currentTheme } = useTheme();
+  const [sortField, setSortField] = useState<SortField>('total');
+  const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
   
-  const handleSort = (column: 'name' | 'score' | 'avgScore' | 'bestRound' | 'worstRound' | 'dutch') => {
-    if (sortColumn === column) {
-      setSortDirection(prev => prev === 'asc' ? 'desc' : 'asc');
+  const handleSort = (field: SortField) => {
+    if (sortField === field) {
+      setSortDirection(prevDirection => {
+        if (prevDirection === 'asc') return 'desc';
+        if (prevDirection === 'desc') return null;
+        return 'asc';
+      });
     } else {
-      setSortColumn(column);
+      setSortField(field);
       setSortDirection('asc');
     }
   };
   
-  const sortedPlayers = [...players].sort((a, b) => {
-    let compareA, compareB;
+  const sortedPlayers = useMemo(() => {
+    if (!sortDirection) return [...players];
     
-    switch (sortColumn) {
-      case 'name':
-        compareA = a.name;
-        compareB = b.name;
-        break;
-      case 'score':
-        compareA = a.totalScore;
-        compareB = b.totalScore;
-        break;
-      case 'avgScore':
-        compareA = a.rounds.length ? a.rounds.reduce((sum, r) => sum + r.score, 0) / a.rounds.length : 0;
-        compareB = b.rounds.length ? b.rounds.reduce((sum, r) => sum + r.score, 0) / b.rounds.length : 0;
-        break;
-      case 'bestRound':
-        compareA = a.rounds.length ? Math.min(...a.rounds.map(r => r.score)) : Infinity;
-        compareB = b.rounds.length ? Math.min(...b.rounds.map(r => r.score)) : Infinity;
-        break;
-      case 'worstRound':
-        compareA = a.rounds.length ? Math.max(...a.rounds.map(r => r.score)) : 0;
-        compareB = b.rounds.length ? Math.max(...b.rounds.map(r => r.score)) : 0;
-        break;
-      case 'dutch':
-        compareA = a.rounds.filter(r => r.isDutch).length;
-        compareB = b.rounds.filter(r => r.isDutch).length;
-        break;
-      default:
-        return 0;
-    }
-    
-    if (compareA === compareB) return 0;
-    
-    const comparison = compareA > compareB ? 1 : -1;
-    return sortDirection === 'asc' ? comparison : -comparison;
-  });
+    return [...players].sort((a, b) => {
+      let valueA: any;
+      let valueB: any;
+      
+      switch (sortField) {
+        case 'name':
+          valueA = a.name.toLowerCase();
+          valueB = b.name.toLowerCase();
+          break;
+        case 'total':
+          valueA = a.totalScore;
+          valueB = b.totalScore;
+          break;
+        case 'avg':
+          valueA = a.stats?.averageScore || 0;
+          valueB = b.stats?.averageScore || 0;
+          break;
+        case 'best':
+          valueA = a.stats?.bestRound || 999;
+          valueB = b.stats?.bestRound || 999;
+          break;
+        case 'dutch':
+          valueA = a.stats?.dutchCount || 0;
+          valueB = b.stats?.dutchCount || 0;
+          break;
+        default:
+          return 0;
+      }
+      
+      const comparison = typeof valueA === 'string'
+        ? valueA.localeCompare(valueB)
+        : valueA - valueB;
+      
+      return sortDirection === 'asc' ? comparison : -comparison;
+    });
+  }, [players, sortField, sortDirection]);
   
-  const getPosition = (player: Player) => {
-    const sorted = [...players].sort((a, b) => a.totalScore - b.totalScore);
-    return sorted.findIndex(p => p.id === player.id) + 1;
+  // Trouver le nombre maximum de manches pour aligner le tableau
+  const maxRounds = players.reduce((max, player) => Math.max(max, player.rounds.length), 0);
+  const rounds = Array.from({ length: maxRounds }, (_, i) => i + 1);
+  
+  // Fonction pour obtenir la classe de style pour une cellule de score
+  const getScoreCellClass = (player: Player, roundIndex: number) => {
+    const round = player.rounds[roundIndex];
+    if (!round) return "bg-gray-50 text-gray-400";
+    
+    if (round.isDutch) return "bg-dutch-orange/10 text-dutch-orange font-medium";
+    
+    const score = round.score;
+    if (score === 0) return "bg-green-50 text-green-600 font-medium";
+    
+    const isLowestScore = players.every(p => 
+      !p.rounds[roundIndex] || p.rounds[roundIndex].score >= score
+    );
+    
+    if (isLowestScore) return "bg-dutch-blue/10 text-dutch-blue font-medium";
+    
+    return "bg-gray-50 text-gray-600";
   };
   
-  const roundCount = players.length > 0 ? players[0].rounds.length : 0;
-  
   return (
-    <div className={cn(
-      "bg-white/80 backdrop-blur-md border border-white/30 rounded-2xl shadow-md p-4 overflow-hidden transition-all duration-300 w-full",
-      `data-theme-${currentTheme}`
-    )}>
-      <div className="overflow-x-auto w-full">
-        <TooltipProvider>
-          <Table className="w-full">
-            <TableHeader className="bg-gradient-to-r from-dutch-blue/10 to-dutch-purple/10">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3 }}
+      className="mb-6"
+    >
+      <Card className="bg-white/80 backdrop-blur-md border border-white/50 shadow-sm">
+        <div className="overflow-x-auto">
+          <Table>
+            <TableHeader className="bg-gray-50/50">
               <TableRow>
-                <TableHead className="w-12 text-center font-semibold">
-                  <span className="sr-only">Position</span>
-                  <Medal className="h-4 w-4 mx-auto text-dutch-blue" />
-                </TableHead>
                 <TableHead 
-                  className="font-semibold cursor-pointer" 
-                  onClick={() => handleSort('name')}
+                  className="w-[120px]"
+                  sortDirection={sortField === 'name' ? sortDirection : null}
+                  onSort={() => handleSort('name')}
                 >
-                  <div className="flex items-center gap-1">
-                    <span>Joueur</span>
-                    {sortColumn === 'name' ? (
-                      sortDirection === 'asc' ? <ArrowUp className="h-3.5 w-3.5 text-dutch-blue" /> : <ArrowDown className="h-3.5 w-3.5 text-dutch-blue" />
-                    ) : <ArrowUpDown className="h-3.5 w-3.5 opacity-50" />}
-                  </div>
+                  Joueur
                 </TableHead>
-                <TableHead 
-                  className="font-semibold text-right cursor-pointer" 
-                  onClick={() => handleSort('score')}
-                >
-                  <div className="flex items-center justify-end gap-1">
-                    <span>Score</span>
-                    {sortColumn === 'score' ? (
-                      sortDirection === 'asc' ? <ArrowUp className="h-3.5 w-3.5 text-dutch-blue" /> : <ArrowDown className="h-3.5 w-3.5 text-dutch-blue" />
-                    ) : <ArrowUpDown className="h-3.5 w-3.5 opacity-50" />}
-                  </div>
-                </TableHead>
-                <TableHead 
-                  className="font-semibold text-right cursor-pointer" 
-                  onClick={() => handleSort('avgScore')}
-                >
-                  <div className="flex items-center justify-end gap-1">
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <span className="flex items-center gap-1">
-                          <Star className="h-3.5 w-3.5 text-dutch-blue" />
-                          <span>Moy.</span>
-                        </span>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Score moyen par manche</p>
-                      </TooltipContent>
-                    </Tooltip>
-                    {sortColumn === 'avgScore' ? (
-                      sortDirection === 'asc' ? <ArrowUp className="h-3.5 w-3.5 text-dutch-blue" /> : <ArrowDown className="h-3.5 w-3.5 text-dutch-blue" />
-                    ) : <ArrowUpDown className="h-3.5 w-3.5 opacity-50" />}
-                  </div>
-                </TableHead>
-                <TableHead 
-                  className="font-semibold text-right cursor-pointer" 
-                  onClick={() => handleSort('bestRound')}
-                >
-                  <div className="flex items-center justify-end gap-1">
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <span className="flex items-center gap-1">
-                          <TrendingDown className="h-3.5 w-3.5 text-green-500" />
-                          <span>Min</span>
-                        </span>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Score minimum (meilleur)</p>
-                      </TooltipContent>
-                    </Tooltip>
-                    {sortColumn === 'bestRound' ? (
-                      sortDirection === 'asc' ? <ArrowUp className="h-3.5 w-3.5 text-dutch-blue" /> : <ArrowDown className="h-3.5 w-3.5 text-dutch-blue" />
-                    ) : <ArrowUpDown className="h-3.5 w-3.5 opacity-50" />}
-                  </div>
-                </TableHead>
-                <TableHead 
-                  className="font-semibold text-right cursor-pointer" 
-                  onClick={() => handleSort('worstRound')}
-                >
-                  <div className="flex items-center justify-end gap-1">
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <span className="flex items-center gap-1">
-                          <TrendingUp className="h-3.5 w-3.5 text-red-500" />
-                          <span>Max</span>
-                        </span>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Score maximum (pire)</p>
-                      </TooltipContent>
-                    </Tooltip>
-                    {sortColumn === 'worstRound' ? (
-                      sortDirection === 'asc' ? <ArrowUp className="h-3.5 w-3.5 text-dutch-blue" /> : <ArrowDown className="h-3.5 w-3.5 text-dutch-blue" />
-                    ) : <ArrowUpDown className="h-3.5 w-3.5 opacity-50" />}
-                  </div>
-                </TableHead>
-                <TableHead 
-                  className="font-semibold text-right cursor-pointer" 
-                  onClick={() => handleSort('dutch')}
-                >
-                  <div className="flex items-center justify-end gap-1">
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <span className="flex items-center gap-1">
-                          <HeartPulse className="h-3.5 w-3.5 text-dutch-orange" />
-                          <span>Dutch</span>
-                        </span>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Nombre de Dutch</p>
-                      </TooltipContent>
-                    </Tooltip>
-                    {sortColumn === 'dutch' ? (
-                      sortDirection === 'asc' ? <ArrowUp className="h-3.5 w-3.5 text-dutch-blue" /> : <ArrowDown className="h-3.5 w-3.5 text-dutch-blue" />
-                    ) : <ArrowUpDown className="h-3.5 w-3.5 opacity-50" />}
-                  </div>
-                </TableHead>
-                {Array.from({ length: Math.min(roundCount, 5) }).map((_, i) => (
-                  <TableHead key={i} className="text-center font-semibold bg-dutch-blue/5">
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <span>M{roundCount - Math.min(roundCount, 5) + i + 1}</span>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Manche {roundCount - Math.min(roundCount, 5) + i + 1}</p>
-                      </TooltipContent>
-                    </Tooltip>
+                
+                {rounds.map(round => (
+                  <TableHead key={round} className="text-center w-[60px]">
+                    M{round}
                   </TableHead>
                 ))}
+                
+                <TableHead 
+                  className="text-center w-[80px]"
+                  sortDirection={sortField === 'total' ? sortDirection : null}
+                  onSort={() => handleSort('total')}
+                >
+                  Total
+                </TableHead>
+                
+                <TableHead 
+                  className="text-center w-[70px]"
+                  sortDirection={sortField === 'avg' ? sortDirection : null}
+                  onSort={() => handleSort('avg')}
+                >
+                  Moy.
+                </TableHead>
+                
+                <TableHead 
+                  className="text-center w-[70px]"
+                  sortDirection={sortField === 'best' ? sortDirection : null}
+                  onSort={() => handleSort('best')}
+                >
+                  Min
+                </TableHead>
+                
+                <TableHead 
+                  className="text-center w-[70px]"
+                  sortDirection={sortField === 'dutch' ? sortDirection : null}
+                  onSort={() => handleSort('dutch')}
+                >
+                  Dutch
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              <AnimatePresence>
-                {sortedPlayers.map((player) => {
-                  const position = getPosition(player);
-                  const avgScore = player.rounds.length
-                    ? (player.rounds.reduce((sum, r) => sum + r.score, 0) / player.rounds.length).toFixed(1)
-                    : '-';
-                  const bestRound = player.rounds.length 
-                    ? Math.min(...player.rounds.map(r => r.score)) 
-                    : '-';
-                  const worstRound = player.rounds.length 
-                    ? Math.max(...player.rounds.map(r => r.score)) 
-                    : '-';
-                  const dutchCount = player.rounds.filter(r => r.isDutch).length;
+              {sortedPlayers.map((player, index) => (
+                <TableRow key={player.id} className={index % 2 === 0 ? 'bg-white/50' : 'bg-gray-50/30'}>
+                  <TableCell className="font-medium">
+                    <div className="flex items-center gap-2">
+                      {index === 0 && (
+                        <Trophy className="h-4 w-4 text-yellow-500" />
+                      )}
+                      {player.name}
+                    </div>
+                  </TableCell>
                   
-                  const lastRounds = player.rounds.slice(-Math.min(5, roundCount));
+                  {rounds.map((round, i) => (
+                    <TableCell key={i} className={cn("text-center", getScoreCellClass(player, i))}>
+                      {player.rounds[i]?.score ?? '-'}
+                    </TableCell>
+                  ))}
                   
-                  return (
-                    <motion.tr 
-                      key={player.id}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      transition={{ duration: 0.3 }}
+                  <TableCell className="text-center font-bold bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">
+                    {player.totalScore}
+                  </TableCell>
+                  
+                  <TableCell className="text-center">
+                    {player.stats?.averageScore.toFixed(1) || '-'}
+                  </TableCell>
+                  
+                  <TableCell className="text-center text-green-600">
+                    {player.stats?.bestRound !== null ? player.stats.bestRound : '-'}
+                  </TableCell>
+                  
+                  <TableCell className="text-center">
+                    <Badge 
+                      variant="outline" 
                       className={cn(
-                        "border-b transition-colors",
-                        position === 1 ? "bg-dutch-blue/5 hover:bg-dutch-blue/10" : 
-                                  position === 2 ? "bg-dutch-purple/5 hover:bg-dutch-purple/10" : 
-                                  position === 3 ? "bg-dutch-orange/5 hover:bg-dutch-orange/10" : 
-                                  "hover:bg-gray-50"
+                        "font-medium",
+                        player.stats?.dutchCount ? "bg-dutch-orange/10 text-dutch-orange" : "bg-gray-100 text-gray-500"
                       )}
                     >
-                      <TableCell className="font-medium text-center">
-                        {position === 1 ? (
-                          <div className="flex justify-center">
-                            <motion.div 
-                              initial={{ rotate: 0 }}
-                              animate={{ rotate: [0, 15, -15, 0] }}
-                              transition={{ duration: 1, repeat: Infinity, repeatDelay: 5 }}
-                            >
-                              <Crown className="h-5 w-5 text-dutch-yellow" />
-                            </motion.div>
-                          </div>
-                        ) : (
-                          <motion.div
-                            whileHover={{ scale: 1.1 }}
-                            whileTap={{ scale: 0.9 }}
-                          >
-                            <Badge variant="outline" className={cn(
-                              "border-none",
-                              position === 2 ? "bg-dutch-purple/10 text-dutch-purple" : 
-                                        position === 3 ? "bg-dutch-orange/10 text-dutch-orange" : 
-                                        "bg-gray-100 text-gray-600"
-                            )}>
-                              {position}
-                            </Badge>
-                          </motion.div>
-                        )}
-                      </TableCell>
-                      <TableCell className="font-medium">
-                        <div className="flex items-center space-x-1">
-                          <span>{player.name}</span>
-                          {player.rounds.some(r => r.isDutch) && (
-                            <Badge variant="outline" className="bg-dutch-orange/10 text-dutch-orange border-none text-xs ml-1">D</Badge>
-                          )}
-                        </div>
-                      </TableCell>
-                      <TableCell className="font-bold text-right">{player.totalScore}</TableCell>
-                      <TableCell className="text-right text-gray-600">{avgScore}</TableCell>
-                      <TableCell className="text-right text-green-600 font-medium">{bestRound}</TableCell>
-                      <TableCell className="text-right text-red-600 font-medium">{worstRound}</TableCell>
-                      <TableCell className="text-right">
-                        {dutchCount > 0 ? (
-                          <Badge className="bg-dutch-orange/20 text-dutch-orange border-none">
-                            {dutchCount}
-                          </Badge>
-                        ) : (
-                          <span className="text-gray-400">0</span>
-                        )}
-                      </TableCell>
-                      
-                      {Array.from({ length: Math.min(roundCount, 5) }).map((_, i) => {
-                        const roundIndex = roundCount - Math.min(roundCount, 5) + i;
-                        const round = lastRounds[i];
-                        
-                        if (!round) return <TableCell key={i} />;
-                        
-                        const isPlayerBestScore = round.score > 0 && 
-                          round.score === Math.min(...player.rounds.map(r => r.score).filter(s => s > 0));
-                        
-                        const isDutch = round.isDutch;
-                        
-                        return (
-                          <TableCell 
-                            key={i} 
-                            className={cn(
-                              "text-center rounded-lg transition-all duration-200",
-                              isDutch ? 'bg-dutch-orange/20 text-dutch-orange font-medium' : 
-                              isPlayerBestScore ? 'bg-green-100 text-green-800 font-medium' : ''
-                            )}
-                          >
-                            <motion.div
-                              whileHover={{ scale: 1.1 }}
-                              className="min-w-6 inline-flex justify-center"
-                            >
-                              {round.score}
-                            </motion.div>
-                          </TableCell>
-                        );
-                      })}
-                    </motion.tr>
-                  );
-                })}
-              </AnimatePresence>
+                      {player.stats?.dutchCount || 0}
+                    </Badge>
+                  </TableCell>
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
-        </TooltipProvider>
-      </div>
+        </div>
+      </Card>
       
-      <div className="text-xs text-gray-500 mt-4 text-center">
-        <p>Cliquez sur les entêtes pour trier le tableau • Seules les 5 dernières manches sont affichées</p>
-        <p className="mt-1 italic">Survolez les icônes pour plus d'informations</p>
+      <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        {sortedPlayers.map(player => (
+          <motion.div
+            key={player.id}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+            className="bg-white/70 backdrop-blur-sm rounded-xl p-3 border border-white/30 shadow-sm"
+          >
+            <div className="flex justify-between items-center mb-2">
+              <h3 className="font-medium text-gray-800">{player.name}</h3>
+              <div className="flex items-center text-sm">
+                <span className="font-bold text-dutch-purple">{player.totalScore}</span>
+                <span className="text-xs text-gray-500 ml-1">pts</span>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-3 gap-2 text-xs">
+              <div className="flex items-center bg-gray-50 rounded-lg p-2">
+                <Star className="h-3 w-3 text-dutch-blue mr-1" />
+                <span className="text-gray-600 mr-1">Moy:</span>
+                <span className="font-medium">{player.stats?.averageScore.toFixed(1) || '-'}</span>
+              </div>
+              
+              <div className="flex items-center bg-gray-50 rounded-lg p-2">
+                <TrendingDown className="h-3 w-3 text-green-500 mr-1" />
+                <span className="text-gray-600 mr-1">Min:</span>
+                <span className="font-medium">{player.stats?.bestRound !== null ? player.stats.bestRound : '-'}</span>
+              </div>
+              
+              <div className="flex items-center bg-gray-50 rounded-lg p-2">
+                <Trophy className="h-3 w-3 text-dutch-orange mr-1" />
+                <span className="text-gray-600 mr-1">Dutch:</span>
+                <span className="font-medium">{player.stats?.dutchCount || 0}</span>
+              </div>
+            </div>
+            
+            {player.stats?.improvementRate !== undefined && (
+              <div className="mt-2 text-xs flex items-center bg-gray-50 rounded-lg p-2">
+                {player.stats.improvementRate < 0 ? (
+                  <>
+                    <TrendingDown className="h-3 w-3 text-green-500 mr-1" />
+                    <span className="text-gray-600 mr-1">Progression:</span>
+                    <span className="font-medium text-green-600">{Math.abs(player.stats.improvementRate).toFixed(1)} pts/manche</span>
+                  </>
+                ) : (
+                  <>
+                    <TrendingUp className="h-3 w-3 text-red-500 mr-1" />
+                    <span className="text-gray-600 mr-1">Tendance:</span>
+                    <span className="font-medium text-red-500">+{player.stats.improvementRate.toFixed(1)} pts/manche</span>
+                  </>
+                )}
+              </div>
+            )}
+          </motion.div>
+        ))}
       </div>
-    </div>
+    </motion.div>
   );
 };
 

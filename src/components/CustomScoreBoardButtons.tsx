@@ -2,21 +2,21 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { Plus, ArrowUp, Clock } from 'lucide-react';
+import { Plus, ArrowUp, Trophy, Clock, Award } from 'lucide-react';
 import NewRoundScoreForm from './NewRoundScoreForm';
 import { Player } from '@/types';
 
 interface CustomScoreBoardButtonsProps {
   players: Player[];
   onAddRound: (scores: number[], dutchPlayerId?: string) => void;
-  onUndoLastRound: () => void;
+  onRequestUndoLastRound: () => void;
   onEndGame: () => void;
 }
 
 const CustomScoreBoardButtons: React.FC<CustomScoreBoardButtonsProps> = ({
   players,
   onAddRound,
-  onUndoLastRound,
+  onRequestUndoLastRound,
   onEndGame
 }) => {
   const [showScoreForm, setShowScoreForm] = useState(false);
@@ -50,8 +50,9 @@ const CustomScoreBoardButtons: React.FC<CustomScoreBoardButtonsProps> = ({
             size="icon"
             variant="outline"
             className="bg-white text-dutch-blue shadow-lg border border-dutch-blue/20 rounded-full h-12 w-12"
+            title="Terminer la partie"
           >
-            <Clock className="h-5 w-5" />
+            <Trophy className="h-5 w-5" />
           </Button>
         </motion.div>
         
@@ -61,10 +62,11 @@ const CustomScoreBoardButtons: React.FC<CustomScoreBoardButtonsProps> = ({
           transition={{ type: "spring", damping: 20, stiffness: 300, delay: 0.3 }}
         >
           <Button
-            onClick={onUndoLastRound}
+            onClick={onRequestUndoLastRound}
             size="icon"
             variant="outline"
             className="bg-white text-dutch-orange shadow-lg border border-dutch-orange/20 rounded-full h-12 w-12"
+            title="Annuler la dernière manche"
           >
             <ArrowUp className="h-5 w-5 transform -rotate-45" />
           </Button>

@@ -57,6 +57,12 @@ export const animationVariants = {
   // Staggered children animation
   staggerChildren: {
     hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
     visible: {
       opacity: 1,
       transition: {
@@ -70,6 +76,13 @@ export const animationVariants = {
     hidden: { 
       opacity: 0, 
       y: 10 
+    },
+    show: { 
+      opacity: 1, 
+      y: 0,
+      transition: {
+        duration: 0.3
+      }
     },
     visible: { 
       opacity: 1, 
@@ -95,7 +108,7 @@ export const animationVariants = {
     }
   },
   
-  // Animation de fottement
+  // Animation de flottement
   float: {
     initial: { 
       y: 0 
