@@ -181,7 +181,7 @@ const GamePage: React.FC = () => {
       })),
       winner,
       duration: gameDuration
-    };
+    } as Game; // Type assertion to fix the duration field issue
     
     setGames(prev => [...prev, newGame]);
     

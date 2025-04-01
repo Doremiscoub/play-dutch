@@ -2,7 +2,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { Plus, ArrowUturnLeft, Clock } from 'lucide-react';
+import { Plus, ArrowUp, Clock } from 'lucide-react';
 
 interface CustomScoreBoardButtonsProps {
   onAddRound: () => void;
@@ -24,8 +24,8 @@ const CustomScoreBoardButtons: React.FC<CustomScoreBoardButtonsProps> = ({
       >
         <Button
           onClick={onEndGame}
-          size="icon"
-          variant="game-icon"
+          size="game-icon"
+          variant="game-control"
           className="bg-white text-dutch-blue shadow-lg border border-dutch-blue/20"
         >
           <Clock className="h-5 w-5" />
@@ -39,11 +39,11 @@ const CustomScoreBoardButtons: React.FC<CustomScoreBoardButtonsProps> = ({
       >
         <Button
           onClick={onUndoLastRound}
-          size="icon"
-          variant="game-icon"
+          size="game-icon"
+          variant="game-control"
           className="bg-white text-dutch-orange shadow-lg border border-dutch-orange/20"
         >
-          <ArrowUturnLeft className="h-5 w-5" />
+          <ArrowUp className="h-5 w-5 transform -rotate-45" />
         </Button>
       </motion.div>
       

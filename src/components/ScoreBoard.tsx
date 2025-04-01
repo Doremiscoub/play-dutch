@@ -6,7 +6,7 @@ import React from 'react';
 import { Player } from '@/types';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
-import { Plus, Clock, ArrowUturnLeft } from 'lucide-react';
+import { Plus, Clock, ArrowUp } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 interface FloatingButtonsProps {
@@ -48,7 +48,7 @@ const FloatingButtons: React.FC<FloatingButtonsProps> = ({
           variant="pill-blue"
           className="bg-white text-dutch-orange shadow-lg border border-dutch-orange/20"
         >
-          <ArrowUturnLeft className="h-5 w-5" />
+          <ArrowUp className="h-5 w-5 transform -rotate-45" />
         </Button>
       </motion.div>
       
