@@ -16,6 +16,7 @@ interface DetailedPlayerStatsProps {
   onToggle: () => void;
   isFirst?: boolean;
   isLast?: boolean;
+  allPlayers?: Player[]; // Add optional allPlayers prop
 }
 
 const DetailedPlayerStats: React.FC<DetailedPlayerStatsProps> = ({ 
@@ -23,7 +24,8 @@ const DetailedPlayerStats: React.FC<DetailedPlayerStatsProps> = ({
   isExpanded, 
   onToggle,
   isFirst = false,
-  isLast = false
+  isLast = false,
+  allPlayers = [] // Default to empty array
 }) => {
   if (!player.stats) return null;
   
@@ -209,9 +211,9 @@ const DetailedPlayerStats: React.FC<DetailedPlayerStatsProps> = ({
                   
                   <PerformanceIndicator 
                     title="Manches gagnées"
-                    value={player.rounds.length > 0 ? 
+                    value={player.rounds.length > 0 && allPlayers.length > 0 ? 
                       `${Math.round((player.rounds.filter((_, i) => 
-                        player.rounds[i].score === Math.min(...players.map(p => p.rounds[i]?.score || Infinity))
+                        player.rounds[i].score === Math.min(...allPlayers.map(p => p.rounds[i]?.score || Infinity))
                       ).length / player.rounds.length) * 100)}%` 
                       : "N/A"}
                     icon={<Crown className="h-4 w-4 text-dutch-yellow" />}

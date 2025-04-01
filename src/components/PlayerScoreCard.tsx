@@ -9,13 +9,14 @@ interface PlayerScoreCardProps {
   player: Player;
   position: number;
   isWinner: boolean;
-  // Suppression de la prop totalPlayers qui n'est plus utilisée
+  totalPlayers?: number; // Adding this prop
 }
 
 const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({ 
   player, 
   position, 
-  isWinner
+  isWinner,
+  totalPlayers
 }) => {
   // Récupérer le badge en fonction du classement
   const getBadge = () => {

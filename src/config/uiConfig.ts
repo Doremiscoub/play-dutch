@@ -245,7 +245,7 @@ export const limits = {
 
 // Utilisé pour générer des couleurs aléatoires pour les graphiques et autres
 export const getPlayerColor = (index: number): string => {
-  const colors = [
+  const playerColors = [
     colors.dutchBlue,
     colors.dutchOrange,
     colors.dutchPurple,
@@ -256,7 +256,7 @@ export const getPlayerColor = (index: number): string => {
     "#D946EF", // pink
   ];
   
-  return colors[index % colors.length];
+  return playerColors[index % playerColors.length];
 };
 
 // Configuration des sons de l'application

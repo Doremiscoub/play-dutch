@@ -239,7 +239,7 @@ const TournamentPage: React.FC = () => {
                 {!tournament.completed && (
                   <>
                     <Button 
-                      variant="dutch-filled" 
+                      variant="dutch-blue" 
                       onClick={handleStartGame}
                       className="flex-1 sm:flex-initial"
                     >
@@ -342,7 +342,7 @@ const TournamentPage: React.FC = () => {
                 </Button>
                 
                 <Button 
-                  variant="dutch-filled"
+                  variant="dutch-blue"
                   onClick={handleCreateTournament}
                 >
                   <Users className="h-4 w-4 mr-2" />

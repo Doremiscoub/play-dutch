@@ -48,6 +48,7 @@ const StatsDrawer: React.FC<StatsDrawerProps> = ({ players, open, onClose }) => 
               onToggle={() => {}}
               isFirst={index === 0}
               isLast={index === sortedPlayers.length - 1}
+              allPlayers={players}
             />
           ))}
         </div>
