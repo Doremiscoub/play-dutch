@@ -158,7 +158,7 @@ const GamePodium: React.FC<GamePodiumProps> = ({ players, onNewGame, gameDuratio
   return (
     <div className="min-h-screen w-full relative overflow-hidden">
       <div className="fixed inset-0 -z-10">
-        <AnimatedBackground variant="celebration" />
+        <AnimatedBackground variant="vibrant" />
       </div>
       
       <div className="container mx-auto px-4 py-12 relative z-10">

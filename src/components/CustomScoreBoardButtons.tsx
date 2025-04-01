@@ -24,9 +24,9 @@ const CustomScoreBoardButtons: React.FC<CustomScoreBoardButtonsProps> = ({
       >
         <Button
           onClick={onEndGame}
-          size="game-icon"
-          variant="game-control"
-          className="bg-white text-dutch-blue shadow-lg border border-dutch-blue/20"
+          size="icon"
+          variant="outline"
+          className="bg-white text-dutch-blue shadow-lg border border-dutch-blue/20 rounded-full h-12 w-12"
         >
           <Clock className="h-5 w-5" />
         </Button>
@@ -39,9 +39,9 @@ const CustomScoreBoardButtons: React.FC<CustomScoreBoardButtonsProps> = ({
       >
         <Button
           onClick={onUndoLastRound}
-          size="game-icon"
-          variant="game-control"
-          className="bg-white text-dutch-orange shadow-lg border border-dutch-orange/20"
+          size="icon"
+          variant="outline"
+          className="bg-white text-dutch-orange shadow-lg border border-dutch-orange/20 rounded-full h-12 w-12"
         >
           <ArrowUp className="h-5 w-5 transform -rotate-45" />
         </Button>
@@ -56,9 +56,8 @@ const CustomScoreBoardButtons: React.FC<CustomScoreBoardButtonsProps> = ({
       >
         <Button
           onClick={onAddRound}
-          variant="game-action"
-          size="game-action"
-          className="px-8 bg-gradient-to-r from-dutch-purple to-dutch-blue shadow-xl"
+          variant="default"
+          className="px-8 bg-gradient-to-r from-dutch-purple to-dutch-blue shadow-xl rounded-full h-14"
         >
           <Plus className="h-5 w-5 mr-2" />
           Nouvelle manche

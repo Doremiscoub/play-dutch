@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Player, Game, PlayerStatistics } from '@/types';
@@ -35,12 +34,10 @@ const GamePage: React.FC = () => {
   const [gameStartTime, setGameStartTime] = useState<Date | null>(null);
   const navigate = useNavigate();
   
-  // Performance optimization: Memoize the updated players with stats
   const playersWithStats = useMemo(() => {
     return updateAllPlayersStats(players);
   }, [players]);
   
-  // Sauvegarder l'état actuel du jeu à chaque modification avec gestion d'erreurs
   useEffect(() => {
     if (gameState === 'playing' && players.length > 0) {
       try {
@@ -58,7 +55,6 @@ const GamePage: React.FC = () => {
     }
   }, [gameState, playersWithStats, roundHistory, gameStartTime]);
 
-  // Au démarrage, récupérer le temps de début de partie
   useEffect(() => {
     const savedGame = localStorage.getItem('current_dutch_game');
     if (savedGame) {
@@ -87,14 +83,12 @@ const GamePage: React.FC = () => {
     setRoundHistory([]);
     setGameStartTime(new Date());
     
-    // Clear any previous saved game
     localStorage.removeItem('current_dutch_game');
     
     toast.success('La partie commence !');
   };
 
-  const handleAddRound = (scores: number[], dutchPlayerId?: string) => {
-    // Vérifications et validations améliorées
+  const handleAddRound = useCallback((scores: number[], dutchPlayerId?: string) => {
     if (!players || players.length === 0) {
       toast.error('Erreur: aucun joueur trouvé');
       return;
@@ -105,14 +99,11 @@ const GamePage: React.FC = () => {
       return;
     }
     
-    // Vérifier que les scores sont des nombres valides
-    // Note: Nous acceptons maintenant les nombres négatifs
     if (scores.some(score => isNaN(score))) {
       toast.error('Erreur: les scores doivent être des nombres valides');
       return;
     }
     
-    // Vérification de cohérence: si un Dutch est signalé, au moins un joueur doit avoir un score
     if (dutchPlayerId && scores.every(score => score === 0)) {
       toast.error('Un Dutch doit avoir au moins un joueur avec des points');
       return;
@@ -143,7 +134,6 @@ const GamePage: React.FC = () => {
     
     toast.success('Manche ajoutée !');
     
-    // Vérification fin de jeu améliorée avec isGameOver
     const updatedPlayers = players.map((player, index) => ({
       ...player,
       totalScore: player.totalScore + scores[index]
@@ -152,7 +142,7 @@ const GamePage: React.FC = () => {
     if (isGameOver(updatedPlayers)) {
       finishGame(scores, dutchPlayerId);
     }
-  };
+  }, [players, setGames, soundEnabled, gameStartTime]);
   
   const finishGame = useCallback((finalScores?: number[], dutchPlayerId?: string) => {
     const updatedPlayers = finalScores 
@@ -181,11 +171,10 @@ const GamePage: React.FC = () => {
       })),
       winner,
       duration: gameDuration
-    } as Game; // Type assertion to fix the duration field issue
+    } as Game;
     
     setGames(prev => [...prev, newGame]);
     
-    // Passer à l'écran de podium
     setGameState('completed');
     
     if (soundEnabled) {
@@ -243,7 +232,6 @@ const GamePage: React.FC = () => {
   }, []);
 
   const handleConfirmEndGame = useCallback(() => {
-    // Si aucune manche n'a été jouée, ne pas enregistrer la partie
     if (players.length > 0 && players[0].rounds && players[0].rounds.length > 0) {
       finishGame();
     } else {
@@ -261,16 +249,13 @@ const GamePage: React.FC = () => {
   }, []);
 
   const handleNewGame = useCallback(() => {
-    // Supprimer la partie en cours
     localStorage.removeItem('current_dutch_game');
     
-    // Retourner à l'écran de configuration
     setGameState('setup');
     setPlayers([]);
     setRoundHistory([]);
   }, []);
 
-  // Vérifier s'il y a une partie en cours au chargement avec gestion de l'expiration
   useEffect(() => {
     const savedGame = localStorage.getItem('current_dutch_game');
     if (savedGame) {
@@ -280,7 +265,6 @@ const GamePage: React.FC = () => {
         const now = new Date();
         const hoursSinceLastUpdate = (now.getTime() - lastUpdated.getTime()) / (1000 * 60 * 60);
         
-        // Si la partie date de plus de 24h, proposer de la reprendre
         if (hoursSinceLastUpdate > 24) {
           const confirmResume = window.confirm('Une partie non terminée a été trouvée. Voulez-vous la reprendre?');
           if (!confirmResume) {

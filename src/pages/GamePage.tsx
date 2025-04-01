@@ -144,7 +144,7 @@ const GamePage: React.FC = () => {
     toast.success('La partie multijoueur commence !');
   };
 
-  const handleAddRound = (scores: number[], dutchPlayerId?: string) => {
+  const handleAddRound = useCallback((scores: number[], dutchPlayerId?: string) => {
     setRoundHistory(prev => [...prev, { scores, dutchPlayerId }]);
     
     setPlayers(prevPlayers => {
@@ -178,7 +178,7 @@ const GamePage: React.FC = () => {
     }
     
     toast.success('Manche ajoutée !');
-  };
+  }, [currentGameId, isMultiplayer, roundHistory]);
   
   const finishGame = () => {
     const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
@@ -241,7 +241,7 @@ const GamePage: React.FC = () => {
     }, 250);
   };
   
-  const handleUndoLastRound = () => {
+  const handleUndoLastRound = useCallback(() => {
     if (players.length === 0 || players[0].rounds.length === 0) {
       toast.error('Pas de manche à annuler !');
       return;
@@ -278,35 +278,35 @@ const GamePage: React.FC = () => {
     }
     
     toast.success('Dernière manche annulée !');
-  };
+  }, [isMultiplayer, currentGameId, roundHistory]);
 
-  const handleEndGame = () => {
+  const handleEndGame = useCallback(() => {
     if (players.length > 0 && players[0].rounds.length > 0) {
       setShowGameEndConfirmation(true);
     } else {
       resetGame();
     }
-  };
+  }, [players]);
   
-  const confirmEndGame = () => {
+  const confirmEndGame = useCallback(() => {
     finishGame();
     setShowGameEndConfirmation(false);
     setTimeout(() => {
       resetGame();
     }, 1500);
-  };
+  }, [finishGame]);
   
-  const cancelEndGame = () => {
+  const cancelEndGame = useCallback(() => {
     setShowGameEndConfirmation(false);
-  };
+  }, []);
   
-  const resetGame = () => {
+  const resetGame = useCallback(() => {
     setGameState('setup');
     setPlayers([]);
     setRoundHistory([]);
     setIsMultiplayer(false);
     setCurrentGameId(null);
-  };
+  }, []);
 
   useEffect(() => {
     if (isMultiplayer && currentGameId && gameState === 'playing') {

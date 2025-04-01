@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -8,6 +9,7 @@ import PageLayout from '@/components/PageLayout';
 import ThemeSelector from '@/components/ThemeSelector';
 import { SignOutButton, useUser } from '@clerk/clerk-react';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
+import { toast } from 'sonner';
 
 const SettingsPage = () => {
   const [soundEnabled, setSoundEnabled] = useLocalStorage('dutch_sound_enabled', true);
@@ -31,17 +33,6 @@ const SettingsPage = () => {
 
   const cancelResetHistory = () => {
     setResetConfirmationOpen(false);
-  };
-
-  const toast = (message: string, type: 'success' | 'error' = 'success') => {
-    const toastElement = document.createElement('div');
-    toastElement.className = `fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-white text-gray-800 p-3 rounded-md shadow-lg z-50 ${type === 'error' ? 'border-2 border-red-500' : ''}`;
-    toastElement.textContent = message;
-    document.body.appendChild(toastElement);
-
-    setTimeout(() => {
-      toastElement.remove();
-    }, 3000);
   };
 
   return (

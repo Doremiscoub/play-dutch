@@ -1,7 +1,4 @@
 
-// This is a read-only file, so we can't modify it directly.
-// Instead, let's create a new component that wraps ScoreBoard and adds our custom floating buttons.
-
 import React from 'react';
 import { Player } from '@/types';
 import { Button } from '@/components/ui/button';
@@ -30,8 +27,8 @@ const FloatingButtons: React.FC<FloatingButtonsProps> = ({
         <Button
           onClick={onEndGame}
           size="icon"
-          variant="pill-blue"
-          className="bg-white text-dutch-blue shadow-lg border border-dutch-blue/20"
+          variant="outline"
+          className="bg-white text-dutch-blue shadow-lg border border-dutch-blue/20 rounded-full h-12 w-12"
         >
           <Clock className="h-5 w-5" />
         </Button>
@@ -45,8 +42,8 @@ const FloatingButtons: React.FC<FloatingButtonsProps> = ({
         <Button
           onClick={onUndoLastRound}
           size="icon"
-          variant="pill-blue"
-          className="bg-white text-dutch-orange shadow-lg border border-dutch-orange/20"
+          variant="outline"
+          className="bg-white text-dutch-orange shadow-lg border border-dutch-orange/20 rounded-full h-12 w-12"
         >
           <ArrowUp className="h-5 w-5 transform -rotate-45" />
         </Button>
@@ -61,9 +58,8 @@ const FloatingButtons: React.FC<FloatingButtonsProps> = ({
       >
         <Button
           onClick={onAddRound}
-          variant="pill-purple"
-          size="pill-lg"
-          className="px-8 bg-gradient-to-r from-dutch-purple to-dutch-blue shadow-lg"
+          variant="default"
+          className="px-8 bg-gradient-to-r from-dutch-purple to-dutch-blue shadow-lg rounded-full h-14"
         >
           <Plus className="h-5 w-5 mr-2" />
           Nouvelle manche
