@@ -95,6 +95,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
       </div>
       
       <CustomScoreBoardButtons
+        players={players}
         onAddRound={onAddRound}
         onUndoLastRound={onUndoLastRound}
         onEndGame={onEndGame}
