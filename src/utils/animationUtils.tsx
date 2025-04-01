@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { motion, Variants } from 'framer-motion';
-import { UI_CONFIG } from '@/config/uiConfig';
+import themeConfig from '@/config/theme';
 
 /**
  * Variants d'animation réutilisables pour Framer Motion
@@ -18,7 +18,7 @@ export const animationVariants = {
       y: 0,
       transition: {
         duration: 0.3,
-        ease: UI_CONFIG.animations.easings.out
+        ease: themeConfig.ANIMATIONS.easing.out
       }
     },
   },
@@ -34,7 +34,7 @@ export const animationVariants = {
       x: 0,
       transition: {
         duration: 0.3,
-        ease: UI_CONFIG.animations.easings.out
+        ease: themeConfig.ANIMATIONS.easing.out
       }
     },
   },
@@ -50,7 +50,7 @@ export const animationVariants = {
       scale: 1,
       transition: {
         duration: 0.3,
-        ease: UI_CONFIG.animations.easings.out
+        ease: themeConfig.ANIMATIONS.easing.out
       }
     },
   },
@@ -148,14 +148,14 @@ export const animationVariants = {
       opacity: 1,
       transition: {
         duration: 0.5,
-        ease: UI_CONFIG.animations.easings.inOut
+        ease: themeConfig.ANIMATIONS.easing.inOut
       }
     },
     exit: { 
       opacity: 0,
       transition: {
         duration: 0.3,
-        ease: UI_CONFIG.animations.easings.inOut
+        ease: themeConfig.ANIMATIONS.easing.inOut
       }
     }
   }
@@ -165,7 +165,7 @@ export const animationVariants = {
  * Animation de confetti pour les victoires et moments de célébration
  * @param duration Durée de l'animation en millisecondes
  */
-export const playConfetti = (duration = 3000) => {
+export const playConfetti = (duration = themeConfig.COMPONENT_STYLES.effects.confetti.duration) => {
   if (typeof window !== 'undefined') {
     import('canvas-confetti').then(confetti => {
       const end = Date.now() + duration;
@@ -176,7 +176,7 @@ export const playConfetti = (duration = 3000) => {
           angle: 60,
           spread: 55,
           origin: { x: 0 },
-          colors: ['#1EAEDB', '#8B5CF6', '#F97316']
+          colors: themeConfig.COMPONENT_STYLES.effects.confetti.colors
         });
         
         confetti.default({
@@ -184,7 +184,7 @@ export const playConfetti = (duration = 3000) => {
           angle: 120,
           spread: 55,
           origin: { x: 1 },
-          colors: ['#1EAEDB', '#8B5CF6', '#F97316']
+          colors: themeConfig.COMPONENT_STYLES.effects.confetti.colors
         });
         
         if (Date.now() < end) {
@@ -227,9 +227,9 @@ export const AnimatedContainer: React.FC<AnimatedContainerProps> = ({
     selectedVariant = {
       ...selectedVariant,
       visible: {
-        ...selectedVariant.visible,
+        ...(selectedVariant.visible as object),
         transition: {
-          ...selectedVariant.visible.transition,
+          ...(selectedVariant.visible as any).transition,
           duration
         }
       }

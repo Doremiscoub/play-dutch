@@ -1,5 +1,6 @@
 
 import type { Config } from "tailwindcss";
+import { COLORS, TYPOGRAPHY, BORDERS, SHADOWS, ANIMATIONS } from "./config/theme";
 
 export default {
 	darkMode: ["class"],
@@ -63,16 +64,17 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
+				// Couleurs Dutch basées sur notre configuration de thème
 				dutch: {
-					blue: '#1EAEDB',
-					orange: '#F97316',
-					purple: '#8B5CF6',
-					pink: '#D946EF',
-					red: '#EF4444',
-					green: '#10B981',
-					yellow: '#FBBF24',
-					background: '#F9FAFB',
-					card: '#FFFFFF',
+					blue: COLORS.blue.DEFAULT,
+					orange: COLORS.orange.DEFAULT,
+					purple: COLORS.purple.DEFAULT,
+					pink: COLORS.pink,
+					red: COLORS.red,
+					green: COLORS.green,
+					yellow: COLORS.yellow,
+					background: COLORS.gray[50],
+					card: COLORS.white,
 				},
 				ios: {
 					blue: '#007AFF',
@@ -98,8 +100,8 @@ export default {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
 				sm: 'calc(var(--radius) - 4px)',
-				'2xl': '1.5rem',
-				'3xl': '2rem',
+				'2xl': BORDERS.radius['2xl'],
+				'3xl': BORDERS.radius['3xl'],
 				'4xl': '2.5rem',
 			},
 			keyframes: {
@@ -188,7 +190,25 @@ export default {
 			},
 			backdropBlur: {
 				xs: '2px',
-			}
+			},
+			fontFamily: {
+				sans: TYPOGRAPHY.fontFamily.sans,
+				mono: TYPOGRAPHY.fontFamily.mono,
+			},
+			boxShadow: {
+				card: SHADOWS.card,
+				glass: SHADOWS.glassCard,
+				button: SHADOWS.glassButton,
+			},
+			transitionDuration: {
+				DEFAULT: ANIMATIONS.duration.normal,
+				fast: ANIMATIONS.duration.fast,
+				slow: ANIMATIONS.duration.slow,
+			},
+			transitionTimingFunction: {
+				DEFAULT: ANIMATIONS.easing.inOut,
+				bounce: ANIMATIONS.easing.bounce,
+			},
 		}
 	},
 	plugins: [require("tailwindcss-animate")],

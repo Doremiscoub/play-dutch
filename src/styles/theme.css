@@ -1,0 +1,135 @@
+
+:root {
+  /* Variables de couleur Dutch qui seront remplacées dynamiquement */
+  --dutch-primary: #1EAEDB;
+  --dutch-secondary: #8B5CF6;
+  --dutch-accent: #F97316;
+  --dutch-background: #F9FAFB;
+  
+  /* Bordures */
+  --radius: 0.75rem;
+  --border: 210 40% 96.1%;
+  --input: 214 32% 91%;
+  --ring: 222.2 84% 4.9%;
+  
+  /* Couleurs de base */
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+  
+  /* Cartes */
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 84% 4.9%;
+  
+  /* Popover */
+  --popover: 0 0% 100%;
+  --popover-foreground: 222.2 84% 4.9%;
+  
+  /* Couleurs supplémentaires */
+  --primary: 222.2 47.4% 11.2%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 210 40% 96.1%;
+  --secondary-foreground: 222.2 47.4% 11.2%;
+  --muted: 210 40% 96.1%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+  --accent: 210 40% 96.1%;
+  --accent-foreground: 222.2 47.4% 11.2%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
+  
+  /* Sidebar */
+  --sidebar-background: 0 0% 100%;
+  --sidebar-foreground: 222.2 84% 4.9%;
+  --sidebar-primary: 222.2 47.4% 11.2%;
+  --sidebar-primary-foreground: 210 40% 98%;
+  --sidebar-accent: 210 40% 96.1%;
+  --sidebar-accent-foreground: 222.2 47.4% 11.2%;
+  --sidebar-border: 214.3 31.8% 91.4%;
+  --sidebar-ring: var(--ring);
+}
+
+/* Thème bleu */
+[data-theme="blue"] {
+  --dutch-primary: #3B82F6;
+  --dutch-secondary: #60A5FA;
+  --dutch-accent: #93C5FD;
+  --dutch-background: #EFF6FF;
+}
+
+/* Thème violet */
+[data-theme="purple"] {
+  --dutch-primary: #8B5CF6;
+  --dutch-secondary: #A78BFA;
+  --dutch-accent: #C4B5FD;
+  --dutch-background: #F5F3FF;
+}
+
+/* Thème orange */
+[data-theme="orange"] {
+  --dutch-primary: #F97316;
+  --dutch-secondary: #FB923C;
+  --dutch-accent: #FDBA74;
+  --dutch-background: #FFF7ED;
+}
+
+/* Classes utilitaires pour les effets Glass */
+.glass-light {
+  background-color: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.glass-medium {
+  background-color: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.glass-heavy {
+  background-color: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Animations globales */
+.fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.scale-in {
+  animation: scaleIn 0.3s ease-out forwards;
+}
+
+.float {
+  animation: float 6s infinite ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}

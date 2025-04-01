@@ -2,7 +2,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Palette } from 'lucide-react';
-import { useTheme, ThemeType } from '@/hooks/use-theme';
+import { useTheme, ThemeType, themeConfig } from '@/hooks/use-theme';
 import { motion } from 'framer-motion';
 
 // Composant simplifié pour le sélecteur de thème

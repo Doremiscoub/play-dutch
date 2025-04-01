@@ -1,9 +1,10 @@
+
 import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Paintbrush, Check, X, Palette, Save, RefreshCw, Plus, Trash2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useTheme, ThemeId, themeConfig } from '@/hooks/use-theme';
+import { useTheme, ThemeType, themeConfig } from '@/hooks/use-theme';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Slider } from "@/components/ui/slider";
 import { HexColorPicker } from 'react-colorful';
@@ -39,11 +40,11 @@ const AdvancedThemeSelector = () => {
   
   const themes = [
     ...Object.entries(themeConfig).map(([id, theme]) => ({
-      id: id as ThemeId,
+      id: id as ThemeType,
       name: theme.name,
-      primary: theme.primary,
-      secondary: theme.secondary,
-      accent: theme.accent,
+      primary: theme.colors.primary,
+      secondary: theme.colors.secondary,
+      accent: theme.colors.accent,
       background: '#FFFFFF',
       isCustom: false
     })),
@@ -102,7 +103,7 @@ const AdvancedThemeSelector = () => {
       );
       
       if (currentTheme === updatedTheme.id) {
-        setTheme(updatedTheme.id as ThemeId);
+        setTheme(updatedTheme.id as ThemeType);
       }
     } else {
       setCustomThemes(prev => [...prev, updatedTheme]);

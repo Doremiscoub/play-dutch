@@ -1,7 +1,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { UI_CONFIG } from '@/config/uiConfig';
+import themeConfig from '@/config/theme';
 
 type AnimatedBackgroundVariant = 'default' | 'subtle' | 'minimal';
 
@@ -16,25 +16,25 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   
-  // Configuration des points flottants
+  // Configuration des points flottants basée sur le thème
   const dotsConfig = {
     default: {
-      count: 40,
-      colors: UI_CONFIG.floatingDots.colors,
-      sizes: UI_CONFIG.floatingDots.sizes,
-      speed: 0.5
+      count: themeConfig.BACKGROUND_CONFIG.dots.count.default,
+      colors: themeConfig.BACKGROUND_CONFIG.dots.colors,
+      sizes: themeConfig.BACKGROUND_CONFIG.dots.sizes,
+      speed: themeConfig.BACKGROUND_CONFIG.dots.speed.default
     },
     subtle: {
-      count: 25,
-      colors: UI_CONFIG.floatingDots.colors,
-      sizes: UI_CONFIG.floatingDots.sizes.slice(0, 2), // Tailles plus petites
-      speed: 0.3
+      count: themeConfig.BACKGROUND_CONFIG.dots.count.subtle,
+      colors: themeConfig.BACKGROUND_CONFIG.dots.colors,
+      sizes: themeConfig.BACKGROUND_CONFIG.dots.sizes.slice(0, 2), // Tailles plus petites
+      speed: themeConfig.BACKGROUND_CONFIG.dots.speed.subtle
     },
     minimal: {
-      count: 15,
-      colors: UI_CONFIG.floatingDots.colors.slice(0, 2), // Moins de couleurs
-      sizes: [UI_CONFIG.floatingDots.sizes[0]], // Une seule taille
-      speed: 0.2
+      count: themeConfig.BACKGROUND_CONFIG.dots.count.minimal,
+      colors: themeConfig.BACKGROUND_CONFIG.dots.colors.slice(0, 2), // Moins de couleurs
+      sizes: [themeConfig.BACKGROUND_CONFIG.dots.sizes[0]], // Une seule taille
+      speed: themeConfig.BACKGROUND_CONFIG.dots.speed.minimal
     }
   };
   
@@ -116,8 +116,8 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
       <div 
         className="absolute inset-0"
         style={{ 
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='${UI_CONFIG.grid.size}' height='${UI_CONFIG.grid.size}' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M 0 0 L ${UI_CONFIG.grid.size} 0 M 0 0 L 0 ${UI_CONFIG.grid.size}' stroke='%23${UI_CONFIG.grid.color.substring(1)}' stroke-opacity='${UI_CONFIG.grid.opacity}' stroke-width='1' fill='none' /%3E%3C/svg%3E")`,
-          backgroundSize: UI_CONFIG.grid.size
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='${themeConfig.BACKGROUND_CONFIG.grid.size}' height='${themeConfig.BACKGROUND_CONFIG.grid.size}' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M 0 0 L ${themeConfig.BACKGROUND_CONFIG.grid.size} 0 M 0 0 L 0 ${themeConfig.BACKGROUND_CONFIG.grid.size}' stroke='%23${themeConfig.BACKGROUND_CONFIG.grid.color.substring(1)}' stroke-opacity='${themeConfig.BACKGROUND_CONFIG.grid.opacity}' stroke-width='1' fill='none' /%3E%3C/svg%3E")`,
+          backgroundSize: themeConfig.BACKGROUND_CONFIG.grid.size
         }}
       />
       
@@ -134,7 +134,7 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
             className="absolute bottom-0 left-0 right-0 z-0"
             style={{
               height: '20vh',
-              background: UI_CONFIG.waves.primaryColor,
+              background: themeConfig.BACKGROUND_CONFIG.waves.primaryColor,
               borderTopLeftRadius: '50%',
               borderTopRightRadius: '50%',
               opacity: 0.4
@@ -155,7 +155,7 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
             className="absolute bottom-0 left-0 right-0 z-0"
             style={{
               height: '15vh',
-              background: UI_CONFIG.waves.secondaryColor,
+              background: themeConfig.BACKGROUND_CONFIG.waves.secondaryColor,
               borderTopLeftRadius: '50%',
               borderTopRightRadius: '50%',
               opacity: 0.4,

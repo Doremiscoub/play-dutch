@@ -45,4 +45,5 @@ export function useMediaQuery(query: string): boolean {
   return matches
 }
 
+// Export par défaut pour la compatibilité avec l'existant
 export default useIsMobile;

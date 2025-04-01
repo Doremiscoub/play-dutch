@@ -7,6 +7,7 @@ import ThemeSelector from './ThemeSelector';
 import { Button } from './ui/button';
 import { ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import themeConfig from '@/config/theme';
 
 interface PageLayoutProps {
   children: React.ReactNode;
@@ -66,7 +67,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
         {/* Titre et sous-titre optionnels */}
         {title && (
           <div className="text-center mb-8">
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent mb-1">
+            <h1 className={`text-2xl font-bold bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent mb-1`}>
               {title}
               <span className="ml-2 text-sm">✨</span>
             </h1>

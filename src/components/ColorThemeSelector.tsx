@@ -27,15 +27,15 @@ const ColorThemeSelector = () => {
             <div className="flex gap-2 mr-4">
               <div 
                 className="w-6 h-6 rounded-full" 
-                style={{ backgroundColor: theme.primary }}
+                style={{ backgroundColor: theme.colors.primary }}
               ></div>
               <div 
                 className="w-6 h-6 rounded-full" 
-                style={{ backgroundColor: theme.secondary }}
+                style={{ backgroundColor: theme.colors.secondary }}
               ></div>
               <div 
                 className="w-6 h-6 rounded-full" 
-                style={{ backgroundColor: theme.accent }}
+                style={{ backgroundColor: theme.colors.accent }}
               ></div>
             </div>
             <span className="font-medium">{theme.name}</span>

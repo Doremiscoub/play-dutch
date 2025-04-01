@@ -1,4 +1,16 @@
 
+import themeConfig, { 
+  COLORS, 
+  SPACING, 
+  TYPOGRAPHY, 
+  BORDERS, 
+  SHADOWS, 
+  ANIMATIONS,
+  BACKGROUND_CONFIG,
+  COMPONENT_STYLES,
+  Z_INDEX
+} from './theme';
+
 /**
  * Configuration centrale de l'interface utilisateur pour Dutch
  * Ce fichier contient toutes les constantes visuelles et de design
@@ -7,122 +19,34 @@
 
 export const UI_CONFIG = {
   // Couleurs principales
-  colors: {
-    blue: '#1EAEDB',
-    blueDark: '#1899C2',
-    blueLight: '#70D6F7',
-    purple: '#8B5CF6',
-    purpleDark: '#7649F1',
-    purpleLight: '#C4B5FD',
-    orange: '#F97316',
-    orangeDark: '#EA580C',
-    orangeLight: '#FDBA74',
-    green: '#10B981',
-    yellow: '#FBBF24',
-    white: '#FFFFFF',
-    background: '#F9FAFB',
-    card: '#FFFFFF',
-    grid: '#DADADA',
-    text: {
-      primary: '#333333',
-      secondary: '#6B7280',
-      light: '#9CA3AF',
-    }
-  },
+  colors: COLORS,
   
   // Typographie
-  typography: {
-    fontFamily: 'Inter, "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-    sizes: {
-      heading1: '36px',
-      heading2: '24px',
-      heading3: '20px',
-      body: '16px',
-      small: '14px',
-      tiny: '12px',
-    },
-    weights: {
-      light: 300,
-      regular: 400,
-      medium: 500,
-      semibold: 600,
-      bold: 700,
-    }
-  },
+  typography: TYPOGRAPHY,
   
   // Espacement
-  spacing: {
-    xs: '4px',
-    sm: '8px',
-    md: '16px',
-    lg: '24px',
-    xl: '32px',
-    xxl: '48px',
-  },
+  spacing: SPACING,
   
   // Rayons de bordure
-  borderRadius: {
-    sm: '8px',
-    md: '12px',
-    lg: '16px',
-    xl: '24px',
-    full: '9999px',
-  },
+  borderRadius: BORDERS.radius,
   
   // Ombres
-  shadows: {
-    sm: '0 1px 2px rgba(0, 0, 0, 0.05)',
-    md: '0 4px 6px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.06)',
-    lg: '0 10px 15px rgba(0, 0, 0, 0.03), 0 4px 6px rgba(0, 0, 0, 0.05)',
-    xl: '0 20px 25px rgba(0, 0, 0, 0.02), 0 10px 10px rgba(0, 0, 0, 0.04)',
-    card: '0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03)',
-  },
+  shadows: SHADOWS,
   
   // Animations et transitions
-  animations: {
-    durations: {
-      fast: '100ms',
-      default: '200ms',
-      medium: '300ms',
-      slow: '500ms',
-    },
-    easings: {
-      default: 'cubic-bezier(0.4, 0, 0.2, 1)',
-      inOut: 'cubic-bezier(0.4, 0, 0.2, 1)',
-      in: 'cubic-bezier(0.4, 0, 1, 1)',
-      out: 'cubic-bezier(0, 0, 0.2, 1)',
-    },
-  },
+  animations: ANIMATIONS,
   
   // Z-index
-  zIndex: {
-    base: 1,
-    overlay: 10,
-    modal: 20,
-    toast: 30,
-    tooltip: 40,
-  },
+  zIndex: Z_INDEX,
   
   // Configuration des vagues en bas d'écran
-  waves: {
-    primaryColor: '#E9D5FF', // Violet pâle
-    secondaryColor: '#FDE68A', // Orange pâle
-    heightPercentage: 20, // 20% de la hauteur d'écran
-  },
+  waves: BACKGROUND_CONFIG.waves,
   
   // Configuration du fond quadrillé
-  grid: {
-    size: '24px',
-    color: '#DADADA',
-    opacity: 0.1,
-  },
+  grid: BACKGROUND_CONFIG.grid,
   
   // Configuration des points flottants
-  floatingDots: {
-    colors: ['#A78BFA', '#FDBA74', '#6EE7B7', '#60A5FA'],
-    sizes: ['2px', '4px', '6px', '8px'],
-    animationDuration: '10s',
-  },
+  floatingDots: BACKGROUND_CONFIG.dots,
   
   // Valeurs pour le glassmorphisme
   glassmorphism: {
@@ -144,12 +68,12 @@ export const UI_CONFIG = {
 
 // Styles communs réutilisables
 export const COMMON_STYLES = {
-  mainButton: 'h-14 px-8 rounded-full font-medium transition-all shadow-md',
-  cardBase: 'rounded-2xl bg-white/80 backdrop-blur-md border border-white/40 shadow-sm p-4',
-  cardWithHover: 'rounded-2xl bg-white/80 backdrop-blur-md border border-white/40 shadow-sm p-4 hover:shadow-md hover:bg-white/90 transition-all',
+  mainButton: COMPONENT_STYLES.button.base,
+  cardBase: COMPONENT_STYLES.card.base + ' ' + COMPONENT_STYLES.card.glass,
+  cardWithHover: COMPONENT_STYLES.card.base + ' ' + COMPONENT_STYLES.card.glass + ' ' + COMPONENT_STYLES.card.hover,
   iconButtonBase: 'h-12 w-12 flex items-center justify-center rounded-full shadow-sm transition-all',
-  inputBase: 'bg-white/90 border border-gray-200 rounded-xl px-4 py-2 focus:ring-2 focus:ring-dutch-blue/20 focus:border-dutch-blue outline-none transition-all w-full',
-  headingGradient: 'text-2xl font-bold bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent',
+  inputBase: COMPONENT_STYLES.input.base + ' ' + COMPONENT_STYLES.input.default,
+  headingGradient: COMPONENT_STYLES.text.heading.base + ' ' + COMPONENT_STYLES.text.heading.gradient,
   pageBackground: 'min-h-screen w-full bg-gradient-to-b from-gray-50 to-white',
   backgroundGrid: 'bg-grid bg-opacity-10 bg-size-24',
 };
