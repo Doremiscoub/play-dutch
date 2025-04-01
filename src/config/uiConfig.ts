@@ -32,6 +32,15 @@ export const UI_CONFIG = {
   transitions: {
     default: "all 0.3s ease",
   },
+
+  // Ajout des breakpoints pour les media queries
+  breakpoints: {
+    xs: "480px",
+    sm: "640px",
+    md: "768px",
+    lg: "1024px",
+    xl: "1280px",
+  },
 };
 
 // Styles communs réutilisables dans toute l'application
