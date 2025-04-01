@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { ChevronLeft } from 'lucide-react';
 import AnimatedBackground from '@/components/AnimatedBackground';
 import { cn } from '@/lib/utils';
+import ThemeSelector from '@/components/ThemeSelector';
 
 interface PageLayoutProps {
   title: string;
@@ -18,6 +19,7 @@ interface PageLayoutProps {
   background?: 'default' | 'game' | 'vibrant' | 'minimal' | 'smooth';
   headerClassName?: string;
   hideBackButton?: boolean;
+  showThemeSelector?: boolean;
 }
 
 const PageLayout: React.FC<PageLayoutProps> = ({
@@ -31,6 +33,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   background = 'default',
   headerClassName,
   hideBackButton = false,
+  showThemeSelector = false,
 }) => {
   return (
     <div className={cn("relative min-h-screen flex flex-col", className)}>
@@ -43,16 +46,24 @@ const PageLayout: React.FC<PageLayoutProps> = ({
       <div className="relative z-10 flex-1 flex flex-col container mx-auto px-4 pt-6 pb-16 md:px-6 md:pt-8">
         {/* Header */}
         <div className={cn("mb-6 md:mb-8", headerClassName)}>
-          {!hideBackButton && (
-            <div className="mb-4">
-              <Link to={backLink}>
-                <Button variant="ghost" size="sm" className="gap-1 pl-2 bg-white/70 hover:bg-white/80 backdrop-blur-sm shadow-sm rounded-full">
-                  <ChevronLeft className="h-4 w-4" />
-                  {backText}
-                </Button>
-              </Link>
-            </div>
-          )}
+          <div className="flex justify-between items-center">
+            {!hideBackButton && (
+              <div className="mb-4">
+                <Link to={backLink}>
+                  <Button variant="ghost" size="sm" className="gap-1 pl-2 bg-white/70 hover:bg-white/80 backdrop-blur-sm shadow-sm rounded-full">
+                    <ChevronLeft className="h-4 w-4" />
+                    {backText}
+                  </Button>
+                </Link>
+              </div>
+            )}
+            
+            {showThemeSelector && (
+              <div className="mb-4">
+                <ThemeSelector />
+              </div>
+            )}
+          </div>
 
           <motion.div
             initial={{ opacity: 0, y: -10 }}

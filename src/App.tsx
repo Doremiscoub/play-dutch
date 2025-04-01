@@ -23,7 +23,7 @@ function App() {
         <Route path="/sign-up/*" element={<SignUp />} />
         <Route path="/rules" element={<RulesPage />} />
         <Route path="/settings" element={<SettingsPage />} />
-        <Route path="/easter-egg" element={<BrickBreaker />} />
+        <Route path="/easter-egg" element={<BrickBreaker onClose={() => window.history.back()} />} />
         <Route 
           path="/game" 
           element={
