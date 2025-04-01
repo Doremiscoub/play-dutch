@@ -47,6 +47,30 @@
   --sidebar-ring: var(--ring);
 }
 
+/* Thème bleu */
+[data-theme="blue"] {
+  --dutch-primary: #3B82F6;
+  --dutch-secondary: #60A5FA;
+  --dutch-accent: #93C5FD;
+  --dutch-background: #EFF6FF;
+}
+
+/* Thème violet */
+[data-theme="purple"] {
+  --dutch-primary: #8B5CF6;
+  --dutch-secondary: #A78BFA;
+  --dutch-accent: #C4B5FD;
+  --dutch-background: #F5F3FF;
+}
+
+/* Thème orange */
+[data-theme="orange"] {
+  --dutch-primary: #F97316;
+  --dutch-secondary: #FB923C;
+  --dutch-accent: #FDBA74;
+  --dutch-background: #FFF7ED;
+}
+
 /* Classes utilitaires pour les effets Glass */
 .glass-light {
   background-color: rgba(255, 255, 255, 0.7);
@@ -108,11 +132,4 @@
   50% {
     transform: translateY(-10px);
   }
-}
-
-/* Grille de fond */
-.bg-grid {
-  background-image: linear-gradient(to right, #DADADA 1px, transparent 1px),
-                    linear-gradient(to bottom, #DADADA 1px, transparent 1px);
-  background-size: 24px 24px;
 }

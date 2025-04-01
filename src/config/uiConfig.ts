@@ -40,33 +40,13 @@ export const UI_CONFIG = {
   zIndex: Z_INDEX,
   
   // Configuration des vagues en bas d'écran
-  waves: {
-    ...BACKGROUND_CONFIG.waves,
-    height: "20%", // Hauteur des vagues (pourcentage de l'écran)
-    colors: {
-      primary: "#E9D5FF", // Violet pâle
-      secondary: "#FDE68A" // Orange pâle
-    },
-    opacity: 0.3,
-  },
+  waves: BACKGROUND_CONFIG.waves,
   
   // Configuration du fond quadrillé
-  grid: {
-    size: '24px',
-    color: '#DADADA',
-    opacity: 0.1
-  },
+  grid: BACKGROUND_CONFIG.grid,
   
   // Configuration des points flottants
-  floatingDots: {
-    colors: ["#A78BFA", "#FDBA74", "#6EE7B7", "#60A5FA"],
-    size: {
-      min: 2,
-      max: 8
-    },
-    count: 30,
-    speed: 0.2
-  },
+  floatingDots: BACKGROUND_CONFIG.dots,
   
   // Valeurs pour le glassmorphisme
   glassmorphism: {
@@ -114,7 +94,6 @@ export const AI_COMMENTATOR_CONFIG = {
     sarcasm: 'Bot',
     encouragement: 'User',
   },
-  name: 'Professeur Cartouche'
 };
 
 export default UI_CONFIG;
