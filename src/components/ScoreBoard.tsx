@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Player } from '@/types';
 import { Button } from '@/components/ui/button';
@@ -28,6 +27,7 @@ import PageLayout from './PageLayout';
 import { animationVariants, AnimatedContainer } from '@/utils/animationUtils';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { UI_CONFIG, COMMON_STYLES } from '@/config/uiConfig';
+import { toast } from 'sonner';
 
 interface ScoreBoardProps {
   players: Player[];

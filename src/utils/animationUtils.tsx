@@ -207,7 +207,7 @@ export const playConfetti = (duration = 3000) => {
  */
 interface AnimatedContainerProps {
   children: React.ReactNode;
-  variant?: string;
+  variant?: keyof typeof animationVariants | string;
   delay?: number;
   duration?: number;
   className?: string;
@@ -222,10 +222,11 @@ export const AnimatedContainer: React.FC<AnimatedContainerProps> = ({
   className = '',
   ...props 
 }) => {
+  // Utiliser une assertion de type plus sûre pour variant
   let selectedVariant = animationVariants[variant as keyof typeof animationVariants] || animationVariants.fadeInUp;
   
   // Permettre d'ajuster la durée manuellement si nécessaire
-  if (duration) {
+  if (duration && selectedVariant.visible && selectedVariant.visible.transition) {
     selectedVariant = {
       ...selectedVariant,
       visible: {
