@@ -2,12 +2,12 @@
 import { Player, PlayerStatistics } from '@/types';
 
 /**
- * Calcule les statistiques d'un joueur
- * Optimisé pour éviter le recalcul inutile
+ * Calcule les statistiques détaillées d'un joueur
+ * @param player Le joueur pour lequel calculer les statistiques
+ * @returns Les statistiques calculées du joueur
  */
-export const calculatePlayerStats = (player: Player, allPlayers: Player[]): PlayerStatistics => {
-  const rounds = player.rounds;
-  if (!rounds || rounds.length === 0) {
+export const calculatePlayerStats = (player: Player): PlayerStatistics => {
+  if (!player.rounds || player.rounds.length === 0) {
     return {
       bestRound: null,
       dutchCount: 0,
@@ -19,118 +19,100 @@ export const calculatePlayerStats = (player: Player, allPlayers: Player[]): Play
     };
   }
 
-  const scores = rounds.map(r => r.score);
-  const dutchCount = rounds.filter(r => r.isDutch).length;
+  // Nombre de Dutch réalisés
+  const dutchCount = player.rounds.filter(round => round.isDutch).length;
   
-  // Adaptation pour les scores négatifs
-  // Le meilleur score est le plus petit (peut être négatif)
-  const sortedScores = [...scores].sort((a, b) => a - b);
-  const bestRound = sortedScores[0]; // Peut être négatif maintenant
-  const worstRound = sortedScores[sortedScores.length - 1];
+  // Score moyen par manche
+  const totalScore = player.rounds.reduce((sum, round) => sum + round.score, 0);
+  const averageScore = player.rounds.length > 0 ? totalScore / player.rounds.length : 0;
   
+  // Meilleur round (score le plus bas)
+  const scores = player.rounds.map(round => round.score);
+  const bestRound = scores.length > 0 ? Math.min(...scores) : null;
+  
+  // Pire round (score le plus haut)
+  const worstRound = scores.length > 0 ? Math.max(...scores) : null;
+  
+  // Tendance d'amélioration : comparer première et seconde moitié des manches
   let improvementRate = 0;
-  if (rounds.length >= 6) {
-    const firstThree = scores.slice(0, 3).reduce((a, b) => a + b, 0) / 3;
-    const lastThree = scores.slice(-3).reduce((a, b) => a + b, 0) / 3;
-    improvementRate = lastThree - firstThree;
-  }
-
-  // Calcul de la moyenne avec une protection contre les divisions par zéro
-  const avg = rounds.length > 0 ? scores.reduce((a, b) => a + b, 0) / rounds.length : 0;
-  
-  // Calcul de la variance avec protection contre les divisions par zéro
-  const variance = rounds.length > 0 
-    ? scores.reduce((a, b) => a + Math.pow(b - avg, 2), 0) / rounds.length 
-    : 0;
-  
-  const consistencyScore = Math.sqrt(variance);
-
-  // Calcul de la série de victoires
-  let winStreak = 0;
-  let currentWinStreak = 0;
-  for (let i = 0; i < rounds.length; i++) {
-    // Vérifier que tous les autres joueurs ont des données pour cette manche
-    const allPlayersHaveRound = allPlayers.every(p => p.id === player.id || (p.rounds && p.rounds[i]));
+  if (player.rounds.length >= 4) {
+    const half = Math.floor(player.rounds.length / 2);
+    const firstHalfScores = player.rounds.slice(0, half);
+    const secondHalfScores = player.rounds.slice(-half);
     
-    if (allPlayersHaveRound && allPlayers.every(p => 
-      p.id === player.id || (p.rounds[i] && rounds[i].score <= p.rounds[i].score)
-    )) {
-      currentWinStreak++;
-      winStreak = Math.max(winStreak, currentWinStreak);
+    const firstHalfAvg = firstHalfScores.reduce((sum, round) => sum + round.score, 0) / firstHalfScores.length;
+    const secondHalfAvg = secondHalfScores.reduce((sum, round) => sum + round.score, 0) / secondHalfScores.length;
+    
+    // Taux d'amélioration : valeur positive = s'améliore, négative = se dégrade
+    improvementRate = firstHalfAvg - secondHalfAvg;
+  }
+  
+  // Score de constance (écart-type inversé): plus c'est élevé, plus le joueur est constant
+  let consistencyScore = 0;
+  if (player.rounds.length >= 2) {
+    const variance = scores.reduce((sum, score) => sum + Math.pow(score - averageScore, 2), 0) / scores.length;
+    const standardDeviation = Math.sqrt(variance);
+    consistencyScore = standardDeviation === 0 ? 10 : 10 / (1 + standardDeviation / 5);
+  }
+  
+  // Calcul de série de victoires (définie comme des tours avec un score <= 5)
+  let currentStreak = 0;
+  let maxStreak = 0;
+  for (const round of player.rounds) {
+    if (round.score <= 5) {
+      currentStreak++;
+      maxStreak = Math.max(maxStreak, currentStreak);
     } else {
-      currentWinStreak = 0;
+      currentStreak = 0;
     }
   }
-
+  
   return {
     bestRound,
     dutchCount,
-    averageScore: Math.round(avg * 10) / 10,
+    averageScore,
     worstRound,
-    improvementRate: Math.round(improvementRate * 10) / 10,
-    consistencyScore: Math.round(consistencyScore * 10) / 10,
-    winStreak
+    improvementRate,
+    consistencyScore,
+    winStreak: maxStreak
   };
 };
 
 /**
  * Met à jour les statistiques de tous les joueurs
+ * @param players La liste des joueurs à mettre à jour
+ * @returns La liste des joueurs avec leurs statistiques à jour
  */
 export const updateAllPlayersStats = (players: Player[]): Player[] => {
-  if (!players || players.length === 0) return players;
-  
   return players.map(player => ({
     ...player,
-    stats: calculatePlayerStats(player, players)
+    stats: calculatePlayerStats(player)
   }));
 };
 
 /**
- * Fonction pour déterminer le vainqueur d'une partie
- */
-export const determineWinner = (players: Player[]): string | null => {
-  if (!players || players.length === 0) return null;
-  
-  const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
-  return sortedPlayers[0].name;
-};
-
-/**
- * Fonction pour vérifier si le jeu est terminé (un joueur a atteint 100 points)
- * Optimisée et plus fiable
+ * Vérifie si les conditions de fin de partie sont atteintes
+ * @param players La liste des joueurs à vérifier
+ * @returns true si la partie est terminée, false sinon
  */
 export const isGameOver = (players: Player[]): boolean => {
-  if (!players || players.length === 0) return false;
-  
-  // Le jeu est terminé si un joueur atteint ou dépasse 100 points
+  // La partie se termine si un joueur atteint 100 points ou plus
   return players.some(player => player.totalScore >= 100);
 };
 
 /**
- * Fonction pour vérifier la cohérence des scores
- * Utile pour détecter d'éventuelles erreurs de calcul
+ * Trouve le gagnant de la partie (celui avec le score le plus bas)
+ * @param players La liste des joueurs
+ * @returns Le joueur gagnant
  */
-export const verifyScoreConsistency = (player: Player): boolean => {
-  if (!player.rounds || player.rounds.length === 0) return true;
-  
-  const calculatedTotal = player.rounds.reduce((sum, round) => sum + round.score, 0);
-  
-  // Tolérance pour erreurs d'arrondi
-  return Math.abs(calculatedTotal - player.totalScore) < 0.01;
+export const findWinner = (players: Player[]): Player | null => {
+  if (!players || players.length === 0) return null;
+  return [...players].sort((a, b) => a.totalScore - b.totalScore)[0];
 };
 
-/**
- * Corrige les totaux si des incohérences sont détectées
- */
-export const recalculatePlayerTotals = (players: Player[]): Player[] => {
-  return players.map(player => {
-    if (!verifyScoreConsistency(player)) {
-      const recalculatedTotal = player.rounds.reduce((sum, round) => sum + round.score, 0);
-      return {
-        ...player,
-        totalScore: recalculatedTotal
-      };
-    }
-    return player;
-  });
+export default {
+  calculatePlayerStats,
+  updateAllPlayersStats,
+  isGameOver,
+  findWinner
 };

@@ -1,132 +1,103 @@
 
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import React, { createContext, useState, useContext, useEffect } from 'react';
 
-export type ThemeId = 'blue' | 'green' | 'pink' | 'red' | 'purple' | string;
-export type ThemeMode = 'light' | 'dark' | 'system';
+// Types de thèmes disponibles
+export type ThemeType = 'default' | 'blue' | 'purple' | 'orange';
 
-// Theme configuration with consistent color palettes
+// Configuration des thèmes
 export const themeConfig = {
-  blue: {
+  default: {
+    name: 'Default',
     primary: '#1EAEDB',
-    secondary: '#F97316',
-    accent: '#8B5CF6',
-    name: 'Bleu Classique'
+    secondary: '#8B5CF6',
+    accent: '#F97316',
+    background: '#F9FAFB',
   },
-  green: {
-    primary: '#10B981',
-    secondary: '#FBBF24',
-    accent: '#3B82F6',
-    name: 'Vert Émeraude'
-  },
-  pink: {
-    primary: '#D946EF',
-    secondary: '#F97316',
-    accent: '#6366F1',
-    name: 'Rose Vif'
-  },
-  red: {
-    primary: '#EF4444',
-    secondary: '#F59E0B',
-    accent: '#8B5CF6',
-    name: 'Rouge Passion'
+  blue: {
+    name: 'Bleu',
+    primary: '#3B82F6',
+    secondary: '#60A5FA',
+    accent: '#93C5FD',
+    background: '#EFF6FF',
   },
   purple: {
+    name: 'Violet',
     primary: '#8B5CF6',
-    secondary: '#10B981',
-    accent: '#F97316',
-    name: 'Violet Royal'
-  }
+    secondary: '#A78BFA',
+    accent: '#C4B5FD',
+    background: '#F5F3FF',
+  },
+  orange: {
+    name: 'Orange',
+    primary: '#F97316',
+    secondary: '#FB923C',
+    accent: '#FDBA74',
+    background: '#FFF7ED',
+  },
 };
 
-interface ThemeState {
-  currentTheme: ThemeId;
-  setTheme: (themeId: ThemeId) => void;
-  getThemeColors: () => typeof themeConfig.blue;
-  themeMode: ThemeMode;
-  setThemeMode: (mode: ThemeMode) => void;
+// Interface du contexte de thème
+interface ThemeContextType {
+  currentTheme: ThemeType;
+  setTheme: (theme: ThemeType) => void;
+  themeConfig: typeof themeConfig;
 }
 
-const applyThemeMode = (mode: ThemeMode) => {
-  if (typeof window === 'undefined') return;
-  
-  const root = window.document.documentElement;
-  
-  if (mode === 'system') {
-    const systemPreference = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    root.classList.remove('dark', 'light');
-    root.classList.add(systemPreference);
-  } else {
-    root.classList.remove('dark', 'light');
-    root.classList.add(mode);
-  }
+// Création du contexte
+const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
+
+// Type des props du fournisseur de thème
+interface ThemeProviderProps {
+  children: React.ReactNode;
+  defaultTheme?: ThemeType;
+}
+
+// Composant fournisseur de thème
+export const ThemeProvider: React.FC<ThemeProviderProps> = ({ 
+  children, 
+  defaultTheme = 'default' 
+}) => {
+  const [currentTheme, setCurrentTheme] = useState<ThemeType>(() => {
+    // Récupérer le thème depuis le localStorage s'il existe
+    const savedTheme = localStorage.getItem('dutch_theme');
+    return (savedTheme as ThemeType) || defaultTheme;
+  });
+
+  // Sauvegarder le thème dans le localStorage quand il change
+  useEffect(() => {
+    localStorage.setItem('dutch_theme', currentTheme);
+    
+    // Appliquer les couleurs CSS personnalisées au document
+    const theme = themeConfig[currentTheme];
+    document.documentElement.style.setProperty('--dutch-primary', theme.primary);
+    document.documentElement.style.setProperty('--dutch-secondary', theme.secondary);
+    document.documentElement.style.setProperty('--dutch-accent', theme.accent);
+    document.documentElement.style.setProperty('--dutch-background', theme.background);
+    
+    // Ajouter l'attribut data-theme au body pour permettre le styling CSS basé sur le thème
+    document.body.setAttribute('data-theme', currentTheme);
+  }, [currentTheme]);
+
+  const setTheme = (theme: ThemeType) => {
+    setCurrentTheme(theme);
+  };
+
+  return (
+    <ThemeContext.Provider value={{ currentTheme, setTheme, themeConfig }}>
+      {children}
+    </ThemeContext.Provider>
+  );
 };
 
-export const useTheme = create<ThemeState>()(
-  persist(
-    (set, get) => ({
-      currentTheme: 'blue',
-      themeMode: 'light',
-      setTheme: (themeId: ThemeId) => {
-        document.documentElement.setAttribute('data-theme', themeId);
-        set({ currentTheme: themeId });
-      },
-      setThemeMode: (mode: ThemeMode) => {
-        applyThemeMode(mode);
-        set({ themeMode: mode });
-      },
-      getThemeColors: () => {
-        const { currentTheme } = get();
-        // For built-in themes, return from themeConfig
-        if (themeConfig[currentTheme]) {
-          return themeConfig[currentTheme];
-        }
-        
-        // For custom themes, check localStorage
-        if (typeof window !== 'undefined') {
-          try {
-            const customThemes = JSON.parse(localStorage.getItem('dutch_custom_themes') || '[]');
-            const customTheme = customThemes.find((theme: any) => theme.id === currentTheme);
-            if (customTheme) {
-              return {
-                primary: customTheme.primary,
-                secondary: customTheme.secondary,
-                accent: customTheme.accent,
-                name: customTheme.name
-              };
-            }
-          } catch (error) {
-            console.error('Error retrieving custom theme', error);
-          }
-        }
-        
-        // Fallback to default theme
-        return themeConfig.blue;
-      }
-    }),
-    {
-      name: 'dutch-theme',
-    }
-  )
-);
-
-// Initialise le thème au chargement
-if (typeof window !== 'undefined') {
-  const storedTheme = localStorage.getItem('dutch-theme');
-  if (storedTheme) {
-    try {
-      const parsedState = JSON.parse(storedTheme);
-      const themeId = parsedState.state?.currentTheme || 'blue';
-      document.documentElement.setAttribute('data-theme', themeId);
-      
-      // Apply the theme mode
-      const themeMode = parsedState.state?.themeMode || 'light';
-      applyThemeMode(themeMode as ThemeMode);
-    } catch (error) {
-      console.error('Error parsing theme from localStorage', error);
-      document.documentElement.setAttribute('data-theme', 'blue');
-    }
-  } else {
-    document.documentElement.setAttribute('data-theme', 'blue');
+// Hook personnalisé pour utiliser le contexte de thème
+export const useTheme = (): ThemeContextType => {
+  const context = useContext(ThemeContext);
+  
+  if (context === undefined) {
+    throw new Error('useTheme doit être utilisé dans un ThemeProvider');
   }
-}
+  
+  return context;
+};
+
+export default useTheme;

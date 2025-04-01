@@ -1,267 +1,233 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { SignedIn, SignedOut, useUser } from '@clerk/clerk-react';
-import { useLocalStorage } from '@/hooks/use-local-storage';
-import { Play, Clock, Info, Settings, RefreshCw, LogIn } from 'lucide-react';
+import { Plus, History, BookOpen, Settings, LogIn, ExternalLink, Trophy } from 'lucide-react';
+import ThemeSelector from '@/components/ThemeSelector';
+import AnimatedBackground from '@/components/AnimatedBackground';
+import { useUser } from '@clerk/clerk-react';
+import { animationVariants } from '@/utils/animationUtils';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { Badge } from '@/components/ui/badge';
 
-const Home = () => {
-  const { isSignedIn } = useUser();
+const Home: React.FC = () => {
   const navigate = useNavigate();
-  const [hasPlayedBefore, setHasPlayedBefore] = useLocalStorage('dutch_has_played', false);
-  const [hasGameInProgress, setHasGameInProgress] = useState(false);
-  
-  // Vérifier si l'utilisateur a déjà joué et s'il a une partie en cours
+  const { isSignedIn, user, isLoaded } = useUser();
+  const [hasSavedGame, setHasSavedGame] = useState<boolean>(false);
+
   useEffect(() => {
-    const savedGames = localStorage.getItem('dutch_games');
-    if (savedGames && JSON.parse(savedGames).length > 0) {
-      setHasPlayedBefore(true);
-    }
-    
-    // Vérifier s'il y a une partie en cours
-    const currentGame = localStorage.getItem('current_dutch_game');
-    if (currentGame) {
-      setHasGameInProgress(true);
-    }
-  }, [setHasPlayedBefore]);
+    // Vérifier s'il existe une partie sauvegardée
+    const savedGame = localStorage.getItem('current_dutch_game');
+    setHasSavedGame(!!savedGame);
+  }, []);
 
-  // Démarrer une nouvelle partie
-  const handleNewGame = () => {
-    localStorage.removeItem('current_dutch_game'); // S'assurer qu'on commence une nouvelle partie
-    navigate('/game');
-  };
-
-  // Reprendre la partie en cours
-  const handleResumeGame = () => {
-    navigate('/game');
+  // Variants pour les animations Framer Motion
+  const buttonVariants = {
+    hover: { 
+      scale: 1.05,
+      transition: { duration: 0.2 }
+    },
+    tap: { 
+      scale: 0.95,
+      transition: { duration: 0.1 }
+    }
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-[#F8F9FA] to-[#FFFFFF]">
-      {/* Quadrillage léger */}
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Fond animé */}
       <div className="absolute inset-0">
-        <div 
-          style={{ 
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='24' height='24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M 0 0 L 24 0 M 0 0 L 0 24' stroke='%23DADADA' stroke-opacity='0.1' stroke-width='1' fill='none' /%3E%3C/svg%3E")`,
-            backgroundSize: '24px 24px'
-          }}
-          className="absolute inset-0 opacity-10 z-0"
-        />
-      </div>
-      
-      {/* Points colorés animés */}
-      <motion.div 
-        className="absolute top-[10%] left-[10%] w-2 h-2 rounded-full bg-[#A78BFA]"
-        animate={{ y: [0, -15, 0], opacity: [0.5, 0.8, 0.5] }}
-        transition={{ duration: 3, repeat: Infinity, repeatType: "reverse" }}
-      />
-      <motion.div 
-        className="absolute top-[30%] right-[15%] w-4 h-4 rounded-full bg-[#FDBA74]"
-        animate={{ y: [0, -20, 0], opacity: [0.4, 0.7, 0.4] }}
-        transition={{ duration: 4, repeat: Infinity, repeatType: "reverse", delay: 1 }}
-      />
-      <motion.div 
-        className="absolute bottom-[40%] left-[20%] w-3 h-3 rounded-full bg-[#6EE7B7]"
-        animate={{ y: [0, -10, 0], opacity: [0.3, 0.6, 0.3] }}
-        transition={{ duration: 5, repeat: Infinity, repeatType: "reverse", delay: 0.5 }}
-      />
-      <motion.div 
-        className="absolute top-[15%] right-[25%] w-2 h-2 rounded-full bg-[#60A5FA]"
-        animate={{ y: [0, -12, 0], opacity: [0.6, 0.9, 0.6] }}
-        transition={{ duration: 3.5, repeat: Infinity, repeatType: "reverse", delay: 0.7 }}
-      />
-      <motion.div 
-        className="absolute bottom-[30%] right-[10%] w-3 h-3 rounded-full bg-[#FDBA74]"
-        animate={{ y: [0, -15, 0], opacity: [0.4, 0.7, 0.4] }}
-        transition={{ duration: 4.5, repeat: Infinity, repeatType: "reverse", delay: 1.2 }}
-      />
-      
-      {/* Vagues animées en bas - plus grandes et plus visibles */}
-      <div className="absolute bottom-0 left-0 right-0 overflow-hidden h-56 pointer-events-none">
-        <motion.div
-          animate={{ 
-            x: [-20, 0, -20],
-            y: [0, 5, 0]
-          }}
-          transition={{
-            x: { duration: 20, repeat: Infinity, repeatType: "reverse" },
-            y: { duration: 10, repeat: Infinity, repeatType: "reverse" }
-          }}
-          className="w-[120%] h-48 bg-[#FDE68A] absolute bottom-[-10px] left-[-10%]"
-          style={{
-            borderRadius: "50% 50% 0 0 / 100% 100% 0 0",
-            opacity: 0.6
-          }}
-        />
-        <motion.div
-          animate={{ 
-            x: [20, 0, 20],
-            y: [0, -5, 0]
-          }}
-          transition={{
-            x: { duration: 15, repeat: Infinity, repeatType: "reverse" },
-            y: { duration: 8, repeat: Infinity, repeatType: "reverse" }
-          }}
-          className="w-[120%] h-40 bg-[#E9D5FF] absolute bottom-0 left-[-10%]"
-          style={{
-            borderRadius: "60% 70% 0 0 / 100% 100% 0 0",
-            opacity: 0.6
-          }}
-        />
+        <AnimatedBackground variant="default" />
       </div>
       
       {/* Contenu principal */}
-      <div className="relative z-10 flex flex-col items-center justify-start min-h-screen px-4 pt-16">
-        {/* Logo et titre */}
-        <div className="text-center mb-14">
-          <h1 className="text-[64px] font-bold relative inline-flex items-center">
-            <span className="bg-gradient-to-r from-[#3B82F6] to-[#8B5CF6] bg-clip-text text-transparent">
-              Dutch
-            </span>
-            <span className="text-[36px] ml-3 absolute -top-2 -right-11">✨</span>
-          </h1>
-          <p className="mt-2 text-[18px] text-[#4B5563]">Votre compagnon de jeu</p>
-        </div>
+      <div className="relative z-10 container mx-auto px-4 py-16 flex flex-col min-h-screen">
+        <header className="mb-auto">
+          <div className="flex justify-end">
+            <ThemeSelector />
+          </div>
+        </header>
         
-        {/* Boutons d'action - avec condition d'affichage basée sur l'authentification */}
-        <div className="flex flex-col items-center w-full max-w-md gap-5">
-          <SignedIn>
-            {/* Boutons pour utilisateurs connectés */}
-            {hasGameInProgress && (
-              <motion.div
-                initial={{ scale: 0.95, y: 20, opacity: 0 }}
-                animate={{ scale: 1, y: 0, opacity: 1 }}
-                transition={{ type: "spring", stiffness: 400, damping: 15 }}
-                whileHover={{ scale: 1.03, y: -3 }}
-                whileTap={{ scale: 0.98 }}
-                className="w-full"
-              >
-                <Button 
-                  onClick={handleResumeGame}
-                  className="w-full h-[70px] rounded-2xl bg-gradient-to-r from-[#2563EB] to-[#4F46E5] shadow-lg shadow-blue-500/30 text-white font-semibold text-xl flex items-center justify-center"
-                >
-                  <RefreshCw className="w-6 h-6 mr-3 text-white" />
-                  Reprendre la partie
-                </Button>
-              </motion.div>
-            )}
-            
-            <motion.div
-              initial={{ scale: 0.95, y: 20, opacity: 0 }}
-              animate={{ scale: 1, y: 0, opacity: 1 }}
-              transition={{ type: "spring", stiffness: 400, damping: 15, delay: 0.1 }}
-              whileHover={{ scale: 1.03, y: -3 }}
-              whileTap={{ scale: 0.98 }}
-              className="w-full"
-            >
-              <Button 
-                onClick={handleNewGame}
-                className="w-full h-[70px] rounded-2xl bg-gradient-to-r from-[#8B5CF6] to-[#D946EF] shadow-lg shadow-purple-500/30 text-white font-semibold text-xl flex items-center justify-center"
-              >
-                <Play className="w-6 h-6 mr-3 text-white" />
-                Nouvelle partie
-              </Button>
-            </motion.div>
-          </SignedIn>
-          
-          <SignedOut>
-            {/* Un seul bouton pour Connexion/Inscription */}
-            <motion.div
-              initial={{ scale: 0.95, y: 20, opacity: 0 }}
-              animate={{ scale: 1, y: 0, opacity: 1 }}
-              transition={{ type: "spring", stiffness: 400, damping: 15 }}
-              whileHover={{ scale: 1.03, y: -3 }}
-              whileTap={{ scale: 0.98 }}
-              className="w-full"
-            >
-              <Button 
-                onClick={() => navigate('/sign-in')}
-                className="w-full h-[70px] rounded-2xl bg-gradient-to-r from-[#2563EB] to-[#4F46E5] shadow-lg shadow-blue-500/30 text-white font-semibold text-xl flex items-center justify-center"
-              >
-                <LogIn className="w-6 h-6 mr-3 text-white" />
-                Connexion / Inscription
-              </Button>
-            </motion.div>
-            
-            {/* Bouton Jouer sans compte */}
-            <motion.div
-              initial={{ scale: 0.95, y: 20, opacity: 0 }}
-              animate={{ scale: 1, y: 0, opacity: 1 }}
-              transition={{ type: "spring", stiffness: 400, damping: 15, delay: 0.1 }}
-              whileHover={{ scale: 1.03, y: -3 }}
-              whileTap={{ scale: 0.98 }}
-              className="w-full"
-            >
-              <Button 
-                onClick={handleNewGame}
-                className="w-full h-[70px] rounded-2xl bg-gradient-to-r from-[#8B5CF6] to-[#D946EF] shadow-lg shadow-purple-500/30 text-white font-semibold text-xl flex items-center justify-center"
-              >
-                <Play className="w-6 h-6 mr-3 text-white" />
-                Jouer sans compte
-              </Button>
-            </motion.div>
-          </SignedOut>
-          
-          {/* Les boutons communs à tous les utilisateurs */}
+        <main className="flex-1 flex flex-col items-center justify-center text-center">
+          {/* Logo et titre */}
           <motion.div
-            initial={{ scale: 0.95, y: 20, opacity: 0 }}
-            animate={{ scale: 1, y: 0, opacity: 1 }}
-            transition={{ type: "spring", stiffness: 400, damping: 15, delay: 0.2 }}
-            whileTap={{ scale: 0.98 }}
-            className="w-full mt-5"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="mb-12"
           >
-            <Button 
-              onClick={() => navigate('/history')}
-              className="w-full h-[50px] rounded-xl bg-white shadow-md text-[#8B5CF6] font-semibold flex items-center justify-center border border-purple-100"
-            >
-              <Clock className="w-5 h-5 mr-2 text-[#8B5CF6]" />
-              Historique
-            </Button>
+            <h1 className="text-5xl sm:text-6xl font-bold bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent mb-2">
+              Dutch <span className="text-2xl">✨</span>
+            </h1>
+            <p className="text-gray-600">Votre compagnon de jeu</p>
           </motion.div>
           
-          <div className="flex w-full gap-3 mt-2">
-            <motion.div
-              initial={{ scale: 0.95, y: 20, opacity: 0 }}
-              animate={{ scale: 1, y: 0, opacity: 1 }}
-              transition={{ type: "spring", stiffness: 400, damping: 15, delay: 0.3 }}
-              whileTap={{ scale: 0.98 }}
-              className="flex-1"
-            >
-              <Button 
-                onClick={() => navigate('/rules')}
-                className="w-full h-[50px] rounded-xl bg-white shadow-md text-[#F97316] font-semibold flex items-center justify-center border border-orange-100"
-              >
-                <Info className="w-5 h-5 mr-2 text-[#F97316]" />
-                Règles
-              </Button>
-            </motion.div>
+          {/* Boutons principaux */}
+          <div className="w-full max-w-xs space-y-4">
+            {isLoaded && (
+              <>
+                {/* Utilisateur connecté */}
+                {isSignedIn ? (
+                  <>
+                    <motion.div
+                      variants={buttonVariants}
+                      whileHover="hover"
+                      whileTap="tap"
+                      className="w-full"
+                    >
+                      <Button 
+                        className="w-full bg-white text-dutch-blue hover:bg-white/90 border border-dutch-blue/20 h-14 rounded-full shadow-md"
+                        onClick={() => navigate('/game')}
+                      >
+                        <Plus className="mr-2 h-5 w-5" />
+                        Nouvelle partie
+                      </Button>
+                    </motion.div>
+                    
+                    {hasSavedGame && (
+                      <motion.div
+                        variants={buttonVariants}
+                        whileHover="hover"
+                        whileTap="tap"
+                        className="w-full"
+                      >
+                        <Button 
+                          className="w-full bg-white text-dutch-purple hover:bg-white/90 border border-dutch-purple/20 h-14 rounded-full shadow-md"
+                          onClick={() => navigate('/game')}
+                        >
+                          <Trophy className="mr-2 h-5 w-5" />
+                          Reprendre la partie
+                        </Button>
+                      </motion.div>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    {/* Utilisateur non connecté */}
+                    <motion.div
+                      variants={buttonVariants}
+                      whileHover="hover"
+                      whileTap="tap"
+                      className="w-full"
+                    >
+                      <Button 
+                        className="w-full bg-white text-dutch-blue hover:bg-white/90 border border-dutch-blue/20 h-14 rounded-full shadow-md"
+                        onClick={() => navigate('/sign-in')}
+                      >
+                        <LogIn className="mr-2 h-5 w-5" />
+                        Connexion / Inscription
+                      </Button>
+                    </motion.div>
+                    
+                    <motion.div
+                      variants={buttonVariants}
+                      whileHover="hover"
+                      whileTap="tap"
+                      className="w-full"
+                    >
+                      <Button 
+                        className="w-full bg-white text-dutch-purple hover:bg-white/90 border border-dutch-purple/20 h-14 rounded-full shadow-md"
+                        onClick={() => navigate('/game')}
+                      >
+                        <ExternalLink className="mr-2 h-5 w-5" />
+                        Jouer sans compte
+                        <Badge className="ml-2 bg-dutch-purple/20 text-dutch-purple border-none text-xs">Rapide</Badge>
+                      </Button>
+                    </motion.div>
+                  </>
+                )}
+              </>
+            )}
             
-            <motion.div
-              initial={{ scale: 0.95, y: 20, opacity: 0 }}
-              animate={{ scale: 1, y: 0, opacity: 1 }}
-              transition={{ type: "spring", stiffness: 400, damping: 15, delay: 0.4 }}
-              whileTap={{ scale: 0.98 }}
-              className="flex-1"
-            >
-              <Button 
-                onClick={() => navigate('/settings')}
-                className="w-full h-[50px] rounded-xl bg-white shadow-md text-[#3B82F6] font-semibold flex items-center justify-center border border-blue-100"
-              >
-                <Settings className="w-5 h-5 mr-2 text-[#3B82F6]" />
-                Réglages
-              </Button>
-            </motion.div>
+            {/* Boutons secondaires */}
+            <div className="pt-4 flex flex-wrap justify-center gap-2">
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <motion.div
+                      variants={animationVariants.mainButton}
+                      whileHover="hover"
+                      whileTap="tap"
+                    >
+                      <Button 
+                        variant="outline" 
+                        size="icon"
+                        className="rounded-full bg-white/80 backdrop-blur-sm border border-white/50 shadow-sm"
+                        onClick={() => navigate('/history')}
+                      >
+                        <History className="h-5 w-5 text-dutch-orange" />
+                      </Button>
+                    </motion.div>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Historique des parties</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+              
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <motion.div
+                      variants={animationVariants.mainButton}
+                      whileHover="hover"
+                      whileTap="tap"
+                    >
+                      <Button 
+                        variant="outline" 
+                        size="icon"
+                        className="rounded-full bg-white/80 backdrop-blur-sm border border-white/50 shadow-sm"
+                        onClick={() => navigate('/rules')}
+                      >
+                        <BookOpen className="h-5 w-5 text-dutch-purple" />
+                      </Button>
+                    </motion.div>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Règles du jeu</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+              
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <motion.div
+                      variants={animationVariants.mainButton}
+                      whileHover="hover"
+                      whileTap="tap"
+                    >
+                      <Button 
+                        variant="outline" 
+                        size="icon"
+                        className="rounded-full bg-white/80 backdrop-blur-sm border border-white/50 shadow-sm"
+                        onClick={() => navigate('/settings')}
+                      >
+                        <Settings className="h-5 w-5 text-dutch-blue" />
+                      </Button>
+                    </motion.div>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Paramètres</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
           </div>
-        </div>
+        </main>
         
-        {/* Badge de version */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
-          <span className="bg-white text-[12px] text-[#6B7280] px-3 py-1 rounded-full shadow-sm">
-            Version 1.0
-          </span>
-        </div>
+        <footer className="mt-auto text-center">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.7 }}
+            transition={{ delay: 1, duration: 1 }}
+          >
+            <Badge variant="outline" className="bg-white/50 text-gray-500 text-xs">
+              Version 1.0.0
+            </Badge>
+          </motion.div>
+        </footer>
       </div>
     </div>
   );

@@ -1,213 +1,339 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Card, CardContent } from '@/components/ui/card';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Send, HelpCircle } from 'lucide-react';
+import { ArrowLeft, MessageCircle, SendHorizontal } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import PageLayout from '@/components/PageLayout';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Card, CardContent } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { toast } from 'sonner';
+import { Badge } from '@/components/ui/badge';
+import { animationVariants } from '@/utils/animationUtils';
+
+interface Message {
+  id: string;
+  content: string;
+  isUser: boolean;
+}
 
 const RulesPage: React.FC = () => {
-  const [question, setQuestion] = useState('');
-  const [answer, setAnswer] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleAskQuestion = () => {
-    if (!question.trim()) return;
+  const [activeTab, setActiveTab] = useState('basic');
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [inputValue, setInputValue] = useState('');
+  const [isProcessing, setIsProcessing] = useState(false);
+  
+  // Fonction pour simuler une réponse de l'IA
+  const simulateAIResponse = (question: string) => {
+    setIsProcessing(true);
     
-    setIsLoading(true);
+    // Prévoir les questions courantes
+    const responses: { [key: string]: string } = {
+      'dutch': "Faire un Dutch signifie que vous n'avez plus qu'une carte en main. Vous devez alors annoncer 'Dutch !' à voix haute. Si vous ne le faites pas et qu'un autre joueur le remarque, vous recevez une pénalité.",
+      'pénalité': "Si vous oubliez d'annoncer 'Dutch' quand vous n'avez plus qu'une carte, ou si vous l'annoncez par erreur, vous prenez une pénalité de 2 cartes du talon.",
+      'gagne': "Le gagnant est celui qui se débarrasse de toutes ses cartes en premier. Dans Dutch, avoir le moins de points à la fin est l'objectif.",
+      'but': "L'objectif du jeu est de se débarrasser de toutes ses cartes le plus vite possible pour marquer le moins de points.",
+      'joue': "Chaque joueur joue à son tour dans le sens des aiguilles d'une montre. Vous devez jouer une carte de même valeur ou de même couleur que la carte du dessus de la défausse.",
+      'score': "Le score est calculé en additionnant la valeur des cartes restant dans votre main à la fin de la manche. Les cartes numérotées valent leur valeur faciale, les figures valent 10 points, et les jokers valent 20 points.",
+      'cartes': "Un jeu complet de 52 cartes plus 2 jokers est utilisé pour jouer à Dutch.",
+      'spéciale': "Les cartes spéciales incluent : le 2 (fait piocher 2 cartes), le Valet (change de sens), le 8 (saute le tour du joueur suivant), As (change la couleur), et le Joker (fait piocher 5 cartes et change la couleur).",
+    };
     
-    // Simulons une réponse d'IA - dans une version réelle, ceci serait remplacé par un appel API
+    const keywords = Object.keys(responses);
+    const matchedKeyword = keywords.find(keyword => 
+      question.toLowerCase().includes(keyword.toLowerCase())
+    );
+    
     setTimeout(() => {
-      const possibleAnswers = [
-        "Selon les règles officielles du Dutch, oui c'est autorisé!",
-        "Non, ce n'est pas autorisé dans les règles standard du Dutch, mais certaines variantes le permettent.",
-        "Les règles ne précisent rien à ce sujet, donc c'est généralement permis tant que tous les joueurs sont d'accord.",
-        "C'est une question intéressante! Dans le Dutch classique, cette action est permise uniquement lors des manches à atout.",
-        "Bonne question! Cette règle varie selon les régions, mais la version la plus répandue l'interdit."
-      ];
-      
-      const randomAnswer = possibleAnswers[Math.floor(Math.random() * possibleAnswers.length)];
-      setAnswer(randomAnswer);
-      setIsLoading(false);
+      if (matchedKeyword) {
+        addMessage(responses[matchedKeyword], false);
+      } else {
+        addMessage("Je ne suis pas sûr de comprendre votre question. Essayez de demander quelque chose sur les règles de base, les cartes spéciales, les points, ou comment jouer à Dutch.", false);
+      }
+      setIsProcessing(false);
     }, 1000);
   };
-
+  
+  const addMessage = (content: string, isUser: boolean) => {
+    const newMessage: Message = {
+      id: Date.now().toString(),
+      content,
+      isUser
+    };
+    setMessages(prev => [...prev, newMessage]);
+  };
+  
+  const handleSendMessage = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    
+    if (!inputValue.trim()) return;
+    
+    addMessage(inputValue, true);
+    simulateAIResponse(inputValue);
+    setInputValue('');
+  };
+  
   return (
-    <PageLayout
-      title="Règles du jeu"
-      subtitle="Apprenez à jouer au Dutch Card Game"
-      showBackButton={true}
-    >
-      <div 
-        className="absolute inset-0"
-        style={{ 
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='24' height='24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M 0 0 L 24 0 M 0 0 L 0 24' stroke='%23DADADA' stroke-opacity='0.1' stroke-width='1' fill='none' /%3E%3C/svg%3E")`,
-          backgroundSize: '24px 24px'
-        }}
-      />
-      
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="w-full mx-auto"
-      >
-        <Card className="rounded-3xl bg-white/80 backdrop-blur-md border border-white/40 shadow-md hover:shadow-lg transition-all">
-          <CardContent className="pt-6">
-            <ScrollArea className="h-[calc(100vh-400px)] pr-4">
-              <div className="space-y-8">
-                <section>
-                  <h2 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">Principes du jeu</h2>
-                  <p className="text-gray-700 mb-4">Dutch est un jeu de cartes de plis, dans lequel chaque joueur essaie de faire exactement le nombre de plis annoncé avant le début de chaque manche.</p>
-                  <p className="text-gray-700 mb-4">Les points sont calculés en fonction de la précision des prédictions faites par chaque joueur. À la fin du jeu, le joueur ayant accumulé le plus de points gagne.</p>
-                </section>
-                
-                <section>
-                  <h2 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">Préparation</h2>
-                  <motion.ul 
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ staggerChildren: 0.1, delayChildren: 0.2 }}
-                    className="list-disc list-inside text-gray-700 space-y-2"
-                  >
-                    <motion.li
-                      initial={{ x: -10, opacity: 0 }}
-                      animate={{ x: 0, opacity: 1 }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      Le jeu se joue avec un paquet standard de 52 cartes.
-                    </motion.li>
-                    <motion.li
-                      initial={{ x: -10, opacity: 0 }}
-                      animate={{ x: 0, opacity: 1 }}
-                      transition={{ duration: 0.3, delay: 0.1 }}
-                    >
-                      Il peut être joué de 2 à 7 joueurs.
-                    </motion.li>
-                    <motion.li
-                      initial={{ x: -10, opacity: 0 }}
-                      animate={{ x: 0, opacity: 1 }}
-                      transition={{ duration: 0.3, delay: 0.2 }}
-                    >
-                      Chaque joueur reçoit le même nombre de cartes à chaque manche.
-                    </motion.li>
-                    <motion.li
-                      initial={{ x: -10, opacity: 0 }}
-                      animate={{ x: 0, opacity: 1 }}
-                      transition={{ duration: 0.3, delay: 0.3 }}
-                    >
-                      Le nombre de cartes distribuées change à chaque manche selon un schéma prédéfini.
-                    </motion.li>
-                  </motion.ul>
-                </section>
-                
-                <section>
-                  <h2 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">Déroulement d'une manche</h2>
-                  <ol className="list-decimal list-inside text-gray-700 space-y-3">
-                    <li>
-                      <strong>Distribution</strong> - Les cartes sont distribuées à chaque joueur selon le nombre défini pour la manche.
-                    </li>
-                    <li>
-                      <strong>Annonce</strong> - Chaque joueur annonce combien de plis il pense pouvoir remporter durant cette manche.
-                    </li>
-                    <li>
-                      <strong>Jeu</strong> - Le joueur à gauche du donneur joue la première carte. Chaque joueur doit suivre la couleur si possible. Si un joueur ne peut pas suivre, il peut jouer n'importe quelle carte.
-                    </li>
-                    <li>
-                      <strong>Plis</strong> - Le pli est remporté par le joueur ayant joué la carte la plus forte dans la couleur demandée (ou par la plus forte carte atout si des atouts ont été joués).
-                    </li>
-                    <li>
-                      <strong>Tour suivant</strong> - Le gagnant du pli précédent joue la première carte du pli suivant.
-                    </li>
-                  </ol>
-                </section>
-                
-                <section>
-                  <h2 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">Calcul des points</h2>
-                  <p className="text-gray-700 mb-4">À la fin de chaque manche :</p>
-                  <ul className="list-disc list-inside text-gray-700 space-y-2">
-                    <li>Si un joueur réalise exactement son annonce, il marque 10 points + 1 point par pli réalisé.</li>
-                    <li>Si un joueur ne réalise pas son annonce, il perd 1 point par pli d'écart (en plus ou en moins).</li>
-                  </ul>
-                </section>
-                
-                <section>
-                  <h2 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">Fin du jeu</h2>
-                  <p className="text-gray-700 mb-4">Le jeu se termine après un nombre prédéfini de manches ou lorsqu'un joueur atteint un nombre de points déterminé à l'avance.</p>
-                  <p className="text-gray-700">Le joueur avec le plus grand nombre de points à la fin est déclaré vainqueur.</p>
-                </section>
-                
-                <section>
-                  <h2 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">Variantes</h2>
-                  <p className="text-gray-700 mb-4">Plusieurs variantes du jeu existent, avec des règles légèrement différentes :</p>
-                  <ul className="list-disc list-inside text-gray-700 space-y-2">
-                    <li><strong>Dutch aveugle</strong> - Les joueurs ne voient pas leurs cartes quand ils font leur annonce.</li>
-                    <li><strong>Dutch avec atout</strong> - Une couleur d'atout est désignée à chaque manche.</li>
-                    <li><strong>Dutch progressif</strong> - Le nombre de cartes augmente puis diminue au fil des manches.</li>
-                  </ul>
-                </section>
-              </div>
-            </ScrollArea>
-          </CardContent>
-        </Card>
+    <PageLayout backgroundVariant="subtle">
+      <div className="max-w-4xl mx-auto">
+        <div className="flex items-center justify-between mb-6">
+          <Link to="/">
+            <Button variant="ghost" size="sm" className="flex items-center gap-1 text-gray-600 hover:text-gray-900">
+              <ArrowLeft className="h-4 w-4" />
+              Retour
+            </Button>
+          </Link>
+        </div>
         
-        {/* Section pour poser des questions sur les règles */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="mt-6"
+          transition={{ duration: 0.5 }}
+          className="mb-8 text-center"
         >
-          <Card className="rounded-3xl bg-white/80 backdrop-blur-md border border-white/40 shadow-md transition-all">
-            <CardContent className="pt-6">
-              <h3 className="text-xl font-semibold mb-4 flex items-center">
-                <HelpCircle className="mr-2 h-5 w-5 text-dutch-purple" />
-                <span className="bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">
-                  Une question sur les règles?
-                </span>
-              </h3>
-              
-              <div className="flex gap-2">
-                <Input
-                  placeholder="Est-ce que je peux... ?"
-                  value={question}
-                  onChange={(e) => setQuestion(e.target.value)}
-                  className="rounded-full bg-white/70 border-gray-200"
-                  onKeyPress={(e) => e.key === 'Enter' && handleAskQuestion()}
-                />
-                <Button 
-                  onClick={handleAskQuestion} 
-                  disabled={isLoading}
-                  className="rounded-full bg-dutch-purple text-white hover:bg-dutch-purple/90 px-4"
-                >
-                  <Send className="h-4 w-4" />
-                </Button>
-              </div>
-              
-              {(isLoading || answer) && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  className="mt-4"
-                >
-                  <div className="p-4 rounded-xl bg-dutch-purple/10 border border-dutch-purple/20">
-                    {isLoading ? (
-                      <div className="flex items-center justify-center">
-                        <div className="w-5 h-5 border-t-2 border-dutch-purple rounded-full animate-spin"></div>
-                        <span className="ml-2 text-dutch-purple/80">Réflexion en cours...</span>
-                      </div>
-                    ) : (
-                      <p className="text-dutch-purple">{answer}</p>
-                    )}
-                  </div>
-                </motion.div>
-              )}
-            </CardContent>
-          </Card>
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent mb-2">
+            Règles du Dutch
+          </h1>
+          <p className="text-gray-600">
+            Tout ce que vous devez savoir pour jouer comme un pro
+          </p>
         </motion.div>
-      </motion.div>
+        
+        <Tabs defaultValue={activeTab} onValueChange={setActiveTab} className="mb-6">
+          <TabsList className="grid grid-cols-3 mb-4">
+            <TabsTrigger value="basic">Règles de base</TabsTrigger>
+            <TabsTrigger value="special">Cartes spéciales</TabsTrigger>
+            <TabsTrigger value="assistant">Assistant de règles</TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="basic" className="mt-4">
+            <Card className="bg-white/80 backdrop-blur-md">
+              <CardContent className="pt-6">
+                <motion.div 
+                  variants={animationVariants.staggerChildren}
+                  initial="hidden"
+                  animate="visible"
+                  className="space-y-6"
+                >
+                  <motion.div variants={animationVariants.staggerItem}>
+                    <h2 className="text-xl font-semibold text-dutch-blue mb-2">Objectif du jeu</h2>
+                    <p className="text-gray-700">
+                      Le but du Dutch est d'être le premier à se débarrasser de toutes ses cartes. 
+                      Le joueur qui gagne une manche ne reçoit aucun point, tandis que les autres joueurs 
+                      marquent des points en fonction des cartes qu'ils ont encore en main.
+                      Le joueur avec le moins de points à la fin de la partie est déclaré vainqueur.
+                    </p>
+                  </motion.div>
+                  
+                  <motion.div variants={animationVariants.staggerItem}>
+                    <h2 className="text-xl font-semibold text-dutch-blue mb-2">Préparation</h2>
+                    <p className="text-gray-700">
+                      Utilisez un jeu de 52 cartes plus les jokers. Chaque joueur reçoit 7 cartes.
+                      Le reste des cartes forme une pioche. Retournez la première carte de la pioche 
+                      pour commencer la pile de défausse.
+                    </p>
+                  </motion.div>
+                  
+                  <motion.div variants={animationVariants.staggerItem}>
+                    <h2 className="text-xl font-semibold text-dutch-blue mb-2">Déroulement du jeu</h2>
+                    <ol className="list-decimal pl-5 space-y-2 text-gray-700">
+                      <li>Les joueurs jouent à tour de rôle dans le sens des aiguilles d'une montre.</li>
+                      <li>À votre tour, vous devez jouer une carte de même couleur ou de même valeur que la carte du dessus de la défausse.</li>
+                      <li>Si vous ne pouvez pas jouer, vous devez piocher une carte. Si cette carte peut être jouée, vous pouvez la poser immédiatement.</li>
+                      <li>Quand vous n'avez plus qu'une seule carte en main, vous devez annoncer "Dutch!". Si vous oubliez et qu'un autre joueur le remarque, vous devez piocher 2 cartes de pénalité.</li>
+                      <li>Le premier joueur à se débarrasser de toutes ses cartes gagne la manche.</li>
+                    </ol>
+                  </motion.div>
+                  
+                  <motion.div variants={animationVariants.staggerItem}>
+                    <h2 className="text-xl font-semibold text-dutch-blue mb-2">Calcul des points</h2>
+                    <p className="text-gray-700">
+                      À la fin de chaque manche, les joueurs qui ont encore des cartes en main 
+                      reçoivent des points selon les valeurs suivantes :
+                    </p>
+                    <ul className="list-disc pl-5 mt-2 text-gray-700">
+                      <li>Cartes numérotées (2-10) : Valeur faciale</li>
+                      <li>Valet, Dame, Roi : 10 points chacun</li>
+                      <li>As : 11 points</li>
+                      <li>Joker : 20 points</li>
+                    </ul>
+                  </motion.div>
+                </motion.div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+          
+          <TabsContent value="special" className="mt-4">
+            <Card className="bg-white/80 backdrop-blur-md">
+              <CardContent className="pt-6">
+                <motion.div 
+                  variants={animationVariants.staggerChildren}
+                  initial="hidden"
+                  animate="visible"
+                  className="space-y-6"
+                >
+                  <motion.div variants={animationVariants.staggerItem}>
+                    <h2 className="text-xl font-semibold text-dutch-orange mb-2">Cartes à effets spéciaux</h2>
+                    <p className="text-gray-700 mb-4">
+                      Certaines cartes ont des effets spéciaux qui s'activent quand elles sont jouées :
+                    </p>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="p-3 bg-white/60 rounded-lg border border-gray-100">
+                        <div className="flex items-center gap-2 mb-1">
+                          <Badge className="bg-dutch-blue/10 text-dutch-blue">2</Badge>
+                          <h3 className="font-medium">Deux</h3>
+                        </div>
+                        <p className="text-sm text-gray-600">
+                          Le joueur suivant doit piocher 2 cartes et passer son tour.
+                        </p>
+                      </div>
+                      
+                      <div className="p-3 bg-white/60 rounded-lg border border-gray-100">
+                        <div className="flex items-center gap-2 mb-1">
+                          <Badge className="bg-dutch-purple/10 text-dutch-purple">8</Badge>
+                          <h3 className="font-medium">Huit</h3>
+                        </div>
+                        <p className="text-sm text-gray-600">
+                          Le joueur suivant passe son tour.
+                        </p>
+                      </div>
+                      
+                      <div className="p-3 bg-white/60 rounded-lg border border-gray-100">
+                        <div className="flex items-center gap-2 mb-1">
+                          <Badge className="bg-dutch-orange/10 text-dutch-orange">J</Badge>
+                          <h3 className="font-medium">Valet</h3>
+                        </div>
+                        <p className="text-sm text-gray-600">
+                          Change le sens du jeu (horaire à anti-horaire ou inversement).
+                        </p>
+                      </div>
+                      
+                      <div className="p-3 bg-white/60 rounded-lg border border-gray-100">
+                        <div className="flex items-center gap-2 mb-1">
+                          <Badge className="bg-dutch-green/10 text-dutch-green">A</Badge>
+                          <h3 className="font-medium">As</h3>
+                        </div>
+                        <p className="text-sm text-gray-600">
+                          Jouer un As permet de changer la couleur demandée.
+                        </p>
+                      </div>
+                      
+                      <div className="p-3 bg-white/60 rounded-lg border border-gray-100 md:col-span-2">
+                        <div className="flex items-center gap-2 mb-1">
+                          <Badge className="bg-dutch-red/10 text-dutch-red">Joker</Badge>
+                          <h3 className="font-medium">Joker</h3>
+                        </div>
+                        <p className="text-sm text-gray-600">
+                          Le joueur suivant doit piocher 5 cartes et passer son tour. Le joueur qui pose le Joker choisit la couleur.
+                        </p>
+                      </div>
+                    </div>
+                  </motion.div>
+                  
+                  <motion.div variants={animationVariants.staggerItem}>
+                    <h2 className="text-xl font-semibold text-dutch-orange mb-2">Combinaisons spéciales</h2>
+                    <p className="text-gray-700 mb-4">
+                      Le Dutch permet aussi certaines combinaisons de cartes pour des stratégies avancées :
+                    </p>
+                    
+                    <div className="space-y-3">
+                      <div className="p-3 bg-white/60 rounded-lg border border-gray-100">
+                        <h3 className="font-medium mb-1">Cumul des effets "Pioche"</h3>
+                        <p className="text-sm text-gray-600">
+                          Si un joueur pose un 2 et que le joueur suivant a également un 2, il peut le jouer, 
+                          et le joueur d'après devra alors piocher 4 cartes (2 + 2).
+                        </p>
+                      </div>
+                      
+                      <div className="p-3 bg-white/60 rounded-lg border border-gray-100">
+                        <h3 className="font-medium mb-1">Cartes identiques</h3>
+                        <p className="text-sm text-gray-600">
+                          Vous pouvez jouer plusieurs cartes de même valeur en un seul tour, 
+                          quelle que soit leur couleur (exemple : tous les Rois ou tous les 5).
+                        </p>
+                      </div>
+                    </div>
+                  </motion.div>
+                </motion.div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+          
+          <TabsContent value="assistant" className="mt-4">
+            <Card className="bg-white/80 backdrop-blur-md">
+              <CardContent className="pt-6">
+                <div className="flex items-center gap-2 mb-4">
+                  <MessageCircle className="text-dutch-purple h-5 w-5" />
+                  <h2 className="text-xl font-semibold">Assistant de règles</h2>
+                </div>
+                
+                <p className="text-gray-700 mb-6">
+                  Vous avez une question sur les règles ? Posez-la ici et l'assistant vous répondra.
+                </p>
+                
+                <div className="bg-white/60 rounded-xl border border-gray-200 p-4 mb-4 h-64 overflow-y-auto">
+                  {messages.length === 0 ? (
+                    <div className="h-full flex flex-col items-center justify-center text-gray-400">
+                      <MessageCircle className="h-10 w-10 mb-2 opacity-20" />
+                      <p>Posez une question sur les règles du Dutch</p>
+                      <p className="text-xs mt-2">Exemple : "Comment fonctionne le Dutch ?"</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-3">
+                      {messages.map(message => (
+                        <motion.div
+                          key={message.id}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          className={`p-3 rounded-lg max-w-[80%] ${
+                            message.isUser 
+                              ? 'bg-dutch-blue/10 text-dutch-blue ml-auto' 
+                              : 'bg-gray-100 text-gray-700'
+                          }`}
+                        >
+                          {message.content}
+                        </motion.div>
+                      ))}
+                      {isProcessing && (
+                        <motion.div
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          className="p-3 rounded-lg bg-gray-100 text-gray-700 max-w-[80%]"
+                        >
+                          <div className="flex gap-1">
+                            <span className="animate-pulse">.</span>
+                            <span className="animate-pulse" style={{ animationDelay: '0.2s' }}>.</span>
+                            <span className="animate-pulse" style={{ animationDelay: '0.4s' }}>.</span>
+                          </div>
+                        </motion.div>
+                      )}
+                    </div>
+                  )}
+                </div>
+                
+                <form onSubmit={handleSendMessage} className="flex gap-2">
+                  <Input
+                    placeholder="Posez votre question sur les règles..."
+                    value={inputValue}
+                    onChange={(e) => setInputValue(e.target.value)}
+                    className="flex-1"
+                    disabled={isProcessing}
+                  />
+                  <Button 
+                    type="submit" 
+                    disabled={!inputValue.trim() || isProcessing}
+                    className="bg-dutch-purple hover:bg-dutch-purple/90 text-white"
+                  >
+                    <SendHorizontal className="h-4 w-4" />
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </div>
     </PageLayout>
   );
 };
