@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 import { UI_CONFIG } from '@/config/uiConfig';
 
 /**
@@ -96,30 +96,26 @@ export const animationVariants = {
   
   // Animation de pulse léger
   softPulse: {
-    initial: { 
-      scale: 1 
-    },
-    animate: {
+    hidden: { scale: 1 },
+    visible: { 
       scale: [1, 1.02, 1],
       transition: {
         duration: 2,
         repeat: Infinity,
-        repeatType: "reverse"
+        repeatType: "reverse" as const
       }
     }
   },
   
   // Animation de flottement
   float: {
-    initial: { 
-      y: 0 
-    },
-    animate: {
+    hidden: { y: 0 },
+    visible: {
       y: [0, -10, 0],
       transition: {
         duration: 6,
         repeat: Infinity,
-        repeatType: "reverse",
+        repeatType: "reverse" as const,
         ease: "easeInOut"
       }
     }
@@ -127,9 +123,8 @@ export const animationVariants = {
   
   // Animation pour le bouton principal
   mainButton: {
-    initial: { 
-      scale: 1 
-    },
+    hidden: { scale: 1 },
+    visible: { scale: 1 },
     hover: { 
       scale: 1.05,
       transition: {
@@ -146,10 +141,10 @@ export const animationVariants = {
   
   // Pour les transitions de pages
   pageTransition: {
-    initial: { 
+    hidden: { 
       opacity: 0 
     },
-    animate: { 
+    visible: { 
       opacity: 1,
       transition: {
         duration: 0.5,
@@ -223,10 +218,12 @@ export const AnimatedContainer: React.FC<AnimatedContainerProps> = ({
   ...props 
 }) => {
   // Utiliser une assertion de type plus sûre pour variant
-  let selectedVariant = animationVariants[variant as keyof typeof animationVariants] || animationVariants.fadeInUp;
+  const variantKey = variant as keyof typeof animationVariants;
+  let selectedVariant: Variants = animationVariants[variantKey] || animationVariants.fadeInUp;
   
   // Permettre d'ajuster la durée manuellement si nécessaire
-  if (duration && selectedVariant.visible && selectedVariant.visible.transition) {
+  if (duration && 'visible' in selectedVariant && selectedVariant.visible && 
+      typeof selectedVariant.visible === 'object' && 'transition' in selectedVariant.visible) {
     selectedVariant = {
       ...selectedVariant,
       visible: {
@@ -236,7 +233,7 @@ export const AnimatedContainer: React.FC<AnimatedContainerProps> = ({
           duration
         }
       }
-    };
+    } as Variants;
   }
   
   return (
