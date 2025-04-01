@@ -1,4 +1,5 @@
 
+import React from 'react';
 import { motion } from 'framer-motion';
 import { UI_CONFIG } from '@/config/uiConfig';
 
@@ -204,7 +205,16 @@ export const playConfetti = (duration = 3000) => {
 /**
  * Composant HOC qui ajoute des animations de base à n'importe quel élément
  */
-export const AnimatedContainer = ({ 
+interface AnimatedContainerProps {
+  children: React.ReactNode;
+  variant?: string;
+  delay?: number;
+  duration?: number;
+  className?: string;
+  [key: string]: any;
+}
+
+export const AnimatedContainer: React.FC<AnimatedContainerProps> = ({ 
   children, 
   variant = 'fadeInUp', 
   delay = 0, 
@@ -212,7 +222,7 @@ export const AnimatedContainer = ({
   className = '',
   ...props 
 }) => {
-  let selectedVariant = animationVariants[variant] || animationVariants.fadeInUp;
+  let selectedVariant = animationVariants[variant as keyof typeof animationVariants] || animationVariants.fadeInUp;
   
   // Permettre d'ajuster la durée manuellement si nécessaire
   if (duration) {
