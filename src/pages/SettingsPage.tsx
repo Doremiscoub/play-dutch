@@ -1,182 +1,198 @@
 
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useTheme } from '@/hooks/use-theme';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { SignedIn, SignedOut, UserButton, useUser } from '@clerk/clerk-react';
 import { Button } from '@/components/ui/button';
-import { Paintbrush, Volume2, VolumeX, Moon, Sun, User, Smartphone } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
-import ThemeSelector from '@/components/ThemeSelector';
-import ColorThemeSelector from '@/components/ColorThemeSelector';
-import PageLayout from '@/components/PageLayout';
-import OfflineMode from '@/components/OfflineMode';
+import { PageLayout } from '@/components/PageLayout';
 import { useLocalStorage } from '@/hooks/use-local-storage';
+import { Trash2, Volume2, Volume1, VolumeX, RefreshCcw, ArrowRight, Moon, SunMedium, Languages, Send, Sparkles } from 'lucide-react';
+import ThemeSelector from '@/components/ThemeSelector';
+import { toast } from 'sonner';
+import { useUser } from '@clerk/clerk-react';
 
-const SettingsPage: React.FC = () => {
-  const { themeMode } = useTheme();
+const SettingsPage = () => {
+  const navigate = useNavigate();
   const { user, isSignedIn } = useUser();
-  
-  // Settings state
   const [soundEnabled, setSoundEnabled] = useLocalStorage('dutch_sound_enabled', true);
-  const [offlineModeEnabled, setOfflineModeEnabled] = useLocalStorage('dutch_offline_mode', false);
+  const [darkMode, setDarkMode] = useLocalStorage('dutch_dark_mode', false);
+  const [colorTheme, setColorTheme] = useLocalStorage('dutch_color_theme', 'blue');
+  const [aiCommentary, setAiCommentary] = useLocalStorage('dutch_ai_commentary', true);
+  const [language, setLanguage] = useLocalStorage('dutch_language', 'fr');
   
-  const handleOfflineModeChange = (enabled: boolean) => {
-    setOfflineModeEnabled(enabled);
+  const handleClearHistory = () => {
+    const confirm = window.confirm("Êtes-vous sûr de vouloir effacer l'historique des parties ? Cette action est irréversible.");
+    if (confirm) {
+      localStorage.removeItem('dutch_games');
+      toast.success("Historique des parties effacé");
+    }
   };
   
+  const handleResetSettings = () => {
+    const confirm = window.confirm("Êtes-vous sûr de vouloir réinitialiser tous les paramètres ?");
+    if (confirm) {
+      setSoundEnabled(true);
+      setDarkMode(false);
+      setColorTheme('blue');
+      setAiCommentary(true);
+      setLanguage('fr');
+      toast.success("Paramètres réinitialisés");
+    }
+  };
+  
+  const handleContactSupport = () => {
+    window.open('mailto:support@dutch-app.com?subject=Support%20Dutch%20App', '_blank');
+    toast.success("Ouverture de votre client mail...");
+  };
+
   return (
-    <PageLayout
-      title="Paramètres"
-      subtitle="Personnalisez votre expérience de jeu"
-    >
-      <motion.div
+    <PageLayout title="Réglages" subtitle="Personnalisez votre expérience" showThemeSelector={true}>
+      <motion.div 
+        className="max-w-md mx-auto w-full p-4 space-y-6"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="w-full mx-auto"
+        transition={{ duration: 0.3 }}
       >
-        <Tabs defaultValue="appearance" className="w-full">
-          <TabsList className="grid grid-cols-2 md:grid-cols-4 mb-6 rounded-xl bg-white/50 backdrop-blur-md border border-white/40 p-1 shadow-sm">
-            <TabsTrigger 
-              value="appearance" 
-              className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm py-2.5 text-dutch-blue"
-            >
-              <Paintbrush className="h-4 w-4 mr-2" />
-              Apparence
-            </TabsTrigger>
-            <TabsTrigger 
-              value="audio" 
-              className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm py-2.5 text-dutch-blue"
-            >
-              {soundEnabled ? <Volume2 className="h-4 w-4 mr-2" /> : <VolumeX className="h-4 w-4 mr-2" />}
-              Audio
-            </TabsTrigger>
-            <TabsTrigger 
-              value="offline" 
-              className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm py-2.5 text-dutch-blue"
-            >
-              <Smartphone className="h-4 w-4 mr-2" />
-              Hors-ligne
-            </TabsTrigger>
-            <TabsTrigger 
-              value="account" 
-              className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm py-2.5 text-dutch-blue"
-            >
-              <User className="h-4 w-4 mr-2" />
-              Compte
-            </TabsTrigger>
-          </TabsList>
+        {/* Son et Voix */}
+        <div className="dutch-card rounded-3xl p-5 bg-white/80 backdrop-blur-sm shadow-md border border-white/30">
+          <h2 className="text-lg font-semibold mb-4 text-dutch-blue">Son et Voix</h2>
           
-          <TabsContent value="appearance">
-            <Card className="rounded-3xl bg-white/70 backdrop-blur-md border border-white/40 shadow-md hover:shadow-lg transition-all">
-              <CardHeader>
-                <CardTitle>Apparence</CardTitle>
-                <CardDescription>Personnalisez l'apparence de l'application.</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="space-y-4">
-                  <h3 className="text-lg font-medium">Thème de couleur</h3>
-                  <ColorThemeSelector />
-                </div>
-                
-                <div className="flex items-center justify-between">
-                  <div className="space-y-0.5">
-                    <Label htmlFor="dark-mode">Mode d'affichage</Label>
-                    <p className="text-sm text-gray-500">Choisissez entre clair, sombre ou automatique</p>
-                  </div>
-                  <ThemeSelector />
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                {soundEnabled ? (
+                  <Volume2 className="h-5 w-5 text-dutch-blue" />
+                ) : (
+                  <VolumeX className="h-5 w-5 text-gray-400" />
+                )}
+                <span>Effets sonores</span>
+              </div>
+              <Switch 
+                checked={soundEnabled} 
+                onCheckedChange={setSoundEnabled}
+                className="data-[state=checked]:bg-dutch-blue"
+              />
+            </div>
+            
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <Sparkles className={`h-5 w-5 ${aiCommentary ? 'text-dutch-purple' : 'text-gray-400'}`} />
+                <span>Commentaires IA</span>
+              </div>
+              <Switch 
+                checked={aiCommentary} 
+                onCheckedChange={setAiCommentary}
+                className="data-[state=checked]:bg-dutch-purple"
+              />
+            </div>
+          </div>
+        </div>
+        
+        {/* Apparence */}
+        <div className="dutch-card rounded-3xl p-5 bg-white/80 backdrop-blur-sm shadow-md border border-white/30">
+          <h2 className="text-lg font-semibold mb-4 text-dutch-orange">Apparence</h2>
           
-          <TabsContent value="audio">
-            <Card className="rounded-3xl bg-white/70 backdrop-blur-md border border-white/40 shadow-md hover:shadow-lg transition-all">
-              <CardHeader>
-                <CardTitle>Paramètres audio</CardTitle>
-                <CardDescription>Gérez les sons et la musique du jeu.</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="flex items-center justify-between">
-                  <div className="space-y-0.5">
-                    <Label htmlFor="sound-effects">Effets sonores</Label>
-                    <p className="text-sm text-gray-500">Sons des cartes et des actions</p>
-                  </div>
-                  <Switch 
-                    id="sound-effects" 
-                    checked={soundEnabled} 
-                    onCheckedChange={setSoundEnabled}
-                  />
-                </div>
-                
-                <div className="flex items-center justify-between">
-                  <div className="space-y-0.5">
-                    <Label htmlFor="background-music">Musique de fond</Label>
-                    <p className="text-sm text-gray-500">Pas encore disponible</p>
-                  </div>
-                  <Switch 
-                    id="background-music" 
-                    checked={false}
-                    disabled={true}
-                  />
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                {darkMode ? (
+                  <Moon className="h-5 w-5 text-dutch-purple" />
+                ) : (
+                  <SunMedium className="h-5 w-5 text-dutch-orange" />
+                )}
+                <span>Mode sombre</span>
+              </div>
+              <Switch 
+                checked={darkMode} 
+                onCheckedChange={setDarkMode}
+                className="data-[state=checked]:bg-dutch-purple"
+              />
+            </div>
+            
+            <div className="pt-2">
+              <p className="text-sm mb-3 text-gray-600">Thème de couleur</p>
+              <ThemeSelector currentTheme={colorTheme} onThemeChange={setColorTheme} />
+            </div>
+          </div>
+        </div>
+        
+        {/* Langue */}
+        <div className="dutch-card rounded-3xl p-5 bg-white/80 backdrop-blur-sm shadow-md border border-white/30">
+          <h2 className="text-lg font-semibold mb-4 text-dutch-purple">Langue</h2>
           
-          <TabsContent value="offline">
-            <OfflineMode onEnableOfflineMode={handleOfflineModeChange} />
-          </TabsContent>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <Languages className="h-5 w-5 text-dutch-purple" />
+                <span>Langue de l'application</span>
+              </div>
+              <select 
+                value={language}
+                onChange={(e) => setLanguage(e.target.value)}
+                className="rounded-full bg-white/70 border border-gray-200 px-3 py-1 text-sm"
+              >
+                <option value="fr">Français</option>
+                <option value="en" disabled>English (coming soon)</option>
+                <option value="es" disabled>Español (coming soon)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        
+        {/* Données et vie privée */}
+        <div className="dutch-card rounded-3xl p-5 bg-white/80 backdrop-blur-sm shadow-md border border-white/30">
+          <h2 className="text-lg font-semibold mb-4 text-dutch-blue">Données et vie privée</h2>
           
-          <TabsContent value="account">
-            <Card className="rounded-3xl bg-white/70 backdrop-blur-md border border-white/40 shadow-md hover:shadow-lg transition-all">
-              <CardHeader>
-                <CardTitle>Compte utilisateur</CardTitle>
-                <CardDescription>Gérez votre compte et vos informations personnelles.</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <SignedIn>
-                  <div className="flex items-center gap-4 mb-6">
-                    <Avatar className="h-16 w-16 border-2 border-white shadow-md">
-                      <AvatarImage src={user?.imageUrl} />
-                      <AvatarFallback className="bg-dutch-blue text-white">
-                        {user?.firstName?.charAt(0) || user?.username?.charAt(0) || 'U'}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <h3 className="text-lg font-semibold">{user?.fullName || user?.username}</h3>
-                      <p className="text-sm text-gray-500">{user?.primaryEmailAddress?.emailAddress}</p>
-                    </div>
-                    <div className="ml-auto">
-                      <UserButton afterSignOutUrl="/" />
-                    </div>
-                  </div>
-                  
-                  <p className="text-sm text-gray-600 mb-4">
-                    Gérez votre profil, vos paramètres de compte et vos préférences de communication depuis le panneau de contrôle de votre compte.
-                  </p>
-                </SignedIn>
-                
-                <SignedOut>
-                  <div className="text-center py-6">
-                    <User className="h-16 w-16 mx-auto text-dutch-blue/50 mb-4" />
-                    <h3 className="text-lg font-semibold mb-2">Vous n'êtes pas connecté</h3>
-                    <p className="text-gray-600 mb-6">
-                      Connectez-vous pour accéder à toutes les fonctionnalités et sauvegarder votre progression.
-                    </p>
-                    <Button variant="dutch-blue" className="w-full md:w-auto" size="lg" asChild>
-                      <a href="/sign-in">Se connecter</a>
-                    </Button>
-                  </div>
-                </SignedOut>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
+          <div className="space-y-4">
+            <Button 
+              variant="outline" 
+              className="w-full justify-between rounded-xl border-gray-200"
+              onClick={handleClearHistory}
+            >
+              <div className="flex items-center gap-2">
+                <Trash2 className="h-4 w-4 text-red-500" />
+                <span>Effacer l'historique</span>
+              </div>
+              <ArrowRight className="h-4 w-4" />
+            </Button>
+            
+            <Button 
+              variant="outline" 
+              className="w-full justify-between rounded-xl border-gray-200"
+              onClick={handleResetSettings}
+            >
+              <div className="flex items-center gap-2">
+                <RefreshCcw className="h-4 w-4 text-dutch-orange" />
+                <span>Réinitialiser les paramètres</span>
+              </div>
+              <ArrowRight className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+        
+        {/* Support */}
+        <div className="dutch-card rounded-3xl p-5 bg-white/80 backdrop-blur-sm shadow-md border border-white/30">
+          <h2 className="text-lg font-semibold mb-4 text-dutch-purple">Support</h2>
+          
+          <div className="space-y-4">
+            <Button 
+              variant="outline" 
+              className="w-full justify-between rounded-xl border-gray-200"
+              onClick={handleContactSupport}
+            >
+              <div className="flex items-center gap-2">
+                <Send className="h-4 w-4 text-dutch-blue" />
+                <span>Contacter le support</span>
+              </div>
+              <ArrowRight className="h-4 w-4" />
+            </Button>
+            
+            <div className="text-center mt-4">
+              <p className="text-xs text-gray-500">Dutch App v1.0</p>
+              <p className="text-xs text-gray-500 mt-1">© 2023 Dutch Team</p>
+            </div>
+          </div>
+        </div>
       </motion.div>
     </PageLayout>
   );

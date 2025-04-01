@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Player, Game, PlayerStatistics } from '@/types';
 import LocalGameSetup from '@/components/LocalGameSetup';
 import ScoreBoard from '@/components/ScoreBoard';
+import GamePodium from '@/components/GamePodium';
 import { v4 as uuidv4 } from 'uuid';
 import { toast } from 'sonner';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -12,7 +13,7 @@ import { useLocalStorage } from '@/hooks/use-local-storage';
 import { calculatePlayerStats, updateAllPlayersStats, isGameOver } from '@/utils/playerStatsCalculator';
 
 const GamePage: React.FC = () => {
-  const [gameState, setGameState] = useState<'setup' | 'playing'>(() => {
+  const [gameState, setGameState] = useState<'setup' | 'playing' | 'completed'>(() => {
     const savedGame = localStorage.getItem('current_dutch_game');
     return savedGame ? 'playing' : 'setup';
   });
@@ -31,6 +32,7 @@ const GamePage: React.FC = () => {
   
   const [showGameEndConfirmation, setShowGameEndConfirmation] = useState<boolean>(false);
   const [soundEnabled, setSoundEnabled] = useLocalStorage('dutch_sound_enabled', true);
+  const [gameStartTime, setGameStartTime] = useState<Date | null>(null);
   const navigate = useNavigate();
   
   // Performance optimization: Memoize the updated players with stats
@@ -45,7 +47,8 @@ const GamePage: React.FC = () => {
         const currentGame = {
           players: playersWithStats,
           roundHistory,
-          lastUpdated: new Date()
+          lastUpdated: new Date(),
+          gameStartTime: gameStartTime || new Date()
         };
         localStorage.setItem('current_dutch_game', JSON.stringify(currentGame));
       } catch (error) {
@@ -53,7 +56,18 @@ const GamePage: React.FC = () => {
         toast.error("Erreur lors de la sauvegarde de la partie");
       }
     }
-  }, [gameState, playersWithStats, roundHistory]);
+  }, [gameState, playersWithStats, roundHistory, gameStartTime]);
+
+  // Au démarrage, récupérer le temps de début de partie
+  useEffect(() => {
+    const savedGame = localStorage.getItem('current_dutch_game');
+    if (savedGame) {
+      const parsed = JSON.parse(savedGame);
+      if (parsed.gameStartTime) {
+        setGameStartTime(new Date(parsed.gameStartTime));
+      }
+    }
+  }, []);
 
   const handleStartGame = (playerNames: string[]) => {
     if (!playerNames || playerNames.length === 0 || playerNames.some(name => !name.trim())) {
@@ -71,6 +85,7 @@ const GamePage: React.FC = () => {
     setPlayers(newPlayers);
     setGameState('playing');
     setRoundHistory([]);
+    setGameStartTime(new Date());
     
     // Clear any previous saved game
     localStorage.removeItem('current_dutch_game');
@@ -151,6 +166,8 @@ const GamePage: React.FC = () => {
     const sortedPlayers = [...updatedPlayers].sort((a, b) => a.totalScore - b.totalScore);
     const winner = sortedPlayers[0].name;
     
+    const gameDuration = gameStartTime ? getGameDuration(gameStartTime) : '';
+    
     const newGame: Game = {
       id: uuidv4(),
       date: new Date(),
@@ -162,62 +179,35 @@ const GamePage: React.FC = () => {
           ? player.id === dutchPlayerId 
           : player.rounds.some(r => r.isDutch)
       })),
-      winner
+      winner,
+      duration: gameDuration
     };
     
     setGames(prev => [...prev, newGame]);
-    toast.success(`Partie terminée ! ${winner} gagne !`);
     
-    launchConfetti();
-    
-    // Supprimer la partie en cours une fois terminée
-    localStorage.removeItem('current_dutch_game');
+    // Passer à l'écran de podium
+    setGameState('completed');
     
     if (soundEnabled) {
       new Audio('/sounds/win-sound.mp3').play().catch(err => console.error("Sound error:", err));
     }
-    
-    // Retourner à l'écran d'accueil après un délai
-    setTimeout(() => {
-      setGameState('setup');
-      setPlayers([]);
-      setRoundHistory([]);
-    }, 3000);
-  }, [players, setGames, soundEnabled]);
+  }, [players, setGames, soundEnabled, gameStartTime]);
   
-  const launchConfetti = useCallback(() => {
-    const duration = 3000;
-    const animationEnd = Date.now() + duration;
-    const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
-
-    function randomInRange(min: number, max: number) {
-      return Math.random() * (max - min) + min;
+  const getGameDuration = (startTime: Date): string => {
+    const endTime = new Date();
+    const diffMs = endTime.getTime() - startTime.getTime();
+    
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHrs = Math.floor(diffMins / 60);
+    const remainingMins = diffMins % 60;
+    
+    if (diffHrs > 0) {
+      return `${diffHrs}h ${remainingMins}min`;
+    } else {
+      return `${diffMins} minutes`;
     }
-
-    const interval = setInterval(() => {
-      const timeLeft = animationEnd - Date.now();
-
-      if (timeLeft <= 0) {
-        return clearInterval(interval);
-      }
-
-      const particleCount = 50 * (timeLeft / duration);
-      
-      confetti({
-        ...defaults,
-        particleCount,
-        origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
-        colors: ['#1EAEDB', '#F97316', '#8B5CF6'],
-      });
-      confetti({
-        ...defaults,
-        particleCount,
-        origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
-        colors: ['#1EAEDB', '#F97316', '#8B5CF6'],
-      });
-    }, 250);
-  }, []);
-
+  };
+  
   const handleUndoLastRound = useCallback(() => {
     if (!players || players.length === 0 || !players[0].rounds || players[0].rounds.length === 0) {
       toast.error('Pas de manche à annuler !');
@@ -270,6 +260,16 @@ const GamePage: React.FC = () => {
     setShowGameEndConfirmation(false);
   }, []);
 
+  const handleNewGame = useCallback(() => {
+    // Supprimer la partie en cours
+    localStorage.removeItem('current_dutch_game');
+    
+    // Retourner à l'écran de configuration
+    setGameState('setup');
+    setPlayers([]);
+    setRoundHistory([]);
+  }, []);
+
   // Vérifier s'il y a une partie en cours au chargement avec gestion de l'expiration
   useEffect(() => {
     const savedGame = localStorage.getItem('current_dutch_game');
@@ -295,10 +295,12 @@ const GamePage: React.FC = () => {
     }
   }, []);
 
+  const gameDuration = gameStartTime ? getGameDuration(gameStartTime) : '';
+
   return (
     <div className="min-h-screen">
       <AnimatePresence mode="wait">
-        {gameState === 'setup' ? (
+        {gameState === 'setup' && (
           <motion.div
             key="setup"
             initial={{ opacity: 0 }}
@@ -307,7 +309,9 @@ const GamePage: React.FC = () => {
           >
             <LocalGameSetup onStartGame={handleStartGame} />
           </motion.div>
-        ) : (
+        )}
+        
+        {gameState === 'playing' && (
           <motion.div
             key="playing"
             initial={{ opacity: 0 }}
@@ -324,6 +328,21 @@ const GamePage: React.FC = () => {
               onConfirmEndGame={handleConfirmEndGame}
               onCancelEndGame={handleCancelEndGame}
               isMultiplayer={false}
+            />
+          </motion.div>
+        )}
+        
+        {gameState === 'completed' && (
+          <motion.div
+            key="completed"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <GamePodium 
+              players={playersWithStats}
+              onNewGame={handleNewGame}
+              gameDuration={gameDuration}
             />
           </motion.div>
         )}

@@ -1,21 +1,16 @@
 
-// This is a read-only file, so we can't modify it directly.
-// Instead, let's create a new component that wraps ScoreBoard and adds our custom floating buttons.
-
 import React from 'react';
-import { Player } from '@/types';
-import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
-import { Plus, Clock, ArrowUturnLeft } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { Plus, ArrowUturnLeft, Clock } from 'lucide-react';
 
-interface FloatingButtonsProps {
+interface CustomScoreBoardButtonsProps {
   onAddRound: () => void;
   onUndoLastRound: () => void;
   onEndGame: () => void;
 }
 
-const FloatingButtons: React.FC<FloatingButtonsProps> = ({
+const CustomScoreBoardButtons: React.FC<CustomScoreBoardButtonsProps> = ({
   onAddRound,
   onUndoLastRound,
   onEndGame
@@ -30,7 +25,7 @@ const FloatingButtons: React.FC<FloatingButtonsProps> = ({
         <Button
           onClick={onEndGame}
           size="icon"
-          variant="pill-blue"
+          variant="game-icon"
           className="bg-white text-dutch-blue shadow-lg border border-dutch-blue/20"
         >
           <Clock className="h-5 w-5" />
@@ -45,7 +40,7 @@ const FloatingButtons: React.FC<FloatingButtonsProps> = ({
         <Button
           onClick={onUndoLastRound}
           size="icon"
-          variant="pill-blue"
+          variant="game-icon"
           className="bg-white text-dutch-orange shadow-lg border border-dutch-orange/20"
         >
           <ArrowUturnLeft className="h-5 w-5" />
@@ -61,9 +56,9 @@ const FloatingButtons: React.FC<FloatingButtonsProps> = ({
       >
         <Button
           onClick={onAddRound}
-          variant="pill-purple"
-          size="pill-lg"
-          className="px-8 bg-gradient-to-r from-dutch-purple to-dutch-blue shadow-lg"
+          variant="game-action"
+          size="game-action"
+          className="px-8 bg-gradient-to-r from-dutch-purple to-dutch-blue shadow-xl"
         >
           <Plus className="h-5 w-5 mr-2" />
           Nouvelle manche
@@ -73,4 +68,4 @@ const FloatingButtons: React.FC<FloatingButtonsProps> = ({
   );
 };
 
-export default FloatingButtons;
+export default CustomScoreBoardButtons;
