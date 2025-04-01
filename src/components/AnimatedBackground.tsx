@@ -135,13 +135,16 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
             style={{
               height: '20vh',
               background: themeConfig.BACKGROUND_CONFIG.waves.primaryColor,
-              borderTopLeftRadius: '50%',
-              borderTopRightRadius: '50%',
+              borderTopLeftRadius: '100%',
+              borderTopRightRadius: '100%',
+              transform: 'scaleX(1.5)', // Élargir la vague pour la rendre plus fluide
+              transformOrigin: 'bottom',
               opacity: 0.4
             }}
             animate={{
               y: [0, -10, 0],
-              scale: [1, 1.02, 1]
+              scaleX: [1.5, 1.6, 1.5], // Animation d'ondulation horizontale
+              scaleY: [1, 1.05, 1]
             }}
             transition={{
               duration: 8,
@@ -156,14 +159,16 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
             style={{
               height: '15vh',
               background: themeConfig.BACKGROUND_CONFIG.waves.secondaryColor,
-              borderTopLeftRadius: '50%',
-              borderTopRightRadius: '50%',
-              opacity: 0.4,
-              transform: 'translateY(30%)'
+              borderTopLeftRadius: '100%',
+              borderTopRightRadius: '100%',
+              transform: 'scaleX(1.8) translateY(30%)', // Élargir davantage la deuxième vague
+              transformOrigin: 'bottom',
+              opacity: 0.4
             }}
             animate={{
-              y: [0, -15, 0],
-              scale: [1, 1.03, 1]
+              y: ['30%', '25%', '30%'],
+              scaleX: [1.8, 1.9, 1.8], // Animation d'ondulation horizontale
+              scaleY: [1, 1.07, 1]
             }}
             transition={{
               duration: 10,

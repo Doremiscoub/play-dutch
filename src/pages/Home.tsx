@@ -70,7 +70,7 @@ const Home: React.FC = () => {
             className="mb-12"
           >
             <h1 className="text-5xl sm:text-6xl font-bold bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent mb-2">
-              Dutch <span className="text-2xl">✨</span>
+              Dutch <span className="text-2xl text-dutch-orange">✨</span>
             </h1>
             <p className="text-gray-600">Votre compagnon de jeu</p>
           </motion.div>
@@ -125,26 +125,10 @@ const Home: React.FC = () => {
                     >
                       <Button 
                         className="w-full bg-white text-dutch-blue hover:bg-white/90 border border-dutch-blue/20 h-14 rounded-full shadow-md"
-                        onClick={() => navigate('/sign-in')}
-                      >
-                        <LogIn className="mr-2 h-5 w-5" />
-                        Connexion / Inscription
-                      </Button>
-                    </motion.div>
-                    
-                    <motion.div
-                      variants={buttonVariants}
-                      whileHover="hover"
-                      whileTap="tap"
-                      className="w-full"
-                    >
-                      <Button 
-                        className="w-full bg-white text-dutch-purple hover:bg-white/90 border border-dutch-purple/20 h-14 rounded-full shadow-md"
                         onClick={() => navigate('/game/setup')}
                       >
-                        <ExternalLink className="mr-2 h-5 w-5" />
-                        Jouer sans compte
-                        <Badge className="ml-2 bg-dutch-purple/20 text-dutch-purple border-none text-xs">Rapide</Badge>
+                        <Plus className="mr-2 h-5 w-5" />
+                        Nouvelle partie
                       </Button>
                     </motion.div>
                   </>
