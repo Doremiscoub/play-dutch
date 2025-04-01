@@ -1,10 +1,9 @@
-
 import React, { useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Player } from '@/types';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
-import { Trophy, Calendar, BarChart3, ArrowLeft, Medal, Target, Fire, Zap } from 'lucide-react';
+import { Trophy, Calendar, BarChart3, ArrowLeft, Medal, Target, Flame, Zap } from 'lucide-react';
 import { playConfetti } from '@/utils/animationUtils';
 import PageLayout from './PageLayout';
 import { Card, CardContent } from '@/components/ui/card';
@@ -19,7 +18,6 @@ const GamePodium: React.FC<GamePodiumProps> = ({ players, onNewGame, gameDuratio
   const navigate = useNavigate();
   const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
   
-  // Générer un titre aléatoire fun
   const funTitles = [
     "Les légendes du Dutch !",
     "Quel match !",
@@ -34,14 +32,11 @@ const GamePodium: React.FC<GamePodiumProps> = ({ players, onNewGame, gameDuratio
     return funTitles[Math.floor(Math.random() * funTitles.length)];
   }, []);
   
-  // Définir le vainqueur
   const winner = sortedPlayers[0];
   
-  // Récupérer les stats fun pour l'écran de fin de partie
   const funStats = useMemo(() => {
     const stats = [];
     
-    // Joueur avec le plus de manches perdues consécutives
     const maxConsecutiveLosses = players.reduce((max, player) => {
       let current = 0;
       let maxForPlayer = 0;
@@ -58,7 +53,6 @@ const GamePodium: React.FC<GamePodiumProps> = ({ players, onNewGame, gameDuratio
       return maxForPlayer > max.count ? { player: player.name, count: maxForPlayer } : max;
     }, { player: '', count: 0 });
     
-    // Joueur ayant "dutché" le plus souvent
     const dutchCounts = players.reduce((acc, player) => {
       const dutchCount = player.rounds.filter(round => round.isDutch).length;
       return dutchCount > 0 ? [...acc, { player: player.name, count: dutchCount }] : acc;
@@ -66,11 +60,10 @@ const GamePodium: React.FC<GamePodiumProps> = ({ players, onNewGame, gameDuratio
     
     const mostDutch = dutchCounts.sort((a, b) => b.count - a.count)[0];
     
-    // Ajout des stats si elles existent
     if (maxConsecutiveLosses.count > 1) {
       stats.push({
         text: `${maxConsecutiveLosses.player} a perdu ${maxConsecutiveLosses.count} manches d'affilée`,
-        icon: <Fire className="h-5 w-5 text-dutch-orange" />
+        icon: <Flame className="h-5 w-5 text-dutch-orange" />
       });
     }
     
@@ -81,7 +74,6 @@ const GamePodium: React.FC<GamePodiumProps> = ({ players, onNewGame, gameDuratio
       });
     }
     
-    // Joueur avec la meilleure moyenne
     const bestAverage = players.reduce((best, player) => {
       const avg = player.stats?.averageScore || 0;
       return avg > best.avg ? { player: player.name, avg } : best;
@@ -97,12 +89,10 @@ const GamePodium: React.FC<GamePodiumProps> = ({ players, onNewGame, gameDuratio
     return stats;
   }, [players]);
   
-  // Lancer les confettis dès que le composant est monté
   useEffect(() => {
     playConfetti(5000);
   }, []);
   
-  // Animations pour les médailles
   const medalAnimation = {
     hidden: { y: -100, opacity: 0 },
     visible: { 
@@ -116,7 +106,6 @@ const GamePodium: React.FC<GamePodiumProps> = ({ players, onNewGame, gameDuratio
     }
   };
   
-  // Animations pour les joueurs
   const playerAnimation = {
     hidden: { y: 50, opacity: 0 },
     visible: (custom: number) => ({
@@ -129,9 +118,7 @@ const GamePodium: React.FC<GamePodiumProps> = ({ players, onNewGame, gameDuratio
     })
   };
   
-  // Obtenir la position des joueurs sur le podium
   const getPodiumPosition = (index: number) => {
-    // Position par défaut en fonction du classement
     switch(index) {
       case 0: return { order: 2, height: 'h-36 md:h-44', color: 'bg-yellow-400' };
       case 1: return { order: 1, height: 'h-28 md:h-36', color: 'bg-gray-300' };
@@ -163,16 +150,13 @@ const GamePodium: React.FC<GamePodiumProps> = ({ players, onNewGame, gameDuratio
           )}
         </motion.div>
         
-        {/* Affichage du podium */}
         <div className="relative mb-16 mt-28">
-          {/* Positions des joueurs sur le podium */}
           <div className="flex items-end justify-center gap-4 md:gap-6 h-52 md:h-72">
             {sortedPlayers.slice(0, 3).map((player, index) => {
               const { order, height, color } = getPodiumPosition(index);
               
               return (
                 <div key={player.id} className="relative" style={{ order }}>
-                  {/* Médaille */}
                   <motion.div 
                     className="absolute -top-24 left-1/2 transform -translate-x-1/2 z-10 flex flex-col items-center"
                     variants={medalAnimation}
@@ -187,7 +171,6 @@ const GamePodium: React.FC<GamePodiumProps> = ({ players, onNewGame, gameDuratio
                     </div>
                   </motion.div>
                   
-                  {/* Joueur */}
                   <motion.div 
                     className="relative flex flex-col items-center"
                     custom={index}
@@ -207,7 +190,6 @@ const GamePodium: React.FC<GamePodiumProps> = ({ players, onNewGame, gameDuratio
                       </div>
                     </div>
                     
-                    {/* Podium */}
                     <div className={`${color} ${height} w-20 md:w-28 rounded-t-lg shadow-lg flex items-center justify-center relative z-0`}>
                       <span className="absolute bottom-2 text-xs text-white font-bold opacity-80">
                         {index + 1}
@@ -220,7 +202,6 @@ const GamePodium: React.FC<GamePodiumProps> = ({ players, onNewGame, gameDuratio
           </div>
         </div>
         
-        {/* Statistiques fun de la partie */}
         {funStats.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -250,7 +231,6 @@ const GamePodium: React.FC<GamePodiumProps> = ({ players, onNewGame, gameDuratio
           </motion.div>
         )}
         
-        {/* Affichage des autres joueurs */}
         {sortedPlayers.length > 3 && (
           <div className="mt-12 px-4">
             <h3 className="text-lg font-semibold text-gray-700 mb-4">Autres participants</h3>
@@ -287,7 +267,6 @@ const GamePodium: React.FC<GamePodiumProps> = ({ players, onNewGame, gameDuratio
           </div>
         )}
         
-        {/* Boutons d'action */}
         <motion.div 
           className="mt-12 flex flex-col md:flex-row gap-4 justify-center"
           initial={{ opacity: 0, y: 20 }}
