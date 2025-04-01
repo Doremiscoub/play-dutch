@@ -1,8 +1,14 @@
+
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Player } from '@/types';
-import { Trophy, Target, Zap, Gauge, Star, TrendingDown, ChevronDown, ChevronUp, Flame } from 'lucide-react';
+import { 
+  Trophy, Target, Zap, Gauge, Star, TrendingDown, ChevronDown, 
+  ChevronUp, Flame, Award, Heart, HeartHandshake, Crown, Target as TargetIcon,
+  CircleOff, Medal, Smile, Frown, Lightbulb
+} from 'lucide-react';
 import ProfCartouche from './ProfCartouche';
+import { composedClasses, scoring } from '@/config/uiConfig';
 
 interface DetailedPlayerStatsProps {
   player: Player;
@@ -21,35 +27,51 @@ const DetailedPlayerStats: React.FC<DetailedPlayerStatsProps> = ({
 }) => {
   if (!player.stats) return null;
   
-  const getSkillLevel = (value: number, type: 'consistency' | 'improvement'): string => {
-    if (type === 'consistency') {
-      if (value <= 3) return "Chirurgical";
-      if (value <= 6) return "Stable";
-      if (value <= 10) return "Variable";
-      return "Chaotique";
-    } else {
-      if (value < -5) return "En chute libre";
-      if (value < 0) return "Décline";
-      if (value === 0) return "Stable";
-      if (value < 5) return "Progresse";
-      return "En feu";
+  const getHighlight = (): { icon: React.ReactNode; text: string; color: string } | null => {
+    if (player.stats.winStreak >= 3) {
+      return {
+        icon: <Crown className="h-4 w-4" />,
+        text: `Série de ${player.stats.winStreak} victoires !`,
+        color: "text-dutch-yellow"
+      };
     }
+    
+    if (player.stats.dutchCount >= 3) {
+      return {
+        icon: <HeartHandshake className="h-4 w-4" />,
+        text: "Expert Dutch !",
+        color: "text-dutch-orange"
+      };
+    }
+    
+    if (player.stats.bestRound !== null && player.stats.bestRound <= 3 && player.stats.bestRound > 0) {
+      return {
+        icon: <Medal className="h-4 w-4" />,
+        text: "Performance exceptionnelle !",
+        color: "text-dutch-green"
+      };
+    }
+    
+    if (player.stats.consistencyScore <= 3) {
+      return {
+        icon: <Zap className="h-4 w-4" />,
+        text: "Joueur très régulier !",
+        color: "text-dutch-blue"
+      };
+    }
+    
+    if (player.stats.improvementRate >= 5) {
+      return {
+        icon: <Lightbulb className="h-4 w-4" />,
+        text: "En grande progression !",
+        color: "text-dutch-purple"
+      };
+    }
+    
+    return null;
   };
   
-  const getSkillColor = (value: number, type: 'consistency' | 'improvement'): string => {
-    if (type === 'consistency') {
-      if (value <= 3) return "text-green-600";
-      if (value <= 6) return "text-blue-600";
-      if (value <= 10) return "text-orange-500";
-      return "text-red-500";
-    } else {
-      if (value < -5) return "text-red-600";
-      if (value < 0) return "text-orange-500";
-      if (value === 0) return "text-gray-600";
-      if (value < 5) return "text-blue-500";
-      return "text-green-600";
-    }
-  };
+  const highlight = getHighlight();
   
   return (
     <motion.div 
@@ -60,7 +82,7 @@ const DetailedPlayerStats: React.FC<DetailedPlayerStatsProps> = ({
       transition={{ delay: isFirst ? 0.1 : 0, duration: 0.3 }}
     >
       <motion.div 
-        className="bg-white/80 backdrop-blur-sm border border-white/30 rounded-2xl shadow-sm overflow-hidden"
+        className={composedClasses.card}
         whileHover={{ y: -2, boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1)" }}
         transition={{ duration: 0.2 }}
       >
@@ -81,6 +103,13 @@ const DetailedPlayerStats: React.FC<DetailedPlayerStatsProps> = ({
                   <span className="ml-2 text-xs px-1.5 py-0.5 bg-dutch-orange/20 text-dutch-orange rounded-full">
                     {player.stats.dutchCount}× Dutch
                   </span>
+                )}
+                
+                {highlight && (
+                  <div className={`ml-2 flex items-center gap-1 ${highlight.color} text-xs`}>
+                    {highlight.icon}
+                    <span>{highlight.text}</span>
+                  </div>
                 )}
               </div>
             </div>
@@ -120,32 +149,94 @@ const DetailedPlayerStats: React.FC<DetailedPlayerStatsProps> = ({
                   label="Pire score"
                   value={`${player.stats.worstRound || '-'} pts`}
                 />
+                
+                <StatItem 
+                  icon={<Target className="h-4 w-4 text-dutch-orange" />}
+                  label="Nombre de Dutch"
+                  value={`${player.stats.dutchCount}`}
+                />
               </div>
               
               <div className="space-y-3">
                 <StatItem 
                   icon={<Zap className="h-4 w-4 text-dutch-orange" />}
-                  label="Consistency"
-                  value={getSkillLevel(player.stats.consistencyScore, 'consistency')}
-                  valueColor={getSkillColor(player.stats.consistencyScore, 'consistency')}
+                  label="Régularité"
+                  value={scoring.getSkillLevel(player.stats.consistencyScore, 'consistency')}
+                  valueColor={scoring.getSkillColor(player.stats.consistencyScore, 'consistency')}
                   tooltip={`Score: ${player.stats.consistencyScore}`}
                 />
                 
                 <StatItem 
-                  icon={<Target className="h-4 w-4 text-dutch-purple" />}
+                  icon={<Award className="h-4 w-4 text-dutch-purple" />}
                   label="Progression"
-                  value={getSkillLevel(player.stats.improvementRate, 'improvement')}
-                  valueColor={getSkillColor(player.stats.improvementRate, 'improvement')}
+                  value={scoring.getSkillLevel(player.stats.improvementRate, 'improvement')}
+                  valueColor={scoring.getSkillColor(player.stats.improvementRate, 'improvement')}
                   tooltip={`Taux: ${player.stats.improvementRate > 0 ? '+' : ''}${player.stats.improvementRate}`}
                 />
                 
                 <StatItem 
                   icon={<Star className="h-4 w-4 text-dutch-yellow" />}
-                  label="Win streak"
+                  label="Série de victoires"
                   value={`${player.stats.winStreak} ${player.stats.winStreak > 1 ? 'manches' : 'manche'}`}
+                />
+                
+                <StatItem 
+                  icon={<Heart className="h-4 w-4 text-dutch-red" />}
+                  label="Manches jouées"
+                  value={`${player.rounds.length}`}
                 />
               </div>
             </div>
+            
+            {isLast && (
+              <div className="mt-4">
+                <h4 className="font-medium text-gray-700 mb-2 flex items-center gap-1">
+                  <HeartHandshake className="h-4 w-4 text-dutch-purple" />
+                  <span>Performances</span>
+                </h4>
+                
+                <div className="grid grid-cols-2 gap-2">
+                  <PerformanceIndicator 
+                    title="Taux Dutch réussis"
+                    value={player.stats.dutchCount > 0 ? 
+                      `${Math.round((player.rounds.filter(r => r.isDutch && r.score === 0).length / player.stats.dutchCount) * 100)}%` 
+                      : "N/A"}
+                    icon={player.stats.dutchCount > 0 && 
+                          (player.rounds.filter(r => r.isDutch && r.score === 0).length / player.stats.dutchCount) > 0.5 ? 
+                          <Smile className="h-4 w-4 text-dutch-green" /> : 
+                          <Frown className="h-4 w-4 text-dutch-orange" />}
+                  />
+                  
+                  <PerformanceIndicator 
+                    title="Manches gagnées"
+                    value={player.rounds.length > 0 ? 
+                      `${Math.round((player.rounds.filter((_, i) => 
+                        player.rounds[i].score === Math.min(...players.map(p => p.rounds[i]?.score || Infinity))
+                      ).length / player.rounds.length) * 100)}%` 
+                      : "N/A"}
+                    icon={<Crown className="h-4 w-4 text-dutch-yellow" />}
+                  />
+                  
+                  <PerformanceIndicator 
+                    title="Manches à 0 pt"
+                    value={player.rounds.length > 0 ? 
+                      `${Math.round((player.rounds.filter(r => r.score === 0).length / player.rounds.length) * 100)}%` 
+                      : "N/A"}
+                    icon={<CircleOff className="h-4 w-4 text-dutch-green" />}
+                  />
+                  
+                  <PerformanceIndicator 
+                    title="Amélioration"
+                    value={player.stats.improvementRate > 0 ? 
+                      `+${player.stats.improvementRate} pts` : 
+                      `${player.stats.improvementRate} pts`}
+                    icon={player.stats.improvementRate > 0 ? 
+                          <TargetIcon className="h-4 w-4 text-dutch-green" /> : 
+                          <TargetIcon className="h-4 w-4 text-dutch-red" />}
+                  />
+                </div>
+              </div>
+            )}
             
             {isLast && (
               <div className="mt-4">
@@ -197,6 +288,24 @@ const StatItem: React.FC<StatItemProps> = ({ icon, label, value, valueColor = 't
       </div>
       <div className={`font-medium ${valueColor} flex items-center`} title={tooltip}>
         {value}
+      </div>
+    </div>
+  );
+};
+
+interface PerformanceIndicatorProps {
+  title: string;
+  value: string;
+  icon: React.ReactNode;
+}
+
+const PerformanceIndicator: React.FC<PerformanceIndicatorProps> = ({ title, value, icon }) => {
+  return (
+    <div className="bg-white/50 rounded-lg p-2 flex flex-col items-center">
+      <div className="text-xs font-medium text-gray-500 mb-1">{title}</div>
+      <div className="flex items-center gap-1">
+        {icon}
+        <span className="font-semibold text-gray-800">{value}</span>
       </div>
     </div>
   );

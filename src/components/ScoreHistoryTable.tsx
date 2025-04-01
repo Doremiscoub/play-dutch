@@ -3,6 +3,7 @@ import React from 'react';
 import { Player } from '@/types';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { motion } from 'framer-motion';
+import { scoring, composedClasses } from '@/config/uiConfig';
 
 interface ScoreHistoryTableProps {
   players: Player[];
@@ -10,25 +11,28 @@ interface ScoreHistoryTableProps {
 }
 
 const ScoreHistoryTable: React.FC<ScoreHistoryTableProps> = ({ players, roundHistory }) => {
-  // Fonction pour déterminer la couleur de fond en fonction du score
-  const getScoreColor = (score: number, isDutch: boolean) => {
-    if (score === 0) return 'bg-transparent';
-    if (isDutch) return 'bg-dutch-orange/20 text-dutch-orange font-medium';
+  // Fonction pour déterminer le joueur gagnant de la manche
+  const getRoundWinner = (roundIndex: number): string | null => {
+    if (!players || !roundHistory || roundIndex >= roundHistory.length) return null;
     
-    // Échelle de couleurs selon le score
-    if (score <= 5) return 'bg-green-50 text-green-700';
-    if (score <= 10) return 'bg-emerald-100/70 text-emerald-700';
-    if (score <= 15) return 'bg-yellow-100/70 text-amber-700';
-    if (score <= 20) return 'bg-orange-100/70 text-orange-700';
-    if (score <= 30) return 'bg-orange-200/70 text-orange-800';
-    if (score <= 40) return 'bg-red-200/70 text-red-700';
-    return 'bg-red-300/70 text-red-800 font-medium';
+    const roundScores = roundHistory[roundIndex].scores;
+    let minScore = Infinity;
+    let winnerId: string | null = null;
+    
+    players.forEach((player, playerIndex) => {
+      if (roundScores[playerIndex] < minScore && roundScores[playerIndex] > 0) {
+        minScore = roundScores[playerIndex];
+        winnerId = player.id;
+      }
+    });
+    
+    return winnerId;
   };
 
   return (
-    <div className="w-full overflow-x-auto rounded-xl border border-white/30 bg-white/60 backdrop-blur-sm shadow-sm">
+    <div className={composedClasses.table}>
       <Table>
-        <TableHeader className="bg-white/30">
+        <TableHeader className={composedClasses.tableHeader}>
           <TableRow>
             <TableHead className="w-[80px] font-medium">Manche</TableHead>
             {players.map(player => (
@@ -40,31 +44,52 @@ const ScoreHistoryTable: React.FC<ScoreHistoryTableProps> = ({ players, roundHis
         </TableHeader>
         <TableBody>
           {roundHistory.length > 0 ? (
-            roundHistory.map((round, index) => (
-              <TableRow key={index} className="hover:bg-white/40 transition-colors">
-                <TableCell className="font-medium">{index + 1}</TableCell>
-                {players.map((player, playerIndex) => {
-                  const isDutch = player.id === round.dutchPlayerId;
-                  return (
-                    <TableCell 
-                      key={player.id} 
-                      className={`text-center ${getScoreColor(round.scores[playerIndex], isDutch)}`}
-                    >
-                      {round.scores[playerIndex]}
-                      {isDutch && (
-                        <motion.span 
-                          initial={{ opacity: 0, scale: 0 }}
+            roundHistory.map((round, index) => {
+              const roundWinner = getRoundWinner(index);
+              
+              return (
+                <TableRow key={index} className={composedClasses.tableRow}>
+                  <TableCell className="font-medium">{index + 1}</TableCell>
+                  {players.map((player, playerIndex) => {
+                    const isDutch = player.id === round.dutchPlayerId;
+                    const isWinner = player.id === roundWinner;
+                    
+                    return (
+                      <TableCell 
+                        key={player.id} 
+                        className={`text-center ${scoring.getScoreColor(round.scores[playerIndex], isDutch)} ${isWinner ? 'font-bold ring-1 ring-dutch-green/30 ring-inset' : ''}`}
+                      >
+                        <motion.div 
+                          initial={{ opacity: 0, scale: 0.8 }}
                           animate={{ opacity: 1, scale: 1 }}
-                          className="ml-1 text-xs opacity-80"
+                          className="flex items-center justify-center"
                         >
-                          D
-                        </motion.span>
-                      )}
-                    </TableCell>
-                  );
-                })}
-              </TableRow>
-            ))
+                          {round.scores[playerIndex]}
+                          {isDutch && (
+                            <motion.span 
+                              initial={{ opacity: 0, scale: 0 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              className="ml-1 text-xs opacity-80"
+                            >
+                              D
+                            </motion.span>
+                          )}
+                          {isWinner && (
+                            <motion.span
+                              initial={{ opacity: 0, scale: 0 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              className="ml-1 text-xs text-dutch-green opacity-80"
+                            >
+                              ★
+                            </motion.span>
+                          )}
+                        </motion.div>
+                      </TableCell>
+                    );
+                  })}
+                </TableRow>
+              );
+            })
           ) : (
             <TableRow>
               <TableCell colSpan={players.length + 1} className="text-center py-6 text-gray-500 italic">

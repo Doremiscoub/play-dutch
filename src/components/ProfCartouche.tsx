@@ -1,8 +1,9 @@
 
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Lightbulb, Brain, Trophy, Flag, Sparkles } from 'lucide-react';
+import React, { memo, useMemo } from 'react';
 import { Player } from '@/types';
+import { motion } from 'framer-motion';
+import { Crown, Award, HeartHandshake, Target, Zap, Star } from 'lucide-react';
+import { composedClasses } from '@/config/uiConfig';
 
 interface ProfCartoucheProps {
   players: Player[];
@@ -10,152 +11,232 @@ interface ProfCartoucheProps {
   view: 'podium' | 'table';
 }
 
-const ProfCartouche: React.FC<ProfCartoucheProps> = ({ players, roundNumber, view }) => {
-  const [comment, setComment] = useState<string>('');
-  const [icon, setIcon] = useState<React.ReactNode>(<Lightbulb className="h-5 w-5 text-dutch-yellow" />);
-
-  useEffect(() => {
-    if (players.length === 0 || roundNumber === 0) {
-      setComment("Allez, on se bouge le popotin ! Faut jouer pour que je puisse te clasher !");
-      setIcon(<Lightbulb className="h-5 w-5 text-dutch-yellow" />);
-      return;
-    }
-
-    // Trier les joueurs par score
-    const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
-    const leader = sortedPlayers[0];
-    const lastPlace = sortedPlayers[sortedPlayers.length - 1];
-    const randomFactor = Math.random();
+/**
+ * Composant qui affiche un cartouche de commentaires du "Prof"
+ * Mémorisé pour éviter les re-renderings inutiles
+ */
+const ProfCartouche: React.FC<ProfCartoucheProps> = memo(({ players, roundNumber, view }) => {
+  // Générer le commentaire en fonction des données des joueurs et du mode de vue
+  const comment = useMemo(() => {
+    if (players.length === 0) return "Commencez la partie !";
     
-    // Commentaires pour le leader
-    const leaderComments = [
-      `${leader.name} domine comme Mbappé face à des U12 ! Les autres, vous jouez avec vos pieds ou quoi ?`,
-      `Franchement, ${leader.name} a tellement d'avance qu'on dirait que les autres sont sous Lexomil !`,
-      `${leader.name} en tête, normal ! Les autres, c'est quoi votre excuse ? "Mon chien a mangé mes cartes" ?`,
-      `${leader.name} premier ? Même ma grand-mère avec ses lunettes cassées ferait mieux que vous autres !`,
-      `C'est ${leader.name} le patron ici ! Les autres, vous êtes juste des stagiaires du Dutch !`
-    ];
-    
-    // Commentaires pour le dernier
-    const lastPlaceComments = [
-      `Oh la honte pour ${lastPlace.name} ! T'as confondu Dutch avec UNO ou t'es juste nul comme ça naturellement ?`,
-      `${lastPlace.name}, t'es en train de battre le record du monde du joueur le plus poissard. Chapeau l'artiste !`,
-      `${lastPlace.name}, même un joueur avec un bandeau sur les yeux ferait mieux ! Faut se réveiller mon coco !`,
-      `Alors ${lastPlace.name}, on fait la sieste pendant le jeu ? T'as tellement de points que t'as même pas besoin de chauffage cet hiver !`,
-      `${lastPlace.name}, t'es sûr que t'as compris les règles ? On dirait que tu joues à "qui ramasse le plus de points" !`
-    ];
-    
-    // Commentaires sur le dutch
-    const dutchComments = [
-      "Y'a quelqu'un qui va se faire trasher pour son Dutch... Ça va piquer plus qu'une diarrhée de piments !",
-      "Être Dutch c'est comme oublier son maillot à la piscine... Tout le monde va se foutre de ta tronche !",
-      "Le Dutch c'est comme les examens, y'a ceux qui révisent et ceux qui vont pleurer après !",
-      "Oh le Dutch de boloss ! C'est comme arriver en tongs à un mariage, ça la fout mal !",
-      "Y'a un Dutch qui pue plus qu'un fromage oublié au soleil... Bonne chance pour t'en sortir !"
-    ];
-    
-    // Commentaires généraux sur le jeu
-    const generalComments = [
-      "Vous jouez comme des pieds ! Même ma tortue serait plus vive avec les cartes !",
-      "Cette partie est plus chaotique que mon appart un dimanche matin après soirée !",
-      "Vous êtes tous nuls, mais genre, vraiment nuls ! Je kiffe trop vous voir galérer !",
-      "C'est quoi ce jeu de fillettes ? Mettez un peu de peps, on dirait un tournoi de belote en EHPAD !",
-      "Ce niveau de jeu est plus bas que mes notes au bac ! Et croyez-moi, c'était pas glorieux !"
-    ];
-    
-    // Commentaires sur l'évolution du jeu
-    const progressComments = [
-      "Le match s'enflamme comme un barbecue un 14 juillet ! Ça va finir en baston tout ça !",
-      "C'est plus serré qu'un jean après les fêtes ! Qui va craquer en premier ?",
-      "Vous êtes au coude-à-coude comme deux poivrots au comptoir ! Qui va tomber en premier ?",
-      "Ça se tire la bourre plus que pour les dernières PS5 en promo ! J'adore ce bordel !",
-      "C'est le feu dans ce match ! Plus chaud qu'une chicha mal dosée !"
-    ];
-    
-    // Sélection du type de commentaire en fonction de la situation et du hasard
-    let selectedComment: string;
-    
-    if (randomFactor < 0.25) {
-      selectedComment = generalComments[Math.floor(Math.random() * generalComments.length)];
-      setIcon(<Brain className="h-5 w-5 text-dutch-orange" />);
-    } else if (randomFactor < 0.45) {
-      selectedComment = leaderComments[Math.floor(Math.random() * leaderComments.length)];
-      setIcon(<Trophy className="h-5 w-5 text-dutch-yellow" />);
-    } else if (randomFactor < 0.65) {
-      selectedComment = lastPlaceComments[Math.floor(Math.random() * lastPlaceComments.length)];
-      setIcon(<Flag className="h-5 w-5 text-dutch-red" />);
-    } else if (randomFactor < 0.85) {
-      selectedComment = dutchComments[Math.floor(Math.random() * dutchComments.length)];
-      setIcon(<Lightbulb className="h-5 w-5 text-dutch-yellow" />);
-    } else {
-      selectedComment = progressComments[Math.floor(Math.random() * progressComments.length)];
-      setIcon(<Sparkles className="h-5 w-5 text-dutch-purple" />);
+    // Si aucune manche n'a été jouée
+    if (roundNumber === 0) {
+      if (players.length === 2) {
+        return "Duel en perspective ! Qui sera le vainqueur ?";
+      } else if (players.length === 3) {
+        return "Partie à trois ! Ça va être chaud !";
+      } else if (players.length >= 4) {
+        return "Plein de joueurs ! Ça va être une belle bataille !";
+      }
+      return "Que la partie commence !";
     }
     
-    setComment(selectedComment);
-  }, [players, roundNumber, view]);
-
+    // Tableau de commentaires possibles
+    const comments = [
+      // Commentaires sur le leader
+      {
+        condition: () => players.length > 1 && roundNumber > 1,
+        getText: () => {
+          const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
+          const leader = sortedPlayers[0];
+          const secondPlayer = sortedPlayers[1];
+          const difference = secondPlayer.totalScore - leader.totalScore;
+          
+          if (difference > 20) {
+            return `${leader.name} domine la partie avec ${difference} points d'avance !`;
+          } else if (difference > 10) {
+            return `${leader.name} a une bonne avance, mais rien n'est joué !`;
+          } else if (difference < 5 && difference > 0) {
+            return `C'est serré entre ${leader.name} et ${secondPlayer.name} ! Seulement ${difference} points d'écart !`;
+          }
+          return `${leader.name} est en tête pour l'instant.`;
+        }
+      },
+      
+      // Commentaires sur les dutchCount
+      {
+        condition: () => players.some(p => p.stats?.dutchCount && p.stats.dutchCount > 2),
+        getText: () => {
+          const dutchPlayer = [...players]
+            .filter(p => p.stats?.dutchCount && p.stats.dutchCount > 2)
+            .sort((a, b) => (b.stats?.dutchCount || 0) - (a.stats?.dutchCount || 0))[0];
+          
+          return `${dutchPlayer.name} dit souvent "Dutch" ! ${dutchPlayer.stats?.dutchCount} fois déjà !`;
+        }
+      },
+      
+      // Commentaires sur les consistencyScore
+      {
+        condition: () => players.some(p => p.stats?.consistencyScore && p.stats.consistencyScore < 4),
+        getText: () => {
+          const consistentPlayer = [...players]
+            .filter(p => p.stats?.consistencyScore && p.stats.consistencyScore < 4)
+            .sort((a, b) => (a.stats?.consistencyScore || 99) - (b.stats?.consistencyScore || 99))[0];
+          
+          return `${consistentPlayer.name} est très régulier dans son jeu !`;
+        }
+      },
+      
+      // Commentaires sur les bestRound
+      {
+        condition: () => players.some(p => p.stats?.bestRound && p.stats.bestRound < 5 && p.stats.bestRound > 0),
+        getText: () => {
+          const bestPlayer = [...players]
+            .filter(p => p.stats?.bestRound && p.stats.bestRound < 5 && p.stats.bestRound > 0)
+            .sort((a, b) => (a.stats?.bestRound || 99) - (b.stats?.bestRound || 99))[0];
+          
+          return `${bestPlayer.name} a fait un score impressionnant de ${bestPlayer.stats?.bestRound} !`;
+        }
+      },
+      
+      // Commentaires sur les winStreak
+      {
+        condition: () => players.some(p => p.stats?.winStreak && p.stats.winStreak > 2),
+        getText: () => {
+          const streakPlayer = [...players]
+            .filter(p => p.stats?.winStreak && p.stats.winStreak > 2)
+            .sort((a, b) => (b.stats?.winStreak || 0) - (a.stats?.winStreak || 0))[0];
+          
+          return `${streakPlayer.name} est en feu avec ${streakPlayer.stats?.winStreak} victoires consécutives !`;
+        }
+      },
+      
+      // Commentaires sur les scores très serrés
+      {
+        condition: () => {
+          if (players.length < 2) return false;
+          const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
+          const totalScores = sortedPlayers.map(p => p.totalScore);
+          const maxDiff = Math.max(...totalScores) - Math.min(...totalScores);
+          return maxDiff < 10 && roundNumber > 2;
+        },
+        getText: () => "Les scores sont très serrés ! Tout peut encore arriver !"
+      },
+      
+      // Commentaires sur le nombre de manches
+      {
+        condition: () => roundNumber > 10,
+        getText: () => `Déjà ${roundNumber} manches ! Quelle partie !`
+      },
+      
+      // Commentaires génériques
+      {
+        condition: () => true,
+        getText: () => {
+          const genericComments = [
+            "Qui va gagner cette manche ?",
+            "Concentrez-vous sur vos cartes !",
+            "N'oubliez pas de dire Dutch !",
+            "Un bon joueur sait quand dire Dutch !",
+            "La chance sourit aux audacieux !",
+            "Stratégie ou chance ? Un peu des deux !",
+            "Une bonne main peut tout changer !",
+            "Gardez un œil sur vos adversaires !",
+            "Soyez attentifs aux cartes jouées !",
+          ];
+          return genericComments[Math.floor(Math.random() * genericComments.length)];
+        }
+      }
+    ];
+    
+    // Choisir un commentaire applicable
+    const applicableComments = comments.filter(c => c.condition());
+    // Favoriser les commentaires spécifiques
+    const specificComments = applicableComments.slice(0, -1);
+    
+    if (specificComments.length > 0) {
+      // Choisir un commentaire spécifique aléatoire
+      return specificComments[Math.floor(Math.random() * specificComments.length)].getText();
+    }
+    
+    // Sinon, retourner un commentaire générique
+    return applicableComments[applicableComments.length - 1].getText();
+  }, [players, roundNumber]);
+  
+  // Déterminer l'icône à afficher
+  const getIcon = () => {
+    if (players.some(p => p.stats?.dutchCount && p.stats.dutchCount > 2)) {
+      return <HeartHandshake className="h-5 w-5 text-dutch-orange" />;
+    }
+    
+    if (players.some(p => p.stats?.winStreak && p.stats.winStreak > 2)) {
+      return <Star className="h-5 w-5 text-dutch-yellow" />;
+    }
+    
+    if (players.some(p => p.stats?.bestRound && p.stats.bestRound < 5 && p.stats.bestRound > 0)) {
+      return <Target className="h-5 w-5 text-dutch-green" />;
+    }
+    
+    if (players.some(p => p.stats?.consistencyScore && p.stats.consistencyScore < 4)) {
+      return <Zap className="h-5 w-5 text-dutch-blue" />;
+    }
+    
+    if (players.length > 1 && roundNumber > 1) {
+      return <Crown className="h-5 w-5 text-dutch-purple" />;
+    }
+    
+    return <Award className="h-5 w-5 text-dutch-blue" />;
+  };
+  
   return (
-    <AnimatePresence mode="wait">
-      <motion.div
-        key={comment}
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -10 }}
-        transition={{ duration: 0.3 }}
-        className={`prof-cartouche relative overflow-hidden ${view === 'podium' ? 'mb-4' : 'my-2'}`}
-      >
-        <div className="absolute -z-10 inset-0 bg-gradient-to-r from-dutch-blue/5 via-dutch-orange/5 to-dutch-purple/5 rounded-2xl" />
-        <div className="absolute -z-10 top-0 right-0 w-32 h-32 bg-dutch-orange/10 rounded-full blur-3xl opacity-30" />
-        <div className="absolute -z-10 bottom-0 left-0 w-32 h-32 bg-dutch-blue/10 rounded-full blur-3xl opacity-30" />
-        
-        <div className={`relative rounded-2xl border border-white/30 backdrop-blur-sm shadow-sm overflow-hidden
-          ${view === 'podium' 
-            ? 'bg-white/70 p-4 md:p-5' 
-            : 'bg-white/80 p-3 md:p-4'}`}
-        >
-          <div className="flex items-start gap-3">
-            <div className="prof-avatar flex-shrink-0">
-              <motion.div
-                whileHover={{ rotate: [0, 5, -5, 0] }}
-                transition={{ duration: 0.5 }}
-                className={`relative overflow-hidden ${view === 'podium' ? 'w-12 h-12 md:w-14 md:h-14' : 'w-10 h-10 md:w-12 md:h-12'} rounded-full bg-gradient-to-br from-dutch-orange to-dutch-pink border-2 border-white/50 shadow-md`}
-              >
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <span className={`font-bold text-white ${view === 'podium' ? 'text-xl md:text-2xl' : 'text-lg md:text-xl'}`}>P</span>
-                </div>
-              </motion.div>
-            </div>
-            
-            <div className="flex-1">
-              <div className="flex items-center gap-1.5 mb-1">
-                <h3 className={`font-semibold bg-gradient-to-r from-dutch-orange to-dutch-pink bg-clip-text text-transparent
-                  ${view === 'podium' ? 'text-lg' : 'text-base'}`}>
-                  Prof. Cartouche
-                </h3>
-                <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ delay: 0.2, type: "spring", stiffness: 400, damping: 10 }}
-                >
-                  {icon}
-                </motion.div>
-              </div>
-              
-              <motion.p 
-                className={`text-gray-800 ${view === 'podium' ? 'text-sm md:text-base' : 'text-xs md:text-sm'}`}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.1 }}
-              >
-                {comment}
-              </motion.p>
-            </div>
+    <motion.div 
+      className={`${composedClasses.card} border-l-4 border-l-dutch-purple p-3 mb-4`}
+      initial={{ opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+      layout
+    >
+      <div className="flex items-start gap-3">
+        <div className="relative">
+          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-dutch-purple to-dutch-blue flex items-center justify-center text-white shadow-sm">
+            <span className="font-bold text-lg">P</span>
           </div>
+          <motion.div 
+            className="absolute -bottom-1 -right-1 bg-white rounded-full p-0.5 shadow-sm"
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.2, type: "spring" }}
+          >
+            {getIcon()}
+          </motion.div>
         </div>
-      </motion.div>
-    </AnimatePresence>
+        
+        <div className="flex-1">
+          <h3 className="font-semibold text-sm text-dutch-purple flex items-center gap-1.5">
+            Le Prof
+            <span className="text-xs font-normal text-gray-400">
+              • Commentateur
+            </span>
+          </h3>
+          <p className="text-gray-700 mt-1">
+            {comment}
+          </p>
+        </div>
+      </div>
+    </motion.div>
   );
-};
+}, (prevProps, nextProps) => {
+  // Optimisation de performance: ne re-render que si nécessaire
+  return (
+    prevProps.roundNumber === nextProps.roundNumber &&
+    prevProps.view === nextProps.view &&
+    prevProps.players.length === nextProps.players.length &&
+    prevProps.players.every((player, index) => {
+      const nextPlayer = nextProps.players[index];
+      return (
+        player.id === nextPlayer.id &&
+        player.totalScore === nextPlayer.totalScore &&
+        player.rounds.length === nextPlayer.rounds.length &&
+        player.stats?.dutchCount === nextPlayer.stats?.dutchCount &&
+        player.stats?.winStreak === nextPlayer.stats?.winStreak &&
+        player.stats?.bestRound === nextPlayer.stats?.bestRound &&
+        player.stats?.consistencyScore === nextPlayer.stats?.consistencyScore
+      );
+    })
+  );
+});
+
+ProfCartouche.displayName = 'ProfCartouche';
 
 export default ProfCartouche;

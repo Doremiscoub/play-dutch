@@ -1,3 +1,4 @@
+
 export interface Player {
   id: string;
   name: string;
@@ -26,15 +27,48 @@ export interface Game {
   gameCode?: string;
 }
 
-// Add these new props to the ScoreBoardProps interface
 export interface ScoreBoardProps {
   players: Player[];
   onAddRound: (scores: number[], dutchPlayerId?: string) => void;
   onEndGame: () => void;
   onUndoLastRound: () => void;
-  roundHistory?: { scores: number[], dutchPlayerId?: string }[];
+  roundHistory: { scores: number[], dutchPlayerId?: string }[];
   isMultiplayer?: boolean;
-  showGameEndConfirmation?: boolean;
-  onConfirmEndGame?: () => void;
-  onCancelEndGame?: () => void;
+  showGameEndConfirmation: boolean;
+  onConfirmEndGame: () => void;
+  onCancelEndGame: () => void;
+}
+
+export interface TournamentPlayer {
+  id: string;
+  name: string;
+  score: number;
+  wins: number;
+  dutchCount: number;
+  totalScore: number;
+  gamesPlayed: number;
+  avgScorePerGame: number;
+  bestGameScore: number;
+  worstGameScore: number;
+}
+
+export interface Tournament {
+  id: string;
+  name: string;
+  date: Date;
+  players: TournamentPlayer[];
+  games: Game[];
+  completed: boolean;
+  currentGameIndex: number;
+  winner?: string;
+}
+
+export interface TournamentState {
+  tournaments: Tournament[];
+  currentTournament: Tournament | null;
+  createTournament: (name: string, playerNames: string[]) => void;
+  getCurrentTournament: () => Tournament | null;
+  updateTournamentWithGameResult: (gameResult: Game) => void;
+  completeTournament: () => void;
+  getTournamentById: (id: string) => Tournament | null;
 }
