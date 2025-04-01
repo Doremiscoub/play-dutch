@@ -1,146 +1,213 @@
-
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import LocalGameSetup from '@/components/LocalGameSetup';
-import ScoreBoard from '@/components/ScoreBoard/index';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { Player, Game, PlayerStatistics } from '@/types';
+import GameSetup from '@/components/GameSetup';
+import ScoreBoard from '@/components/ScoreBoard';
+import MultiplayerGameSetup from '@/components/MultiplayerGameSetup';
+import { v4 as uuidv4 } from 'uuid';
 import { toast } from 'sonner';
 import { AnimatePresence, motion } from 'framer-motion';
 import confetti from 'canvas-confetti';
-import useGameStore from '@/store/useGameStore';
-import useOfflineStorage from '@/hooks/useOfflineStorage';
-import useTournamentStore from '@/store/useTournamentStore';
-import { sounds } from '@/config/uiConfig';
+import { updateGameState, getGameSession, getGamePlayers } from '@/utils/gameInvitation';
+import { useUser } from '@clerk/clerk-react';
 
-/**
- * Page principale du jeu
- * Gère le flux entre l'écran de setup et le tableau de score
- */
 const GamePage: React.FC = () => {
-  // Récupérer l'état global du jeu
-  const { 
-    players, roundHistory, startGame, addRound, undoLastRound, 
-    endGame, confirmEndGame, cancelEndGame, updatePlayerStats,
-    showGameEndConfirmation, games
-  } = useGameStore();
-  
-  const { currentTournament, updateTournamentWithGameResult } = useTournamentStore();
-  
-  // Hook pour la gestion du stockage hors-ligne
-  const { getSavedGame, hasOngoingGame, restoreSavedGame } = useOfflineStorage();
-  
-  // État local - important: setting this to 'setup' by default
   const [gameState, setGameState] = useState<'setup' | 'playing'>('setup');
-  
+  const [players, setPlayers] = useState<Player[]>([]);
+  const [games, setGames] = useState<Game[]>(() => {
+    const savedGames = localStorage.getItem('dutch_games');
+    return savedGames ? JSON.parse(savedGames) : [];
+  });
+  const [roundHistory, setRoundHistory] = useState<{ scores: number[], dutchPlayerId?: string }[]>([]);
+  const [isMultiplayer, setIsMultiplayer] = useState<boolean>(false);
+  const [currentGameId, setCurrentGameId] = useState<string | null>(null);
+  const [showGameEndConfirmation, setShowGameEndConfirmation] = useState<boolean>(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const { user } = useUser();
 
-  // Effet pour initialiser l'état à partir du stockage local si une partie est en cours
   useEffect(() => {
-    if (hasOngoingGame()) {
-      const success = restoreSavedGame();
-      if (success) {
-        setGameState('playing');
+    const params = new URLSearchParams(location.search);
+    const joinCode = params.get('join');
+    
+    if (joinCode) {
+      setCurrentGameId(joinCode);
+    }
+  }, [location]);
+
+  useEffect(() => {
+    localStorage.setItem('dutch_games', JSON.stringify(games));
+  }, [games]);
+
+  const calculatePlayerStats = useCallback((player: Player): PlayerStatistics => {
+    const rounds = player.rounds;
+    if (rounds.length === 0) {
+      return {
+        bestRound: null,
+        dutchCount: 0,
+        averageScore: 0,
+        worstRound: null,
+        improvementRate: 0,
+        consistencyScore: 0,
+        winStreak: 0
+      };
+    }
+
+    const scores = rounds.map(r => r.score);
+    const dutchCount = rounds.filter(r => r.isDutch).length;
+    const nonZeroScores = scores.filter(s => s > 0);
+    
+    let improvementRate = 0;
+    if (rounds.length >= 6) {
+      const firstThree = scores.slice(0, 3).reduce((a, b) => a + b, 0) / 3;
+      const lastThree = scores.slice(-3).reduce((a, b) => a + b, 0) / 3;
+      improvementRate = lastThree - firstThree;
+    }
+
+    const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
+    const variance = scores.reduce((a, b) => a + Math.pow(b - avg, 2), 0) / scores.length;
+    const consistencyScore = Math.sqrt(variance);
+
+    let winStreak = 0;
+    let currentWinStreak = 0;
+    for (let i = 0; i < rounds.length; i++) {
+      if (players.every(p => p.id === player.id || (p.rounds[i] && rounds[i].score <= p.rounds[i].score))) {
+        currentWinStreak++;
+        winStreak = Math.max(winStreak, currentWinStreak);
+      } else {
+        currentWinStreak = 0;
       }
     }
-  }, []);
-  
-  // Effet pour mettre à jour les stats des joueurs quand les rounds changent
-  // FIX: This was causing the infinite loop. We now check if players have rounds
-  // and only call updatePlayerStats when needed.
+
+    return {
+      bestRound: nonZeroScores.length > 0 ? Math.min(...nonZeroScores) : null,
+      dutchCount,
+      averageScore: Math.round(avg * 10) / 10,
+      worstRound: scores.length > 0 ? Math.max(...scores) : null,
+      improvementRate: Math.round(improvementRate * 10) / 10,
+      consistencyScore: Math.round(consistencyScore * 10) / 10,
+      winStreak
+    };
+  }, [players]);
+
+  const updatePlayerStats = useCallback(() => {
+    setPlayers(prevPlayers => {
+      return prevPlayers.map(player => ({
+        ...player,
+        stats: calculatePlayerStats(player)
+      }));
+    });
+  }, [calculatePlayerStats]);
+
   useEffect(() => {
-    // Only update stats if there are players with rounds
-    const hasRounds = players.length > 0 && players[0].rounds.length > 0;
-    
-    // We only want to update stats if the rounds actually exist
-    // The players state might already include updated stats from other operations
-    if (hasRounds && !players[0].stats) {
+    if (players.length > 0 && players[0].rounds.length > 0) {
       updatePlayerStats();
     }
-  }, [players.length, players.map(p => p.rounds.length).join(',')]);
-  
-  // Gestionnaires d'événements
-  const handleStartGame = (playerNames: string[]) => {
-    startGame(playerNames);
+  }, [players, updatePlayerStats]);
+
+  const handleStartLocalGame = (playerNames: string[]) => {
+    const newPlayers = playerNames.map(name => ({
+      id: uuidv4(),
+      name,
+      totalScore: 0,
+      rounds: []
+    }));
+    
+    setPlayers(newPlayers);
     setGameState('playing');
+    setRoundHistory([]);
+    setIsMultiplayer(false);
+    setCurrentGameId(null);
     toast.success('La partie commence !');
+  };
+  
+  const handleStartMultiplayerGame = (gameId: string) => {
+    const gameSession = getGameSession(gameId);
+    
+    if (!gameSession) {
+      toast.error("Cette partie n'existe plus");
+      return;
+    }
+    
+    const gamePlayers = gameSession.players.map(player => ({
+      id: player.id,
+      name: player.name,
+      totalScore: 0,
+      rounds: []
+    }));
+    
+    setPlayers(gamePlayers);
+    setGameState('playing');
+    setRoundHistory([]);
+    setIsMultiplayer(true);
+    setCurrentGameId(gameId);
+    toast.success('La partie multijoueur commence !');
   };
 
   const handleAddRound = (scores: number[], dutchPlayerId?: string) => {
-    addRound(scores, dutchPlayerId);
+    setRoundHistory(prev => [...prev, { scores, dutchPlayerId }]);
     
-    // Jouer le son
-    if (window.localStorage.getItem('dutch_sound_enabled') !== 'false') {
-      try {
-        new Audio(sounds.cardSound).play().catch(err => console.error("Sound error:", err));
-      } catch (err) {
-        console.error("Sound error:", err);
+    setPlayers(prevPlayers => {
+      const updatedPlayers = prevPlayers.map((player, index) => {
+        const isDutch = player.id === dutchPlayerId;
+        const newRound = { 
+          score: scores[index],
+          isDutch 
+        };
+        const newTotalScore = player.totalScore + scores[index];
+        
+        return {
+          ...player,
+          rounds: [...player.rounds, newRound],
+          totalScore: newTotalScore
+        };
+      });
+      
+      if (isMultiplayer && currentGameId) {
+        updateGameState(currentGameId, {
+          players: updatedPlayers,
+          roundHistory: [...roundHistory, { scores, dutchPlayerId }]
+        });
       }
+      
+      return updatedPlayers;
+    });
+    
+    if (window.localStorage.getItem('dutch_sound_enabled') !== 'false') {
+      new Audio('/sounds/card-sound.mp3').play().catch(err => console.error("Sound error:", err));
     }
     
     toast.success('Manche ajoutée !');
-    
-    // Vérifier si la partie est terminée (100 points ou plus)
-    const playersTotalWithNewScores = players.map((player, index) => ({
-      ...player,
-      newTotal: player.totalScore + scores[index]
-    }));
-    
-    const gameOver = playersTotalWithNewScores.some(p => p.newTotal >= 100);
-    
-    if (gameOver) {
-      handleConfirmEndGame();
-    }
   };
   
-  const handleUndoLastRound = () => {
-    undoLastRound();
+  const finishGame = () => {
+    const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
+    const winner = sortedPlayers[0].name;
     
-    // Jouer le son
-    if (window.localStorage.getItem('dutch_sound_enabled') !== 'false') {
-      try {
-        new Audio(sounds.undoSound).play().catch(err => console.error("Sound error:", err));
-      } catch (err) {
-        console.error("Sound error:", err);
-      }
-    }
+    const newGame: Game = {
+      id: uuidv4(),
+      date: new Date(),
+      rounds: players[0].rounds.length,
+      players: sortedPlayers.map(player => ({
+        name: player.name,
+        score: player.totalScore,
+        isDutch: player.rounds.some(r => r.isDutch)
+      })),
+      winner,
+      isMultiplayer,
+      gameCode: isMultiplayer ? currentGameId || undefined : undefined
+    };
     
-    toast.success('Dernière manche annulée !');
-  };
-  
-  const handleEndGame = () => {
-    endGame();
-  };
-  
-  const handleConfirmEndGame = () => {
-    confirmEndGame();
-    
-    // Si on est dans un tournoi, mettre à jour les résultats du tournoi
-    if (currentTournament) {
-      const latestGame = games[games.length - 1];
-      updateTournamentWithGameResult(latestGame);
-    }
+    setGames(prev => [...prev, newGame]);
+    toast.success(`Partie terminée ! ${winner} gagne !`);
     
     launchConfetti();
     
-    // Jouer le son de victoire
     if (window.localStorage.getItem('dutch_sound_enabled') !== 'false') {
-      try {
-        new Audio(sounds.winSound).play().catch(err => console.error("Sound error:", err));
-      } catch (err) {
-        console.error("Sound error:", err);
-      }
+      new Audio('/sounds/win-sound.mp3').play().catch(err => console.error("Sound error:", err));
     }
-    
-    // Rediriger vers le podium
-    setTimeout(() => {
-      navigate('/history');
-    }, 2000);
   };
   
-  const handleCancelEndGame = () => {
-    cancelEndGame();
-  };
-  
-  // Fonction pour lancer des confettis
   const launchConfetti = () => {
     const duration = 3000;
     const animationEnd = Date.now() + duration;
@@ -173,6 +240,94 @@ const GamePage: React.FC = () => {
       });
     }, 250);
   };
+  
+  const handleUndoLastRound = () => {
+    if (players.length === 0 || players[0].rounds.length === 0) {
+      toast.error('Pas de manche à annuler !');
+      return;
+    }
+    
+    setRoundHistory(prev => prev.slice(0, -1));
+    
+    setPlayers(prevPlayers => {
+      const updatedPlayers = prevPlayers.map(player => {
+        if (player.rounds.length === 0) return player;
+        
+        const lastRound = player.rounds[player.rounds.length - 1];
+        const newTotalScore = player.totalScore - lastRound.score;
+        
+        return {
+          ...player,
+          rounds: player.rounds.slice(0, -1),
+          totalScore: newTotalScore
+        };
+      });
+      
+      if (isMultiplayer && currentGameId) {
+        updateGameState(currentGameId, {
+          players: updatedPlayers,
+          roundHistory: roundHistory.slice(0, -1)
+        });
+      }
+      
+      return updatedPlayers;
+    });
+    
+    if (window.localStorage.getItem('dutch_sound_enabled') !== 'false') {
+      new Audio('/sounds/undo-sound.mp3').play().catch(err => console.error("Sound error:", err));
+    }
+    
+    toast.success('Dernière manche annulée !');
+  };
+
+  const handleEndGame = () => {
+    if (players.length > 0 && players[0].rounds.length > 0) {
+      setShowGameEndConfirmation(true);
+    } else {
+      resetGame();
+    }
+  };
+  
+  const confirmEndGame = () => {
+    finishGame();
+    setShowGameEndConfirmation(false);
+    setTimeout(() => {
+      resetGame();
+    }, 1500);
+  };
+  
+  const cancelEndGame = () => {
+    setShowGameEndConfirmation(false);
+  };
+  
+  const resetGame = () => {
+    setGameState('setup');
+    setPlayers([]);
+    setRoundHistory([]);
+    setIsMultiplayer(false);
+    setCurrentGameId(null);
+  };
+
+  useEffect(() => {
+    if (isMultiplayer && currentGameId && gameState === 'playing') {
+      const intervalId = setInterval(() => {
+        const gameSession = getGameSession(currentGameId);
+        if (gameSession && gameSession.gameState) {
+          const serverPlayers = gameSession.gameState.players;
+          const serverRoundHistory = gameSession.gameState.roundHistory;
+          
+          if (serverPlayers && serverRoundHistory && 
+              (serverPlayers.length !== players.length || 
+               serverRoundHistory.length !== roundHistory.length)) {
+            setPlayers(serverPlayers);
+            setRoundHistory(serverRoundHistory);
+          }
+        }
+      }, 3000);
+      
+      return () => clearInterval(intervalId);
+    }
+  }, [isMultiplayer, currentGameId, gameState, players.length, roundHistory.length]);
 
   return (
     <div className="min-h-screen">
@@ -184,7 +339,10 @@ const GamePage: React.FC = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <LocalGameSetup onStartGame={handleStartGame} />
+            <MultiplayerGameSetup 
+              onStartLocalGame={handleStartLocalGame}
+              onStartMultiplayerGame={handleStartMultiplayerGame}
+            />
           </motion.div>
         ) : (
           <motion.div
@@ -199,10 +357,10 @@ const GamePage: React.FC = () => {
               onEndGame={handleEndGame}
               onUndoLastRound={handleUndoLastRound}
               roundHistory={roundHistory}
+              isMultiplayer={isMultiplayer}
               showGameEndConfirmation={showGameEndConfirmation}
-              onConfirmEndGame={handleConfirmEndGame}
-              onCancelEndGame={handleCancelEndGame}
-              isMultiplayer={false}
+              onConfirmEndGame={confirmEndGame}
+              onCancelEndGame={cancelEndGame}
             />
           </motion.div>
         )}
