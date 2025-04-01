@@ -3,7 +3,7 @@ import React from 'react';
 import { cn } from '@/lib/utils';
 
 interface LogoProps {
-  size?: 'sm' | 'md' | 'lg' | 'xl';
+  size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl';
   className?: string;
 }
 
@@ -18,14 +18,16 @@ const Logo: React.FC<LogoProps> = ({ size = 'md', className }) => {
     md: 'text-xl',
     lg: 'text-2xl',
     xl: 'text-3xl',
+    '2xl': 'text-4xl',
   }[size];
 
   // Déterminer la taille du sparkle en fonction de la taille du logo
   const sparkleSize = {
     sm: 'text-xs',
-    md: 'text-xs',
-    lg: 'text-sm',
-    xl: 'text-base',
+    md: 'text-sm',
+    lg: 'text-base',
+    xl: 'text-lg',
+    '2xl': 'text-xl',
   }[size];
 
   // Déterminer l'offset vertical du sparkle
@@ -33,7 +35,8 @@ const Logo: React.FC<LogoProps> = ({ size = 'md', className }) => {
     sm: '-top-1',
     md: '-top-1',
     lg: '-top-1.5',
-    xl: '-top-1.5',
+    xl: '-top-2',
+    '2xl': '-top-2.5',
   }[size];
 
   return (
@@ -41,7 +44,7 @@ const Logo: React.FC<LogoProps> = ({ size = 'md', className }) => {
       <span className="bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">
         Dutch
       </span>
-      <span className={cn('relative ml-1', sparkleSize, sparkleOffset)}>
+      <span className={cn('relative ml-1.5', sparkleSize, sparkleOffset)}>
         <span className="text-dutch-orange">✨</span>
       </span>
     </div>

@@ -8,6 +8,7 @@ import NotFound from '@/pages/NotFound';
 import SignIn from '@/pages/SignIn';
 import SignUp from '@/pages/SignUp';
 import GamePage from '@/pages/GamePage';
+import GameSetupPage from '@/pages/GameSetupPage';
 import HistoryPage from '@/pages/HistoryPage';
 import RulesPage from '@/pages/RulesPage';
 import SettingsPage from '@/pages/SettingsPage';
@@ -30,6 +31,7 @@ function App() {
           <Route path="/rules" element={<RulesPage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/easter-egg" element={<BrickBreaker onClose={() => window.history.back()} />} />
+          <Route path="/game-setup" element={<GameSetupPage />} />
           <Route path="/game" element={<GamePage />} />
           <Route path="/history" element={<HistoryPage />} />
           <Route path="*" element={<NotFound />} />

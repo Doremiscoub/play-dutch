@@ -15,9 +15,9 @@ const Home: React.FC = () => {
   const { user, loaded } = useClerk();
   const { isMobile } = useDeviceDetect();
 
-  // Redirige directement vers la page de jeu pour "Jouer sans compte"
-  const handlePlayOffline = () => {
-    navigate('/game');
+  // Redirige vers l'écran de configuration pour "Nouvelle partie"
+  const handleNewGame = () => {
+    navigate('/game-setup');
   };
 
   // Redirige vers la reprise de partie
@@ -29,15 +29,20 @@ const Home: React.FC = () => {
       navigate('/game');
     } else {
       // S'il n'y a pas de partie en cours, rediriger vers une nouvelle partie
-      navigate('/game');
+      navigate('/game-setup');
     }
+  };
+
+  // Jouer sans compte redirige vers l'écran de configuration
+  const handlePlayOffline = () => {
+    navigate('/game-setup');
   };
 
   if (!loaded) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-pulse text-center">
-          <Logo size="lg" className="mx-auto mb-4" />
+          <Logo size="xl" className="mx-auto mb-4" />
           <p className="text-gray-600">Chargement...</p>
         </div>
       </div>
@@ -55,10 +60,11 @@ const Home: React.FC = () => {
   };
 
   return (
-    <PageLayout>
-      <div className="max-w-md mx-auto pt-12 pb-20 px-4">
-        <div className="text-center mb-16">
-          <Logo size="xl" className="mx-auto mb-4" />
+    <PageLayout className="bg-white" backgroundVariant="home">
+      <div className="max-w-md mx-auto pt-10 pb-20 px-4">
+        <div className="text-center mb-14">
+          <Logo size="2xl" className="mx-auto mb-2" />
+          <p className="text-gray-600 mt-2">Votre compagnon de jeu</p>
         </div>
 
         <div className="space-y-4">
@@ -113,7 +119,7 @@ const Home: React.FC = () => {
                   variant="default"
                   size="lg"
                   className="w-full py-6 rounded-full bg-gradient-to-r from-dutch-blue to-dutch-purple text-white shadow-md"
-                  onClick={handlePlayOffline}
+                  onClick={handleNewGame}
                 >
                   <ExternalLink className="mr-3 h-5 w-5" />
                   Nouvelle partie

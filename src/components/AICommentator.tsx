@@ -1,9 +1,12 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Player } from '@/types';
-import { motion } from 'framer-motion';
-import { MessageSquare, Bot } from 'lucide-react';
 import { getAIComment } from '@/utils/aiCommentsGenerator';
+import { Card, CardContent } from '@/components/ui/card';
+import { Bot, MessageSquare, RefreshCw } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Button } from './ui/button';
+import { cn } from '@/lib/utils';
 
 interface AICommentatorProps {
   players: Player[];
@@ -12,80 +15,154 @@ interface AICommentatorProps {
   name?: string;
 }
 
-/**
- * Composant pour le commentateur IA qui analyse la partie et fait des remarques
- */
-const AICommentator: React.FC<AICommentatorProps> = ({ 
-  players, 
+const AICommentator: React.FC<AICommentatorProps> = ({
+  players,
   roundHistory = [],
-  className = '',
-  name = 'Professeur Cartouche'
+  className,
+  name = "Professeur Cartouche"
 }) => {
   const [comment, setComment] = useState<string>('');
   const [commentType, setCommentType] = useState<'info' | 'joke' | 'sarcasm' | 'encouragement'>('info');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   
-  // Générer un commentaire basé sur l'état actuel de la partie
-  useEffect(() => {
-    if (players.length === 0) return;
+  // Générer un nouveau commentaire
+  const generateComment = () => {
+    setIsLoading(true);
     
-    const generateComment = () => {
-      const { comment, type } = getAIComment(players, roundHistory, name);
-      setComment(comment);
+    // Simuler un délai pour l'effet de "réflexion" de l'IA
+    setTimeout(() => {
+      const { comment: newComment, type } = getAIComment(players, roundHistory, name);
+      setComment(newComment);
       setCommentType(type);
-    };
-    
-    // Générer un commentaire initial
-    generateComment();
-    
-    // Mettre à jour le commentaire périodiquement
-    const interval = setInterval(generateComment, 20000); // Toutes les 20 secondes
-    
-    return () => clearInterval(interval);
-  }, [players, roundHistory, name]);
+      setIsLoading(false);
+    }, 600);
+  };
   
-  // Styles basés sur le type de commentaire
-  const getCommentStyles = () => {
+  // Générer un commentaire initial au chargement et quand les joueurs ou l'historique changent
+  useEffect(() => {
+    generateComment();
+  }, [players.length, roundHistory.length]);
+  
+  // Styles conditionnels basés sur le type de commentaire
+  const getCommentTypeStyles = () => {
     switch (commentType) {
-      case 'info':
-        return 'border-dutch-blue/30 bg-dutch-blue/5';
       case 'joke':
-        return 'border-dutch-orange/30 bg-dutch-orange/5';
+        return 'bg-dutch-orange/10 border-dutch-orange/20 text-dutch-orange';
       case 'sarcasm':
-        return 'border-dutch-purple/30 bg-dutch-purple/5';
+        return 'bg-dutch-purple/10 border-dutch-purple/20 text-dutch-purple';
       case 'encouragement':
-        return 'border-dutch-green/30 bg-dutch-green/5';
+        return 'bg-green-500/10 border-green-500/20 text-green-600';
+      case 'info':
       default:
-        return 'border-gray-200 bg-gray-50';
+        return 'bg-dutch-blue/10 border-dutch-blue/20 text-dutch-blue';
     }
   };
   
-  // Animations
-  const variants = {
-    initial: { opacity: 0, y: 20 },
-    animate: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-    exit: { opacity: 0, y: -20, transition: { duration: 0.3 } }
+  const characterAnimationVariants = {
+    hidden: { scale: 0.8, opacity: 0 },
+    visible: { 
+      scale: 1, 
+      opacity: 1,
+      transition: { duration: 0.4 }
+    },
+    exit: { 
+      scale: 0.8, 
+      opacity: 0,
+      transition: { duration: 0.3 }
+    }
+  };
+  
+  const bubbleAnimationVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: { 
+      y: 0, 
+      opacity: 1,
+      transition: { 
+        duration: 0.4,
+        delay: 0.1
+      }
+    },
+    exit: { 
+      y: 20, 
+      opacity: 0,
+      transition: { duration: 0.3 }
+    }
   };
 
   return (
-    <motion.div 
-      className={`rounded-2xl border p-4 shadow-sm backdrop-blur-sm ${getCommentStyles()} ${className}`}
-      variants={variants}
-      initial="initial"
-      animate="animate"
-      exit="exit"
-    >
-      <div className="flex items-start gap-3">
-        <div className="flex-shrink-0 h-8 w-8 rounded-full bg-white flex items-center justify-center shadow-sm">
-          <Bot className="h-4 w-4 text-dutch-purple" />
-        </div>
-        <div>
-          <h3 className="font-medium text-gray-800 mb-1">{name}</h3>
-          <p className="text-gray-600 text-sm">
-            {comment || `Bienvenue dans cette partie de Dutch ! Je suis ${name}, votre commentateur.`}
-          </p>
-        </div>
-      </div>
-    </motion.div>
+    <div className={cn("", className)}>
+      <Card className="bg-white/70 backdrop-blur-md rounded-xl overflow-hidden border border-white/40 shadow-sm relative">
+        <CardContent className="p-4">
+          <div className="flex flex-col">
+            <div className="flex items-center gap-3 mb-3">
+              <motion.div 
+                initial={{ scale: 0.9 }}
+                animate={{ scale: 1 }}
+                transition={{ 
+                  duration: 0.5,
+                  repeat: Infinity,
+                  repeatType: "reverse"
+                }}
+                className="flex-shrink-0 h-12 w-12 rounded-full bg-gradient-to-r from-dutch-blue/90 to-dutch-purple/90 flex items-center justify-center text-white shadow-md"
+              >
+                <Bot className="h-6 w-6" />
+              </motion.div>
+              
+              <div>
+                <h3 className="font-semibold text-gray-900">{name}</h3>
+                <p className="text-xs text-gray-500">Commentateur IA</p>
+              </div>
+              
+              <Button
+                variant="ghost"
+                size="icon"
+                className="ml-auto h-8 w-8 rounded-full text-gray-500 hover:text-gray-700 hover:bg-gray-100/50"
+                onClick={generateComment}
+                disabled={isLoading}
+              >
+                <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
+              </Button>
+            </div>
+            
+            <AnimatePresence mode="wait">
+              {isLoading ? (
+                <motion.div
+                  key="loading"
+                  variants={bubbleAnimationVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  className="p-3 rounded-xl bg-gray-100/70 backdrop-blur-sm shadow-sm text-gray-500 text-sm"
+                >
+                  <div className="flex items-center gap-2">
+                    <div className="flex space-x-1">
+                      <div className="h-2 w-2 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: "0ms" }} />
+                      <div className="h-2 w-2 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: "150ms" }} />
+                      <div className="h-2 w-2 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: "300ms" }} />
+                    </div>
+                    <span>{name} réfléchit...</span>
+                  </div>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="comment"
+                  variants={bubbleAnimationVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  className={`p-3 rounded-xl backdrop-blur-sm shadow-sm text-sm ${getCommentTypeStyles()}`}
+                >
+                  <div className="flex items-start gap-2">
+                    <MessageSquare className="h-4 w-4 mt-0.5 flex-shrink-0" />
+                    <span>{comment}</span>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 

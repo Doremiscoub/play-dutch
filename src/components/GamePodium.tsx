@@ -1,3 +1,4 @@
+
 import React, { useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Player } from '@/types';
@@ -83,6 +84,19 @@ const GamePodium: React.FC<GamePodiumProps> = ({ players, onNewGame, gameDuratio
       stats.push({
         text: `${bestAverage.player} a la meilleure moyenne: ${bestAverage.avg.toFixed(1)} pts/manche`,
         icon: <Target className="h-5 w-5 text-dutch-blue" />
+      });
+    }
+    
+    // Statistique sur le joueur le plus régulier
+    const mostConsistent = players.reduce((most, player) => {
+      const consistency = player.stats?.consistencyScore || 0;
+      return consistency > most.score ? { player: player.name, score: consistency } : most;
+    }, { player: '', score: 0 });
+    
+    if (mostConsistent.score > 0) {
+      stats.push({
+        text: `${mostConsistent.player} a été le joueur le plus régulier`,
+        icon: <Medal className="h-5 w-5 text-yellow-500" />
       });
     }
     

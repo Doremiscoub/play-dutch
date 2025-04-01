@@ -62,6 +62,7 @@ const HistoryPage: React.FC = () => {
     <PageLayout
       title="Historique des parties"
       subtitle="Consultez toutes vos parties terminées"
+      showBackButton={true}
     >
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <motion.div
