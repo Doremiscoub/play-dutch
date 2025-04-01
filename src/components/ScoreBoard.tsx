@@ -58,7 +58,6 @@ const FloatingButtons: React.FC<FloatingButtonsProps> = ({
       >
         <Button
           onClick={onAddRound}
-          variant="default"
           className="px-8 bg-gradient-to-r from-dutch-purple to-dutch-blue shadow-lg rounded-full h-14"
         >
           <Plus className="h-5 w-5 mr-2" />

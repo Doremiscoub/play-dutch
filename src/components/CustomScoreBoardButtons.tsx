@@ -56,7 +56,6 @@ const CustomScoreBoardButtons: React.FC<CustomScoreBoardButtonsProps> = ({
       >
         <Button
           onClick={onAddRound}
-          variant="default"
           className="px-8 bg-gradient-to-r from-dutch-purple to-dutch-blue shadow-xl rounded-full h-14"
         >
           <Plus className="h-5 w-5 mr-2" />
