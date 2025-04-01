@@ -1,6 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useLocalStorage } from '@/hooks/use-local-storage';
 import { Switch } from '@/components/ui/switch';
@@ -13,7 +12,6 @@ import { toast } from 'sonner';
 const SettingsPage = () => {
   const [soundEnabled, setSoundEnabled] = useLocalStorage('dutch_sound_enabled', true);
   const [resetConfirmationOpen, setResetConfirmationOpen] = useState(false);
-  const navigate = useNavigate();
   const { user } = useUser();
 
   const handleSoundToggle = (value: boolean) => {

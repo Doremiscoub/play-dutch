@@ -15,7 +15,7 @@ const CustomScoreBoardButtons: React.FC<CustomScoreBoardButtonsProps> = ({
   onUndoLastRound,
   onEndGame
 }) => {
-  // Dummy function to match the correct signature
+  // Fonction pour gérer le clic sur le bouton d'ajout de manche
   const handleAddRound = () => {
     onAddRound([], undefined);
   };

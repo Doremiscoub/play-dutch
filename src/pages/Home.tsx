@@ -125,9 +125,49 @@ const Home = () => {
           <p className="mt-2 text-[18px] text-[#4B5563]">Votre compagnon de jeu</p>
         </div>
         
-        {/* Boutons d'action */}
+        {/* Boutons d'action - avec condition d'affichage basée sur l'authentification */}
         <div className="flex flex-col items-center w-full max-w-md gap-5">
-          {hasGameInProgress && (
+          <SignedIn>
+            {/* Boutons pour utilisateurs connectés */}
+            {hasGameInProgress && (
+              <motion.div
+                initial={{ scale: 0.95, y: 20, opacity: 0 }}
+                animate={{ scale: 1, y: 0, opacity: 1 }}
+                transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                whileHover={{ scale: 1.03, y: -3 }}
+                whileTap={{ scale: 0.98 }}
+                className="w-full"
+              >
+                <Button 
+                  onClick={handleResumeGame}
+                  className="w-full h-[70px] rounded-2xl bg-gradient-to-r from-[#2563EB] to-[#4F46E5] shadow-lg shadow-blue-500/30 text-white font-semibold text-xl flex items-center justify-center"
+                >
+                  <RefreshCw className="w-6 h-6 mr-3 text-white" />
+                  Reprendre la partie
+                </Button>
+              </motion.div>
+            )}
+            
+            <motion.div
+              initial={{ scale: 0.95, y: 20, opacity: 0 }}
+              animate={{ scale: 1, y: 0, opacity: 1 }}
+              transition={{ type: "spring", stiffness: 400, damping: 15, delay: 0.1 }}
+              whileHover={{ scale: 1.03, y: -3 }}
+              whileTap={{ scale: 0.98 }}
+              className="w-full"
+            >
+              <Button 
+                onClick={handleNewGame}
+                className="w-full h-[70px] rounded-2xl bg-gradient-to-r from-[#8B5CF6] to-[#D946EF] shadow-lg shadow-purple-500/30 text-white font-semibold text-xl flex items-center justify-center"
+              >
+                <Play className="w-6 h-6 mr-3 text-white" />
+                Nouvelle partie
+              </Button>
+            </motion.div>
+          </SignedIn>
+          
+          <SignedOut>
+            {/* Boutons pour utilisateurs non connectés */}
             <motion.div
               initial={{ scale: 0.95, y: 20, opacity: 0 }}
               animate={{ scale: 1, y: 0, opacity: 1 }}
@@ -137,32 +177,33 @@ const Home = () => {
               className="w-full"
             >
               <Button 
-                onClick={handleResumeGame}
+                onClick={() => navigate('/sign-in')}
                 className="w-full h-[70px] rounded-2xl bg-gradient-to-r from-[#2563EB] to-[#4F46E5] shadow-lg shadow-blue-500/30 text-white font-semibold text-xl flex items-center justify-center"
               >
-                <RefreshCw className="w-6 h-6 mr-3 text-white" />
-                Reprendre la partie
+                <LogIn className="w-6 h-6 mr-3 text-white" />
+                Connexion
               </Button>
             </motion.div>
-          )}
-          
-          <motion.div
-            initial={{ scale: 0.95, y: 20, opacity: 0 }}
-            animate={{ scale: 1, y: 0, opacity: 1 }}
-            transition={{ type: "spring", stiffness: 400, damping: 15, delay: 0.1 }}
-            whileHover={{ scale: 1.03, y: -3 }}
-            whileTap={{ scale: 0.98 }}
-            className="w-full"
-          >
-            <Button 
-              onClick={handleNewGame}
-              className="w-full h-[70px] rounded-2xl bg-gradient-to-r from-[#8B5CF6] to-[#D946EF] shadow-lg shadow-purple-500/30 text-white font-semibold text-xl flex items-center justify-center"
+            
+            <motion.div
+              initial={{ scale: 0.95, y: 20, opacity: 0 }}
+              animate={{ scale: 1, y: 0, opacity: 1 }}
+              transition={{ type: "spring", stiffness: 400, damping: 15, delay: 0.1 }}
+              whileHover={{ scale: 1.03, y: -3 }}
+              whileTap={{ scale: 0.98 }}
+              className="w-full"
             >
-              <Play className="w-6 h-6 mr-3 text-white" />
-              Nouvelle partie
-            </Button>
-          </motion.div>
+              <Button 
+                onClick={() => navigate('/sign-up')}
+                className="w-full h-[70px] rounded-2xl bg-gradient-to-r from-[#8B5CF6] to-[#D946EF] shadow-lg shadow-purple-500/30 text-white font-semibold text-xl flex items-center justify-center"
+              >
+                <UserPlus className="w-6 h-6 mr-3 text-white" />
+                Inscription
+              </Button>
+            </motion.div>
+          </SignedOut>
           
+          {/* Les boutons communs à tous les utilisateurs */}
           <motion.div
             initial={{ scale: 0.95, y: 20, opacity: 0 }}
             animate={{ scale: 1, y: 0, opacity: 1 }}

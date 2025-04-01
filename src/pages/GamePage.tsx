@@ -1,15 +1,16 @@
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Player, Game } from '@/types';
+import { Player, Game, PlayerStatistics } from '@/types';
 import GameSetup from '@/components/GameSetup';
 import ScoreBoard from '@/components/ScoreBoard';
 import GamePodium from '@/components/GamePodium';
 import { v4 as uuidv4 } from 'uuid';
 import { toast } from 'sonner';
 import { AnimatePresence, motion } from 'framer-motion';
+import confetti from 'canvas-confetti';
 import { useLocalStorage } from '@/hooks/use-local-storage';
-import { updateAllPlayersStats, isGameOver } from '@/utils/playerStatsCalculator';
+import { calculatePlayerStats, updateAllPlayersStats, isGameOver } from '@/utils/playerStatsCalculator';
 
 const GamePage: React.FC = () => {
   const [gameState, setGameState] = useState<'setup' | 'playing' | 'completed'>(() => {
@@ -83,6 +84,8 @@ const GamePage: React.FC = () => {
     setRoundHistory([]);
     setGameStartTime(new Date());
     
+    localStorage.removeItem('current_dutch_game');
+    
     toast.success('La partie commence !');
   };
 
@@ -140,7 +143,7 @@ const GamePage: React.FC = () => {
     if (isGameOver(updatedPlayers)) {
       finishGame(scores, dutchPlayerId);
     }
-  }, [players, soundEnabled]);
+  }, [players, setGames, soundEnabled, gameStartTime]);
   
   const finishGame = useCallback((finalScores?: number[], dutchPlayerId?: string) => {
     const updatedPlayers = finalScores 
