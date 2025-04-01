@@ -2,37 +2,18 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Plus, Minus, Play, Copy, Users, Share2, Sparkles, Wand } from 'lucide-react';
+import { Plus, Minus, Play, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { useUser } from '@clerk/clerk-react';
-import { toast } from 'sonner';
-import { createGameSession, generateGameLink } from '@/utils/gameInvitation';
-import { useSearchParams, useNavigate } from 'react-router-dom';
 import AnimatedBackground from './AnimatedBackground';
 
 interface GameSetupProps {
   onStartGame: (players: string[]) => void;
-  onJoinGame?: (gameId: string) => void;
 }
 
-const GameSetup: React.FC<GameSetupProps> = ({ onStartGame, onJoinGame }) => {
+const GameSetup: React.FC<GameSetupProps> = ({ onStartGame }) => {
   const [numPlayers, setNumPlayers] = useState(4);
   const [playerNames, setPlayerNames] = useState<string[]>(Array(4).fill('').map((_, i) => `Joueur ${i + 1}`));
-  const [gameLink, setGameLink] = useState<string | null>(null);
-  const [gameId, setGameId] = useState<string | null>(null);
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
-  const { user, isSignedIn } = useUser();
-
-  // Check if we're joining a game
-  useEffect(() => {
-    const joinCode = searchParams.get('join');
-    if (joinCode && onJoinGame) {
-      // We're joining someone else's game
-      onJoinGame(joinCode);
-    }
-  }, [searchParams, onJoinGame]);
-
+  
   const handleNumPlayersChange = (increment: boolean) => {
     const newNum = increment 
       ? Math.min(numPlayers + 1, 10) 
@@ -52,66 +33,6 @@ const GameSetup: React.FC<GameSetupProps> = ({ onStartGame, onJoinGame }) => {
     const newNames = [...playerNames];
     newNames[index] = name;
     setPlayerNames(newNames);
-  };
-
-  const handleCreateInvitation = () => {
-    if (!isSignedIn || !user) {
-      toast.error('Vous devez être connecté pour inviter des amis', {
-        className: "dutch-toast",
-        style: { borderRadius: "14px", background: "rgba(255, 255, 255, 0.9)", border: "1px solid rgba(255, 255, 255, 0.5)", backdropFilter: "blur(8px)" }
-      });
-      return;
-    }
-
-    // Create a new game session with the user's name (needed second argument)
-    const userName = user.fullName || user.username || 'Joueur';
-    const newGameId = createGameSession(user.id, userName);
-    setGameId(newGameId);
-    
-    // Generate a shareable link
-    const link = generateGameLink(newGameId);
-    setGameLink(link);
-    
-    toast.success('Lien d\'invitation créé !', {
-      className: "dutch-toast",
-      style: { borderRadius: "14px", background: "rgba(255, 255, 255, 0.9)", border: "1px solid rgba(255, 255, 255, 0.5)", backdropFilter: "blur(8px)" },
-      icon: <Sparkles className="w-5 h-5 text-dutch-purple" />
-    });
-  };
-
-  const handleCopyLink = () => {
-    if (gameLink) {
-      navigator.clipboard.writeText(gameLink);
-      toast.success('Lien copié dans le presse-papier !', {
-        className: "dutch-toast",
-        style: { borderRadius: "14px", background: "rgba(255, 255, 255, 0.9)", border: "1px solid rgba(255, 255, 255, 0.5)", backdropFilter: "blur(8px)" }
-      });
-    }
-  };
-
-  const handleShareLink = async () => {
-    if (gameLink) {
-      if (navigator.share) {
-        try {
-          await navigator.share({
-            title: 'Rejoignez ma partie de Dutch',
-            text: 'Cliquez sur ce lien pour rejoindre ma partie de Dutch',
-            url: gameLink,
-          });
-          toast.success('Invitation partagée !', {
-            className: "dutch-toast",
-            style: { borderRadius: "14px", background: "rgba(255, 255, 255, 0.9)", border: "1px solid rgba(255, 255, 255, 0.5)", backdropFilter: "blur(8px)" }
-          });
-        } catch (error) {
-          console.error('Error sharing:', error);
-          // Fallback to copy
-          handleCopyLink();
-        }
-      } else {
-        // Fallback to copy
-        handleCopyLink();
-      }
-    }
   };
 
   const handleStartGame = () => {
@@ -148,66 +69,6 @@ const GameSetup: React.FC<GameSetupProps> = ({ onStartGame, onJoinGame }) => {
           Nouvelle Partie
         </motion.h1>
         
-        {/* Invitation section */}
-        {isSignedIn && (
-          <motion.div 
-            className="dutch-card mb-8 backdrop-blur-md border border-white/40 bg-white/80 hover:shadow-lg transition-all duration-300 rounded-2xl overflow-hidden p-6"
-            initial={{ scale: 0.95, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ ...transitionProps, delay: 0.1 }}
-            whileHover={{ y: -3, boxShadow: "0 15px 30px rgba(0,0,0,0.1)" }}
-          >
-            <h2 className="text-xl font-semibold mb-4 text-dutch-purple">Jouer avec des amis</h2>
-            
-            {!gameLink ? (
-              <Button 
-                onClick={handleCreateInvitation}
-                variant="pill-glass"
-                size="pill"
-                elevated
-                animated
-                className="w-full bg-white/80 border border-dutch-purple/30 text-dutch-purple hover:bg-dutch-purple/10"
-              >
-                <Users className="h-5 w-5 mr-2" /> Créer une invitation
-              </Button>
-            ) : (
-              <div className="space-y-3">
-                <motion.div 
-                  className="p-3 bg-white/60 rounded-md border border-dutch-blue/20 text-sm break-all relative overflow-hidden"
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <div className="absolute inset-0 bg-gradient-to-r from-dutch-blue/5 via-dutch-purple/5 to-dutch-blue/5 animate-gradient-x"></div>
-                  {gameLink}
-                </motion.div>
-                <div className="flex gap-2">
-                  <Button
-                    onClick={handleCopyLink}
-                    variant="pill-glass"
-                    size="pill"
-                    elevated
-                    animated
-                    className="flex-1 bg-white/80 border border-dutch-blue/30 text-dutch-blue hover:bg-dutch-blue/10"
-                  >
-                    <Copy className="h-4 w-4 mr-2" /> Copier
-                  </Button>
-                  <Button
-                    onClick={handleShareLink}
-                    variant="pill-glass"
-                    size="pill"
-                    elevated
-                    animated
-                    className="flex-1 bg-white/80 border border-dutch-orange/30 text-dutch-orange hover:bg-dutch-orange/10"
-                  >
-                    <Share2 className="h-4 w-4 mr-2" /> Partager
-                  </Button>
-                </div>
-              </div>
-            )}
-          </motion.div>
-        )}
-        
         <motion.div 
           className="dutch-card mb-8 backdrop-blur-md border border-white/40 bg-white/80 hover:shadow-lg transition-all duration-300 rounded-2xl overflow-hidden p-6"
           initial={{ scale: 0.95, opacity: 0 }}
@@ -221,8 +82,6 @@ const GameSetup: React.FC<GameSetupProps> = ({ onStartGame, onJoinGame }) => {
               <Button 
                 variant="dutch-glass" 
                 size="icon" 
-                glassmorphism
-                elevated
                 onClick={() => handleNumPlayersChange(false)}
                 disabled={numPlayers <= 2}
                 className="border border-white/40 shadow-md"
@@ -243,8 +102,6 @@ const GameSetup: React.FC<GameSetupProps> = ({ onStartGame, onJoinGame }) => {
               <Button 
                 variant="dutch-glass" 
                 size="icon"
-                glassmorphism
-                elevated
                 onClick={() => handleNumPlayersChange(true)}
                 disabled={numPlayers >= 10}
                 className="border border-white/40 shadow-md"
@@ -311,18 +168,15 @@ const GameSetup: React.FC<GameSetupProps> = ({ onStartGame, onJoinGame }) => {
             onClick={handleStartGame}
             variant="floating"
             size="game-action"
-            glassmorphism
-            elevated
-            animated
-            className="w-full shadow-lg transition-all relative overflow-hidden rounded-2xl border border-white/20 backdrop-blur-md bg-gradient-to-r from-dutch-blue/90 via-dutch-purple/90 to-dutch-blue/90"
+            className="w-full shadow-lg transition-all relative overflow-hidden rounded-2xl border border-white/20 backdrop-blur-md bg-gradient-to-r from-dutch-blue/90 via-dutch-purple/90 to-dutch-blue/90 h-16"
           >
             <motion.div 
               className="absolute inset-0 bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-blue bg-[length:200%_100%]"
               animate={{ backgroundPosition: ['0% 0%', '100% 0%', '0% 0%'] }}
               transition={{ duration: 10, repeat: Infinity }}
             />
-            <span className="absolute inset-0 flex items-center justify-center gap-2 text-lg font-medium">
-              <Play className="h-5 w-5" /> Commencer la partie
+            <span className="absolute inset-0 flex items-center justify-center gap-2 text-lg font-medium text-white">
+              <Play className="h-6 w-6" /> Commencer la partie
             </span>
           </Button>
         </motion.div>

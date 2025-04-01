@@ -6,7 +6,6 @@ import { useLocalStorage } from '@/hooks/use-local-storage';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import PageLayout from '@/components/PageLayout';
-import ThemeSelector from '@/components/ThemeSelector';
 import { SignOutButton, useUser } from '@clerk/clerk-react';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { toast } from 'sonner';
@@ -47,7 +46,6 @@ const SettingsPage = () => {
           </div>
         </div>
 
-        
         <div className="space-y-4 bg-white/50 backdrop-blur-md rounded-xl border border-white/40 p-4 shadow-sm">
           <h2 className="text-lg font-semibold text-gray-800">Historique</h2>
           <AlertDialog>
@@ -69,14 +67,6 @@ const SettingsPage = () => {
             </AlertDialogContent>
           </AlertDialog>
         </div>
-        
-        <div className="space-y-4 bg-white/50 backdrop-blur-md rounded-xl border border-white/40 p-4 shadow-sm">
-          <h2 className="text-lg font-semibold text-gray-800">Thème</h2>
-          <div className="space-y-4">
-            <ThemeSelector />
-          </div>
-        </div>
-
         
         {user && (
           <div className="space-y-4 bg-white/50 backdrop-blur-md rounded-xl border border-white/40 p-4 shadow-sm">

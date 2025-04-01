@@ -1,114 +1,79 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { Player, Game, PlayerStatistics } from '@/types';
+
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Player, Game } from '@/types';
 import GameSetup from '@/components/GameSetup';
 import ScoreBoard from '@/components/ScoreBoard';
-import MultiplayerGameSetup from '@/components/MultiplayerGameSetup';
+import GamePodium from '@/components/GamePodium';
 import { v4 as uuidv4 } from 'uuid';
 import { toast } from 'sonner';
 import { AnimatePresence, motion } from 'framer-motion';
-import confetti from 'canvas-confetti';
-import { updateGameState, getGameSession, getGamePlayers } from '@/utils/gameInvitation';
-import { useUser } from '@clerk/clerk-react';
+import { useLocalStorage } from '@/hooks/use-local-storage';
+import { updateAllPlayersStats, isGameOver } from '@/utils/playerStatsCalculator';
 
 const GamePage: React.FC = () => {
-  const [gameState, setGameState] = useState<'setup' | 'playing'>('setup');
-  const [players, setPlayers] = useState<Player[]>([]);
-  const [games, setGames] = useState<Game[]>(() => {
-    const savedGames = localStorage.getItem('dutch_games');
-    return savedGames ? JSON.parse(savedGames) : [];
+  const [gameState, setGameState] = useState<'setup' | 'playing' | 'completed'>(() => {
+    const savedGame = localStorage.getItem('current_dutch_game');
+    return savedGame ? 'playing' : 'setup';
   });
-  const [roundHistory, setRoundHistory] = useState<{ scores: number[], dutchPlayerId?: string }[]>([]);
-  const [isMultiplayer, setIsMultiplayer] = useState<boolean>(false);
-  const [currentGameId, setCurrentGameId] = useState<string | null>(null);
+  
+  const [players, setPlayers] = useState<Player[]>(() => {
+    const savedGame = localStorage.getItem('current_dutch_game');
+    return savedGame ? JSON.parse(savedGame).players : [];
+  });
+  
+  const [games, setGames] = useLocalStorage<Game[]>('dutch_games', []);
+  
+  const [roundHistory, setRoundHistory] = useState<{ scores: number[], dutchPlayerId?: string }[]>(() => {
+    const savedGame = localStorage.getItem('current_dutch_game');
+    return savedGame ? JSON.parse(savedGame).roundHistory : [];
+  });
+  
   const [showGameEndConfirmation, setShowGameEndConfirmation] = useState<boolean>(false);
+  const [soundEnabled, setSoundEnabled] = useLocalStorage('dutch_sound_enabled', true);
+  const [gameStartTime, setGameStartTime] = useState<Date | null>(null);
   const navigate = useNavigate();
-  const location = useLocation();
-  const { user } = useUser();
-
+  
+  const playersWithStats = useMemo(() => {
+    return updateAllPlayersStats(players);
+  }, [players]);
+  
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const joinCode = params.get('join');
-    
-    if (joinCode) {
-      setCurrentGameId(joinCode);
-    }
-  }, [location]);
-
-  useEffect(() => {
-    localStorage.setItem('dutch_games', JSON.stringify(games));
-  }, [games]);
-
-  const calculatePlayerStats = useCallback((player: Player): PlayerStatistics => {
-    const rounds = player.rounds;
-    if (rounds.length === 0) {
-      return {
-        bestRound: null,
-        dutchCount: 0,
-        averageScore: 0,
-        worstRound: null,
-        improvementRate: 0,
-        consistencyScore: 0,
-        winStreak: 0
-      };
-    }
-
-    const scores = rounds.map(r => r.score);
-    const dutchCount = rounds.filter(r => r.isDutch).length;
-    const nonZeroScores = scores.filter(s => s > 0);
-    
-    let improvementRate = 0;
-    if (rounds.length >= 6) {
-      const firstThree = scores.slice(0, 3).reduce((a, b) => a + b, 0) / 3;
-      const lastThree = scores.slice(-3).reduce((a, b) => a + b, 0) / 3;
-      improvementRate = lastThree - firstThree;
-    }
-
-    const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
-    const variance = scores.reduce((a, b) => a + Math.pow(b - avg, 2), 0) / scores.length;
-    const consistencyScore = Math.sqrt(variance);
-
-    let winStreak = 0;
-    let currentWinStreak = 0;
-    for (let i = 0; i < rounds.length; i++) {
-      if (players.every(p => p.id === player.id || (p.rounds[i] && rounds[i].score <= p.rounds[i].score))) {
-        currentWinStreak++;
-        winStreak = Math.max(winStreak, currentWinStreak);
-      } else {
-        currentWinStreak = 0;
+    if (gameState === 'playing' && players.length > 0) {
+      try {
+        const currentGame = {
+          players: playersWithStats,
+          roundHistory,
+          lastUpdated: new Date(),
+          gameStartTime: gameStartTime || new Date()
+        };
+        localStorage.setItem('current_dutch_game', JSON.stringify(currentGame));
+      } catch (error) {
+        console.error("Erreur lors de la sauvegarde du jeu:", error);
+        toast.error("Erreur lors de la sauvegarde de la partie");
       }
     }
-
-    return {
-      bestRound: nonZeroScores.length > 0 ? Math.min(...nonZeroScores) : null,
-      dutchCount,
-      averageScore: Math.round(avg * 10) / 10,
-      worstRound: scores.length > 0 ? Math.max(...scores) : null,
-      improvementRate: Math.round(improvementRate * 10) / 10,
-      consistencyScore: Math.round(consistencyScore * 10) / 10,
-      winStreak
-    };
-  }, [players]);
-
-  const updatePlayerStats = useCallback(() => {
-    setPlayers(prevPlayers => {
-      return prevPlayers.map(player => ({
-        ...player,
-        stats: calculatePlayerStats(player)
-      }));
-    });
-  }, [calculatePlayerStats]);
+  }, [gameState, playersWithStats, roundHistory, gameStartTime]);
 
   useEffect(() => {
-    if (players.length > 0 && players[0].rounds.length > 0) {
-      updatePlayerStats();
+    const savedGame = localStorage.getItem('current_dutch_game');
+    if (savedGame) {
+      const parsed = JSON.parse(savedGame);
+      if (parsed.gameStartTime) {
+        setGameStartTime(new Date(parsed.gameStartTime));
+      }
     }
-  }, [players, updatePlayerStats]);
+  }, []);
 
-  const handleStartLocalGame = (playerNames: string[]) => {
+  const handleStartGame = (playerNames: string[]) => {
+    if (!playerNames || playerNames.length === 0 || playerNames.some(name => !name.trim())) {
+      toast.error('Veuillez entrer le nom de tous les joueurs');
+      return;
+    }
+    
     const newPlayers = playerNames.map(name => ({
       id: uuidv4(),
-      name,
+      name: name.trim(),
       totalScore: 0,
       rounds: []
     }));
@@ -116,39 +81,36 @@ const GamePage: React.FC = () => {
     setPlayers(newPlayers);
     setGameState('playing');
     setRoundHistory([]);
-    setIsMultiplayer(false);
-    setCurrentGameId(null);
+    setGameStartTime(new Date());
+    
     toast.success('La partie commence !');
-  };
-  
-  const handleStartMultiplayerGame = (gameId: string) => {
-    const gameSession = getGameSession(gameId);
-    
-    if (!gameSession) {
-      toast.error("Cette partie n'existe plus");
-      return;
-    }
-    
-    const gamePlayers = gameSession.players.map(player => ({
-      id: player.id,
-      name: player.name,
-      totalScore: 0,
-      rounds: []
-    }));
-    
-    setPlayers(gamePlayers);
-    setGameState('playing');
-    setRoundHistory([]);
-    setIsMultiplayer(true);
-    setCurrentGameId(gameId);
-    toast.success('La partie multijoueur commence !');
   };
 
   const handleAddRound = useCallback((scores: number[], dutchPlayerId?: string) => {
+    if (!players || players.length === 0) {
+      toast.error('Erreur: aucun joueur trouvé');
+      return;
+    }
+    
+    if (!scores || scores.length !== players.length) {
+      toast.error('Erreur: nombre de scores incorrect');
+      return;
+    }
+    
+    if (scores.some(score => isNaN(score))) {
+      toast.error('Erreur: les scores doivent être des nombres valides');
+      return;
+    }
+    
+    if (dutchPlayerId && scores.every(score => score === 0)) {
+      toast.error('Un Dutch doit avoir au moins un joueur avec des points');
+      return;
+    }
+    
     setRoundHistory(prev => [...prev, { scores, dutchPlayerId }]);
     
     setPlayers(prevPlayers => {
-      const updatedPlayers = prevPlayers.map((player, index) => {
+      return prevPlayers.map((player, index) => {
         const isDutch = player.id === dutchPlayerId;
         const newRound = { 
           score: scores[index],
@@ -162,87 +124,79 @@ const GamePage: React.FC = () => {
           totalScore: newTotalScore
         };
       });
-      
-      if (isMultiplayer && currentGameId) {
-        updateGameState(currentGameId, {
-          players: updatedPlayers,
-          roundHistory: [...roundHistory, { scores, dutchPlayerId }]
-        });
-      }
-      
-      return updatedPlayers;
     });
     
-    if (window.localStorage.getItem('dutch_sound_enabled') !== 'false') {
+    if (soundEnabled) {
       new Audio('/sounds/card-sound.mp3').play().catch(err => console.error("Sound error:", err));
     }
     
     toast.success('Manche ajoutée !');
-  }, [currentGameId, isMultiplayer, roundHistory]);
+    
+    const updatedPlayers = players.map((player, index) => ({
+      ...player,
+      totalScore: player.totalScore + scores[index]
+    }));
+    
+    if (isGameOver(updatedPlayers)) {
+      finishGame(scores, dutchPlayerId);
+    }
+  }, [players, soundEnabled]);
   
-  const finishGame = () => {
-    const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
+  const finishGame = useCallback((finalScores?: number[], dutchPlayerId?: string) => {
+    const updatedPlayers = finalScores 
+      ? players.map((player, index) => ({
+          ...player,
+          totalScore: player.totalScore + finalScores[index],
+          isDutch: player.id === dutchPlayerId
+        }))
+      : players;
+    
+    const sortedPlayers = [...updatedPlayers].sort((a, b) => a.totalScore - b.totalScore);
     const winner = sortedPlayers[0].name;
+    
+    const gameDuration = gameStartTime ? getGameDuration(gameStartTime) : '';
     
     const newGame: Game = {
       id: uuidv4(),
       date: new Date(),
-      rounds: players[0].rounds.length,
+      rounds: players[0].rounds.length + (finalScores ? 1 : 0),
       players: sortedPlayers.map(player => ({
         name: player.name,
         score: player.totalScore,
-        isDutch: player.rounds.some(r => r.isDutch)
+        isDutch: finalScores 
+          ? player.id === dutchPlayerId 
+          : player.rounds.some(r => r.isDutch)
       })),
       winner,
-      isMultiplayer,
-      gameCode: isMultiplayer ? currentGameId || undefined : undefined
-    };
+      duration: gameDuration
+    } as Game;
     
     setGames(prev => [...prev, newGame]);
-    toast.success(`Partie terminée ! ${winner} gagne !`);
     
-    launchConfetti();
+    setGameState('completed');
     
-    if (window.localStorage.getItem('dutch_sound_enabled') !== 'false') {
+    if (soundEnabled) {
       new Audio('/sounds/win-sound.mp3').play().catch(err => console.error("Sound error:", err));
     }
-  };
+  }, [players, setGames, soundEnabled, gameStartTime]);
   
-  const launchConfetti = () => {
-    const duration = 3000;
-    const animationEnd = Date.now() + duration;
-    const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
-
-    function randomInRange(min: number, max: number) {
-      return Math.random() * (max - min) + min;
+  const getGameDuration = (startTime: Date): string => {
+    const endTime = new Date();
+    const diffMs = endTime.getTime() - startTime.getTime();
+    
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHrs = Math.floor(diffMins / 60);
+    const remainingMins = diffMins % 60;
+    
+    if (diffHrs > 0) {
+      return `${diffHrs}h ${remainingMins}min`;
+    } else {
+      return `${diffMins} minutes`;
     }
-
-    const interval = setInterval(() => {
-      const timeLeft = animationEnd - Date.now();
-
-      if (timeLeft <= 0) {
-        return clearInterval(interval);
-      }
-
-      const particleCount = 50 * (timeLeft / duration);
-      
-      confetti({
-        ...defaults,
-        particleCount,
-        origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
-        colors: ['#1EAEDB', '#F97316', '#8B5CF6'],
-      });
-      confetti({
-        ...defaults,
-        particleCount,
-        origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
-        colors: ['#1EAEDB', '#F97316', '#8B5CF6'],
-      });
-    }, 250);
   };
   
   const handleUndoLastRound = useCallback(() => {
-    if (players.length === 0 || players[0].rounds.length === 0) {
+    if (!players || players.length === 0 || !players[0].rounds || players[0].rounds.length === 0) {
       toast.error('Pas de manche à annuler !');
       return;
     }
@@ -250,8 +204,8 @@ const GamePage: React.FC = () => {
     setRoundHistory(prev => prev.slice(0, -1));
     
     setPlayers(prevPlayers => {
-      const updatedPlayers = prevPlayers.map(player => {
-        if (player.rounds.length === 0) return player;
+      return prevPlayers.map(player => {
+        if (!player.rounds || player.rounds.length === 0) return player;
         
         const lastRound = player.rounds[player.rounds.length - 1];
         const newTotalScore = player.totalScore - lastRound.score;
@@ -262,89 +216,84 @@ const GamePage: React.FC = () => {
           totalScore: newTotalScore
         };
       });
-      
-      if (isMultiplayer && currentGameId) {
-        updateGameState(currentGameId, {
-          players: updatedPlayers,
-          roundHistory: roundHistory.slice(0, -1)
-        });
-      }
-      
-      return updatedPlayers;
     });
     
-    if (window.localStorage.getItem('dutch_sound_enabled') !== 'false') {
+    if (soundEnabled) {
       new Audio('/sounds/undo-sound.mp3').play().catch(err => console.error("Sound error:", err));
     }
     
     toast.success('Dernière manche annulée !');
-  }, [isMultiplayer, currentGameId, roundHistory]);
+  }, [players, soundEnabled]);
 
   const handleEndGame = useCallback(() => {
-    if (players.length > 0 && players[0].rounds.length > 0) {
-      setShowGameEndConfirmation(true);
+    setShowGameEndConfirmation(true);
+  }, []);
+
+  const handleConfirmEndGame = useCallback(() => {
+    if (players.length > 0 && players[0].rounds && players[0].rounds.length > 0) {
+      finishGame();
     } else {
-      resetGame();
+      setGameState('setup');
+      setPlayers([]);
+      setRoundHistory([]);
+      localStorage.removeItem('current_dutch_game');
     }
-  }, [players]);
-  
-  const confirmEndGame = useCallback(() => {
-    finishGame();
+    
     setShowGameEndConfirmation(false);
-    setTimeout(() => {
-      resetGame();
-    }, 1500);
-  }, [finishGame]);
-  
-  const cancelEndGame = useCallback(() => {
+  }, [players, finishGame]);
+
+  const handleCancelEndGame = useCallback(() => {
     setShowGameEndConfirmation(false);
   }, []);
-  
-  const resetGame = useCallback(() => {
+
+  const handleNewGame = useCallback(() => {
+    localStorage.removeItem('current_dutch_game');
+    
     setGameState('setup');
     setPlayers([]);
     setRoundHistory([]);
-    setIsMultiplayer(false);
-    setCurrentGameId(null);
   }, []);
 
   useEffect(() => {
-    if (isMultiplayer && currentGameId && gameState === 'playing') {
-      const intervalId = setInterval(() => {
-        const gameSession = getGameSession(currentGameId);
-        if (gameSession && gameSession.gameState) {
-          const serverPlayers = gameSession.gameState.players;
-          const serverRoundHistory = gameSession.gameState.roundHistory;
-          
-          if (serverPlayers && serverRoundHistory && 
-              (serverPlayers.length !== players.length || 
-               serverRoundHistory.length !== roundHistory.length)) {
-            setPlayers(serverPlayers);
-            setRoundHistory(serverRoundHistory);
+    const savedGame = localStorage.getItem('current_dutch_game');
+    if (savedGame) {
+      try {
+        const parsedGame = JSON.parse(savedGame);
+        const lastUpdated = new Date(parsedGame.lastUpdated);
+        const now = new Date();
+        const hoursSinceLastUpdate = (now.getTime() - lastUpdated.getTime()) / (1000 * 60 * 60);
+        
+        if (hoursSinceLastUpdate > 24) {
+          const confirmResume = window.confirm('Une partie non terminée a été trouvée. Voulez-vous la reprendre?');
+          if (!confirmResume) {
+            localStorage.removeItem('current_dutch_game');
+            setGameState('setup');
           }
         }
-      }, 3000);
-      
-      return () => clearInterval(intervalId);
+      } catch (error) {
+        console.error("Erreur lors de l'analyse de la partie sauvegardée:", error);
+        localStorage.removeItem('current_dutch_game');
+      }
     }
-  }, [isMultiplayer, currentGameId, gameState, players.length, roundHistory.length]);
+  }, []);
+
+  const gameDuration = gameStartTime ? getGameDuration(gameStartTime) : '';
 
   return (
     <div className="min-h-screen">
       <AnimatePresence mode="wait">
-        {gameState === 'setup' ? (
+        {gameState === 'setup' && (
           <motion.div
             key="setup"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <MultiplayerGameSetup 
-              onStartLocalGame={handleStartLocalGame}
-              onStartMultiplayerGame={handleStartMultiplayerGame}
-            />
+            <GameSetup onStartGame={handleStartGame} />
           </motion.div>
-        ) : (
+        )}
+        
+        {gameState === 'playing' && (
           <motion.div
             key="playing"
             initial={{ opacity: 0 }}
@@ -352,15 +301,30 @@ const GamePage: React.FC = () => {
             exit={{ opacity: 0 }}
           >
             <ScoreBoard 
-              players={players}
-              onAddRound={(scores, dutchPlayerId) => handleAddRound(scores, dutchPlayerId)}
+              players={playersWithStats}
+              onAddRound={handleAddRound}
               onEndGame={handleEndGame}
               onUndoLastRound={handleUndoLastRound}
               roundHistory={roundHistory}
-              isMultiplayer={isMultiplayer}
               showGameEndConfirmation={showGameEndConfirmation}
-              onConfirmEndGame={confirmEndGame}
-              onCancelEndGame={cancelEndGame}
+              onConfirmEndGame={handleConfirmEndGame}
+              onCancelEndGame={handleCancelEndGame}
+              isMultiplayer={false}
+            />
+          </motion.div>
+        )}
+        
+        {gameState === 'completed' && (
+          <motion.div
+            key="completed"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <GamePodium 
+              players={playersWithStats}
+              onNewGame={handleNewGame}
+              gameDuration={gameDuration}
             />
           </motion.div>
         )}

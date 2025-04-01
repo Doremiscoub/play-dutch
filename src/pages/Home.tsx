@@ -29,6 +29,7 @@ const Home = () => {
 
   // Démarrer une nouvelle partie
   const handleNewGame = () => {
+    localStorage.removeItem('current_dutch_game'); // S'assurer qu'on commence une nouvelle partie
     navigate('/game');
   };
 
@@ -115,13 +116,13 @@ const Home = () => {
       <div className="relative z-10 flex flex-col items-center justify-start min-h-screen px-4 pt-16">
         {/* Logo et titre */}
         <div className="text-center mb-14">
-          <h1 className="text-[48px] font-bold relative inline-flex items-center">
+          <h1 className="text-[64px] font-bold relative inline-flex items-center">
             <span className="bg-gradient-to-r from-[#3B82F6] to-[#8B5CF6] bg-clip-text text-transparent">
               Dutch
             </span>
-            <span className="text-[24px] ml-2 absolute -top-1 -right-8">✨</span>
+            <span className="text-[36px] ml-3 absolute -top-2 -right-11">✨</span>
           </h1>
-          <p className="mt-2 text-[16px] text-[#4B5563]">Votre compagnon de jeu</p>
+          <p className="mt-2 text-[18px] text-[#4B5563]">Votre compagnon de jeu</p>
         </div>
         
         {/* Boutons d'action */}
@@ -137,9 +138,9 @@ const Home = () => {
             >
               <Button 
                 onClick={handleResumeGame}
-                className="w-full h-[60px] rounded-2xl bg-gradient-to-r from-[#2563EB] to-[#4F46E5] shadow-lg shadow-blue-500/30 text-white font-semibold text-lg flex items-center justify-center"
+                className="w-full h-[70px] rounded-2xl bg-gradient-to-r from-[#2563EB] to-[#4F46E5] shadow-lg shadow-blue-500/30 text-white font-semibold text-xl flex items-center justify-center"
               >
-                <RefreshCw className="w-5 h-5 mr-3 text-white" />
+                <RefreshCw className="w-6 h-6 mr-3 text-white" />
                 Reprendre la partie
               </Button>
             </motion.div>
@@ -155,9 +156,9 @@ const Home = () => {
           >
             <Button 
               onClick={handleNewGame}
-              className="w-full h-[60px] rounded-2xl bg-gradient-to-r from-[#8B5CF6] to-[#D946EF] shadow-lg shadow-purple-500/30 text-white font-semibold text-lg flex items-center justify-center"
+              className="w-full h-[70px] rounded-2xl bg-gradient-to-r from-[#8B5CF6] to-[#D946EF] shadow-lg shadow-purple-500/30 text-white font-semibold text-xl flex items-center justify-center"
             >
-              <Play className="w-5 h-5 mr-3 text-white" />
+              <Play className="w-6 h-6 mr-3 text-white" />
               Nouvelle partie
             </Button>
           </motion.div>
@@ -167,7 +168,7 @@ const Home = () => {
             animate={{ scale: 1, y: 0, opacity: 1 }}
             transition={{ type: "spring", stiffness: 400, damping: 15, delay: 0.2 }}
             whileTap={{ scale: 0.98 }}
-            className="w-full mt-3"
+            className="w-full mt-5"
           >
             <Button 
               onClick={() => navigate('/history')}
