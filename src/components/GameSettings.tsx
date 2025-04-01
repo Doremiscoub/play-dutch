@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Settings, Bell, VolumeX, Moon, Sun, Smartphone, Laptop, Home, Info } from 'lucide-react';
+import { Settings, Bell, VolumeX, Moon, Sun, Smartphone, Laptop, Home, Info, Trash2, Save, Database } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
@@ -10,28 +10,33 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import ColorThemeSelector from './ColorThemeSelector';
 import { useTheme } from '@/hooks/use-theme';
+import { useSound } from '@/hooks/use-sound';
+import { useLocalStorage } from '@/hooks/use-local-storage';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from './ui/alert-dialog';
 
 interface GameSettingsProps {
-  soundEnabled: boolean;
-  setSoundEnabled: (enabled: boolean) => void;
+  onExport?: () => void;
+  onImport?: () => void;
+  gameActive?: boolean;
 }
 
 const GameSettings: React.FC<GameSettingsProps> = ({ 
-  soundEnabled, 
-  setSoundEnabled 
+  onExport,
+  onImport,
+  gameActive = false
 }) => {
   const navigate = useNavigate();
   const { currentTheme } = useTheme();
+  const { isSoundEnabled, setSoundEnabled } = useSound();
+  const [offlineModeEnabled, setOfflineModeEnabled] = useLocalStorage('dutch_offline_mode', false);
 
   const handleClearData = () => {
-    if (window.confirm('Êtes-vous sûr de vouloir effacer toutes les données ? Cette action est irréversible.')) {
-      localStorage.clear();
-      toast.success('Toutes les données ont été effacées. Retour à l\'accueil...');
-      setTimeout(() => {
-        navigate('/');
-        window.location.reload();
-      }, 1500);
-    }
+    localStorage.clear();
+    toast.success('Toutes les données ont été effacées. Retour à l\'accueil...');
+    setTimeout(() => {
+      navigate('/');
+      window.location.reload();
+    }, 1500);
   };
 
   return (
@@ -69,23 +74,35 @@ const GameSettings: React.FC<GameSettingsProps> = ({
               Apparence
             </TabsTrigger>
             <TabsTrigger 
-              value="about" 
+              value="data" 
               className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm py-2.5"
             >
-              À propos
+              Données
             </TabsTrigger>
           </TabsList>
           
           <TabsContent value="general" className="space-y-4">
             <div className="flex items-center justify-between p-4 bg-white/50 rounded-xl shadow-sm border border-white/30">
               <Label htmlFor="sound-toggle" className="font-medium flex items-center gap-2">
-                {soundEnabled ? <Bell className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
+                {isSoundEnabled ? <Bell className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
                 Sons
               </Label>
               <Switch 
                 id="sound-toggle" 
-                checked={soundEnabled} 
+                checked={isSoundEnabled} 
                 onCheckedChange={setSoundEnabled} 
+              />
+            </div>
+            
+            <div className="flex items-center justify-between p-4 bg-white/50 rounded-xl shadow-sm border border-white/30">
+              <Label htmlFor="offline-mode" className="font-medium flex items-center gap-2">
+                <Smartphone className="h-4 w-4" />
+                Mode hors-ligne
+              </Label>
+              <Switch 
+                id="offline-mode" 
+                checked={offlineModeEnabled} 
+                onCheckedChange={setOfflineModeEnabled} 
               />
             </div>
             
@@ -100,11 +117,12 @@ const GameSettings: React.FC<GameSettingsProps> = ({
               </Button>
               
               <Button 
-                variant="destructive" 
-                className="justify-start rounded-xl mt-4"
-                onClick={handleClearData}
+                variant="dutch-glass" 
+                className="justify-start rounded-xl"
+                onClick={() => navigate('/settings')}
               >
-                Effacer toutes les données
+                <Settings className="h-4 w-4 mr-2" aria-hidden="true" />
+                Paramètres avancés
               </Button>
             </div>
           </TabsContent>
@@ -116,18 +134,55 @@ const GameSettings: React.FC<GameSettingsProps> = ({
             </div>
           </TabsContent>
           
-          <TabsContent value="about" className="space-y-4">
-            <div className="bg-white/50 p-4 rounded-xl shadow-sm border border-white/30 space-y-2">
-              <h3 className="font-medium flex items-center gap-1">
-                <Info className="h-4 w-4" />
-                Dutch Blitz Scoreboard
-              </h3>
-              <p className="text-sm text-gray-600">
-                Version 1.0.0
-              </p>
-              <p className="text-sm text-gray-600 mt-4">
-                Une application pour suivre les scores de vos parties de Dutch Blitz.
-              </p>
+          <TabsContent value="data" className="space-y-4">
+            <div className="flex flex-col gap-3">
+              {onExport && (
+                <Button 
+                  variant="outline" 
+                  className="justify-start"
+                  onClick={onExport}
+                >
+                  <Save className="h-4 w-4 mr-2" />
+                  Exporter les données
+                </Button>
+              )}
+              
+              {onImport && (
+                <Button 
+                  variant="outline" 
+                  className="justify-start"
+                  onClick={onImport}
+                >
+                  <Database className="h-4 w-4 mr-2" />
+                  Importer des données
+                </Button>
+              )}
+              
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button 
+                    variant="destructive" 
+                    className="justify-start mt-4"
+                  >
+                    <Trash2 className="h-4 w-4 mr-2" />
+                    Effacer toutes les données
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent className="rounded-3xl">
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Êtes-vous absolument sûr?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Cette action ne peut pas être annulée. Toutes vos parties et préférences seront définitivement effacées.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Annuler</AlertDialogCancel>
+                    <AlertDialogAction onClick={handleClearData}>
+                      Confirmer
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </div>
           </TabsContent>
         </Tabs>

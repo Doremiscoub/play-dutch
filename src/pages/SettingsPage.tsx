@@ -7,19 +7,26 @@ import { useTheme } from '@/hooks/use-theme';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { SignedIn, SignedOut, UserButton, useUser } from '@clerk/clerk-react';
 import { Button } from '@/components/ui/button';
-import { Paintbrush, Volume2, VolumeX, Moon, Sun, User } from 'lucide-react';
+import { Paintbrush, Volume2, VolumeX, Moon, Sun, User, Smartphone } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import ThemeSelector from '@/components/ThemeSelector';
 import ColorThemeSelector from '@/components/ColorThemeSelector';
 import PageLayout from '@/components/PageLayout';
+import OfflineMode from '@/components/OfflineMode';
+import { useLocalStorage } from '@/hooks/use-local-storage';
 
 const SettingsPage: React.FC = () => {
   const { themeMode } = useTheme();
   const { user, isSignedIn } = useUser();
   
-  // Mock settings state
-  const [soundEnabled, setSoundEnabled] = React.useState(true);
+  // Settings state
+  const [soundEnabled, setSoundEnabled] = useLocalStorage('dutch_sound_enabled', true);
+  const [offlineModeEnabled, setOfflineModeEnabled] = useLocalStorage('dutch_offline_mode', false);
+  
+  const handleOfflineModeChange = (enabled: boolean) => {
+    setOfflineModeEnabled(enabled);
+  };
   
   return (
     <PageLayout
@@ -33,7 +40,7 @@ const SettingsPage: React.FC = () => {
         className="w-full mx-auto"
       >
         <Tabs defaultValue="appearance" className="w-full">
-          <TabsList className="grid grid-cols-2 md:grid-cols-3 mb-6 rounded-xl bg-white/50 backdrop-blur-md border border-white/40 p-1 shadow-sm">
+          <TabsList className="grid grid-cols-2 md:grid-cols-4 mb-6 rounded-xl bg-white/50 backdrop-blur-md border border-white/40 p-1 shadow-sm">
             <TabsTrigger 
               value="appearance" 
               className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm py-2.5 text-dutch-blue"
@@ -49,8 +56,15 @@ const SettingsPage: React.FC = () => {
               Audio
             </TabsTrigger>
             <TabsTrigger 
+              value="offline" 
+              className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm py-2.5 text-dutch-blue"
+            >
+              <Smartphone className="h-4 w-4 mr-2" />
+              Hors-ligne
+            </TabsTrigger>
+            <TabsTrigger 
               value="account" 
-              className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm py-2.5 text-dutch-blue col-span-2 md:col-span-1"
+              className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm py-2.5 text-dutch-blue"
             >
               <User className="h-4 w-4 mr-2" />
               Compte
@@ -112,6 +126,10 @@ const SettingsPage: React.FC = () => {
                 </div>
               </CardContent>
             </Card>
+          </TabsContent>
+          
+          <TabsContent value="offline">
+            <OfflineMode onEnableOfflineMode={handleOfflineModeChange} />
           </TabsContent>
           
           <TabsContent value="account">
