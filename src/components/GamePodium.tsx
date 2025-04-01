@@ -1,12 +1,13 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Player } from '@/types';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
-import { Trophy, Calendar, BarChart3, ArrowLeft } from 'lucide-react';
+import { Trophy, Calendar, BarChart3, ArrowLeft, Medal, Target, Fire, Zap } from 'lucide-react';
 import { playConfetti } from '@/utils/animationUtils';
 import PageLayout from './PageLayout';
+import { Card, CardContent } from '@/components/ui/card';
 
 interface GamePodiumProps {
   players: Player[];
@@ -18,8 +19,83 @@ const GamePodium: React.FC<GamePodiumProps> = ({ players, onNewGame, gameDuratio
   const navigate = useNavigate();
   const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
   
+  // Générer un titre aléatoire fun
+  const funTitles = [
+    "Les légendes du Dutch !",
+    "Quel match !",
+    "Un Dutch mémorable !",
+    "Champions de cartes !",
+    "La bataille finale !",
+    "Duel de titans !",
+    "Partie épique terminée !"
+  ];
+  
+  const randomTitle = useMemo(() => {
+    return funTitles[Math.floor(Math.random() * funTitles.length)];
+  }, []);
+  
   // Définir le vainqueur
   const winner = sortedPlayers[0];
+  
+  // Récupérer les stats fun pour l'écran de fin de partie
+  const funStats = useMemo(() => {
+    const stats = [];
+    
+    // Joueur avec le plus de manches perdues consécutives
+    const maxConsecutiveLosses = players.reduce((max, player) => {
+      let current = 0;
+      let maxForPlayer = 0;
+      
+      player.rounds.forEach(round => {
+        if (round.score > 0) {
+          current = 0;
+        } else {
+          current++;
+          maxForPlayer = Math.max(maxForPlayer, current);
+        }
+      });
+      
+      return maxForPlayer > max.count ? { player: player.name, count: maxForPlayer } : max;
+    }, { player: '', count: 0 });
+    
+    // Joueur ayant "dutché" le plus souvent
+    const dutchCounts = players.reduce((acc, player) => {
+      const dutchCount = player.rounds.filter(round => round.isDutch).length;
+      return dutchCount > 0 ? [...acc, { player: player.name, count: dutchCount }] : acc;
+    }, [] as Array<{ player: string, count: number }>);
+    
+    const mostDutch = dutchCounts.sort((a, b) => b.count - a.count)[0];
+    
+    // Ajout des stats si elles existent
+    if (maxConsecutiveLosses.count > 1) {
+      stats.push({
+        text: `${maxConsecutiveLosses.player} a perdu ${maxConsecutiveLosses.count} manches d'affilée`,
+        icon: <Fire className="h-5 w-5 text-dutch-orange" />
+      });
+    }
+    
+    if (mostDutch && mostDutch.count > 0) {
+      stats.push({
+        text: `${mostDutch.player} a "dutché" ${mostDutch.count} fois`,
+        icon: <Zap className="h-5 w-5 text-dutch-purple" />
+      });
+    }
+    
+    // Joueur avec la meilleure moyenne
+    const bestAverage = players.reduce((best, player) => {
+      const avg = player.stats?.averageScore || 0;
+      return avg > best.avg ? { player: player.name, avg } : best;
+    }, { player: '', avg: 0 });
+    
+    if (bestAverage.avg > 0) {
+      stats.push({
+        text: `${bestAverage.player} a la meilleure moyenne: ${bestAverage.avg.toFixed(1)} pts/manche`,
+        icon: <Target className="h-5 w-5 text-dutch-blue" />
+      });
+    }
+    
+    return stats;
+  }, [players]);
   
   // Lancer les confettis dès que le composant est monté
   useEffect(() => {
@@ -73,8 +149,8 @@ const GamePodium: React.FC<GamePodiumProps> = ({ players, onNewGame, gameDuratio
           transition={{ duration: 0.5 }}
           className="text-center mb-8"
         >
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">
-            Partie terminée !
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent mb-2">
+            {randomTitle}
           </h1>
           <p className="text-lg mt-2 text-gray-600">
             {winner.name} remporte la partie avec {winner.totalScore} points
@@ -88,7 +164,7 @@ const GamePodium: React.FC<GamePodiumProps> = ({ players, onNewGame, gameDuratio
         </motion.div>
         
         {/* Affichage du podium */}
-        <div className="relative mb-16 mt-24">
+        <div className="relative mb-16 mt-28">
           {/* Positions des joueurs sur le podium */}
           <div className="flex items-end justify-center gap-4 md:gap-6 h-52 md:h-72">
             {sortedPlayers.slice(0, 3).map((player, index) => {
@@ -98,7 +174,7 @@ const GamePodium: React.FC<GamePodiumProps> = ({ players, onNewGame, gameDuratio
                 <div key={player.id} className="relative" style={{ order }}>
                   {/* Médaille */}
                   <motion.div 
-                    className="absolute -top-20 left-1/2 transform -translate-x-1/2 z-10 flex flex-col items-center"
+                    className="absolute -top-24 left-1/2 transform -translate-x-1/2 z-10 flex flex-col items-center"
                     variants={medalAnimation}
                     initial="hidden"
                     animate="visible"
@@ -143,6 +219,36 @@ const GamePodium: React.FC<GamePodiumProps> = ({ players, onNewGame, gameDuratio
             })}
           </div>
         </div>
+        
+        {/* Statistiques fun de la partie */}
+        {funStats.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.6 }}
+            className="mb-8"
+          >
+            <Card className="bg-white/70 backdrop-blur-md rounded-xl border border-white/40 shadow-sm">
+              <CardContent className="p-4">
+                <h3 className="text-lg font-semibold text-dutch-blue mb-3">Moments marquants</h3>
+                <div className="space-y-2">
+                  {funStats.map((stat, index) => (
+                    <motion.div 
+                      key={index}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.7 + index * 0.1 }}
+                      className="flex items-center gap-2 text-sm text-gray-700"
+                    >
+                      {stat.icon}
+                      <span>{stat.text}</span>
+                    </motion.div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        )}
         
         {/* Affichage des autres joueurs */}
         {sortedPlayers.length > 3 && (

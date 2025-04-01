@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Game } from '@/types';
 import { motion } from 'framer-motion';
@@ -7,7 +8,6 @@ import { Clock, Trophy, Users } from 'lucide-react';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import GameHistory from '@/components/GameHistory';
-import AnimatedBackground from '@/components/AnimatedBackground';
 import PageLayout from '@/components/PageLayout';
 
 const HistoryPage: React.FC = () => {

@@ -9,7 +9,7 @@ import AnimatedBackground from '@/components/AnimatedBackground';
 
 const SignUp: React.FC = () => {
   return (
-    <div className="relative min-h-screen flex items-center justify-center p-4">
+    <div className="relative min-h-screen flex items-center justify-center p-4 overflow-hidden">
       <div className="absolute inset-0 overflow-hidden">
         <AnimatedBackground variant="default" />
       </div>
@@ -36,7 +36,7 @@ const SignUp: React.FC = () => {
           </Button>
         </Link>
         
-        <div className="bg-white/70 backdrop-blur-md rounded-3xl shadow-lg border border-white/40 p-1">
+        <div className="bg-white/70 backdrop-blur-md rounded-3xl shadow-lg border border-white/40 p-1 overflow-hidden">
           <ClerkSignUp 
             appearance={{
               elements: {
@@ -50,11 +50,18 @@ const SignUp: React.FC = () => {
                 formFieldInput: "bg-white border-gray-300 focus:border-dutch-blue focus:ring-dutch-blue/20",
                 footerActionLink: "text-dutch-blue hover:text-dutch-blue-dark",
                 formButtonPrimary: "bg-dutch-blue hover:bg-dutch-blue-dark focus:ring-dutch-blue/30",
+                formFieldAction__clipboard: "hidden",
+                form: "w-full max-w-full overflow-hidden",
+                formFieldRow: "max-w-full",
+                formFieldInput__emailAddress: "w-full max-w-full",
+                identityPreviewEditButton: "text-dutch-blue",
+                otpCodeFieldInputs: "max-w-full",
+                otpCodeField: "max-w-full overflow-hidden",
               }
             }}
+            signInUrl="/sign-in"
+            afterSignUpUrl="/game"
             redirectUrl="/game"
-            routing="path"
-            path="/sign-up"
           />
         </div>
       </motion.div>
