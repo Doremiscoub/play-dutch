@@ -12,7 +12,7 @@ import { useDeviceDetect } from '@/hooks/use-mobile';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
-  const { user, isLoaded } = useClerk();
+  const { user, loaded } = useClerk();
   const { isMobile } = useDeviceDetect();
 
   // Redirige directement vers la page de jeu pour "Jouer sans compte"
@@ -20,7 +20,7 @@ const Home: React.FC = () => {
     navigate('/game');
   };
 
-  if (!isLoaded) {
+  if (!loaded) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-pulse text-center">
