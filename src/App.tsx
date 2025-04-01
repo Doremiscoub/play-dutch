@@ -10,8 +10,8 @@ import RulesPage from '@/pages/RulesPage';
 import SettingsPage from '@/pages/SettingsPage';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import AuthStatus from '@/components/AuthStatus';
-import GamePage from '@/pages/GamePage'; // Updated import path
-import BrickBreaker from '@/components/EasterEgg/BrickBreaker'; // Import the Easter Egg
+import GamePage from '@/pages/GamePage';
+import BrickBreaker from '@/components/EasterEgg/BrickBreaker';
 
 function App() {
   return (

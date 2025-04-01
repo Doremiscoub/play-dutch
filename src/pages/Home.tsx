@@ -3,15 +3,13 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { 
-  Play, History, Settings as SettingsIcon, BookOpen, Trophy, 
+  Play, History, Settings as SettingsIcon, BookOpen, 
   Circle, User, Users, Sparkles
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import AnimatedBackground from '@/components/AnimatedBackground';
 import { toast } from 'sonner';
 import { useUser } from '@clerk/clerk-react';
-import { Badge } from '@/components/ui/badge';
-import useTournamentStore from '@/store/useTournamentStore';
 import useGameStore from '@/store/useGameStore';
 import GameSettings from '@/components/GameSettings';
 import AdBanner from '@/components/AdBanner';
@@ -23,7 +21,6 @@ const Home: React.FC = () => {
   const navigate = useNavigate();
   const { isSignedIn } = useUser();
   const { games } = useGameStore();
-  const { tournaments, currentTournament, createTournament } = useTournamentStore();
   const [showEasterEgg, setShowEasterEgg] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState<boolean>(() => {
     return window.localStorage.getItem('dutch_sound_enabled') !== 'false';
@@ -74,38 +71,6 @@ const Home: React.FC = () => {
     setShowEasterEgg(false);
   };
 
-  const handleStartTournament = () => {
-    if (currentTournament) {
-      navigate('/tournament');
-    } else {
-      // Créer un nouveau tournoi
-      const newTournament = {
-        id: `tournament-${Date.now()}`,
-        name: `Tournoi du ${new Date().toLocaleDateString('fr-FR')}`,
-        players: [],
-        games: [],
-        currentGame: null,
-        completed: false,
-        date: new Date(),
-      };
-      
-      // Create tournament now uses the createTournament function instead of setCurrentTournament
-      createTournament(newTournament.name, []);
-      navigate('/tournament');
-    }
-  };
-
-  // Define motion variants for buttons
-  const mainButtonVariants = {
-    hover: { scale: 1.04, y: -5, boxShadow: "0 10px 25px rgba(0, 0, 0, 0.15)" },
-    tap: { scale: 0.98, y: -2, boxShadow: "0 5px 10px rgba(0, 0, 0, 0.1)" }
-  };
-
-  const iconButtonVariants = {
-    hover: { scale: 1.1, y: -3 },
-    tap: { scale: 0.95, y: 0 }
-  };
-
   return (
     <div className="min-h-screen relative overflow-hidden">
       {/* Background design elements */}
@@ -144,10 +109,10 @@ const Home: React.FC = () => {
           </div>
           
           <h1 className="text-4xl font-extrabold bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange bg-clip-text text-transparent">
-            Dutch Blitz
+            Dutch
           </h1>
-          <p className="text-gray-600 mt-2 text-sm">
-            Compteur de score facile et fun
+          <p className="text-gray-600 mt-2">
+            Votre compagnon de jeu
           </p>
         </motion.div>
         
@@ -161,35 +126,12 @@ const Home: React.FC = () => {
             <motion.button 
               onClick={handleStartGame}
               className="w-full py-8 text-lg font-semibold rounded-2xl bg-gradient-to-r from-dutch-blue to-dutch-purple hover:from-dutch-blue/90 hover:to-dutch-purple/90 shadow-md hover:shadow-lg transition-all text-white flex items-center justify-center"
-              whileHover="hover"
-              whileTap="tap"
-              variants={mainButtonVariants}
+              whileHover={{ scale: 1.04, y: -5, boxShadow: "0 10px 25px rgba(0, 0, 0, 0.15)" }}
+              whileTap={{ scale: 0.98, y: -2, boxShadow: "0 5px 10px rgba(0, 0, 0, 0.1)" }}
             >
               <Play className="mr-2 h-5 w-5" />
               Nouvelle Partie
             </motion.button>
-          </motion.div>
-          
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            className="relative"
-          >
-            <motion.button 
-              onClick={handleStartTournament}
-              className="w-full py-6 text-lg font-medium rounded-2xl bg-gradient-to-r from-dutch-orange to-dutch-yellow hover:from-dutch-orange/90 hover:to-dutch-yellow/90 shadow-md hover:shadow-lg transition-all text-white flex items-center justify-center"
-              whileHover="hover"
-              whileTap="tap"
-              variants={mainButtonVariants}
-            >
-              <Trophy className="mr-2 h-5 w-5" />
-              Mode Tournoi
-            </motion.button>
-            
-            {currentTournament && !currentTournament.completed && (
-              <Badge className="absolute -top-2 -right-1 bg-dutch-red shadow-sm">En cours</Badge>
-            )}
           </motion.div>
           
           {/* Secondary Buttons */}
@@ -199,7 +141,10 @@ const Home: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.5 }}
           >
-            <motion.div variants={iconButtonVariants} whileHover="hover" whileTap="tap">
+            <motion.div 
+              whileHover={{ scale: 1.1, y: -3 }}
+              whileTap={{ scale: 0.95, y: 0 }}
+            >
               <Button 
                 variant="ghost"
                 className="w-full h-full aspect-square flex flex-col items-center justify-center gap-2 rounded-xl bg-white/70 hover:bg-white/90 backdrop-blur-sm border border-white/40 shadow-sm hover:shadow-md transition-all"
@@ -210,7 +155,10 @@ const Home: React.FC = () => {
               </Button>
             </motion.div>
             
-            <motion.div variants={iconButtonVariants} whileHover="hover" whileTap="tap">
+            <motion.div 
+              whileHover={{ scale: 1.1, y: -3 }}
+              whileTap={{ scale: 0.95, y: 0 }}
+            >
               <Button 
                 variant="ghost"
                 className="w-full h-full aspect-square flex flex-col items-center justify-center gap-2 rounded-xl bg-white/70 hover:bg-white/90 backdrop-blur-sm border border-white/40 shadow-sm hover:shadow-md transition-all"
@@ -221,7 +169,10 @@ const Home: React.FC = () => {
               </Button>
             </motion.div>
             
-            <motion.div variants={iconButtonVariants} whileHover="hover" whileTap="tap">
+            <motion.div 
+              whileHover={{ scale: 1.1, y: -3 }}
+              whileTap={{ scale: 0.95, y: 0 }}
+            >
               <Button 
                 variant="ghost"
                 className="w-full h-full aspect-square flex flex-col items-center justify-center gap-2 rounded-xl bg-white/70 hover:bg-white/90 backdrop-blur-sm border border-white/40 shadow-sm hover:shadow-md transition-all"
@@ -249,16 +200,6 @@ const Home: React.FC = () => {
               <div>
                 <div className="text-xs text-gray-500">Parties jouées</div>
                 <div className="font-semibold">{games.length}</div>
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-dutch-orange/10 flex items-center justify-center">
-                <Trophy className="h-4 w-4 text-dutch-orange" />
-              </div>
-              <div>
-                <div className="text-xs text-gray-500">Tournois</div>
-                <div className="font-semibold">{tournaments.length}</div>
               </div>
             </div>
             
@@ -305,7 +246,7 @@ const Home: React.FC = () => {
           transition={{ duration: 0.5, delay: 0.7 }}
           className="text-center text-xs text-gray-500 mt-auto pb-4"
         >
-          Dutch Blitz Scoreboard © {new Date().getFullYear()}
+          Dutch © {new Date().getFullYear()}
         </motion.div>
       </div>
       
