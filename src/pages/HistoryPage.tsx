@@ -1,10 +1,14 @@
+
 import React, { useState, useEffect } from 'react';
 import { Game } from '@/types';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Clock, Trophy, Users } from 'lucide-react';
+import { format } from 'date-fns';
+import { fr } from 'date-fns/locale';
 import GameHistory from '@/components/GameHistory';
+import AnimatedBackground from '@/components/AnimatedBackground';
 import PageLayout from '@/components/PageLayout';
 
 const HistoryPage: React.FC = () => {
@@ -62,6 +66,7 @@ const HistoryPage: React.FC = () => {
     <PageLayout
       title="Historique des parties"
       subtitle="Consultez toutes vos parties terminées"
+      showThemeSelector={true}
     >
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <motion.div
