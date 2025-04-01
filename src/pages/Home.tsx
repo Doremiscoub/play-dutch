@@ -1,18 +1,11 @@
 
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  Play, History, Settings as SettingsIcon, BookOpen, 
-  Circle, User, Users, Sparkles
-} from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Play, History, Settings, BookOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import AnimatedBackground from '@/components/AnimatedBackground';
-import { toast } from 'sonner';
 import { useUser } from '@clerk/clerk-react';
-import useGameStore from '@/store/useGameStore';
-import GameSettings from '@/components/GameSettings';
-import AdBanner from '@/components/AdBanner';
 
 /**
  * Page d'accueil avec navigation vers les différentes fonctionnalités
@@ -20,16 +13,7 @@ import AdBanner from '@/components/AdBanner';
 const Home: React.FC = () => {
   const navigate = useNavigate();
   const { isSignedIn } = useUser();
-  const { games } = useGameStore();
-  const [showEasterEgg, setShowEasterEgg] = useState(false);
-  const [soundEnabled, setSoundEnabled] = useState<boolean>(() => {
-    return window.localStorage.getItem('dutch_sound_enabled') !== 'false';
-  });
   const [clickCount, setClickCount] = useState(0);
-
-  useEffect(() => {
-    window.localStorage.setItem('dutch_sound_enabled', String(soundEnabled));
-  }, [soundEnabled]);
 
   const handleStartGame = () => {
     navigate('/game');
@@ -47,237 +31,126 @@ const Home: React.FC = () => {
     navigate('/rules');
   };
 
-  const handleCircleClick = () => {
+  const handleLogoClick = () => {
     setClickCount(prev => {
       const newCount = prev + 1;
       
       if (newCount >= 7) {
-        setShowEasterEgg(true);
+        // Navigate to easter egg when clicked 7 times
+        navigate('/easter-egg');
         return 0;
-      }
-      
-      if (newCount === 3) {
-        toast.info('Continue d\'appuyer...', {
-          position: 'bottom-center',
-          duration: 1500,
-        });
       }
       
       return newCount;
     });
   };
 
-  const handleCloseEasterEgg = () => {
-    setShowEasterEgg(false);
-  };
-
   return (
-    <div className="min-h-screen relative overflow-hidden">
-      {/* Background design elements */}
+    <div className="min-h-screen relative overflow-hidden flex flex-col items-center justify-center">
+      {/* Background elements */}
       <div className="fixed inset-0 -z-10">
-        <AnimatedBackground variant="default" />
+        <AnimatedBackground variant="smooth" />
       </div>
       
       {/* Main Content */}
-      <div className="container max-w-md mx-auto px-4 py-8 min-h-screen flex flex-col">
-        {/* Absolute positioned settings button */}
-        <div className="absolute top-6 right-6 z-30">
-          <GameSettings soundEnabled={soundEnabled} setSoundEnabled={setSoundEnabled} />
-        </div>
-        
+      <div className="w-full max-w-md px-4 py-8 flex flex-col items-center justify-center gap-6 z-10">
         {/* Logo and title */}
         <motion.div 
-          className="mt-8 mb-12 text-center"
+          className="mb-8 text-center"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
+          transition={{ duration: 0.6 }}
         >
-          <div className="flex justify-center mb-4">
-            <motion.div
-              className="w-20 h-20 rounded-full bg-gradient-to-br from-dutch-blue to-dutch-purple flex items-center justify-center shadow-lg relative"
-              whileHover={{ rotate: 360 }}
-              transition={{ duration: 1 }}
-              onClick={handleCircleClick}
-            >
-              <motion.div 
-                className="w-16 h-16 rounded-full bg-white flex items-center justify-center text-3xl font-bold relative z-10"
-                whileTap={{ scale: 0.95 }}
-              >
-                <Circle className="h-10 w-10 text-dutch-purple" strokeWidth={3} />
-              </motion.div>
-            </motion.div>
-          </div>
-          
-          <h1 className="text-4xl font-extrabold bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange bg-clip-text text-transparent">
+          <motion.div 
+            className="text-6xl font-bold bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange bg-clip-text text-transparent relative"
+            onClick={handleLogoClick}
+          >
             Dutch
-          </h1>
-          <p className="text-gray-600 mt-2">
+            <motion.div 
+              className="absolute -right-6 -top-6"
+              initial={{ rotate: 0 }}
+              animate={{ rotate: [0, 10, -5, 0] }}
+              transition={{ duration: 2, repeat: Infinity, repeatDelay: 5 }}
+            >
+              <span className="text-dutch-orange text-xl">★</span>
+            </motion.div>
+          </motion.div>
+          <p className="text-gray-600 mt-2 text-lg">
             Votre compagnon de jeu
           </p>
         </motion.div>
         
-        {/* Main Action Buttons */}
-        <div className="space-y-4 flex-grow flex flex-col justify-center mb-12">
+        {/* Action Buttons */}
+        <div className="w-full space-y-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
           >
-            <motion.button 
+            <Button 
               onClick={handleStartGame}
-              className="w-full py-8 text-lg font-semibold rounded-2xl bg-gradient-to-r from-dutch-blue to-dutch-purple hover:from-dutch-blue/90 hover:to-dutch-purple/90 shadow-md hover:shadow-lg transition-all text-white flex items-center justify-center"
-              whileHover={{ scale: 1.04, y: -5, boxShadow: "0 10px 25px rgba(0, 0, 0, 0.15)" }}
-              whileTap={{ scale: 0.98, y: -2, boxShadow: "0 5px 10px rgba(0, 0, 0, 0.1)" }}
+              className="w-full py-6 rounded-full bg-white/80 text-dutch-blue hover:bg-white/90 backdrop-blur-sm border border-white/40 shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 text-lg font-medium"
             >
-              <Play className="mr-2 h-5 w-5" />
-              Nouvelle Partie
-            </motion.button>
+              <Play className="h-5 w-5 text-dutch-blue" />
+              Nouvelle partie
+            </Button>
           </motion.div>
           
-          {/* Secondary Buttons */}
-          <motion.div 
-            className="grid grid-cols-3 gap-3 mt-6"
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.5 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
           >
-            <motion.div 
-              whileHover={{ scale: 1.1, y: -3 }}
-              whileTap={{ scale: 0.95, y: 0 }}
+            <Button 
+              onClick={handleGoToHistory}
+              className="w-full py-6 rounded-full bg-white/80 text-dutch-purple hover:bg-white/90 backdrop-blur-sm border border-white/40 shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 text-lg font-medium"
             >
-              <Button 
-                variant="ghost"
-                className="w-full h-full aspect-square flex flex-col items-center justify-center gap-2 rounded-xl bg-white/70 hover:bg-white/90 backdrop-blur-sm border border-white/40 shadow-sm hover:shadow-md transition-all"
-                onClick={handleGoToHistory}
-              >
-                <History className="h-6 w-6 text-dutch-blue" />
-                <span className="text-xs font-medium text-gray-700">Historique</span>
-              </Button>
-            </motion.div>
-            
-            <motion.div 
-              whileHover={{ scale: 1.1, y: -3 }}
-              whileTap={{ scale: 0.95, y: 0 }}
-            >
-              <Button 
-                variant="ghost"
-                className="w-full h-full aspect-square flex flex-col items-center justify-center gap-2 rounded-xl bg-white/70 hover:bg-white/90 backdrop-blur-sm border border-white/40 shadow-sm hover:shadow-md transition-all"
-                onClick={handleGoToRules}
-              >
-                <BookOpen className="h-6 w-6 text-dutch-orange" />
-                <span className="text-xs font-medium text-gray-700">Règles</span>
-              </Button>
-            </motion.div>
-            
-            <motion.div 
-              whileHover={{ scale: 1.1, y: -3 }}
-              whileTap={{ scale: 0.95, y: 0 }}
-            >
-              <Button 
-                variant="ghost"
-                className="w-full h-full aspect-square flex flex-col items-center justify-center gap-2 rounded-xl bg-white/70 hover:bg-white/90 backdrop-blur-sm border border-white/40 shadow-sm hover:shadow-md transition-all"
-                onClick={handleGoToSettings}
-              >
-                <SettingsIcon className="h-6 w-6 text-dutch-purple" />
-                <span className="text-xs font-medium text-gray-700">Réglages</span>
-              </Button>
-            </motion.div>
+              <History className="h-5 w-5 text-dutch-purple" />
+              Historique
+            </Button>
           </motion.div>
-        </div>
-        
-        {/* Stats Summary */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.6 }}
-          className="rounded-2xl p-4 bg-white/80 backdrop-blur-sm border border-white/40 shadow-sm mb-6"
-        >
-          <div className="grid grid-cols-2 gap-3">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-dutch-blue/10 flex items-center justify-center">
-                <History className="h-4 w-4 text-dutch-blue" />
-              </div>
-              <div>
-                <div className="text-xs text-gray-500">Parties jouées</div>
-                <div className="font-semibold">{games.length}</div>
-              </div>
-            </div>
+          
+          <div className="grid grid-cols-2 gap-4 mt-4">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+            >
+              <Button 
+                onClick={handleGoToRules}
+                className="w-full py-6 rounded-full bg-white/80 text-dutch-orange hover:bg-white/90 backdrop-blur-sm border border-white/40 shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 text-base font-medium"
+              >
+                <BookOpen className="h-5 w-5 text-dutch-orange" />
+                Règles
+              </Button>
+            </motion.div>
             
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-dutch-purple/10 flex items-center justify-center">
-                {isSignedIn ? (
-                  <User className="h-4 w-4 text-dutch-purple" />
-                ) : (
-                  <Users className="h-4 w-4 text-dutch-purple" />
-                )}
-              </div>
-              <div>
-                <div className="text-xs text-gray-500">Mode</div>
-                <div className="font-semibold">{isSignedIn ? 'Connecté' : 'Local'}</div>
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-dutch-green/10 flex items-center justify-center">
-                <Sparkles className="h-4 w-4 text-dutch-green" />
-              </div>
-              <div>
-                <div className="text-xs text-gray-500">Version</div>
-                <div className="font-semibold">1.0.0</div>
-              </div>
-            </div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+            >
+              <Button 
+                onClick={handleGoToSettings}
+                className="w-full py-6 rounded-full bg-white/80 text-dutch-green hover:bg-white/90 backdrop-blur-sm border border-white/40 shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 text-base font-medium"
+              >
+                <Settings className="h-5 w-5 text-dutch-green" />
+                Réglages
+              </Button>
+            </motion.div>
           </div>
-        </motion.div>
-
-        {/* Ad Banner */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.7 }}
-          className="w-full flex justify-center mb-4"
-        >
-          <AdBanner format="horizontal" position="inline" />
-        </motion.div>
+        </div>
         
         {/* Footer */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.7 }}
-          className="text-center text-xs text-gray-500 mt-auto pb-4"
+          className="text-center text-xs text-gray-500 mt-16 absolute bottom-6"
         >
-          Dutch © {new Date().getFullYear()}
+          Version 1.0
         </motion.div>
       </div>
-      
-      {/* Easter Egg Modal */}
-      {showEasterEgg && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div className="fixed inset-0 bg-black/60" onClick={handleCloseEasterEgg}></div>
-          <div className="bg-white/90 backdrop-blur-lg rounded-3xl p-6 relative z-10 w-[90%] max-w-md mx-auto">
-            <h2 className="text-xl font-bold mb-4 bg-gradient-to-r from-dutch-orange to-dutch-red bg-clip-text text-transparent">
-              Easter Egg découvert !
-            </h2>
-            <p className="text-gray-700 mb-4">
-              Vous avez découvert un mini-jeu caché ! Voulez-vous y jouer ?
-            </p>
-            <div className="flex gap-3 justify-end">
-              <Button 
-                variant="outline" 
-                onClick={handleCloseEasterEgg}
-              >
-                Annuler
-              </Button>
-              <Button 
-                variant="dutch-orange"
-                onClick={() => navigate('/easter-egg')}
-              >
-                Jouer
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
