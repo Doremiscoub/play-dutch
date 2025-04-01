@@ -34,6 +34,15 @@ const Home: React.FC = () => {
     }
   };
 
+  // Fallback content while Clerk is loading
+  if (!isLoaded) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-pulse text-dutch-blue">Chargement...</div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen relative overflow-hidden">
       {/* Fond animé */}

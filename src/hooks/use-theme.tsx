@@ -1,13 +1,12 @@
 
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import themeConfig, { ThemeType, THEMES } from '@/config/theme';
+import { THEMES, ThemeType } from '@/config/theme';
 
 // Type alias pour la compatibilité avec l'existant
 export type { ThemeType };
-export type ThemeId = ThemeType;
 
 // Export des constantes du thème pour faciliter l'accès
-export { THEMES as themeConfig };
+export const themeConfig = THEMES;
 
 // Interface du contexte de thème
 interface ThemeContextType {

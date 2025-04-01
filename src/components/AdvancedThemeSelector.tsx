@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -214,7 +213,7 @@ const AdvancedThemeSelector = () => {
                       "relative flex items-center w-full p-4 rounded-xl transition-all cursor-pointer hover:shadow-md",
                       currentTheme === theme.id ? "ring-2 ring-primary shadow-md" : "bg-white/60 border border-white/30"
                     )}
-                    onClick={() => setTheme(theme.id as ThemeId)}
+                    onClick={() => setTheme(theme.id as ThemeType)}
                   >
                     <div className="flex items-center gap-3 flex-1">
                       <div className="flex gap-1">
