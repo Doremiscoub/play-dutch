@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Player } from '@/types';
 import { Button } from '@/components/ui/button';
@@ -11,7 +12,8 @@ import {
   AlertDialogDescription, 
   AlertDialogFooter, 
   AlertDialogHeader, 
-  AlertDialogTitle 
+  AlertDialogTitle, 
+  AlertDialogTrigger 
 } from '@/components/ui/alert-dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { LayoutGrid, LayoutList, Info, Settings, ArrowLeft } from 'lucide-react';
@@ -92,9 +94,9 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
   };
 
   return (
-    <PageLayout backgroundVariant="subtle" className="pb-32">
-      <div className="relative z-10">
-        <div className="flex justify-between items-center mb-6">
+    <PageLayout backgroundVariant="subtle" className="pb-32 px-0 sm:px-2">
+      <div className="relative z-10 w-full">
+        <div className="flex justify-between items-center mb-6 px-4">
           <Link to="/">
             <Button variant="ghost" size="sm" className="flex items-center gap-1 text-gray-600 hover:text-gray-900">
               <ArrowLeft className="h-4 w-4" />
@@ -118,7 +120,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
           </div>
         </div>
         
-        <div className="text-center mb-6">
+        <div className="text-center mb-6 px-4">
           <h1 className="text-2xl font-bold bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">
             Tableau des scores
             <span className="ml-2 text-sm">✨</span>
@@ -127,12 +129,12 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
         </div>
         
         {/* Onglets pour basculer entre les vues - toujours visible */}
-        <div className="flex justify-center mb-6">
+        <div className="flex justify-center mb-6 px-4">
           <Tabs 
             defaultValue="list" 
             value={view}
             onValueChange={(value) => setView(value as 'list' | 'table')} 
-            className="w-full max-w-md"
+            className="w-full"
           >
             <TabsList className="grid grid-cols-2 mb-2">
               <TabsTrigger value="list" className="flex items-center gap-1">
@@ -146,7 +148,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
         </div>
         
         {/* Layout desktop/mobile avec commentateur IA */}
-        <div className={`${isDesktop ? 'md:flex md:gap-6' : ''}`}>
+        <div className={`${isDesktop ? 'md:flex md:gap-6' : 'px-4'}`}>
           {/* Colonne gauche (classement ou tableau) */}
           <div className={`${isDesktop && view === 'list' ? 'md:w-2/3' : 'w-full'}`}>
             <AnimatePresence mode="wait">
@@ -165,6 +167,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                       players={players}
                       roundHistory={roundHistory}
                       className="mb-4"
+                      name="Professeur Cartouche"
                     />
                   )}
                 
@@ -225,7 +228,36 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.3 }}
+                  className="w-full overflow-x-auto"
                 >
+                  <div className="mb-4">
+                    <h3 className="text-lg font-medium text-gray-700 mb-3">Manches</h3>
+                    <div className="bg-white/70 rounded-xl p-3 shadow-sm border border-white/30 overflow-x-auto">
+                      <table className="w-full min-w-max">
+                        <thead>
+                          <tr className="text-sm text-gray-500">
+                            <th className="py-2 px-3 text-left">Manche</th>
+                            {players.map(player => (
+                              <th key={player.id} className="py-2 px-3 text-center">{player.name}</th>
+                            ))}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {roundHistory.map((round, roundIndex) => (
+                            <tr key={roundIndex} className="border-t border-gray-100">
+                              <td className="py-2 px-3 text-sm font-medium">{roundIndex + 1}</td>
+                              {players.map((player, playerIndex) => (
+                                <td key={`${player.id}-${roundIndex}`} className={`py-2 px-3 text-center ${player.id === round.dutchPlayerId ? 'bg-dutch-orange/10 text-dutch-orange font-medium' : ''}`}>
+                                  {round.scores[playerIndex]}
+                                </td>
+                              ))}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  
                   <ScoreTableView 
                     players={players}
                     roundHistory={roundHistory || []}
@@ -249,6 +281,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                   players={players}
                   roundHistory={roundHistory}
                   className="mb-6"
+                  name="Professeur Cartouche"
                 />
               )}
               

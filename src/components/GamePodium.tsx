@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { Player } from '@/types';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
-import { Trophy, Calendar, BarChart3 } from 'lucide-react';
+import { Trophy, Calendar, BarChart3, ArrowLeft } from 'lucide-react';
 import { playConfetti } from '@/utils/animationUtils';
 import PageLayout from './PageLayout';
 
@@ -65,7 +65,7 @@ const GamePodium: React.FC<GamePodiumProps> = ({ players, onNewGame, gameDuratio
   };
   
   return (
-    <PageLayout backgroundVariant="default">
+    <PageLayout backgroundVariant="default" showBackButton={true}>
       <div className="max-w-3xl mx-auto">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
@@ -88,7 +88,7 @@ const GamePodium: React.FC<GamePodiumProps> = ({ players, onNewGame, gameDuratio
         </motion.div>
         
         {/* Affichage du podium */}
-        <div className="relative mb-16 mt-20">
+        <div className="relative mb-16 mt-24">
           {/* Positions des joueurs sur le podium */}
           <div className="flex items-end justify-center gap-4 md:gap-6 h-52 md:h-72">
             {sortedPlayers.slice(0, 3).map((player, index) => {
@@ -98,7 +98,7 @@ const GamePodium: React.FC<GamePodiumProps> = ({ players, onNewGame, gameDuratio
                 <div key={player.id} className="relative" style={{ order }}>
                   {/* Médaille */}
                   <motion.div 
-                    className="absolute -top-16 left-1/2 transform -translate-x-1/2 z-10"
+                    className="absolute -top-20 left-1/2 transform -translate-x-1/2 z-10 flex flex-col items-center"
                     variants={medalAnimation}
                     initial="hidden"
                     animate="visible"
@@ -106,7 +106,7 @@ const GamePodium: React.FC<GamePodiumProps> = ({ players, onNewGame, gameDuratio
                     <div className={`rounded-full ${index === 0 ? 'bg-yellow-500' : index === 1 ? 'bg-gray-400' : 'bg-amber-700'} p-3 shadow-lg`}>
                       <Trophy className={`h-6 w-6 md:h-8 md:w-8 ${index === 0 ? 'text-yellow-100' : 'text-white'}`} />
                     </div>
-                    <div className="text-center mt-1 font-bold">
+                    <div className="text-center mt-2 font-bold">
                       {index === 0 ? '1er' : index === 1 ? '2e' : '3e'}
                     </div>
                   </motion.div>
@@ -119,7 +119,7 @@ const GamePodium: React.FC<GamePodiumProps> = ({ players, onNewGame, gameDuratio
                     initial="hidden"
                     animate="visible"
                   >
-                    <div className="flex flex-col items-center absolute -top-12 left-1/2 transform -translate-x-1/2 w-full">
+                    <div className="flex flex-col items-center absolute -top-14 left-1/2 transform -translate-x-1/2 w-full">
                       <div className="h-10 w-10 md:h-12 md:w-12 rounded-full bg-white border-2 border-gray-200 flex items-center justify-center mb-1 shadow-md overflow-hidden">
                         <span className="text-lg font-bold text-gray-800">{player.name.charAt(0)}</span>
                       </div>

@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { Plus, ArrowUp, Trophy, CheckCircle2 } from 'lucide-react';
+import { Plus, RotateCcw, Flag, CheckCircle2 } from 'lucide-react';
 import NewRoundScoreForm from './NewRoundScoreForm';
 import { Player } from '@/types';
 import { toast } from 'sonner';
@@ -57,7 +57,7 @@ const CustomScoreBoardButtons: React.FC<CustomScoreBoardButtonsProps> = ({
             className="bg-white text-dutch-purple shadow-lg border border-dutch-purple/20 rounded-full h-12 w-12"
             title="Terminer la partie"
           >
-            <Trophy className="h-5 w-5" />
+            <Flag className="h-5 w-5" />
           </Button>
         </motion.div>
         
@@ -73,7 +73,7 @@ const CustomScoreBoardButtons: React.FC<CustomScoreBoardButtonsProps> = ({
             className="bg-white text-dutch-orange shadow-lg border border-dutch-orange/20 rounded-full h-12 w-12"
             title="Annuler la dernière manche"
           >
-            <ArrowUp className="h-5 w-5 transform -rotate-45" />
+            <RotateCcw className="h-5 w-5" />
           </Button>
         </motion.div>
         

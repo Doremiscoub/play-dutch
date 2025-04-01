@@ -8,8 +8,6 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
-import ColorThemeSelector from './ColorThemeSelector';
-import { useTheme } from '@/hooks/use-theme';
 import { useSound } from '@/hooks/use-sound';
 import { useLocalStorage } from '@/hooks/use-local-storage';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from './ui/alert-dialog';
@@ -26,7 +24,6 @@ const GameSettings: React.FC<GameSettingsProps> = ({
   gameActive = false
 }) => {
   const navigate = useNavigate();
-  const { currentTheme } = useTheme();
   const { isSoundEnabled, setSoundEnabled } = useSound();
   const [offlineModeEnabled, setOfflineModeEnabled] = useLocalStorage('dutch_offline_mode', false);
 
@@ -60,18 +57,12 @@ const GameSettings: React.FC<GameSettingsProps> = ({
         </DialogHeader>
 
         <Tabs defaultValue="general" className="mt-4">
-          <TabsList className="grid grid-cols-3 mb-4 rounded-xl bg-white/50 backdrop-blur-md p-1 shadow-sm">
+          <TabsList className="grid grid-cols-2 mb-4 rounded-xl bg-white/50 backdrop-blur-md p-1 shadow-sm">
             <TabsTrigger 
               value="general" 
               className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm py-2.5"
             >
               Général
-            </TabsTrigger>
-            <TabsTrigger 
-              value="appearance" 
-              className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm py-2.5"
-            >
-              Apparence
             </TabsTrigger>
             <TabsTrigger 
               value="data" 
@@ -124,13 +115,6 @@ const GameSettings: React.FC<GameSettingsProps> = ({
                 <Settings className="h-4 w-4 mr-2" aria-hidden="true" />
                 Paramètres avancés
               </Button>
-            </div>
-          </TabsContent>
-          
-          <TabsContent value="appearance" className="space-y-4">
-            <div className="bg-white/50 p-4 rounded-xl shadow-sm border border-white/30">
-              <Label className="font-medium mb-3 block">Thème de couleur</Label>
-              <ColorThemeSelector />
             </div>
           </TabsContent>
           

@@ -3,7 +3,6 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import AnimatedBackground from './AnimatedBackground';
 import { animationVariants } from '@/utils/animationUtils';
-import ThemeSelector from './ThemeSelector';
 import { Button } from './ui/button';
 import { ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -16,7 +15,6 @@ interface PageLayoutProps {
   backgroundVariant?: 'default' | 'subtle' | 'minimal';
   withAnimation?: boolean;
   className?: string;
-  showThemeSelector?: boolean;
   showBackButton?: boolean;
 }
 
@@ -31,7 +29,6 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   backgroundVariant = 'default',
   withAnimation = true,
   className = '',
-  showThemeSelector = false,
   showBackButton = false
 }) => {
   const navigate = useNavigate();
@@ -55,13 +52,6 @@ const PageLayout: React.FC<PageLayoutProps> = ({
         </div>
       )}
       
-      {/* Sélecteur de thème */}
-      {showThemeSelector && (
-        <div className="absolute top-6 right-6 z-20">
-          <ThemeSelector />
-        </div>
-      )}
-      
       {/* Contenu de la page */}
       <div className="relative z-10 py-6 px-4 sm:px-6 lg:px-8">
         {/* Titre et sous-titre optionnels */}
@@ -78,7 +68,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
         )}
         
         {/* Contenu principal */}
-        <div className="container mx-auto max-w-4xl">
+        <div className="container mx-auto max-w-5xl">
           {children}
         </div>
       </div>
