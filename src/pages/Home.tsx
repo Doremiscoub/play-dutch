@@ -12,9 +12,7 @@ import { useDeviceDetect } from '@/hooks/use-mobile';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
-  const clerk = useClerk();
-  const user = clerk.user;
-  const isLoaded = clerk.loaded;
+  const { user, isLoaded } = useClerk();
   const { isMobile } = useDeviceDetect();
 
   // Redirige directement vers la page de jeu pour "Jouer sans compte"
