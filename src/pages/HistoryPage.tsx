@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Game } from '@/types';
 import { motion } from 'framer-motion';
@@ -26,13 +25,11 @@ const HistoryPage: React.FC = () => {
   });
 
   useEffect(() => {
-    // Load games from localStorage
     const savedGames = localStorage.getItem('dutch_games');
     const parsedGames: Game[] = savedGames ? JSON.parse(savedGames) : [];
     
     setGames(parsedGames);
     
-    // Calculate stats
     if (parsedGames.length > 0) {
       const totalRounds = parsedGames.reduce((sum, game) => sum + game.rounds, 0);
       
@@ -43,7 +40,6 @@ const HistoryPage: React.FC = () => {
         });
       });
       
-      // Find most frequent winner
       const winnerCount: Record<string, number> = {};
       parsedGames.forEach(game => {
         winnerCount[game.winner] = (winnerCount[game.winner] || 0) + 1;
@@ -66,7 +62,6 @@ const HistoryPage: React.FC = () => {
     <PageLayout
       title="Historique des parties"
       subtitle="Consultez toutes vos parties terminées"
-      showThemeSelector={true}
     >
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <motion.div
