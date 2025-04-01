@@ -27,7 +27,6 @@ const BrickBreaker: React.FC = () => {
   const { getThemeColors } = useTheme();
   const colors = getThemeColors();
   
-  // Game variables stored in refs to maintain state between renders
   const gameRef = useRef({
     canvas: null as HTMLCanvasElement | null,
     ctx: null as CanvasRenderingContext2D | null,
@@ -57,7 +56,6 @@ const BrickBreaker: React.FC = () => {
     ready: false,
   });
   
-  // Set up play sound function
   const playSound = (frequency: number, type: 'sine' | 'square' | 'sawtooth' | 'triangle' = 'sine', duration = 0.1) => {
     if (!soundEnabled) return;
     
@@ -81,7 +79,6 @@ const BrickBreaker: React.FC = () => {
     }
   };
   
-  // Initialize game
   const initGame = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -93,7 +90,6 @@ const BrickBreaker: React.FC = () => {
     game.canvas = canvas;
     game.ctx = ctx;
     
-    // Adjust canvas size to fit container
     const resizeCanvas = () => {
       const container = canvas.parentElement;
       if (container) {
@@ -101,7 +97,6 @@ const BrickBreaker: React.FC = () => {
         canvas.width = width;
         canvas.height = Math.min(600, window.innerHeight * 0.7);
         
-        // Recalculate dimensions based on canvas size
         game.paddleX = (canvas.width - game.paddleWidth) / 2;
         game.x = canvas.width / 2;
         game.y = canvas.height - 30;
@@ -112,21 +107,17 @@ const BrickBreaker: React.FC = () => {
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
     
-    // Create bricks
     createBricks();
     
-    // Set up controls
     document.addEventListener('keydown', keyDownHandler);
     document.addEventListener('keyup', keyUpHandler);
     document.addEventListener('mousemove', mouseMoveHandler);
     document.addEventListener('touchmove', touchMoveHandler, { passive: false });
     
-    // Set starting position
     game.paddleX = (canvas.width - game.paddleWidth) / 2;
     game.x = canvas.width / 2;
     game.y = canvas.height - 30;
     
-    // Add the main ball to the balls array
     game.balls = [{ x: game.x, y: game.y, dx: game.dx, dy: game.dy, radius: game.ballRadius }];
     game.ready = true;
     
@@ -140,7 +131,6 @@ const BrickBreaker: React.FC = () => {
     };
   };
   
-  // Create bricks with varying colors and points
   const createBricks = () => {
     const game = gameRef.current;
     game.bricks = [];
@@ -152,8 +142,8 @@ const BrickBreaker: React.FC = () => {
       getComputedStyle(document.documentElement).getPropertyValue('--dutch-green').trim() || '#10B981',
     ];
     
-    const rows = Math.min(4 + Math.floor(level / 2), 7); // Increase rows with level
-    const columns = Math.min(5 + Math.floor(level / 3), 8); // Increase columns with level
+    const rows = Math.min(4 + Math.floor(level / 2), 7);
+    const columns = Math.min(5 + Math.floor(level / 3), 8);
     
     game.brickRowCount = rows;
     game.brickColumnCount = columns;
@@ -161,8 +151,8 @@ const BrickBreaker: React.FC = () => {
     for (let c = 0; c < columns; c++) {
       for (let r = 0; r < rows; r++) {
         const colorIndex = (r + c) % colors.length;
-        const health = 1 + Math.floor(level / 5); // Some bricks get tougher at higher levels
-        const points = (r + 1) * 10; // Higher rows worth more points
+        const health = 1 + Math.floor(level / 5);
+        const points = (r + 1) * 10;
         
         game.bricks.push({
           x: 0,
@@ -174,7 +164,6 @@ const BrickBreaker: React.FC = () => {
       }
     }
     
-    // Calculate positions
     calculateBrickPositions();
   };
   
@@ -182,7 +171,6 @@ const BrickBreaker: React.FC = () => {
     const game = gameRef.current;
     if (!game.canvas) return;
     
-    // Recalculate brick width based on canvas size and column count
     game.brickWidth = (game.canvas.width - (game.brickOffsetLeft * 2) - (game.brickPadding * (game.brickColumnCount - 1))) / game.brickColumnCount;
     
     let index = 0;
@@ -199,7 +187,6 @@ const BrickBreaker: React.FC = () => {
     }
   };
   
-  // Event handlers for keyboard, mouse, and touch controls
   const keyDownHandler = (e: KeyboardEvent) => {
     if (e.key === 'Right' || e.key === 'ArrowRight') {
       gameRef.current.rightPressed = true;
@@ -226,7 +213,6 @@ const BrickBreaker: React.FC = () => {
     if (relativeX > 0 && relativeX < game.canvas.width) {
       game.paddleX = relativeX - game.paddleWidth / 2;
       
-      // Keep paddle within canvas boundaries
       if (game.paddleX < 0) {
         game.paddleX = 0;
       } else if (game.paddleX + game.paddleWidth > game.canvas.width) {
@@ -245,7 +231,6 @@ const BrickBreaker: React.FC = () => {
     if (relativeX > 0 && relativeX < game.canvas.width) {
       game.paddleX = relativeX - game.paddleWidth / 2;
       
-      // Keep paddle within canvas boundaries
       if (game.paddleX < 0) {
         game.paddleX = 0;
       } else if (game.paddleX + game.paddleWidth > game.canvas.width) {
@@ -254,7 +239,6 @@ const BrickBreaker: React.FC = () => {
     }
   };
   
-  // Draw functions
   const drawBall = (x: number, y: number, radius: number) => {
     const game = gameRef.current;
     if (!game.ctx) return;
@@ -265,7 +249,6 @@ const BrickBreaker: React.FC = () => {
     game.ctx.fill();
     game.ctx.closePath();
     
-    // Add a subtle gradient effect
     const gradient = game.ctx.createRadialGradient(x, y, 0, x, y, radius);
     gradient.addColorStop(0, 'rgba(255, 255, 255, 0.8)');
     gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
@@ -280,7 +263,6 @@ const BrickBreaker: React.FC = () => {
     const game = gameRef.current;
     if (!game.ctx || !game.canvas) return;
     
-    // Main paddle body
     game.ctx.beginPath();
     game.ctx.roundRect(
       game.paddleX, 
@@ -290,7 +272,6 @@ const BrickBreaker: React.FC = () => {
       [6, 6, 6, 6]
     );
     
-    // Create gradient
     const gradient = game.ctx.createLinearGradient(
       game.paddleX, 
       game.canvas.height - game.paddleHeight, 
@@ -304,7 +285,6 @@ const BrickBreaker: React.FC = () => {
     game.ctx.fill();
     game.ctx.closePath();
     
-    // Add a highlight
     game.ctx.beginPath();
     game.ctx.roundRect(
       game.paddleX + 2, 
@@ -324,11 +304,9 @@ const BrickBreaker: React.FC = () => {
     
     game.bricks.forEach(brick => {
       if (brick.status > 0) {
-        // Draw brick with rounded corners
         game.ctx.beginPath();
         game.ctx.roundRect(brick.x, brick.y, game.brickWidth, game.brickHeight, 4);
         
-        // Create gradient based on brick color
         const gradient = game.ctx.createLinearGradient(brick.x, brick.y, brick.x, brick.y + game.brickHeight);
         const baseColor = brick.color;
         gradient.addColorStop(0, baseColor);
@@ -337,13 +315,11 @@ const BrickBreaker: React.FC = () => {
         game.ctx.fillStyle = gradient;
         game.ctx.fill();
         
-        // Add a highlight
         game.ctx.beginPath();
         game.ctx.roundRect(brick.x + 2, brick.y + 2, game.brickWidth - 4, 4, [4, 4, 0, 0]);
         game.ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
         game.ctx.fill();
         
-        // For bricks with more than 1 health, add an indicator
         if (brick.status > 1) {
           game.ctx.beginPath();
           game.ctx.arc(brick.x + game.brickWidth / 2, brick.y + game.brickHeight / 2, 4, 0, Math.PI * 2);
@@ -367,10 +343,9 @@ const BrickBreaker: React.FC = () => {
       game.ctx!.fill();
       game.ctx!.closePath();
       
-      // Update particle position and properties
       particle.x += particle.dx;
       particle.y += particle.dy;
-      particle.dy += 0.1; // Gravity
+      particle.dy += 0.1;
       particle.life -= 1;
       particle.alpha = particle.life / 20;
     });
@@ -380,21 +355,17 @@ const BrickBreaker: React.FC = () => {
     const game = gameRef.current;
     if (!game.ctx || !game.canvas) return;
     
-    // Draw score
     game.ctx.font = "16px 'Segoe UI', Arial, sans-serif";
     game.ctx.fillStyle = "#333";
     game.ctx.textAlign = "left";
     game.ctx.fillText(`Score: ${score}`, 10, 20);
     
-    // Draw level
     game.ctx.textAlign = "center";
     game.ctx.fillText(`Level ${level}`, game.canvas.width / 2, 20);
     
-    // Draw lives
     game.ctx.textAlign = "right";
     game.ctx.fillText(`Lives: ${lives}`, game.canvas.width - 10, 20);
     
-    // Draw power-up indicator if active
     if (powerUp) {
       const powerUpText = {
         'extraLife': '❤️ Extra Life',
@@ -412,22 +383,18 @@ const BrickBreaker: React.FC = () => {
       game.ctx.fillText(`${powerUpText} (${timeLeft}s)`, game.canvas.width / 2, 45);
     }
     
-    // Draw game state overlay
     if (gameState === 'ready' || gameState === 'paused') {
       const message = gameState === 'ready' ? 'Appuyez sur JOUER pour démarrer' : 'PAUSE';
       
-      // Semi-transparent overlay
       game.ctx.fillStyle = "rgba(0, 0, 0, 0.4)";
       game.ctx.fillRect(0, 0, game.canvas.width, game.canvas.height);
       
-      // Message
       game.ctx.font = "24px 'Segoe UI', Arial, sans-serif";
       game.ctx.fillStyle = "#fff";
       game.ctx.textAlign = "center";
       game.ctx.textBaseline = "middle";
       game.ctx.fillText(message, game.canvas.width / 2, game.canvas.height / 2);
       
-      // Instructions
       if (gameState === 'ready') {
         game.ctx.font = "16px 'Segoe UI', Arial, sans-serif";
         game.ctx.fillText("Utilisez les flèches ou la souris pour déplacer", game.canvas.width / 2, game.canvas.height / 2 + 40);
@@ -435,41 +402,33 @@ const BrickBreaker: React.FC = () => {
       }
     }
     
-    // Game over screen
     if (gameState === 'gameOver') {
-      // Semi-transparent overlay
       game.ctx.fillStyle = "rgba(0, 0, 0, 0.6)";
       game.ctx.fillRect(0, 0, game.canvas.width, game.canvas.height);
       
-      // Game over message
       game.ctx.font = "30px 'Segoe UI', Arial, sans-serif";
       game.ctx.fillStyle = "#fff";
       game.ctx.textAlign = "center";
       game.ctx.textBaseline = "middle";
       game.ctx.fillText("Game Over", game.canvas.width / 2, game.canvas.height / 2 - 40);
       
-      // Final score
       game.ctx.font = "20px 'Segoe UI', Arial, sans-serif";
       game.ctx.fillText(`Score Final: ${score}`, game.canvas.width / 2, game.canvas.height / 2);
       
-      // High score
       if (score > 0) {
         const highScoreText = score > highScore ? "Nouveau Record!" : `Record: ${highScore}`;
         game.ctx.fillText(highScoreText, game.canvas.width / 2, game.canvas.height / 2 + 30);
       }
       
-      // Restart prompt
       game.ctx.font = "16px 'Segoe UI', Arial, sans-serif";
       game.ctx.fillText("Appuyez sur REJOUER pour recommencer", game.canvas.width / 2, game.canvas.height / 2 + 70);
     }
   };
   
-  // Game logic
   const checkCollision = (ball: typeof gameRef.current.balls[0]) => {
     const game = gameRef.current;
     if (!game.canvas) return;
     
-    // Brick collision
     for (let i = 0; i < game.bricks.length; i++) {
       const brick = game.bricks[i];
       if (brick.status <= 0) continue;
@@ -484,21 +443,16 @@ const BrickBreaker: React.FC = () => {
         brick.status--;
         
         if (brick.status <= 0) {
-          // Add score
           const newScore = score + brick.points;
           setScore(newScore);
           
-          // Create explosion particles
           createExplosion(brick.x + game.brickWidth / 2, brick.y + game.brickHeight / 2, brick.color);
           
-          // Randomly spawn power-up (10% chance)
           if (Math.random() < 0.1) {
             spawnPowerUp(brick.x + game.brickWidth / 2, brick.y + game.brickHeight / 2);
           }
           
-          // Check if all bricks are gone
           if (game.bricks.every(b => b.status <= 0)) {
-            // Level complete
             setLevel(prevLevel => prevLevel + 1);
             resetGame(false);
             playSound(880, 'sine', 0.5);
@@ -507,7 +461,6 @@ const BrickBreaker: React.FC = () => {
           }
         }
         
-        // Play different sounds based on brick status
         if (brick.status <= 0) {
           playSound(440, 'square', 0.1);
         } else {
@@ -518,27 +471,23 @@ const BrickBreaker: React.FC = () => {
       }
     }
     
-    // Wall collision
     if (ball.x + ball.dx > game.canvas.width - ball.radius || ball.x + ball.dx < ball.radius) {
       ball.dx = -ball.dx;
       playSound(220, 'sine', 0.05);
     }
     
-    // Top wall collision
     if (ball.y + ball.dy < ball.radius) {
       ball.dy = -ball.dy;
       playSound(220, 'sine', 0.05);
     }
     
-    // Paddle collision
     if (
       ball.y + ball.dy > game.canvas.height - ball.radius - game.paddleHeight && 
       ball.x > game.paddleX && 
       ball.x < game.paddleX + game.paddleWidth
     ) {
-      // Calculate angle based on where ball hits paddle
       const hitPos = (ball.x - game.paddleX) / game.paddleWidth;
-      const angle = (hitPos * 2 - 1) * Math.PI / 3; // -60 to 60 degrees
+      const angle = (hitPos * 2 - 1) * Math.PI / 3;
       
       const speed = Math.sqrt(ball.dx * ball.dx + ball.dy * ball.dy);
       ball.dx = Math.sin(angle) * speed;
@@ -547,14 +496,11 @@ const BrickBreaker: React.FC = () => {
       playSound(440, 'triangle', 0.1);
     }
     
-    // Bottom wall collision (lose a life)
     if (ball.y + ball.dy > game.canvas.height - ball.radius) {
-      // Only lose a life if this is the last ball
       if (game.balls.length === 1) {
         loseLife();
         return true;
       } else {
-        // Otherwise just remove this ball
         return true;
       }
     }
@@ -570,7 +516,6 @@ const BrickBreaker: React.FC = () => {
       if (newLives <= 0) {
         gameOver();
       } else {
-        // Reset ball position
         game.balls = [{
           x: game.canvas!.width / 2,
           y: game.canvas!.height - 30,
@@ -579,10 +524,8 @@ const BrickBreaker: React.FC = () => {
           radius: game.ballRadius
         }];
         
-        // Reset paddle position
         game.paddleX = (game.canvas!.width - game.paddleWidth) / 2;
         
-        // Cancel any active power-ups
         setPowerUp(null);
         setPowerUpTimer(0);
         game.paddleWidth = 80;
@@ -599,7 +542,6 @@ const BrickBreaker: React.FC = () => {
     setGameState('gameOver');
     playSound(110, 'sawtooth', 1);
     
-    // Update high score if needed
     if (score > highScore) {
       setHighScore(score);
       localStorage.setItem('dutch_brickbreaker_highscore', score.toString());
@@ -610,7 +552,6 @@ const BrickBreaker: React.FC = () => {
   const createExplosion = (x: number, y: number, color: string) => {
     const game = gameRef.current;
     
-    // Create 8-12 particles
     const particleCount = 8 + Math.floor(Math.random() * 5);
     
     for (let i = 0; i < particleCount; i++) {
@@ -635,9 +576,8 @@ const BrickBreaker: React.FC = () => {
     const powerUpType = game.powerUpTypes[Math.floor(Math.random() * game.powerUpTypes.length)];
     
     setPowerUp(powerUpType);
-    setPowerUpTimer(600); // 10 seconds at 60 updates per second
+    setPowerUpTimer(600);
     
-    // Apply power-up effect
     switch (powerUpType) {
       case 'extraLife':
         setLives(prev => prev + 1);
@@ -648,16 +588,13 @@ const BrickBreaker: React.FC = () => {
         toast.success('Paddle agrandi !');
         break;
       case 'multiball':
-        // Spawn 2 additional balls
-        const mainBall = game.balls[0];
         game.balls.push(
-          { ...mainBall, dx: mainBall.dx * 1.2, dy: -Math.abs(mainBall.dy) },
-          { ...mainBall, dx: mainBall.dx * -1.2, dy: -Math.abs(mainBall.dy) }
+          { ...game.balls[0], dx: game.balls[0].dx * 1.2, dy: -Math.abs(game.balls[0].dy) },
+          { ...game.balls[0], dx: game.balls[0].dx * -1.2, dy: -Math.abs(game.balls[0].dy) }
         );
         toast.success('Multi-balles !');
         break;
       case 'slowBall':
-        // Slow down all balls
         game.balls.forEach(ball => {
           ball.dx *= 0.7;
           ball.dy *= 0.7;
@@ -666,37 +603,28 @@ const BrickBreaker: React.FC = () => {
         break;
     }
     
-    // Play power-up sound
     playSound(660, 'sine', 0.3);
   };
   
-  // Animation loop
   const draw = (timestamp: number) => {
     const game = gameRef.current;
     if (!game.ctx || !game.canvas || gameState !== 'playing') return;
     
-    // Clear canvas
     game.ctx.clearRect(0, 0, game.canvas.width, game.canvas.height);
     
-    // Calculate delta time for smooth animation
     const deltaTime = timestamp - game.lastTime;
     game.lastTime = timestamp;
     
-    // Draw elements
     drawBricks();
     
-    // Draw and update all balls
     game.balls = game.balls.filter((ball, index) => {
       drawBall(ball.x, ball.y, ball.radius);
       
-      // Update ball position
       ball.x += ball.dx;
       ball.y += ball.dy;
       
-      // Check collision for this ball
       const removeThisBall = checkCollision(ball);
       
-      // Only lose a life if this is the last ball AND it's removed
       if (removeThisBall && game.balls.length === 1) {
         return false;
       }
@@ -708,22 +636,18 @@ const BrickBreaker: React.FC = () => {
     drawParticles();
     drawUI();
     
-    // Move paddle based on key state
     if (game.rightPressed && game.paddleX < game.canvas.width - game.paddleWidth) {
       game.paddleX += 7;
     } else if (game.leftPressed && game.paddleX > 0) {
       game.paddleX -= 7;
     }
     
-    // Update power-up timer
     if (powerUp) {
       setPowerUpTimer(prev => {
         const newTimer = prev - 1;
         if (newTimer <= 0) {
-          // Power-up expired
           setPowerUp(null);
           
-          // Reset affected properties
           if (powerUp === 'bigPaddle') {
             game.paddleWidth = 80;
           } else if (powerUp === 'slowBall') {
@@ -739,13 +663,11 @@ const BrickBreaker: React.FC = () => {
       });
     }
     
-    // Request next frame if still playing
     if (game.balls.length > 0) {
       game.animationFrameId = requestAnimationFrame(draw);
     }
   };
   
-  // Game state management
   const startGame = () => {
     const game = gameRef.current;
     setGameState('playing');
@@ -774,10 +696,8 @@ const BrickBreaker: React.FC = () => {
   const resetGame = (fullReset = true) => {
     const game = gameRef.current;
     
-    // Cancel animation frame
     cancelAnimationFrame(game.animationFrameId);
     
-    // Reset game state
     if (fullReset) {
       setScore(0);
       setLives(3);
@@ -789,11 +709,141 @@ const BrickBreaker: React.FC = () => {
       setGameState('ready');
     }
     
-    // Reset ball and paddle
-    game.dx = 4 * (1 + (level - 1) * 0.1); // Increase speed with level
+    game.dx = 4 * (1 + (level - 1) * 0.1);
     game.dy = -4 * (1 + (level - 1) * 0.1);
     
     if (game.canvas) {
       game.paddleX = (game.canvas.width - game.paddleWidth) / 2;
       game.x = game.canvas.width / 2;
       game.y = game.canvas.height - 30;
+      
+      game.balls = [{
+        x: game.canvas.width / 2,
+        y: game.canvas.height - 30,
+        dx: game.dx,
+        dy: game.dy,
+        radius: game.ballRadius
+      }];
+      
+      game.paddleWidth = 80;
+      
+      createBricks();
+    }
+  };
+  
+  const toggleSound = () => {
+    const newSoundState = !soundEnabled;
+    setSoundEnabled(newSoundState);
+    localStorage.setItem('dutch_brickbreaker_sound', newSoundState.toString());
+    toast.success(newSoundState ? 'Son activé' : 'Son désactivé');
+  };
+  
+  const adjustColorBrightness = (hex: string, percent: number) => {
+    let r = parseInt(hex.substring(1, 3), 16);
+    let g = parseInt(hex.substring(3, 5), 16);
+    let b = parseInt(hex.substring(5, 7), 16);
+
+    r = Math.min(255, Math.max(0, r + (r * percent / 100)));
+    g = Math.min(255, Math.max(0, g + (g * percent / 100)));
+    b = Math.min(255, Math.max(0, b + (b * percent / 100)));
+
+    return `#${Math.round(r).toString(16).padStart(2, '0')}${Math.round(g).toString(16).padStart(2, '0')}${Math.round(b).toString(16).padStart(2, '0')}`;
+  };
+  
+  const hexToRgb = (hex: string) => {
+    const r = parseInt(hex.substring(1, 3), 16);
+    const g = parseInt(hex.substring(3, 5), 16);
+    const b = parseInt(hex.substring(5, 7), 16);
+    return `${r}, ${g}, ${b}`;
+  };
+  
+  useEffect(() => {
+    const cleanup = initGame();
+    return () => {
+      if (cleanup) cleanup();
+    };
+  }, []);
+  
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen bg-background p-4 relative">
+      <AnimatedBackground />
+      
+      <div className="z-10 w-full max-w-lg">
+        <div className="flex justify-between items-center mb-4">
+          <Button variant="ghost" onClick={() => navigate('/')} className="flex items-center gap-2">
+            <Home size={18} /> Accueil
+          </Button>
+          
+          <div className="flex gap-2">
+            <Button variant="ghost" onClick={toggleSound} className="flex items-center gap-1">
+              {soundEnabled ? <Volume2 size={18} /> : <VolumeX size={18} />}
+              {soundEnabled ? 'Son On' : 'Son Off'}
+            </Button>
+          </div>
+        </div>
+        
+        <motion.div 
+          className="relative bg-card rounded-lg shadow-lg overflow-hidden border border-border"
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          <div className="p-4 bg-card border-b border-border">
+            <h1 className="text-xl font-bold text-center">Dutch Brick Breaker</h1>
+            <div className="flex justify-between items-center mt-2">
+              <div className="text-sm font-medium">Score: {score}</div>
+              <div className="text-sm font-medium">Niveau: {level}</div>
+              <div className="text-sm font-medium">Vies: {lives}</div>
+            </div>
+          </div>
+          
+          <div className="relative bg-muted">
+            <canvas 
+              ref={canvasRef} 
+              className="block w-full" 
+              height="500"
+            />
+          </div>
+          
+          <div className="p-4 flex justify-between gap-2">
+            <Button 
+              variant="outline" 
+              onClick={() => resetGame(true)} 
+              className="flex items-center gap-2"
+              disabled={gameState === 'playing'}
+            >
+              <RefreshCw size={18} /> Réinitialiser
+            </Button>
+            
+            <Button 
+              onClick={toggleGameState} 
+              className="flex-1 flex items-center justify-center gap-2"
+            >
+              {gameState === 'playing' ? (
+                <>
+                  <PauseCircle size={18} /> Pause
+                </>
+              ) : (
+                <>
+                  <Play size={18} /> {gameState === 'paused' ? 'Reprendre' : 'Jouer'}
+                </>
+              )}
+            </Button>
+          </div>
+        </motion.div>
+        
+        <div className="mt-6 text-center text-muted-foreground text-sm">
+          <p>Record: {highScore}</p>
+          <p className="mt-2">
+            Utilisez les flèches ← → ou déplacez la souris pour contrôler le paddle.
+          </p>
+          <p className="mt-1">
+            Appuyez sur ESPACE pour mettre en pause/reprendre le jeu.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default BrickBreaker;
