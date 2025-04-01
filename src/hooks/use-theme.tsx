@@ -3,6 +3,8 @@ import React, { createContext, useState, useContext, useEffect } from 'react';
 
 // Types de thèmes disponibles
 export type ThemeType = 'default' | 'blue' | 'purple' | 'orange';
+// Add ThemeId type alias to fix AdvancedThemeSelector
+export type ThemeId = ThemeType;
 
 // Configuration des thèmes
 export const themeConfig = {

@@ -2,7 +2,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Palette } from 'lucide-react';
-import { useTheme, themeConfig } from '@/hooks/use-theme';
+import { useTheme, ThemeType } from '@/hooks/use-theme';
 import { motion } from 'framer-motion';
 
 // Composant simplifié pour le sélecteur de thème
@@ -15,7 +15,7 @@ const ThemeSelector: React.FC = () => {
     const themeIds = themeEntries.map(([id]) => id);
     const currentIndex = themeIds.indexOf(currentTheme);
     const nextIndex = (currentIndex + 1) % themeIds.length;
-    setTheme(themeIds[nextIndex]);
+    setTheme(themeIds[nextIndex] as ThemeType);
   };
 
   return (

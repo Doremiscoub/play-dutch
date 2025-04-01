@@ -29,7 +29,6 @@ const AdvancedThemeSelector = () => {
   const [currentTab, setCurrentTab] = useState<'select' | 'customize'>('select');
   const [customThemes, setCustomThemes] = useLocalStorage<CustomTheme[]>('dutch_custom_themes', []);
   
-  // For theme creation/editing
   const [editingTheme, setEditingTheme] = useState<CustomTheme | null>(null);
   const [themeName, setThemeName] = useState('');
   const [primaryColor, setPrimaryColor] = useState('#1EAEDB');
@@ -38,7 +37,6 @@ const AdvancedThemeSelector = () => {
   const [backgroundColor, setBackgroundColor] = useState('#FFFFFF');
   const [editingColorType, setEditingColorType] = useState<'primary' | 'secondary' | 'accent' | 'background'>('primary');
   
-  // Convert theme config to array for rendering
   const themes = [
     ...Object.entries(themeConfig).map(([id, theme]) => ({
       id: id as ThemeId,
@@ -53,7 +51,6 @@ const AdvancedThemeSelector = () => {
   ];
 
   const startCreatingTheme = () => {
-    // Reset theme creation form
     setThemeName('New Theme');
     setPrimaryColor('#1EAEDB');
     setSecondaryColor('#8B5CF6');
@@ -99,13 +96,11 @@ const AdvancedThemeSelector = () => {
       isCustom: true
     };
     
-    // Update existing or add new
     if (editingTheme) {
       setCustomThemes(prev => 
         prev.map(t => t.id === updatedTheme.id ? updatedTheme : t)
       );
       
-      // If we're editing the current theme, update it
       if (currentTheme === updatedTheme.id) {
         setTheme(updatedTheme.id as ThemeId);
       }
@@ -120,7 +115,6 @@ const AdvancedThemeSelector = () => {
   const deleteTheme = (themeId: string) => {
     setCustomThemes(prev => prev.filter(t => t.id !== themeId));
     
-    // If we're deleting the current theme, switch to default
     if (currentTheme === themeId) {
       setTheme('blue');
     }
@@ -159,7 +153,6 @@ const AdvancedThemeSelector = () => {
   };
   
   const randomizeColors = () => {
-    // Generate random colors for fun
     setPrimaryColor('#' + Math.floor(Math.random()*16777215).toString(16));
     setSecondaryColor('#' + Math.floor(Math.random()*16777215).toString(16));
     setAccentColor('#' + Math.floor(Math.random()*16777215).toString(16));
@@ -377,7 +370,6 @@ const AdvancedThemeSelector = () => {
                 </div>
                 
                 <div className="rounded-xl border overflow-hidden p-4 bg-white/70">
-                  {/* Color picker */}
                   <HexColorPicker
                     color={getCurrentColor()}
                     onChange={setCurrentColor}
