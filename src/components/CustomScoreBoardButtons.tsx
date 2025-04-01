@@ -2,9 +2,10 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { Plus, ArrowUp, Trophy, Clock, Award } from 'lucide-react';
+import { Plus, ArrowUp, Trophy, CheckCircle2 } from 'lucide-react';
 import NewRoundScoreForm from './NewRoundScoreForm';
 import { Player } from '@/types';
+import { toast } from 'sonner';
 
 interface CustomScoreBoardButtonsProps {
   players: Player[];
@@ -23,6 +24,10 @@ const CustomScoreBoardButtons: React.FC<CustomScoreBoardButtonsProps> = ({
   
   // Fonction pour ouvrir le formulaire de saisie de scores
   const handleOpenScoreForm = () => {
+    if (players.length === 0) {
+      toast.error("Aucun joueur trouvé");
+      return;
+    }
     setShowScoreForm(true);
   };
   
@@ -49,7 +54,7 @@ const CustomScoreBoardButtons: React.FC<CustomScoreBoardButtonsProps> = ({
             onClick={onEndGame}
             size="icon"
             variant="outline"
-            className="bg-white text-dutch-blue shadow-lg border border-dutch-blue/20 rounded-full h-12 w-12"
+            className="bg-white text-dutch-purple shadow-lg border border-dutch-purple/20 rounded-full h-12 w-12"
             title="Terminer la partie"
           >
             <Trophy className="h-5 w-5" />

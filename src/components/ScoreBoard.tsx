@@ -25,7 +25,7 @@ import PlayerDetailedStats from './PlayerDetailedStats';
 import PlayerScoreCard from './PlayerScoreCard';
 import { Link } from 'react-router-dom';
 import PageLayout from './PageLayout';
-import { animationVariants } from '@/utils/animationUtils';
+import { animationVariants, AnimatedContainer } from '@/utils/animationUtils';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { UI_CONFIG, COMMON_STYLES } from '@/config/uiConfig';
 
@@ -61,8 +61,19 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
   // Trier les joueurs par score, du meilleur au pire
   const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
   
+  // Sélectionner automatiquement le premier joueur pour les statistiques détaillées
+  useEffect(() => {
+    if (sortedPlayers.length > 0 && !selectedPlayer) {
+      setSelectedPlayer(sortedPlayers[0]);
+    }
+  }, [sortedPlayers, selectedPlayer]);
+  
   // Gestionnaires pour l'annulation de la dernière manche
   const handleRequestUndo = () => {
+    if (players.length === 0 || players[0].rounds.length === 0) {
+      toast.error('Pas de manche à annuler !');
+      return;
+    }
     setShowUndoConfirmation(true);
   };
   
@@ -112,12 +123,17 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
             Tableau des scores
             <span className="ml-2 text-sm">✨</span>
           </h1>
-          <p className="text-gray-600">Manche {players[0]?.rounds.length || 0}</p>
+          <p className="text-gray-600">Manche {players.length > 0 ? players[0]?.rounds.length || 0 : 0}</p>
         </div>
         
         {/* Onglets pour basculer entre les vues - toujours visible */}
         <div className="flex justify-center mb-6">
-          <Tabs defaultValue={view} onValueChange={(value) => setView(value as 'list' | 'table')} className="w-full max-w-md">
+          <Tabs 
+            defaultValue="list" 
+            value={view}
+            onValueChange={(value) => setView(value as 'list' | 'table')} 
+            className="w-full max-w-md"
+          >
             <TabsList className="grid grid-cols-2 mb-2">
               <TabsTrigger value="list" className="flex items-center gap-1">
                 <LayoutList className="h-4 w-4" /> Classement
@@ -169,6 +185,12 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                       />
                     </motion.div>
                   ))}
+                  
+                  {sortedPlayers.length === 0 && (
+                    <div className="text-center p-8 bg-white/70 rounded-2xl shadow-sm border border-white/50">
+                      <p className="text-gray-500">Aucun joueur pour le moment</p>
+                    </div>
+                  )}
                   
                   {/* Drawer pour les stats détaillées sur mobile */}
                   {!isDesktop && (
