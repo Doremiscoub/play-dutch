@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { Plus, History, BookOpen, Settings, LogIn, ExternalLink, Trophy } from 'lucide-react';
+import { Plus, History, BookOpen, Settings, LogIn, ExternalLink, Trophy, Loader2 } from 'lucide-react';
 import ThemeSelector from '@/components/ThemeSelector';
 import AnimatedBackground from '@/components/AnimatedBackground';
 import { useUser } from '@clerk/clerk-react';
@@ -34,11 +34,14 @@ const Home: React.FC = () => {
     }
   };
 
-  // Fallback content while Clerk is loading
+  // Afficher un loader pendant que Clerk charge
   if (!isLoaded) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-pulse text-dutch-blue">Chargement...</div>
+        <div className="flex flex-col items-center">
+          <Loader2 className="h-12 w-12 text-dutch-blue animate-spin mb-4" />
+          <div className="text-dutch-blue text-lg">Chargement...</div>
+        </div>
       </div>
     );
   }
