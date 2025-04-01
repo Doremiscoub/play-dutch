@@ -6,7 +6,7 @@ import { animationVariants } from '@/utils/animationUtils';
 import ThemeSelector from './ThemeSelector';
 import { Button } from './ui/button';
 import { ArrowLeft } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import themeConfig from '@/config/theme';
 
 interface PageLayoutProps {
@@ -32,9 +32,15 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   withAnimation = true,
   className = '',
   showThemeSelector = false,
-  showBackButton = false
+  showBackButton
 }) => {
   const navigate = useNavigate();
+  const location = useLocation();
+  
+  // Automatically show back button on rules and history pages
+  const isRulesPage = location.pathname === '/rules';
+  const isHistoryPage = location.pathname === '/history';
+  const shouldShowBackButton = showBackButton !== undefined ? showBackButton : (isRulesPage || isHistoryPage);
   
   const content = (
     <div className={`relative min-h-screen w-full ${className}`}>
@@ -42,12 +48,12 @@ const PageLayout: React.FC<PageLayoutProps> = ({
       <AnimatedBackground variant={backgroundVariant} />
       
       {/* Bouton retour */}
-      {showBackButton && (
+      {shouldShowBackButton && (
         <div className="absolute top-6 left-6 z-20">
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => navigate(-1)}
+            onClick={() => navigate('/')}
             className="bg-white/80 hover:bg-white/90 backdrop-blur-sm rounded-full shadow-sm"
           >
             <ArrowLeft className="h-5 w-5 text-dutch-blue" />

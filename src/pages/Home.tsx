@@ -90,7 +90,7 @@ const Home: React.FC = () => {
                     >
                       <Button 
                         className="w-full bg-white text-dutch-blue hover:bg-white/90 border border-dutch-blue/20 h-14 rounded-full shadow-md"
-                        onClick={() => navigate('/game')}
+                        onClick={() => navigate('/game/setup')}
                       >
                         <Plus className="mr-2 h-5 w-5" />
                         Nouvelle partie
@@ -140,7 +140,7 @@ const Home: React.FC = () => {
                     >
                       <Button 
                         className="w-full bg-white text-dutch-purple hover:bg-white/90 border border-dutch-purple/20 h-14 rounded-full shadow-md"
-                        onClick={() => navigate('/game')}
+                        onClick={() => navigate('/game/setup')}
                       >
                         <ExternalLink className="mr-2 h-5 w-5" />
                         Jouer sans compte

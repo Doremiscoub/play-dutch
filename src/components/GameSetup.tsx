@@ -5,12 +5,14 @@ import { Input } from '@/components/ui/input';
 import { Plus, Minus, Play, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
 import AnimatedBackground from './AnimatedBackground';
+import { useNavigate } from 'react-router-dom';
 
 interface GameSetupProps {
-  onStartGame: (players: string[]) => void;
+  onStartGame?: (players: string[]) => void;
 }
 
 const GameSetup: React.FC<GameSetupProps> = ({ onStartGame }) => {
+  const navigate = useNavigate();
   const [numPlayers, setNumPlayers] = useState(4);
   const [playerNames, setPlayerNames] = useState<string[]>(Array(4).fill('').map((_, i) => `Joueur ${i + 1}`));
   
@@ -38,7 +40,17 @@ const GameSetup: React.FC<GameSetupProps> = ({ onStartGame }) => {
   const handleStartGame = () => {
     // Validate player names (ensure no empty names)
     const validPlayerNames = playerNames.map(name => name.trim() === '' ? `Joueur ${playerNames.indexOf(name) + 1}` : name);
-    onStartGame(validPlayerNames);
+    
+    // Store player names in localStorage to be picked up by GamePage
+    localStorage.setItem('dutch_player_setup', JSON.stringify(validPlayerNames));
+    
+    // Call the onStartGame prop if provided
+    if (onStartGame) {
+      onStartGame(validPlayerNames);
+    }
+    
+    // Navigate to the game page
+    navigate('/game');
   };
 
   const transitionProps = {

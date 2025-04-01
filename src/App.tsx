@@ -12,6 +12,7 @@ import HistoryPage from '@/pages/HistoryPage';
 import RulesPage from '@/pages/RulesPage';
 import SettingsPage from '@/pages/SettingsPage';
 import BrickBreaker from '@/components/EasterEgg/BrickBreaker';
+import GameSetup from '@/components/GameSetup';
 import { cleanupOldData } from '@/utils/pwaUtils';
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/easter-egg" element={<BrickBreaker onClose={() => window.history.back()} />} />
           <Route path="/game" element={<GamePage />} />
+          <Route path="/game/setup" element={<GameSetup onStartGame={players => null} />} />
           <Route path="/history" element={<HistoryPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { Player } from '@/types';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
-import { Trophy, Calendar, BarChart3 } from 'lucide-react';
+import { Trophy, Calendar, BarChart3, Home } from 'lucide-react';
 import { playConfetti } from '@/utils/animationUtils';
 import PageLayout from './PageLayout';
 
@@ -74,7 +74,7 @@ const GamePodium: React.FC<GamePodiumProps> = ({ players, onNewGame, gameDuratio
           className="text-center mb-8"
         >
           <h1 className="text-3xl font-bold bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">
-            Partie terminée !
+            Les légendes du Dutch !
           </h1>
           <p className="text-lg mt-2 text-gray-600">
             {winner.name} remporte la partie avec {winner.totalScore} points
@@ -193,17 +193,18 @@ const GamePodium: React.FC<GamePodiumProps> = ({ players, onNewGame, gameDuratio
             className="bg-gradient-to-r from-dutch-purple to-dutch-blue text-white rounded-full px-8 py-6 shadow-lg hover:shadow-xl transition-all"
             size="lg"
           >
+            <Trophy className="h-5 w-5 mr-2" />
             Nouvelle partie
           </Button>
           
           <Button 
-            onClick={() => navigate('/history')}
+            onClick={() => navigate('/')}
             className="bg-white text-dutch-orange border border-dutch-orange/20 hover:bg-dutch-orange/10 rounded-full px-8 py-6"
             variant="outline"
             size="lg"
           >
-            <BarChart3 className="h-5 w-5 mr-2" />
-            Voir l'historique
+            <Home className="h-5 w-5 mr-2" />
+            Retour à l'accueil
           </Button>
         </motion.div>
       </div>
