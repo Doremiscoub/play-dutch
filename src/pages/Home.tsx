@@ -77,8 +77,8 @@ const Home = () => {
         transition={{ duration: 4.5, repeat: Infinity, repeatType: "reverse", delay: 1.2 }}
       />
       
-      {/* Vagues en bas */}
-      <div className="absolute bottom-0 left-0 right-0 overflow-hidden">
+      {/* Vagues animées en bas - plus grandes et plus visibles */}
+      <div className="absolute bottom-0 left-0 right-0 overflow-hidden h-56 pointer-events-none">
         <motion.div
           animate={{ 
             x: [-20, 0, -20],
@@ -88,10 +88,10 @@ const Home = () => {
             x: { duration: 20, repeat: Infinity, repeatType: "reverse" },
             y: { duration: 10, repeat: Infinity, repeatType: "reverse" }
           }}
-          className="w-[120%] h-40 bg-[#FDE68A] absolute bottom-[-10px] left-[-10%]"
+          className="w-[120%] h-48 bg-[#FDE68A] absolute bottom-[-10px] left-[-10%]"
           style={{
             borderRadius: "50% 50% 0 0 / 100% 100% 0 0",
-            opacity: 0.4
+            opacity: 0.6
           }}
         />
         <motion.div
@@ -103,71 +103,113 @@ const Home = () => {
             x: { duration: 15, repeat: Infinity, repeatType: "reverse" },
             y: { duration: 8, repeat: Infinity, repeatType: "reverse" }
           }}
-          className="w-[120%] h-32 bg-[#E9D5FF] absolute bottom-0 left-[-10%]"
+          className="w-[120%] h-40 bg-[#E9D5FF] absolute bottom-0 left-[-10%]"
           style={{
             borderRadius: "60% 70% 0 0 / 100% 100% 0 0",
-            opacity: 0.4
+            opacity: 0.6
           }}
         />
       </div>
       
       {/* Contenu principal */}
-      <div className="relative z-10 flex flex-col items-center justify-start min-h-screen px-4 pt-20">
+      <div className="relative z-10 flex flex-col items-center justify-start min-h-screen px-4 pt-16">
         {/* Logo et titre */}
-        <div className="text-center mb-16">
-          <h1 className="text-[36px] font-semibold relative inline-flex items-center">
+        <div className="text-center mb-14">
+          <h1 className="text-[48px] font-bold relative inline-flex items-center">
             <span className="bg-gradient-to-r from-[#3B82F6] to-[#8B5CF6] bg-clip-text text-transparent">
               Dutch
             </span>
-            <span className="text-[16px] ml-2 absolute -top-1 -right-6">✨</span>
+            <span className="text-[24px] ml-2 absolute -top-1 -right-8">✨</span>
           </h1>
-          <p className="mt-2 text-[14px] text-[#4B5563]">Votre compagnon de jeu</p>
+          <p className="mt-2 text-[16px] text-[#4B5563]">Votre compagnon de jeu</p>
         </div>
         
         {/* Boutons d'action */}
-        <div className="flex flex-col items-center w-full max-w-md gap-4">
+        <div className="flex flex-col items-center w-full max-w-md gap-5">
           {hasGameInProgress && (
-            <Button 
-              onClick={handleResumeGame}
-              className="w-full h-[50px] rounded-full bg-white shadow text-[#3B82F6] font-semibold flex items-center justify-center"
+            <motion.div
+              initial={{ scale: 0.95, y: 20, opacity: 0 }}
+              animate={{ scale: 1, y: 0, opacity: 1 }}
+              transition={{ type: "spring", stiffness: 400, damping: 15 }}
+              whileHover={{ scale: 1.03, y: -3 }}
+              whileTap={{ scale: 0.98 }}
+              className="w-full"
             >
-              <RefreshCw className="w-5 h-5 mr-2 text-[#3B82F6]" />
-              Reprendre la partie
-            </Button>
+              <Button 
+                onClick={handleResumeGame}
+                className="w-full h-[60px] rounded-2xl bg-gradient-to-r from-[#2563EB] to-[#4F46E5] shadow-lg shadow-blue-500/30 text-white font-semibold text-lg flex items-center justify-center"
+              >
+                <RefreshCw className="w-5 h-5 mr-3 text-white" />
+                Reprendre la partie
+              </Button>
+            </motion.div>
           )}
           
-          <Button 
-            onClick={handleNewGame}
-            className="w-full h-[50px] rounded-full bg-white shadow text-[#3B82F6] font-semibold flex items-center justify-center"
+          <motion.div
+            initial={{ scale: 0.95, y: 20, opacity: 0 }}
+            animate={{ scale: 1, y: 0, opacity: 1 }}
+            transition={{ type: "spring", stiffness: 400, damping: 15, delay: 0.1 }}
+            whileHover={{ scale: 1.03, y: -3 }}
+            whileTap={{ scale: 0.98 }}
+            className="w-full"
           >
-            <Play className="w-5 h-5 mr-2 text-[#3B82F6]" />
-            Nouvelle partie
-          </Button>
-          
-          <Button 
-            onClick={() => navigate('/history')}
-            className="w-full h-[50px] rounded-full bg-white shadow text-[#8B5CF6] font-semibold flex items-center justify-center"
-          >
-            <Clock className="w-5 h-5 mr-2 text-[#8B5CF6]" />
-            Historique
-          </Button>
-          
-          <div className="flex w-full gap-3 mt-1">
             <Button 
-              onClick={() => navigate('/rules')}
-              className="flex-1 h-[50px] rounded-full bg-white shadow text-[#4B5563] font-semibold flex items-center justify-center"
+              onClick={handleNewGame}
+              className="w-full h-[60px] rounded-2xl bg-gradient-to-r from-[#8B5CF6] to-[#D946EF] shadow-lg shadow-purple-500/30 text-white font-semibold text-lg flex items-center justify-center"
             >
-              <Info className="w-5 h-5 mr-2 text-[#F97316]" />
-              Règles
+              <Play className="w-5 h-5 mr-3 text-white" />
+              Nouvelle partie
             </Button>
+          </motion.div>
+          
+          <motion.div
+            initial={{ scale: 0.95, y: 20, opacity: 0 }}
+            animate={{ scale: 1, y: 0, opacity: 1 }}
+            transition={{ type: "spring", stiffness: 400, damping: 15, delay: 0.2 }}
+            whileTap={{ scale: 0.98 }}
+            className="w-full mt-3"
+          >
+            <Button 
+              onClick={() => navigate('/history')}
+              className="w-full h-[50px] rounded-xl bg-white shadow-md text-[#8B5CF6] font-semibold flex items-center justify-center border border-purple-100"
+            >
+              <Clock className="w-5 h-5 mr-2 text-[#8B5CF6]" />
+              Historique
+            </Button>
+          </motion.div>
+          
+          <div className="flex w-full gap-3 mt-2">
+            <motion.div
+              initial={{ scale: 0.95, y: 20, opacity: 0 }}
+              animate={{ scale: 1, y: 0, opacity: 1 }}
+              transition={{ type: "spring", stiffness: 400, damping: 15, delay: 0.3 }}
+              whileTap={{ scale: 0.98 }}
+              className="flex-1"
+            >
+              <Button 
+                onClick={() => navigate('/rules')}
+                className="w-full h-[50px] rounded-xl bg-white shadow-md text-[#F97316] font-semibold flex items-center justify-center border border-orange-100"
+              >
+                <Info className="w-5 h-5 mr-2 text-[#F97316]" />
+                Règles
+              </Button>
+            </motion.div>
             
-            <Button 
-              onClick={() => navigate('/settings')}
-              className="flex-1 h-[50px] rounded-full bg-white shadow text-[#4B5563] font-semibold flex items-center justify-center"
+            <motion.div
+              initial={{ scale: 0.95, y: 20, opacity: 0 }}
+              animate={{ scale: 1, y: 0, opacity: 1 }}
+              transition={{ type: "spring", stiffness: 400, damping: 15, delay: 0.4 }}
+              whileTap={{ scale: 0.98 }}
+              className="flex-1"
             >
-              <Settings className="w-5 h-5 mr-2 text-[#3B82F6]" />
-              Réglages
-            </Button>
+              <Button 
+                onClick={() => navigate('/settings')}
+                className="w-full h-[50px] rounded-xl bg-white shadow-md text-[#3B82F6] font-semibold flex items-center justify-center border border-blue-100"
+              >
+                <Settings className="w-5 h-5 mr-2 text-[#3B82F6]" />
+                Réglages
+              </Button>
+            </motion.div>
           </div>
         </div>
         

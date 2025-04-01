@@ -353,7 +353,7 @@ const GamePage: React.FC = () => {
           >
             <ScoreBoard 
               players={players}
-              onAddRound={handleAddRound}
+              onAddRound={(scores, dutchPlayerId) => handleAddRound(scores, dutchPlayerId)}
               onEndGame={handleEndGame}
               onUndoLastRound={handleUndoLastRound}
               roundHistory={roundHistory}

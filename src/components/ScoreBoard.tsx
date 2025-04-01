@@ -7,7 +7,7 @@ import { Plus, Clock, ArrowUp } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 interface FloatingButtonsProps {
-  onAddRound: () => void;
+  onAddRound: (scores: number[], dutchPlayerId?: string) => void;
   onUndoLastRound: () => void;
   onEndGame: () => void;
 }
@@ -17,6 +17,11 @@ const FloatingButtons: React.FC<FloatingButtonsProps> = ({
   onUndoLastRound,
   onEndGame
 }) => {
+  // Dummy function to match the correct signature
+  const handleAddRound = () => {
+    onAddRound([], undefined);
+  };
+
   return (
     <div className="fixed bottom-6 right-6 flex flex-col items-end gap-3 z-50">
       <motion.div
@@ -57,7 +62,7 @@ const FloatingButtons: React.FC<FloatingButtonsProps> = ({
         whileTap={{ scale: 0.95 }}
       >
         <Button
-          onClick={onAddRound}
+          onClick={handleAddRound}
           className="px-8 bg-gradient-to-r from-dutch-purple to-dutch-blue shadow-lg rounded-full h-14"
         >
           <Plus className="h-5 w-5 mr-2" />
