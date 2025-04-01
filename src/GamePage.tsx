@@ -9,6 +9,7 @@ import { toast } from 'sonner';
 import { AnimatePresence, motion } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import { useLocalStorage } from '@/hooks/use-local-storage';
+import { calculatePlayerStats, updateAllPlayersStats, isGameOver } from '@/utils/playerStatsCalculator';
 
 const GamePage: React.FC = () => {
   const [gameState, setGameState] = useState<'setup' | 'playing'>(() => {
@@ -32,12 +33,17 @@ const GamePage: React.FC = () => {
   const [soundEnabled, setSoundEnabled] = useLocalStorage('dutch_sound_enabled', true);
   const navigate = useNavigate();
   
-  // Sauvegarder l'état actuel du jeu à chaque modification
+  // Performance optimization: Memoize the updated players with stats
+  const playersWithStats = useMemo(() => {
+    return updateAllPlayersStats(players);
+  }, [players]);
+  
+  // Sauvegarder l'état actuel du jeu à chaque modification avec gestion d'erreurs
   useEffect(() => {
     if (gameState === 'playing' && players.length > 0) {
       try {
         const currentGame = {
-          players,
+          players: playersWithStats,
           roundHistory,
           lastUpdated: new Date()
         };
@@ -47,74 +53,7 @@ const GamePage: React.FC = () => {
         toast.error("Erreur lors de la sauvegarde de la partie");
       }
     }
-  }, [gameState, players, roundHistory]);
-
-  const calculatePlayerStats = useCallback((player: Player): PlayerStatistics => {
-    const rounds = player.rounds;
-    if (!rounds || rounds.length === 0) {
-      return {
-        bestRound: null,
-        dutchCount: 0,
-        averageScore: 0,
-        worstRound: null,
-        improvementRate: 0,
-        consistencyScore: 0,
-        winStreak: 0
-      };
-    }
-
-    const scores = rounds.map(r => r.score);
-    const dutchCount = rounds.filter(r => r.isDutch).length;
-    const nonZeroScores = scores.filter(s => s > 0);
-    
-    let improvementRate = 0;
-    if (rounds.length >= 6) {
-      const firstThree = scores.slice(0, 3).reduce((a, b) => a + b, 0) / 3;
-      const lastThree = scores.slice(-3).reduce((a, b) => a + b, 0) / 3;
-      improvementRate = lastThree - firstThree;
-    }
-
-    const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
-    const variance = scores.reduce((a, b) => a + Math.pow(b - avg, 2), 0) / scores.length;
-    const consistencyScore = Math.sqrt(variance);
-
-    let winStreak = 0;
-    let currentWinStreak = 0;
-    for (let i = 0; i < rounds.length; i++) {
-      if (players.every(p => p.id === player.id || (p.rounds[i] && rounds[i].score <= p.rounds[i].score))) {
-        currentWinStreak++;
-        winStreak = Math.max(winStreak, currentWinStreak);
-      } else {
-        currentWinStreak = 0;
-      }
-    }
-
-    return {
-      bestRound: nonZeroScores.length > 0 ? Math.min(...nonZeroScores) : null,
-      dutchCount,
-      averageScore: Math.round(avg * 10) / 10,
-      worstRound: scores.length > 0 ? Math.max(...scores) : null,
-      improvementRate: Math.round(improvementRate * 10) / 10,
-      consistencyScore: Math.round(consistencyScore * 10) / 10,
-      winStreak
-    };
-  }, [players]);
-
-  // Optimisé avec useMemo pour éviter des recalculs inutiles
-  const updatePlayerStats = useCallback(() => {
-    setPlayers(prevPlayers => {
-      return prevPlayers.map(player => ({
-        ...player,
-        stats: calculatePlayerStats(player)
-      }));
-    });
-  }, [calculatePlayerStats]);
-
-  useEffect(() => {
-    if (players.length > 0 && players[0].rounds && players[0].rounds.length > 0) {
-      updatePlayerStats();
-    }
-  }, [players, updatePlayerStats]);
+  }, [gameState, playersWithStats, roundHistory]);
 
   const handleStartGame = (playerNames: string[]) => {
     if (!playerNames || playerNames.length === 0 || playerNames.some(name => !name.trim())) {
@@ -140,14 +79,27 @@ const GamePage: React.FC = () => {
   };
 
   const handleAddRound = (scores: number[], dutchPlayerId?: string) => {
-    if (!players || players.length === 0 || !scores || scores.length !== players.length) {
-      toast.error('Erreur: impossible d\'ajouter la manche.');
+    // Vérifications et validations améliorées
+    if (!players || players.length === 0) {
+      toast.error('Erreur: aucun joueur trouvé');
       return;
     }
     
-    // Vérifier que les scores sont valides
-    if (scores.some(score => isNaN(score) || score < 0)) {
-      toast.error('Erreur: les scores doivent être des nombres positifs');
+    if (!scores || scores.length !== players.length) {
+      toast.error('Erreur: nombre de scores incorrect');
+      return;
+    }
+    
+    // Vérifier que les scores sont des nombres valides
+    // Note: Nous acceptons maintenant les nombres négatifs
+    if (scores.some(score => isNaN(score))) {
+      toast.error('Erreur: les scores doivent être des nombres valides');
+      return;
+    }
+    
+    // Vérification de cohérence: si un Dutch est signalé, au moins un joueur doit avoir un score
+    if (dutchPlayerId && scores.every(score => score === 0)) {
+      toast.error('Un Dutch doit avoir au moins un joueur avec des points');
       return;
     }
     
@@ -176,35 +128,39 @@ const GamePage: React.FC = () => {
     
     toast.success('Manche ajoutée !');
     
-    const playersTotalWithNewScores = players.map((player, index) => ({
+    // Vérification fin de jeu améliorée avec isGameOver
+    const updatedPlayers = players.map((player, index) => ({
       ...player,
-      newTotal: player.totalScore + scores[index]
+      totalScore: player.totalScore + scores[index]
     }));
-
-    const gameOver = playersTotalWithNewScores.some(p => p.newTotal >= 100);
     
-    if (gameOver) {
+    if (isGameOver(updatedPlayers)) {
       finishGame(scores, dutchPlayerId);
     }
   };
   
-  const finishGame = (finalScores: number[], dutchPlayerId?: string) => {
-    const sortedPlayers = [...players].map((player, index) => ({
-      ...player,
-      totalScore: player.totalScore + finalScores[index],
-      isDutch: player.id === dutchPlayerId
-    })).sort((a, b) => a.totalScore - b.totalScore);
+  const finishGame = useCallback((finalScores?: number[], dutchPlayerId?: string) => {
+    const updatedPlayers = finalScores 
+      ? players.map((player, index) => ({
+          ...player,
+          totalScore: player.totalScore + finalScores[index],
+          isDutch: player.id === dutchPlayerId
+        }))
+      : players;
     
+    const sortedPlayers = [...updatedPlayers].sort((a, b) => a.totalScore - b.totalScore);
     const winner = sortedPlayers[0].name;
     
     const newGame: Game = {
       id: uuidv4(),
       date: new Date(),
-      rounds: players[0].rounds.length + 1,
+      rounds: players[0].rounds.length + (finalScores ? 1 : 0),
       players: sortedPlayers.map(player => ({
         name: player.name,
         score: player.totalScore,
-        isDutch: player.id === dutchPlayerId
+        isDutch: finalScores 
+          ? player.id === dutchPlayerId 
+          : player.rounds.some(r => r.isDutch)
       })),
       winner
     };
@@ -227,7 +183,7 @@ const GamePage: React.FC = () => {
       setPlayers([]);
       setRoundHistory([]);
     }, 3000);
-  };
+  }, [players, setGames, soundEnabled]);
   
   const launchConfetti = useCallback(() => {
     const duration = 3000;
@@ -299,44 +255,22 @@ const GamePage: React.FC = () => {
   const handleConfirmEndGame = useCallback(() => {
     // Si aucune manche n'a été jouée, ne pas enregistrer la partie
     if (players.length > 0 && players[0].rounds && players[0].rounds.length > 0) {
-      // Créer une nouvelle partie à enregistrer
-      const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
-      const winner = sortedPlayers[0].name;
-      
-      const newGame: Game = {
-        id: uuidv4(),
-        date: new Date(),
-        rounds: players[0].rounds.length,
-        players: sortedPlayers.map(player => ({
-          name: player.name,
-          score: player.totalScore,
-          isDutch: player.rounds.some(r => r.isDutch)
-        })),
-        winner
-      };
-      
-      setGames(prev => [...prev, newGame]);
-      toast.success(`Partie terminée! ${winner} gagne!`);
-      
-      if (soundEnabled) {
-        new Audio('/sounds/win-sound.mp3').play().catch(err => console.error("Sound error:", err));
-      }
+      finishGame();
+    } else {
+      setGameState('setup');
+      setPlayers([]);
+      setRoundHistory([]);
+      localStorage.removeItem('current_dutch_game');
     }
     
     setShowGameEndConfirmation(false);
-    setGameState('setup');
-    setPlayers([]);
-    setRoundHistory([]);
-    
-    // Supprimer la partie en cours
-    localStorage.removeItem('current_dutch_game');
-  }, [players, setGames, soundEnabled]);
+  }, [players, finishGame]);
 
   const handleCancelEndGame = useCallback(() => {
     setShowGameEndConfirmation(false);
   }, []);
 
-  // Vérifier s'il y a une partie en cours au chargement
+  // Vérifier s'il y a une partie en cours au chargement avec gestion de l'expiration
   useEffect(() => {
     const savedGame = localStorage.getItem('current_dutch_game');
     if (savedGame) {
@@ -381,7 +315,7 @@ const GamePage: React.FC = () => {
             exit={{ opacity: 0 }}
           >
             <ScoreBoard 
-              players={players}
+              players={playersWithStats}
               onAddRound={handleAddRound}
               onEndGame={handleEndGame}
               onUndoLastRound={handleUndoLastRound}

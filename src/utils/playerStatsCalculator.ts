@@ -21,7 +21,12 @@ export const calculatePlayerStats = (player: Player, allPlayers: Player[]): Play
 
   const scores = rounds.map(r => r.score);
   const dutchCount = rounds.filter(r => r.isDutch).length;
-  const nonZeroScores = scores.filter(s => s > 0);
+  
+  // Adaptation pour les scores négatifs
+  // Le meilleur score est le plus petit (peut être négatif)
+  const sortedScores = [...scores].sort((a, b) => a - b);
+  const bestRound = sortedScores[0]; // Peut être négatif maintenant
+  const worstRound = sortedScores[sortedScores.length - 1];
   
   let improvementRate = 0;
   if (rounds.length >= 6) {
@@ -58,10 +63,10 @@ export const calculatePlayerStats = (player: Player, allPlayers: Player[]): Play
   }
 
   return {
-    bestRound: nonZeroScores.length > 0 ? Math.min(...nonZeroScores) : null,
+    bestRound,
     dutchCount,
     averageScore: Math.round(avg * 10) / 10,
-    worstRound: scores.length > 0 ? Math.max(...scores) : null,
+    worstRound,
     improvementRate: Math.round(improvementRate * 10) / 10,
     consistencyScore: Math.round(consistencyScore * 10) / 10,
     winStreak
@@ -92,8 +97,40 @@ export const determineWinner = (players: Player[]): string | null => {
 
 /**
  * Fonction pour vérifier si le jeu est terminé (un joueur a atteint 100 points)
+ * Optimisée et plus fiable
  */
 export const isGameOver = (players: Player[]): boolean => {
   if (!players || players.length === 0) return false;
+  
+  // Le jeu est terminé si un joueur atteint ou dépasse 100 points
   return players.some(player => player.totalScore >= 100);
+};
+
+/**
+ * Fonction pour vérifier la cohérence des scores
+ * Utile pour détecter d'éventuelles erreurs de calcul
+ */
+export const verifyScoreConsistency = (player: Player): boolean => {
+  if (!player.rounds || player.rounds.length === 0) return true;
+  
+  const calculatedTotal = player.rounds.reduce((sum, round) => sum + round.score, 0);
+  
+  // Tolérance pour erreurs d'arrondi
+  return Math.abs(calculatedTotal - player.totalScore) < 0.01;
+};
+
+/**
+ * Corrige les totaux si des incohérences sont détectées
+ */
+export const recalculatePlayerTotals = (players: Player[]): Player[] => {
+  return players.map(player => {
+    if (!verifyScoreConsistency(player)) {
+      const recalculatedTotal = player.rounds.reduce((sum, round) => sum + round.score, 0);
+      return {
+        ...player,
+        totalScore: recalculatedTotal
+      };
+    }
+    return player;
+  });
 };

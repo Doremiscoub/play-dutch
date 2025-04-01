@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Player, ScoreBoardProps } from '@/types';
 import NewRoundModal from './NewRoundModal';
@@ -33,7 +32,14 @@ import {
   UndoIcon, 
   XIcon,
   UserIcon,
-  ArrowLeftIcon
+  ArrowLeftIcon,
+  TrendingUp,
+  TrendingDown,
+  Star,
+  Target,
+  Medal,
+  Calculator,
+  Zap
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useMediaQuery } from '@/hooks/use-mobile';
@@ -43,6 +49,7 @@ import PodiumView from './PodiumView';
 import { Switch } from './ui/switch';
 import { Link } from 'react-router-dom';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table';
+import { toast } from 'sonner';
 
 const AICommentator: React.FC<{
   players: Player[];
@@ -50,13 +57,13 @@ const AICommentator: React.FC<{
   className?: string;
 }> = ({ players, roundHistory, className }) => {
   const [comment, setComment] = useState<string | null>(null);
-  const [commentType, setCommentType] = useState<'info' | 'joke' | 'sarcasm' | 'encouragement'>('info');
+  const [commentType, setCommentType] = useState<'info' | 'joke' | 'sarcasm' | 'encouragement'>('sarcasm');
   const [isExpanded, setIsExpanded] = useState(false);
   const isMobile = useMediaQuery("(max-width: 768px)");
   
   const generateComment = () => {
     if (!players.length || !roundHistory.length) {
-      return "La partie vient de commencer ! Qui sera le champion aujourd'hui ?";
+      return "La partie commence à peine et je sens déjà que certains d'entre vous vont regretter d'avoir accepté de jouer...";
     }
     
     const commentTypes: Array<'info' | 'joke' | 'sarcasm' | 'encouragement'> = ['info', 'joke', 'sarcasm', 'encouragement'];
@@ -80,42 +87,42 @@ const AICommentator: React.FC<{
     
     // Trouver le joueur en tête au classement général
     if (players.length === 0) {
-      return "En attente des joueurs...";
+      return "En attente des joueurs... J'espère qu'ils savent au moins compter jusqu'à 10.";
     }
     
     const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
     const leadingPlayer = sortedPlayers[0];
     const lastPlayer = sortedPlayers[sortedPlayers.length - 1];
     
-    // Commentaires possibles selon le type
+    // Commentaires possibles selon le type - plus piquants et taquins
     const comments = {
       info: [
-        leadingPlayer ? `${leadingPlayer.name} est en tête avec ${leadingPlayer.totalScore} points. La tension monte !` : "La partie est très serrée !",
-        "Cette partie est très serrée, tout peut encore changer !",
-        minScorePlayer ? `${minScorePlayer.name} a réalisé un excellent score de ${minScore} points ! Continuez comme ça !` : "Excellent score le plus bas de cette manche !",
-        `Déjà ${roundHistory.length} manches jouées. La partie bat son plein !`,
-        leadingPlayer && lastPlayer ? `L'écart entre le 1er et le dernier est de ${lastPlayer.totalScore - leadingPlayer.totalScore} points.` : "Les scores sont très rapprochés !"
+        leadingPlayer ? `${leadingPlayer.name} est en tête. Si seulement les autres pouvaient comprendre les règles aussi bien...` : "Cette partie est si serrée qu'on dirait que personne ne sait vraiment jouer.",
+        "Cette partie est aussi imprévisible que les excuses qu'inventent les perdants.",
+        minScorePlayer ? `${minScorePlayer.name} a fait ${minScore} points... Soit c'est un génie, soit les autres sont vraiment mauvais.` : "Quelqu'un a enfin compris que le but est de faire peu de points?",
+        `${roundHistory.length} manches déjà? Je n'ai jamais vu une partie traîner autant...`,
+        leadingPlayer && lastPlayer ? `${lastPlayer.name} est à ${lastPlayer.totalScore - leadingPlayer.totalScore} points derrière ${leadingPlayer.name}. C'est ce qu'on appelle "creuser sa propre tombe".` : "Les écarts de score sont minimes... comme les compétences des joueurs."
       ],
       joke: [
-        dutchPlayer ? `${dutchPlayer.name} a fait Dutch ! C'était prévisible, vu comment il/elle tient ses cartes...` : `Personne n'a fait Dutch ce tour-ci... vous êtes tous trop prudents ou simplement chanceux ?`,
-        maxScorePlayer ? `${maxScorePlayer.name} avec ${maxScore} points ? Je dirais que quelqu'un a besoin de lunettes pour mieux lire ses cartes !` : "Quelqu'un a besoin de lunettes pour mieux lire ses cartes !",
-        lastPlayer ? `Si ${lastPlayer.name} continue comme ça, il/elle va bientôt pouvoir prendre sa retraite... du jeu !` : "Certains joueurs devraient peut-être envisager une retraite anticipée du jeu !",
-        `J'ai vu des escargots distribuer les cartes plus rapidement que vous !`,
-        minScorePlayer ? `${minScorePlayer.name} joue comme un pro ! Ou alors c'est juste un coup de chance incroyable...` : "Il y a des pros parmi nous ! Ou juste beaucoup de chance..."
+        dutchPlayer ? `${dutchPlayer.name} a fait Dutch! J'imagine déjà son air faussement surpris, comme si ce n'était pas prévisible.` : `Pas de Dutch ce tour-ci? Vous avez tous peur ou vous êtes juste trop prudents?`,
+        maxScorePlayer ? `${maxScorePlayer.name} avec ${maxScore} points, c'est comme apporter une cuillère à une bataille de couteaux.` : "Ces scores sont tellement hauts qu'on pourrait penser que vous jouez à un jeu où il faut marquer beaucoup.",
+        lastPlayer ? `Si ${lastPlayer.name} avait autant de talent que de malchance, on aurait une vraie compétition.` : "Certains joueurs ici me rappellent pourquoi les jeux de hasard existent - pour donner une chance à tout le monde.",
+        `J'ai vu des escargots distribuer des cartes plus rapidement. Vous avez peur qu'elles s'usent?`,
+        minScorePlayer ? `${minScorePlayer.name} a fait un miracle avec ${minScore} points. Dommage que les miracles soient rares dans votre cas.` : "Un bon score dans cette manche... probablement un accident."
       ],
       sarcasm: [
-        maxScorePlayer ? `Wow, ${maxScorePlayer.name}, ${maxScore} points ! Impressionnant... si l'objectif était de marquer le PLUS de points.` : "Des scores impressionnants... si l'objectif était de marquer le PLUS de points.",
-        leadingPlayer ? `Je vois que ${leadingPlayer.name} est en tête. Quelqu'un veut lui rappeler que c'est celui qui a le MOINS de points qui gagne ?` : "Quelqu'un veut rappeler aux joueurs que c'est celui qui a le MOINS de points qui gagne ?",
-        `À ce stade, je me demande si certains d'entre vous connaissent vraiment les règles du jeu.`,
-        lastPlayer ? `${lastPlayer.name} semble avoir une stratégie très... intéressante. On appelle ça "perdre avec style" ?` : "Certains semblent avoir une stratégie très... intéressante. Perdre avec style ?",
-        dutchPlayer ? `${dutchPlayer.name} a fait Dutch. Quelle surprise... dit personne jamais.` : `Pas de Dutch ce tour-ci ? Vous commencez enfin à comprendre comment jouer !`
+        maxScorePlayer ? `Wow ${maxScorePlayer.name}, ${maxScore} points! Tellement impressionnant... si on joue au golf à l'envers.` : "Ces scores sont vraiment impressionnants... pour un jeu où le but est de perdre.",
+        leadingPlayer ? `${leadingPlayer.name} mène le jeu. Quelqu'un pourrait-il lui rappeler que dans ce jeu, on veut avoir MOINS de points?` : "Je me demande si quelqu'un à cette table connait réellement les règles du Dutch.",
+        `À voir vos scores, je me demande si vous jouez au Dutch ou si vous inventez les règles au fur et à mesure.`,
+        lastPlayer ? `La stratégie de ${lastPlayer.name} est fascinante - accumuler des points comme si c'était de l'or alors que c'est plutôt du plomb ici.` : "Certains d'entre vous semblent jouer avec une stratégie très... originale.",
+        dutchPlayer ? `${dutchPlayer.name} a fait Dutch. Quelle surprise... dit absolument personne autour de cette table.` : `Pas de Dutch? C'est comme regarder un film d'action sans explosion.`
       ],
       encouragement: [
-        lastPlayer ? `Ne désespérez pas ${lastPlayer.name} ! Même les plus grands champions ont connu des moments difficiles.` : "Ne désespérez pas ! Même les plus grands champions ont connu des moments difficiles.",
-        minScorePlayer ? `${minScorePlayer.name} montre une excellente maîtrise du jeu avec un score de ${minScore} !` : "Excellent jeu de la part du meilleur joueur ce tour-ci !",
-        `Tout peut encore changer ! Un bon Dutch et les scores seront bouleversés.`,
-        `Restez concentrés, la partie est encore longue !`,
-        leadingPlayer ? `${leadingPlayer.name} est en tête, mais rien n'est joué ! Gardez votre sang-froid et prenez les bonnes décisions.` : "La tête du classement peut encore changer ! Gardez votre sang-froid."
+        lastPlayer ? `${lastPlayer.name}, ne t'inquiète pas! Même les pires joueurs ont parfois un coup de chance.` : "Ne désespérez pas! Même une horloge cassée donne l'heure juste deux fois par jour.",
+        minScorePlayer ? `${minScorePlayer.name} nous démontre qu'on peut être bon même par accident avec ce ${minScore}.` : "Ce n'est pas la chance qui fait le bon joueur, c'est... bon, d'accord, c'est quand même 90% de chance.",
+        `Un bon Dutch et tout peut basculer! Ou pas, vu comment certains d'entre vous jouent.`,
+        `Restez concentrés! Ou essayez au moins, ce serait déjà un progrès pour certains.`,
+        leadingPlayer ? `${leadingPlayer.name} est en tête, mais dans ce jeu, être en tête c'est comme être en tête d'une course vers une falaise.` : "La tête du classement est comme un château de cartes - instable et probablement construit par hasard."
       ]
     };
     
@@ -129,13 +136,13 @@ const AICommentator: React.FC<{
     if (roundHistory.length > 0) {
       setComment(generateComment());
     } else {
-      setComment("Bienvenue ! La partie n'a pas encore commencé. Prêts à jouer ?");
+      setComment("Bienvenue! Je suis votre commentateur personnel, et je sens déjà que cette partie va être... intéressante.");
     }
     
-    // Générer un nouveau commentaire toutes les 20 secondes ou après un nouveau round
+    // Générer un nouveau commentaire toutes les 15 secondes (plus fréquent) ou après un nouveau round
     const intervalId = setInterval(() => {
       setComment(generateComment());
-    }, 20000);
+    }, 15000);
     
     return () => clearInterval(intervalId);
   }, [roundHistory.length]);
@@ -144,15 +151,15 @@ const AICommentator: React.FC<{
   const getCommentStyle = () => {
     switch (commentType) {
       case 'info':
-        return 'border-dutch-blue/30 bg-dutch-blue/10';
+        return 'border-dutch-blue/40 bg-gradient-to-r from-dutch-blue/10 to-dutch-blue/5';
       case 'joke':
-        return 'border-dutch-orange/30 bg-dutch-orange/10';
+        return 'border-dutch-orange/40 bg-gradient-to-r from-dutch-orange/10 to-dutch-orange/5';
       case 'sarcasm':
-        return 'border-dutch-purple/30 bg-dutch-purple/10';
+        return 'border-dutch-purple/40 bg-gradient-to-r from-dutch-purple/10 to-dutch-purple/5';
       case 'encouragement':
-        return 'border-dutch-green/30 bg-dutch-green/10';
+        return 'border-dutch-green/40 bg-gradient-to-r from-dutch-green/10 to-dutch-green/5';
       default:
-        return 'border-dutch-blue/30 bg-dutch-blue/10';
+        return 'border-dutch-blue/40 bg-gradient-to-r from-dutch-blue/10 to-dutch-blue/5';
     }
   };
   
@@ -181,7 +188,7 @@ const AICommentator: React.FC<{
     >
       <div className="flex flex-col">
         <div 
-          className={`p-4 border ${getCommentStyle()} backdrop-blur-sm flex items-start gap-3 cursor-pointer rounded-xl`}
+          className={`p-4 border ${getCommentStyle()} backdrop-blur-sm flex items-start gap-3 cursor-pointer rounded-xl hover:shadow-md transition-shadow`}
           onClick={() => setIsExpanded(!isExpanded)}
         >
           <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center ${commentType === 'info' ? 'bg-dutch-blue/20' : commentType === 'joke' ? 'bg-dutch-orange/20' : commentType === 'sarcasm' ? 'bg-dutch-purple/20' : 'bg-dutch-green/20'} shadow-md`}>
@@ -193,7 +200,7 @@ const AICommentator: React.FC<{
               <h3 className="text-base font-bold bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">
                 Prof. Cartouche
               </h3>
-              <span className="text-xs text-gray-600 -mt-1 mb-1">Analyste de jeu</span>
+              <span className="text-xs text-gray-600 -mt-1 mb-1">Analyste impitoyable</span>
             </div>
             
             <motion.p 
@@ -206,7 +213,7 @@ const AICommentator: React.FC<{
             </motion.p>
             
             {isMobile && !isExpanded && (
-              <p className="text-xs text-gray-400 mt-1 italic">Appuyez pour d'autres commentaires</p>
+              <p className="text-xs text-gray-400 mt-1 italic">Tapez pour plus de commentaires mordants</p>
             )}
           </div>
         </div>
@@ -283,13 +290,16 @@ const ScoreHeatmapTable: React.FC<{
   const roundCount = players[0].rounds.length;
   const rounds = Array.from({ length: roundCount }, (_, i) => i + 1);
   
+  // Fonction améliorée pour le gradient de couleur basé sur le score
   const getScoreColor = (score: number) => {
-    if (score === 0) return 'bg-green-100 text-green-800';
-    if (score <= 5) return 'bg-green-200 text-green-800';
-    if (score <= 10) return 'bg-blue-200 text-blue-800';
-    if (score <= 15) return 'bg-purple-200 text-purple-800';
-    if (score <= 20) return 'bg-orange-200 text-orange-800';
-    return 'bg-red-200 text-red-800';
+    if (score < 0) return 'bg-green-100 text-green-800 ring-2 ring-green-400';
+    if (score === 0) return 'bg-green-200 text-green-800 ring-1 ring-green-400';
+    if (score <= 3) return 'bg-green-300 text-green-800';
+    if (score <= 6) return 'bg-blue-200 text-blue-800';
+    if (score <= 10) return 'bg-purple-200 text-purple-800';
+    if (score <= 15) return 'bg-orange-200 text-orange-800';
+    if (score <= 20) return 'bg-red-200 text-red-800';
+    return 'bg-red-300 text-red-800';
   };
   
   return (
@@ -297,10 +307,18 @@ const ScoreHeatmapTable: React.FC<{
       <Table className="w-full bg-white/90 rounded-xl">
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[150px]">Joueur</TableHead>
+            <TableHead className="w-[150px]">
+              <div className="flex items-center gap-1">
+                <UserIcon className="h-4 w-4 text-gray-500" /> 
+                <span>Joueur</span>
+              </div>
+            </TableHead>
             {rounds.map(round => (
               <TableHead key={round} className="text-center font-medium">
-                Manche {round}
+                <div className="flex items-center justify-center gap-1">
+                  <Target className="h-4 w-4 text-gray-500" />
+                  <span>Manche {round}</span>
+                </div>
               </TableHead>
             ))}
           </TableRow>
@@ -336,12 +354,42 @@ const StatsTable: React.FC<{
       <Table className="w-full bg-white/90 rounded-xl">
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[150px]">Joueur</TableHead>
-            <TableHead className="text-center">Score</TableHead>
-            <TableHead className="text-center">Moyenne</TableHead>
-            <TableHead className="text-center">Min</TableHead>
-            <TableHead className="text-center">Max</TableHead>
-            <TableHead className="text-center">Dutch</TableHead>
+            <TableHead className="w-[150px]">
+              <div className="flex items-center gap-1">
+                <UserIcon className="h-4 w-4 text-gray-500" /> 
+                <span>Joueur</span>
+              </div>
+            </TableHead>
+            <TableHead className="text-center">
+              <div className="flex items-center justify-center gap-1">
+                <Target className="h-4 w-4 text-gray-500" />
+                <span>Score</span>
+              </div>
+            </TableHead>
+            <TableHead className="text-center">
+              <div className="flex items-center justify-center gap-1">
+                <Calculator className="h-4 w-4 text-gray-500" />
+                <span>Moyenne</span>
+              </div>
+            </TableHead>
+            <TableHead className="text-center">
+              <div className="flex items-center justify-center gap-1">
+                <TrendingDown className="h-4 w-4 text-gray-500" />
+                <span>Min</span>
+              </div>
+            </TableHead>
+            <TableHead className="text-center">
+              <div className="flex items-center justify-center gap-1">
+                <TrendingUp className="h-4 w-4 text-gray-500" />
+                <span>Max</span>
+              </div>
+            </TableHead>
+            <TableHead className="text-center">
+              <div className="flex items-center justify-center gap-1">
+                <Flag className="h-4 w-4 text-gray-500" />
+                <span>Dutch</span>
+              </div>
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -505,11 +553,69 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
   };
 
   const handleAddRound = () => {
-    onAddRound(scores, dutchPlayerId);
+    // Validation des scores
+    if (scores.some(score => isNaN(Number(score)))) {
+      toast.error("Les scores doivent être des nombres valides");
+      return;
+    }
+    
+    // Conversion des scores en nombres
+    const validatedScores = scores.map(s => Number(s));
+    
+    onAddRound(validatedScores, dutchPlayerId);
     setIsNewRoundModalOpen(false);
     setScores([]);
     setDutchPlayerId(undefined);
   };
+
+  // Pour les boutons flottants en bas à droite
+  const FloatingActionButtons = () => (
+    <div className="fixed bottom-6 right-6 flex flex-col gap-3 z-50">
+      <motion.div
+        initial={{ scale: 0, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ type: "spring", stiffness: 400, damping: 15 }}
+      >
+        <Button
+          onClick={onAddRoundHandler}
+          size="floating"
+          variant="game-action"
+          className="shadow-lg"
+        >
+          <PlusIcon className="h-6 w-6" />
+        </Button>
+      </motion.div>
+      
+      <motion.div
+        initial={{ scale: 0, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ type: "spring", stiffness: 400, damping: 15, delay: 0.05 }}
+      >
+        <Button
+          onClick={onUndoLastRound}
+          size="floating" 
+          variant="game-control"
+        >
+          <UndoIcon className="h-5 w-5 text-dutch-blue" />
+        </Button>
+      </motion.div>
+      
+      <motion.div
+        initial={{ scale: 0, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ type: "spring", stiffness: 400, damping: 15, delay: 0.1 }}
+      >
+        <Button
+          onClick={onEndGame}
+          size="floating"
+          variant="game-control"
+          className="text-red-500"
+        >
+          <XIcon className="h-5 w-5" />
+        </Button>
+      </motion.div>
+    </div>
+  );
 
   return (
     <div className="p-4 md:p-6 container max-w-7xl mx-auto">
@@ -536,7 +642,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
       >
         <div className="flex items-center gap-3">
           <Link to="/" className="flex-shrink-0">
-            <Button variant="outline" size="icon" className="rounded-full shadow-sm hover:shadow">
+            <Button variant="dutch-glass" size="icon" className="rounded-full shadow-sm hover:shadow">
               <ArrowLeftIcon className="h-5 w-5" />
             </Button>
           </Link>
@@ -554,8 +660,8 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
             />
             <span className="text-sm text-gray-500 hidden md:inline">Tableau</span>
           </div>
-          <Button variant="outline" size="icon" className="rounded-full opacity-70">
-            <UserIcon className="h-5 w-5" />
+          <Button variant="dutch-glass" size="icon" className="rounded-full">
+            <UserIcon className="h-5 w-5 text-dutch-blue" />
           </Button>
         </div>
       </motion.div>
@@ -601,67 +707,11 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
             )}
           </div>
           
-          <div className="fixed bottom-6 left-0 right-0 px-4 z-10">
-            <div className="bg-white/90 backdrop-blur-md rounded-2xl shadow-lg border border-white/40 p-4">
-              <div className="grid grid-cols-3 gap-3">
-                <Button 
-                  variant="outline" 
-                  className="h-14 rounded-xl border-dutch-orange text-dutch-orange hover:bg-dutch-orange/10 flex flex-col items-center justify-center px-1" 
-                  onClick={onUndoLastRound}
-                >
-                  <UndoIcon className="h-5 w-5 mb-1" />
-                  <span className="text-xs">Annuler</span>
-                </Button>
-                
-                <Button 
-                  variant="dutch-blue" 
-                  className="h-14 rounded-xl shadow-md flex flex-col items-center justify-center px-1"
-                  onClick={onAddRoundHandler}
-                >
-                  <PlusIcon className="h-6 w-6 mb-1" />
-                  <span className="text-xs">Nouvelle manche</span>
-                </Button>
-                
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button 
-                      variant="outline" 
-                      className="h-14 rounded-xl border-dutch-purple text-dutch-purple hover:bg-dutch-purple/10 flex flex-col items-center justify-center px-1"
-                    >
-                      <BarChart2 className="h-5 w-5 mb-1" />
-                      <span className="text-xs">Stats</span>
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Statistiques du jeu</DialogTitle>
-                    </DialogHeader>
-                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                      <div className="space-y-4">
-                        <h3 className="text-sm font-semibold">Performance par joueur</h3>
-                        <PlayerStatsChart players={players} />
-                      </div>
-                      <div>
-                        <h3 className="text-sm font-semibold mb-4">Points forts</h3>
-                        <FunStats players={players} showExtended={true} />
-                      </div>
-                    </div>
-                  </DialogContent>
-                </Dialog>
-              </div>
-              
-              <Button 
-                variant="outline" 
-                className="w-full mt-3 border-red-300 text-red-500 hover:bg-red-50" 
-                onClick={onEndGame}
-              >
-                <XIcon className="h-4 w-4 mr-2" /> Terminer la partie
-              </Button>
-            </div>
-          </div>
+          {/* Boutons d'action flottants remplaçant la barre en bas */}
+          <FloatingActionButtons />
           
           <div className="pt-36">
-            {/* Spacer to ensure content isn't hidden behind fixed bottom bar */}
+            {/* Spacer pour éviter que le contenu ne soit caché par les boutons flottants */}
           </div>
         </div>
       ) : (
@@ -718,70 +768,8 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
             )}
           </div>
           
-          <div className="col-span-12 mt-4">
-            <div className="flex justify-between items-center">
-              <div>
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button 
-                      variant="outline" 
-                      className="rounded-xl border-dutch-purple text-dutch-purple hover:bg-dutch-purple/10 gap-2"
-                    >
-                      <BarChart2 className="h-4 w-4" /> Statistiques détaillées
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="max-w-4xl">
-                    <DialogHeader>
-                      <DialogTitle>Statistiques détaillées</DialogTitle>
-                    </DialogHeader>
-                    <div className="grid grid-cols-2 gap-6">
-                      <div>
-                        <h3 className="text-sm font-semibold mb-4">Performance par joueur</h3>
-                        <PlayerStatsChart players={players} />
-                      </div>
-                      <div>
-                        <h3 className="text-sm font-semibold mb-4">Points forts</h3>
-                        <FunStats players={players} showExtended={true} />
-                      </div>
-                    </div>
-                  </DialogContent>
-                </Dialog>
-              </div>
-              
-              <div className="flex gap-3">
-                <Button 
-                  variant="outline" 
-                  className="rounded-xl border-dutch-orange text-dutch-orange hover:bg-dutch-orange/10 gap-2" 
-                  onClick={onUndoLastRound}
-                >
-                  <UndoIcon className="h-4 w-4" /> Annuler dernière
-                </Button>
-                
-                <Button 
-                  variant="dutch-blue" 
-                  className="rounded-xl shadow-md gap-2" 
-                  onClick={onAddRoundHandler}
-                >
-                  <PlusIcon className="h-4 w-4" /> Nouvelle manche
-                </Button>
-                
-                <Button 
-                  variant="outline"
-                  className="rounded-xl border-red-300 text-red-500 hover:bg-red-50 gap-2"
-                  onClick={onEndGame}
-                >
-                  <XIcon className="h-4 w-4" /> Terminer
-                </Button>
-              </div>
-            </div>
-          </div>
-          
-          <div className="col-span-12 mt-2 p-3 bg-gray-100 rounded-xl border border-gray-200 opacity-80 flex items-center justify-center">
-            <div className="flex items-center gap-2 text-gray-600">
-              <Clock className="h-4 w-4" />
-              <span>Mode multijoueur bientôt disponible</span>
-            </div>
-          </div>
+          {/* Boutons d'action flottants sur desktop aussi, pour cohérence */}
+          <FloatingActionButtons />
         </div>
       )}
       
@@ -842,6 +830,10 @@ const PlayerScoreCard: React.FC<{
   const styles = getPositionStyles();
   const stats = player.stats;
   
+  const getNegativeScoreClass = (score: number) => {
+    return score < 0 ? 'text-green-600 font-bold' : '';
+  };
+  
   return (
     <motion.div 
       className={`rounded-2xl p-5 transition-all backdrop-blur-sm ${styles.card}`}
@@ -889,10 +881,16 @@ const PlayerScoreCard: React.FC<{
               />
             </div>
             <div className="flex items-center">
-              <span className="text-xl font-bold">{player.totalScore}</span>
+              <span className={`text-xl font-bold ${getNegativeScoreClass(player.totalScore)}`}>{player.totalScore}</span>
               {lastRoundScore !== undefined && (
-                <span className="ml-2 text-xs text-gray-500 flex items-center">
-                  +{lastRoundScore}
+                <span className={`ml-2 text-xs text-gray-500 flex items-center ${getNegativeScoreClass(lastRoundScore)}`}>
+                  {lastRoundScore >= 0 ? '+' : ''}{lastRoundScore}
+                  {player.rounds.length > 1 && player.rounds[player.rounds.length - 1].score < player.rounds[player.rounds.length - 2].score && (
+                    <TrendingDown className="h-3 w-3 ml-0.5 text-green-500" aria-hidden="true" />
+                  )}
+                  {player.rounds.length > 1 && player.rounds[player.rounds.length - 1].score > player.rounds[player.rounds.length - 2].score && (
+                    <TrendingUp className="h-3 w-3 ml-0.5 text-red-500" aria-hidden="true" />
+                  )}
                 </span>
               )}
             </div>
@@ -901,15 +899,23 @@ const PlayerScoreCard: React.FC<{
           {stats && (
             <div className="mt-3 grid grid-cols-3 gap-x-2 gap-y-1">
               <div className="text-center bg-dutch-blue/5 rounded-lg p-1.5">
-                <div className="text-xs text-gray-500">Moy</div>
+                <div className="text-xs text-gray-500 flex items-center justify-center gap-1">
+                  <Calculator className="w-3 h-3" /> Moy
+                </div>
                 <div className="font-bold text-dutch-blue">{stats.averageScore.toFixed(1)}</div>
               </div>
               <div className="text-center bg-dutch-green/5 rounded-lg p-1.5">
-                <div className="text-xs text-gray-500">Min</div>
-                <div className="font-bold text-dutch-green">{stats.bestRound || '-'}</div>
+                <div className="text-xs text-gray-500 flex items-center justify-center gap-1">
+                  <TrendingDown className="w-3 h-3" /> Min
+                </div>
+                <div className={`font-bold text-dutch-green ${getNegativeScoreClass(stats.bestRound || 0)}`}>
+                  {stats.bestRound || '-'}
+                </div>
               </div>
               <div className="text-center bg-dutch-orange/5 rounded-lg p-1.5">
-                <div className="text-xs text-gray-500">Dutch</div>
+                <div className="text-xs text-gray-500 flex items-center justify-center gap-1">
+                  <Flag className="w-3 h-3" /> Dutch
+                </div>
                 <div className="font-bold text-dutch-orange">{stats.dutchCount}</div>
               </div>
             </div>
@@ -921,6 +927,7 @@ const PlayerScoreCard: React.FC<{
         <div className="mt-3 flex gap-2 overflow-x-auto py-1 scrollbar-none">
           {player.rounds.map((round, index) => {
             const isPlayerBestScore = stats?.bestRound === round.score;
+            const isNegativeScore = round.score < 0;
             
             return (
               <motion.div 
@@ -928,6 +935,7 @@ const PlayerScoreCard: React.FC<{
                 className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium
                   transition-transform shadow-sm ${
                     round.isDutch ? 'bg-gradient-to-br from-dutch-orange to-dutch-pink text-white' : 
+                    isNegativeScore ? 'bg-gradient-to-br from-green-400 to-green-500 text-white ring-2 ring-green-300' :
                     isPlayerBestScore ? 'bg-gradient-to-br from-dutch-green to-dutch-blue/50 text-white' : 'bg-gray-100'
                   }`}
                 whileHover={{ scale: 1.15, rotate: [-1, 1, -1, 0] }}
