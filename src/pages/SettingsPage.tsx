@@ -33,9 +33,16 @@ const SettingsPage = () => {
   };
 
   return (
-    <PageLayout title="Réglages" subtitle="Personnalisez votre expérience">
+    <PageLayout title="Réglages" subtitle="Personnalisez votre expérience" showBackButton={true}>
+      <div 
+        className="absolute inset-0"
+        style={{ 
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='24' height='24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M 0 0 L 24 0 M 0 0 L 0 24' stroke='%23DADADA' stroke-opacity='0.1' stroke-width='1' fill='none' /%3E%3C/svg%3E")`,
+          backgroundSize: '24px 24px'
+        }}
+      />
+
       <div className="p-4 space-y-8 max-w-lg mx-auto">
-        
         <div className="space-y-4 bg-white/50 backdrop-blur-md rounded-xl border border-white/40 p-4 shadow-sm">
           <h2 className="text-lg font-semibold text-gray-800">Son</h2>
           <div className="flex items-center justify-between">

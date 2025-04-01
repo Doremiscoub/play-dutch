@@ -1,17 +1,53 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Send, HelpCircle } from 'lucide-react';
 import PageLayout from '@/components/PageLayout';
 
 const RulesPage: React.FC = () => {
+  const [question, setQuestion] = useState('');
+  const [answer, setAnswer] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleAskQuestion = () => {
+    if (!question.trim()) return;
+    
+    setIsLoading(true);
+    
+    // Simulons une réponse d'IA - dans une version réelle, ceci serait remplacé par un appel API
+    setTimeout(() => {
+      const possibleAnswers = [
+        "Selon les règles officielles du Dutch, oui c'est autorisé!",
+        "Non, ce n'est pas autorisé dans les règles standard du Dutch, mais certaines variantes le permettent.",
+        "Les règles ne précisent rien à ce sujet, donc c'est généralement permis tant que tous les joueurs sont d'accord.",
+        "C'est une question intéressante! Dans le Dutch classique, cette action est permise uniquement lors des manches à atout.",
+        "Bonne question! Cette règle varie selon les régions, mais la version la plus répandue l'interdit."
+      ];
+      
+      const randomAnswer = possibleAnswers[Math.floor(Math.random() * possibleAnswers.length)];
+      setAnswer(randomAnswer);
+      setIsLoading(false);
+    }, 1000);
+  };
+
   return (
     <PageLayout
       title="Règles du jeu"
       subtitle="Apprenez à jouer au Dutch Card Game"
-      showThemeSelector={true}
+      showBackButton={true}
     >
+      <div 
+        className="absolute inset-0"
+        style={{ 
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='24' height='24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M 0 0 L 24 0 M 0 0 L 0 24' stroke='%23DADADA' stroke-opacity='0.1' stroke-width='1' fill='none' /%3E%3C/svg%3E")`,
+          backgroundSize: '24px 24px'
+        }}
+      />
+      
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -20,7 +56,7 @@ const RulesPage: React.FC = () => {
       >
         <Card className="rounded-3xl bg-white/80 backdrop-blur-md border border-white/40 shadow-md hover:shadow-lg transition-all">
           <CardContent className="pt-6">
-            <ScrollArea className="h-[calc(100vh-280px)] pr-4">
+            <ScrollArea className="h-[calc(100vh-400px)] pr-4">
               <div className="space-y-8">
                 <section>
                   <h2 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">Principes du jeu</h2>
@@ -116,6 +152,61 @@ const RulesPage: React.FC = () => {
             </ScrollArea>
           </CardContent>
         </Card>
+        
+        {/* Section pour poser des questions sur les règles */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="mt-6"
+        >
+          <Card className="rounded-3xl bg-white/80 backdrop-blur-md border border-white/40 shadow-md transition-all">
+            <CardContent className="pt-6">
+              <h3 className="text-xl font-semibold mb-4 flex items-center">
+                <HelpCircle className="mr-2 h-5 w-5 text-dutch-purple" />
+                <span className="bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">
+                  Une question sur les règles?
+                </span>
+              </h3>
+              
+              <div className="flex gap-2">
+                <Input
+                  placeholder="Est-ce que je peux... ?"
+                  value={question}
+                  onChange={(e) => setQuestion(e.target.value)}
+                  className="rounded-full bg-white/70 border-gray-200"
+                  onKeyPress={(e) => e.key === 'Enter' && handleAskQuestion()}
+                />
+                <Button 
+                  onClick={handleAskQuestion} 
+                  disabled={isLoading}
+                  className="rounded-full bg-dutch-purple text-white hover:bg-dutch-purple/90 px-4"
+                >
+                  <Send className="h-4 w-4" />
+                </Button>
+              </div>
+              
+              {(isLoading || answer) && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  className="mt-4"
+                >
+                  <div className="p-4 rounded-xl bg-dutch-purple/10 border border-dutch-purple/20">
+                    {isLoading ? (
+                      <div className="flex items-center justify-center">
+                        <div className="w-5 h-5 border-t-2 border-dutch-purple rounded-full animate-spin"></div>
+                        <span className="ml-2 text-dutch-purple/80">Réflexion en cours...</span>
+                      </div>
+                    ) : (
+                      <p className="text-dutch-purple">{answer}</p>
+                    )}
+                  </div>
+                </motion.div>
+              )}
+            </CardContent>
+          </Card>
+        </motion.div>
       </motion.div>
     </PageLayout>
   );

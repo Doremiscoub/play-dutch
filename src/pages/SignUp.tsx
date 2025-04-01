@@ -14,6 +14,15 @@ const SignUp: React.FC = () => {
         <AnimatedBackground variant="default" />
       </div>
       
+      {/* Quadrillage léger */}
+      <div 
+        className="absolute inset-0 z-0"
+        style={{ 
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='24' height='24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M 0 0 L 24 0 M 0 0 L 0 24' stroke='%23DADADA' stroke-opacity='0.1' stroke-width='1' fill='none' /%3E%3C/svg%3E")`,
+          backgroundSize: '24px 24px'
+        }}
+      />
+      
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

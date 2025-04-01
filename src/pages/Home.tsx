@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { SignedIn, SignedOut, useUser } from '@clerk/clerk-react';
 import { useLocalStorage } from '@/hooks/use-local-storage';
-import { Play, Clock, Info, Settings, UserPlus, LogIn, RefreshCw } from 'lucide-react';
+import { Play, Clock, Info, Settings, RefreshCw, LogIn } from 'lucide-react';
 
 const Home = () => {
   const { isSignedIn } = useUser();
@@ -167,7 +167,7 @@ const Home = () => {
           </SignedIn>
           
           <SignedOut>
-            {/* Boutons pour utilisateurs non connectés */}
+            {/* Un seul bouton pour Connexion/Inscription */}
             <motion.div
               initial={{ scale: 0.95, y: 20, opacity: 0 }}
               animate={{ scale: 1, y: 0, opacity: 1 }}
@@ -181,10 +181,11 @@ const Home = () => {
                 className="w-full h-[70px] rounded-2xl bg-gradient-to-r from-[#2563EB] to-[#4F46E5] shadow-lg shadow-blue-500/30 text-white font-semibold text-xl flex items-center justify-center"
               >
                 <LogIn className="w-6 h-6 mr-3 text-white" />
-                Connexion
+                Connexion / Inscription
               </Button>
             </motion.div>
             
+            {/* Bouton Jouer sans compte */}
             <motion.div
               initial={{ scale: 0.95, y: 20, opacity: 0 }}
               animate={{ scale: 1, y: 0, opacity: 1 }}
@@ -194,11 +195,11 @@ const Home = () => {
               className="w-full"
             >
               <Button 
-                onClick={() => navigate('/sign-up')}
+                onClick={handleNewGame}
                 className="w-full h-[70px] rounded-2xl bg-gradient-to-r from-[#8B5CF6] to-[#D946EF] shadow-lg shadow-purple-500/30 text-white font-semibold text-xl flex items-center justify-center"
               >
-                <UserPlus className="w-6 h-6 mr-3 text-white" />
-                Inscription
+                <Play className="w-6 h-6 mr-3 text-white" />
+                Jouer sans compte
               </Button>
             </motion.div>
           </SignedOut>
