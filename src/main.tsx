@@ -12,10 +12,17 @@ import { toast } from 'sonner'
 const CLERK_PUBLISHABLE_KEY = 'pk_test_YmFsYW5jZWQtYnJlYW0tMjguY2xlcmsuYWNjb3VudHMuZGV2JA'
 
 // Protection contre les erreurs d'initialisation de Clerk
-const handleClerkError = (err: any) => {
-  console.error("Erreur d'initialisation de Clerk:", err);
-  toast.error("Problème d'authentification. Mode hors ligne activé.");
-  // L'application continuera de fonctionner même sans authentification
+// La gestion d'erreur doit être effectuée via window.addEventListener car onError n'est pas disponible
+if (typeof window !== 'undefined') {
+  window.addEventListener('unhandledrejection', (event) => {
+    // Vérifier si l'erreur provient de Clerk
+    if (event.reason && typeof event.reason.message === 'string' && 
+        event.reason.message.includes('Clerk')) {
+      console.error("Erreur d'initialisation de Clerk:", event.reason);
+      toast.error("Problème d'authentification. Mode hors ligne activé.");
+      // L'application continuera de fonctionner même sans authentification
+    }
+  });
 }
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
@@ -35,7 +42,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           footerActionLink: 'text-dutch-blue hover:text-dutch-blue-dark',
         }
       }}
-      onError={handleClerkError}
     >
       <ThemeProvider>
         <App />
