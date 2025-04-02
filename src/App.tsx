@@ -20,23 +20,25 @@ import { toast } from 'sonner';
 function App() {
   const { loaded: clerkLoaded } = useClerk();
   const [isLoading, setIsLoading] = useState(true);
+  const [offlineMode, setOfflineMode] = useState(false);
 
   // Nettoyage des anciennes données au démarrage de l'application
   useEffect(() => {
     cleanupOldData(30); // Nettoyer les données de plus de 30 jours
   }, []);
 
-  // Vérifier si une erreur d'authentification a déjà été rencontrée
+  // Vérifier immédiatement si une erreur d'authentification a déjà été rencontrée
   useEffect(() => {
     if (localStorage.getItem('clerk_auth_failed') === 'true') {
+      setOfflineMode(true);
       setIsLoading(false);
     }
   }, []);
 
-  // Ajouter un timeout encore plus court pour éviter un blocage sur le loading
+  // Ajouter un timeout très court pour éviter un blocage sur le loading
   useEffect(() => {
     // Si déjà chargé ou si erreur connue, ne pas attendre
-    if (clerkLoaded || localStorage.getItem('clerk_auth_failed') === 'true') {
+    if (clerkLoaded || offlineMode) {
       setIsLoading(false);
       return;
     }
@@ -44,15 +46,15 @@ function App() {
     // Définir un timeout très court pour éviter l'attente
     const timer = setTimeout(() => {
       if (!clerkLoaded) {
-        console.warn("Authentication timed out - continuing without authentication");
+        console.warn("Authentication timed out - continuing in offline mode");
         localStorage.setItem('clerk_auth_failed', 'true');
-        toast.error("Impossible de charger l'authentification. Mode hors ligne activé.");
+        setOfflineMode(true);
         setIsLoading(false);
       }
-    }, 1000); // Réduit à 1 seconde maximum
+    }, 500); // Réduit à 500ms pour une réaction plus rapide
 
     return () => clearTimeout(timer);
-  }, [clerkLoaded]);
+  }, [clerkLoaded, offlineMode]);
 
   // Si l'application est encore en chargement, afficher un loader
   if (isLoading) {
@@ -65,6 +67,16 @@ function App() {
       </div>
     );
   }
+
+  // Si on est en mode hors ligne, afficher une notification discrète
+  useEffect(() => {
+    if (offlineMode) {
+      toast.info("Mode hors ligne activé", {
+        description: "L'application fonctionne sans authentification",
+        duration: 3000
+      });
+    }
+  }, [offlineMode]);
 
   return (
     <Router>

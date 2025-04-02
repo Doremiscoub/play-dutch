@@ -12,14 +12,14 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const { loaded } = useClerk();
   const [authTimeout, setAuthTimeout] = useState(false);
   
-  // Vérifier si une erreur d'authentification a déjà été rencontrée
+  // Vérifier immédiatement si une erreur d'authentification a déjà été rencontrée
   useEffect(() => {
     if (localStorage.getItem('clerk_auth_failed') === 'true') {
       setAuthTimeout(true);
     }
   }, []);
   
-  // Ajouter un timeout très court pour l'authentification (1 seconde maximum)
+  // Ajouter un timeout très court pour l'authentification (500ms maximum)
   useEffect(() => {
     // Si déjà chargé ou si erreur connue, ne pas attendre
     if (loaded || authTimeout) return;
@@ -27,10 +27,10 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
     const timer = setTimeout(() => {
       if (!loaded) {
         setAuthTimeout(true);
-        console.warn("Authentication loading timed out in ProtectedRoute");
+        console.warn("Authentication timed out in ProtectedRoute - continuing without auth");
         localStorage.setItem('clerk_auth_failed', 'true');
       }
-    }, 1000); // Réduit à 1 seconde pour éviter l'attente
+    }, 500); // Réduit à 500ms pour réagir encore plus vite
     
     return () => clearTimeout(timer);
   }, [loaded, authTimeout]);
@@ -54,7 +54,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
     );
   }
   
-  // Loader court pendant le chargement initial (sera remplacé par authTimeout après 1s)
+  // Loader court pendant le chargement initial (sera remplacé par authTimeout après 500ms)
   return (
     <div className="h-screen w-full flex items-center justify-center">
       <Loader2 className="h-8 w-8 text-dutch-blue animate-spin" />

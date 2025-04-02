@@ -12,42 +12,74 @@ import { toast } from 'sonner'
 const CLERK_PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY || 
                                'pk_test_YmFsYW5jZWQtYnJlYW0tMjguY2xlcmsuYWNjb3VudHMuZGV2JA'
 
+// Vérifier immédiatement si le mode hors ligne a déjà été activé précédemment
+if (localStorage.getItem('clerk_auth_failed') === 'true') {
+  console.info("Mode hors ligne détecté, authentification Clerk ignorée");
+}
+
 // Protection contre les erreurs d'initialisation de Clerk
-// La gestion d'erreur doit être effectuée via window.addEventListener car les autres méthodes ne fonctionnent pas
 if (typeof window !== 'undefined') {
+  // Timeout très court pour détecter rapidement les problèmes d'initialisation Clerk
+  setTimeout(() => {
+    if (!window.Clerk && !localStorage.getItem('clerk_auth_failed')) {
+      console.warn("Clerk n'a pas pu être initialisé dans le délai imparti");
+      localStorage.setItem('clerk_auth_failed', 'true');
+      toast.error("Problème d'authentification: mode hors ligne activé");
+      // Forcer un rechargement pour appliquer le mode hors ligne
+      window.location.reload();
+    }
+  }, 800); // Timeout très court
+
+  // Écouter les erreurs non gérées qui pourraient provenir de Clerk
   window.addEventListener('unhandledrejection', (event) => {
     // Vérifier si l'erreur provient de Clerk
     if (event.reason && typeof event.reason.message === 'string' && 
         (event.reason.message.includes('Clerk') || event.reason.message.includes('ClerkJS'))) {
       console.error("Erreur d'initialisation de Clerk:", event.reason);
-      toast.error("Problème d'authentification. Mode hors ligne activé.");
-      // L'application continuera de fonctionner même sans authentification
       localStorage.setItem('clerk_auth_failed', 'true');
+      toast.error("Problème d'authentification: mode hors ligne activé");
+      // Forcer un rechargement pour appliquer le mode hors ligne
+      window.location.reload();
     }
   });
 }
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <ClerkProvider 
-      publishableKey={CLERK_PUBLISHABLE_KEY}
-      clerkJSVersion="5.56.0-snapshot.v20250312225817"
-      signInUrl="/sign-in"
-      signUpUrl="/sign-up"
-      signInFallbackRedirectUrl="/"
-      signUpFallbackRedirectUrl="/"
-      afterSignOutUrl="/"
-      appearance={{
-        elements: {
-          // Style personnalisé cohérent avec notre thème Dutch
-          formButtonPrimary: 'bg-dutch-blue hover:bg-dutch-blue-dark focus:ring-dutch-blue/30',
-          footerActionLink: 'text-dutch-blue hover:text-dutch-blue-dark',
-        }
-      }}
-    >
+const root = ReactDOM.createRoot(document.getElementById('root')!);
+
+// Vérifier si nous sommes déjà en mode hors ligne pour accélérer le rendu
+if (localStorage.getItem('clerk_auth_failed') === 'true') {
+  // En mode hors ligne, ne pas initialiser Clerk du tout
+  root.render(
+    <React.StrictMode>
       <ThemeProvider>
         <App />
       </ThemeProvider>
-    </ClerkProvider>
-  </React.StrictMode>,
-)
+    </React.StrictMode>
+  );
+} else {
+  // Mode normal avec tentative d'authentification Clerk
+  root.render(
+    <React.StrictMode>
+      <ClerkProvider 
+        publishableKey={CLERK_PUBLISHABLE_KEY}
+        clerkJSVersion="5.56.0-snapshot.v20250312225817"
+        signInUrl="/sign-in"
+        signUpUrl="/sign-up"
+        signInFallbackRedirectUrl="/"
+        signUpFallbackRedirectUrl="/"
+        afterSignOutUrl="/"
+        appearance={{
+          elements: {
+            // Style personnalisé cohérent avec notre thème Dutch
+            formButtonPrimary: 'bg-dutch-blue hover:bg-dutch-blue-dark focus:ring-dutch-blue/30',
+            footerActionLink: 'text-dutch-blue hover:text-dutch-blue-dark',
+          }
+        }}
+      >
+        <ThemeProvider>
+          <App />
+        </ThemeProvider>
+      </ClerkProvider>
+    </React.StrictMode>
+  );
+}
