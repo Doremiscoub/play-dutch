@@ -12,44 +12,54 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const { loaded } = useClerk();
   const [authTimeout, setAuthTimeout] = useState(false);
   
-  // Ajouter un timeout plus court pour l'authentification
+  // Vérifier si une erreur d'authentification a déjà été rencontrée
   useEffect(() => {
+    if (localStorage.getItem('clerk_auth_failed') === 'true') {
+      setAuthTimeout(true);
+    }
+  }, []);
+  
+  // Ajouter un timeout très court pour l'authentification (1 seconde maximum)
+  useEffect(() => {
+    // Si déjà chargé ou si erreur connue, ne pas attendre
+    if (loaded || authTimeout) return;
+    
     const timer = setTimeout(() => {
       if (!loaded) {
         setAuthTimeout(true);
         console.warn("Authentication loading timed out in ProtectedRoute");
-        toast.error("L'authentification n'a pas pu se charger. Accès limité.");
+        localStorage.setItem('clerk_auth_failed', 'true');
       }
-    }, 2000); // 2 secondes maximum (réduit de 3s à 2s)
+    }, 1000); // Réduit à 1 seconde pour éviter l'attente
     
     return () => clearTimeout(timer);
-  }, [loaded]);
+  }, [loaded, authTimeout]);
   
-  // Si l'authentification prend trop de temps, on laisse passer l'utilisateur
-  if ((!loaded && !authTimeout)) {
-    return (
-      <div className="h-screen w-full flex items-center justify-center">
-        <Loader2 className="h-8 w-8 text-dutch-blue animate-spin" />
-        <span className="ml-2 text-lg text-gray-600">Chargement...</span>
-      </div>
-    );
-  }
-  
-  // Si l'authentification a échoué après le timeout, on affiche le contenu quand même
+  // Si l'authentification prend trop de temps ou a échoué, on laisse passer l'utilisateur immédiatement
   if (authTimeout) {
     return <>{children}</>;
   }
   
-  // Comportement normal avec authentification
+  // Si Clerk est chargé correctement, utiliser le comportement normal
+  if (loaded) {
+    return (
+      <>
+        <SignedIn>
+          {children}
+        </SignedIn>
+        <SignedOut>
+          {children}
+        </SignedOut>
+      </>
+    );
+  }
+  
+  // Loader court pendant le chargement initial (sera remplacé par authTimeout après 1s)
   return (
-    <>
-      <SignedIn>
-        {children}
-      </SignedIn>
-      <SignedOut>
-        {children}
-      </SignedOut>
-    </>
+    <div className="h-screen w-full flex items-center justify-center">
+      <Loader2 className="h-8 w-8 text-dutch-blue animate-spin" />
+      <span className="ml-2 text-lg text-gray-600">Chargement...</span>
+    </div>
   );
 };
 

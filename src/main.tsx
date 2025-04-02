@@ -9,10 +9,11 @@ import { ClerkProvider } from '@clerk/clerk-react'
 import { toast } from 'sonner'
 
 // Utilisation d'une clé Clerk de développement pour tester - à remplacer en production
-const CLERK_PUBLISHABLE_KEY = 'pk_test_YmFsYW5jZWQtYnJlYW0tMjguY2xlcmsuYWNjb3VudHMuZGV2JA'
+const CLERK_PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY || 
+                               'pk_test_YmFsYW5jZWQtYnJlYW0tMjguY2xlcmsuYWNjb3VudHMuZGV2JA'
 
 // Protection contre les erreurs d'initialisation de Clerk
-// La gestion d'erreur doit être effectuée via window.addEventListener car onError n'est pas disponible
+// La gestion d'erreur doit être effectuée via window.addEventListener car les autres méthodes ne fonctionnent pas
 if (typeof window !== 'undefined') {
   window.addEventListener('unhandledrejection', (event) => {
     // Vérifier si l'erreur provient de Clerk
@@ -21,6 +22,7 @@ if (typeof window !== 'undefined') {
       console.error("Erreur d'initialisation de Clerk:", event.reason);
       toast.error("Problème d'authentification. Mode hors ligne activé.");
       // L'application continuera de fonctionner même sans authentification
+      localStorage.setItem('clerk_auth_failed', 'true');
     }
   });
 }

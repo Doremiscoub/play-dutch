@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from '@/components/ui/sonner';
 import { AnimatePresence } from 'framer-motion';
 import Home from '@/pages/Home';
@@ -19,7 +19,6 @@ import { toast } from 'sonner';
 
 function App() {
   const { loaded: clerkLoaded } = useClerk();
-  const [authTimeout, setAuthTimeout] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   // Nettoyage des anciennes données au démarrage de l'application
@@ -27,23 +26,30 @@ function App() {
     cleanupOldData(30); // Nettoyer les données de plus de 30 jours
   }, []);
 
-  // Ajouter un timeout pour éviter un blocage infini sur le loading de Clerk
+  // Vérifier si une erreur d'authentification a déjà été rencontrée
   useEffect(() => {
-    // Si Clerk est chargé, on peut afficher l'app immédiatement
-    if (clerkLoaded) {
+    if (localStorage.getItem('clerk_auth_failed') === 'true') {
+      setIsLoading(false);
+    }
+  }, []);
+
+  // Ajouter un timeout encore plus court pour éviter un blocage sur le loading
+  useEffect(() => {
+    // Si déjà chargé ou si erreur connue, ne pas attendre
+    if (clerkLoaded || localStorage.getItem('clerk_auth_failed') === 'true') {
       setIsLoading(false);
       return;
     }
 
-    // Sinon, on définit un timeout court pour éviter l'attente infinie
+    // Définir un timeout très court pour éviter l'attente
     const timer = setTimeout(() => {
       if (!clerkLoaded) {
-        setAuthTimeout(true);
-        setIsLoading(false);
         console.warn("Authentication timed out - continuing without authentication");
+        localStorage.setItem('clerk_auth_failed', 'true');
         toast.error("Impossible de charger l'authentification. Mode hors ligne activé.");
+        setIsLoading(false);
       }
-    }, 3000); // 3 secondes de timeout maximum (réduit de 5s à 3s)
+    }, 1000); // Réduit à 1 seconde maximum
 
     return () => clearTimeout(timer);
   }, [clerkLoaded]);
