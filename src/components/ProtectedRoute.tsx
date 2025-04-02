@@ -12,7 +12,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const { loaded } = useClerk();
   const [authTimeout, setAuthTimeout] = useState(false);
   
-  // Ajouter un timeout pour l'authentification
+  // Ajouter un timeout plus court pour l'authentification
   useEffect(() => {
     const timer = setTimeout(() => {
       if (!loaded) {
@@ -20,7 +20,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
         console.warn("Authentication loading timed out in ProtectedRoute");
         toast.error("L'authentification n'a pas pu se charger. Accès limité.");
       }
-    }, 3000); // 3 secondes maximum
+    }, 2000); // 2 secondes maximum (réduit de 3s à 2s)
     
     return () => clearTimeout(timer);
   }, [loaded]);

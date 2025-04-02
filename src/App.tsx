@@ -20,6 +20,7 @@ import { toast } from 'sonner';
 function App() {
   const { loaded: clerkLoaded } = useClerk();
   const [authTimeout, setAuthTimeout] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Nettoyage des anciennes données au démarrage de l'application
   useEffect(() => {
@@ -28,32 +29,35 @@ function App() {
 
   // Ajouter un timeout pour éviter un blocage infini sur le loading de Clerk
   useEffect(() => {
+    // Si Clerk est chargé, on peut afficher l'app immédiatement
+    if (clerkLoaded) {
+      setIsLoading(false);
+      return;
+    }
+
+    // Sinon, on définit un timeout court pour éviter l'attente infinie
     const timer = setTimeout(() => {
       if (!clerkLoaded) {
         setAuthTimeout(true);
+        setIsLoading(false);
         console.warn("Authentication timed out - continuing without authentication");
         toast.error("Impossible de charger l'authentification. Mode hors ligne activé.");
       }
-    }, 5000); // 5 secondes de timeout maximum
+    }, 3000); // 3 secondes de timeout maximum (réduit de 5s à 3s)
 
     return () => clearTimeout(timer);
   }, [clerkLoaded]);
 
-  // Si Clerk n'est pas chargé mais que le timeout n'est pas encore atteint, continuons à attendre
-  if (!clerkLoaded && !authTimeout) {
-    // Si nous sommes sur la route racine, nous attendons Clerk pour éviter les flashs d'UI
-    // Mais si nous sommes sur une autre route, on laisse passer pour ne pas bloquer l'utilisateur
-    const currentPath = window.location.pathname;
-    if (currentPath === '/' || currentPath === '/sign-in' || currentPath === '/sign-up') {
-      return (
-        <div className="h-screen w-full flex items-center justify-center">
-          <div className="flex flex-col items-center">
-            <div className="h-12 w-12 border-4 border-dutch-blue/30 border-t-dutch-blue rounded-full animate-spin mb-4" />
-            <p className="text-gray-600">Chargement de l'application...</p>
-          </div>
+  // Si l'application est encore en chargement, afficher un loader
+  if (isLoading) {
+    return (
+      <div className="h-screen w-full flex items-center justify-center">
+        <div className="flex flex-col items-center">
+          <div className="h-12 w-12 border-4 border-dutch-blue/30 border-t-dutch-blue rounded-full animate-spin mb-4" />
+          <p className="text-gray-600">Chargement de l'application...</p>
         </div>
-      );
-    }
+      </div>
+    );
   }
 
   return (

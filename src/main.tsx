@@ -17,7 +17,7 @@ if (typeof window !== 'undefined') {
   window.addEventListener('unhandledrejection', (event) => {
     // Vérifier si l'erreur provient de Clerk
     if (event.reason && typeof event.reason.message === 'string' && 
-        event.reason.message.includes('Clerk')) {
+        (event.reason.message.includes('Clerk') || event.reason.message.includes('ClerkJS'))) {
       console.error("Erreur d'initialisation de Clerk:", event.reason);
       toast.error("Problème d'authentification. Mode hors ligne activé.");
       // L'application continuera de fonctionner même sans authentification
@@ -32,8 +32,8 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       clerkJSVersion="5.56.0-snapshot.v20250312225817"
       signInUrl="/sign-in"
       signUpUrl="/sign-up"
-      afterSignInUrl="/"
-      afterSignUpUrl="/"
+      fallbackRedirectUrl="/"
+      forceRedirectUrl="/"
       afterSignOutUrl="/"
       appearance={{
         elements: {
