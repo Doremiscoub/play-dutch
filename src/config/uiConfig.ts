@@ -8,7 +8,8 @@ import themeConfig, {
   ANIMATIONS,
   BACKGROUND_CONFIG,
   COMPONENT_STYLES,
-  Z_INDEX
+  Z_INDEX,
+  GLASS
 } from './theme';
 
 /**
@@ -49,11 +50,7 @@ export const UI_CONFIG = {
   floatingDots: BACKGROUND_CONFIG.dots,
   
   // Valeurs pour le glassmorphisme
-  glassmorphism: {
-    background: 'rgba(255, 255, 255, 0.7)',
-    backdropFilter: 'blur(12px)',
-    border: '1px solid rgba(255, 255, 255, 0.5)',
-  },
+  glassmorphism: GLASS.medium,
   
   // Tailles d'écran pour le responsive
   breakpoints: {
@@ -64,18 +61,31 @@ export const UI_CONFIG = {
     xl: '1280px',
     xxl: '1536px',
   },
+  
+  // Configuration VisionOS
+  visionOS: {
+    glassPanelLight: GLASS.light,
+    glassPanelMedium: GLASS.medium,
+    glassPanelHeavy: GLASS.heavy,
+    glassPanelDark: GLASS.dark,
+    borderRadius: BORDERS.radius,
+    animations: {
+      spring: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+      duration: ANIMATIONS.duration,
+    }
+  }
 };
 
-// Styles communs réutilisables
+// Styles communs réutilisables - Style VisionOS
 export const COMMON_STYLES = {
-  mainButton: COMPONENT_STYLES.button.base,
-  cardBase: COMPONENT_STYLES.card.base + ' ' + COMPONENT_STYLES.card.glass,
-  cardWithHover: COMPONENT_STYLES.card.base + ' ' + COMPONENT_STYLES.card.glass + ' ' + COMPONENT_STYLES.card.hover,
-  iconButtonBase: 'h-12 w-12 flex items-center justify-center rounded-full shadow-sm transition-all',
-  inputBase: COMPONENT_STYLES.input.base + ' ' + COMPONENT_STYLES.input.default,
-  headingGradient: COMPONENT_STYLES.text.heading.base + ' ' + COMPONENT_STYLES.text.heading.gradient,
-  pageBackground: 'min-h-screen w-full bg-gradient-to-b from-gray-50 to-white',
-  backgroundGrid: 'bg-grid bg-opacity-10 bg-size-24',
+  mainButton: "rounded-2xl bg-white/70 backdrop-blur-xl border border-white/50 shadow-sm hover:bg-white/80 transition-all hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-none py-3 px-6 font-medium",
+  cardBase: "rounded-3xl bg-white/70 backdrop-blur-xl border border-white/50 shadow-sm p-5",
+  cardWithHover: "rounded-3xl bg-white/70 backdrop-blur-xl border border-white/50 shadow-sm p-5 transition-all hover:shadow-md hover:-translate-y-0.5 hover:bg-white/80",
+  iconButtonBase: 'rounded-full h-12 w-12 flex items-center justify-center bg-white/70 backdrop-blur-xl border border-white/50 shadow-sm hover:bg-white/80 transition-all hover:-translate-y-0.5 active:translate-y-0.5',
+  inputBase: "rounded-xl bg-white/70 backdrop-blur-xl border border-white/50 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-dutch-blue/20 transition-all",
+  headingGradient: "bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent font-medium",
+  pageBackground: "min-h-screen w-full bg-gradient-to-b from-gray-50 to-white",
+  backgroundGrid: "bg-grid bg-opacity-10 bg-size-24",
 };
 
 // Configuration pour le commentateur IA
@@ -83,10 +93,10 @@ export const AI_COMMENTATOR_CONFIG = {
   commentFrequency: 20000, // Toutes les 20 secondes
   commentTypes: ['info', 'joke', 'sarcasm', 'encouragement'],
   styles: {
-    info: 'border-dutch-blue/30 bg-dutch-blue/5',
-    joke: 'border-dutch-orange/30 bg-dutch-orange/5',
-    sarcasm: 'border-dutch-purple/30 bg-dutch-purple/5',
-    encouragement: 'border-dutch-green/30 bg-dutch-green/5',
+    info: 'rounded-2xl border-dutch-blue/30 bg-dutch-blue/5',
+    joke: 'rounded-2xl border-dutch-orange/30 bg-dutch-orange/5',
+    sarcasm: 'rounded-2xl border-dutch-purple/30 bg-dutch-purple/5',
+    encouragement: 'rounded-2xl border-dutch-green/30 bg-dutch-green/5',
   },
   icons: {
     info: 'MessageSquare',
@@ -94,6 +104,29 @@ export const AI_COMMENTATOR_CONFIG = {
     sarcasm: 'Bot',
     encouragement: 'User',
   },
+  animation: {
+    enter: {
+      initial: { opacity: 0, scale: 0.9, y: 10 },
+      animate: { 
+        opacity: 1, 
+        scale: 1, 
+        y: 0,
+        transition: {
+          type: 'spring',
+          stiffness: 300,
+          damping: 15
+        }
+      },
+      exit: { 
+        opacity: 0, 
+        scale: 0.9, 
+        y: 10,
+        transition: {
+          duration: 0.2
+        } 
+      }
+    }
+  }
 };
 
 export default UI_CONFIG;

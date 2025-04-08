@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { SignedIn, SignedOut } from '@clerk/clerk-react';
-import { Loader2 } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -32,22 +32,49 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   
   // Si l'authentification prend trop de temps ou a échoué, on laisse passer l'utilisateur immédiatement
   if (authTimeout) {
-    return <>{children}</>;
+    return (
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3 }}
+      >
+        {children}
+      </motion.div>
+    );
   }
   
   // Si nous ne sommes pas en offline mode, essayer d'utiliser les composants Clerk normalement
   return (
     <>
       <SignedIn>
-        {children}
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3 }}
+        >
+          {children}
+        </motion.div>
       </SignedIn>
       <SignedOut>
-        {children}
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3 }}
+        >
+          {children}
+        </motion.div>
       </SignedOut>
-      {/* Afficher un loader pendant que nous vérifions l'état de l'authentification */}
+      {/* Afficher un loader VisionOS-style pendant que nous vérifions l'état de l'authentification */}
       <div className="h-screen w-full flex items-center justify-center">
-        <Loader2 className="h-8 w-8 text-dutch-blue animate-spin" />
-        <span className="ml-2 text-lg text-gray-600">Chargement...</span>
+        <motion.div 
+          className="flex flex-col items-center"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: [0.34, 1.56, 0.64, 1] }}
+        >
+          <div className="h-10 w-10 rounded-full border-3 border-dutch-blue/20 border-t-dutch-blue border-r-dutch-blue/60 animate-spin mb-4" />
+          <span className="text-lg font-medium text-gray-600">Chargement...</span>
+        </motion.div>
       </div>
     </>
   );

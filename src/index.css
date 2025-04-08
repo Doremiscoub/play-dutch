@@ -4,8 +4,8 @@
 @tailwind utilities;
 
 @layer base {
-  :root,
-  [data-theme="blue"] {
+  :root, 
+  [data-theme="default"] {
     --background: 210 40% 98%;
     --foreground: 222.2 84% 4.9%;
 
@@ -15,26 +15,26 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 196 73% 49%;
+    --primary: 211 100% 51%; /* iOS Blue */
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 25 95% 53%;
+    --secondary: 250 96% 62%; /* iOS Purple */
     --secondary-foreground: 222.2 47.4% 11.2%;
 
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 265 84% 63%;
+    --accent: 37 100% 52%; /* iOS Orange */
     --accent-foreground: 222.2 47.4% 11.2%;
 
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 84.2% 60.2%; /* iOS Red */
     --destructive-foreground: 210 40% 98%;
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 196 73% 49%;
+    --ring: 211 100% 51%;
 
-    --radius: 1rem;
+    --radius: 1.5rem; /* VisionOS style rounded corners */
   }
 
   .dark {
@@ -47,16 +47,16 @@
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 196 73% 49%;
+    --primary: 211 100% 51%;
     --primary-foreground: 222.2 47.4% 11.2%;
 
-    --secondary: 25 95% 53%;
+    --secondary: 250 96% 62%;
     --secondary-foreground: 210 40% 98%;
 
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
 
-    --accent: 265 84% 63%;
+    --accent: 37 100% 52%;
     --accent-foreground: 210 40% 98%;
 
     --destructive: 0 62.8% 30.6%;
@@ -64,51 +64,7 @@
 
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
-    --ring: 196 73% 55%;
-  }
-
-  [data-theme="green"] {
-    --primary: 160 64% 40%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 48 96% 53%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --accent: 217 91% 60%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-  }
-
-  [data-theme="pink"] {
-    --primary: 322 80% 60%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 25 95% 53%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --accent: 250 91% 65%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-  }
-
-  [data-theme="red"] {
-    --primary: 0 84% 60%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 30 95% 52%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --accent: 265 84% 63%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-  }
-
-  [data-theme="purple"] {
-    --primary: 265 84% 63%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 160 64% 40%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --accent: 25 95% 53%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --ring: 211 100% 55%;
   }
 }
 
@@ -118,8 +74,14 @@
   }
 
   body {
-    @apply bg-gradient-to-br from-gray-100/80 to-gray-200/80 text-foreground antialiased min-h-screen;
+    @apply bg-gradient-to-br from-gray-50/80 to-white text-foreground antialiased min-h-screen;
     background-attachment: fixed;
+    font-feature-settings: "cv02", "cv03", "cv04";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", system-ui, sans-serif;
   }
   
   body.dark {
@@ -128,42 +90,41 @@
   
   /* Animation for ripple effect on buttons */
   @keyframes ripple {
-    0% {
-      transform: scale(0);
-      opacity: 0.5;
-    }
-    100% {
-      transform: scale(100);
-      opacity: 0;
-    }
+    0% { transform: scale(0); opacity: 0.5; }
+    100% { transform: scale(100); opacity: 0; }
+  }
+
+  /* iOS text selection */
+  ::selection {
+    @apply bg-dutch-blue/20 text-dutch-blue;
   }
 }
 
 @layer components {
-  /* iOS-inspired design elements */
+  /* VisionOS-inspired design elements */
   .ios-card {
-    @apply rounded-2xl bg-white/80 backdrop-blur-md shadow-md border border-white/40 p-5 transition-all hover:shadow-lg hover:-translate-y-0.5;
-    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
+    @apply rounded-3xl bg-white/70 backdrop-blur-xl shadow-sm border border-white/50 p-5 transition-all duration-300 hover:shadow-md hover:-translate-y-1 hover:bg-white/80;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.03);
   }
   
   .ios-button {
-    @apply rounded-full px-6 py-3 font-medium text-white shadow-sm transition-all hover:-translate-y-0.5 active:translate-y-0;
+    @apply rounded-2xl px-6 py-3 font-medium text-white shadow-sm transition-all duration-300 hover:-translate-y-1 active:translate-y-0 backdrop-blur-xl;
     background: rgba(255, 255, 255, 0.25);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
   }
   
   .ios-input {
-    @apply rounded-xl border border-gray-200/60 bg-white/70 backdrop-blur-sm px-4 py-2 focus:outline-none focus:ring-2 focus:ring-dutch-blue/20 transition-all;
+    @apply rounded-2xl border border-white/50 bg-white/70 backdrop-blur-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-dutch-blue/20 transition-all;
   }
   
   .ios-glass {
-    background: rgba(255, 255, 255, 0.25);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    @apply rounded-3xl transition-all;
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    @apply rounded-3xl transition-all shadow-sm;
   }
   
   .ios-blur-bg {
@@ -175,12 +136,30 @@
     @apply absolute inset-0 -z-10 bg-gradient-to-b from-white/80 to-white/40 backdrop-blur-xl;
   }
 
-  .card-gradient {
-    @apply bg-gradient-to-br from-white to-gray-50 shadow-md transition-all;
+  /* VisionOS card styles */
+  .visionos-card {
+    @apply rounded-3xl bg-white/70 backdrop-blur-xl border border-white/50 shadow-sm transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 hover:bg-white/80;
+  }
+  
+  .visionos-button {
+    @apply rounded-2xl bg-white/70 backdrop-blur-xl border border-white/50 shadow-sm hover:bg-white/80 transition-all hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-none;
+  }
+  
+  .visionos-input {
+    @apply rounded-xl bg-white/60 backdrop-blur-xl border border-white/40 focus:ring-2 focus:ring-dutch-blue/20 focus:border-dutch-blue/30 focus:outline-none transition-all;
+  }
+  
+  .visionos-header {
+    @apply bg-white/60 backdrop-blur-xl border-b border-white/30 shadow-sm;
+  }
+  
+  .visionos-footer {
+    @apply bg-white/60 backdrop-blur-xl border-t border-white/30 shadow-sm;
   }
 
+  /* Button variants */
   .dutch-button {
-    @apply rounded-full px-6 py-3 font-semibold text-white shadow-md transition-all hover:translate-y-[-2px] hover:shadow-lg active:translate-y-0 active:shadow-md backdrop-blur-sm relative overflow-hidden;
+    @apply rounded-full px-6 py-3 font-semibold text-white shadow-md transition-all duration-300 hover:translate-y-[-2px] hover:shadow-lg active:translate-y-0 active:shadow-md backdrop-blur-sm relative overflow-hidden;
   }
   
   .dutch-button::after {
@@ -193,37 +172,22 @@
     @apply opacity-10;
   }
 
+  /* Vision card */
   .dutch-card {
-    @apply rounded-3xl bg-white/60 backdrop-blur-sm p-5 shadow-md transition-all hover:shadow-lg hover:-translate-y-0.5 border border-white/20;
+    @apply rounded-3xl bg-white/70 backdrop-blur-xl p-5 shadow-sm transition-all hover:shadow-md hover:-translate-y-0.5 border border-white/40;
   }
 
+  /* Vision input */
   .dutch-input {
-    @apply rounded-full border border-gray-200/60 bg-white/80 backdrop-blur-sm px-4 py-2 focus:border-dutch-blue focus:outline-none focus:ring-2 focus:ring-dutch-blue/20 transition-all;
-  }
-  
-  /* VisionOS-inspired style */
-  .glassmorphism {
-    @apply bg-white/60 backdrop-blur-md border border-white/30 shadow-sm transition-all duration-200;
-  }
-  
-  .visionos-button {
-    @apply rounded-2xl bg-white/70 backdrop-blur-md border border-white/40 shadow-sm hover:bg-white/80 transition-all hover:-translate-y-0.5 active:translate-y-0;
-  }
-  
-  .visionos-card {
-    @apply rounded-3xl bg-white/60 backdrop-blur-md border border-white/30 shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5;
-  }
-  
-  .visionos-input {
-    @apply rounded-full bg-white/70 backdrop-blur-md border border-white/40 focus:ring-2 focus:ring-white/60 focus:outline-none transition-all;
+    @apply rounded-2xl border border-white/50 bg-white/70 backdrop-blur-xl px-4 py-2 focus:border-dutch-blue/30 focus:outline-none focus:ring-2 focus:ring-dutch-blue/20 transition-all;
   }
   
   /* Dialog / Modal styling */
   .glass-dialog {
-    @apply bg-white/70 backdrop-blur-lg border border-white/40 shadow-xl rounded-3xl overflow-hidden;
+    @apply bg-white/70 backdrop-blur-xl border border-white/40 shadow-xl rounded-3xl overflow-hidden;
   }
   
-  /* Enhanced button styles */
+  /* Floating buttons */
   .float-button {
     @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1 active:translate-y-0 active:shadow-md;
   }
@@ -242,10 +206,10 @@
     display: none; /* Chrome, Safari, Opera */
   }
   
-  /* Stylish blob shape for backgrounds */
-  .blob-shape {
+  /* VisionOS blob shape for backgrounds */
+  .vision-blob {
     border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
-    animation: blob-morph 8s ease-in-out infinite;
+    animation: blob-morph 15s ease-in-out infinite;
   }
   
   @keyframes blob-morph {
@@ -254,18 +218,31 @@
     100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
   }
 
-  /* Gradient animation for buttons */
-  .gradient-animate {
-    background-size: 200% 200%;
-    animation: gradient-shift 3s ease infinite;
+  /* VisionOS-style Button */
+  .vision-button {
+    @apply transition-all duration-300 relative overflow-hidden flex items-center justify-center px-6 py-3 rounded-2xl bg-white/70 backdrop-blur-xl border border-white/50 text-gray-800 font-medium shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-none;
   }
-  
-  @keyframes gradient-shift {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+
+  .vision-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent
+    );
+    transition: left 0.7s;
   }
-  
+
+  .vision-button:hover::before {
+    left: 100%;
+  }
+
   /* Badge styles */
   .player-badge {
     @apply inline-flex items-center rounded-full text-xs font-medium transition-all hover:scale-105;
@@ -284,60 +261,41 @@
   
   /* Effet de pulsation subtile */
   .pulse-subtle {
-    animation: pulse-subtle 3s ease-in-out infinite;
+    animation: pulse-subtle 4s ease-in-out infinite;
   }
   
   @keyframes pulse-subtle {
     0%, 100% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.03); opacity: 0.9; }
+    50% { transform: scale(1.02); opacity: 0.95; }
   }
   
-  /* Effet d'apparition en fondu */
-  .fade-in-element {
-    animation: fade-in 0.5s ease-out forwards;
-    opacity: 0;
+  /* VisionOS shimmer effect */
+  .shimmer {
+    position: relative;
+    overflow: hidden;
   }
-  
-  @keyframes fade-in {
-    0% { opacity: 0; transform: translateY(10px); }
-    100% { opacity: 1; transform: translateY(0); }
+
+  .shimmer::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-image: linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.2) 50%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    background-repeat: no-repeat;
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
   }
-  
-  /* Improved focus styles */
-  .focus-ring {
-    @apply focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-white/10;
-  }
-  
-  /* Animating background gradients */
-  .animated-gradient-bg {
-    background: linear-gradient(-45deg, #e73c7e0d, #23a6d50d, #23d5ab0d);
-    background-size: 400% 400%;
-    animation: gradient 15s ease infinite;
-  }
-  
-  @keyframes gradient {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
-  
-  /* Improved hover effects for all interactive elements */
-  .interactive {
-    @apply transition-all duration-200;
-  }
-  
-  .interactive:hover {
-    @apply transform -translate-y-0.5;
-  }
-  
-  .interactive:active {
-    @apply transform translate-y-0;
-  }
-  
-  /* Enhanced inputs */
-  .enhanced-input {
-    @apply rounded-xl border border-white/30 bg-white/70 backdrop-blur-sm px-4 py-2 shadow-sm;
-    @apply focus:outline-none focus:ring-2 focus:ring-dutch-blue/30 focus:border-transparent transition-all;
+
+  @keyframes shimmer {
+    0% { background-position: -100% 0; }
+    100% { background-position: 200% 0; }
   }
   
   /* Page transitions */
@@ -349,7 +307,7 @@
   .page-transition-enter-active {
     opacity: 1;
     transform: translateY(0);
-    transition: opacity 300ms, transform 300ms;
+    transition: opacity 300ms, transform 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
   }
   
   .page-transition-exit {
@@ -360,28 +318,6 @@
   .page-transition-exit-active {
     opacity: 0;
     transform: translateY(-10px);
-    transition: opacity 300ms, transform 300ms;
-  }
-  
-  /* Animated border for special elements */
-  .animated-border {
-    position: relative;
-    border-radius: 1rem;
-    overflow: hidden;
-  }
-  
-  .animated-border::before {
-    content: "";
-    position: absolute;
-    inset: -2px;
-    z-index: -1;
-    background: linear-gradient(90deg, #1EAEDB, #8B5CF6, #F97316, #1EAEDB);
-    background-size: 400% 400%;
-    animation: border-animation 4s linear infinite;
-  }
-  
-  @keyframes border-animation {
-    0% { background-position: 0% 50%; }
-    100% { background-position: 100% 50%; }
+    transition: opacity 300ms, transform 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 }

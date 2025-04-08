@@ -1,36 +1,36 @@
 
 /**
- * Configuration centralisée du thème Dutch
+ * Configuration centralisée du thème Dutch - Inspiré iOS 19 & VisionOS
  * Ce fichier contient toutes les définitions de style, couleurs, et variables visuelles
  * qui sont utilisées à travers l'application pour garantir cohérence et maintenabilité
  */
 
 // Types
-export type ThemeType = 'default' | 'blue' | 'purple' | 'orange' | string;
+export type ThemeType = 'default' | 'light' | 'dark';
 
-// Couleurs de base
+// Couleurs de base - Palette inspirée iOS 19
 export const COLORS = {
   // Couleurs principales
   blue: {
-    DEFAULT: '#1EAEDB',
-    light: '#70D6F7',
-    dark: '#1899C2',
+    DEFAULT: '#0A84FF', // iOS blue
+    light: '#5AC8FA',
+    dark: '#0062CC',
   },
   purple: {
-    DEFAULT: '#8B5CF6',
+    DEFAULT: '#8B5CF6', // Purple
     light: '#C4B5FD',
-    dark: '#7649F1',
+    dark: '#6D28D9',
   },
   orange: {
-    DEFAULT: '#F97316',
-    light: '#FDBA74',
-    dark: '#EA580C',
+    DEFAULT: '#FF9F0A', // iOS orange
+    light: '#FFD60A',
+    dark: '#E67700',
   },
   // Couleurs additionnelles
-  pink: '#D946EF',
-  red: '#EF4444',
-  green: '#10B981',
-  yellow: '#FBBF24',
+  pink: '#FF375F',
+  red: '#FF453A',
+  green: '#30D158',
+  yellow: '#FFD60A',
   // Neutres
   white: '#FFFFFF',
   black: '#000000',
@@ -48,10 +48,10 @@ export const COLORS = {
   },
 };
 
-// Typographie
+// Typographie - Style Apple
 export const TYPOGRAPHY = {
   fontFamily: {
-    sans: 'Inter, "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+    sans: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", system-ui, "Segoe UI", Roboto, sans-serif',
     mono: 'SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
   },
   fontSize: {
@@ -63,6 +63,7 @@ export const TYPOGRAPHY = {
     '2xl': '1.5rem',   // 24px
     '3xl': '1.875rem', // 30px
     '4xl': '2.25rem',  // 36px
+    '5xl': '3rem',     // 48px
   },
   fontWeight: {
     light: 300,
@@ -109,17 +110,17 @@ export const SPACING = {
   32: '8rem',      // 128px
 };
 
-// Bordures
+// Bordures - VisionOS inspired (très arrondis)
 export const BORDERS = {
   radius: {
     none: '0',
-    sm: '0.25rem',     // 4px
-    DEFAULT: '0.5rem', // 8px
-    md: '0.75rem',     // 12px
-    lg: '1rem',        // 16px
-    xl: '1.5rem',      // 24px
-    '2xl': '2rem',     // 32px
-    '3xl': '2.5rem',   // 40px
+    sm: '0.5rem',      // 8px
+    DEFAULT: '1rem',   // 16px 
+    md: '1.25rem',     // 20px
+    lg: '1.5rem',      // 24px
+    xl: '2rem',        // 32px
+    '2xl': '2.5rem',   // 40px 
+    '3xl': '3rem',     // 48px - VisionOS style
     full: '9999px',
   },
   width: {
@@ -131,20 +132,20 @@ export const BORDERS = {
   },
 };
 
-// Ombres
+// Ombres - Subtiles comme dans iOS 19/VisionOS
 export const SHADOWS = {
   none: 'none',
-  xs: '0 1px 2px rgba(0, 0, 0, 0.05)',
-  sm: '0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03)',
-  md: '0 4px 6px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.06)',
-  lg: '0 10px 15px rgba(0, 0, 0, 0.03), 0 4px 6px rgba(0, 0, 0, 0.05)',
-  xl: '0 20px 25px rgba(0, 0, 0, 0.02), 0 10px 10px rgba(0, 0, 0, 0.04)',
-  card: '0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03)',
-  glassButton: '0 2px 10px rgba(0, 0, 0, 0.05)',
-  glassCard: '0 8px 32px rgba(31, 38, 135, 0.1)',
+  xs: '0 1px 2px rgba(0, 0, 0, 0.03)',
+  sm: '0 1px 3px rgba(0, 0, 0, 0.03), 0 1px 2px rgba(0, 0, 0, 0.02)',
+  md: '0 4px 6px rgba(0, 0, 0, 0.02), 0 1px 3px rgba(0, 0, 0, 0.03)',
+  lg: '0 10px 15px rgba(0, 0, 0, 0.02), 0 4px 6px rgba(0, 0, 0, 0.02)',
+  xl: '0 20px 25px rgba(0, 0, 0, 0.01), 0 10px 10px rgba(0, 0, 0, 0.02)',
+  card: '0 2px 8px rgba(0, 0, 0, 0.03)',
+  glassButton: '0 2px 10px rgba(0, 0, 0, 0.03)',
+  glassCard: '0 8px 32px rgba(31, 38, 135, 0.05)',
 };
 
-// Animations
+// Animations - Inspirées iOS/VisionOS
 export const ANIMATIONS = {
   duration: {
     fastest: '0.1s',
@@ -158,11 +159,14 @@ export const ANIMATIONS = {
     in: 'cubic-bezier(0.4, 0, 1, 1)',
     out: 'cubic-bezier(0, 0, 0.2, 1)',
     inOut: 'cubic-bezier(0.4, 0, 0.2, 1)',
+    // iOS springy feeling
     bounce: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+    // Dynamic Island animation
+    dynamicIsland: 'cubic-bezier(0.33, 1, 0.68, 1)',
   },
   transition: {
     default: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-    button: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+    button: 'all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)',
     transform: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
     opacity: 'opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
     colors: 'background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
@@ -181,22 +185,27 @@ export const Z_INDEX = {
   max: 50,
 };
 
-// Configuration du glassmorphisme
+// Configuration du glassmorphisme - Inspiré VisionOS
 export const GLASS = {
   light: {
     background: 'rgba(255, 255, 255, 0.7)',
-    backdropFilter: 'blur(8px)',
-    border: '1px solid rgba(255, 255, 255, 0.5)',
+    backdropFilter: 'blur(10px)',
+    border: '1px solid rgba(255, 255, 255, 0.7)',
   },
   medium: {
-    background: 'rgba(255, 255, 255, 0.65)',
-    backdropFilter: 'blur(12px)',
-    border: '1px solid rgba(255, 255, 255, 0.3)',
+    background: 'rgba(255, 255, 255, 0.6)',
+    backdropFilter: 'blur(15px)',
+    border: '1px solid rgba(255, 255, 255, 0.5)',
   },
   heavy: {
     background: 'rgba(255, 255, 255, 0.5)',
-    backdropFilter: 'blur(16px)',
-    border: '1px solid rgba(255, 255, 255, 0.2)',
+    backdropFilter: 'blur(20px)',
+    border: '1px solid rgba(255, 255, 255, 0.3)',
+  },
+  dark: {
+    background: 'rgba(30, 30, 30, 0.7)',
+    backdropFilter: 'blur(10px)',
+    border: '1px solid rgba(255, 255, 255, 0.1)',
   },
 };
 
@@ -208,7 +217,7 @@ export const BACKGROUND_CONFIG = {
     opacity: 0.1,
   },
   dots: {
-    colors: [COLORS.purple.light, COLORS.orange.light, '#6EE7B7', COLORS.blue.light],
+    colors: ['#C4B5FD', '#FDBA74', '#6EE7B7', '#93C5FD'],
     sizes: ['2px', '4px', '6px', '8px'],
     count: { default: 40, subtle: 25, minimal: 15 },
     speed: { default: 0.5, subtle: 0.3, minimal: 0.2 },
@@ -217,6 +226,7 @@ export const BACKGROUND_CONFIG = {
     primaryColor: '#E9D5FF', // Violet pâle
     secondaryColor: '#FDE68A', // Orange pâle
     heightPercentage: 20,
+    animationDuration: 15, // secondes
   },
 };
 
@@ -224,7 +234,7 @@ export const BACKGROUND_CONFIG = {
 export const THEMES = {
   default: {
     id: 'default',
-    name: 'Défaut',
+    name: 'Dutch',
     colors: {
       primary: COLORS.blue.DEFAULT,
       secondary: COLORS.purple.DEFAULT,
@@ -232,39 +242,29 @@ export const THEMES = {
       background: COLORS.gray[50],
     },
   },
-  blue: {
-    id: 'blue',
-    name: 'Bleu',
+  light: {
+    id: 'light',
+    name: 'Clair',
     colors: {
-      primary: COLORS.blue.DEFAULT,
-      secondary: COLORS.blue.light,
-      accent: '#93C5FD',
-      background: '#EFF6FF',
+      primary: '#0A84FF', // iOS blue
+      secondary: '#5856D6', // iOS indigo
+      accent: '#FF9F0A', // iOS orange
+      background: '#F2F2F7', // iOS light background
     },
   },
-  purple: {
-    id: 'purple',
-    name: 'Violet',
+  dark: {
+    id: 'dark',
+    name: 'Sombre',
     colors: {
-      primary: COLORS.purple.DEFAULT,
-      secondary: COLORS.purple.light,
-      accent: '#C4B5FD', 
-      background: '#F5F3FF',
-    },
-  },
-  orange: {
-    id: 'orange',
-    name: 'Orange',
-    colors: {
-      primary: COLORS.orange.DEFAULT,
-      secondary: COLORS.orange.light,
-      accent: '#FDBA74',
-      background: '#FFF7ED',
+      primary: '#0A84FF', // iOS blue dark
+      secondary: '#5E5CE6', // iOS indigo dark
+      accent: '#FF9F0A', // iOS orange dark
+      background: '#1C1C1E', // iOS dark background
     },
   },
 };
 
-// Configuration des composants d'interface utilisateur communs
+// Configuration des composants d'interface utilisateur communs - Style VisionOS
 export const COMPONENT_STYLES = {
   // Styles de boutons
   button: {
@@ -272,7 +272,7 @@ export const COMPONENT_STYLES = {
     primary: `bg-[${COLORS.blue.DEFAULT}] text-white hover:bg-[${COLORS.blue.dark}]`,
     secondary: `bg-[${COLORS.purple.DEFAULT}] text-white hover:bg-[${COLORS.purple.dark}]`,
     accent: `bg-[${COLORS.orange.DEFAULT}] text-white hover:bg-[${COLORS.orange.dark}]`,
-    ghost: 'bg-white/80 backdrop-blur-sm border border-white/30 shadow-sm hover:bg-white/90',
+    ghost: 'bg-white/80 backdrop-blur-sm border border-white/50 shadow-sm hover:bg-white/90',
     rounded: {
       sm: BORDERS.radius.sm,
       DEFAULT: BORDERS.radius.DEFAULT,
@@ -288,24 +288,24 @@ export const COMPONENT_STYLES = {
     },
   },
   
-  // Styles de cartes
+  // Styles de cartes - VisionOS inspired
   card: {
     base: 'overflow-hidden transition-all',
-    glass: 'bg-white/80 backdrop-blur-md border border-white/40 shadow-sm',
-    rounded: BORDERS.radius.lg,
+    glass: 'bg-white/70 backdrop-blur-xl border border-white/50 shadow-sm',
+    rounded: BORDERS.radius['2xl'],
     padding: {
       sm: SPACING[3],
       DEFAULT: SPACING[4],
       lg: SPACING[6],
     },
-    hover: 'hover:shadow-md hover:bg-white/90',
+    hover: 'hover:shadow-md hover:bg-white/80 transform-gpu hover:-translate-y-1 transition-all',
   },
   
-  // Styles de texte
+  // Styles de texte - Inspiré Apple
   text: {
     heading: {
-      base: 'font-semibold',
-      gradient: 'bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent',
+      base: 'font-medium',
+      gradient: 'bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent',
       sizes: {
         sm: TYPOGRAPHY.fontSize.xl,
         DEFAULT: TYPOGRAPHY.fontSize['2xl'],
@@ -314,7 +314,7 @@ export const COMPONENT_STYLES = {
       },
     },
     body: {
-      base: 'text-gray-600',
+      base: 'text-gray-700',
       sizes: {
         sm: TYPOGRAPHY.fontSize.sm,
         DEFAULT: TYPOGRAPHY.fontSize.base,
@@ -323,13 +323,13 @@ export const COMPONENT_STYLES = {
     },
   },
   
-  // Styles d'entrée
+  // Styles d'entrée - Style iOS/VisionOS
   input: {
     base: 'transition-all focus:outline-none focus:ring-2',
-    default: 'bg-white/90 border border-gray-200 focus:border-dutch-blue focus:ring-dutch-blue/20',
-    glass: 'bg-white/70 backdrop-blur-sm border border-white/30 focus:border-white/50 focus:ring-white/20',
-    rounded: BORDERS.radius.md,
-    padding: `${SPACING[2]} ${SPACING[3]}`,
+    default: 'bg-white/80 border border-gray-200 focus:border-blue-500 focus:ring-blue-500/20',
+    glass: 'bg-white/60 backdrop-blur-xl border border-white/50 focus:border-white/70 focus:ring-white/30',
+    rounded: BORDERS.radius.xl,
+    padding: `${SPACING[3]} ${SPACING[4]}`,
   },
   
   // Styles d'effets
@@ -349,6 +349,17 @@ export const COMPONENT_STYLES = {
       },
     },
   },
+  
+  // Configuration VisionOS
+  visionOS: {
+    glassPanel: 'bg-white/70 backdrop-blur-xl border border-white/50 shadow-sm rounded-3xl',
+    floatingButton: 'bg-white/80 backdrop-blur-xl border border-white/60 shadow-md rounded-2xl transform-gpu transition-all hover:-translate-y-0.5 hover:shadow-lg',
+    tooltip: 'bg-white/90 backdrop-blur-xl border border-white/70 shadow-md rounded-xl px-3 py-1.5 text-sm',
+    header: 'bg-white/60 backdrop-blur-xl border-b border-white/30 shadow-sm',
+    navBar: 'bg-white/60 backdrop-blur-xl border-t border-white/30 shadow-sm',
+    tooltip: 'bg-white/80 backdrop-blur-xl shadow-sm rounded-xl px-3 py-1.5',
+    shimmer: 'animate-shimmer bg-gradient-to-r from-transparent via-white/20 to-transparent',
+  }
 };
 
 // Assemblage de la config complète

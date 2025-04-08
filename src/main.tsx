@@ -75,9 +75,13 @@ const renderApp = () => {
         afterSignOutUrl="/"
         appearance={{
           elements: {
-            // Style personnalisé cohérent avec notre thème Dutch
-            formButtonPrimary: 'bg-dutch-blue hover:bg-dutch-blue-dark focus:ring-dutch-blue/30',
-            footerActionLink: 'text-dutch-blue hover:text-dutch-blue-dark',
+            // Style personnalisé VisionOS
+            formButtonPrimary: 'bg-dutch-blue hover:bg-dutch-blue/90 rounded-2xl transition-all',
+            card: 'backdrop-blur-xl bg-white/70 border border-white/50 rounded-3xl shadow-sm',
+            footerActionLink: 'text-dutch-blue hover:text-dutch-blue/90',
+            rootBox: 'rounded-3xl overflow-hidden',
+            formFieldInput: 'rounded-xl border border-white/50 bg-white/70 backdrop-blur-sm',
+            identityPreview: 'rounded-xl bg-white/50 backdrop-blur-sm',
           }
         }}
       >

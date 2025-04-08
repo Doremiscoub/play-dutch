@@ -8,10 +8,12 @@ type AnimatedBackgroundVariant = 'default' | 'subtle' | 'minimal';
 interface AnimatedBackgroundProps {
   variant?: AnimatedBackgroundVariant;
   className?: string;
+  hideWaves?: boolean;
 }
 
 const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ 
   variant = 'default',
+  hideWaves = false,
   className = ''
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -38,7 +40,7 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
     }
   };
   
-  // Animation des points flottants sur canvas
+  // Animation des points flottants sur canvas - Style VisionOS
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -48,14 +50,18 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
     
     // Ajuster la taille du canvas à la fenêtre
     const resizeCanvas = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = window.innerWidth * dpr;
+      canvas.height = window.innerHeight * dpr;
+      canvas.style.width = `${window.innerWidth}px`;
+      canvas.style.height = `${window.innerHeight}px`;
+      ctx.scale(dpr, dpr);
     };
     
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
     
-    // Créer les points
+    // Créer les points - VisionOS style
     const config = dotsConfig[variant];
     const dots: { 
       x: number; 
@@ -64,6 +70,9 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
       size: number; 
       speedX: number;
       speedY: number;
+      opacity: number;
+      pulsing: boolean;
+      pulseSpeed: number;
     }[] = [];
     
     for (let i = 0; i < config.count; i++) {
@@ -73,27 +82,51 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
         color: config.colors[Math.floor(Math.random() * config.colors.length)],
         size: parseFloat(config.sizes[Math.floor(Math.random() * config.sizes.length)]),
         speedX: (Math.random() - 0.5) * config.speed,
-        speedY: (Math.random() - 0.5) * config.speed
+        speedY: (Math.random() - 0.5) * config.speed,
+        opacity: 0.3 + Math.random() * 0.5, // VisionOS style avec transparence variable
+        pulsing: Math.random() > 0.5, // Certains points pulsent
+        pulseSpeed: 0.005 + Math.random() * 0.01
       });
     }
     
-    // Animer les points
+    // Animer les points avec pulsation douce
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
       dots.forEach(dot => {
+        // Pulsation douce de l'opacité pour certains points
+        if (dot.pulsing) {
+          dot.opacity += dot.pulseSpeed;
+          if (dot.opacity >= 0.8 || dot.opacity <= 0.2) {
+            dot.pulseSpeed = -dot.pulseSpeed;
+          }
+        }
+        
         ctx.beginPath();
         ctx.arc(dot.x, dot.y, dot.size, 0, Math.PI * 2);
-        ctx.fillStyle = dot.color;
+        ctx.fillStyle = dot.color.replace(')', `, ${dot.opacity})`).replace('rgb', 'rgba');
         ctx.fill();
         
-        // Mouvement
+        // Mouvement lisse
         dot.x += dot.speedX;
         dot.y += dot.speedY;
         
-        // Rebonds sur les bords
-        if (dot.x > canvas.width || dot.x < 0) dot.speedX *= -1;
-        if (dot.y > canvas.height || dot.y < 0) dot.speedY *= -1;
+        // Rebonds sur les bords avec effet doux
+        if (dot.x > window.innerWidth) {
+          dot.x = window.innerWidth;
+          dot.speedX = -Math.abs(dot.speedX);
+        } else if (dot.x < 0) {
+          dot.x = 0;
+          dot.speedX = Math.abs(dot.speedX);
+        }
+        
+        if (dot.y > window.innerHeight) {
+          dot.y = window.innerHeight;
+          dot.speedY = -Math.abs(dot.speedY);
+        } else if (dot.y < 0) {
+          dot.y = 0;
+          dot.speedY = Math.abs(dot.speedY);
+        }
       });
       
       requestAnimationFrame(animate);
@@ -108,11 +141,11 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
   }, [variant]);
   
   return (
-    <div className={`absolute inset-0 overflow-hidden ${className}`}>
-      {/* Fond dégradé */}
-      <div className="absolute inset-0 bg-gradient-to-b from-gray-50 to-white" />
+    <div className={`absolute inset-0 overflow-hidden z-0 ${className}`}>
+      {/* Fond dégradé léger - iOS style */}
+      <div className="absolute inset-0 bg-gradient-to-b from-gray-50/80 to-white/90" />
       
-      {/* Grille */}
+      {/* Grille subtile - inspirée VisionOS */}
       <div 
         className="absolute inset-0"
         style={{ 
@@ -121,14 +154,14 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
         }}
       />
       
-      {/* Points flottants */}
+      {/* Points flottants style VisionOS */}
       <canvas 
         ref={canvasRef} 
         className="absolute inset-0 z-0"
       />
       
-      {/* Vagues fluides en bas */}
-      {variant !== 'minimal' && (
+      {/* Vagues fluides en bas - iOS 19 style avec animation */}
+      {!hideWaves && (
         <>
           <motion.div 
             className="absolute bottom-0 left-0 right-0 z-0 origin-bottom"
@@ -146,7 +179,7 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
               y: [0, -5, 0],
             }}
             transition={{
-              duration: 10,
+              duration: themeConfig.BACKGROUND_CONFIG.waves.animationDuration,
               repeat: Infinity,
               repeatType: 'reverse',
               ease: 'easeInOut'
@@ -169,7 +202,7 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
               y: [5, 0, 5],
             }}
             transition={{
-              duration: 13,
+              duration: themeConfig.BACKGROUND_CONFIG.waves.animationDuration * 0.8,
               repeat: Infinity,
               repeatType: 'reverse',
               ease: 'easeInOut',

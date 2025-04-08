@@ -1,9 +1,9 @@
 
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import { THEMES, ThemeType } from '@/config/theme';
+import { THEMES } from '@/config/theme';
 
-// Type alias pour la compatibilité avec l'existant
-export type { ThemeType };
+// Type alias pour la compatibilité
+export type ThemeType = 'default' | 'light' | 'dark';
 
 // Export des constantes du thème pour faciliter l'accès
 export const themeConfig = THEMES;
@@ -11,8 +11,6 @@ export const themeConfig = THEMES;
 // Interface du contexte de thème
 interface ThemeContextType {
   currentTheme: ThemeType;
-  setTheme: (theme: ThemeType) => void;
-  themeConfig: typeof THEMES;
 }
 
 // Création du contexte
@@ -21,41 +19,28 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 // Type des props du fournisseur de thème
 interface ThemeProviderProps {
   children: React.ReactNode;
-  defaultTheme?: ThemeType;
 }
 
-// Composant fournisseur de thème
-export const ThemeProvider: React.FC<ThemeProviderProps> = ({ 
-  children, 
-  defaultTheme = 'default' 
-}) => {
-  const [currentTheme, setCurrentTheme] = useState<ThemeType>(() => {
-    // Récupérer le thème depuis le localStorage s'il existe
-    const savedTheme = localStorage.getItem('dutch_theme');
-    return (savedTheme as ThemeType) || defaultTheme;
-  });
+// Composant fournisseur de thème (simplifié)
+export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
+  // Thème fixé à 'default' comme demandé
+  const [currentTheme] = useState<ThemeType>('default');
 
-  // Sauvegarder le thème dans le localStorage quand il change
+  // Appliquer le thème par défaut au chargement
   useEffect(() => {
-    localStorage.setItem('dutch_theme', currentTheme);
-    
     // Appliquer les couleurs CSS personnalisées au document
-    const theme = THEMES[currentTheme as keyof typeof THEMES] || THEMES.default;
+    const theme = THEMES[currentTheme] || THEMES.default;
     document.documentElement.style.setProperty('--dutch-primary', theme.colors.primary);
     document.documentElement.style.setProperty('--dutch-secondary', theme.colors.secondary);
     document.documentElement.style.setProperty('--dutch-accent', theme.colors.accent);
     document.documentElement.style.setProperty('--dutch-background', theme.colors.background);
     
-    // Ajouter l'attribut data-theme au body pour permettre le styling CSS basé sur le thème
+    // Ajouter l'attribut data-theme au body
     document.body.setAttribute('data-theme', currentTheme);
   }, [currentTheme]);
 
-  const setTheme = (theme: ThemeType) => {
-    setCurrentTheme(theme);
-  };
-
   return (
-    <ThemeContext.Provider value={{ currentTheme, setTheme, themeConfig: THEMES }}>
+    <ThemeContext.Provider value={{ currentTheme }}>
       {children}
     </ThemeContext.Provider>
   );
