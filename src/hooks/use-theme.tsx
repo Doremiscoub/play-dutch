@@ -14,8 +14,11 @@ interface ThemeContextType {
   setTheme: (theme: ThemeType) => void;
 }
 
-// Création du contexte
-const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
+// Création du contexte avec une valeur par défaut pour éviter les erreurs
+const ThemeContext = createContext<ThemeContextType>({
+  currentTheme: 'default',
+  setTheme: () => {},
+});
 
 // Type des props du fournisseur de thème
 interface ThemeProviderProps {
@@ -65,11 +68,6 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
 // Hook personnalisé pour utiliser le contexte de thème
 export const useTheme = (): ThemeContextType => {
   const context = useContext(ThemeContext);
-  
-  if (context === undefined) {
-    throw new Error('useTheme doit être utilisé dans un ThemeProvider');
-  }
-  
   return context;
 };
 

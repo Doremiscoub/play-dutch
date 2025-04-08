@@ -1,3 +1,4 @@
+@tailwind components;
 
 @layer components {
   /* VisionOS UI Classes */
@@ -37,7 +38,6 @@
   }
 }
 
-/* Keep all existing code before the VisionOS UI Classes section */
 :root {
   /* Variables de couleur Dutch - Style iOS 19 */
   --dutch-primary: #0A84FF;
@@ -120,7 +120,6 @@
   --ring: 212.7 26.8% 83.9%;
 }
 
-/* Classes utilitaires pour les effets VisionOS */
 .glass-light {
   background-color: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(10px);
@@ -145,7 +144,6 @@
   border-radius: 1.5rem;
 }
 
-/* Dark mode glass */
 .dark .glass-light {
   background-color: rgba(30, 30, 30, 0.7);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -161,7 +159,6 @@
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-/* Animations globales - iOS/VisionOS style */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -202,7 +199,6 @@
   }
 }
 
-/* Animation classes */
 .fade-in {
   animation: fadeIn 0.5s cubic-bezier(0.33, 1, 0.68, 1) forwards;
 }
@@ -221,7 +217,6 @@
   animation: shimmer 2s infinite linear;
 }
 
-/* Page transitions */
 .page-transition-enter {
   opacity: 0;
   transform: translateY(10px);

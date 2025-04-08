@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
 import GamePage from './pages/GamePage';
@@ -12,7 +12,8 @@ import { SignIn, SignUp } from "@clerk/clerk-react";
 import { toast } from 'sonner';
 
 const App = () => {
-  useEffect(() => {
+  // Moved useEffect inside the component body without any conditional logic
+  React.useEffect(() => {
     const isOfflineMode = localStorage.getItem('clerk_auth_failed') === 'true';
     if (isOfflineMode) {
       toast.info("Mode hors-ligne activé");

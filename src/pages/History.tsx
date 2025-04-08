@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { GameHistory } from '@/components/GameHistory';
+import GameHistory from '@/components/GameHistory';
 import AnimatedBackground from '@/components/AnimatedBackground';
 
 const History: React.FC = () => {

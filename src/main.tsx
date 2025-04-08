@@ -6,7 +6,7 @@ import './index.css'
 import './styles/theme.css'
 import { ThemeProvider } from './hooks/use-theme'
 import { ClerkProvider } from '@clerk/clerk-react'
-import { toast } from 'sonner'
+import { Toaster } from "sonner"
 
 // Utilisation d'une clé Clerk de développement pour tester - à remplacer en production
 const CLERK_PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY || 
@@ -27,7 +27,6 @@ if (typeof window !== 'undefined' && !isOfflineMode) {
     if (!('Clerk' in window) && !localStorage.getItem('clerk_auth_failed')) {
       console.warn("Clerk n'a pas pu être initialisé dans le délai imparti");
       localStorage.setItem('clerk_auth_failed', 'true');
-      toast.error("Problème d'authentification: mode hors ligne activé");
       // Forcer un rechargement pour appliquer le mode hors ligne
       window.location.reload();
     }
@@ -40,7 +39,6 @@ if (typeof window !== 'undefined' && !isOfflineMode) {
         (event.reason.message.includes('Clerk') || event.reason.message.includes('ClerkJS'))) {
       console.error("Erreur d'initialisation de Clerk:", event.reason);
       localStorage.setItem('clerk_auth_failed', 'true');
-      toast.error("Problème d'authentification: mode hors ligne activé");
       // Forcer un rechargement pour appliquer le mode hors ligne
       window.location.reload();
     }
@@ -57,6 +55,7 @@ const renderApp = () => {
       <React.StrictMode>
         <ThemeProvider>
           <App />
+          <Toaster position="top-center" />
         </ThemeProvider>
       </React.StrictMode>
     );
@@ -87,6 +86,7 @@ const renderApp = () => {
       >
         <ThemeProvider>
           <App />
+          <Toaster position="top-center" />
         </ThemeProvider>
       </ClerkProvider>
     </React.StrictMode>
