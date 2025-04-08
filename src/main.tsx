@@ -21,7 +21,8 @@ if (localStorage.getItem('clerk_auth_failed') === 'true') {
 if (typeof window !== 'undefined') {
   // Timeout très court pour détecter rapidement les problèmes d'initialisation Clerk
   setTimeout(() => {
-    if (!window.Clerk && !localStorage.getItem('clerk_auth_failed')) {
+    // Utilisation de la vérification sécurisée avec 'in' au lieu d'accéder directement à window.Clerk
+    if (!('Clerk' in window) && !localStorage.getItem('clerk_auth_failed')) {
       console.warn("Clerk n'a pas pu être initialisé dans le délai imparti");
       localStorage.setItem('clerk_auth_failed', 'true');
       toast.error("Problème d'authentification: mode hors ligne activé");
