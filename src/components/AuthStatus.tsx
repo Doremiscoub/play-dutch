@@ -1,13 +1,19 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { SignedIn, SignedOut, UserButton } from '@clerk/clerk-react';
 import { Button } from './ui/button';
 import { Link, useLocation } from 'react-router-dom';
-import { User, LogIn, Home, Gamepad } from 'lucide-react';
+import { User, LogIn, Home } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export const AuthStatus: React.FC = () => {
   const location = useLocation();
+  const [offlineMode, setOfflineMode] = useState(false);
+  
+  // Vérifier si le mode hors ligne est activé
+  useEffect(() => {
+    setOfflineMode(localStorage.getItem('clerk_auth_failed') === 'true');
+  }, []);
   
   // Check if we're on the sign-in or sign-up page, or their sub-routes
   const isAuthPage = location.pathname.startsWith('/sign-in') || 
@@ -26,6 +32,11 @@ export const AuthStatus: React.FC = () => {
   
   // Don't show auth buttons on home page since it already has auth buttons
   if (isHomePage) {
+    // En mode hors ligne, ne pas afficher le bouton utilisateur
+    if (offlineMode) {
+      return null;
+    }
+    
     return (
       <motion.div 
         className="fixed top-4 right-4 z-50"
@@ -79,29 +90,36 @@ export const AuthStatus: React.FC = () => {
             </Button>
           </motion.div>
         </Link>
-        <SignedIn>
-          <motion.div
-            className="fixed top-4 right-4 z-40"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-dutch-blue/20 via-dutch-purple/20 to-dutch-pink/20 rounded-full blur-md animate-pulse-slow"></div>
-            <UserButton 
-              afterSignOutUrl="/"
-              appearance={{
-                elements: {
-                  userButtonAvatarBox: 'w-10 h-10 rounded-full border-2 border-white/50 shadow-md transition-all hover:scale-105 hover:border-white/70 active:scale-95',
-                }
-              }}
-            />
-          </motion.div>
-        </SignedIn>
+        {!offlineMode && (
+          <SignedIn>
+            <motion.div
+              className="fixed top-4 right-4 z-40"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-dutch-blue/20 via-dutch-purple/20 to-dutch-pink/20 rounded-full blur-md animate-pulse-slow"></div>
+              <UserButton 
+                afterSignOutUrl="/"
+                appearance={{
+                  elements: {
+                    userButtonAvatarBox: 'w-10 h-10 rounded-full border-2 border-white/50 shadow-md transition-all hover:scale-105 hover:border-white/70 active:scale-95',
+                  }
+                }}
+              />
+            </motion.div>
+          </SignedIn>
+        )}
       </motion.div>
     );
   }
   
   // Calculate the optimal position based on the page
   const topPosition = isRulesPage ? 'top-20' : isHistoryPage ? 'top-20' : 'top-4';
+  
+  // En mode hors ligne, ne pas afficher les boutons d'authentification
+  if (offlineMode) {
+    return null;
+  }
   
   return (
     <motion.div 

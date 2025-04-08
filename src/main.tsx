@@ -13,12 +13,14 @@ const CLERK_PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY ||
                                'pk_test_YmFsYW5jZWQtYnJlYW0tMjguY2xlcmsuYWNjb3VudHMuZGV2JA'
 
 // Vérifier immédiatement si le mode hors ligne a déjà été activé précédemment
-if (localStorage.getItem('clerk_auth_failed') === 'true') {
+const isOfflineMode = localStorage.getItem('clerk_auth_failed') === 'true';
+
+if (isOfflineMode) {
   console.info("Mode hors ligne détecté, authentification Clerk ignorée");
 }
 
 // Protection contre les erreurs d'initialisation de Clerk
-if (typeof window !== 'undefined') {
+if (typeof window !== 'undefined' && !isOfflineMode) {
   // Timeout très court pour détecter rapidement les problèmes d'initialisation Clerk
   setTimeout(() => {
     // Utilisation de la vérification sécurisée avec 'in' au lieu d'accéder directement à window.Clerk
@@ -47,19 +49,21 @@ if (typeof window !== 'undefined') {
 
 const root = ReactDOM.createRoot(document.getElementById('root')!);
 
-// Vérifier si nous sommes déjà en mode hors ligne pour accélérer le rendu
-if (localStorage.getItem('clerk_auth_failed') === 'true') {
-  // En mode hors ligne, ne pas initialiser Clerk du tout
-  root.render(
-    <React.StrictMode>
-      <ThemeProvider>
-        <App />
-      </ThemeProvider>
-    </React.StrictMode>
-  );
-} else {
-  // Mode normal avec tentative d'authentification Clerk
-  root.render(
+// Utiliser une fonction pour rendre l'application avec ou sans ClerkProvider
+const renderApp = () => {
+  // Déjà en mode hors ligne
+  if (isOfflineMode) {
+    return (
+      <React.StrictMode>
+        <ThemeProvider>
+          <App />
+        </ThemeProvider>
+      </React.StrictMode>
+    );
+  }
+  
+  // Mode normal avec tentative d'authentification
+  return (
     <React.StrictMode>
       <ClerkProvider 
         publishableKey={CLERK_PUBLISHABLE_KEY}
@@ -83,4 +87,7 @@ if (localStorage.getItem('clerk_auth_failed') === 'true') {
       </ClerkProvider>
     </React.StrictMode>
   );
-}
+};
+
+// Rendre l'application en utilisant la fonction
+root.render(renderApp());

@@ -14,11 +14,9 @@ import SettingsPage from '@/pages/SettingsPage';
 import BrickBreaker from '@/components/EasterEgg/BrickBreaker';
 import GameSetup from '@/components/GameSetup';
 import { cleanupOldData } from '@/utils/pwaUtils';
-import { useClerk } from '@clerk/clerk-react';
 import { toast } from 'sonner';
 
 function App() {
-  const { loaded: clerkLoaded } = useClerk();
   const [isLoading, setIsLoading] = useState(true);
   const [offlineMode, setOfflineMode] = useState(false);
   const [shouldShowOfflineToast, setShouldShowOfflineToast] = useState(false);
@@ -34,30 +32,24 @@ function App() {
       setOfflineMode(true);
       setIsLoading(false);
       setShouldShowOfflineToast(true);
+    } else {
+      // Si pas déjà en mode hors ligne, définir un court délai pour vérifier si Clerk est disponible
+      const timer = setTimeout(() => {
+        // Vérification sécurisée de l'existence de Clerk dans window
+        const clerkAvailable = typeof window !== 'undefined' && 'Clerk' in window;
+        if (!clerkAvailable) {
+          console.warn("Clerk n'a pas pu être initialisé");
+          localStorage.setItem('clerk_auth_failed', 'true');
+          setOfflineMode(true);
+          setShouldShowOfflineToast(true);
+        }
+        // Dans tous les cas, terminer le chargement
+        setIsLoading(false);
+      }, 500); // 500ms de délai
+      
+      return () => clearTimeout(timer);
     }
   }, []);
-
-  // Ajouter un timeout très court pour éviter un blocage sur le loading
-  useEffect(() => {
-    // Si déjà chargé ou si erreur connue, ne pas attendre
-    if (clerkLoaded || offlineMode) {
-      setIsLoading(false);
-      return;
-    }
-
-    // Définir un timeout très court pour éviter l'attente
-    const timer = setTimeout(() => {
-      if (!clerkLoaded) {
-        console.warn("Authentication timed out - continuing in offline mode");
-        localStorage.setItem('clerk_auth_failed', 'true');
-        setOfflineMode(true);
-        setIsLoading(false);
-        setShouldShowOfflineToast(true);
-      }
-    }, 500); // Réduit à 500ms pour une réaction plus rapide
-
-    return () => clearTimeout(timer);
-  }, [clerkLoaded, offlineMode]);
 
   // Afficher une notification pour le mode hors ligne - toujours défini, jamais conditionnel
   useEffect(() => {
