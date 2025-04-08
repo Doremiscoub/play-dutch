@@ -11,6 +11,7 @@ export const themeConfig = THEMES;
 // Interface du contexte de thème
 interface ThemeContextType {
   currentTheme: ThemeType;
+  setTheme: (theme: ThemeType) => void;
 }
 
 // Création du contexte
@@ -21,12 +22,27 @@ interface ThemeProviderProps {
   children: React.ReactNode;
 }
 
-// Composant fournisseur de thème (simplifié)
+// Composant fournisseur de thème
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
-  // Thème fixé à 'default' comme demandé
-  const [currentTheme] = useState<ThemeType>('default');
+  // État du thème avec valeur par défaut 'default'
+  const [currentTheme, setCurrentTheme] = useState<ThemeType>('default');
 
-  // Appliquer le thème par défaut au chargement
+  // Setter de thème pour modifier l'état
+  const setTheme = (theme: ThemeType) => {
+    setCurrentTheme(theme);
+    // Stockage optionnel dans localStorage pour persistance
+    localStorage.setItem('dutch_theme', theme);
+  };
+
+  // Charger le thème à partir de localStorage
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('dutch_theme') as ThemeType | null;
+    if (savedTheme && Object.keys(THEMES).includes(savedTheme)) {
+      setCurrentTheme(savedTheme);
+    }
+  }, []);
+
+  // Appliquer le thème au chargement ou à son changement
   useEffect(() => {
     // Appliquer les couleurs CSS personnalisées au document
     const theme = THEMES[currentTheme] || THEMES.default;
@@ -40,7 +56,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   }, [currentTheme]);
 
   return (
-    <ThemeContext.Provider value={{ currentTheme }}>
+    <ThemeContext.Provider value={{ currentTheme, setTheme }}>
       {children}
     </ThemeContext.Provider>
   );

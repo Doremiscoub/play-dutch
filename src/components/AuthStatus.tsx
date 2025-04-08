@@ -1,190 +1,267 @@
 
-import React, { useState, useEffect } from 'react';
-import { SignedIn, SignedOut, UserButton } from '@clerk/clerk-react';
-import { Button } from './ui/button';
-import { Link, useLocation } from 'react-router-dom';
-import { User, LogIn, Home } from 'lucide-react';
+import React, { useState } from 'react';
+import { useUser, useAuth } from '@clerk/clerk-react';
+import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { LogOut, ChevronDown, UserCircle, Settings, History, Trophy } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 import { motion } from 'framer-motion';
+import { Badge } from '@/components/ui/badge';
 
-export const AuthStatus: React.FC = () => {
-  const location = useLocation();
-  const [offlineMode, setOfflineMode] = useState(false);
-  
-  // Vérifier si le mode hors ligne est activé
-  useEffect(() => {
-    setOfflineMode(localStorage.getItem('clerk_auth_failed') === 'true');
-  }, []);
-  
-  // Check if we're on the sign-in or sign-up page, or their sub-routes
-  const isAuthPage = location.pathname.startsWith('/sign-in') || 
-                     location.pathname.startsWith('/sign-up');
-  
-  // If we're on an auth page, don't show the auth buttons
-  if (isAuthPage) {
-    return null;
-  }
-  
-  // Determine which page we're on to adjust positioning
-  const isRulesPage = location.pathname === '/rules';
-  const isHomePage = location.pathname === '/' || location.pathname === '/index';
-  const isHistoryPage = location.pathname === '/history';
-  const isGamePage = location.pathname === '/game';
-  
-  // Don't show auth buttons on home page since it already has auth buttons
-  if (isHomePage) {
-    // En mode hors ligne, ne pas afficher le bouton utilisateur
-    if (offlineMode) {
-      return null;
+interface AuthStatusProps {
+  showLoginButtons?: boolean;
+  buttonStyle?: 'default' | 'minimal' | 'pill';
+  className?: string;
+}
+
+const AuthStatus = ({ showLoginButtons = true, buttonStyle = 'default', className = '' }: AuthStatusProps) => {
+  const { isSignedIn, user, isLoaded } = useUser();
+  const { signOut } = useAuth();
+  const navigate = useNavigate();
+  const [isSigningOut, setIsSigningOut] = useState(false);
+
+  // Gestionnaire de déconnexion
+  const handleSignOut = async () => {
+    try {
+      setIsSigningOut(true);
+      await signOut();
+      toast.success('Déconnexion réussie');
+      navigate('/');
+    } catch (error) {
+      console.error('Erreur lors de la déconnexion', error);
+      toast.error('Problème lors de la déconnexion');
+    } finally {
+      setIsSigningOut(false);
     }
-    
+  };
+
+  // Activer le mode hors ligne
+  const enableOfflineMode = () => {
+    localStorage.setItem('clerk_auth_failed', 'true');
+    toast.success('Mode hors ligne activé');
+    window.location.reload();
+  };
+
+  // Si Clerk est en cours de chargement, afficher un loader
+  if (!isLoaded) {
     return (
-      <motion.div 
-        className="fixed top-4 right-4 z-50"
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
-      >
-        <SignedIn>
+      <div className="animate-pulse flex items-center">
+        <div className="h-8 w-8 rounded-full bg-gray-200"></div>
+      </div>
+    );
+  }
+
+  // Si l'utilisateur est connecté, afficher son profil
+  if (isSignedIn && user) {
+    const userInitials = user.firstName && user.lastName
+      ? `${user.firstName[0]}${user.lastName[0]}`
+      : user.firstName
+        ? user.firstName[0]
+        : '?';
+
+    return (
+      <div className={className}>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button 
+              variant="game-control"
+              className="vision-button p-2 flex items-center gap-2"
+            >
+              <Avatar className="h-8 w-8 border border-white/40">
+                <AvatarImage src={user.imageUrl} />
+                <AvatarFallback className="bg-dutch-blue text-white">
+                  {userInitials}
+                </AvatarFallback>
+              </Avatar>
+              
+              <div className="flex items-center">
+                <span className="text-sm font-medium truncate max-w-[100px]">
+                  {user.firstName || user.username || 'Utilisateur'}
+                </span>
+                <ChevronDown className="ml-1 h-4 w-4 opacity-50" />
+              </div>
+            </Button>
+          </DropdownMenuTrigger>
+          
+          <DropdownMenuContent align="end" className="glass-light">
+            <DropdownMenuLabel>Mon compte</DropdownMenuLabel>
+            
+            <DropdownMenuSeparator />
+            
+            <DropdownMenuItem 
+              className="cursor-pointer flex items-center" 
+              onClick={() => navigate('/game')}
+            >
+              <Trophy className="mr-2 h-4 w-4 text-dutch-orange" />
+              Partie en cours
+            </DropdownMenuItem>
+            
+            <DropdownMenuItem 
+              className="cursor-pointer flex items-center"
+              onClick={() => navigate('/history')}
+            >
+              <History className="mr-2 h-4 w-4 text-dutch-purple" />
+              Historique
+            </DropdownMenuItem>
+            
+            <DropdownMenuItem 
+              className="cursor-pointer flex items-center"
+              onClick={() => navigate('/settings')}
+            >
+              <Settings className="mr-2 h-4 w-4 text-dutch-blue" />
+              Paramètres
+            </DropdownMenuItem>
+            
+            <DropdownMenuSeparator />
+            
+            <DropdownMenuItem 
+              className="cursor-pointer flex items-center text-red-500"
+              onClick={handleSignOut}
+              disabled={isSigningOut}
+            >
+              <LogOut className="mr-2 h-4 w-4" />
+              {isSigningOut ? 'Déconnexion...' : 'Se déconnecter'}
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    );
+  }
+
+  // Gérer le type d'affichage des boutons
+  if (showLoginButtons) {
+    // Style "pill" pour un affichage compact
+    if (buttonStyle === 'pill') {
+      return (
+        <div className={`flex items-center gap-2 ${className}`}>
           <motion.div
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="relative"
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-dutch-blue/20 via-dutch-purple/20 to-dutch-pink/20 rounded-full blur-md animate-pulse-slow"></div>
-            <UserButton 
-              afterSignOutUrl="/"
-              appearance={{
-                elements: {
-                  userButtonAvatarBox: 'w-10 h-10 rounded-full border-2 border-white/50 shadow-md transition-all hover:scale-105 hover:border-white/70 active:scale-95',
-                }
-              }}
-            />
+            <Button
+              size="pill-sm"
+              variant="pill-glass"
+              className="text-dutch-blue"
+              onClick={() => navigate('/sign-in')}
+            >
+              <UserCircle className="h-3.5 w-3.5 mr-1" />
+              Connexion
+            </Button>
           </motion.div>
-        </SignedIn>
-      </motion.div>
-    );
-  }
-  
-  // Special style for game page
-  if (isGamePage) {
-    return (
-      <motion.div 
-        className="fixed top-4 left-4 z-40"
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.3 }}
-      >
-        <Link to="/">
-          <motion.div 
+          
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Button
+              size="pill-sm"
+              variant="pill-blue"
+              className="text-white"
+              onClick={() => navigate('/sign-up')}
+            >
+              <UserCircle className="h-3.5 w-3.5 mr-1" />
+              Inscription
+            </Button>
+          </motion.div>
+          
+          <motion.div
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
             <Button 
-              size="game-icon" 
-              variant="game-control" 
-              elevated
-              animated
-              className="flex items-center justify-center"
+              size="pill-sm"
+              variant="ghost"
+              className="text-xs text-gray-500"
+              onClick={enableOfflineMode}
             >
-              <Home className="w-5 h-5" />
+              Mode hors-ligne
             </Button>
           </motion.div>
-        </Link>
-        {!offlineMode && (
-          <SignedIn>
-            <motion.div
-              className="fixed top-4 right-4 z-40"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-dutch-blue/20 via-dutch-purple/20 to-dutch-pink/20 rounded-full blur-md animate-pulse-slow"></div>
-              <UserButton 
-                afterSignOutUrl="/"
-                appearance={{
-                  elements: {
-                    userButtonAvatarBox: 'w-10 h-10 rounded-full border-2 border-white/50 shadow-md transition-all hover:scale-105 hover:border-white/70 active:scale-95',
-                  }
-                }}
-              />
-            </motion.div>
-          </SignedIn>
-        )}
-      </motion.div>
+        </div>
+      );
+    }
+    
+    // Style minimal pour un affichage discret
+    if (buttonStyle === 'minimal') {
+      return (
+        <div className={`flex items-center gap-2 ${className}`}>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-dutch-blue"
+            onClick={() => navigate('/sign-in')}
+          >
+            Connexion
+          </Button>
+          
+          <Button
+            variant="dutch-blue"
+            size="sm"
+            onClick={() => navigate('/sign-up')}
+          >
+            Inscription
+          </Button>
+          
+          <Button 
+            variant="ghost"
+            size="sm"
+            className="text-xs text-gray-500"
+            onClick={enableOfflineMode}
+          >
+            Mode hors-ligne
+          </Button>
+        </div>
+      );
+    }
+    
+    // Style par défaut
+    return (
+      <div className={`space-y-2 ${className}`}>
+        <div className="flex flex-col sm:flex-row gap-2">
+          <Button
+            className="vision-button bg-dutch-blue/90 text-white border-dutch-blue/20"
+            onClick={() => navigate('/sign-in')}
+          >
+            <UserCircle className="mr-2 h-5 w-5" />
+            Se connecter
+          </Button>
+          
+          <Button
+            variant="outline"
+            className="vision-button"
+            onClick={() => navigate('/sign-up')}
+          >
+            <UserCircle className="mr-2 h-5 w-5" />
+            Créer un compte
+          </Button>
+        </div>
+        
+        <div className="text-center">
+          <Button 
+            variant="ghost"
+            size="sm"
+            className="text-xs text-gray-500"
+            onClick={enableOfflineMode}
+          >
+            Continuer sans compte
+            <Badge variant="outline" className="ml-2 text-xs bg-gray-100">Mode hors-ligne</Badge>
+          </Button>
+        </div>
+      </div>
     );
   }
-  
-  // Calculate the optimal position based on the page
-  const topPosition = isRulesPage ? 'top-20' : isHistoryPage ? 'top-20' : 'top-4';
-  
-  // En mode hors ligne, ne pas afficher les boutons d'authentification
-  if (offlineMode) {
-    return null;
-  }
-  
-  return (
-    <motion.div 
-      className={`fixed ${topPosition} right-4 z-40`}
-      initial={{ opacity: 0, y: -10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
-    >
-      <SignedIn>
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="relative"
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-dutch-blue/20 via-dutch-purple/20 to-dutch-pink/20 rounded-full blur-md animate-pulse-slow"></div>
-          <UserButton 
-            afterSignOutUrl="/"
-            appearance={{
-              elements: {
-                userButtonAvatarBox: 'w-10 h-10 rounded-full border-2 border-white/50 shadow-md transition-all hover:scale-105 hover:border-white/70 active:scale-95',
-              }
-            }}
-          />
-        </motion.div>
-      </SignedIn>
-      <SignedOut>
-        <div className="flex gap-2">
-          <Link to="/sign-in">
-            <motion.div 
-              whileHover={{ scale: 1.03, y: -2 }}
-              whileTap={{ scale: 0.97 }}
-              transition={{ type: "spring", stiffness: 400, damping: 17 }}
-            >
-              <Button 
-                size="pill-sm" 
-                variant="pill-glass" 
-                elevated
-                animated
-                className="transition-all shadow-sm hover:shadow-md active:shadow-sm"
-              >
-                <LogIn className="w-4 h-4 mr-1" /> Connexion
-              </Button>
-            </motion.div>
-          </Link>
-          <Link to="/sign-up">
-            <motion.div 
-              whileHover={{ scale: 1.03, y: -2 }}
-              whileTap={{ scale: 0.97 }}
-              transition={{ type: "spring", stiffness: 400, damping: 17 }}
-            >
-              <Button 
-                size="pill-sm" 
-                variant="pill-blue" 
-                elevated
-                animated
-                className="transition-all shadow-sm hover:shadow-md active:shadow-sm"
-              >
-                <User className="w-4 h-4 mr-1" /> Inscription
-              </Button>
-            </motion.div>
-          </Link>
-        </div>
-      </SignedOut>
-    </motion.div>
-  );
+
+  // Si aucun bouton ne doit être affiché
+  return null;
 };
 
 export default AuthStatus;

@@ -36,6 +36,7 @@ const buttonVariants = cva(
         "pill-orange": "rounded-full bg-dutch-orange text-white shadow-sm",
         "pill-blue": "rounded-full bg-dutch-blue text-white shadow-sm",
         "pill-sm": "text-xs px-2 py-1 rounded-full",
+        "game-control": "bg-white/70 backdrop-blur-xl text-dutch-blue border border-dutch-blue/20 shadow-sm hover:bg-white/90",
       },
       size: {
         default: "h-10 px-4 py-2",
@@ -50,10 +51,20 @@ const buttonVariants = cva(
         "pill-sm": "h-7 text-xs",
         "game-icon": "h-12 w-12",
       },
+      elevated: {
+        true: "shadow-md hover:shadow-lg transform-gpu hover:-translate-y-0.5 transition-all",
+        false: "",
+      },
+      animated: {
+        true: "transition-all duration-300 ease-in-out hover:scale-105 active:scale-95",
+        false: "",
+      },
     },
     defaultVariants: {
       variant: "default",
       size: "default",
+      elevated: false,
+      animated: false,
     },
   }
 )
@@ -61,15 +72,17 @@ const buttonVariants = cva(
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
-  asChild?: boolean
+  asChild?: boolean;
+  elevated?: boolean;
+  animated?: boolean;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
+  ({ className, variant, size, elevated, animated, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "button"
     return (
       <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
+        className={cn(buttonVariants({ variant, size, elevated, animated, className }))}
         ref={ref}
         {...props}
       />

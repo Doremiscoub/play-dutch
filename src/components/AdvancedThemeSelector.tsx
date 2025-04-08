@@ -1,12 +1,11 @@
+
 import React, { useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription, DialogFooter } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Paintbrush, Check, X, Palette, Save, RefreshCw, Plus, Trash2 } from 'lucide-react';
+import { Check, X, Palette, Save, RefreshCw, Plus, Trash2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useTheme, ThemeType, themeConfig } from '@/hooks/use-theme';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Slider } from "@/components/ui/slider";
-import { HexColorPicker } from 'react-colorful';
 import { toast } from 'sonner';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -37,6 +36,7 @@ const AdvancedThemeSelector = () => {
   const [backgroundColor, setBackgroundColor] = useState('#FFFFFF');
   const [editingColorType, setEditingColorType] = useState<'primary' | 'secondary' | 'accent' | 'background'>('primary');
   
+  // Convert theme config to proper format for display
   const themes = [
     ...Object.entries(themeConfig).map(([id, theme]) => ({
       id: id as ThemeType,
@@ -44,7 +44,7 @@ const AdvancedThemeSelector = () => {
       primary: theme.colors.primary,
       secondary: theme.colors.secondary,
       accent: theme.colors.accent,
-      background: '#FFFFFF',
+      background: theme.colors.background,
       isCustom: false
     })),
     ...customThemes
@@ -116,7 +116,7 @@ const AdvancedThemeSelector = () => {
     setCustomThemes(prev => prev.filter(t => t.id !== themeId));
     
     if (currentTheme === themeId) {
-      setTheme('blue');
+      setTheme('default');
     }
     
     toast.success('Thème supprimé');
@@ -169,10 +169,10 @@ const AdvancedThemeSelector = () => {
           className="shadow-md hover:shadow-lg bg-white/60 backdrop-blur-sm"
         >
           <div className="relative">
-            <Paintbrush className="h-4 w-4" />
+            <Palette className="h-4 w-4" />
             <div 
               className="absolute -top-1 -right-1 w-2 h-2 rounded-full"
-              style={{ backgroundColor: themeConfig[currentTheme]?.primary || primaryColor }}
+              style={{ backgroundColor: themes.find(t => t.id === currentTheme)?.primary }}
             ></div>
           </div>
         </Button>
@@ -211,7 +211,7 @@ const AdvancedThemeSelector = () => {
                     key={theme.id}
                     className={cn(
                       "relative flex items-center w-full p-4 rounded-xl transition-all cursor-pointer hover:shadow-md",
-                      currentTheme === theme.id ? "ring-2 ring-primary shadow-md" : "bg-white/60 border border-white/30"
+                      currentTheme === theme.id ? "ring-2 ring-dutch-blue shadow-md" : "bg-white/60 border border-white/30"
                     )}
                     onClick={() => setTheme(theme.id as ThemeType)}
                   >
@@ -230,7 +230,7 @@ const AdvancedThemeSelector = () => {
                     </div>
                     
                     {currentTheme === theme.id ? (
-                      <div className="rounded-full bg-primary w-6 h-6 flex items-center justify-center text-white">
+                      <div className="rounded-full bg-dutch-blue w-6 h-6 flex items-center justify-center text-white">
                         <Check className="h-4 w-4" />
                       </div>
                     ) : theme.isCustom ? (
@@ -312,7 +312,7 @@ const AdvancedThemeSelector = () => {
                     variant="outline"
                     className={cn(
                       "flex flex-col items-center p-2 h-auto border-2",
-                      editingColorType === 'primary' ? "ring-2 ring-primary" : ""
+                      editingColorType === 'primary' ? "ring-2 ring-dutch-blue" : ""
                     )}
                     onClick={() => setEditingColorType('primary')}
                   >
@@ -327,7 +327,7 @@ const AdvancedThemeSelector = () => {
                     variant="outline"
                     className={cn(
                       "flex flex-col items-center p-2 h-auto border-2",
-                      editingColorType === 'secondary' ? "ring-2 ring-primary" : ""
+                      editingColorType === 'secondary' ? "ring-2 ring-dutch-blue" : ""
                     )}
                     onClick={() => setEditingColorType('secondary')}
                   >
@@ -342,7 +342,7 @@ const AdvancedThemeSelector = () => {
                     variant="outline"
                     className={cn(
                       "flex flex-col items-center p-2 h-auto border-2",
-                      editingColorType === 'accent' ? "ring-2 ring-primary" : ""
+                      editingColorType === 'accent' ? "ring-2 ring-dutch-blue" : ""
                     )}
                     onClick={() => setEditingColorType('accent')}
                   >
@@ -357,7 +357,7 @@ const AdvancedThemeSelector = () => {
                     variant="outline"
                     className={cn(
                       "flex flex-col items-center p-2 h-auto border-2",
-                      editingColorType === 'background' ? "ring-2 ring-primary" : ""
+                      editingColorType === 'background' ? "ring-2 ring-dutch-blue" : ""
                     )}
                     onClick={() => setEditingColorType('background')}
                   >
@@ -369,13 +369,7 @@ const AdvancedThemeSelector = () => {
                   </Button>
                 </div>
                 
-                <div className="rounded-xl border overflow-hidden p-4 bg-white/70">
-                  <HexColorPicker
-                    color={getCurrentColor()}
-                    onChange={setCurrentColor}
-                    className="w-full"
-                  />
-                  
+                <div className="rounded-xl border overflow-hidden p-4 bg-white/70">                  
                   <div className="flex items-center gap-2 mt-4">
                     <Label htmlFor="color-hex" className="shrink-0">Code couleur:</Label>
                     <Input
