@@ -1,4 +1,3 @@
-
 /**
  * Configuration centralisée du thème Dutch - Inspiré iOS 19 & VisionOS
  * Ce fichier contient toutes les définitions de style, couleurs, et variables visuelles
@@ -354,10 +353,8 @@ export const COMPONENT_STYLES = {
   visionOS: {
     glassPanel: 'bg-white/70 backdrop-blur-xl border border-white/50 shadow-sm rounded-3xl',
     floatingButton: 'bg-white/80 backdrop-blur-xl border border-white/60 shadow-md rounded-2xl transform-gpu transition-all hover:-translate-y-0.5 hover:shadow-lg',
-    tooltip: 'bg-white/90 backdrop-blur-xl border border-white/70 shadow-md rounded-xl px-3 py-1.5 text-sm',
     header: 'bg-white/60 backdrop-blur-xl border-b border-white/30 shadow-sm',
     navBar: 'bg-white/60 backdrop-blur-xl border-t border-white/30 shadow-sm',
-    tooltip: 'bg-white/80 backdrop-blur-xl shadow-sm rounded-xl px-3 py-1.5',
     shimmer: 'animate-shimmer bg-gradient-to-r from-transparent via-white/20 to-transparent',
   }
 };

@@ -64,7 +64,7 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// Couleurs Dutch basées sur l'iOS 19
+				// Couleurs Dutch basées sur notre configuration de thème
 				dutch: {
 					blue: COLORS.blue.DEFAULT,
 					'blue-light': COLORS.blue.light,
@@ -81,6 +81,7 @@ export default {
 					yellow: COLORS.yellow,
 					background: COLORS.gray[50],
 					card: COLORS.white,
+					primary: COLORS.blue.DEFAULT,
 				},
 				ios: {
 					blue: '#0A84FF',

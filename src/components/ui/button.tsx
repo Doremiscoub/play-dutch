@@ -6,64 +6,54 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
         default: "bg-primary text-primary-foreground hover:bg-primary/90",
-        destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-        outline: "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
-        secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+        destructive:
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+        outline:
+          "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+        secondary:
+          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        gradient: "bg-gradient-to-r from-dutch-blue to-dutch-purple text-white hover:opacity-90",
-        "ios-blue": "bg-dutch-blue text-white hover:bg-dutch-blue/90 shadow-sm",
-        "ios-purple": "bg-dutch-purple text-white hover:bg-dutch-purple/90 shadow-sm",
-        "ios-orange": "bg-dutch-orange text-white hover:bg-dutch-orange/90 shadow-sm",
-        "ios-outline": "border border-white/40 bg-white/60 backdrop-blur-xl text-gray-700 hover:bg-white/70 shadow-sm",
-        "ios-glass": "bg-white/70 backdrop-blur-xl border border-white/50 text-gray-800 hover:bg-white/80 shadow-sm",
-        "vision-glass": "bg-white/60 backdrop-blur-xl border border-white/50 text-gray-800 hover:bg-white/70 shadow-sm hover:-translate-y-0.5 hover:shadow-md active:translate-y-0.5 active:shadow-sm",
-        "vision-blue": "bg-dutch-blue text-white hover:bg-dutch-blue/90 shadow-sm hover:-translate-y-0.5 hover:shadow-md active:translate-y-0.5 active:shadow-sm",
-        "vision-purple": "bg-dutch-purple text-white hover:bg-dutch-purple/90 shadow-sm hover:-translate-y-0.5 hover:shadow-md active:translate-y-0.5 active:shadow-sm",
-        "vision-orange": "bg-dutch-orange text-white hover:bg-dutch-orange/90 shadow-sm hover:-translate-y-0.5 hover:shadow-md active:translate-y-0.5 active:shadow-sm",
+        gradient: "bg-gradient-to-r from-dutch-blue to-dutch-purple text-white",
+        "ios-blue": "bg-ios-blue text-white hover:bg-ios-blue/90",
+        "ios-purple": "bg-ios-purple text-white hover:bg-ios-purple/90",
+        "ios-orange": "bg-ios-orange text-white hover:bg-ios-orange/90",
+        "ios-outline": "border border-ios-blue/20 text-ios-blue bg-white hover:bg-white/90",
+        "ios-glass": "bg-white/70 backdrop-blur-sm border border-white/50 shadow-sm text-gray-800 hover:bg-white/80",
+        "vision-glass": "bg-white/70 backdrop-blur-xl border border-white/50 shadow-sm text-gray-800 hover:bg-white/80 transition-all hover:-translate-y-0.5",
+        "vision-blue": "bg-dutch-blue text-white hover:bg-dutch-blue/90",
+        "vision-purple": "bg-dutch-purple text-white hover:bg-dutch-purple/90",
+        "vision-orange": "bg-dutch-orange text-white hover:bg-dutch-orange/90",
+        "dutch-blue": "bg-dutch-blue text-white hover:bg-dutch-blue/90",
+        "dutch-glass": "bg-white/70 backdrop-blur-xl border border-white/50 shadow-sm hover:bg-white/80",
+        "floating": "bg-white shadow-lg text-gray-800 hover:shadow-xl",
+        "pill-glass": "rounded-full bg-white/70 backdrop-blur-xl border border-white/50 shadow-sm",
+        "pill-orange": "rounded-full bg-dutch-orange text-white shadow-sm",
+        "pill-blue": "rounded-full bg-dutch-blue text-white shadow-sm",
+        "pill-sm": "text-xs px-2 py-1 rounded-full",
       },
       size: {
         default: "h-10 px-4 py-2",
-        sm: "h-9 rounded-lg px-3",
-        lg: "h-11 rounded-lg px-8",
-        xl: "h-12 rounded-xl px-8 text-base",
-        "2xl": "h-14 rounded-xl px-10 text-lg",
+        sm: "h-9 rounded-md px-3",
+        lg: "h-11 rounded-md px-8",
+        xl: "h-12 rounded-md px-10",
+        "2xl": "h-14 rounded-xl px-12 text-lg",
         icon: "h-10 w-10",
         "icon-sm": "h-8 w-8",
-        "icon-lg": "h-12 w-12 text-lg",
+        "icon-lg": "h-12 w-12",
+        "game-action": "h-16 text-lg font-medium",
+        "pill-sm": "h-7 text-xs",
+        "game-icon": "h-12 w-12",
       },
-      rounded: {
-        default: "rounded-lg",
-        md: "rounded-xl",
-        lg: "rounded-2xl",
-        xl: "rounded-3xl",
-        full: "rounded-full",
-      },
-      glassmorphism: {
-        true: "backdrop-blur-xl bg-white/60 border border-white/50",
-        false: "",
-      },
-      elevated: {
-        true: "shadow-sm hover:shadow-md transition-shadow",
-        false: "",
-      },
-      animated: {
-        true: "transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0.5",
-        false: "",
-      }
     },
     defaultVariants: {
       variant: "default",
       size: "default",
-      rounded: "lg",
-      glassmorphism: false,
-      elevated: false,
-      animated: false,
     },
   }
 )
@@ -75,11 +65,11 @@ export interface ButtonProps
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, rounded, glassmorphism, elevated, animated, asChild = false, ...props }, ref) => {
+  ({ className, variant, size, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "button"
     return (
       <Comp
-        className={cn(buttonVariants({ variant, size, rounded, glassmorphism, elevated, animated, className }))}
+        className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
         {...props}
       />
