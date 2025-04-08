@@ -1,9 +1,25 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import GameHistory from '@/components/GameHistory';
 import AnimatedBackground from '@/components/AnimatedBackground';
+import { Game } from '@/types';
 
 const History: React.FC = () => {
+  const [games, setGames] = useState<Game[]>([]);
+
+  useEffect(() => {
+    // Load games from localStorage
+    const savedGames = localStorage.getItem('dutch_games');
+    if (savedGames) {
+      try {
+        const parsedGames = JSON.parse(savedGames);
+        setGames(parsedGames);
+      } catch (error) {
+        console.error("Error parsing saved games:", error);
+      }
+    }
+  }, []);
+
   return (
     <div className="min-h-screen relative">
       <div className="absolute inset-0">
@@ -16,7 +32,7 @@ const History: React.FC = () => {
         </h1>
         
         <div className="vision-card p-4">
-          <GameHistory />
+          <GameHistory games={games} />
         </div>
       </div>
     </div>
