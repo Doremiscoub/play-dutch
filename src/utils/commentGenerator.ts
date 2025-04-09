@@ -1,58 +1,116 @@
 
 import { Player } from '@/types';
 
-// Types de commentaires possibles
-type CommentType = 'info' | 'joke' | 'sarcasm' | 'encouragement';
+// Type pour les commentaires
+export type CommentType = 'info' | 'joke' | 'sarcasm' | 'encouragement';
 
-/**
- * Génère un commentaire aléatoire en fonction de l'état du jeu
- */
+interface Comment {
+  comment: string;
+  type: CommentType;
+}
+
+// Fonction principale pour obtenir un commentaire aléatoire
 export const getRandomComment = (
-  players: Player[],
+  players: Player[], 
   roundHistory: { scores: number[], dutchPlayerId?: string }[]
-): { comment: string; type: CommentType } => {
-  // Si pas de joueurs, retour générique
-  if (!players.length) {
-    return {
-      comment: "Alors, on commence la partie ou quoi ?",
-      type: 'encouragement'
-    };
+): Comment => {
+  // Si pas de joueurs ou pas de rounds, retourner un commentaire de nouvelle partie
+  if (players.length === 0 || (players[0].rounds && players[0].rounds.length === 0)) {
+    return getRandomElementFromArray(newGameComments);
   }
 
-  // Si pas encore de manches jouées
-  if (!roundHistory.length || !players[0].rounds.length) {
-    return getRandomFromArray(newGameComments);
-  }
-
-  // Sélectionner un type de commentaire aléatoire
-  const commentOptions: { [key in CommentType]: () => string } = {
-    info: () => getInfoComment(players, roundHistory),
-    joke: () => getJokeComment(players),
-    sarcasm: () => getSarcasmComment(players, roundHistory),
-    encouragement: () => getEncouragementComment(players)
-  };
-
-  const types: CommentType[] = ['info', 'joke', 'sarcasm', 'encouragement'];
-  const selectedType = getRandomFromArray(types);
+  // Analyser l'état du jeu pour des commentaires contextuels
+  const lastRoundIndex = roundHistory.length - 1;
   
-  return {
-    comment: commentOptions[selectedType](),
-    type: selectedType
-  };
-};
-
-// Fonction utilitaire pour obtenir un élément aléatoire d'un tableau
-const getRandomFromArray = <T>(arr: T[]): T => {
-  return arr[Math.floor(Math.random() * arr.length)];
-};
-
-// Fonction utilitaire pour remplacer le nom du joueur dans un message
-const insertPlayerName = (message: string, players: Player[]): string => {
-  if (message.includes('{player}') && players.length > 0) {
-    const randomPlayer = getRandomFromArray(players);
-    return message.replace('{player}', randomPlayer.name);
+  if (lastRoundIndex >= 0) {
+    // Obtenir le joueur qui a fait le meilleur score au dernier tour
+    const lastRound = roundHistory[lastRoundIndex];
+    const minScoreLastRound = Math.min(...lastRound.scores);
+    const playerWithMinScoreIndex = lastRound.scores.indexOf(minScoreLastRound);
+    const playerWithMinScore = players[playerWithMinScoreIndex];
+    
+    // Obtenir le joueur qui a fait le pire score au dernier tour
+    const maxScoreLastRound = Math.max(...lastRound.scores);
+    const playerWithMaxScoreIndex = lastRound.scores.indexOf(maxScoreLastRound);
+    const playerWithMaxScore = players[playerWithMaxScoreIndex];
+    
+    // 35% de chance de faire un commentaire sur un joueur spécifique
+    if (Math.random() < 0.35) {
+      if (minScoreLastRound === 0) {
+        return {
+          comment: `${playerWithMinScore.name} a fait un Dutch ! ${getRandomElementFromArray([
+            "C'est beau comme Mbappé qui marque à la 90ème !",
+            "J'ai presque versé une larme d'émotion. Presque.",
+            "Est-ce que t'as triché ou t'as vraiment eu un coup de chance ?",
+            "Incroyable ! Je crois que même ton adversaire est impressionné, mais il fait genre que non.",
+          ])}`,
+          type: 'joke'
+        };
+      } else if (minScoreLastRound <= 3) {
+        return {
+          comment: `${getRandomElementFromArray([
+            `${playerWithMinScore.name}, très solide ce tour ! Si seulement tu jouais comme ça depuis le début...`,
+            `Pas mal ${playerWithMinScore.name} ! C'était de la chance ou tu commences enfin à comprendre le jeu ?`,
+            `${playerWithMinScore.name} se réveille ! Il était temps après tous ces points accumulés !`,
+            `Joli coup ${playerWithMinScore.name} ! Garde ce rythme et tu auras peut-être une chance de ne pas finir dernier.`
+          ])}`,
+          type: 'sarcasm'
+        };
+      } else if (maxScoreLastRound >= 10) {
+        return {
+          comment: `${getRandomElementFromArray([
+            `Aïe aïe aïe ${playerWithMaxScore.name}... T'as pris cher ! Tu joues pour perdre ou c'est naturel ?`,
+            `${playerWithMaxScore.name} collectionne les points comme certains collectionnent les timbres. Dommage que le but soit d'en avoir le moins possible...`,
+            `Hey ${playerWithMaxScore.name}, tu sais que le but n'est PAS d'avoir le plus de points, hein ?`,
+            `${playerWithMaxScore.name}, on dirait que les cartes ne t'aiment pas. Ou alors c'est juste ton jeu qui est catastrophique.`
+          ])}`,
+          type: 'sarcasm'
+        };
+      }
+    }
   }
-  return message;
+
+  // 30% de chance d'avoir un commentaire sur le classement général
+  if (Math.random() < 0.3) {
+    // Trier les joueurs par score
+    const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
+    const leader = sortedPlayers[0];
+    const loser = sortedPlayers[sortedPlayers.length - 1];
+    
+    // Écart important entre le premier et le dernier ?
+    const gap = loser.totalScore - leader.totalScore;
+    
+    if (gap > 30) {
+      return {
+        comment: `${getRandomElementFromArray([
+          `${loser.name} est à ${gap} points derrière ${leader.name}. À ce stade, c'est plus un jeu, c'est une leçon d'humilité !`,
+          `${leader.name} mène avec ${gap} points d'avance sur ${loser.name}. C'est comme un match PSG-Dunkerque, y'a plus de suspense !`,
+          `${gap} points d'écart entre ${leader.name} et ${loser.name} ! C'est ce qu'on appelle la différence entre talent et... euh... participation.`
+        ])}`,
+        type: 'sarcasm'
+      };
+    } else if (gap < 5 && players[0].rounds.length > 2) {
+      return {
+        comment: `${getRandomElementFromArray([
+          `${leader.name} et ${loser.name} sont au coude à coude ! Ça va se jouer à qui a le plus de chance... euh je veux dire de talent !`,
+          `Seulement ${gap} points d'écart entre tous les joueurs ! Soit vous êtes tous très bons, soit vous êtes tous... enfin bref, c'est serré !`,
+          `Match ultra serré ! ${gap} points d'écart à peine. Je sens qu'on va avoir droit à des coups bas dans les prochaines manches !`
+        ])}`,
+        type: 'encouragement'
+      };
+    }
+  }
+
+  // 25% de chance d'avoir un commentaire aléatoire drôle
+  if (Math.random() < 0.25) {
+    return getRandomElementFromArray(randomJokeComments);
+  }
+
+  // Par défaut, donner un commentaire informatif sur l'état du jeu
+  return {
+    comment: getInfoComment(players, roundHistory),
+    type: 'info'
+  };
 };
 
 // Commentaires pour une nouvelle partie
@@ -65,73 +123,67 @@ const newGameComments = [
 
 // Commentaires d'information sur l'état du jeu
 const getInfoComment = (players: Player[], roundHistory: { scores: number[], dutchPlayerId?: string }[]): string => {
+  if (players.length === 0) return "Ajoutez des joueurs pour commencer !";
+
   const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
   const leader = sortedPlayers[0];
-  const lastPlace = sortedPlayers[sortedPlayers.length - 1];
-  
-  const possibleComments = [
-    `${leader.name} est en tête avec ${leader.totalScore} points. Pas mal, mais est-ce que ça va durer ?`,
-    `${lastPlace.name} est dernier avec ${lastPlace.totalScore} points. Allez, remonte la pente !`,
-    `Déjà ${roundHistory.length} manches jouées. On est bien lancés !`,
-    `La moyenne des scores est de ${Math.round(players.reduce((acc, player) => acc + player.totalScore, 0) / players.length)} points.`,
-    `${players.filter(p => p.rounds.some(r => r.isDutch)).length} joueurs ont déjà fait un Dutch, pas mal !`
-  ];
-  
-  return getRandomFromArray(possibleComments);
-};
+  const runnerUp = sortedPlayers.length > 1 ? sortedPlayers[1] : null;
 
-// Commentaires humoristiques
-const getJokeComment = (players: Player[]): string => {
-  const jokes = [
-    "Si tu mélanges aussi mal les cartes que tu joues, on n'est pas sortis de l'auberge !",
-    "C'est comme au poker : il faut savoir bluffer... mais toi {player}, on voit tout sur ton visage !",
-    "Jouer comme ça, c'est comme manger une pizza à l'ananas : techniquement possible, mais pourquoi ?",
-    "Tu tiens tes cartes comme mon grand-père tient son smartphone : avec confusion et panique.",
-    "Si les cartes étaient des excuses, {player} serait champion du monde !",
-    "Avec cette stratégie, tu pourrais même perdre à un jeu de hasard contre un poisson rouge.",
-    "Quel suspense insoutenable ! J'ai vu des escargots plus rapides pour jouer leur tour."
-  ];
-  
-  return insertPlayerName(getRandomFromArray(jokes), players);
-};
-
-// Commentaires sarcastiques
-const getSarcasmComment = (players: Player[], roundHistory: { scores: number[], dutchPlayerId?: string }[]): string => {
-  // Trouver le joueur qui a le plus de points (donc le moins bon)
-  const worstPlayer = [...players].sort((a, b) => b.totalScore - a.totalScore)[0];
-  
-  // Trouver le joueur qui a pris le plus de points lors du dernier tour
-  let lastRoundLoser = null;
-  if (roundHistory.length > 0) {
-    const lastRound = roundHistory[roundHistory.length - 1];
-    const maxScoreIndex = lastRound.scores.indexOf(Math.max(...lastRound.scores));
-    lastRoundLoser = players[maxScoreIndex];
+  if (!leader.rounds || leader.rounds.length === 0) {
+    return "Première manche ! Que le meilleur gagne, ou le plus fourbe...";
   }
+
+  const currentRound = players[0].rounds.length;
   
-  const sarcasticComments = [
-    `Wow ${worstPlayer.name}, ${worstPlayer.totalScore} points ! Tu collectionnes les points comme d'autres collectionnent les succès.`,
-    `${lastRoundLoser ? lastRoundLoser.name : 'Quelqu\'un'} a dû confondre Dutch avec "prendre tous les points possibles". Stratégie audacieuse !`,
-    "Si le but était de perdre, certains d'entre vous seraient des génies absolus !",
-    "Je n'ai jamais vu quelqu'un autant aimer ramasser des cartes que {player}. C'est presque touchant.",
-    "Tu as une technique fascinante {player} : accumuler des points comme si c'était des Pokémons.",
-    "À ce stade, je ne sais pas si c'est de la malchance ou un talent particulier pour perdre.",
-    "Je commence à croire que certains d'entre vous confondent ce jeu avec un concours du plus grand score !"
-  ];
-  
-  return insertPlayerName(getRandomFromArray(sarcasticComments), players);
+  if (runnerUp) {
+    const diff = runnerUp.totalScore - leader.totalScore;
+    if (diff === 0) {
+      return `Égalité parfaite après ${currentRound} manches ! C'est tendu comme la corde d'un string !`;
+    } else {
+      return `${leader.name} mène avec ${diff} points d'avance après ${currentRound} manches. Rattrapez-le avant qu'il ne prenne la grosse tête !`;
+    }
+  }
+
+  return `${leader.name} est en tête après ${currentRound} manches. Ça doit être sa soirée... ou les autres sont juste mauvais !`;
 };
 
-// Commentaires d'encouragement
-const getEncouragementComment = (players: Player[]): string => {
-  const encouragements = [
-    "Allez {player}, la chance va tourner ! Ou pas, mais c'est le jeu !",
-    "N'oubliez pas d'annoncer 'Dutch' quand vous n'avez qu'une carte. Je dis ça, je dis rien...",
-    "Même si tu perds, rappelle-toi que ce n'est qu'un jeu. Un jeu où tout le monde va se moquer de toi, certes.",
-    "Les meilleurs joueurs savent quand faire semblant d'être nuls. C'est ta stratégie, {player} ?",
-    "Le vrai gagnant, c'est celui qui s'amuse le plus. Mais bon, gagner c'est quand même plus amusant.",
-    "Un Roi en main, c'est bien. Un As, c'est mieux. Une stratégie, c'est optionnel visiblement pour certains.",
-    "Rappelle-toi : ce n'est pas celui qui a le plus de cartes qui gagne. Je précise, on ne sait jamais."
-  ];
-  
-  return insertPlayerName(getRandomFromArray(encouragements), players);
+// Commentaires aléatoires drôles
+const randomJokeComments = [
+  { 
+    comment: "Tu sais que tu as le droit de regarder tes cartes hein ? Je dis ça parce que vu ton jeu, on pourrait en douter...", 
+    type: 'joke' 
+  },
+  { 
+    comment: "C'est comme au poker, sauf que tu ne peux pas bluffer. Enfin si, mais c'est toi qui va en subir les conséquences !", 
+    type: 'sarcasm' 
+  },
+  { 
+    comment: "Le Dutch c'est pas sorcier, faut juste de la chance, de la stratégie, et des amis qui jouent encore plus mal que toi.", 
+    type: 'joke' 
+  },
+  { 
+    comment: "Si tu regardes en l'air pendant que tu joues, c'est que soit ta stratégie est dans les nuages, soit tu cherches désespérément l'inspiration divine.", 
+    type: 'joke' 
+  },
+  { 
+    comment: "Conseil pro : si tu bois assez, tu te ficheras complètement de ton score. C'est ma technique préférée !", 
+    type: 'joke' 
+  },
+  { 
+    comment: "Si quelqu'un vous dit qu'il a une stratégie infaillible au Dutch, c'est soit un génie, soit un menteur, soit les deux.", 
+    type: 'sarcasm' 
+  },
+  { 
+    comment: "Les cartes ne sont pas contre toi, elles sont juste en faveur de quelqu'un d'autre !", 
+    type: 'sarcasm' 
+  },
+  { 
+    comment: "N'oubliez pas : la règle la plus importante du Dutch, c'est de ne pas renverser les chips et la bière sur les cartes !", 
+    type: 'joke' 
+  }
+];
+
+// Fonction utilitaire pour obtenir un élément aléatoire d'un tableau
+const getRandomElementFromArray = <T>(array: T[]): T => {
+  return array[Math.floor(Math.random() * array.length)];
 };

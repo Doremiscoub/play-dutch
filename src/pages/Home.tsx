@@ -36,13 +36,13 @@ const Home: React.FC = () => {
   // SVG du sparkle pour le logo Dutch
   const SparkleIcon = () => (
     <svg 
-      width="24" 
-      height="24" 
+      width="28" 
+      height="28" 
       viewBox="0 0 24 24" 
       fill="none" 
       xmlns="http://www.w3.org/2000/svg"
       className="inline-block ml-1 translate-y-[-5px] rotate-12"
-      style={{ position: 'absolute', top: '0px', right: '-15px' }}
+      style={{ position: 'absolute', top: '-2px', right: '-18px' }}
     >
       <path 
         d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" 
@@ -77,7 +77,7 @@ const Home: React.FC = () => {
       {/* Contenu principal */}
       <div className="relative z-10 container mx-auto px-4 py-16 flex flex-col min-h-screen">
         <header className="mb-auto">
-          {/* ThemeSelector supprimé d'ici */}
+          {/* Supprimer le sélecteur de thème en haut à droite */}
         </header>
         
         <main className="flex-1 flex flex-col items-center justify-center text-center">

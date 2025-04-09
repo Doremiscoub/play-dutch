@@ -2,7 +2,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Player } from '@/types';
-import { ArrowUp, ArrowDown, Medal, TrendingDown, TrendingUp } from 'lucide-react';
+import { ChevronUp, ChevronDown, Sparkles, ThumbsUp } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 interface PlayerScoreCardProps {
@@ -13,83 +13,108 @@ interface PlayerScoreCardProps {
   warningThreshold?: number;
 }
 
-const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({ 
-  player, 
-  position, 
+const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
+  player,
+  position,
   isWinner = false,
   lastRoundScore,
   warningThreshold
 }) => {
-  const isCloseToLimit = warningThreshold && player.totalScore >= warningThreshold;
+  // Déterminer si le joueur est proche du seuil d'avertissement
+  const isNearThreshold = warningThreshold && player.totalScore >= warningThreshold;
   
-  // Déterminer si le score de la dernière manche est positif, négatif ou nul
-  const getScoreDirection = () => {
-    if (lastRoundScore === undefined) return null;
-    if (lastRoundScore > 0) return <TrendingUp className="h-4 w-4 text-red-500" />;
-    if (lastRoundScore < 0) return <TrendingDown className="h-4 w-4 text-green-500" />;
-    return null;
-  };
-
+  // Déterminer si le dernier score était bon ou mauvais
+  const isLastScoreGood = lastRoundScore !== undefined && lastRoundScore <= 5;
+  const isLastScoreBad = lastRoundScore !== undefined && lastRoundScore >= 10;
+  
+  // Style pour le graphe de progression des manches
+  const roundCount = player.rounds.length;
+  
   return (
-    <div className={`bg-white/70 backdrop-blur-sm rounded-xl border ${isWinner ? 'border-dutch-orange/40' : 'border-white/50'} shadow-sm p-4 flex items-center gap-3 transition-all ${isCloseToLimit ? 'bg-red-50' : ''}`}>
-      {/* Position */}
-      <div className={`w-8 h-8 flex-shrink-0 rounded-full ${getBgColor(position)} flex items-center justify-center text-white font-semibold text-sm`}>
-        {position}
-      </div>
-      
-      {/* Nom et informations */}
-      <div className="flex-grow">
-        <div className="flex items-center justify-between">
-          <h3 className="font-medium text-gray-800 flex items-center">
-            {player.name}
-            {isWinner && (
-              <span className="ml-1">
-                <Medal className="h-4 w-4 text-dutch-orange inline-block" />
+    <div className={`
+      p-4 rounded-2xl border transition-all
+      ${isWinner ? 'bg-dutch-purple/10 border-dutch-purple/30' : 'bg-white/70 border-white/50'}
+      ${isNearThreshold ? 'bg-dutch-orange/10 border-dutch-orange/30' : ''}
+    `}>
+      <div className="flex items-center gap-3">
+        {/* Position */}
+        <div className={`
+          h-8 w-8 rounded-full flex items-center justify-center text-white font-bold
+          ${position === 1 ? 'bg-dutch-purple' : position === 2 ? 'bg-blue-500' : position === 3 ? 'bg-dutch-orange' : 'bg-gray-400'}
+        `}>
+          {position}
+        </div>
+        
+        {/* Informations du joueur */}
+        <div className="flex-1">
+          <h3 className="font-semibold text-gray-800">{player.name}</h3>
+          
+          {/* Statistiques simples */}
+          <div className="flex text-xs text-gray-500 mt-1 gap-2">
+            <span>{player.rounds.length || 0} manches</span>
+            {player.stats?.dutchCount ? (
+              <span className="flex items-center">
+                <Sparkles className="h-3 w-3 mr-0.5 text-dutch-purple" />
+                {player.stats.dutchCount} Dutch
               </span>
-            )}
-          </h3>
-          <div className="flex items-center gap-1">
-            {getScoreDirection()}
-            <span className={`font-semibold ${isCloseToLimit ? 'text-red-600' : 'text-gray-700'}`}>{player.totalScore}</span>
-            {isCloseToLimit && (
-              <Badge variant="destructive" className="ml-1 text-xs">
-                Proche limite
-              </Badge>
-            )}
+            ) : null}
           </div>
         </div>
         
-        {/* Statistiques */}
-        <div className="mt-1 flex items-center text-xs gap-2 text-gray-500">
-          <span>{player.rounds ? player.rounds.length : 0} manches</span>
-          <span>•</span>
-          <span>
-            {player.rounds && player.rounds.some(round => round.isDutch) ? 
-              `${player.rounds.filter(round => round.isDutch).length} Dutch` : 
-              'Pas de Dutch'}
-          </span>
-          {lastRoundScore !== undefined && (
-            <>
-              <span>•</span>
-              <span className={`${lastRoundScore > 0 ? 'text-red-500' : lastRoundScore < 0 ? 'text-green-500' : ''}`}>
-                Dernier: {lastRoundScore > 0 ? `+${lastRoundScore}` : lastRoundScore}
+        {/* Score */}
+        <div className="text-right">
+          <div className="flex items-center gap-1">
+            <span className={`text-xl font-bold ${isNearThreshold ? 'text-dutch-orange' : 'text-gray-800'}`}>
+              {player.totalScore}
+            </span>
+            
+            {/* Indicateur de changement de score */}
+            {lastRoundScore !== undefined && (
+              <div className="flex flex-col items-center">
+                {isLastScoreGood ? (
+                  <Badge variant="outline" className="text-xs px-1 py-0 bg-green-50 text-green-600 border-green-200">
+                    <ChevronDown className="h-3 w-3 mr-0.5" />
+                    {lastRoundScore}
+                  </Badge>
+                ) : isLastScoreBad ? (
+                  <Badge variant="outline" className="text-xs px-1 py-0 bg-red-50 text-red-600 border-red-200">
+                    <ChevronUp className="h-3 w-3 mr-0.5" />
+                    {lastRoundScore}
+                  </Badge>
+                ) : (
+                  <Badge variant="outline" className="text-xs px-1 py-0 bg-gray-50 text-gray-600 border-gray-200">
+                    {lastRoundScore}
+                  </Badge>
+                )}
+              </div>
+            )}
+          </div>
+          
+          {/* Affichage des statistiques supplémentaires */}
+          {player.stats?.streakInfo?.current > 1 && (
+            <div className="text-xs flex items-center justify-end mt-1">
+              <ThumbsUp className="h-3 w-3 mr-1 text-dutch-blue" />
+              <span className="text-dutch-blue font-medium">
+                {player.stats.streakInfo.current} en série
               </span>
-            </>
+            </div>
           )}
         </div>
       </div>
+      
+      {/* Graphique simplifié de progression des scores */}
+      {roundCount > 0 && (
+        <div className="mt-3 h-2 bg-gray-100 rounded-full overflow-hidden">
+          <motion.div 
+            className="h-full bg-gradient-to-r from-dutch-blue to-dutch-purple"
+            initial={{ width: 0 }}
+            animate={{ width: `${Math.min(100, (player.totalScore / (warningThreshold || 100)) * 100)}%` }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          />
+        </div>
+      )}
     </div>
   );
-};
-
-// Fonction pour obtenir la couleur d'arrière-plan en fonction de la position
-const getBgColor = (position: number): string => {
-  switch(position) {
-    case 1: return 'bg-dutch-orange';
-    case 2: return 'bg-dutch-purple';
-    case 3: return 'bg-dutch-blue';
-    default: return 'bg-gray-500';
-  }
 };
 
 export default PlayerScoreCard;

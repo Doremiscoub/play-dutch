@@ -27,7 +27,7 @@ const SignIn: React.FC = () => {
           </Button>
         </Link>
         
-        <div className="bg-white/70 backdrop-blur-md rounded-3xl shadow-lg border border-white/40 p-1">
+        <div className="bg-white/70 backdrop-blur-md rounded-3xl shadow-lg border border-white/40 p-6">
           <ClerkSignIn 
             appearance={{
               variables: {

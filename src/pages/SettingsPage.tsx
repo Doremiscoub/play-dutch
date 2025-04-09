@@ -6,6 +6,8 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import PageLayout from '@/components/PageLayout';
 import { SignOutButton, useUser } from '@clerk/clerk-react';
+import { ArrowLeft } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { toast } from 'sonner';
 
@@ -33,58 +35,80 @@ const SettingsPage = () => {
   };
 
   return (
-    <PageLayout title="Réglages" subtitle="Personnalisez votre expérience" showBackButton={true}>
-      <div 
-        className="absolute inset-0"
-        style={{ 
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='24' height='24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M 0 0 L 24 0 M 0 0 L 0 24' stroke='%23DADADA' stroke-opacity='0.1' stroke-width='1' fill='none' /%3E%3C/svg%3E")`,
-          backgroundSize: '24px 24px'
-        }}
-      />
+    <PageLayout title="Réglages" subtitle="Personnalisez votre expérience de jeu" backgroundVariant="subtle">
+      <div className="flex justify-between items-center mb-6">
+        <Link to="/">
+          <Button variant="ghost" size="sm" className="flex items-center gap-1 text-gray-600 hover:text-gray-900">
+            <ArrowLeft className="h-4 w-4" />
+            Retour à l'accueil
+          </Button>
+        </Link>
+      </div>
 
-      <div className="p-4 space-y-8 max-w-lg mx-auto">
-        <div className="space-y-4 bg-white/50 backdrop-blur-md rounded-xl border border-white/40 p-4 shadow-sm">
-          <h2 className="text-lg font-semibold text-gray-800">Son</h2>
+      <div className="space-y-8">
+        {/* Réglages du son */}
+        <div className="vision-card p-6">
+          <h2 className="text-xl font-semibold mb-4 text-dutch-blue">Effets sonores</h2>
           <div className="flex items-center justify-between">
-            <Label htmlFor="sound">Effets sonores</Label>
-            <Switch id="sound" checked={soundEnabled} onCheckedChange={handleSoundToggle} />
+            <Label htmlFor="sound-toggle" className="cursor-pointer">Activer les sons du jeu</Label>
+            <Switch 
+              id="sound-toggle" 
+              checked={soundEnabled}
+              onCheckedChange={handleSoundToggle}
+            />
           </div>
         </div>
 
-        <div className="space-y-4 bg-white/50 backdrop-blur-md rounded-xl border border-white/40 p-4 shadow-sm">
-          <h2 className="text-lg font-semibold text-gray-800">Historique</h2>
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button variant="destructive">Effacer l'historique</Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Êtes-vous sûr(e) ?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  Cette action supprimera définitivement toutes les parties enregistrées.
-                  Cette action est irréversible.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel onClick={cancelResetHistory}>Annuler</AlertDialogCancel>
-                <AlertDialogAction onClick={confirmResetHistory}>Effacer</AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+        {/* Gestion des données */}
+        <div className="vision-card p-6">
+          <h2 className="text-xl font-semibold mb-4 text-dutch-blue">Gestion des données</h2>
+          <div className="space-y-4">
+            <div className="flex flex-col space-y-2">
+              <Button 
+                variant="outline" 
+                className="w-full justify-start text-red-500 hover:text-red-600 hover:bg-red-50"
+                onClick={handleResetHistory}
+              >
+                Effacer l'historique des parties
+              </Button>
+            </div>
+          </div>
         </div>
-        
+
+        {/* Compte */}
         {user && (
-          <div className="space-y-4 bg-white/50 backdrop-blur-md rounded-xl border border-white/40 p-4 shadow-sm">
-            <h2 className="text-lg font-semibold text-gray-800">Compte</h2>
-            <div className="flex items-center justify-between">
-              <p className="text-gray-800">Connecté en tant que {user.firstName} {user.lastName}</p>
-              <SignOutButton>
-                <Button variant="outline">Se déconnecter</Button>
-              </SignOutButton>
+          <div className="vision-card p-6">
+            <h2 className="text-xl font-semibold mb-4 text-dutch-blue">Compte</h2>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="font-medium">{user.fullName || user.username}</p>
+                  <p className="text-sm text-gray-500">{user.primaryEmailAddress?.emailAddress}</p>
+                </div>
+                <SignOutButton>
+                  <Button variant="outline">Déconnexion</Button>
+                </SignOutButton>
+              </div>
             </div>
           </div>
         )}
       </div>
+
+      {/* Confirmation de réinitialisation */}
+      <AlertDialog open={resetConfirmationOpen}>
+        <AlertDialogContent className="bg-white rounded-2xl border-white/50">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Effacer l'historique ?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Cette action supprimera définitivement l'historique de toutes vos parties. Cette action ne peut pas être annulée.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={cancelResetHistory} className="bg-gray-100 hover:bg-gray-200 text-gray-700">Annuler</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmResetHistory} className="bg-red-500 hover:bg-red-600 text-white">Effacer</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </PageLayout>
   );
 };
