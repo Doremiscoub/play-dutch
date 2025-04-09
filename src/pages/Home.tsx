@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Plus, History, BookOpen, Settings, LogIn, ExternalLink, Trophy } from 'lucide-react';
-import ThemeSelector from '@/components/ThemeSelector';
 import AnimatedBackground from '@/components/AnimatedBackground';
 import { useUser } from '@clerk/clerk-react';
 import { animationVariants } from '@/utils/animationUtils';
@@ -34,21 +33,22 @@ const Home: React.FC = () => {
     }
   };
 
-  // Sparkle SVG component
+  // SVG du sparkle pour le logo Dutch
   const SparkleIcon = () => (
     <svg 
-      width="16" 
-      height="16" 
+      width="24" 
+      height="24" 
       viewBox="0 0 24 24" 
       fill="none" 
       xmlns="http://www.w3.org/2000/svg"
-      className="ml-1 inline-block translate-y-[-2px]"
+      className="inline-block ml-1 translate-y-[-5px] rotate-12"
+      style={{ position: 'absolute', top: '0px', right: '-15px' }}
     >
       <path 
         d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" 
         fill="#F97316" 
         stroke="#F97316" 
-        strokeWidth="2" 
+        strokeWidth="1.5" 
         strokeLinecap="round" 
         strokeLinejoin="round"
       />
@@ -77,9 +77,7 @@ const Home: React.FC = () => {
       {/* Contenu principal */}
       <div className="relative z-10 container mx-auto px-4 py-16 flex flex-col min-h-screen">
         <header className="mb-auto">
-          <div className="flex justify-end">
-            <ThemeSelector />
-          </div>
+          {/* ThemeSelector supprimé d'ici */}
         </header>
         
         <main className="flex-1 flex flex-col items-center justify-center text-center">
@@ -90,8 +88,9 @@ const Home: React.FC = () => {
             transition={{ duration: 0.5 }}
             className="mb-12"
           >
-            <h1 className="text-5xl sm:text-6xl font-bold bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent mb-2">
-              Dutch <SparkleIcon />
+            <h1 className="text-6xl sm:text-7xl font-bold bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent mb-2 relative">
+              Dutch
+              <SparkleIcon />
             </h1>
             <p className="text-gray-600">Votre compagnon de jeu</p>
           </motion.div>

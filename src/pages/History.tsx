@@ -3,6 +3,9 @@ import React, { useState, useEffect } from 'react';
 import GameHistory from '@/components/GameHistory';
 import AnimatedBackground from '@/components/AnimatedBackground';
 import { Game } from '@/types';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const History: React.FC = () => {
   const [games, setGames] = useState<Game[]>([]);
@@ -27,6 +30,15 @@ const History: React.FC = () => {
       </div>
       
       <div className="relative z-10 container mx-auto px-4 py-8">
+        <div className="flex justify-between items-center mb-6">
+          <Link to="/">
+            <Button variant="ghost" size="sm" className="flex items-center gap-1 text-gray-600 hover:text-gray-900">
+              <ArrowLeft className="h-4 w-4" />
+              Retour à l'accueil
+            </Button>
+          </Link>
+        </div>
+        
         <h1 className="text-3xl font-semibold mb-8 bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">
           Historique des parties
         </h1>

@@ -1,8 +1,8 @@
+
 import React, { useState, useEffect } from 'react';
 import { Player } from '@/types';
 import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Card } from '@/components/ui/card';
 import { 
   AlertDialog, 
   AlertDialogAction, 
@@ -39,6 +39,7 @@ interface ScoreBoardProps {
   showGameEndConfirmation?: boolean;
   onConfirmEndGame?: () => void;
   onCancelEndGame?: () => void;
+  scoreLimit?: number;
 }
 
 const ScoreBoard: React.FC<ScoreBoardProps> = ({
@@ -50,7 +51,8 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
   isMultiplayer = false,
   showGameEndConfirmation = false,
   onConfirmEndGame,
-  onCancelEndGame
+  onCancelEndGame,
+  scoreLimit = 100
 }) => {
   const [view, setView] = useState<'list' | 'table'>('list');
   const [showAICommentator, setShowAICommentator] = useState<boolean>(true);
@@ -123,7 +125,10 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
             Tableau des scores
             <span className="ml-2 text-sm">✨</span>
           </h1>
-          <p className="text-gray-600">Manche {players.length > 0 ? players[0]?.rounds.length || 0 : 0}</p>
+          <p className="text-gray-600">
+            Manche {players.length > 0 ? players[0]?.rounds.length || 0 : 0}
+            {scoreLimit ? <span className="ml-2 text-dutch-purple"> | Limite: {scoreLimit} points</span> : ''}
+          </p>
         </div>
         
         {/* Onglets pour basculer entre les vues - toujours visible */}
@@ -182,6 +187,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                         position={index + 1}
                         isWinner={index === 0}
                         lastRoundScore={player.rounds.length > 0 ? player.rounds[player.rounds.length - 1].score : undefined}
+                        warningThreshold={scoreLimit ? scoreLimit * 0.8 : undefined}
                       />
                     </motion.div>
                   ))}

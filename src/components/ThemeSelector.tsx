@@ -1,10 +1,10 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Settings } from 'lucide-react';
 import { motion } from 'framer-motion';
 import GameSettings from './GameSettings';
 
+// Ce composant est maintenu pour compatibilité mais n'est plus utilisé sur la page d'accueil
 const ThemeSelector: React.FC = () => {
   return (
     <motion.div

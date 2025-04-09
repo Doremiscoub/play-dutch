@@ -1,7 +1,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import themeConfig from '@/config/theme';
+import { useTheme } from '@/hooks/use-theme';
 
 type AnimatedBackgroundVariant = 'default' | 'subtle' | 'minimal';
 
@@ -17,26 +17,27 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
   className = ''
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const { currentTheme } = useTheme();
   
-  // Configuration des points flottants basée sur le thème
+  // Configuration des points flottants
   const dotsConfig = {
     default: {
-      count: themeConfig.BACKGROUND_CONFIG.dots.count.default,
-      colors: themeConfig.BACKGROUND_CONFIG.dots.colors,
-      sizes: themeConfig.BACKGROUND_CONFIG.dots.sizes,
-      speed: themeConfig.BACKGROUND_CONFIG.dots.speed.default
+      count: 30,
+      colors: ['#A78BFA', '#FDBA74', '#6EE7B7', '#60A5FA'],
+      sizes: [2, 4, 6, 8],
+      speed: 0.4
     },
     subtle: {
-      count: themeConfig.BACKGROUND_CONFIG.dots.count.subtle,
-      colors: themeConfig.BACKGROUND_CONFIG.dots.colors,
-      sizes: themeConfig.BACKGROUND_CONFIG.dots.sizes.slice(0, 2), // Tailles plus petites
-      speed: themeConfig.BACKGROUND_CONFIG.dots.speed.subtle
+      count: 20,
+      colors: ['#A78BFA', '#FDBA74', '#6EE7B7', '#60A5FA'],
+      sizes: [2, 4],
+      speed: 0.3
     },
     minimal: {
-      count: themeConfig.BACKGROUND_CONFIG.dots.count.minimal,
-      colors: themeConfig.BACKGROUND_CONFIG.dots.colors.slice(0, 2), // Moins de couleurs
-      sizes: [themeConfig.BACKGROUND_CONFIG.dots.sizes[0]], // Une seule taille
-      speed: themeConfig.BACKGROUND_CONFIG.dots.speed.minimal
+      count: 10,
+      colors: ['#A78BFA', '#60A5FA'],
+      sizes: [2],
+      speed: 0.2
     }
   };
   
@@ -48,6 +49,8 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
     
+    const config = dotsConfig[variant];
+    
     // Ajuster la taille du canvas à la fenêtre
     const resizeCanvas = () => {
       const dpr = window.devicePixelRatio || 1;
@@ -58,151 +61,117 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
       ctx.scale(dpr, dpr);
     };
     
-    window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
     
-    // Créer les points - VisionOS style
-    const config = dotsConfig[variant];
-    const dots: { 
-      x: number; 
-      y: number; 
-      color: string; 
-      size: number; 
-      speedX: number;
-      speedY: number;
-      opacity: number;
-      pulsing: boolean;
-      pulseSpeed: number;
-    }[] = [];
+    // Créer les points
+    const dots = Array.from({ length: config.count }).map(() => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      size: config.sizes[Math.floor(Math.random() * config.sizes.length)],
+      color: config.colors[Math.floor(Math.random() * config.colors.length)],
+      speedX: (Math.random() - 0.5) * config.speed,
+      speedY: (Math.random() - 0.5) * config.speed,
+      opacity: 0.1 + Math.random() * 0.5
+    }));
     
-    for (let i = 0; i < config.count; i++) {
-      dots.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        color: config.colors[Math.floor(Math.random() * config.colors.length)],
-        size: parseFloat(config.sizes[Math.floor(Math.random() * config.sizes.length)]),
-        speedX: (Math.random() - 0.5) * config.speed,
-        speedY: (Math.random() - 0.5) * config.speed,
-        opacity: 0.3 + Math.random() * 0.5, // VisionOS style avec transparence variable
-        pulsing: Math.random() > 0.5, // Certains points pulsent
-        pulseSpeed: 0.005 + Math.random() * 0.01
-      });
-    }
+    // Animation
+    let animationFrameId: number;
     
-    // Animer les points avec pulsation douce
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
+      // Dessiner les points
       dots.forEach(dot => {
-        // Pulsation douce de l'opacité pour certains points
-        if (dot.pulsing) {
-          dot.opacity += dot.pulseSpeed;
-          if (dot.opacity >= 0.8 || dot.opacity <= 0.2) {
-            dot.pulseSpeed = -dot.pulseSpeed;
-          }
-        }
-        
+        ctx.globalAlpha = dot.opacity;
+        ctx.fillStyle = dot.color;
         ctx.beginPath();
         ctx.arc(dot.x, dot.y, dot.size, 0, Math.PI * 2);
-        ctx.fillStyle = dot.color.replace(')', `, ${dot.opacity})`).replace('rgb', 'rgba');
         ctx.fill();
         
-        // Mouvement lisse
+        // Déplacer les points
         dot.x += dot.speedX;
         dot.y += dot.speedY;
         
-        // Rebonds sur les bords avec effet doux
-        if (dot.x > window.innerWidth) {
-          dot.x = window.innerWidth;
-          dot.speedX = -Math.abs(dot.speedX);
-        } else if (dot.x < 0) {
-          dot.x = 0;
-          dot.speedX = Math.abs(dot.speedX);
-        }
-        
-        if (dot.y > window.innerHeight) {
-          dot.y = window.innerHeight;
-          dot.speedY = -Math.abs(dot.speedY);
-        } else if (dot.y < 0) {
-          dot.y = 0;
-          dot.speedY = Math.abs(dot.speedY);
-        }
+        // Rebondissement aux bords
+        if (dot.x < 0 || dot.x > canvas.width) dot.speedX *= -1;
+        if (dot.y < 0 || dot.y > canvas.height) dot.speedY *= -1;
       });
       
-      requestAnimationFrame(animate);
+      animationFrameId = requestAnimationFrame(animate);
     };
     
-    const animationId = requestAnimationFrame(animate);
+    animate();
     
     return () => {
       window.removeEventListener('resize', resizeCanvas);
-      cancelAnimationFrame(animationId);
+      cancelAnimationFrame(animationFrameId);
     };
   }, [variant]);
   
+  // Fond avec quadrillage léger
+  const gridStyle = {
+    backgroundImage: `url("data:image/svg+xml,%3Csvg width='24' height='24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M 0 0 L 24 0 M 0 0 L 0 24' stroke='%23DADADA' stroke-opacity='0.1' stroke-width='1' fill='none' /%3E%3C/svg%3E")`,
+    backgroundSize: '24px 24px',
+    position: 'absolute',
+    inset: 0,
+    zIndex: -1
+  } as React.CSSProperties;
+  
   return (
-    <div className={`absolute inset-0 overflow-hidden z-0 ${className}`}>
-      {/* Fond dégradé léger - iOS style */}
-      <div className="absolute inset-0 bg-gradient-to-b from-gray-50/80 to-white/90" />
-      
-      {/* Grille subtile - inspirée VisionOS */}
+    <div className={`absolute inset-0 overflow-hidden ${className}`}>
+      {/* Fond de couleur légère */}
       <div 
-        className="absolute inset-0"
-        style={{ 
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='${themeConfig.BACKGROUND_CONFIG.grid.size}' height='${themeConfig.BACKGROUND_CONFIG.grid.size}' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M 0 0 L ${themeConfig.BACKGROUND_CONFIG.grid.size} 0 M 0 0 L 0 ${themeConfig.BACKGROUND_CONFIG.grid.size}' stroke='%23${themeConfig.BACKGROUND_CONFIG.grid.color.substring(1)}' stroke-opacity='${themeConfig.BACKGROUND_CONFIG.grid.opacity}' stroke-width='1' fill='none' /%3E%3C/svg%3E")`,
-          backgroundSize: themeConfig.BACKGROUND_CONFIG.grid.size
-        }}
+        className="absolute inset-0 bg-gradient-to-b from-gray-50 to-white"
+        style={{ zIndex: -3 }}
       />
       
-      {/* Points flottants style VisionOS */}
-      <canvas 
-        ref={canvasRef} 
+      {/* Quadrillage léger */}
+      <div style={gridStyle} />
+      
+      {/* Canvas pour les points flottants */}
+      <canvas
+        ref={canvasRef}
         className="absolute inset-0 z-0"
+        style={{ zIndex: -2 }}
       />
       
-      {/* Vagues fluides en bas - iOS 19 style avec animation */}
+      {/* Vagues en bas */}
       {!hideWaves && (
         <>
-          <motion.div 
-            className="absolute bottom-0 left-0 right-0 z-0 origin-bottom"
-            style={{
-              height: '30vh',
-              background: themeConfig.BACKGROUND_CONFIG.waves.primaryColor,
+          <motion.div
+            className="absolute bottom-0 left-0 right-0 z-0"
+            style={{ 
+              height: '20%',
+              background: 'linear-gradient(to top left, rgba(233, 213, 255, 0.6), rgba(233, 213, 255, 0.2))',
+              borderTopLeftRadius: '100%',
+              borderTopRightRadius: '100%',
+              zIndex: -1
             }}
-            initial={{ 
-              borderTopLeftRadius: '65% 100%',
-              borderTopRightRadius: '35% 100%'
-            }}
-            animate={{ 
-              borderTopLeftRadius: ['65% 100%', '35% 100%', '65% 100%'],
-              borderTopRightRadius: ['35% 100%', '65% 100%', '35% 100%'],
-              y: [0, -5, 0],
+            animate={{
+              y: [0, -5, 0]
             }}
             transition={{
-              duration: themeConfig.BACKGROUND_CONFIG.waves.animationDuration,
+              duration: 8,
               repeat: Infinity,
               repeatType: 'reverse',
               ease: 'easeInOut'
             }}
           />
-          
-          <motion.div 
-            className="absolute bottom-0 left-0 right-0 z-0 origin-bottom"
-            style={{
-              height: '28vh',
-              background: themeConfig.BACKGROUND_CONFIG.waves.secondaryColor,
+          <motion.div
+            className="absolute bottom-0 left-0 right-0 z-0"
+            style={{ 
+              height: '15%',
+              background: 'linear-gradient(to top left, rgba(253, 230, 138, 0.4), rgba(253, 230, 138, 0.1))',
+              borderTopLeftRadius: '100%',
+              borderTopRightRadius: '100%',
+              zIndex: -1
             }}
-            initial={{ 
-              borderTopLeftRadius: '40% 100%',
-              borderTopRightRadius: '60% 100%'
-            }}
-            animate={{ 
-              borderTopLeftRadius: ['40% 100%', '70% 100%', '40% 100%'],
-              borderTopRightRadius: ['60% 100%', '30% 100%', '60% 100%'],
-              y: [5, 0, 5],
+            animate={{
+              y: [0, -8, 0]
             }}
             transition={{
-              duration: themeConfig.BACKGROUND_CONFIG.waves.animationDuration * 0.8,
+              duration: 7,
               repeat: Infinity,
               repeatType: 'reverse',
               ease: 'easeInOut',

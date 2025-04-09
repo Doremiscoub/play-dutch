@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Player } from '@/types';
 import { Button } from '@/components/ui/button';
-import { Plus, Home, Share2 } from 'lucide-react';
+import { Plus, Home, Share2, ArrowRight } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { useNavigate } from 'react-router-dom';
 import AnimatedBackground from './AnimatedBackground';
@@ -13,12 +13,14 @@ import FunStats from './FunStats';
 interface GamePodiumProps {
   players: Player[];
   onNewGame?: () => void;
+  onContinueGame?: () => void;
   gameDuration?: string;
 }
 
 const GamePodium: React.FC<GamePodiumProps> = ({ 
   players, 
   onNewGame,
+  onContinueGame,
   gameDuration = ''
 }) => {
   const navigate = useNavigate();
@@ -52,8 +54,10 @@ const GamePodium: React.FC<GamePodiumProps> = ({
     navigate('/');
   };
   
-  const handleShowDetails = () => {
-    // Implémenter ici la logique pour afficher plus de détails
+  const handleContinueGame = () => {
+    if (onContinueGame) {
+      onContinueGame();
+    }
   };
 
   return (
@@ -121,6 +125,19 @@ const GamePodium: React.FC<GamePodiumProps> = ({
             >
               <Plus className="mr-2 h-5 w-5" />
               Nouvelle partie
+            </Button>
+          </motion.div>
+          
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Button
+              onClick={handleContinueGame}
+              className="bg-gradient-to-r from-dutch-purple to-dutch-pink rounded-full px-6 py-6 text-white shadow-lg h-12"
+            >
+              <ArrowRight className="mr-2 h-5 w-5" />
+              Continuer la partie
             </Button>
           </motion.div>
           

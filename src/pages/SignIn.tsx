@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import AnimatedBackground from '@/components/AnimatedBackground';
-import PageLayout from '@/components/PageLayout';
 
 const SignIn: React.FC = () => {
   return (
@@ -14,15 +13,6 @@ const SignIn: React.FC = () => {
       <div className="absolute inset-0 overflow-hidden">
         <AnimatedBackground variant="default" />
       </div>
-      
-      {/* Quadrillage léger */}
-      <div 
-        className="absolute inset-0 z-0"
-        style={{ 
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='24' height='24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M 0 0 L 24 0 M 0 0 L 0 24' stroke='%23DADADA' stroke-opacity='0.1' stroke-width='1' fill='none' /%3E%3C/svg%3E")`,
-          backgroundSize: '24px 24px'
-        }}
-      />
       
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -40,6 +30,14 @@ const SignIn: React.FC = () => {
         <div className="bg-white/70 backdrop-blur-md rounded-3xl shadow-lg border border-white/40 p-1">
           <ClerkSignIn 
             appearance={{
+              variables: {
+                colorPrimary: "#0A84FF",
+                colorTextOnPrimaryBackground: "white",
+                colorTextSecondary: "#4B5563",
+                colorBackground: "transparent",
+                fontFamily: "SF Pro Text, SF Pro Display, system-ui, sans-serif",
+                borderRadius: "1rem"
+              },
               elements: {
                 rootBox: "w-full",
                 card: "bg-transparent shadow-none border-0 p-4",

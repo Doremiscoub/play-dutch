@@ -33,6 +33,7 @@ const GamePage: React.FC = () => {
   const [showGameEndConfirmation, setShowGameEndConfirmation] = useState<boolean>(false);
   const [soundEnabled, setSoundEnabled] = useLocalStorage('dutch_sound_enabled', true);
   const [gameStartTime, setGameStartTime] = useState<Date | null>(null);
+  const [scoreLimit, setScoreLimit] = useState<number>(100);
   const navigate = useNavigate();
   
   const playersWithStats = useMemo(() => {
@@ -46,7 +47,8 @@ const GamePage: React.FC = () => {
           players: playersWithStats,
           roundHistory,
           lastUpdated: new Date(),
-          gameStartTime: gameStartTime || new Date()
+          gameStartTime: gameStartTime || new Date(),
+          scoreLimit
         };
         localStorage.setItem('current_dutch_game', JSON.stringify(currentGame));
       } catch (error) {
@@ -54,7 +56,7 @@ const GamePage: React.FC = () => {
         toast.error("Erreur lors de la sauvegarde de la partie");
       }
     }
-  }, [gameState, playersWithStats, roundHistory, gameStartTime]);
+  }, [gameState, playersWithStats, roundHistory, gameStartTime, scoreLimit]);
 
   useEffect(() => {
     // Récupérer les joueurs depuis le setup si disponible
@@ -89,6 +91,9 @@ const GamePage: React.FC = () => {
       if (parsed.gameStartTime) {
         setGameStartTime(new Date(parsed.gameStartTime));
       }
+      if (parsed.scoreLimit) {
+        setScoreLimit(parsed.scoreLimit);
+      }
     }
   }, []);
 
@@ -109,6 +114,7 @@ const GamePage: React.FC = () => {
     setGameState('playing');
     setRoundHistory([]);
     setGameStartTime(new Date());
+    setScoreLimit(100); // Réinitialiser la limite de score
     
     localStorage.removeItem('current_dutch_game');
     
@@ -166,10 +172,11 @@ const GamePage: React.FC = () => {
       totalScore: player.totalScore + scores[index]
     }));
     
-    if (isGameOver(updatedPlayers)) {
+    // Vérifier si un joueur a dépassé la limite de score
+    if (isGameOver(updatedPlayers, scoreLimit)) {
       finishGame(scores, dutchPlayerId);
     }
-  }, [players, setGames, soundEnabled, gameStartTime]);
+  }, [players, setGames, soundEnabled, gameStartTime, scoreLimit]);
   
   const finishGame = useCallback((finalScores?: number[], dutchPlayerId?: string) => {
     const updatedPlayers = finalScores 
@@ -285,6 +292,22 @@ const GamePage: React.FC = () => {
   const handleNewGame = useCallback(() => {
     navigate('/game/setup');
   }, [navigate]);
+  
+  const handleContinueGame = useCallback(() => {
+    // Augmenter la limite de score et retourner au jeu
+    const newScoreLimit = scoreLimit + 100;
+    setScoreLimit(newScoreLimit);
+    
+    // Recréer les joueurs mais conserver leurs scores
+    const continuedPlayers = players.map(player => ({
+      ...player,
+    }));
+    
+    setPlayers(continuedPlayers);
+    setGameState('playing');
+    
+    toast.success(`Partie prolongée ! Nouvelle limite: ${newScoreLimit} points`);
+  }, [players, scoreLimit]);
 
   useEffect(() => {
     const savedGame = localStorage.getItem('current_dutch_game');
@@ -342,6 +365,7 @@ const GamePage: React.FC = () => {
               onConfirmEndGame={handleConfirmEndGame}
               onCancelEndGame={handleCancelEndGame}
               isMultiplayer={false}
+              scoreLimit={scoreLimit}
             />
           </motion.div>
         )}
@@ -356,6 +380,7 @@ const GamePage: React.FC = () => {
             <GamePodium 
               players={playersWithStats}
               onNewGame={handleNewGame}
+              onContinueGame={handleContinueGame}
               gameDuration={gameDuration}
             />
           </motion.div>

@@ -10,7 +10,7 @@ import { Toaster } from "sonner"
 
 // Utilisation d'une clé Clerk de développement pour tester - à remplacer en production
 const CLERK_PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY || 
-                               'pk_test_YmFsYW5jZWQtYnJlYW0tMjguY2xlcmsuYWNjb3VudHMuZGV2JA'
+                             'pk_test_YmFsYW5jZWQtYnJlYW0tMjguY2xlcmsuYWNjb3VudHMuZGV2JA'
 
 // Vérifier immédiatement si le mode hors ligne a déjà été activé précédemment
 const isOfflineMode = localStorage.getItem('clerk_auth_failed') === 'true';
@@ -55,7 +55,7 @@ const renderApp = () => {
       <React.StrictMode>
         <ThemeProvider>
           <App />
-          <Toaster position="top-center" />
+          <Toaster position="top-center" richColors />
         </ThemeProvider>
       </React.StrictMode>
     );
@@ -86,7 +86,7 @@ const renderApp = () => {
       >
         <ThemeProvider>
           <App />
-          <Toaster position="top-center" />
+          <Toaster position="top-center" richColors />
         </ThemeProvider>
       </ClerkProvider>
     </React.StrictMode>
