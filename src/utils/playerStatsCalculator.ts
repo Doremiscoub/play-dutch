@@ -10,17 +10,22 @@ export const calculatePlayerStats = (player: Player): PlayerStatistics => {
   
   if (roundCount === 0) {
     return {
-      average: 0,
+      averageScore: 0,
+      bestRound: null,
+      worstRound: null,
+      dutchCount: 0,
+      improvementRate: 0,
+      consistencyScore: 0,
+      winStreak: 0,
       highestRound: 0,
       lowestRound: 0,
-      dutchCount: 0,
       streakInfo: { current: 0, best: 0, type: 'none' }
     };
   }
   
   // Valeurs de base
   const totalScore = player.totalScore;
-  const average = roundCount > 0 ? totalScore / roundCount : 0;
+  const averageScore = roundCount > 0 ? totalScore / roundCount : 0;
   const scores = rounds.map(r => r.score);
   const highestRound = Math.max(...scores);
   const lowestRound = Math.min(...scores);
@@ -60,10 +65,15 @@ export const calculatePlayerStats = (player: Player): PlayerStatistics => {
   const bestStreak = Math.max(bestPositiveStreak, bestNegativeStreak);
   
   return {
-    average: parseFloat(average.toFixed(1)),
+    averageScore: parseFloat(averageScore.toFixed(1)),
+    bestRound: highestRound,
+    worstRound: lowestRound,
+    dutchCount,
+    improvementRate: 0, // À implémenter selon les besoins
+    consistencyScore: 0, // À implémenter selon les besoins
+    winStreak: bestPositiveStreak,
     highestRound,
     lowestRound,
-    dutchCount,
     streakInfo: {
       current: currentStreak,
       best: bestStreak,

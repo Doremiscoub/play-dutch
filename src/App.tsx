@@ -24,8 +24,8 @@ const App = () => {
     <Router>
       <Routes>
         {/* Pages d'authentification */}
-        <Route path="/sign-in" element={<SignIn routing="path" />} />
-        <Route path="/sign-up" element={<SignUp routing="path" />} />
+        <Route path="/sign-in" element={<SignIn routing="path" path="/sign-in" />} />
+        <Route path="/sign-up" element={<SignUp routing="path" path="/sign-up" />} />
         
         {/* Pages principales */}
         <Route path="/" element={<Home />} />

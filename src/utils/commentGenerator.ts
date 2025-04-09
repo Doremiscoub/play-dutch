@@ -57,11 +57,11 @@ const insertPlayerName = (message: string, players: Player[]): string => {
 
 // Commentaires pour une nouvelle partie
 const newGameComments = [
-  { comment: "C'est parti ! Qui sera le plus malin ce soir ?", type: 'encouragement' },
-  { comment: "Dutch time ! Préparez vos bluffs et vos stratégies !", type: 'encouragement' },
-  { comment: "Nouvelle partie, nouvelles chances de ridiculiser tes potes !", type: 'joke' },
-  { comment: "Les cartes sont distribuées. Que le moins nul gagne !", type: 'sarcasm' }
-] as const;
+  { comment: "C'est parti ! Qui sera le plus malin ce soir ?", type: 'encouragement' as CommentType },
+  { comment: "Dutch time ! Préparez vos bluffs et vos stratégies !", type: 'encouragement' as CommentType },
+  { comment: "Nouvelle partie, nouvelles chances de ridiculiser tes potes !", type: 'joke' as CommentType },
+  { comment: "Les cartes sont distribuées. Que le moins nul gagne !", type: 'sarcasm' as CommentType }
+];
 
 // Commentaires d'information sur l'état du jeu
 const getInfoComment = (players: Player[], roundHistory: { scores: number[], dutchPlayerId?: string }[]): string => {

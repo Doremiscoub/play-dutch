@@ -1,3 +1,4 @@
+
 export interface Player {
   id: string;
   name: string;
@@ -7,13 +8,20 @@ export interface Player {
 }
 
 export interface PlayerStatistics {
+  averageScore: number;
   bestRound: number | null;
   dutchCount: number;
-  averageScore: number;
   worstRound: number | null;
   improvementRate: number;
   consistencyScore: number;
   winStreak: number;
+  highestRound?: number;
+  lowestRound?: number;
+  streakInfo?: {
+    current: number;
+    best: number;
+    type: 'positive' | 'negative' | 'none';
+  };
 }
 
 export interface Game {
