@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageCircle, Bot, Sparkles, BrainCircuit } from 'lucide-react';
+import { MessageCircle, Bot, Sparkles, BrainCircuit, Flag, Megaphone } from 'lucide-react';
 import { Player } from '@/types';
 import { getRandomComment } from '@/utils/commentGenerator';
 
@@ -13,7 +13,7 @@ interface AICommentatorProps {
 
 const AICommentator: React.FC<AICommentatorProps> = ({ players, roundHistory = [], className = '' }) => {
   const [comment, setComment] = useState('');
-  const [commentType, setCommentType] = useState<'info' | 'joke' | 'sarcasm' | 'encouragement'>('info');
+  const [commentType, setCommentType] = useState<'info' | 'joke' | 'sarcasm' | 'encouragement' | 'headline'>('info');
   const [isVisible, setIsVisible] = useState(true);
 
   // Générer un nouveau commentaire selon certains événements
@@ -46,6 +46,7 @@ const AICommentator: React.FC<AICommentatorProps> = ({ players, roundHistory = [
     joke: 'border-dutch-orange/30 bg-dutch-orange/5',
     sarcasm: 'border-dutch-purple/30 bg-dutch-purple/5',
     encouragement: 'border-dutch-green/30 bg-dutch-green/5',
+    headline: 'border-dutch-orange/30 bg-gradient-to-r from-dutch-orange/10 to-dutch-purple/10'
   };
 
   // Icône selon le type de commentaire
@@ -55,6 +56,7 @@ const AICommentator: React.FC<AICommentatorProps> = ({ players, roundHistory = [
       case 'joke': return <Sparkles className="h-5 w-5 text-dutch-orange" />;
       case 'sarcasm': return <Bot className="h-5 w-5 text-dutch-purple" />;
       case 'encouragement': return <BrainCircuit className="h-5 w-5 text-green-500" />;
+      case 'headline': return <Megaphone className="h-5 w-5 text-dutch-orange" />;
       default: return <MessageCircle className="h-5 w-5" />;
     }
   };
@@ -79,7 +81,11 @@ const AICommentator: React.FC<AICommentatorProps> = ({ players, roundHistory = [
             </div>
             <div className="flex-1">
               <h3 className="font-semibold text-gray-800 mb-1">Professeur Cartouche</h3>
-              <p className="text-gray-700">{comment}</p>
+              {commentType === 'headline' ? (
+                <p className="text-gray-800 font-bold text-lg">{comment}</p>
+              ) : (
+                <p className="text-gray-700">{comment}</p>
+              )}
             </div>
           </div>
         </motion.div>

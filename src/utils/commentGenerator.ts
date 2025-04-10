@@ -2,7 +2,7 @@
 import { Player } from '@/types';
 
 // Type pour les commentaires
-export type CommentType = 'info' | 'joke' | 'sarcasm' | 'encouragement';
+export type CommentType = 'info' | 'joke' | 'sarcasm' | 'encouragement' | 'headline';
 
 interface Comment {
   comment: string;
@@ -22,6 +22,11 @@ export const getRandomComment = (
   // Analyser l'état du jeu pour des commentaires contextuels
   const lastRoundIndex = roundHistory.length - 1;
   
+  // 20% de chance d'avoir un titre façon presse sportive
+  if (Math.random() < 0.2 && lastRoundIndex > 0) {
+    return getHeadlineComment(players, roundHistory);
+  }
+  
   if (lastRoundIndex >= 0) {
     // Obtenir le joueur qui a fait le meilleur score au dernier tour
     const lastRound = roundHistory[lastRoundIndex];
@@ -34,39 +39,45 @@ export const getRandomComment = (
     const playerWithMaxScoreIndex = lastRound.scores.indexOf(maxScoreLastRound);
     const playerWithMaxScore = players[playerWithMaxScoreIndex];
     
-    // 35% de chance de faire un commentaire sur un joueur spécifique
-    if (Math.random() < 0.35) {
+    // 50% de chance de faire un commentaire sur un joueur spécifique
+    if (Math.random() < 0.5) {
       if (minScoreLastRound === 0) {
         return {
-          comment: `${playerWithMinScore.name} a fait un Dutch ! ${getRandomElementFromArray([
-            "C'est beau comme Mbappé qui marque à la 90ème !",
-            "J'ai presque versé une larme d'émotion. Presque.",
-            "Est-ce que t'as triché ou t'as vraiment eu un coup de chance ?",
-            "Incroyable ! Je crois que même ton adversaire est impressionné, mais il fait genre que non.",
+          comment: `${getRandomElementFromArray([
+            `${playerWithMinScore.name} dodge comme un ninja ! 🔥 Des années de pratique ou juste un coup de bol ?`,
+            `DODGE PARFAIT pour ${playerWithMinScore.name} ! Les autres en PLS.`,
+            `${playerWithMinScore.name} met la clim à tout le monde avec ce dodge. Froid, très froid.`,
+            `Quand ${playerWithMinScore.name} dodge, le reste de la table transpire.`,
+            `${playerWithMinScore.name} : profession tireur d'élite. 0 points, 100% efficacité.`
           ])}`,
           type: 'joke'
         };
       } else if (minScoreLastRound <= 3) {
         return {
           comment: `${getRandomElementFromArray([
-            `${playerWithMinScore.name}, très solide ce tour ! Si seulement tu jouais comme ça depuis le début...`,
-            `Pas mal ${playerWithMinScore.name} ! C'était de la chance ou tu commences enfin à comprendre le jeu ?`,
-            `${playerWithMinScore.name} se réveille ! Il était temps après tous ces points accumulés !`,
-            `Joli coup ${playerWithMinScore.name} ! Garde ce rythme et tu auras peut-être une chance de ne pas finir dernier.`
+            `${playerWithMinScore.name} régale avec ce petit ${minScoreLastRound}. C'est propre, c'est net !`,
+            `${minScoreLastRound} points pour ${playerWithMinScore.name}. Joli coup, ou belle planche de bol ?`,
+            `${playerWithMinScore.name} a posé un ${minScoreLastRound} tranquille. Les autres peuvent fermer la boîte à sel.`,
+            `${playerWithMinScore.name} joue comme un pro sur ce tour. La différence entre talent et chance ? On s'en fiche !`
           ])}`,
-          type: 'sarcasm'
+          type: 'encouragement'
         };
       } else if (maxScoreLastRound >= 10) {
         return {
           comment: `${getRandomElementFromArray([
-            `Aïe aïe aïe ${playerWithMaxScore.name}... T'as pris cher ! Tu joues pour perdre ou c'est naturel ?`,
-            `${playerWithMaxScore.name} collectionne les points comme certains collectionnent les timbres. Dommage que le but soit d'en avoir le moins possible...`,
-            `Hey ${playerWithMaxScore.name}, tu sais que le but n'est PAS d'avoir le plus de points, hein ?`,
-            `${playerWithMaxScore.name}, on dirait que les cartes ne t'aiment pas. Ou alors c'est juste ton jeu qui est catastrophique.`
+            `Aïe aïe aïe ${playerWithMaxScore.name}... ${maxScoreLastRound} points ! On peut appeler ça un moment Titanic.`,
+            `${playerWithMaxScore.name} encaisse ${maxScoreLastRound} points. Y'a des soirs comme ça où il fallait rester au lit.`,
+            `${maxScoreLastRound} points d'un coup pour ${playerWithMaxScore.name}. Les cartes n'aiment pas tout le monde ce soir !`,
+            `Avec ${maxScoreLastRound} points, ${playerWithMaxScore.name} se rapproche dangereusement du titre de victime de la soirée.`
           ])}`,
           type: 'sarcasm'
         };
       }
+    }
+
+    // 30% de chance d'analyser une tendance sur plusieurs tours
+    if (Math.random() < 0.3 && lastRoundIndex >= 2) {
+      return getTrendComment(players, roundHistory);
     }
   }
 
@@ -83,18 +94,20 @@ export const getRandomComment = (
     if (gap > 30) {
       return {
         comment: `${getRandomElementFromArray([
-          `${loser.name} est à ${gap} points derrière ${leader.name}. À ce stade, c'est plus un jeu, c'est une leçon d'humilité !`,
-          `${leader.name} mène avec ${gap} points d'avance sur ${loser.name}. C'est comme un match PSG-Dunkerque, y'a plus de suspense !`,
-          `${gap} points d'écart entre ${leader.name} et ${loser.name} ! C'est ce qu'on appelle la différence entre talent et... euh... participation.`
+          `${leader.name} domine la compétition avec ${gap} points d'avance. Le reste ? Des figurants.`,
+          `${gap} points séparent ${leader.name} et ${loser.name}. À ce niveau-là, on parle plus de gouffre que d'écart.`,
+          `${leader.name} écrase la partie. ${gap} points d'écart, c'est presque gênant pour les autres.`,
+          `${gap} points d'écart entre le top et la cave. ${loser.name} en mode touriste dans cette partie.`
         ])}`,
         type: 'sarcasm'
       };
     } else if (gap < 5 && players[0].rounds.length > 2) {
       return {
         comment: `${getRandomElementFromArray([
-          `${leader.name} et ${loser.name} sont au coude à coude ! Ça va se jouer à qui a le plus de chance... euh je veux dire de talent !`,
-          `Seulement ${gap} points d'écart entre tous les joueurs ! Soit vous êtes tous très bons, soit vous êtes tous... enfin bref, c'est serré !`,
-          `Match ultra serré ! ${gap} points d'écart à peine. Je sens qu'on va avoir droit à des coups bas dans les prochaines manches !`
+          `${gap} points d'écart seulement ! La tension est palpable, comme dans un penalty à la 90ème.`,
+          `Match ultra serré ! ${gap} points entre les extrêmes. Ici, chaque carte compte double.`,
+          `Rien n'est joué avec ${gap} points d'écart. On est sur du combat de rue jusqu'à la dernière carte !`,
+          `${leader.name} et ${loser.name} se tiennent en ${gap} points. C'est le moment où les vrais se révèlent.`
         ])}`,
         type: 'encouragement'
       };
@@ -113,24 +126,146 @@ export const getRandomComment = (
   };
 };
 
+// Fonction pour générer un titre façon presse sportive
+const getHeadlineComment = (players: Player[], roundHistory: { scores: number[], dutchPlayerId?: string }[]): Comment => {
+  const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
+  const leader = sortedPlayers[0];
+  const loser = sortedPlayers[sortedPlayers.length - 1];
+  
+  // Trouver un joueur qui progresse bien sur les derniers tours
+  let risingPlayerName = "";
+  let biggestImprovement = 0;
+  
+  if (players.length > 0 && players[0].rounds.length >= 3) {
+    for (const player of players) {
+      const recentRounds = player.rounds.slice(-3);
+      if (recentRounds[2].score < recentRounds[0].score && 
+          recentRounds[2].score < recentRounds[1].score) {
+        const improvement = recentRounds[0].score - recentRounds[2].score;
+        if (improvement > biggestImprovement) {
+          biggestImprovement = improvement;
+          risingPlayerName = player.name;
+        }
+      }
+    }
+  }
+  
+  // Trouver un joueur qui a fait beaucoup de dodges
+  let dodgeMaster = "";
+  let maxDodges = 0;
+  
+  for (const player of players) {
+    const dodgeCount = player.rounds.filter(r => r.isDutch).length;
+    if (dodgeCount > maxDodges) {
+      maxDodges = dodgeCount;
+      dodgeMaster = player.name;
+    }
+  }
+  
+  const headlines: Comment[] = [
+    { comment: `${leader.name.toUpperCase()} RÈGNE EN MAÎTRE, LES AUTRES RAMASSENT LES MIETTES`, type: 'headline' },
+    { comment: `CARNAGE DE POINTS : LA PARTIE DÉRAPE COMPLÈTEMENT`, type: 'headline' },
+    { comment: `${loser.name.toUpperCase()} : LA DESCENTE AUX ENFERS CONTINUE`, type: 'headline' },
+    { comment: `ALERTE : HOLD-UP EN COURS À LA TABLE DE DUTCH`, type: 'headline' },
+    { comment: `${dodgeMaster ? dodgeMaster.toUpperCase() + " : " : ""}LE ROI DU DODGE FRAPPE ENCORE`, type: 'headline' },
+    { comment: `TENSION MAXIMALE : TOUT SE JOUERA À LA DERNIÈRE CARTE`, type: 'headline' },
+    { comment: `${risingPlayerName ? risingPlayerName.toUpperCase() + " : " : ""}LA REMONTADA EST EN MARCHE 🔥`, type: 'headline' },
+    { comment: `LA CHUTE LIBRE CONTINUE : QUI ARRÊTERA L'HÉMORRAGIE ?`, type: 'headline' },
+    { comment: `SCÉNARIO CATASTROPHE POUR ${loser.name.toUpperCase()}`, type: 'headline' },
+    { comment: `ON N'A JAMAIS VU ÇA : LA PARTIE QUI DÉFIE TOUTES LES STATISTIQUES`, type: 'headline' },
+  ];
+  
+  return getRandomElementFromArray(headlines);
+};
+
+// Fonction pour générer un commentaire sur les tendances
+const getTrendComment = (players: Player[], roundHistory: { scores: number[], dutchPlayerId?: string }[]): Comment => {
+  // Identifier les joueurs avec une bonne/mauvaise série
+  let streakPlayer = null;
+  let streakType = '';
+  let streakLength = 0;
+  
+  for (const player of players) {
+    if (player.rounds.length < 3) continue;
+    
+    // Regarder les 3 derniers tours
+    const lastThreeRounds = player.rounds.slice(-3);
+    
+    // Bonne série = scores bas consécutifs
+    if (lastThreeRounds.every(r => r.score <= 5)) {
+      if (3 > streakLength) {
+        streakPlayer = player;
+        streakType = 'good';
+        streakLength = 3;
+      }
+    }
+    // Mauvaise série = scores élevés consécutifs
+    else if (lastThreeRounds.every(r => r.score >= 8)) {
+      if (3 > streakLength) {
+        streakPlayer = player;
+        streakType = 'bad';
+        streakLength = 3;
+      }
+    }
+  }
+  
+  if (streakPlayer) {
+    if (streakType === 'good') {
+      return {
+        comment: `${getRandomElementFromArray([
+          `${streakPlayer.name} est en feu depuis 3 tours. On parle d'une masterclass en direct.`,
+          `Zone de confort activée pour ${streakPlayer.name}. 3 tours au top, les autres peuvent s'incliner.`,
+          `${streakPlayer.name} a trouvé son rythme. Quand ça veut pas sourire aux autres, ça sourit à quelqu'un !`,
+          `${streakPlayer.name} enchaîne les bons coups. Est-ce qu'on peut parler de skill sur un jeu de cartes ? Apparemment oui.`
+        ])}`,
+        type: 'encouragement'
+      };
+    } else {
+      return {
+        comment: `${getRandomElementFromArray([
+          `3 tours de galère pour ${streakPlayer.name}. À ce stade, c'est plus de la malchance, c'est un style de vie.`,
+          `${streakPlayer.name} continue sa collection de mauvais scores. Le karma a manifestement un compte à régler.`,
+          `La spirale infernale continue pour ${streakPlayer.name}. Les cartes ne mentent pas : c'est pas son soir.`,
+          `${streakPlayer.name} n'arrive pas à sortir la tête de l'eau. 3 tours catastrophiques, on attend le miracle.`
+        ])}`,
+        type: 'sarcasm'
+      };
+    }
+  }
+  
+  // Par défaut, commentaire sur la dynamique globale
+  const currentRound = players[0].rounds.length;
+  
+  return {
+    comment: `${getRandomElementFromArray([
+      `Tour ${currentRound} : la table est en feu, les scores s'envolent et les amitiés vacillent.`,
+      `Après ${currentRound} manches, on commence à voir qui bluff et qui joue vraiment.`,
+      `Le Dutch ne pardonne pas : ${currentRound} tours et déjà des écarts qui font mal aux stats.`,
+      `${currentRound} manches et toujours autant de drama à chaque carte tirée. Le Dutch dans toute sa splendeur !`
+    ])}`,
+    type: 'info'
+  };
+};
+
 // Commentaires pour une nouvelle partie
 const newGameComments: Comment[] = [
-  { comment: "C'est parti ! Qui sera le plus malin ce soir ?", type: 'encouragement' },
-  { comment: "Dutch time ! Préparez vos bluffs et vos stratégies !", type: 'encouragement' },
-  { comment: "Nouvelle partie, nouvelles chances de ridiculiser tes potes !", type: 'joke' },
-  { comment: "Les cartes sont distribuées. Que le moins nul gagne !", type: 'sarcasm' }
+  { comment: "C'est parti ! Que le meilleur tacticien gagne et que les autres prennent cher !", type: 'encouragement' },
+  { comment: "Dutch time ! La table est prête pour du sang, de la sueur et des larmes... de rire !", type: 'encouragement' },
+  { comment: "Nouvelle partie, nouvelles chances de ridiculiser tes potes. La soirée commence fort !", type: 'joke' },
+  { comment: "Les cartes sont distribuées. Et rappelez-vous : ce n'est qu'un jeu... pour les perdants !", type: 'sarcasm' },
+  { comment: "Messieurs-dames, attachez vos ceintures. Le vol Dutch Airlines est prêt au décollage !", type: 'joke' }
 ];
 
 // Commentaires d'information sur l'état du jeu
 const getInfoComment = (players: Player[], roundHistory: { scores: number[], dutchPlayerId?: string }[]): string => {
-  if (players.length === 0) return "Ajoutez des joueurs pour commencer !";
+  if (players.length === 0) return "Ajoutez des joueurs pour démarrer cette masterclass de Dutch !";
 
   const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
   const leader = sortedPlayers[0];
   const runnerUp = sortedPlayers.length > 1 ? sortedPlayers[1] : null;
 
   if (!leader.rounds || leader.rounds.length === 0) {
-    return "Première manche ! Que le meilleur gagne, ou le plus fourbe...";
+    return "Première manche ! Montrez-nous ce que vous avez dans le ventre. Ou dans les cartes, plutôt.";
   }
 
   const currentRound = players[0].rounds.length;
@@ -138,47 +273,57 @@ const getInfoComment = (players: Player[], roundHistory: { scores: number[], dut
   if (runnerUp) {
     const diff = runnerUp.totalScore - leader.totalScore;
     if (diff === 0) {
-      return `Égalité parfaite après ${currentRound} manches ! C'est tendu comme la corde d'un string !`;
+      return `Égalité parfaite après ${currentRound} manches ! C'est plus serré qu'un penalty en finale de Coupe du Monde.`;
+    } else if (diff <= 3) {
+      return `${leader.name} devance ${runnerUp.name} de seulement ${diff} points. C'est ce qu'on appelle manger dans la même assiette !`;
     } else {
-      return `${leader.name} mène avec ${diff} points d'avance après ${currentRound} manches. Rattrapez-le avant qu'il ne prenne la grosse tête !`;
+      return `${diff} points séparent ${leader.name} de la concurrence après ${currentRound} manches. La domination est en marche.`;
     }
   }
 
-  return `${leader.name} est en tête après ${currentRound} manches. Ça doit être sa soirée... ou les autres sont juste mauvais !`;
+  return `${leader.name} mène la danse après ${currentRound} manches. Soit c'est un crack, soit les autres sont en mode dimanche.`;
 };
 
 // Commentaires aléatoires drôles
 const randomJokeComments: Comment[] = [
   { 
-    comment: "Tu sais que tu as le droit de regarder tes cartes hein ? Je dis ça parce que vu ton jeu, on pourrait en douter...", 
+    comment: "Si les cartes parlaient, elles te diraient probablement de trouver un autre hobby...", 
     type: 'joke' 
   },
   { 
-    comment: "C'est comme au poker, sauf que tu ne peux pas bluffer. Enfin si, mais c'est toi qui va en subir les conséquences !", 
+    comment: "Le Dutch est comme la vie : 10% de skill, 90% de hasard et 100% de raisons de râler sur ses potes.", 
     type: 'sarcasm' 
   },
   { 
-    comment: "Le Dutch c'est pas sorcier, faut juste de la chance, de la stratégie, et des amis qui jouent encore plus mal que toi.", 
+    comment: "Les meilleurs joueurs de Dutch ne gagnent pas, ils font juste perdre les autres plus vite.", 
     type: 'joke' 
   },
   { 
-    comment: "Si tu regardes en l'air pendant que tu joues, c'est que soit ta stratégie est dans les nuages, soit tu cherches désespérément l'inspiration divine.", 
+    comment: "Cette intensité sur chaque carte... On se croirait au Poker Stars Championship, mais avec moins d'argent et plus de vannes.", 
     type: 'joke' 
   },
   { 
-    comment: "Conseil pro : si tu bois assez, tu te ficheras complètement de ton score. C'est ma technique préférée !", 
+    comment: "Si tu plisses les yeux en regardant tes cartes, ça ne changera pas les chiffres dessus. Crois-moi, j'ai testé.", 
     type: 'joke' 
   },
   { 
-    comment: "Si quelqu'un vous dit qu'il a une stratégie infaillible au Dutch, c'est soit un génie, soit un menteur, soit les deux.", 
+    comment: "Savais-tu que le Dutch a été inventé par un type qui voulait juste créer du drama entre amis ? Mission accomplie.", 
     type: 'sarcasm' 
   },
   { 
-    comment: "Les cartes ne sont pas contre toi, elles sont juste en faveur de quelqu'un d'autre !", 
+    comment: "Les vrais savent : c'est pas la carte qui compte, c'est comment tu fais croire aux autres que c'est une bonne carte.", 
+    type: 'joke' 
+  },
+  { 
+    comment: "La tension est palpable. On pourrait la couper au couteau. Ou avec une carte de Dutch, au choix.", 
     type: 'sarcasm' 
   },
   { 
-    comment: "N'oubliez pas : la règle la plus importante du Dutch, c'est de ne pas renverser les chips et la bière sur les cartes !", 
+    comment: "Ce moment de silence quand quelqu'un tire une carte... C'est beau comme un but à la 90ème.", 
+    type: 'joke' 
+  },
+  { 
+    comment: "Rappel du jour : gagner au Dutch ne vous donne aucun droit de supériorité. Sauf si vous battez le champion en titre, là c'est permis.", 
     type: 'joke' 
   }
 ];
