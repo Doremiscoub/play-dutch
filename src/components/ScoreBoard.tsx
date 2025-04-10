@@ -1,33 +1,21 @@
 
 import React, { useState, useEffect } from 'react';
-import { Player } from '@/types';
-import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  AlertDialog, 
-  AlertDialogAction, 
-  AlertDialogCancel, 
-  AlertDialogContent, 
-  AlertDialogDescription, 
-  AlertDialogFooter, 
-  AlertDialogHeader, 
-  AlertDialogTitle 
-} from '@/components/ui/alert-dialog';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { LayoutGrid, LayoutList, Info, Settings, ArrowLeft } from 'lucide-react';
+import { Player } from '@/types';
+import { useMediaQuery } from '@/hooks/use-media-query';
+import { toast } from 'sonner';
+import PageLayout from './PageLayout';
 import CustomScoreBoardButtons from './CustomScoreBoardButtons';
 import ScoreTableView from './ScoreTableView';
 import AICommentator from './AICommentator';
-import { Badge } from '@/components/ui/badge';
-import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
-import PlayerDetailedStats from './PlayerDetailedStats';
-import PlayerScoreCard from './PlayerScoreCard';
-import { Link } from 'react-router-dom';
-import PageLayout from './PageLayout';
-import { animationVariants, AnimatedContainer } from '@/utils/animationUtils';
-import { useMediaQuery } from '@/hooks/use-media-query';
-import { UI_CONFIG, COMMON_STYLES } from '@/config/uiConfig';
-import { toast } from 'sonner';
+
+// Import the newly created components
+import ScoreBoardHeader from './scoreboard/ScoreBoardHeader';
+import ScoreBoardTabs from './scoreboard/ScoreBoardTabs';
+import PlayerListView from './scoreboard/PlayerListView';
+import DesktopSidePanel from './scoreboard/DesktopSidePanel';
+import UndoConfirmationDialog from './scoreboard/UndoConfirmationDialog';
+import EndGameConfirmationDialog from './scoreboard/EndGameConfirmationDialog';
 
 interface ScoreBoardProps {
   players: Player[];
@@ -60,17 +48,17 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
   const [showUndoConfirmation, setShowUndoConfirmation] = useState<boolean>(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
   
-  // Trier les joueurs par score, du meilleur au pire
+  // Sort players by score, best to worst
   const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
   
-  // Sélectionner automatiquement le premier joueur pour les statistiques détaillées
+  // Auto-select the first player for detailed stats
   useEffect(() => {
     if (sortedPlayers.length > 0 && !selectedPlayer) {
       setSelectedPlayer(sortedPlayers[0]);
     }
   }, [sortedPlayers, selectedPlayer]);
   
-  // Gestionnaires pour l'annulation de la dernière manche
+  // Handle undo request
   const handleRequestUndo = () => {
     if (players.length === 0 || players[0].rounds.length === 0) {
       toast.error('Pas de manche à annuler !');
@@ -88,7 +76,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
     setShowUndoConfirmation(false);
   };
   
-  // Gestionnaire pour les stats détaillées d'un joueur
+  // Handle player selection for detailed stats
   const handlePlayerSelect = (player: Player) => {
     setSelectedPlayer(player);
   };
@@ -96,75 +84,26 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
   return (
     <PageLayout backgroundVariant="subtle" className="pb-32 max-w-5xl mx-auto px-3 sm:px-4 lg:px-6">
       <div className="relative z-10">
-        <div className="flex justify-between items-center mb-6">
-          <Link to="/">
-            <Button variant="ghost" size="sm" className="flex items-center gap-1 text-gray-600 hover:text-gray-900">
-              <ArrowLeft className="h-4 w-4" />
-              Accueil
-            </Button>
-          </Link>
-          
-          <div className="flex gap-2">
-            <Link to="/rules">
-              <Button variant="outline" size="sm" className="flex items-center gap-1 text-gray-600">
-                <Info className="h-4 w-4" />
-                <span className="hidden sm:inline">Règles</span>
-              </Button>
-            </Link>
-            <Link to="/settings">
-              <Button variant="outline" size="sm" className="flex items-center gap-1 text-gray-600">
-                <Settings className="h-4 w-4" />
-                <span className="hidden sm:inline">Réglages</span>
-              </Button>
-            </Link>
-          </div>
-        </div>
+        {/* Header with navigation buttons and title */}
+        <ScoreBoardHeader 
+          roundCount={players.length > 0 ? players[0]?.rounds.length || 0 : 0}
+          scoreLimit={scoreLimit}
+        />
         
-        <div className="text-center mb-6">
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">
-            Tableau des scores
-            <span className="ml-2 text-sm">✨</span>
-          </h1>
-          <p className="text-gray-600">
-            Manche {players.length > 0 ? players[0]?.rounds.length || 0 : 0}
-            {scoreLimit ? <span className="ml-2 text-dutch-purple"> | Limite: {scoreLimit} points</span> : ''}
-          </p>
-        </div>
+        {/* Tabs for switching between views */}
+        <ScoreBoardTabs 
+          currentView={view}
+          onViewChange={(newView) => setView(newView)}
+        />
         
-        {/* Onglets pour basculer entre les vues - toujours visible */}
-        <div className="flex justify-center mb-6">
-          <Tabs 
-            defaultValue="list" 
-            value={view}
-            onValueChange={(value) => setView(value as 'list' | 'table')} 
-            className="w-full max-w-2xl"
-          >
-            <TabsList className="grid grid-cols-2 mb-2">
-              <TabsTrigger value="list" className="flex items-center gap-1">
-                <LayoutList className="h-4 w-4" /> Classement
-              </TabsTrigger>
-              <TabsTrigger value="table" className="flex items-center gap-1">
-                <LayoutGrid className="h-4 w-4" /> Tableau détaillé
-              </TabsTrigger>
-            </TabsList>
-          </Tabs>
-        </div>
-        
-        {/* Layout desktop/mobile avec commentateur IA */}
+        {/* Layout desktop/mobile with AI commentator */}
         <div className={`${isDesktop ? 'md:flex md:gap-6' : ''}`}>
-          {/* Colonne gauche (classement ou tableau) */}
+          {/* Left column (ranking or table) */}
           <div className={`${isDesktop && view === 'list' ? 'md:w-3/5' : 'w-full'}`}>
             <AnimatePresence mode="wait">
               {view === 'list' && (
-                <motion.div
-                  key="list-view"
-                  initial="hidden"
-                  animate="show"
-                  exit={{ opacity: 0, transition: { duration: 0.2 } }}
-                  variants={animationVariants.staggerChildren}
-                  className="space-y-4"
-                >
-                  {/* Commentateur IA pour mobile (dans la vue liste) */}
+                <>
+                  {/* Mobile AI commentator */}
                   {!isDesktop && showAICommentator && (
                     <AICommentator 
                       players={players}
@@ -172,56 +111,15 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                       className="mb-4"
                     />
                   )}
-                
-                  {sortedPlayers.map((player, index) => (
-                    <motion.div
-                      key={player.id}
-                      variants={animationVariants.staggerItem}
-                      layoutId={`player-card-${player.id}`}
-                      whileHover={{ y: -3, boxShadow: "0 10px 25px -5px rgba(0,0,0,0.1)" }}
-                      className="cursor-pointer"
-                      onClick={() => isDesktop ? handlePlayerSelect(player) : null}
-                    >
-                      <PlayerScoreCard 
-                        player={player}
-                        position={index + 1}
-                        isWinner={index === 0}
-                        lastRoundScore={player.rounds.length > 0 ? player.rounds[player.rounds.length - 1].score : undefined}
-                        warningThreshold={scoreLimit ? scoreLimit * 0.8 : undefined}
-                      />
-                    </motion.div>
-                  ))}
                   
-                  {sortedPlayers.length === 0 && (
-                    <div className="text-center p-8 bg-white/70 rounded-2xl shadow-sm border border-white/50">
-                      <p className="text-gray-500">Aucun joueur pour le moment</p>
-                    </div>
-                  )}
-                  
-                  {/* Drawer pour les stats détaillées sur mobile */}
-                  {!isDesktop && (
-                    <div className="mt-8 flex justify-center">
-                      <Drawer>
-                        <DrawerTrigger asChild>
-                          <Button className="bg-white text-dutch-purple border border-dutch-purple/20 hover:bg-dutch-purple/10">
-                            Voir les statistiques détaillées
-                          </Button>
-                        </DrawerTrigger>
-                        <DrawerContent className="bg-white rounded-t-3xl p-4 max-h-[85vh]">
-                          <div className="space-y-6 overflow-y-auto max-h-[80vh] px-1 py-2">
-                            <h3 className="font-bold text-lg text-center text-dutch-purple">Statistiques détaillées</h3>
-                            {sortedPlayers.map((player) => (
-                              <div key={player.id} className="space-y-2">
-                                <h4 className="font-medium text-gray-700">{player.name}</h4>
-                                <PlayerDetailedStats player={player} />
-                              </div>
-                            ))}
-                          </div>
-                        </DrawerContent>
-                      </Drawer>
-                    </div>
-                  )}
-                </motion.div>
+                  {/* Player list view */}
+                  <PlayerListView 
+                    players={players}
+                    isDesktop={isDesktop}
+                    scoreLimit={scoreLimit}
+                    onPlayerSelect={handlePlayerSelect}
+                  />
+                </>
               )}
               
               {view === 'table' && (
@@ -241,43 +139,19 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
             </AnimatePresence>
           </div>
           
-          {/* Colonne droite (desktop uniquement - commentateur IA et stats du joueur sélectionné) */}
+          {/* Right column (desktop only - AI commentator and player stats) */}
           {isDesktop && view === 'list' && (
-            <motion.div 
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.4 }}
-              className="hidden md:block md:w-2/5 space-y-6"
-            >
-              {/* Commentateur IA */}
-              {showAICommentator && (
-                <AICommentator 
-                  players={players}
-                  roundHistory={roundHistory}
-                  className="mb-6"
-                />
-              )}
-              
-              {/* Section stats détaillées pour le joueur sélectionné */}
-              <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-4 border border-white/30 shadow-sm">
-                <h3 className="font-semibold text-gray-800 mb-3">
-                  {selectedPlayer ? `Statistiques de ${selectedPlayer.name}` : 'Sélectionnez un joueur pour voir ses statistiques'}
-                </h3>
-                
-                {selectedPlayer ? (
-                  <PlayerDetailedStats player={selectedPlayer} />
-                ) : (
-                  <div className="text-gray-500 text-sm italic p-4 text-center">
-                    Cliquez sur un joueur dans le classement pour afficher ses statistiques détaillées
-                  </div>
-                )}
-              </div>
-            </motion.div>
+            <DesktopSidePanel 
+              showAICommentator={showAICommentator}
+              players={players}
+              roundHistory={roundHistory}
+              selectedPlayer={selectedPlayer}
+            />
           )}
         </div>
       </div>
       
-      {/* Boutons d'action */}
+      {/* Action buttons */}
       <CustomScoreBoardButtons
         players={players}
         onAddRound={onAddRound}
@@ -285,39 +159,21 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
         onEndGame={onEndGame}
       />
       
-      {/* Confirmation de fin de partie */}
+      {/* End game confirmation dialog */}
       {showGameEndConfirmation && onConfirmEndGame && onCancelEndGame && (
-        <AlertDialog open={showGameEndConfirmation}>
-          <AlertDialogContent className="bg-white rounded-2xl border-white/50">
-            <AlertDialogHeader>
-              <AlertDialogTitle>Terminer la partie ?</AlertDialogTitle>
-              <AlertDialogDescription>
-                Êtes-vous sûr de vouloir terminer cette partie ? Cette action ne peut pas être annulée.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel onClick={onCancelEndGame} className="bg-gray-100 hover:bg-gray-200 text-gray-700">Annuler</AlertDialogCancel>
-              <AlertDialogAction onClick={onConfirmEndGame} className="bg-dutch-purple hover:bg-dutch-purple/90 text-white">Terminer</AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+        <EndGameConfirmationDialog 
+          isOpen={showGameEndConfirmation}
+          onConfirm={onConfirmEndGame}
+          onCancel={onCancelEndGame}
+        />
       )}
       
-      {/* Confirmation d'annulation de manche */}
-      <AlertDialog open={showUndoConfirmation}>
-        <AlertDialogContent className="bg-white rounded-2xl border-white/50">
-          <AlertDialogHeader>
-            <AlertDialogTitle>Annuler la dernière manche ?</AlertDialogTitle>
-            <AlertDialogDescription>
-              Êtes-vous sûr de vouloir annuler la dernière manche ? Les scores seront définitivement perdus.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel onClick={handleCancelUndo} className="bg-gray-100 hover:bg-gray-200 text-gray-700">Annuler</AlertDialogCancel>
-            <AlertDialogAction onClick={handleConfirmUndo} className="bg-dutch-orange hover:bg-dutch-orange/90 text-white">Confirmer</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      {/* Undo confirmation dialog */}
+      <UndoConfirmationDialog 
+        isOpen={showUndoConfirmation}
+        onConfirm={handleConfirmUndo}
+        onCancel={handleCancelUndo}
+      />
     </PageLayout>
   );
 };

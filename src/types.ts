@@ -32,6 +32,7 @@ export interface Game {
   winner: string;
   isMultiplayer?: boolean;
   gameCode?: string;
+  duration?: string;  // Added duration property
 }
 
 // Add these new props to the ScoreBoardProps interface
@@ -45,4 +46,5 @@ export interface ScoreBoardProps {
   showGameEndConfirmation?: boolean;
   onConfirmEndGame?: () => void;
   onCancelEndGame?: () => void;
+  scoreLimit?: number;
 }

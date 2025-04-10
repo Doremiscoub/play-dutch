@@ -134,7 +134,7 @@ export const useGameState = () => {
         })),
         winner,
         duration: gameDuration
-      };
+      } as Game;  // Type assertion to fix the error
       
       setGames(prev => [...prev, game]);
       toast.success('Partie sauvegardée dans l\'historique');
