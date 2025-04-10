@@ -20,7 +20,7 @@ const GamePage: React.FC = () => {
     handleRestart
   } = useGameState();
   
-  // Check for long inactivity (moved from inline to separate useEffect for clarity)
+  // Check for long inactivity
   useEffect(() => {
     const savedGame = localStorage.getItem('current_dutch_game');
     if (savedGame) {
