@@ -114,11 +114,11 @@ export const getRandomComment = (
 };
 
 // Commentaires pour une nouvelle partie
-const newGameComments = [
-  { comment: "C'est parti ! Qui sera le plus malin ce soir ?", type: 'encouragement' as CommentType },
-  { comment: "Dutch time ! Préparez vos bluffs et vos stratégies !", type: 'encouragement' as CommentType },
-  { comment: "Nouvelle partie, nouvelles chances de ridiculiser tes potes !", type: 'joke' as CommentType },
-  { comment: "Les cartes sont distribuées. Que le moins nul gagne !", type: 'sarcasm' as CommentType }
+const newGameComments: Comment[] = [
+  { comment: "C'est parti ! Qui sera le plus malin ce soir ?", type: 'encouragement' },
+  { comment: "Dutch time ! Préparez vos bluffs et vos stratégies !", type: 'encouragement' },
+  { comment: "Nouvelle partie, nouvelles chances de ridiculiser tes potes !", type: 'joke' },
+  { comment: "Les cartes sont distribuées. Que le moins nul gagne !", type: 'sarcasm' }
 ];
 
 // Commentaires d'information sur l'état du jeu
@@ -148,7 +148,7 @@ const getInfoComment = (players: Player[], roundHistory: { scores: number[], dut
 };
 
 // Commentaires aléatoires drôles
-const randomJokeComments = [
+const randomJokeComments: Comment[] = [
   { 
     comment: "Tu sais que tu as le droit de regarder tes cartes hein ? Je dis ça parce que vu ton jeu, on pourrait en douter...", 
     type: 'joke' 
