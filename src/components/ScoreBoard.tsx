@@ -94,7 +94,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
   };
 
   return (
-    <PageLayout backgroundVariant="subtle" className="pb-32">
+    <PageLayout backgroundVariant="subtle" className="pb-32 max-w-5xl mx-auto px-3 sm:px-4 lg:px-6">
       <div className="relative z-10">
         <div className="flex justify-between items-center mb-6">
           <Link to="/">
@@ -137,7 +137,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
             defaultValue="list" 
             value={view}
             onValueChange={(value) => setView(value as 'list' | 'table')} 
-            className="w-full max-w-md"
+            className="w-full max-w-2xl"
           >
             <TabsList className="grid grid-cols-2 mb-2">
               <TabsTrigger value="list" className="flex items-center gap-1">
@@ -153,7 +153,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
         {/* Layout desktop/mobile avec commentateur IA */}
         <div className={`${isDesktop ? 'md:flex md:gap-6' : ''}`}>
           {/* Colonne gauche (classement ou tableau) */}
-          <div className={`${isDesktop && view === 'list' ? 'md:w-2/3' : 'w-full'}`}>
+          <div className={`${isDesktop && view === 'list' ? 'md:w-3/5' : 'w-full'}`}>
             <AnimatePresence mode="wait">
               {view === 'list' && (
                 <motion.div
@@ -247,7 +247,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.4 }}
-              className="hidden md:block md:w-1/3 space-y-6"
+              className="hidden md:block md:w-2/5 space-y-6"
             >
               {/* Commentateur IA */}
               {showAICommentator && (
