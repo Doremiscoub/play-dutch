@@ -23,42 +23,42 @@ const PlayerListView: React.FC<PlayerListViewProps> = ({
 }) => {
   const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
 
+  // If no players, show a message
+  if (sortedPlayers.length === 0) {
+    return (
+      <div className="w-full p-8 text-center bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-white/70">
+        <p className="text-gray-500">Aucun joueur pour le moment</p>
+      </div>
+    );
+  }
+
   return (
-    <motion.div
-      key="list-view"
-      initial="hidden"
-      animate="show"
-      exit={{ opacity: 0, transition: { duration: 0.2 } }}
-      variants={animationVariants.staggerChildren}
-      className="space-y-4 z-20 relative w-full max-w-full"
-    >
-      {sortedPlayers.map((player, index) => (
-        <motion.div
-          key={player.id}
-          variants={animationVariants.staggerItem}
-          layoutId={`player-card-${player.id}`}
-          whileHover={{ y: -3, boxShadow: "0 10px 25px -5px rgba(0,0,0,0.1)" }}
-          className="cursor-pointer w-full"
-          onClick={() => isDesktop && onPlayerSelect ? onPlayerSelect(player) : null}
-        >
-          <PlayerScoreCard 
-            player={player}
-            position={index + 1}
-            isWinner={index === 0}
-            lastRoundScore={player.rounds.length > 0 ? player.rounds[player.rounds.length - 1].score : undefined}
-            warningThreshold={scoreLimit ? scoreLimit * 0.8 : undefined}
-          />
-        </motion.div>
-      ))}
+    <div className="w-full">
+      {/* Player score cards */}
+      <div className="space-y-4 w-full">
+        {sortedPlayers.map((player, index) => (
+          <motion.div
+            key={player.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: index * 0.1 }}
+            whileHover={{ y: -3, transition: { duration: 0.2 } }}
+            className="w-full"
+            onClick={() => isDesktop && onPlayerSelect ? onPlayerSelect(player) : null}
+          >
+            <PlayerScoreCard 
+              player={player}
+              position={index + 1}
+              isWinner={index === 0}
+              lastRoundScore={player.rounds.length > 0 ? player.rounds[player.rounds.length - 1].score : undefined}
+              warningThreshold={scoreLimit ? scoreLimit * 0.8 : undefined}
+            />
+          </motion.div>
+        ))}
+      </div>
       
-      {sortedPlayers.length === 0 && (
-        <div className="text-center p-8 bg-white/90 rounded-2xl shadow-md border border-white/50">
-          <p className="text-gray-500">Aucun joueur pour le moment</p>
-        </div>
-      )}
-      
-      {/* Drawer for mobile stats */}
-      {!isDesktop && (
+      {/* Mobile stats drawer */}
+      {!isDesktop && sortedPlayers.length > 0 && (
         <div className="mt-8 flex justify-center">
           <Drawer>
             <DrawerTrigger asChild>
@@ -80,7 +80,7 @@ const PlayerListView: React.FC<PlayerListViewProps> = ({
           </Drawer>
         </div>
       )}
-    </motion.div>
+    </div>
   );
 };
 

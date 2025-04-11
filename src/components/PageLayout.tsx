@@ -42,9 +42,9 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   const shouldShowBackButton = showBackButton !== undefined ? showBackButton : (isRulesPage || isHistoryPage);
   
   const content = (
-    <div className={`relative min-h-screen w-full flex flex-col ${className}`}>
+    <div className={`relative min-h-screen w-full flex flex-col overflow-x-hidden ${className}`}>
       {/* Fond animé */}
-      <div className="absolute inset-0 z-0 w-full h-full">
+      <div className="fixed inset-0 z-0 w-full h-full overflow-hidden">
         <AnimatedBackground variant={backgroundVariant} />
       </div>
       
@@ -84,8 +84,8 @@ const PageLayout: React.FC<PageLayoutProps> = ({
           </div>
         )}
         
-        {/* Contenu principal */}
-        <div className="flex-grow w-full">
+        {/* Contenu principal avec meilleure visibilité */}
+        <div className="flex-grow w-full relative z-10">
           {children}
         </div>
       </div>
@@ -98,7 +98,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
       animate="visible"
       exit="exit"
       variants={animationVariants.pageTransition}
-      className="min-h-screen flex flex-col w-full"
+      className="min-h-screen flex flex-col w-full overflow-hidden"
     >
       {content}
     </motion.div>

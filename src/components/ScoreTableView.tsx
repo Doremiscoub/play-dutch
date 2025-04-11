@@ -11,10 +11,14 @@ interface ScoreTableViewProps {
 }
 
 const ScoreTableView: React.FC<ScoreTableViewProps> = ({ players, roundHistory }) => {
-  if (!players.length) return null;
+  if (!players.length) return (
+    <div className="text-center p-8">
+      <p className="text-gray-500">Aucun joueur pour le moment</p>
+    </div>
+  );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Tableau des scores par manche */}
       <div>
         <h3 className="text-lg font-medium mb-3 text-gray-700">Scores par manche</h3>
@@ -30,7 +34,7 @@ const ScoreTableView: React.FC<ScoreTableViewProps> = ({ players, roundHistory }
           transition={{ duration: 0.3, delay: 0.2 }}
           className="w-full overflow-x-auto"
         >
-          <Table className="w-full bg-white rounded-xl overflow-hidden border border-white shadow-lg">
+          <Table className="w-full bg-white/95 rounded-xl overflow-hidden border shadow-lg">
             <TableHeader className="bg-dutch-blue/10">
               <TableRow>
                 <TableHead className="whitespace-nowrap font-semibold text-dutch-blue">Joueur</TableHead>
