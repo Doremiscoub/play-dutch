@@ -32,7 +32,7 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
   
   return (
     <div className={`
-      p-4 rounded-2xl border transition-all shadow-md
+      p-4 rounded-2xl border transition-all shadow-lg
       ${isWinner ? 'bg-dutch-purple/20 border-dutch-purple/50' : 'bg-white border-white/80'}
       ${isNearThreshold ? 'bg-dutch-orange/20 border-dutch-orange/40' : ''}
     `}>

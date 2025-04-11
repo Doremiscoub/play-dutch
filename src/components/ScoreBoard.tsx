@@ -82,7 +82,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
   };
 
   return (
-    <PageLayout backgroundVariant="subtle" className="pb-32 min-h-screen">
+    <PageLayout backgroundVariant="subtle" className="pb-32 min-h-screen w-full">
       <div className="container mx-auto px-3 sm:px-4 lg:px-6 max-w-5xl">
         <div className="relative z-10">
           {/* Header with navigation buttons and title */}

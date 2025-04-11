@@ -7,7 +7,6 @@ import ThemeSelector from './ThemeSelector';
 import { Button } from './ui/button';
 import { ArrowLeft } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import themeConfig from '@/config/theme';
 
 interface PageLayoutProps {
   children: React.ReactNode;
@@ -45,7 +44,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   const content = (
     <div className={`relative min-h-screen w-full flex flex-col ${className}`}>
       {/* Fond animé */}
-      <div className="absolute inset-0 z-0">
+      <div className="absolute inset-0 z-0 w-full h-full">
         <AnimatedBackground variant={backgroundVariant} />
       </div>
       
@@ -71,7 +70,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
       )}
       
       {/* Contenu de la page */}
-      <div className="relative z-10 py-6 px-4 sm:px-6 lg:px-8 flex-grow">
+      <div className="relative z-10 py-6 px-4 sm:px-6 lg:px-8 flex-grow w-full">
         {/* Titre et sous-titre optionnels */}
         {title && (
           <div className="text-center mb-8">
@@ -86,7 +85,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
         )}
         
         {/* Contenu principal */}
-        <div className="flex-grow">
+        <div className="flex-grow w-full">
           {children}
         </div>
       </div>
@@ -99,7 +98,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
       animate="visible"
       exit="exit"
       variants={animationVariants.pageTransition}
-      className="min-h-screen flex flex-col"
+      className="min-h-screen flex flex-col w-full"
     >
       {content}
     </motion.div>
