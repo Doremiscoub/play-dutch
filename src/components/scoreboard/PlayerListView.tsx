@@ -30,7 +30,7 @@ const PlayerListView: React.FC<PlayerListViewProps> = ({
       animate="show"
       exit={{ opacity: 0, transition: { duration: 0.2 } }}
       variants={animationVariants.staggerChildren}
-      className="space-y-4 z-10 relative"
+      className="space-y-4 z-20 relative w-full max-w-full"
     >
       {sortedPlayers.map((player, index) => (
         <motion.div
@@ -38,7 +38,7 @@ const PlayerListView: React.FC<PlayerListViewProps> = ({
           variants={animationVariants.staggerItem}
           layoutId={`player-card-${player.id}`}
           whileHover={{ y: -3, boxShadow: "0 10px 25px -5px rgba(0,0,0,0.1)" }}
-          className="cursor-pointer"
+          className="cursor-pointer w-full"
           onClick={() => isDesktop && onPlayerSelect ? onPlayerSelect(player) : null}
         >
           <PlayerScoreCard 
@@ -52,7 +52,7 @@ const PlayerListView: React.FC<PlayerListViewProps> = ({
       ))}
       
       {sortedPlayers.length === 0 && (
-        <div className="text-center p-8 bg-white/90 rounded-2xl shadow-sm border border-white/50">
+        <div className="text-center p-8 bg-white/90 rounded-2xl shadow-md border border-white/50">
           <p className="text-gray-500">Aucun joueur pour le moment</p>
         </div>
       )}

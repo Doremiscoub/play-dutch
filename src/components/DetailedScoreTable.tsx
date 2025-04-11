@@ -34,7 +34,7 @@ const DetailedScoreTable: React.FC<DetailedScoreTableProps> = ({ players, roundH
       transition={{ duration: 0.3 }}
       className="w-full overflow-x-auto"
     >
-      <Table className="w-full bg-white/90 backdrop-blur-md rounded-xl overflow-hidden border border-white/30 shadow-sm">
+      <Table className="w-full bg-white rounded-xl overflow-hidden border border-white/60 shadow-md">
         <TableHeader className="bg-dutch-blue/10">
           <TableRow>
             <TableHead className="whitespace-nowrap font-semibold text-dutch-blue">Joueur</TableHead>

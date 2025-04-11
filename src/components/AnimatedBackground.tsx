@@ -36,13 +36,13 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
   const currentConfig = config[variant];
 
   return (
-    <div className={`absolute inset-0 overflow-hidden ${className}`}>
+    <div className={`absolute inset-0 w-full h-full overflow-hidden ${className}`}>
       {/* Fond de base avec dégradé subtil */}
-      <div className="absolute inset-0 bg-gradient-to-b from-gray-50 to-white"></div>
+      <div className="absolute inset-0 w-full h-full bg-gradient-to-b from-gray-50 to-white"></div>
       
       {/* Grille de fond */}
       {currentConfig.grid && (
-        <div className="absolute inset-0" style={{
+        <div className="absolute inset-0 w-full h-full" style={{
           backgroundImage: 'linear-gradient(to right, rgba(220, 220, 230, 0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(220, 220, 230, 0.1) 1px, transparent 1px)',
           backgroundSize: '24px 24px'
         }}></div>
@@ -87,14 +87,16 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
 
       {/* Vagues fluides en bas d'écran */}
       {currentConfig.waves && (
-        <div className="absolute bottom-0 left-0 right-0 pointer-events-none">
+        <div className="absolute bottom-0 left-0 right-0 w-full pointer-events-none" style={{ height: '25vh', zIndex: 5 }}>
           <motion.div 
-            className="absolute bottom-0 left-0 right-0 h-[25vh]"
+            className="absolute bottom-0 left-0 right-0 w-full"
             style={{ 
+              height: '100%',
               background: `linear-gradient(to bottom right, transparent, ${currentConfig.waveColors[0]})`,
               borderTopLeftRadius: '50%',
               borderTopRightRadius: '50%',
               transformOrigin: 'bottom',
+              zIndex: 1
             }}
             animate={{
               y: [0, -5, 0],
@@ -108,12 +110,14 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
           />
           
           <motion.div 
-            className="absolute bottom-0 left-0 right-0 h-[20vh]"
+            className="absolute bottom-0 left-0 right-0 w-full"
             style={{ 
+              height: '80%',
               background: `linear-gradient(to bottom right, transparent, ${currentConfig.waveColors[1]})`,
               borderTopLeftRadius: '60%',
               borderTopRightRadius: '40%',
               transformOrigin: 'bottom',
+              zIndex: 2
             }}
             animate={{
               y: [0, -8, 0],
