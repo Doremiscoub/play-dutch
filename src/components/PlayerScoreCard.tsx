@@ -32,9 +32,9 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
   
   return (
     <div className={`
-      p-4 rounded-2xl border transition-all
-      ${isWinner ? 'bg-dutch-purple/10 border-dutch-purple/30' : 'bg-white/70 border-white/50'}
-      ${isNearThreshold ? 'bg-dutch-orange/10 border-dutch-orange/30' : ''}
+      p-4 rounded-2xl border transition-all shadow-sm
+      ${isWinner ? 'bg-dutch-purple/10 border-dutch-purple/30' : 'bg-white/90 border-white/50'}
+      ${isNearThreshold ? 'bg-dutch-orange/20 border-dutch-orange/30' : ''}
     `}>
       <div className="flex items-center gap-3">
         {/* Position */}
@@ -50,7 +50,7 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
           <h3 className="font-semibold text-gray-800">{player.name}</h3>
           
           {/* Statistiques simples */}
-          <div className="flex text-xs text-gray-500 mt-1 gap-2">
+          <div className="flex text-xs text-gray-600 mt-1 gap-2">
             <span>{player.rounds.length || 0} manches</span>
             {player.stats?.dutchCount ? (
               <span className="flex items-center">
@@ -72,17 +72,17 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
             {lastRoundScore !== undefined && (
               <div className="flex flex-col items-center">
                 {isLastScoreGood ? (
-                  <Badge variant="outline" className="text-xs px-1 py-0 bg-green-50 text-green-600 border-green-200">
+                  <Badge variant="outline" className="text-xs px-1 py-0 bg-green-100 text-green-600 border-green-200">
                     <ChevronDown className="h-3 w-3 mr-0.5" />
                     {lastRoundScore}
                   </Badge>
                 ) : isLastScoreBad ? (
-                  <Badge variant="outline" className="text-xs px-1 py-0 bg-red-50 text-red-600 border-red-200">
+                  <Badge variant="outline" className="text-xs px-1 py-0 bg-red-100 text-red-600 border-red-200">
                     <ChevronUp className="h-3 w-3 mr-0.5" />
                     {lastRoundScore}
                   </Badge>
                 ) : (
-                  <Badge variant="outline" className="text-xs px-1 py-0 bg-gray-50 text-gray-600 border-gray-200">
+                  <Badge variant="outline" className="text-xs px-1 py-0 bg-gray-100 text-gray-600 border-gray-200">
                     {lastRoundScore}
                   </Badge>
                 )}
@@ -104,7 +104,7 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
       
       {/* Graphique simplifié de progression des scores */}
       {roundCount > 0 && (
-        <div className="mt-3 h-2 bg-gray-100 rounded-full overflow-hidden">
+        <div className="mt-3 h-2 bg-gray-200 rounded-full overflow-hidden">
           <motion.div 
             className="h-full bg-gradient-to-r from-dutch-blue to-dutch-purple"
             initial={{ width: 0 }}

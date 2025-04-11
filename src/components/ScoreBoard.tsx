@@ -96,8 +96,8 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
           onViewChange={(newView) => setView(newView)}
         />
         
-        {/* Layout desktop/mobile with AI commentator */}
-        <div className={`${isDesktop ? 'md:flex md:gap-6' : ''}`}>
+        {/* Main content container with elevated z-index */}
+        <div className={`${isDesktop ? 'md:flex md:gap-6' : ''} relative z-20`}>
           {/* Left column (ranking or table) */}
           <div className={`${isDesktop && view === 'list' ? 'md:w-3/5' : 'w-full'}`}>
             <AnimatePresence mode="wait">
@@ -129,6 +129,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.3 }}
+                  className="relative z-20"
                 >
                   <ScoreTableView 
                     players={players}
@@ -151,13 +152,15 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
         </div>
       </div>
       
-      {/* Action buttons */}
-      <CustomScoreBoardButtons
-        players={players}
-        onAddRound={onAddRound}
-        onRequestUndoLastRound={handleRequestUndo}
-        onEndGame={onEndGame}
-      />
+      {/* Action buttons - elevated above background */}
+      <div className="relative z-20">
+        <CustomScoreBoardButtons
+          players={players}
+          onAddRound={onAddRound}
+          onRequestUndoLastRound={handleRequestUndo}
+          onEndGame={onEndGame}
+        />
+      </div>
       
       {/* End game confirmation dialog */}
       {showGameEndConfirmation && onConfirmEndGame && onCancelEndGame && (

@@ -30,8 +30,8 @@ const ScoreTableView: React.FC<ScoreTableViewProps> = ({ players, roundHistory }
           transition={{ duration: 0.3, delay: 0.2 }}
           className="w-full overflow-x-auto"
         >
-          <Table className="w-full bg-white/70 backdrop-blur-md rounded-xl overflow-hidden border border-white/30 shadow-sm">
-            <TableHeader className="bg-dutch-blue/5">
+          <Table className="w-full bg-white/90 backdrop-blur-md rounded-xl overflow-hidden border border-white/30 shadow-sm">
+            <TableHeader className="bg-dutch-blue/10">
               <TableRow>
                 <TableHead className="whitespace-nowrap font-semibold text-dutch-blue">Joueur</TableHead>
                 <TableHead className="text-center whitespace-nowrap font-medium text-dutch-blue/80">Total</TableHead>

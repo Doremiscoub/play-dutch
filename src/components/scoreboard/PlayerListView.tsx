@@ -30,7 +30,7 @@ const PlayerListView: React.FC<PlayerListViewProps> = ({
       animate="show"
       exit={{ opacity: 0, transition: { duration: 0.2 } }}
       variants={animationVariants.staggerChildren}
-      className="space-y-4"
+      className="space-y-4 z-10 relative"
     >
       {sortedPlayers.map((player, index) => (
         <motion.div
@@ -52,7 +52,7 @@ const PlayerListView: React.FC<PlayerListViewProps> = ({
       ))}
       
       {sortedPlayers.length === 0 && (
-        <div className="text-center p-8 bg-white/70 rounded-2xl shadow-sm border border-white/50">
+        <div className="text-center p-8 bg-white/90 rounded-2xl shadow-sm border border-white/50">
           <p className="text-gray-500">Aucun joueur pour le moment</p>
         </div>
       )}
