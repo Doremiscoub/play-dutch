@@ -1,9 +1,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageCircle, Bot, Sparkles, BrainCircuit, Flag, Megaphone } from 'lucide-react';
+import { MessageCircle, Bot, Sparkles, BrainCircuit, Megaphone } from 'lucide-react';
 import { Player } from '@/types';
 import { getRandomComment } from '@/utils/commentGenerator';
+import ProfessorAvatar from './ProfessorAvatar';
 
 interface AICommentatorProps {
   players: Player[];
@@ -15,6 +16,7 @@ const AICommentator: React.FC<AICommentatorProps> = ({ players, roundHistory = [
   const [comment, setComment] = useState('');
   const [commentType, setCommentType] = useState<'info' | 'joke' | 'sarcasm' | 'encouragement' | 'headline'>('info');
   const [isVisible, setIsVisible] = useState(true);
+  const [isSpeaking, setIsSpeaking] = useState(false);
 
   // Générer un nouveau commentaire selon certains événements
   useEffect(() => {
@@ -60,6 +62,31 @@ const AICommentator: React.FC<AICommentatorProps> = ({ players, roundHistory = [
       default: return <MessageCircle className="h-5 w-5" />;
     }
   };
+  
+  // Fonction de lecture à voix haute
+  const speakMessage = () => {
+    if (!isSpeaking && 'speechSynthesis' in window) {
+      setIsSpeaking(true);
+      const utterance = new SpeechSynthesisUtterance(comment);
+      
+      // Trouver une voix française si disponible
+      const voices = window.speechSynthesis.getVoices();
+      const frenchVoice = voices.find(voice => voice.lang.includes('fr'));
+      if (frenchVoice) {
+        utterance.voice = frenchVoice;
+      }
+      
+      utterance.pitch = 1.1; // Légèrement plus aigu
+      utterance.rate = 1.05; // Légèrement plus rapide
+      utterance.volume = 1;
+      
+      utterance.onend = () => {
+        setIsSpeaking(false);
+      };
+      
+      window.speechSynthesis.speak(utterance);
+    }
+  };
 
   return (
     <AnimatePresence>
@@ -76,11 +103,14 @@ const AICommentator: React.FC<AICommentatorProps> = ({ players, roundHistory = [
           className={`rounded-2xl border p-4 ${commentStyles[commentType]} ${className}`}
         >
           <div className="flex items-start gap-3">
-            <div className="mt-1 bg-white/50 backdrop-blur-sm p-2 rounded-full">
-              <CommentIcon />
+            <div className="mt-1 w-auto">
+              <ProfessorAvatar 
+                message={comment} 
+                onSpeakMessage={speakMessage}
+              />
             </div>
             <div className="flex-1">
-              <h3 className="font-semibold text-gray-800 mb-1">Professeur Cartouche</h3>
+              <h3 className="font-semibold text-gray-800 text-lg mb-1">Professeur Cartouche</h3>
               {commentType === 'headline' ? (
                 <p className="text-gray-800 font-bold text-lg">{comment}</p>
               ) : (

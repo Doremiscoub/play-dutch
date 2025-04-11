@@ -51,18 +51,18 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
       {/* Points flottants animés */}
       {currentConfig.dots && (
         <>
-          {[...Array(15)].map((_, i) => {
+          {[...Array(20)].map((_, i) => {
             const colors = ['#A78BFA20', '#FDBA7420', '#6EE7B720', '#60A5FA20'];
             const randomColor = colors[Math.floor(Math.random() * colors.length)];
             const size = Math.random() * 6 + 2;
             const x = Math.random() * 100;
-            const y = Math.random() * 100;
+            const y = Math.random() * 90; // Reduce to 90% to avoid getting under the waves
             const duration = Math.random() * 20 + 10;
             
             return (
               <motion.div
                 key={i}
-                className="absolute rounded-full"
+                className="absolute rounded-full shadow-sm"
                 style={{
                   width: size,
                   height: size,
@@ -87,20 +87,21 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
 
       {/* Vagues fluides en bas d'écran */}
       {currentConfig.waves && (
-        <div className="absolute bottom-0 left-0 right-0 w-full pointer-events-none" style={{ height: '25vh', zIndex: 5 }}>
+        <div className="absolute bottom-0 left-0 right-0 w-full pointer-events-none overflow-hidden" style={{ height: '20vh', zIndex: 5 }}>
+          {/* Première vague */}
           <motion.div 
             className="absolute bottom-0 left-0 right-0 w-full"
             style={{ 
               height: '100%',
               background: `linear-gradient(to bottom right, transparent, ${currentConfig.waveColors[0]})`,
-              borderTopLeftRadius: '50%',
-              borderTopRightRadius: '50%',
+              borderTopLeftRadius: '60%',
+              borderTopRightRadius: '70%',
               transformOrigin: 'bottom',
               zIndex: 1
             }}
             animate={{
               y: [0, -5, 0],
-              scaleX: [1, 1.02, 1],
+              scaleX: [1, 1.03, 1],
             }}
             transition={{
               duration: 10,
@@ -109,19 +110,20 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
             }}
           />
           
+          {/* Deuxième vague */}
           <motion.div 
             className="absolute bottom-0 left-0 right-0 w-full"
             style={{ 
-              height: '80%',
+              height: '70%',
               background: `linear-gradient(to bottom right, transparent, ${currentConfig.waveColors[1]})`,
-              borderTopLeftRadius: '60%',
-              borderTopRightRadius: '40%',
+              borderTopLeftRadius: '65%',
+              borderTopRightRadius: '55%',
               transformOrigin: 'bottom',
               zIndex: 2
             }}
             animate={{
               y: [0, -8, 0],
-              scaleX: [1, 1.03, 1],
+              scaleX: [1, 1.05, 1],
             }}
             transition={{
               duration: 12,

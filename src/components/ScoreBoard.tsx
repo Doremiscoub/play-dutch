@@ -82,13 +82,23 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
   };
 
   return (
-    <PageLayout backgroundVariant="subtle" className="pb-32">
-      <div className="container mx-auto px-2 sm:px-4 max-w-5xl">
+    <PageLayout backgroundVariant="subtle" className="pb-20 sm:pb-32">
+      <div className="w-full max-w-6xl mx-auto px-2 sm:px-4">
         {/* Header with navigation buttons and title */}
         <ScoreBoardHeader 
           roundCount={players.length > 0 ? players[0]?.rounds.length || 0 : 0}
           scoreLimit={scoreLimit}
         />
+        
+        {/* AI Commentator - both on mobile and desktop */}
+        {showAICommentator && (
+          <div className="mb-4">
+            <AICommentator 
+              players={players}
+              roundHistory={roundHistory}
+            />
+          </div>
+        )}
         
         {/* Tabs for switching between views */}
         <ScoreBoardTabs 
@@ -109,15 +119,6 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                   exit={{ opacity: 0 }}
                   className="w-full"
                 >
-                  {/* Mobile AI commentator */}
-                  {!isDesktop && showAICommentator && (
-                    <AICommentator 
-                      players={players}
-                      roundHistory={roundHistory}
-                      className="mb-4"
-                    />
-                  )}
-                  
                   {/* Player list view */}
                   <PlayerListView 
                     players={players}
@@ -145,10 +146,10 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
             </AnimatePresence>
           </div>
           
-          {/* Right column (desktop only - AI commentator and player stats) */}
+          {/* Right column (desktop only - player stats) */}
           {isDesktop && view === 'list' && (
             <DesktopSidePanel 
-              showAICommentator={showAICommentator}
+              showAICommentator={false} // AI commentator is shown at the top for all screens
               players={players}
               roundHistory={roundHistory}
               selectedPlayer={selectedPlayer}

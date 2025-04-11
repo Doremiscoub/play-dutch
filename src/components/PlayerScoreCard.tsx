@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Player } from '@/types';
 import { ChevronUp, ChevronDown, Sparkles, ThumbsUp } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface PlayerScoreCardProps {
   player: Player;
@@ -23,19 +24,23 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
   // Déterminer si le joueur est proche du seuil d'avertissement
   const isNearThreshold = warningThreshold && player.totalScore >= warningThreshold;
   
-  // Déterminer si le dernier score était bon ou mauvais
-  const isLastScoreGood = lastRoundScore !== undefined && lastRoundScore <= 5;
-  const isLastScoreBad = lastRoundScore !== undefined && lastRoundScore >= 10;
-  
   // Style pour le graphe de progression des manches
   const roundCount = player.rounds.length;
   
+  // Fonction pour déterminer la couleur du score en fonction de sa valeur
+  const getScoreColorClass = (score: number): string => {
+    if (score <= 0) return 'bg-green-500 text-white'; // Excellent score (dodge parfait)
+    if (score <= 15) return 'bg-gray-200 text-gray-700'; // Score correct
+    if (score <= 25) return 'bg-red-300 text-red-800'; // Score faible
+    return 'bg-red-900 text-white'; // Score catastrophique
+  };
+
   return (
     <div className={`
       relative p-4 rounded-2xl border backdrop-blur-sm transition-all
       ${isWinner 
         ? 'bg-dutch-purple/30 border-dutch-purple shadow-[0_8px_30px_rgb(139,92,246,0.2)]' 
-        : 'bg-white/95 border-white shadow-[0_4px_20px_rgba(0,0,0,0.08)]'}
+        : 'bg-white/95 border-white shadow-[0_4px_30px_rgba(0,0,0,0.08)]'}
       ${isNearThreshold ? 'bg-dutch-orange/30 border-dutch-orange/60 shadow-[0_8px_30px_rgb(249,115,22,0.2)]' : ''}
     `}>
       <div className="flex items-center gap-3">
@@ -73,12 +78,12 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
             {/* Indicateur de changement de score */}
             {lastRoundScore !== undefined && (
               <div className="flex flex-col items-center">
-                {isLastScoreGood ? (
+                {lastRoundScore <= 0 ? (
                   <Badge variant="outline" className="text-xs px-1 py-0 bg-green-100 text-green-600 border-green-200">
                     <ChevronDown className="h-3 w-3 mr-0.5" />
                     {lastRoundScore}
                   </Badge>
-                ) : isLastScoreBad ? (
+                ) : lastRoundScore >= 15 ? (
                   <Badge variant="outline" className="text-xs px-1 py-0 bg-red-100 text-red-600 border-red-200">
                     <ChevronUp className="h-3 w-3 mr-0.5" />
                     {lastRoundScore}
@@ -113,6 +118,29 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
             animate={{ width: `${Math.min(100, (player.totalScore / (warningThreshold || 100)) * 100)}%` }}
             transition={{ duration: 0.5, delay: 0.2 }}
           />
+        </div>
+      )}
+      
+      {/* Scores par manche avec défilement horizontal */}
+      {roundCount > 0 && (
+        <div className="mt-3">
+          <ScrollArea className="w-full" orientation="horizontal">
+            <div className="flex gap-1.5 py-2 pr-4">
+              {/* Afficher les scores des manches de la plus récente à la plus ancienne */}
+              {[...player.rounds].reverse().map((round, idx) => {
+                const roundNumber = roundCount - idx;
+                return (
+                  <div 
+                    key={`round-${roundNumber}`} 
+                    className={`${getScoreColorClass(round.score)} min-w-[30px] h-6 rounded-md flex items-center justify-center text-xs font-medium ${round.isDutch ? 'ring-2 ring-dutch-purple ring-offset-1' : ''}`}
+                    title={`Manche ${roundNumber}${round.isDutch ? ' (Dutch)' : ''}: ${round.score} points`}
+                  >
+                    {round.score}
+                  </div>
+                );
+              })}
+            </div>
+          </ScrollArea>
         </div>
       )}
     </div>

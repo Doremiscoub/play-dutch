@@ -43,7 +43,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   
   const content = (
     <div className={`relative min-h-screen w-full flex flex-col overflow-x-hidden ${className}`}>
-      {/* Fond animé */}
+      {/* Fond animé - couvre tout l'écran */}
       <div className="fixed inset-0 z-0 w-full h-full overflow-hidden">
         <AnimatedBackground variant={backgroundVariant} />
       </div>
@@ -70,22 +70,22 @@ const PageLayout: React.FC<PageLayoutProps> = ({
       )}
       
       {/* Contenu de la page */}
-      <div className="relative z-10 py-6 px-4 sm:px-6 lg:px-8 flex-grow w-full">
-        {/* Titre et sous-titre optionnels */}
+      <div className="relative z-10 py-4 sm:py-6 px-3 sm:px-6 lg:px-8 flex-grow w-full">
+        {/* Titre et sous-titre optionnels avec taille augmentée */}
         {title && (
-          <div className="text-center mb-8">
-            <h1 className={`text-2xl font-bold bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent mb-1`}>
+          <div className="text-center mb-6 sm:mb-8">
+            <h1 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent mb-1">
               {title}
               <span className="ml-2 text-sm">✨</span>
             </h1>
             {subtitle && (
-              <p className="text-gray-600 text-sm">{subtitle}</p>
+              <p className="text-gray-600 text-sm sm:text-base">{subtitle}</p>
             )}
           </div>
         )}
         
-        {/* Contenu principal avec meilleure visibilité */}
-        <div className="flex-grow w-full relative z-10">
+        {/* Contenu principal avec meilleure visibilité - utilise largeur maximale */}
+        <div className="flex-grow w-full relative z-10 mx-auto">
           {children}
         </div>
       </div>
