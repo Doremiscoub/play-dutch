@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Volume2 } from 'lucide-react';
 import { Button } from './ui/button';
@@ -45,21 +45,26 @@ interface ProfessorAvatarProps {
 
 const ProfessorAvatar: React.FC<ProfessorAvatarProps> = ({ message, onSpeakMessage }) => {
   const [modelError, setModelError] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   
   // Vérifier la disponibilité du modèle 3D
-  const checkModelAvailability = () => {
-    fetch('/models/cartouche.glb')
-      .then(response => {
+  useEffect(() => {
+    const checkModelAvailability = async () => {
+      try {
+        setIsLoading(true);
+        const response = await fetch('/models/cartouche.glb');
         if (!response.ok) {
-          setModelError(true);
+          throw new Error(`Modèle non disponible: ${response.status}`);
         }
-      })
-      .catch(() => {
+        setModelError(false);
+      } catch (error) {
+        console.error('Erreur lors de la vérification du modèle:', error);
         setModelError(true);
-      });
-  };
-  
-  React.useEffect(() => {
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
     checkModelAvailability();
   }, []);
 
@@ -68,8 +73,16 @@ const ProfessorAvatar: React.FC<ProfessorAvatarProps> = ({ message, onSpeakMessa
       <div className="relative">
         <motion.div 
           className="w-16 h-16 sm:w-20 sm:h-20 bg-white rounded-full shadow-lg border-2 border-dutch-purple flex items-center justify-center overflow-hidden"
+          animate={{ 
+            scale: [1, 1.05, 1],
+          }}
+          transition={{
+            duration: 4,
+            repeat: Infinity,
+            repeatType: "reverse",
+          }}
         >
-          {modelError ? (
+          {modelError || isLoading ? (
             <ProfessorFallback />
           ) : (
             <CartoucheScene />
