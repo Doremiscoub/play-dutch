@@ -18,10 +18,11 @@ export default function dynamic<T>(
   const LoadingComponent = options.loading || (() => null);
 
   return function DynamicComponent(props: T): JSX.Element {
-    return (
-      <Suspense fallback={<LoadingComponent />}>
-        <LazyComponent {...props} />
-      </Suspense>
+    // Utilisation de React.createElement au lieu de JSX
+    return React.createElement(
+      Suspense, 
+      { fallback: React.createElement(LoadingComponent) },
+      React.createElement(LazyComponent, props)
     );
   };
 }
