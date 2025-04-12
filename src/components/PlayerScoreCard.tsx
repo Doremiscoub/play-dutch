@@ -29,7 +29,7 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
   
   // Fonction pour déterminer la couleur du score en fonction de sa valeur
   const getScoreColorClass = (score: number): string => {
-    if (score <= 0) return 'bg-green-500 text-white'; // Excellent score (dodge parfait)
+    if (score <= 0) return 'bg-green-500 text-white'; // Excellent score (Dutch parfait)
     if (score <= 15) return 'bg-gray-200 text-gray-700'; // Score correct
     if (score <= 25) return 'bg-red-300 text-red-800'; // Score faible
     return 'bg-red-900 text-white'; // Score catastrophique
@@ -74,27 +74,6 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
             <span className={`text-xl font-bold ${isNearThreshold ? 'text-dutch-orange' : 'text-gray-800'}`}>
               {player.totalScore}
             </span>
-            
-            {/* Indicateur de changement de score */}
-            {lastRoundScore !== undefined && (
-              <div className="flex flex-col items-center">
-                {lastRoundScore <= 0 ? (
-                  <Badge variant="outline" className="text-xs px-1 py-0 bg-green-100 text-green-600 border-green-200">
-                    <ChevronDown className="h-3 w-3 mr-0.5" />
-                    {lastRoundScore}
-                  </Badge>
-                ) : lastRoundScore >= 15 ? (
-                  <Badge variant="outline" className="text-xs px-1 py-0 bg-red-100 text-red-600 border-red-200">
-                    <ChevronUp className="h-3 w-3 mr-0.5" />
-                    {lastRoundScore}
-                  </Badge>
-                ) : (
-                  <Badge variant="outline" className="text-xs px-1 py-0 bg-gray-100 text-gray-600 border-gray-200">
-                    {lastRoundScore}
-                  </Badge>
-                )}
-              </div>
-            )}
           </div>
           
           {/* Affichage des statistiques supplémentaires */}
@@ -125,10 +104,10 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
       {roundCount > 0 && (
         <div className="mt-3">
           <ScrollArea className="w-full" orientation="horizontal">
-            <div className="flex gap-1.5 py-2 pr-4">
-              {/* Afficher les scores des manches de la plus récente à la plus ancienne */}
-              {[...player.rounds].reverse().map((round, idx) => {
-                const roundNumber = roundCount - idx;
+            <div className="flex gap-1.5 py-2 pr-4 justify-end">
+              {/* Afficher les scores des manches de l'ancienne à la plus récente (gauche à droite) */}
+              {player.rounds.map((round, idx) => {
+                const roundNumber = idx + 1;
                 return (
                   <div 
                     key={`round-${roundNumber}`} 

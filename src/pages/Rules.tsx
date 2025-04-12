@@ -17,7 +17,7 @@ const Rules: React.FC = () => {
         <AnimatedBackground variant="subtle" />
       </div>
       
-      <div className="container mx-auto px-4 py-8 relative z-10">
+      <div className="container mx-auto px-2 py-8 relative z-10">
         <div className="flex justify-between items-center mb-6">
           <Link to="/">
             <Button variant="ghost" size="sm" className="flex items-center gap-1 text-gray-600 hover:text-gray-900">
@@ -31,7 +31,7 @@ const Rules: React.FC = () => {
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="text-3xl font-bold mb-8 bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent"
+          className="text-4xl font-bold mb-8 bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent"
         >
           Règles du Dutch
         </motion.h1>

@@ -82,8 +82,8 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
   };
 
   return (
-    <PageLayout backgroundVariant="subtle" className="pb-20 sm:pb-32">
-      <div className="w-full max-w-6xl mx-auto px-2 sm:px-4">
+    <PageLayout backgroundVariant="subtle" className="pb-12 sm:pb-20">
+      <div className="w-full max-w-6xl mx-auto px-2 sm:px-3">
         {/* Header with navigation buttons and title */}
         <ScoreBoardHeader 
           roundCount={players.length > 0 ? players[0]?.rounds.length || 0 : 0}
@@ -107,9 +107,9 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
         />
         
         {/* Main content */}
-        <div className={`mt-4 ${isDesktop ? 'md:flex md:gap-6' : ''}`}>
+        <div className={`mt-4 ${isDesktop ? 'md:flex md:gap-4' : ''}`}>
           {/* Left column (ranking or table) */}
-          <div className={`${isDesktop && view === 'list' ? 'md:w-3/5' : 'w-full'} z-20 relative`}>
+          <div className={`${isDesktop && view === 'list' ? 'md:w-4/5' : 'w-full'} z-20 relative`}>
             <AnimatePresence mode="wait">
               {view === 'list' && (
                 <motion.div
@@ -158,7 +158,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
         </div>
         
         {/* Action buttons */}
-        <div className="mt-6">
+        <div className="mt-4">
           <CustomScoreBoardButtons
             players={players}
             onAddRound={onAddRound}

@@ -18,16 +18,16 @@ const ScoreTableView: React.FC<ScoreTableViewProps> = ({ players, roundHistory }
   );
 
   return (
-    <div className="space-y-8 w-full">
+    <div className="space-y-6 w-full">
       {/* Tableau des scores par manche */}
       <div>
-        <h3 className="text-xl font-medium mb-3 text-gray-700">Scores par manche</h3>
+        <h3 className="text-2xl font-medium mb-3 text-gray-700">Scores par manche</h3>
         <DetailedScoreTable players={players} roundHistory={roundHistory} />
       </div>
       
       {/* Tableau des statistiques globales */}
       <div>
-        <h3 className="text-xl font-medium mb-3 text-gray-700">Statistiques globales</h3>
+        <h3 className="text-2xl font-medium mb-3 text-gray-700">Statistiques globales</h3>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

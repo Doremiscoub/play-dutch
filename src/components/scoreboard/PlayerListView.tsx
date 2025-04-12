@@ -50,7 +50,6 @@ const PlayerListView: React.FC<PlayerListViewProps> = ({
               player={player}
               position={index + 1}
               isWinner={index === 0}
-              lastRoundScore={player.rounds.length > 0 ? player.rounds[player.rounds.length - 1].score : undefined}
               warningThreshold={scoreLimit ? scoreLimit * 0.8 : undefined}
             />
           </motion.div>
@@ -59,7 +58,7 @@ const PlayerListView: React.FC<PlayerListViewProps> = ({
       
       {/* Mobile stats drawer */}
       {!isDesktop && sortedPlayers.length > 0 && (
-        <div className="mt-8 flex justify-center">
+        <div className="mt-4 flex justify-center">
           <Drawer>
             <DrawerTrigger asChild>
               <Button className="bg-white text-dutch-purple border border-dutch-purple/20 hover:bg-dutch-purple/10">

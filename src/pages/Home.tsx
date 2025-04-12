@@ -75,7 +75,7 @@ const Home: React.FC = () => {
       </div>
       
       {/* Contenu principal */}
-      <div className="relative z-10 container mx-auto px-4 py-16 flex flex-col min-h-screen">
+      <div className="relative z-10 container mx-auto px-3 py-16 flex flex-col min-h-screen">
         <header className="mb-auto">
           {/* Supprimer le sélecteur de thème en haut à droite */}
         </header>

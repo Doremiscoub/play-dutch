@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Headphones } from 'lucide-react';
+import { Volume2 } from 'lucide-react';
 import { Button } from './ui/button';
 
 interface ProfessorAvatarProps {
@@ -62,8 +62,8 @@ const ProfessorAvatar: React.FC<ProfessorAvatarProps> = ({ message, onSpeakMessa
           className="bg-white/80 hover:bg-white border border-dutch-purple/30 text-dutch-purple hover:text-dutch-purple/80 rounded-full"
           onClick={onSpeakMessage}
         >
-          <Headphones className="w-4 h-4 mr-1" />
-          <span className="text-xs">Lire à voix haute</span>
+          <Volume2 className="w-4 h-4 mr-1" />
+          <span className="text-xs">Écouter</span>
         </Button>
       )}
     </div>
