@@ -9,7 +9,7 @@ interface DynamicOptions {
 }
 
 // Fonction qui simule le comportement de next/dynamic
-export default function dynamic<T>(
+export default function dynamic<T extends object>(
   importFn: () => Promise<{ default: React.ComponentType<T> }>,
   options: DynamicOptions = {}
 ): React.ComponentType<T> {
@@ -22,7 +22,8 @@ export default function dynamic<T>(
     return React.createElement(
       Suspense, 
       { fallback: React.createElement(LoadingComponent) },
-      React.createElement(LazyComponent, props)
+      // Forcer le cast du type props pour résoudre l'erreur TS2769
+      React.createElement(LazyComponent, props as any)
     );
   };
 }
