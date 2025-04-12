@@ -1,52 +1,50 @@
 
 import React from 'react';
+import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Info, Settings } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Badge } from '@/components/ui/badge';
+import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
 interface ScoreBoardHeaderProps {
   roundCount: number;
   scoreLimit?: number;
 }
 
-const ScoreBoardHeader: React.FC<ScoreBoardHeaderProps> = ({ roundCount, scoreLimit }) => {
+const ScoreBoardHeader: React.FC<ScoreBoardHeaderProps> = ({ roundCount, scoreLimit = 100 }) => {
+  const navigate = useNavigate();
+  
   return (
-    <>
-      <div className="flex justify-between items-center mb-6">
-        <Link to="/">
-          <Button variant="ghost" size="sm" className="flex items-center gap-1 text-gray-600 hover:text-gray-900">
-            <ArrowLeft className="h-4 w-4" />
-            Accueil
-          </Button>
-        </Link>
+    <div className="mb-4">
+      <div className="flex items-center justify-between">
+        <Button 
+          variant="ghost" 
+          className="p-2 bg-white/80 hover:bg-white/90 rounded-full"
+          onClick={() => navigate('/')}
+        >
+          <ArrowLeft className="h-5 w-5 text-gray-700" />
+        </Button>
         
-        <div className="flex gap-2">
-          <Link to="/rules">
-            <Button variant="outline" size="sm" className="flex items-center gap-1 text-gray-600">
-              <Info className="h-4 w-4" />
-              <span className="hidden sm:inline">Règles</span>
-            </Button>
-          </Link>
-          <Link to="/settings">
-            <Button variant="outline" size="sm" className="flex items-center gap-1 text-gray-600">
-              <Settings className="h-4 w-4" />
-              <span className="hidden sm:inline">Réglages</span>
-            </Button>
-          </Link>
+        <motion.h1 
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-3xl font-semibold mx-auto text-center bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent"
+        >
+          Tableau des Scores
+        </motion.h1>
+        
+        <div className="flex items-center gap-2">
+          <Badge variant="outline" className="bg-white/80 text-dutch-purple font-medium">
+            {roundCount} manche{roundCount > 1 ? 's' : ''}
+          </Badge>
+          
+          <Badge variant="outline" className="bg-white/80 text-dutch-blue font-medium">
+            {scoreLimit} pts
+          </Badge>
         </div>
       </div>
-      
-      <div className="text-center mb-6">
-        <h1 className="text-2xl font-bold bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">
-          Tableau des scores
-          <span className="ml-2 text-sm">✨</span>
-        </h1>
-        <p className="text-gray-600">
-          Manche {roundCount}
-          {scoreLimit ? <span className="ml-2 text-dutch-purple"> | Limite: {scoreLimit} points</span> : ''}
-        </p>
-      </div>
-    </>
+    </div>
   );
 };
 

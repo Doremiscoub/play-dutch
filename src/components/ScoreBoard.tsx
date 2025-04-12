@@ -11,7 +11,7 @@ import AICommentator from './AICommentator';
 
 // Import the newly created components
 import ScoreBoardHeader from './scoreboard/ScoreBoardHeader';
-import ScoreBoardTabs from './scoreboard/ScoreBoardTabs';
+import ScoreBoardTabs from './ScoreBoardTabs';
 import PlayerListView from './scoreboard/PlayerListView';
 import DesktopSidePanel from './scoreboard/DesktopSidePanel';
 import UndoConfirmationDialog from './scoreboard/UndoConfirmationDialog';
@@ -83,7 +83,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
 
   return (
     <PageLayout backgroundVariant="subtle" className="pb-12 sm:pb-20">
-      <div className="w-full max-w-6xl mx-auto px-2 sm:px-3">
+      <div className="w-full max-w-6xl mx-auto px-1 sm:px-2">
         {/* Header with navigation buttons and title */}
         <ScoreBoardHeader 
           roundCount={players.length > 0 ? players[0]?.rounds.length || 0 : 0}

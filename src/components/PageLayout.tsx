@@ -70,7 +70,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
       )}
       
       {/* Contenu de la page */}
-      <div className="relative z-10 py-4 sm:py-6 px-3 sm:px-6 lg:px-8 flex-grow w-full">
+      <div className="relative z-10 py-4 sm:py-6 px-2 sm:px-4 lg:px-6 flex-grow w-full">
         {/* Titre et sous-titre optionnels avec taille augmentée */}
         {title && (
           <div className="text-center mb-6 sm:mb-8">

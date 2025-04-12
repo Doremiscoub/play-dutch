@@ -35,6 +35,57 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
     return 'bg-red-900 text-white'; // Score catastrophique
   };
 
+  // Commentaire dynamique sur la performance du joueur
+  const getDynamicComment = () => {
+    if (!player.rounds || player.rounds.length < 2) return null;
+    
+    // Afficher les séries de victoires
+    if (player.stats?.streakInfo?.current > 1) {
+      return (
+        <div className="text-xs flex items-center text-dutch-blue font-medium">
+          <ThumbsUp className="h-3 w-3 mr-1 text-dutch-blue" />
+          <span>{player.stats.streakInfo.current} en série</span>
+        </div>
+      );
+    }
+    
+    // Autres commentaires potentiels basés sur l'évolution des scores
+    const lastThreeRounds = player.rounds.slice(-3);
+    if (lastThreeRounds.length >= 3) {
+      const avg1 = lastThreeRounds[0].score;
+      const avg2 = lastThreeRounds[1].score;
+      const avg3 = lastThreeRounds[2].score;
+      
+      if (avg3 < avg2 && avg2 < avg1) {
+        return (
+          <div className="text-xs flex items-center text-green-600 font-medium">
+            <ChevronUp className="h-3 w-3 mr-1 text-green-600" />
+            <span>En grande forme</span>
+          </div>
+        );
+      } else if (avg3 > avg2 && avg2 > avg1) {
+        return (
+          <div className="text-xs flex items-center text-red-600 font-medium">
+            <ChevronDown className="h-3 w-3 mr-1 text-red-600" />
+            <span>En difficulté</span>
+          </div>
+        );
+      }
+    }
+    
+    // Dutch réussis
+    if (player.stats?.dutchCount) {
+      return (
+        <div className="text-xs flex items-center text-dutch-purple font-medium">
+          <Sparkles className="h-3 w-3 mr-1 text-dutch-purple" />
+          <span>{player.stats.dutchCount} Dutch</span>
+        </div>
+      );
+    }
+    
+    return null;
+  };
+
   return (
     <div className={`
       relative p-4 rounded-2xl border backdrop-blur-sm transition-all
@@ -56,16 +107,8 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
         <div className="flex-1">
           <h3 className="font-semibold text-gray-800">{player.name}</h3>
           
-          {/* Statistiques simples */}
-          <div className="flex text-xs text-gray-600 mt-1 gap-2">
-            <span>{player.rounds.length || 0} manches</span>
-            {player.stats?.dutchCount ? (
-              <span className="flex items-center">
-                <Sparkles className="h-3 w-3 mr-0.5 text-dutch-purple" />
-                {player.stats.dutchCount} Dutch
-              </span>
-            ) : null}
-          </div>
+          {/* Commentaire dynamique sur la performance */}
+          {getDynamicComment()}
         </div>
         
         {/* Score */}
@@ -75,16 +118,6 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
               {player.totalScore}
             </span>
           </div>
-          
-          {/* Affichage des statistiques supplémentaires */}
-          {player.stats?.streakInfo?.current > 1 && (
-            <div className="text-xs flex items-center justify-end mt-1">
-              <ThumbsUp className="h-3 w-3 mr-1 text-dutch-blue" />
-              <span className="text-dutch-blue font-medium">
-                {player.stats.streakInfo.current} en série
-              </span>
-            </div>
-          )}
         </div>
       </div>
       
@@ -105,8 +138,8 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
         <div className="mt-3">
           <ScrollArea className="w-full" orientation="horizontal">
             <div className="flex gap-1.5 py-2 pr-4 justify-end">
-              {/* Afficher les scores des manches de l'ancienne à la plus récente (gauche à droite) */}
-              {player.rounds.map((round, idx) => {
+              {/* Afficher les scores des manches de l'ancienne à la plus récente (droite) */}
+              {[...player.rounds].map((round, idx) => {
                 const roundNumber = idx + 1;
                 return (
                   <div 

@@ -61,7 +61,7 @@ const DetailedScoreTable: React.FC<DetailedScoreTableProps> = ({ players, roundH
           </Table>
         </div>
 
-        <div className="overflow-x-auto ml-[100px]"> {/* Réduit l'espacement entre les colonnes */}
+        <div className="overflow-x-auto ml-[80px]"> {/* Réduit l'espacement entre les colonnes */}
           {/* Table pour les scores défilants */}
           <Table className="w-auto bg-white/95 rounded-r-xl overflow-hidden border shadow-lg">
             <TableHeader className="bg-dutch-blue/10">

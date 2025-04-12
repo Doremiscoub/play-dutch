@@ -1,4 +1,3 @@
-
 import { Player } from '@/types';
 
 // Type pour les commentaires
@@ -44,10 +43,10 @@ export const getRandomComment = (
       if (minScoreLastRound === 0) {
         return {
           comment: `${getRandomElementFromArray([
-            `${playerWithMinScore.name} dodge comme un ninja ! 🔥 Des années de pratique ou juste un coup de bol ?`,
-            `DODGE PARFAIT pour ${playerWithMinScore.name} ! Les autres en PLS.`,
-            `${playerWithMinScore.name} met la clim à tout le monde avec ce dodge. Froid, très froid.`,
-            `Quand ${playerWithMinScore.name} dodge, le reste de la table transpire.`,
+            `${playerWithMinScore.name} Dutch comme un ninja ! 🔥 Des années de pratique ou juste un coup de bol ?`,
+            `DUTCH PARFAIT pour ${playerWithMinScore.name} ! Les autres en PLS.`,
+            `${playerWithMinScore.name} met la clim à tout le monde avec ce Dutch. Froid, très froid.`,
+            `Quand ${playerWithMinScore.name} Dutch, le reste de la table transpire.`,
             `${playerWithMinScore.name} : profession tireur d'élite. 0 points, 100% efficacité.`
           ])}`,
           type: 'joke'
@@ -151,14 +150,14 @@ const getHeadlineComment = (players: Player[], roundHistory: { scores: number[],
   }
   
   // Trouver un joueur qui a fait beaucoup de dodges
-  let dodgeMaster = "";
+  let dutchMaster = "";
   let maxDodges = 0;
   
   for (const player of players) {
     const dodgeCount = player.rounds.filter(r => r.isDutch).length;
     if (dodgeCount > maxDodges) {
       maxDodges = dodgeCount;
-      dodgeMaster = player.name;
+      dutchMaster = player.name;
     }
   }
   
@@ -167,7 +166,7 @@ const getHeadlineComment = (players: Player[], roundHistory: { scores: number[],
     { comment: `CARNAGE DE POINTS : LA PARTIE DÉRAPE COMPLÈTEMENT`, type: 'headline' },
     { comment: `${loser.name.toUpperCase()} : LA DESCENTE AUX ENFERS CONTINUE`, type: 'headline' },
     { comment: `ALERTE : HOLD-UP EN COURS À LA TABLE DE DUTCH`, type: 'headline' },
-    { comment: `${dodgeMaster ? dodgeMaster.toUpperCase() + " : " : ""}LE ROI DU DODGE FRAPPE ENCORE`, type: 'headline' },
+    { comment: `${dutchMaster ? dutchMaster.toUpperCase() + " : " : ""}LE ROI DU DUTCH FRAPPE ENCORE`, type: 'headline' },
     { comment: `TENSION MAXIMALE : TOUT SE JOUERA À LA DERNIÈRE CARTE`, type: 'headline' },
     { comment: `${risingPlayerName ? risingPlayerName.toUpperCase() + " : " : ""}LA REMONTADA EST EN MARCHE 🔥`, type: 'headline' },
     { comment: `LA CHUTE LIBRE CONTINUE : QUI ARRÊTERA L'HÉMORRAGIE ?`, type: 'headline' },
