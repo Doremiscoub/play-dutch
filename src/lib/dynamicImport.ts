@@ -27,11 +27,12 @@ export default function dynamic<T extends object>(
   
   const LoadingComponent = options.loading || (() => null);
 
+  // Créer un composant sans utiliser la syntaxe JSX directement
   return function DynamicComponent(props: T): JSX.Element {
-    return (
-      <Suspense fallback={<LoadingComponent />}>
-        <LazyComponent {...props} />
-      </Suspense>
+    return React.createElement(
+      Suspense,
+      { fallback: React.createElement(LoadingComponent) },
+      React.createElement(LazyComponent, props)
     );
   };
 }
