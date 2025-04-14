@@ -1,60 +1,48 @@
 
+/**
+ * Onglets pour basculer entre les différentes vues du tableau des scores
+ */
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ListOrdered, Table2 } from 'lucide-react';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { List, Table2 } from 'lucide-react';
 
 interface ScoreBoardTabsProps {
   currentView: 'list' | 'table';
   onViewChange: (view: 'list' | 'table') => void;
 }
 
-const ScoreBoardTabs: React.FC<ScoreBoardTabsProps> = ({ currentView, onViewChange }) => {
+const ScoreBoardTabs: React.FC<ScoreBoardTabsProps> = ({ 
+  currentView, 
+  onViewChange 
+}) => {
   return (
-    <div className="flex justify-center mt-4">
-      <div className="bg-white/70 backdrop-blur-sm p-1 rounded-full flex gap-2 shadow-sm border border-white">
-        <motion.button
-          onClick={() => onViewChange('list')}
-          className={`relative flex items-center gap-2 px-4 py-2 rounded-full ${
-            currentView === 'list'
-              ? 'text-dutch-blue'
-              : 'text-gray-500'
-          }`}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          {currentView === 'list' && (
-            <motion.div
-              layoutId="tab-highlight"
-              className="absolute inset-0 bg-white rounded-full shadow-sm"
-              transition={{ type: 'spring', duration: 0.5 }}
-            />
-          )}
-          <ListOrdered className="h-4 w-4 relative z-10" />
-          <span className="relative z-10 font-medium">Classement</span>
-        </motion.button>
-
-        <motion.button
-          onClick={() => onViewChange('table')}
-          className={`relative flex items-center gap-2 px-4 py-2 rounded-full ${
-            currentView === 'table'
-              ? 'text-dutch-blue'
-              : 'text-gray-500'
-          }`}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          {currentView === 'table' && (
-            <motion.div
-              layoutId="tab-highlight"
-              className="absolute inset-0 bg-white rounded-full shadow-sm"
-              transition={{ type: 'spring', duration: 0.5 }}
-            />
-          )}
-          <Table2 className="h-4 w-4 relative z-10" />
-          <span className="relative z-10 font-medium">Tableau</span>
-        </motion.button>
-      </div>
-    </div>
+    <motion.div
+      initial={{ opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, delay: 0.1 }}
+    >
+      <Tabs 
+        value={currentView} 
+        onValueChange={(value) => onViewChange(value as 'list' | 'table')}
+        className="w-full"
+      >
+        <TabsList className="grid grid-cols-2 bg-white/50 backdrop-blur-sm border border-white/50 shadow-sm rounded-xl">
+          <TabsTrigger 
+            value="list" 
+            className="rounded-lg data-[state=active]:bg-white/90 data-[state=active]:shadow-sm data-[state=active]:text-dutch-blue flex items-center space-x-1"
+          >
+            <List className="h-4 w-4 mr-1" /> Classement
+          </TabsTrigger>
+          <TabsTrigger 
+            value="table" 
+            className="rounded-lg data-[state=active]:bg-white/90 data-[state=active]:shadow-sm data-[state=active]:text-dutch-blue flex items-center space-x-1"
+          >
+            <Table2 className="h-4 w-4 mr-1" /> Détail des manches
+          </TabsTrigger>
+        </TabsList>
+      </Tabs>
+    </motion.div>
   );
 };
 

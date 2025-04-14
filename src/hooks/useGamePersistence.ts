@@ -1,35 +1,32 @@
 
+/**
+ * Hook pour la persistance des données de jeu
+ */
 import { useCallback } from 'react';
 import { Player, Game } from '@/types';
 import { toast } from 'sonner';
 import { useLocalStorage } from './use-local-storage';
 import { v4 as uuidv4 } from 'uuid';
+import { calculateGameDuration } from '@/utils/gameUtils';
 
+/**
+ * Hook pour gérer la persistance des données de jeu
+ */
 export const useGamePersistence = () => {
   const [games, setGames] = useLocalStorage<Game[]>('dutch_games', []);
 
-  // Calculate game duration
-  const getGameDuration = (startTime: Date): string => {
-    const endTime = new Date();
-    const diffMs = endTime.getTime() - startTime.getTime();
-    
-    const diffMins = Math.floor(diffMs / 60000);
-    const diffHrs = Math.floor(diffMins / 60);
-    const remainingMins = diffMins % 60;
-    
-    if (diffHrs > 0) {
-      return `${diffHrs}h ${remainingMins}min`;
-    } else {
-      return `${diffMins} minutes`;
-    }
-  };
-
-  // Save game to history
+  /**
+   * Sauvegarde une partie terminée dans l'historique
+   */
   const saveGameToHistory = useCallback((players: Player[], gameStartTime: Date | null) => {
     try {
+      if (!players || players.length === 0) {
+        throw new Error("Impossible de sauvegarder une partie sans joueurs");
+      }
+      
       const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
       const winner = sortedPlayers[0].name;
-      const gameDuration = gameStartTime ? getGameDuration(gameStartTime) : '';
+      const gameDuration = gameStartTime ? calculateGameDuration(gameStartTime) : '';
       
       const game: Game = {
         id: uuidv4(),
@@ -54,23 +51,34 @@ export const useGamePersistence = () => {
     }
   }, [setGames]);
 
-  // Load initial game state from localStorage
+  /**
+   * Charge l'état initial du jeu depuis localStorage
+   */
   const loadGameState = useCallback(() => {
-    const savedGame = localStorage.getItem('current_dutch_game');
-    
-    if (savedGame) {
-      try {
-        return JSON.parse(savedGame);
-      } catch (error) {
-        console.error('Erreur lors du chargement de la partie :', error);
-        return null;
+    try {
+      const savedGame = localStorage.getItem('current_dutch_game');
+      
+      if (savedGame) {
+        const parsedGame = JSON.parse(savedGame);
+        
+        // Vérification de base des données chargées
+        if (!parsedGame.players || !Array.isArray(parsedGame.players)) {
+          throw new Error("Format de partie invalide");
+        }
+        
+        return parsedGame;
       }
+    } catch (error) {
+      console.error('Erreur lors du chargement de la partie :', error);
+      toast.error('Erreur lors du chargement de la partie');
     }
     
     return null;
   }, []);
 
-  // Save current game state to localStorage
+  /**
+   * Sauvegarde l'état actuel du jeu dans localStorage
+   */
   const saveGameState = useCallback((gameState: {
     players: Player[];
     roundHistory: { scores: number[], dutchPlayerId?: string }[];
@@ -78,18 +86,42 @@ export const useGamePersistence = () => {
     scoreLimit: number;
     gameStartTime: Date | null;
   }) => {
-    const stateToSave = {
-      ...gameState,
-      lastUpdated: new Date()
-    };
-    
-    localStorage.setItem('current_dutch_game', JSON.stringify(stateToSave));
+    try {
+      if (!gameState || !gameState.players) {
+        throw new Error("Impossible de sauvegarder un état de jeu invalide");
+      }
+      
+      const stateToSave = {
+        ...gameState,
+        lastUpdated: new Date()
+      };
+      
+      localStorage.setItem('current_dutch_game', JSON.stringify(stateToSave));
+    } catch (error) {
+      console.error('Erreur lors de la sauvegarde de l\'état du jeu :', error);
+    }
   }, []);
+
+  /**
+   * Supprime une partie de l'historique
+   */
+  const deleteGameFromHistory = useCallback((gameId: string) => {
+    try {
+      setGames(prev => prev.filter(game => game.id !== gameId));
+      toast.success('Partie supprimée de l\'historique');
+      return true;
+    } catch (error) {
+      console.error('Erreur lors de la suppression de la partie :', error);
+      toast.error('Erreur lors de la suppression de la partie');
+      return false;
+    }
+  }, [setGames]);
 
   return {
     games,
     loadGameState,
     saveGameState,
     saveGameToHistory,
+    deleteGameFromHistory
   };
 };

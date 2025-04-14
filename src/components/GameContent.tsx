@@ -1,8 +1,13 @@
 
+/**
+ * Contenu principal de la page de jeu
+ */
 import React from 'react';
 import { Player } from '@/types';
-import ScoreBoard from '@/components/ScoreBoard';
-import GameOverScreen from '@/components/GameOverScreen';
+import { ErrorBoundary } from 'react-error-boundary';
+import ScoreBoard from './ScoreBoard';
+import NewRoundScoreForm from './NewRoundScoreForm';
+import GameResultOverlay from './game/GameResultOverlay';
 
 interface GameContentProps {
   players: Player[];
@@ -33,26 +38,67 @@ const GameContent: React.FC<GameContentProps> = ({
   onContinueGame,
   onRestart
 }) => {
-  // Render game over screen or score board based on game state
-  return showGameOver ? (
-    <GameOverScreen 
-      players={players}
-      onRestart={onRestart}
-      onContinueGame={onContinueGame}
-      currentScoreLimit={scoreLimit}
-    />
-  ) : (
-    <ScoreBoard 
-      players={players}
-      onAddRound={onAddRound}
-      onEndGame={onRequestEndGame}
-      onUndoLastRound={onUndoLastRound}
-      roundHistory={roundHistory}
-      showGameEndConfirmation={showGameEndConfirmation}
-      onConfirmEndGame={onConfirmEndGame}
-      onCancelEndGame={onCancelEndGame}
-      scoreLimit={scoreLimit}
-    />
+  const [showScoreForm, setShowScoreForm] = React.useState(false);
+
+  const handleAddRoundClick = () => {
+    setShowScoreForm(true);
+  };
+
+  const handleCloseScoreForm = () => {
+    setShowScoreForm(false);
+  };
+
+  const handleAddRound = (scores: number[], dutchPlayerId?: string) => {
+    onAddRound(scores, dutchPlayerId);
+    setShowScoreForm(false);
+  };
+
+  // Fallback UI en cas d'erreur
+  const ErrorFallback = ({ error }: { error: Error }) => (
+    <div className="p-6 bg-red-50 rounded-lg border border-red-200 m-4">
+      <h3 className="text-xl font-bold text-red-700 mb-2">Une erreur est survenue</h3>
+      <p className="text-red-600 mb-4">
+        {error.message}
+      </p>
+      <p className="text-gray-600">
+        Essayez de rafraîchir la page ou de revenir à l'accueil.
+      </p>
+    </div>
+  );
+
+  return (
+    <ErrorBoundary FallbackComponent={ErrorFallback}>
+      {/* Tableau des scores */}
+      <ScoreBoard
+        players={players}
+        onAddRound={handleAddRoundClick}
+        onUndoLastRound={onUndoLastRound}
+        onEndGame={onRequestEndGame}
+        roundHistory={roundHistory}
+        showGameEndConfirmation={showGameEndConfirmation}
+        onConfirmEndGame={onConfirmEndGame}
+        onCancelEndGame={onCancelEndGame}
+        scoreLimit={scoreLimit}
+      />
+
+      {/* Formulaire d'ajout de score */}
+      <NewRoundScoreForm
+        players={players}
+        open={showScoreForm}
+        onClose={handleCloseScoreForm}
+        onSubmit={handleAddRound}
+      />
+
+      {/* Overlay de fin de partie */}
+      {showGameOver && (
+        <GameResultOverlay
+          players={players}
+          onContinue={onContinueGame}
+          onRestart={onRestart}
+          scoreLimit={scoreLimit}
+        />
+      )}
+    </ErrorBoundary>
   );
 };
 

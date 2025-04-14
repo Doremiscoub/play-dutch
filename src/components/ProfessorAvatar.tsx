@@ -1,21 +1,28 @@
 
+/**
+ * Avatar du Professeur Cartouche avec gestion robuste des fallbacks
+ */
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Volume2 } from 'lucide-react';
 import { Button } from './ui/button';
-import dynamic from '../lib/dynamicImport';
+import { ErrorBoundary } from 'react-error-boundary';
+import dynamic from 'next/dynamic';
 
 // Importation dynamique du composant 3D pour éviter les problèmes de SSR
 const CartoucheScene = dynamic(
   () => import('./3d/CartoucheScene'),
-  { ssr: false, loading: () => <ProfessorFallback /> }
+  { 
+    ssr: false, 
+    loading: () => <AvatarFallback /> 
+  }
 );
 
 // URL de l'image de fallback
 const FALLBACK_IMAGE_URL = '/lovable-uploads/a2234ca1-7b29-4c32-8167-2ff6be271875.png';
 
 // Composant de fallback pour le chargement ou les erreurs
-const ProfessorFallback = () => (
+const AvatarFallback = () => (
   <motion.div 
     className="w-16 h-16 sm:w-20 sm:h-20 bg-white rounded-full shadow-lg border-2 border-dutch-purple flex items-center justify-center overflow-hidden"
     initial={{ scale: 0.9 }}
@@ -42,6 +49,11 @@ const ProfessorFallback = () => (
   </motion.div>
 );
 
+// Composant pour les erreurs
+const AvatarErrorFallback = () => {
+  return <AvatarFallback />;
+};
+
 interface ProfessorAvatarProps {
   message: string;
   onSpeakMessage?: () => void;
@@ -49,23 +61,21 @@ interface ProfessorAvatarProps {
 
 const ProfessorAvatar: React.FC<ProfessorAvatarProps> = ({ message, onSpeakMessage }) => {
   const [modelError, setModelError] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [is3DLoaded, setIs3DLoaded] = useState<boolean>(false);
   
-  // Vérifier la disponibilité du modèle 3D
+  // Vérifier la disponibilité du modèle 3D et marquer comme chargé après un délai
   useEffect(() => {
     const checkModelAvailability = async () => {
       try {
-        setIsLoading(true);
         const response = await fetch('/models/cartouche.glb');
         if (!response.ok) {
           throw new Error(`Modèle non disponible: ${response.status}`);
         }
-        setModelError(false);
+        // Donnons un peu de temps pour que le modèle se charge avant de l'afficher
+        setTimeout(() => setIs3DLoaded(true), 300);
       } catch (error) {
         console.error('Erreur lors de la vérification du modèle:', error);
         setModelError(true);
-      } finally {
-        setIsLoading(false);
       }
     };
     
@@ -75,23 +85,25 @@ const ProfessorAvatar: React.FC<ProfessorAvatarProps> = ({ message, onSpeakMessa
   return (
     <div className="flex items-center gap-3">
       <div className="relative">
-        <motion.div 
-          className="w-16 h-16 sm:w-20 sm:h-20 bg-white rounded-full shadow-lg border-2 border-dutch-purple flex items-center justify-center overflow-hidden"
-          animate={{ 
-            scale: [1, 1.05, 1],
-          }}
-          transition={{
-            duration: 4,
-            repeat: Infinity,
-            repeatType: "reverse",
-          }}
-        >
-          {modelError || isLoading ? (
-            <ProfessorFallback />
-          ) : (
-            <CartoucheScene />
-          )}
-        </motion.div>
+        <ErrorBoundary FallbackComponent={AvatarErrorFallback}>
+          <motion.div 
+            className="w-16 h-16 sm:w-20 sm:h-20 bg-white rounded-full shadow-lg border-2 border-dutch-purple flex items-center justify-center overflow-hidden"
+            animate={{ 
+              scale: [1, 1.05, 1],
+            }}
+            transition={{
+              duration: 4,
+              repeat: Infinity,
+              repeatType: "reverse",
+            }}
+          >
+            {(modelError || !is3DLoaded) ? (
+              <AvatarFallback />
+            ) : (
+              <CartoucheScene fallbackImage={FALLBACK_IMAGE_URL} />
+            )}
+          </motion.div>
+        </ErrorBoundary>
         
         {/* Bulle d'animation pour donner vie à l'avatar */}
         <motion.div 

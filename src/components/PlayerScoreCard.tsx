@@ -1,10 +1,13 @@
 
+/**
+ * Carte de score du joueur avec historique des manches
+ */
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Player } from '@/types';
 import { ChevronUp, ChevronDown, Sparkles, ThumbsUp } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { getScoreColorClass } from '@/utils/gameUtils';
 
 interface PlayerScoreCardProps {
   player: Player;
@@ -24,16 +27,8 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
   // Déterminer si le joueur est proche du seuil d'avertissement
   const isNearThreshold = warningThreshold && player.totalScore >= warningThreshold;
   
-  // Style pour le graphe de progression des manches
+  // Nombre de manches
   const roundCount = player.rounds.length;
-  
-  // Fonction pour déterminer la couleur du score en fonction de sa valeur
-  const getScoreColorClass = (score: number): string => {
-    if (score <= 0) return 'bg-green-500 text-white'; // Excellent score (Dutch parfait)
-    if (score <= 15) return 'bg-gray-200 text-gray-700'; // Score correct
-    if (score <= 25) return 'bg-red-300 text-red-800'; // Score faible
-    return 'bg-red-900 text-white'; // Score catastrophique
-  };
 
   // Commentaire dynamique sur la performance du joueur
   const getDynamicComment = () => {

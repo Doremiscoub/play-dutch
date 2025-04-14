@@ -1,9 +1,12 @@
 
+/**
+ * Panneau latéral pour affichage des statistiques sur desktop
+ */
 import React from 'react';
-import { Player } from '@/types';
 import { motion } from 'framer-motion';
-import AICommentator from '@/components/AICommentator';
-import PlayerDetailedStats from '@/components/PlayerDetailedStats';
+import { Player } from '@/types';
+import AICommentator from '../AICommentator';
+import PlayerStatsCard from './PlayerStatsCard';
 
 interface DesktopSidePanelProps {
   showAICommentator: boolean;
@@ -12,43 +15,39 @@ interface DesktopSidePanelProps {
   selectedPlayer: Player | null;
 }
 
-const DesktopSidePanel: React.FC<DesktopSidePanelProps> = ({
-  showAICommentator,
-  players,
+const DesktopSidePanel: React.FC<DesktopSidePanelProps> = ({ 
+  showAICommentator, 
+  players, 
   roundHistory = [],
-  selectedPlayer
+  selectedPlayer 
 }) => {
   return (
-    <motion.div 
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.4 }}
-      className="hidden md:block md:w-2/5 space-y-6"
-    >
-      {/* Commentateur IA */}
+    <div className="md:w-1/5 ml-4 space-y-4">
+      {/* Afficher l'AI Commentator si activé */}
       {showAICommentator && (
-        <AICommentator 
-          players={players}
-          roundHistory={roundHistory}
-          className="mb-6"
-        />
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          <AICommentator 
+            players={players}
+            roundHistory={roundHistory}
+          />
+        </motion.div>
       )}
       
-      {/* Section stats détaillées pour le joueur sélectionné */}
-      <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-4 border border-white/30 shadow-sm">
-        <h3 className="font-semibold text-gray-800 mb-3">
-          {selectedPlayer ? `Statistiques de ${selectedPlayer.name}` : 'Sélectionnez un joueur pour voir ses statistiques'}
-        </h3>
-        
-        {selectedPlayer ? (
-          <PlayerDetailedStats player={selectedPlayer} />
-        ) : (
-          <div className="text-gray-500 text-sm italic p-4 text-center">
-            Cliquez sur un joueur dans le classement pour afficher ses statistiques détaillées
-          </div>
-        )}
-      </div>
-    </motion.div>
+      {/* Statistiques détaillées du joueur sélectionné */}
+      {selectedPlayer && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+        >
+          <PlayerStatsCard player={selectedPlayer} />
+        </motion.div>
+      )}
+    </div>
   );
 };
 

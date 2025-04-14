@@ -1,8 +1,13 @@
 
-import React, { useRef } from 'react';
+/**
+ * Composant Avatar 3D optimisé du Professeur Cartouche
+ * Comprend un fallback robuste et des optimisations de performance
+ */
+import React, { useRef, useEffect, useState } from 'react';
 import { useGLTF } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import { Group } from 'three';
+import useModelsAvailability from '@/hooks/useModelsAvailability';
 
 interface CartoucheAvatarProps {
   scale?: number;
@@ -15,6 +20,10 @@ export function CartoucheAvatar({
   position = [0, -0.7, 0], 
   rotation = [0, 0, 0] 
 }: CartoucheAvatarProps) {
+  // État pour suivre les erreurs de chargement
+  const [hasError, setHasError] = useState<boolean>(false);
+  const { isModelAvailable } = useModelsAvailability('/models/cartouche.glb');
+  
   // Référence pour l'animation
   const modelRef = useRef<Group>(null);
   
@@ -30,9 +39,19 @@ export function CartoucheAvatar({
     }
   });
 
-  // Nous tentons de charger le modèle 3D avec une gestion d'erreur améliorée
+  // Si le modèle n'est pas disponible ou a une erreur, afficher un modèle de secours
+  if (!isModelAvailable || hasError) {
+    return (
+      <mesh position={position} rotation={rotation} scale={[scale * 0.5, scale * 0.5, scale * 0.5]}>
+        <sphereGeometry args={[0.5, 16, 16]} /> {/* Forme de secours améliorée */}
+        <meshStandardMaterial color="#8B5CF6" />
+      </mesh>
+    );
+  }
+
+  // Essayer de charger le modèle 3D avec gestion d'erreur
   try {
-    // Utilisation de draco pour la compression si disponible
+    // Utiliser draco pour la compression si disponible
     const { scene } = useGLTF('/models/cartouche.glb', true);
     
     // Cloner la scène pour éviter les conflits si le composant est monté plusieurs fois
@@ -53,10 +72,12 @@ export function CartoucheAvatar({
     );
   } catch (error) {
     console.error('Erreur lors du chargement du modèle 3D:', error);
+    setHasError(true);
+    
     // Retourner un objet 3D simple en cas d'échec
     return (
-      <mesh position={position} rotation={rotation} scale={[scale, scale, scale]}>
-        <sphereGeometry args={[0.5, 8, 8]} /> {/* Réduction de la complexité géométrique */}
+      <mesh position={position} rotation={rotation} scale={[scale * 0.5, scale * 0.5, scale * 0.5]}>
+        <sphereGeometry args={[0.5, 16, 16]} />
         <meshStandardMaterial color="#8B5CF6" />
       </mesh>
     );
@@ -65,4 +86,8 @@ export function CartoucheAvatar({
 
 // Préchargement du modèle pour améliorer les performances
 // Activer Draco si disponible avec le second paramètre à true
-useGLTF.preload('/models/cartouche.glb', true);
+try {
+  useGLTF.preload('/models/cartouche.glb', true);
+} catch (error) {
+  console.error('Erreur lors du préchargement du modèle:', error);
+}

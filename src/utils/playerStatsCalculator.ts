@@ -1,14 +1,15 @@
 
+/**
+ * Utilitaires pour le calcul des statistiques des joueurs
+ */
 import { Player, PlayerStatistics } from '@/types';
+import { isGameOver } from './gameUtils';
 
 /**
- * Calcule les statistiques d'un joueur
+ * Calcule les statistiques complètes pour un joueur
  */
-export const calculatePlayerStats = (player: Player): PlayerStatistics => {
-  const rounds = player.rounds || [];
-  const roundCount = rounds.length;
-  
-  if (roundCount === 0) {
+export function calculatePlayerStatistics(player: Player): PlayerStatistics {
+  if (!player || !player.rounds || player.rounds.length === 0) {
     return {
       averageScore: 0,
       bestRound: null,
@@ -17,84 +18,120 @@ export const calculatePlayerStats = (player: Player): PlayerStatistics => {
       improvementRate: 0,
       consistencyScore: 0,
       winStreak: 0,
-      highestRound: 0,
-      lowestRound: 0,
-      streakInfo: { current: 0, best: 0, type: 'none' }
     };
   }
-  
-  // Valeurs de base
-  const totalScore = player.totalScore;
-  const averageScore = roundCount > 0 ? totalScore / roundCount : 0;
-  const scores = rounds.map(r => r.score);
-  const highestRound = Math.max(...scores);
-  const lowestRound = Math.min(...scores);
-  const dutchCount = rounds.filter(r => r.isDutch).length;
-  
-  // Analyse des streaks
-  let currentPositiveStreak = 0;
-  let currentNegativeStreak = 0;
-  let bestPositiveStreak = 0;
-  let bestNegativeStreak = 0;
-  
-  rounds.forEach(round => {
-    if (round.score <= 0) {
-      currentPositiveStreak = 0;
-      currentNegativeStreak++;
-      bestNegativeStreak = Math.max(bestNegativeStreak, currentNegativeStreak);
-    } else {
-      currentNegativeStreak = 0;
-      currentPositiveStreak++;
-      bestPositiveStreak = Math.max(bestPositiveStreak, currentPositiveStreak);
-    }
-  });
-  
-  // Déterminer le type de streak courant
-  const streakType = rounds.length > 0 
-    ? (rounds[rounds.length - 1].score <= 0 ? 'negative' : 'positive')
-    : 'none';
-  
-  // Valeur de la streak courante
-  const currentStreak = streakType === 'positive' 
-    ? currentPositiveStreak 
-    : streakType === 'negative' 
-      ? currentNegativeStreak 
-      : 0;
-  
-  // Valeur de la meilleure streak
-  const bestStreak = Math.max(bestPositiveStreak, bestNegativeStreak);
-  
+
+  // Calcul du score moyen
+  const roundScores = player.rounds.map(round => round.score);
+  const totalScore = roundScores.reduce((sum, score) => sum + score, 0);
+  const averageScore = player.rounds.length > 0 ? totalScore / player.rounds.length : 0;
+
+  // Meilleur et pire round
+  const bestRound = Math.min(...roundScores);
+  const worstRound = Math.max(...roundScores);
+
+  // Nombre de Dutch
+  const dutchCount = player.rounds.filter(round => round.isDutch).length;
+
+  // Taux d'amélioration
+  let improvementRate = 0;
+  if (player.rounds.length > 1) {
+    const firstHalf = player.rounds.slice(0, Math.floor(player.rounds.length / 2));
+    const secondHalf = player.rounds.slice(Math.floor(player.rounds.length / 2));
+    
+    const firstHalfAvg = firstHalf.reduce((sum, round) => sum + round.score, 0) / firstHalf.length;
+    const secondHalfAvg = secondHalf.reduce((sum, round) => sum + round.score, 0) / secondHalf.length;
+    
+    improvementRate = firstHalfAvg - secondHalfAvg;
+  }
+
+  // Score de consistance (écart-type simplifié)
+  let consistencyScore = 0;
+  if (player.rounds.length > 1) {
+    const squaredDiffs = roundScores.map(score => Math.pow(score - averageScore, 2));
+    const variance = squaredDiffs.reduce((sum, diff) => sum + diff, 0) / player.rounds.length;
+    consistencyScore = Math.sqrt(variance);
+  }
+
+  // Séries de victoires
+  const streakInfo = calculateStreakInfo(player);
+  const winStreak = streakInfo.best;
+
   return {
     averageScore: parseFloat(averageScore.toFixed(1)),
-    bestRound: highestRound,
-    worstRound: lowestRound,
+    bestRound,
+    worstRound,
     dutchCount,
-    improvementRate: 0, // À implémenter selon les besoins
-    consistencyScore: 0, // À implémenter selon les besoins
-    winStreak: bestPositiveStreak,
-    highestRound,
-    lowestRound,
-    streakInfo: {
-      current: currentStreak,
-      best: bestStreak,
-      type: streakType
-    }
+    improvementRate: parseFloat(improvementRate.toFixed(1)),
+    consistencyScore: parseFloat(consistencyScore.toFixed(1)),
+    winStreak,
+    streakInfo
   };
-};
+}
 
 /**
- * Met à jour les statistiques de tous les joueurs
+ * Calcule les informations de série pour un joueur
  */
-export const updateAllPlayersStats = (players: Player[]): Player[] => {
-  return players.map(player => {
-    const stats = calculatePlayerStats(player);
-    return { ...player, stats };
-  });
-};
+export function calculateStreakInfo(player: Player): {
+  current: number;
+  best: number;
+  type: 'positive' | 'negative' | 'none';
+} {
+  if (!player.rounds || player.rounds.length < 2) {
+    return {
+      current: 0,
+      best: 0,
+      type: 'none'
+    };
+  }
+
+  // Initialisation
+  let currentStreak = 1;
+  let bestStreak = 1;
+  let currentType: 'positive' | 'negative' | 'none' = 'none';
+  
+  // Détermination du type initial
+  if (player.rounds.length > 1) {
+    const diff = player.rounds[1].score - player.rounds[0].score;
+    if (diff < 0) currentType = 'positive';
+    else if (diff > 0) currentType = 'negative';
+  }
+
+  // Parcours des rounds pour calculer les séries
+  for (let i = 1; i < player.rounds.length; i++) {
+    const prevScore = player.rounds[i - 1].score;
+    const currentScore = player.rounds[i].score;
+    const diff = currentScore - prevScore;
+    
+    // Continuation d'une série
+    if ((diff < 0 && currentType === 'positive') || (diff > 0 && currentType === 'negative')) {
+      currentStreak++;
+      if (currentStreak > bestStreak) {
+        bestStreak = currentStreak;
+      }
+    } 
+    // Nouvelle série
+    else if (diff !== 0) {
+      currentType = diff < 0 ? 'positive' : 'negative';
+      currentStreak = 1;
+    }
+  }
+
+  return {
+    current: currentStreak,
+    best: bestStreak,
+    type: currentType
+  };
+}
 
 /**
- * Vérifie si la partie est terminée (un joueur a dépassé la limite)
+ * Met à jour les statistiques pour tous les joueurs
  */
-export const isGameOver = (players: Player[], scoreLimit: number = 100): boolean => {
-  return players.some(player => player.totalScore >= scoreLimit);
-};
+export function updateAllPlayersStats(players: Player[]): Player[] {
+  if (!players) return [];
+  
+  return players.map(player => ({
+    ...player,
+    stats: calculatePlayerStatistics(player)
+  }));
+}

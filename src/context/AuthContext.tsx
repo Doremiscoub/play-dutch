@@ -1,24 +1,10 @@
 
+/**
+ * Contexte d'authentification avec gestion du mode hors-ligne
+ */
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useUser as useClerkUser, useAuth as useClerkAuth } from '@clerk/clerk-react';
-
-// Types pour notre contexte d'authentification simplifié
-interface AuthUser {
-  id: string;
-  fullName: string | null;
-  firstName: string | null;
-  lastName: string | null;
-  username: string | null;
-  imageUrl: string | null;
-}
-
-interface AuthContextType {
-  isSignedIn: boolean;
-  isLoaded: boolean;
-  user: AuthUser | null;
-  signOut: () => Promise<void>;
-  isOfflineMode: boolean;
-}
+import { AuthUser, AuthContextType } from '@/types';
 
 // Valeurs par défaut pour le mode hors-ligne
 const defaultAuthContext: AuthContextType = {
@@ -29,10 +15,17 @@ const defaultAuthContext: AuthContextType = {
   isOfflineMode: false
 };
 
+// Création du contexte
 const AuthContext = createContext<AuthContextType>(defaultAuthContext);
 
+/**
+ * Hook pour utiliser le contexte d'authentification
+ */
 export const useAuth = () => useContext(AuthContext);
 
+/**
+ * Provider du contexte d'authentification avec gestion du mode hors-ligne
+ */
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [isOfflineMode, setIsOfflineMode] = useState<boolean>(
     localStorage.getItem('clerk_auth_failed') === 'true'
@@ -89,7 +82,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   );
 };
 
-// Composant qui utilise les hooks Clerk réels
+/**
+ * Composant qui utilise les hooks Clerk réels
+ */
 const ClerkAuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const { user, isSignedIn, isLoaded } = useClerkUser();
   const { signOut } = useClerkAuth();

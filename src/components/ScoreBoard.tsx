@@ -1,15 +1,18 @@
 
+/**
+ * Tableau des scores principal - Composant refactorisé
+ */
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Player } from '@/types';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { toast } from 'sonner';
-import PageLayout from './PageLayout';
+import PageLayout from './layouts/PageLayout';
 import CustomScoreBoardButtons from './CustomScoreBoardButtons';
 import ScoreTableView from './ScoreTableView';
 import AICommentator from './AICommentator';
 
-// Import the newly created components
+// Import des composants modulaires
 import ScoreBoardHeader from './scoreboard/ScoreBoardHeader';
 import ScoreBoardTabs from './ScoreBoardTabs';
 import PlayerListView from './scoreboard/PlayerListView';
@@ -42,24 +45,26 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
   onCancelEndGame,
   scoreLimit = 100
 }) => {
+  // État local pour la gestion de l'interface
   const [view, setView] = useState<'list' | 'table'>('list');
   const [showAICommentator, setShowAICommentator] = useState<boolean>(true);
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
   const [showUndoConfirmation, setShowUndoConfirmation] = useState<boolean>(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
   
-  // Sort players by score, best to worst
+  // Tri des joueurs par score (du meilleur au moins bon)
   const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
   
-  // Auto-select the first player for detailed stats
+  // Sélection automatique du premier joueur pour les stats détaillées
   useEffect(() => {
     if (sortedPlayers.length > 0 && !selectedPlayer) {
       setSelectedPlayer(sortedPlayers[0]);
     }
   }, [sortedPlayers, selectedPlayer]);
   
-  // Handle undo request
+  // Gestion de l'annulation d'une manche
   const handleRequestUndo = () => {
+    // Vérification s'il y a des manches à annuler
     if (players.length === 0 || players[0].rounds.length === 0) {
       toast.error('Pas de manche à annuler !');
       return;
@@ -76,7 +81,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
     setShowUndoConfirmation(false);
   };
   
-  // Handle player selection for detailed stats
+  // Sélection d'un joueur pour voir ses stats détaillées
   const handlePlayerSelect = (player: Player) => {
     setSelectedPlayer(player);
   };
@@ -84,13 +89,13 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
   return (
     <PageLayout backgroundVariant="subtle" className="pb-12 sm:pb-20">
       <div className="w-full max-w-6xl mx-auto px-1 sm:px-2">
-        {/* Header with navigation buttons and title */}
+        {/* En-tête avec boutons de navigation et titre */}
         <ScoreBoardHeader 
           roundCount={players.length > 0 ? players[0]?.rounds.length || 0 : 0}
           scoreLimit={scoreLimit}
         />
         
-        {/* AI Commentator - both on mobile and desktop */}
+        {/* Commentateur IA - sur mobile et desktop */}
         {showAICommentator && (
           <div className="mb-4">
             <AICommentator 
@@ -100,15 +105,15 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
           </div>
         )}
         
-        {/* Tabs for switching between views */}
+        {/* Onglets pour changer de vue */}
         <ScoreBoardTabs 
           currentView={view}
           onViewChange={(newView) => setView(newView)}
         />
         
-        {/* Main content */}
+        {/* Contenu principal */}
         <div className={`mt-4 ${isDesktop ? 'md:flex md:gap-4' : ''}`}>
-          {/* Left column (ranking or table) */}
+          {/* Colonne de gauche (classement ou tableau) */}
           <div className={`${isDesktop && view === 'list' ? 'md:w-4/5' : 'w-full'} z-20 relative`}>
             <AnimatePresence mode="wait">
               {view === 'list' && (
@@ -119,7 +124,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                   exit={{ opacity: 0 }}
                   className="w-full"
                 >
-                  {/* Player list view */}
+                  {/* Vue liste des joueurs */}
                   <PlayerListView 
                     players={players}
                     isDesktop={isDesktop}
@@ -146,10 +151,10 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
             </AnimatePresence>
           </div>
           
-          {/* Right column (desktop only - player stats) */}
+          {/* Colonne de droite (desktop uniquement - stats joueur) */}
           {isDesktop && view === 'list' && (
             <DesktopSidePanel 
-              showAICommentator={false} // AI commentator is shown at the top for all screens
+              showAICommentator={false} // Commentateur IA affiché en haut pour tous les écrans
               players={players}
               roundHistory={roundHistory}
               selectedPlayer={selectedPlayer}
@@ -157,7 +162,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
           )}
         </div>
         
-        {/* Action buttons */}
+        {/* Boutons d'action */}
         <div className="mt-4">
           <CustomScoreBoardButtons
             players={players}
@@ -168,7 +173,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
         </div>
       </div>
       
-      {/* End game confirmation dialog */}
+      {/* Dialogues de confirmation */}
       {showGameEndConfirmation && onConfirmEndGame && onCancelEndGame && (
         <EndGameConfirmationDialog 
           isOpen={showGameEndConfirmation}
@@ -177,7 +182,6 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
         />
       )}
       
-      {/* Undo confirmation dialog */}
       <UndoConfirmationDialog 
         isOpen={showUndoConfirmation}
         onConfirm={handleConfirmUndo}

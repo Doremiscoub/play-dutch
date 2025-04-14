@@ -1,4 +1,7 @@
 
+/**
+ * Dialogue de confirmation pour terminer une partie
+ */
 import React from 'react';
 import {
   AlertDialog,
@@ -8,8 +11,9 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogTitle
-} from '@/components/ui/alert-dialog';
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { Flag } from 'lucide-react';
 
 interface EndGameConfirmationDialogProps {
   isOpen: boolean;
@@ -23,17 +27,31 @@ const EndGameConfirmationDialog: React.FC<EndGameConfirmationDialogProps> = ({
   onCancel
 }) => {
   return (
-    <AlertDialog open={isOpen}>
-      <AlertDialogContent className="bg-white rounded-2xl border-white/50">
+    <AlertDialog open={isOpen} onOpenChange={onCancel}>
+      <AlertDialogContent className="bg-white/90 backdrop-blur-lg border border-white/70 rounded-2xl shadow-lg">
         <AlertDialogHeader>
-          <AlertDialogTitle>Terminer la partie ?</AlertDialogTitle>
+          <AlertDialogTitle className="text-dutch-orange flex items-center gap-2">
+            <Flag className="h-5 w-5" /> Terminer la partie ?
+          </AlertDialogTitle>
           <AlertDialogDescription>
-            Êtes-vous sûr de vouloir terminer cette partie ? Cette action ne peut pas être annulée.
+            La partie sera enregistrée dans l'historique avec les scores actuels.
+            <br/>
+            Cette action est irréversible.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel onClick={onCancel} className="bg-gray-100 hover:bg-gray-200 text-gray-700">Annuler</AlertDialogCancel>
-          <AlertDialogAction onClick={onConfirm} className="bg-dutch-purple hover:bg-dutch-purple/90 text-white">Terminer</AlertDialogAction>
+          <AlertDialogCancel 
+            className="rounded-xl bg-gray-100 hover:bg-gray-200 border-gray-200 text-gray-700"
+            onClick={onCancel}
+          >
+            Continuer de jouer
+          </AlertDialogCancel>
+          <AlertDialogAction 
+            className="rounded-xl bg-dutch-orange text-white hover:bg-dutch-orange/90"
+            onClick={onConfirm}
+          >
+            Terminer la partie
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
