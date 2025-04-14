@@ -5,7 +5,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Player } from '@/types';
-import { ChevronUp, ChevronDown, Sparkles, ThumbsUp } from 'lucide-react';
+import { ChevronUp, ChevronDown, Sparkles, ThumbsUp, ChevronRight } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { getScoreColorClass } from '@/utils/gameUtils';
 
@@ -15,6 +15,7 @@ interface PlayerScoreCardProps {
   isWinner?: boolean;
   lastRoundScore?: number;
   warningThreshold?: number;
+  isExpanded?: boolean;
 }
 
 const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
@@ -22,7 +23,8 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
   position,
   isWinner = false,
   lastRoundScore,
-  warningThreshold
+  warningThreshold,
+  isExpanded = false
 }) => {
   // Déterminer si le joueur est proche du seuil d'avertissement
   const isNearThreshold = warningThreshold && player.totalScore >= warningThreshold;
@@ -88,6 +90,7 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
         ? 'bg-dutch-purple/30 border-dutch-purple shadow-[0_8px_30px_rgb(139,92,246,0.2)]' 
         : 'bg-white/95 border-white shadow-[0_4px_30px_rgba(0,0,0,0.08)]'}
       ${isNearThreshold ? 'bg-dutch-orange/30 border-dutch-orange/60 shadow-[0_8px_30px_rgb(249,115,22,0.2)]' : ''}
+      ${isExpanded ? 'ring-2 ring-dutch-blue/30 shadow-lg' : ''}
     `}>
       <div className="flex items-center gap-3">
         {/* Position */}
@@ -106,13 +109,13 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
           {getDynamicComment()}
         </div>
         
-        {/* Score */}
-        <div className="text-right">
-          <div className="flex items-center gap-1">
-            <span className={`text-xl font-bold ${isNearThreshold ? 'text-dutch-orange' : 'text-gray-800'}`}>
-              {player.totalScore}
-            </span>
-          </div>
+        {/* Score et indicateur d'expansion */}
+        <div className="text-right flex items-center">
+          <span className={`text-xl font-bold ${isNearThreshold ? 'text-dutch-orange' : 'text-gray-800'}`}>
+            {player.totalScore}
+          </span>
+          
+          <ChevronRight className={`ml-2 h-5 w-5 text-gray-500 transition-transform ${isExpanded ? 'rotate-90' : ''}`}/>
         </div>
       </div>
       

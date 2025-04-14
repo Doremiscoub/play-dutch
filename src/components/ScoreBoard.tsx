@@ -16,7 +16,7 @@ import AICommentator from './AICommentator';
 import ScoreBoardHeader from './scoreboard/ScoreBoardHeader';
 import ScoreBoardTabs from './ScoreBoardTabs';
 import PlayerListView from './scoreboard/PlayerListView';
-import DesktopSidePanel from './scoreboard/DesktopSidePanel';
+import GameStatsPanel from './scoreboard/GameStatsPanel';
 import UndoConfirmationDialog from './scoreboard/UndoConfirmationDialog';
 import EndGameConfirmationDialog from './scoreboard/EndGameConfirmationDialog';
 
@@ -113,8 +113,8 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
         
         {/* Contenu principal */}
         <div className={`mt-4 ${isDesktop ? 'md:flex md:gap-4' : ''}`}>
-          {/* Colonne de gauche (classement ou tableau) */}
-          <div className={`${isDesktop && view === 'list' ? 'md:w-4/5' : 'w-full'} z-20 relative`}>
+          {/* Colonne de gauche (classement ou tableau) - responsive */}
+          <div className={`${isDesktop ? 'md:w-3/4' : 'w-full'} z-20 relative`}>
             <AnimatePresence mode="wait">
               {view === 'list' && (
                 <motion.div
@@ -124,7 +124,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                   exit={{ opacity: 0 }}
                   className="w-full"
                 >
-                  {/* Vue liste des joueurs */}
+                  {/* Vue liste des joueurs avec cartes dépliables */}
                   <PlayerListView 
                     players={players}
                     isDesktop={isDesktop}
@@ -151,14 +151,14 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
             </AnimatePresence>
           </div>
           
-          {/* Colonne de droite (desktop uniquement - stats joueur) */}
-          {isDesktop && view === 'list' && (
-            <DesktopSidePanel 
-              showAICommentator={false} // Commentateur IA affiché en haut pour tous les écrans
-              players={players}
-              roundHistory={roundHistory}
-              selectedPlayer={selectedPlayer}
-            />
+          {/* Panneau statistique de droite (desktop uniquement) */}
+          {isDesktop && (
+            <div className="md:w-1/4">
+              <GameStatsPanel
+                players={players}
+                roundHistory={roundHistory}
+              />
+            </div>
           )}
         </div>
         
