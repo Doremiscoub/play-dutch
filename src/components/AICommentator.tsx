@@ -5,6 +5,8 @@ import { MessageCircle, Bot, Sparkles, BrainCircuit, Megaphone } from 'lucide-re
 import { Player } from '@/types';
 import { getRandomComment } from '@/utils/commentGenerator';
 import ProfessorAvatar from './ProfessorAvatar';
+import { useElevenLabs } from '@/hooks/use-eleven-labs';
+import { useSound } from '@/hooks/use-sound';
 
 interface AICommentatorProps {
   players: Player[];
@@ -17,6 +19,8 @@ const AICommentator: React.FC<AICommentatorProps> = ({ players, roundHistory = [
   const [commentType, setCommentType] = useState<'info' | 'joke' | 'sarcasm' | 'encouragement' | 'headline'>('info');
   const [isVisible, setIsVisible] = useState(true);
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const { speakWithFallback } = useElevenLabs();
+  const { isSoundEnabled, playCardSound } = useSound();
 
   // Générer un nouveau commentaire selon certains événements
   useEffect(() => {
@@ -50,41 +54,19 @@ const AICommentator: React.FC<AICommentatorProps> = ({ players, roundHistory = [
     encouragement: 'border-dutch-green/30 bg-dutch-green/5',
     headline: 'border-dutch-orange/30 bg-gradient-to-r from-dutch-orange/10 to-dutch-purple/10'
   };
-
-  // Icône selon le type de commentaire
-  const CommentIcon = () => {
-    switch (commentType) {
-      case 'info': return <MessageCircle className="h-5 w-5 text-dutch-blue" />;
-      case 'joke': return <Sparkles className="h-5 w-5 text-dutch-orange" />;
-      case 'sarcasm': return <Bot className="h-5 w-5 text-dutch-purple" />;
-      case 'encouragement': return <BrainCircuit className="h-5 w-5 text-green-500" />;
-      case 'headline': return <Megaphone className="h-5 w-5 text-dutch-orange" />;
-      default: return <MessageCircle className="h-5 w-5" />;
-    }
-  };
   
-  // Fonction de lecture à voix haute
-  const speakMessage = () => {
-    if (!isSpeaking && 'speechSynthesis' in window) {
+  // Fonction de lecture à voix haute avec Eleven Labs
+  const speakMessage = async () => {
+    if (!isSpeaking && isSoundEnabled) {
       setIsSpeaking(true);
-      const utterance = new SpeechSynthesisUtterance(comment);
       
-      // Trouver une voix française si disponible
-      const voices = window.speechSynthesis.getVoices();
-      const frenchVoice = voices.find(voice => voice.lang.includes('fr'));
-      if (frenchVoice) {
-        utterance.voice = frenchVoice;
-      }
+      // Jouer un effet sonore pour attirer l'attention
+      playCardSound();
       
-      utterance.pitch = 1.1; // Légèrement plus aigu
-      utterance.rate = 1.05; // Légèrement plus rapide
-      utterance.volume = 1;
+      // Utiliser Eleven Labs ou le fallback
+      await speakWithFallback(comment);
       
-      utterance.onend = () => {
-        setIsSpeaking(false);
-      };
-      
-      window.speechSynthesis.speak(utterance);
+      setIsSpeaking(false);
     }
   };
 

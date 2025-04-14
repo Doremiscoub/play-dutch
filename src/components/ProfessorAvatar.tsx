@@ -8,6 +8,8 @@ import { Volume2 } from 'lucide-react';
 import { Button } from './ui/button';
 import ErrorBoundary from './ErrorBoundary';
 import dynamic from '../lib/dynamicImport';
+import { useElevenLabs } from '@/hooks/use-eleven-labs';
+import { useSound } from '@/hooks/use-sound';
 
 // Importation dynamique du composant 3D pour éviter les problèmes de SSR
 const CartoucheScene = dynamic(
@@ -63,6 +65,8 @@ interface ProfessorAvatarProps {
 const ProfessorAvatar: React.FC<ProfessorAvatarProps> = ({ message, onSpeakMessage }) => {
   const [modelError, setModelError] = useState<boolean>(false);
   const [is3DLoaded, setIs3DLoaded] = useState<boolean>(false);
+  const { config: elevenLabsConfig, speakWithFallback, isLoading: isSpeaking } = useElevenLabs();
+  const { isSoundEnabled } = useSound();
   
   // Vérifier la disponibilité du modèle 3D et marquer comme chargé après un délai
   useEffect(() => {
@@ -82,6 +86,17 @@ const ProfessorAvatar: React.FC<ProfessorAvatarProps> = ({ message, onSpeakMessa
     
     checkModelAvailability();
   }, []);
+
+  // Fonction pour faire parler le professeur via Eleven Labs ou fallback
+  const handleSpeak = async () => {
+    if (isSoundEnabled) {
+      if (onSpeakMessage) {
+        onSpeakMessage();
+      } else {
+        await speakWithFallback(message);
+      }
+    }
+  };
 
   return (
     <div className="flex items-center gap-3">
@@ -123,17 +138,19 @@ const ProfessorAvatar: React.FC<ProfessorAvatarProps> = ({ message, onSpeakMessa
         </motion.div>
       </div>
       
-      {onSpeakMessage && (
-        <Button
-          variant="outline"
-          size="icon"
-          className="bg-white/80 hover:bg-white border border-dutch-purple/30 text-dutch-purple hover:text-dutch-purple/80 rounded-full w-8 h-8 p-0"
-          onClick={onSpeakMessage}
-          title="Écouter"
-        >
-          <Volume2 className="w-4 h-4" />
-        </Button>
-      )}
+      <Button
+        variant="outline"
+        size="icon"
+        className="bg-white/80 hover:bg-white border border-dutch-purple/30 text-dutch-purple hover:text-dutch-purple/80 rounded-full w-8 h-8 p-0"
+        onClick={handleSpeak}
+        disabled={isSpeaking}
+        title={elevenLabsConfig.enabled ? "Écouter (Eleven Labs)" : "Écouter"}
+      >
+        <Volume2 className="w-4 h-4" />
+        {isSpeaking && (
+          <span className="absolute top-0 right-0 w-2 h-2 bg-dutch-orange rounded-full animate-ping" />
+        )}
+      </Button>
     </div>
   );
 };
