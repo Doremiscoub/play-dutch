@@ -48,3 +48,21 @@ export interface ScoreBoardProps {
   onCancelEndGame?: () => void;
   scoreLimit?: number;
 }
+
+// Add the AuthUser and AuthContextType interfaces
+export interface AuthUser {
+  id: string;
+  fullName: string | null;
+  firstName: string | null;
+  lastName: string | null;
+  username: string | null;
+  imageUrl: string | null;
+}
+
+export interface AuthContextType {
+  isSignedIn: boolean;
+  isLoaded: boolean;
+  user: AuthUser | null;
+  signOut: () => Promise<void>;
+  isOfflineMode: boolean;
+}
