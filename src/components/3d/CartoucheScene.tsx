@@ -1,8 +1,11 @@
 
 import React, { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Stage, useProgress } from '@react-three/drei';
+import { OrbitControls, Stage, useProgress, useGLTF } from '@react-three/drei';
 import { CartoucheAvatar } from './CartoucheAvatar';
+
+// Précharger le modèle avec compression Draco si disponible
+useGLTF.preload('/models/cartouche.glb', true); // Le paramètre true active Draco si disponible
 
 // Composant de chargement avec progression
 function Loader() {
@@ -37,11 +40,18 @@ export default function CartoucheScene({
           shadows 
           className="w-full h-full" 
           camera={{ position: [0, 0, 5], fov: 45 }}
-          gl={{ preserveDrawingBuffer: true, antialias: true }}
+          gl={{ 
+            preserveDrawingBuffer: true, 
+            antialias: true,
+            powerPreference: 'high-performance', // Optimisation pour les appareils mobiles
+            alpha: true, // Fond transparent
+          }}
+          dpr={[1, 2]} // Limite le DPR pour améliorer les performances sur mobile
+          performance={{ min: 0.5 }} // Optimisation pour les appareils mobiles
         >
-          {/* Éclairage amélioré */}
+          {/* Éclairage amélioré et optimisé */}
           <ambientLight intensity={0.6} />
-          <directionalLight position={[5, 5, 5]} intensity={1} castShadow />
+          <directionalLight position={[5, 5, 5]} intensity={1} castShadow={false} /> {/* Désactivation des ombres pour améliorer les performances */}
           
           {/* Utilisation de Stage pour un environnement optimisé */}
           <Stage 
@@ -49,6 +59,7 @@ export default function CartoucheScene({
             intensity={0.6}
             preset="rembrandt"
             shadows={{ type: 'contact', opacity: 0.2, blur: 3 }}
+            adjustCamera={false} // Améliore la performance en évitant les ajustements dynamiques
           >
             <CartoucheAvatar scale={1.75} />
           </Stage>
@@ -59,7 +70,8 @@ export default function CartoucheScene({
             minPolarAngle={Math.PI / 4}
             maxPolarAngle={Math.PI / 1.8}
             autoRotate={autoRotate} 
-            autoRotateSpeed={1} 
+            autoRotateSpeed={1}
+            enableDamping={false} // Désactivé pour améliorer les performances
           />
         </Canvas>
       </Suspense>
