@@ -5,14 +5,14 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Plus, History, BookOpen, Settings, LogIn, ExternalLink, Trophy } from 'lucide-react';
 import AnimatedBackground from '@/components/AnimatedBackground';
-import { useUser } from '@clerk/clerk-react';
 import { animationVariants } from '@/utils/animationUtils';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Badge } from '@/components/ui/badge';
+import { useAuth } from '@/context/AuthContext';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
-  const { isSignedIn, user, isLoaded } = useUser();
+  const { isSignedIn, user, isLoaded } = useAuth();
   const [hasSavedGame, setHasSavedGame] = useState<boolean>(false);
 
   useEffect(() => {
@@ -55,7 +55,7 @@ const Home: React.FC = () => {
     </svg>
   );
 
-  // Afficher un loader pendant que Clerk charge
+  // Afficher un loader pendant que l'authentification charge
   if (!isLoaded) {
     return (
       <div className="min-h-screen flex items-center justify-center">

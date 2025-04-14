@@ -10,6 +10,7 @@ import SettingsPage from './pages/SettingsPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import { SignIn, SignUp } from "@clerk/clerk-react";
 import { toast } from 'sonner';
+import { AuthProvider } from './context/AuthContext';
 
 const App = () => {
   // Notification de mode hors-ligne si détecté
@@ -21,24 +22,26 @@ const App = () => {
   }, []);
   
   return (
-    <Router>
-      <Routes>
-        {/* Pages d'authentification */}
-        <Route path="/sign-in" element={<SignIn routing="path" path="/sign-in" />} />
-        <Route path="/sign-up" element={<SignUp routing="path" path="/sign-up" />} />
-        
-        {/* Pages principales */}
-        <Route path="/" element={<Home />} />
-        <Route path="/game/setup" element={<GameSetup />} />
-        <Route path="/game" element={<ProtectedRoute><GamePage /></ProtectedRoute>} />
-        <Route path="/history" element={<ProtectedRoute><History /></ProtectedRoute>} />
-        <Route path="/rules" element={<Rules />} />
-        <Route path="/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
-        
-        {/* Redirection pour les routes non définies */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <Routes>
+          {/* Pages d'authentification */}
+          <Route path="/sign-in" element={<SignIn routing="path" path="/sign-in" />} />
+          <Route path="/sign-up" element={<SignUp routing="path" path="/sign-up" />} />
+          
+          {/* Pages principales */}
+          <Route path="/" element={<Home />} />
+          <Route path="/game/setup" element={<GameSetup />} />
+          <Route path="/game" element={<ProtectedRoute><GamePage /></ProtectedRoute>} />
+          <Route path="/history" element={<ProtectedRoute><History /></ProtectedRoute>} />
+          <Route path="/rules" element={<Rules />} />
+          <Route path="/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
+          
+          {/* Redirection pour les routes non définies */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
 };
 

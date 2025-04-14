@@ -12,58 +12,56 @@ import { Toaster } from "sonner"
 const CLERK_PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY || 
                              'pk_test_YmFsYW5jZWQtYnJlYW0tMjguY2xlcmsuYWNjb3VudHMuZGV2JA'
 
-// Vérifier immédiatement si le mode hors ligne a déjà été activé précédemment
-const isOfflineMode = localStorage.getItem('clerk_auth_failed') === 'true';
-
-if (isOfflineMode) {
-  console.info("Mode hors ligne détecté, authentification Clerk ignorée");
-}
-
-// Protection contre les erreurs d'initialisation de Clerk
-if (typeof window !== 'undefined' && !isOfflineMode) {
-  // Timeout très court pour détecter rapidement les problèmes d'initialisation Clerk
-  setTimeout(() => {
-    // Utilisation de la vérification sécurisée avec 'in' au lieu d'accéder directement à window.Clerk
-    if (!('Clerk' in window) && !localStorage.getItem('clerk_auth_failed')) {
-      console.warn("Clerk n'a pas pu être initialisé dans le délai imparti");
-      localStorage.setItem('clerk_auth_failed', 'true');
-      // Forcer un rechargement pour appliquer le mode hors ligne
-      window.location.reload();
-    }
-  }, 800); // Timeout très court
-
-  // Écouter les erreurs non gérées qui pourraient provenir de Clerk
+// Gestionnaire d'erreurs global pour Clerk
+function setupErrorHandling() {
+  // Si l'application est déjà en mode hors-ligne, pas besoin de configurer la gestion d'erreurs
+  if (localStorage.getItem('clerk_auth_failed') === 'true') {
+    console.info("Mode hors ligne déjà activé, gestion d'erreurs Clerk ignorée");
+    return;
+  }
+  
+  // Intercepter les rejets de promesses non gérés
   window.addEventListener('unhandledrejection', (event) => {
-    // Vérifier si l'erreur provient de Clerk
     if (event.reason && typeof event.reason.message === 'string' && 
         (event.reason.message.includes('Clerk') || event.reason.message.includes('ClerkJS'))) {
       console.error("Erreur d'initialisation de Clerk:", event.reason);
       localStorage.setItem('clerk_auth_failed', 'true');
-      // Forcer un rechargement pour appliquer le mode hors ligne
       window.location.reload();
     }
   });
+  
+  // Timeout court pour vérifier si Clerk est initialisé
+  setTimeout(() => {
+    if (typeof window !== 'undefined' && !('Clerk' in window) && 
+        !localStorage.getItem('clerk_auth_failed')) {
+      console.warn("Clerk n'a pas pu être initialisé dans le délai imparti");
+      localStorage.setItem('clerk_auth_failed', 'true');
+      window.location.reload();
+    }
+  }, 1500);
 }
+
+// Vérifier si le mode hors-ligne est déjà activé
+const isOfflineMode = localStorage.getItem('clerk_auth_failed') === 'true';
 
 const root = ReactDOM.createRoot(document.getElementById('root')!);
 
-// Utiliser une fonction pour rendre l'application avec ou sans ClerkProvider
-const renderApp = () => {
-  // Déjà en mode hors ligne
-  if (isOfflineMode) {
-    return (
-      <React.StrictMode>
-        <ThemeProvider>
-          <App />
-          <Toaster position="top-center" richColors />
-        </ThemeProvider>
-      </React.StrictMode>
-    );
-  }
-  
-  // Mode normal avec tentative d'authentification
-  return (
-    <React.StrictMode>
+// Configurer la détection d'erreur si nécessaire
+if (!isOfflineMode) {
+  setupErrorHandling();
+}
+
+// Rendre l'application
+root.render(
+  <React.StrictMode>
+    {isOfflineMode ? (
+      // Mode hors-ligne : pas de ClerkProvider
+      <ThemeProvider>
+        <App />
+        <Toaster position="top-center" richColors />
+      </ThemeProvider>
+    ) : (
+      // Mode normal : avec ClerkProvider
       <ClerkProvider 
         publishableKey={CLERK_PUBLISHABLE_KEY}
         clerkJSVersion="5.56.0-snapshot.v20250312225817"
@@ -74,7 +72,6 @@ const renderApp = () => {
         afterSignOutUrl="/"
         appearance={{
           elements: {
-            // Style personnalisé VisionOS
             formButtonPrimary: 'bg-dutch-blue hover:bg-dutch-blue/90 rounded-2xl transition-all',
             card: 'backdrop-blur-xl bg-white/70 border border-white/50 rounded-3xl shadow-sm',
             footerActionLink: 'text-dutch-blue hover:text-dutch-blue/90',
@@ -89,9 +86,6 @@ const renderApp = () => {
           <Toaster position="top-center" richColors />
         </ThemeProvider>
       </ClerkProvider>
-    </React.StrictMode>
-  );
-};
-
-// Rendre l'application en utilisant la fonction
-root.render(renderApp());
+    )}
+  </React.StrictMode>
+);

@@ -1,6 +1,4 @@
-
 import React, { useState } from 'react';
-import { useUser, useAuth } from '@clerk/clerk-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -16,6 +14,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
+import { useAuth } from '@/context/AuthContext';
 
 interface AuthStatusProps {
   showLoginButtons?: boolean;
@@ -24,8 +23,7 @@ interface AuthStatusProps {
 }
 
 const AuthStatus = ({ showLoginButtons = true, buttonStyle = 'default', className = '' }: AuthStatusProps) => {
-  const { isSignedIn, user, isLoaded } = useUser();
-  const { signOut } = useAuth();
+  const { isSignedIn, user, isLoaded, signOut, isOfflineMode } = useAuth();
   const navigate = useNavigate();
   const [isSigningOut, setIsSigningOut] = useState(false);
 
@@ -51,7 +49,7 @@ const AuthStatus = ({ showLoginButtons = true, buttonStyle = 'default', classNam
     window.location.reload();
   };
 
-  // Si Clerk est en cours de chargement, afficher un loader
+  // Si l'auth est en cours de chargement, afficher un loader
   if (!isLoaded) {
     return (
       <div className="animate-pulse flex items-center">

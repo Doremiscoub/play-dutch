@@ -1,0 +1,118 @@
+
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { useUser as useClerkUser, useAuth as useClerkAuth } from '@clerk/clerk-react';
+
+// Types pour notre contexte d'authentification simplifié
+interface AuthUser {
+  id: string;
+  fullName: string | null;
+  firstName: string | null;
+  lastName: string | null;
+  username: string | null;
+  imageUrl: string | null;
+}
+
+interface AuthContextType {
+  isSignedIn: boolean;
+  isLoaded: boolean;
+  user: AuthUser | null;
+  signOut: () => Promise<void>;
+  isOfflineMode: boolean;
+}
+
+// Valeurs par défaut pour le mode hors-ligne
+const defaultAuthContext: AuthContextType = {
+  isSignedIn: false,
+  isLoaded: true,
+  user: null,
+  signOut: async () => {},
+  isOfflineMode: false
+};
+
+const AuthContext = createContext<AuthContextType>(defaultAuthContext);
+
+export const useAuth = () => useContext(AuthContext);
+
+export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [isOfflineMode, setIsOfflineMode] = useState<boolean>(
+    localStorage.getItem('clerk_auth_failed') === 'true'
+  );
+  
+  useEffect(() => {
+    // Vérifier si nous sommes déjà en mode hors-ligne
+    if (localStorage.getItem('clerk_auth_failed') === 'true') {
+      setIsOfflineMode(true);
+    }
+
+    // Surveiller les erreurs Clerk et basculer en mode hors-ligne si nécessaire
+    const handleError = (event: ErrorEvent) => {
+      if (event.error && event.error.message && 
+          (event.error.message.includes('Clerk') || 
+           event.error.message.includes('ClerkJS'))) {
+        console.warn("Erreur Clerk détectée, activation du mode hors-ligne");
+        localStorage.setItem('clerk_auth_failed', 'true');
+        setIsOfflineMode(true);
+      }
+    };
+
+    window.addEventListener('error', handleError);
+    
+    // Timeout rapide pour détecter si Clerk est chargé correctement
+    const timeout = setTimeout(() => {
+      if (!window.hasOwnProperty('Clerk') && !isOfflineMode) {
+        console.warn("Clerk non disponible après le délai, activation du mode hors-ligne");
+        localStorage.setItem('clerk_auth_failed', 'true');
+        setIsOfflineMode(true);
+      }
+    }, 2000);
+
+    return () => {
+      window.removeEventListener('error', handleError);
+      clearTimeout(timeout);
+    };
+  }, [isOfflineMode]);
+
+  // Si nous sommes en mode hors-ligne, utiliser des valeurs par défaut
+  if (isOfflineMode) {
+    return (
+      <AuthContext.Provider value={{ ...defaultAuthContext, isOfflineMode: true }}>
+        {children}
+      </AuthContext.Provider>
+    );
+  }
+
+  // Sinon, utiliser les hooks Clerk réels
+  return (
+    <ClerkAuthProvider>
+      {children}
+    </ClerkAuthProvider>
+  );
+};
+
+// Composant qui utilise les hooks Clerk réels
+const ClerkAuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const { user, isSignedIn, isLoaded } = useClerkUser();
+  const { signOut } = useClerkAuth();
+  
+  // Convertir l'utilisateur Clerk en format cohérent
+  const authUser: AuthUser | null = user ? {
+    id: user.id,
+    fullName: user.fullName,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    username: user.username,
+    imageUrl: user.imageUrl
+  } : null;
+  
+  return (
+    <AuthContext.Provider value={{ 
+      isSignedIn: !!isSignedIn, 
+      isLoaded, 
+      user: authUser,
+      signOut,
+      isOfflineMode: false
+    }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
