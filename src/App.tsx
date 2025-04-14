@@ -8,7 +8,8 @@ import History from './pages/History';
 import Rules from './pages/Rules';
 import SettingsPage from './pages/SettingsPage';
 import ProtectedRoute from './components/ProtectedRoute';
-import { SignIn, SignUp } from "@clerk/clerk-react";
+import SignIn from './pages/SignIn';
+import SignUp from './pages/SignUp';
 import { toast } from 'sonner';
 import { AuthProvider } from './context/AuthContext';
 
@@ -26,8 +27,8 @@ const App = () => {
       <Router>
         <Routes>
           {/* Pages d'authentification */}
-          <Route path="/sign-in" element={<SignIn routing="path" path="/sign-in" />} />
-          <Route path="/sign-up" element={<SignUp routing="path" path="/sign-up" />} />
+          <Route path="/sign-in" element={<SignIn />} />
+          <Route path="/sign-up" element={<SignUp />} />
           
           {/* Pages principales */}
           <Route path="/" element={<Home />} />

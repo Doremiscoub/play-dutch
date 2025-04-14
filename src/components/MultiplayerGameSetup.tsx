@@ -1,5 +1,5 @@
+
 import React, { useState, useEffect } from 'react';
-import { useUser } from '@clerk/clerk-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import LocalGameSetup from './LocalGameSetup';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { useAuth } from '@/context/AuthContext';
 
 interface MultiplayerGameSetupProps {
   onStartLocalGame: (playerNames: string[]) => void;
@@ -22,7 +23,7 @@ const MultiplayerGameSetup: React.FC<MultiplayerGameSetupProps> = ({
   onStartLocalGame,
   onStartMultiplayerGame
 }) => {
-  const { user, isSignedIn } = useUser();
+  const { user, isSignedIn, isOfflineMode } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<string>("local");
