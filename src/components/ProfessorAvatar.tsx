@@ -6,8 +6,8 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Volume2 } from 'lucide-react';
 import { Button } from './ui/button';
-import { ErrorBoundary } from 'react-error-boundary';
-import dynamic from 'next/dynamic';
+import ErrorBoundary from './ErrorBoundary';
+import dynamic from '../lib/dynamicImport';
 
 // Importation dynamique du composant 3D pour éviter les problèmes de SSR
 const CartoucheScene = dynamic(
@@ -50,7 +50,8 @@ const AvatarFallback = () => (
 );
 
 // Composant pour les erreurs
-const AvatarErrorFallback = () => {
+const AvatarErrorFallback = ({ error }: { error: Error }) => {
+  console.error('Avatar error:', error);
   return <AvatarFallback />;
 };
 

@@ -1,29 +1,37 @@
 
 // Ce fichier sert de polyfill pour next/dynamic dans un environnement non-Next.js
 
-import React, { lazy, Suspense } from 'react';
+import React, { lazy, Suspense, ComponentType } from 'react';
 
 interface DynamicOptions {
   ssr?: boolean;
   loading?: () => JSX.Element;
 }
 
-// Fonction qui simule le comportement de next/dynamic
+/**
+ * Fonction qui simule le comportement de next/dynamic
+ * Compatible avec un environnement React standard
+ */
 export default function dynamic<T extends object>(
-  importFn: () => Promise<{ default: React.ComponentType<T> }>,
+  importFn: () => Promise<{ default: ComponentType<T> }>,
   options: DynamicOptions = {}
-): React.ComponentType<T> {
-  const LazyComponent = lazy(importFn);
+): ComponentType<T> {
+  // Utiliser React.lazy pour charger dynamiquement le composant
+  const LazyComponent = lazy(() => {
+    return importFn().catch(error => {
+      console.error('Error loading dynamic component:', error);
+      // Retourner un composant vide si le chargement échoue
+      return { default: ((props: T) => null) as ComponentType<T> };
+    });
+  });
   
   const LoadingComponent = options.loading || (() => null);
 
   return function DynamicComponent(props: T): JSX.Element {
-    // Utilisation de React.createElement au lieu de JSX
-    return React.createElement(
-      Suspense, 
-      { fallback: React.createElement(LoadingComponent) },
-      // Forcer le cast du type props pour résoudre l'erreur TS2769
-      React.createElement(LazyComponent, props as any)
+    return (
+      <Suspense fallback={<LoadingComponent />}>
+        <LazyComponent {...props} />
+      </Suspense>
     );
   };
 }

@@ -4,7 +4,7 @@
  */
 import React from 'react';
 import { Player } from '@/types';
-import { ErrorBoundary } from 'react-error-boundary';
+import ErrorBoundary from './ErrorBoundary';
 import ScoreBoard from './ScoreBoard';
 import NewRoundScoreForm from './NewRoundScoreForm';
 import GameResultOverlay from './game/GameResultOverlay';

@@ -5,23 +5,26 @@
  */
 import React, { Suspense, useState, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Stage, useProgress, useGLTF } from '@react-three/drei';
+import { OrbitControls, Stage, useProgress } from '@react-three/drei';
 import { CartoucheAvatar } from './CartoucheAvatar';
-import { ErrorBoundary } from 'react-error-boundary';
+import ErrorBoundary from '../ErrorBoundary';
 
 // Composant pour afficher une erreur de rendu 3D
-const FallbackErrorComponent = () => (
-  <div className="h-full w-full flex items-center justify-center bg-white/50 rounded-full">
-    <div className="flex flex-col items-center">
-      <div className="w-10 h-10 bg-dutch-purple rounded-full flex items-center justify-center text-white text-xl">
-        ?
-      </div>
-      <div className="text-xs font-medium text-dutch-purple/80 mt-2">
-        Erreur 3D
+const FallbackErrorComponent = ({ error }: { error: Error }) => {
+  console.error('3D render error:', error);
+  return (
+    <div className="h-full w-full flex items-center justify-center bg-white/50 rounded-full">
+      <div className="flex flex-col items-center">
+        <div className="w-10 h-10 bg-dutch-purple rounded-full flex items-center justify-center text-white text-xl">
+          ?
+        </div>
+        <div className="text-xs font-medium text-dutch-purple/80 mt-2">
+          Erreur 3D
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 // Composant de chargement avec progression
 function Loader() {
@@ -111,7 +114,6 @@ export default function CartoucheScene({
               alpha: true, // Fond transparent
             }}
             dpr={[1, 2]} // Limite le DPR pour améliorer les performances sur mobile
-            performance={{ min: 0.5 }} // Optimisation pour les appareils mobiles
           >
             {/* Éclairage amélioré et optimisé */}
             <ambientLight intensity={0.6} />
