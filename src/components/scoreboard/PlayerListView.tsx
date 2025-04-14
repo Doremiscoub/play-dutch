@@ -51,41 +51,31 @@ const PlayerListView: React.FC<PlayerListViewProps> = ({
       transition={{ duration: 0.5 }}
     >
       {sortedPlayers.map((player, index) => (
-        <div key={player.id} className="space-y-2">
-          <motion.div 
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.3, delay: index * 0.1 }}
-            onClick={() => handlePlayerClick(player)}
-            className="cursor-pointer"
-          >
-            <PlayerScoreCard
-              player={player}
-              position={index + 1}
-              isWinner={index === 0 && player.totalScore >= scoreLimit}
-              lastRoundScore={player.rounds.length > 0 ? player.rounds[player.rounds.length - 1].score : undefined}
-              warningThreshold={warningThreshold}
-              isExpanded={expandedPlayerId === player.id}
-            />
-          </motion.div>
-          
-          <AnimatePresence>
-            {expandedPlayerId === player.id && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.3 }}
-                className="overflow-hidden px-2"
-              >
+        <motion.div 
+          key={player.id}
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.3, delay: index * 0.1 }}
+          className="cursor-pointer"
+          onClick={() => handlePlayerClick(player)}
+        >
+          <PlayerScoreCard
+            player={player}
+            position={index + 1}
+            isWinner={index === 0 && player.totalScore >= scoreLimit}
+            lastRoundScore={player.rounds.length > 0 ? player.rounds[player.rounds.length - 1].score : undefined}
+            warningThreshold={warningThreshold}
+            isExpanded={expandedPlayerId === player.id}
+            expandedContent={
+              expandedPlayerId === player.id ? (
                 <PlayerDetailedStats 
                   player={player} 
-                  className="ml-8"
+                  className="mt-3 px-2"
                 />
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
+              ) : null
+            }
+          />
+        </motion.div>
       ))}
       
       {players.length === 0 && (

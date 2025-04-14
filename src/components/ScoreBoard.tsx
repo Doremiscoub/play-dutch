@@ -87,7 +87,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
   };
 
   return (
-    <PageLayout backgroundVariant="subtle" className="pb-12 sm:pb-20">
+    <PageLayout backgroundVariant="default" className="pb-12 sm:pb-20">
       <div className="w-full max-w-6xl mx-auto px-1 sm:px-2">
         {/* En-tête avec boutons de navigation et titre */}
         <ScoreBoardHeader 
@@ -153,7 +153,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
           
           {/* Panneau statistique de droite (desktop uniquement) */}
           {isDesktop && (
-            <div className="md:w-1/4">
+            <div className="md:w-1/4 md:max-h-screen md:sticky md:top-0">
               <GameStatsPanel
                 players={players}
                 roundHistory={roundHistory}
