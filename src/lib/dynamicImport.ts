@@ -32,7 +32,7 @@ export default function dynamic<T extends object>(
     return React.createElement(
       Suspense,
       { fallback: React.createElement(LoadingComponent) },
-      React.createElement(LazyComponent, props)
+      React.createElement(LazyComponent, { ...props } as React.JSX.LibraryManagedAttributes<typeof LazyComponent, T>)
     );
   };
 }
