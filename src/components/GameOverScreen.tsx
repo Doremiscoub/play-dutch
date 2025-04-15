@@ -1,6 +1,8 @@
+
 import React, { useState, useEffect } from 'react';
 import confetti from 'canvas-confetti';
 import { toast } from 'sonner';
+import { motion } from 'framer-motion'; // Added missing import
 import { Player } from '@/types';
 import AnimatedBackground from './AnimatedBackground';
 import GameOverHeader from './game/GameOverHeader';
