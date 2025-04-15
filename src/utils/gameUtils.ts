@@ -29,7 +29,7 @@ export const initializePlayers = (): Player[] | null => {
       rounds: []
     }));
     
-    // Suppression des données d'initialisation
+    // Suppression des données d'initialisation après usage
     localStorage.removeItem('dutch_player_setup');
     
     return players;
@@ -37,6 +37,16 @@ export const initializePlayers = (): Player[] | null => {
     console.error("Erreur lors de l'initialisation des joueurs:", error);
     return null;
   }
+};
+
+/**
+ * Force la réinitialisation complète de l'état de jeu
+ */
+export const cleanupGameState = () => {
+  // Supprimer toutes les données relatives à une partie en cours
+  localStorage.removeItem('current_dutch_game');
+  localStorage.removeItem('dutch_new_game_requested');
+  localStorage.removeItem('dutch_player_setup');
 };
 
 /**

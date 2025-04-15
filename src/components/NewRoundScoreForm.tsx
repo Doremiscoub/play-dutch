@@ -94,9 +94,9 @@ const NewRoundScoreForm: React.FC<NewRoundScoreFormProps> = ({
     // Convertir l'objet scores en array de scores dans le même ordre que les joueurs
     const scoresArray = players.map(player => scores[player.id] || 0);
     
-    // Soumettre les scores et fermer le dialogue
+    // Soumettre les scores et fermer le dialogue immédiatement
     onSubmit(scoresArray, dutchPlayer);
-    // Le onClose sera appelé par le composant parent après traitement
+    onClose();
   };
   
   return (

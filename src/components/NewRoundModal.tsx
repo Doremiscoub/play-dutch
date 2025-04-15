@@ -55,18 +55,19 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
   const handleClose = () => {
     if (!isSubmitting) {
       setIsOpen(false);
-      setTimeout(onClose, 300);  // Délai pour l'animation
+      onClose();
     }
   };
   
   // Gestion de la soumission du formulaire pour éviter la double soumission
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
     if (isSubmitting) return;
     
     setIsSubmitting(true);
     onAddRound();
-    // Pas besoin d'appeler handleClose car onAddRound devrait déjà fermer la modale
+    handleClose(); // Fermer immédiatement après soumission
   };
 
   // Fonction utilitaire pour valider l'entrée numérique, acceptant les valeurs négatives

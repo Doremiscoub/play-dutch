@@ -41,7 +41,22 @@ export const useGamePersistence = () => {
         duration: gameDuration
       };
       
-      setGames(prev => [...prev, game]);
+      // Éviter les duplications d'entrées
+      setGames(prev => {
+        // Vérifier si la partie existe déjà avec les mêmes joueurs et scores
+        const isDuplicate = prev.some(g => 
+          g.rounds === game.rounds && 
+          g.winner === game.winner &&
+          JSON.stringify(g.players) === JSON.stringify(game.players)
+        );
+        
+        if (isDuplicate) {
+          return prev;
+        }
+        
+        return [...prev, game];
+      });
+      
       toast.success('Partie sauvegardée dans l\'historique');
       return true;
     } catch (error) {
@@ -66,10 +81,27 @@ export const useGamePersistence = () => {
           throw new Error("Format de partie invalide");
         }
         
+        // Vérification de la structure attendue
+        if (parsedGame.players.some((p: any) => !p.id || !p.name || p.totalScore === undefined)) {
+          throw new Error("Structure de joueurs invalide");
+        }
+        
+        // Vérifier la fraîcheur des données
+        if (parsedGame.lastUpdated) {
+          const lastUpdated = new Date(parsedGame.lastUpdated);
+          const now = new Date();
+          // Si plus de 7 jours, considérer comme périmée
+          if ((now.getTime() - lastUpdated.getTime()) > 7 * 24 * 60 * 60 * 1000) {
+            console.warn("Données de partie trop anciennes, création d'une nouvelle partie");
+            return null;
+          }
+        }
+        
         return parsedGame;
       }
     } catch (error) {
       console.error('Erreur lors du chargement de la partie :', error);
+      localStorage.removeItem('current_dutch_game'); // Supprimer les données corrompues
       toast.error('Erreur lors du chargement de la partie');
     }
     
@@ -87,8 +119,13 @@ export const useGamePersistence = () => {
     gameStartTime: Date | null;
   }) => {
     try {
-      if (!gameState || !gameState.players) {
+      if (!gameState || !gameState.players || gameState.players.length === 0) {
         throw new Error("Impossible de sauvegarder un état de jeu invalide");
+      }
+      
+      // Vérification de structure
+      if (gameState.players.some(p => !p.id || !p.name || p.totalScore === undefined || !Array.isArray(p.rounds))) {
+        throw new Error("Structure de joueurs invalide pour la sauvegarde");
       }
       
       const stateToSave = {
@@ -97,8 +134,10 @@ export const useGamePersistence = () => {
       };
       
       localStorage.setItem('current_dutch_game', JSON.stringify(stateToSave));
+      return true;
     } catch (error) {
       console.error('Erreur lors de la sauvegarde de l\'état du jeu :', error);
+      return false;
     }
   }, []);
 

@@ -9,7 +9,7 @@ import { toast } from 'sonner';
 import { useLocalStorage } from './use-local-storage';
 import { useGamePersistence } from './useGamePersistence';
 import { useRoundManagement } from './useRoundManagement';
-import { initializePlayers } from '@/utils/gameUtils';
+import { initializePlayers, cleanupGameState } from '@/utils/gameUtils';
 import { updateAllPlayersStats } from '@/utils/playerStatsCalculator';
 
 /**
@@ -69,9 +69,9 @@ export const useGameState = () => {
     } catch (error) {
       console.error("Erreur lors de l'initialisation du jeu:", error);
       toast.error("Une erreur est survenue lors du chargement de la partie");
-      createNewGame();
+      navigate('/game/setup');
     }
-  }, [loadGameState]);
+  }, [loadGameState, navigate, setRoundHistory]);
   
   // Sauvegarder l'état du jeu dans localStorage quand il change
   useEffect(() => {
@@ -96,8 +96,11 @@ export const useGameState = () => {
   // Créer un nouveau jeu avec les noms des joueurs de la configuration
   const createNewGame = useCallback(() => {
     try {
+      // Nettoyage pour s'assurer qu'il n'y a pas de résidus
+      cleanupGameState();
+      
       const newPlayers = initializePlayers();
-      if (newPlayers) {
+      if (newPlayers && newPlayers.length > 0) {
         setPlayers(newPlayers);
         setRoundHistory([]);
         setShowGameOver(false);
@@ -126,10 +129,15 @@ export const useGameState = () => {
             setShowGameOver(true);
           }, 500);
         }
+        
+        return true; // Indiquer que l'ajout a réussi
       }
+      
+      return false; // Indiquer que l'ajout a échoué
     } catch (error) {
       console.error("Erreur lors de l'ajout d'une manche:", error);
       toast.error("Une erreur est survenue lors de l'ajout de la manche");
+      return false;
     }
   }, [players, addRound]);
   
@@ -143,9 +151,12 @@ export const useGameState = () => {
       if (showGameOver) {
         setShowGameOver(false);
       }
+      
+      return true; // Indiquer que l'annulation a réussi
     } catch (error) {
       console.error("Erreur lors de l'annulation de la dernière manche:", error);
       toast.error("Une erreur est survenue lors de l'annulation de la manche");
+      return false;
     }
   }, [players, undoLastRound, soundEnabled, showGameOver]);
   
@@ -160,9 +171,11 @@ export const useGameState = () => {
       saveGameToHistory(players, gameStartTime);
       setShowGameOver(true);
       setShowGameEndConfirmation(false);
+      return true;
     } catch (error) {
       console.error("Erreur lors de la confirmation de fin de partie:", error);
       toast.error("Une erreur est survenue lors de la sauvegarde de la partie");
+      return false;
     }
   }, [saveGameToHistory, players, gameStartTime]);
   
@@ -181,14 +194,18 @@ export const useGameState = () => {
   // Redémarrer avec un nouveau jeu
   const handleRestart = useCallback(() => {
     try {
-      // Effacer complètement l'état de jeu actuel
-      localStorage.removeItem('current_dutch_game');
+      // Effectuer un nettoyage complet
+      cleanupGameState();
+      
       // Définir le flag pour forcer une nouvelle partie
       localStorage.setItem('dutch_new_game_requested', 'true');
       navigate('/game/setup');
+      
+      return true;
     } catch (error) {
       console.error("Erreur lors du redémarrage de la partie:", error);
       toast.error("Une erreur est survenue lors du redémarrage");
+      return false;
     }
   }, [navigate]);
   

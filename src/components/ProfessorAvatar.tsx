@@ -49,14 +49,17 @@ const ProfessorAvatar: React.FC<ProfessorAvatarProps> = ({ message, onSpeakMessa
             repeat: Infinity,
             repeatType: "reverse",
           }}
+          whileHover={{ scale: 1.1 }}
         >
           <img 
             src={imageError ? FALLBACK_IMAGE_URL : PROFESSOR_IMAGE_URL}
             alt="Professeur Cartouche"
             className="w-full h-full object-contain"
             onError={() => {
+              console.warn("Image principale du Professeur non chargée, utilisation du fallback");
               setImageError(true);
             }}
+            loading="eager"
           />
         </motion.div>
         

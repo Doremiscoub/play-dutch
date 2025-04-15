@@ -73,6 +73,97 @@ const PageLayout: React.FC<PageLayoutProps> = ({
       window.removeEventListener('resize', generateDots);
     };
   }, [isMobile]);
+
+  // Styles pour les vagues animées
+  const waveStyles = `
+    @keyframes waveAnimation1 {
+      0% { transform: translateX(0) translateZ(0); }
+      50% { transform: translateX(-25%) translateZ(0); }
+      100% { transform: translateX(0) translateZ(0); }
+    }
+    
+    @keyframes waveAnimation2 {
+      0% { transform: translateX(0) translateZ(0); }
+      50% { transform: translateX(25%) translateZ(0); }
+      100% { transform: translateX(0) translateZ(0); }
+    }
+    
+    @keyframes waveAnimation3 {
+      0% { transform: translateX(0) translateZ(0) scale(1.05); }
+      50% { transform: translateX(-15%) translateZ(0) scale(1); }
+      100% { transform: translateX(0) translateZ(0) scale(1.05); }
+    }
+    
+    .wave-bottom-1 {
+      position: absolute;
+      bottom: 0;
+      left: -5%;
+      right: -5%;
+      height: 15vh;
+      background: #E9D5FF;
+      border-radius: 100% 100% 0 0 / 100% 100% 0 0;
+      opacity: 0.5;
+      animation: waveAnimation1 15s ease-in-out infinite;
+      z-index: -3;
+      transform-origin: center bottom;
+    }
+    
+    .wave-bottom-2 {
+      position: absolute;
+      bottom: 0;
+      left: -10%;
+      right: -10%;
+      height: 12vh;
+      background: #FDE68A;
+      border-radius: 100% 100% 0 0 / 100% 100% 0 0;
+      opacity: 0.4;
+      animation: waveAnimation2 18s ease-in-out infinite;
+      z-index: -4;
+      transform-origin: center bottom;
+    }
+    
+    .wave-bottom-3 {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 8vh;
+      background: #BAE6FD;
+      border-radius: 100% 100% 0 0 / 100% 100% 0 0;
+      opacity: 0.3;
+      animation: waveAnimation3 20s ease-in-out infinite;
+      z-index: -5;
+      transform-origin: center bottom;
+    }
+    
+    .background-dots {
+      position: absolute;
+      inset: 0;
+      z-index: -10;
+      overflow: hidden;
+    }
+    
+    .background-dot {
+      position: absolute;
+      border-radius: 50%;
+      animation: floatingDot 10s ease-in-out infinite;
+    }
+    
+    @keyframes floatingDot {
+      0%, 100% {
+        transform: translate(0, 0);
+      }
+      25% {
+        transform: translate(20px, 15px);
+      }
+      50% {
+        transform: translate(-5px, 20px);
+      }
+      75% {
+        transform: translate(-15px, 5px);
+      }
+    }
+  `;
   
   return (
     <motion.div 
@@ -81,6 +172,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3 }}
     >
+      <style>{waveStyles}</style>
       <GradientAnimationStyles />
       
       {/* Grille en arrière-plan */}

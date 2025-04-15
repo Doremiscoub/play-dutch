@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
+import { cleanupGameState } from '@/utils/gameUtils';
 
 interface GameSetupProps {
   onStartGame?: (players: string[]) => void;
@@ -19,6 +20,12 @@ const GameSetup: React.FC<GameSetupProps> = ({ onStartGame }) => {
   const [numPlayers, setNumPlayers] = useState(4);
   const [playerNames, setPlayerNames] = useState<string[]>(Array(4).fill('').map((_, i) => `Joueur ${i + 1}`));
   const [gameMode, setGameMode] = useState<'local' | 'multiplayer'>('local');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  useEffect(() => {
+    // Nettoyage proactif au chargement de l'écran de configuration
+    cleanupGameState();
+  }, []);
   
   const handleNumPlayersChange = (increment: boolean) => {
     const newNum = increment 
@@ -42,31 +49,39 @@ const GameSetup: React.FC<GameSetupProps> = ({ onStartGame }) => {
   };
 
   const handleStartGame = () => {
+    // Éviter les soumissions multiples
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+    
     // Validate player names (ensure no empty names)
     const validPlayerNames = playerNames.map(name => name.trim() === '' ? `Joueur ${playerNames.indexOf(name) + 1}` : name);
     
     if (gameMode === 'multiplayer') {
       toast.info('Le mode multijoueur sera disponible prochainement !');
+      setIsSubmitting(false);
       return;
     }
     
-    // Nettoyer les parties précédentes
-    localStorage.removeItem('current_dutch_game');
-    localStorage.removeItem('dutch_new_game_requested');
-    
-    // Marquer qu'une nouvelle partie a été demandée
-    localStorage.setItem('dutch_new_game_requested', 'true');
-    
-    // Store player names in localStorage to be picked up by GamePage
-    localStorage.setItem('dutch_player_setup', JSON.stringify(validPlayerNames));
-    
-    // Call the onStartGame prop if provided
-    if (onStartGame) {
-      onStartGame(validPlayerNames);
+    try {
+      // Nettoyer COMPLÈTEMENT les parties précédentes
+      cleanupGameState();
+      
+      // Store player names in localStorage to be picked up by GamePage
+      localStorage.setItem('dutch_player_setup', JSON.stringify(validPlayerNames));
+      localStorage.setItem('dutch_new_game_requested', 'true');
+      
+      // Call the onStartGame prop if provided
+      if (onStartGame) {
+        onStartGame(validPlayerNames);
+      }
+      
+      // Navigate to the game page
+      navigate('/game');
+    } catch (error) {
+      console.error("Erreur lors du démarrage de la partie:", error);
+      toast.error("Une erreur est survenue lors de la création de la partie");
+      setIsSubmitting(false);
     }
-    
-    // Navigate to the game page
-    navigate('/game');
   };
 
   const transitionProps = {
