@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import confetti from 'canvas-confetti';
 import { toast } from 'sonner';
-import { motion } from 'framer-motion'; // Added missing import
+import { motion } from 'framer-motion';
 import { Player } from '@/types';
 import AnimatedBackground from './AnimatedBackground';
 import GameOverHeader from './game/GameOverHeader';
@@ -30,54 +30,82 @@ const GameOverScreen: React.FC<GameOverScreenProps> = ({
   const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
   const winner = sortedPlayers[0];
   
-  // Trigger confetti for the winner - Enhanced
+  // Trigger confetti for the winner - Further enhanced
   const triggerConfetti = () => {
     if (isConfettiTriggered) return;
     
     // More abundant and colorful confetti
     confetti({
-      particleCount: 150,
-      spread: 90,
+      particleCount: 200,
+      spread: 100,
       origin: { y: 0.5, x: 0.5 },
-      colors: ['#1EAEDB', '#8B5CF6', '#F97316', '#10B981', '#FBBF24']
+      colors: ['#1EAEDB', '#8B5CF6', '#F97316', '#10B981', '#FBBF24', '#FF6B6B', '#4CD4FF']
     });
     
     // Second wave of confetti after a delay
     setTimeout(() => {
       confetti({
-        particleCount: 100,
+        particleCount: 150,
         angle: 60,
-        spread: 70,
-        origin: { x: 0, y: 0.5 }
+        spread: 80,
+        origin: { x: 0, y: 0.5 },
+        colors: ['#1EAEDB', '#8B5CF6', '#F97316', '#10B981']
       });
       
       confetti({
-        particleCount: 100,
+        particleCount: 150,
         angle: 120,
-        spread: 70,
-        origin: { x: 1, y: 0.5 }
+        spread: 80,
+        origin: { x: 1, y: 0.5 },
+        colors: ['#FF6B6B', '#4CD4FF', '#FFD166', '#C5F277']
       });
-    }, 800);
+    }, 700);
+    
+    // Third wave for extra celebration
+    setTimeout(() => {
+      confetti({
+        particleCount: 100,
+        angle: 90,
+        spread: 120,
+        origin: { x: 0.5, y: 0.2 },
+        colors: ['#FFFFFF', '#E9D5FF', '#FDE68A', '#BFDBFE']
+      });
+    }, 1400);
     
     setIsConfettiTriggered(true);
+    
+    // Play celebration sound if available
+    try {
+      const audio = new Audio('/sounds/victory.mp3');
+      audio.volume = 0.6;
+      audio.play();
+    } catch (error) {
+      console.log('Sound not available');
+    }
   };
 
   // Trigger confetti on load
   useEffect(() => {
     triggerConfetti();
     
-    // Timer to relaunch confetti periodically
+    // Timer to relaunch confetti periodically for continuous celebration
     const confettiInterval = setInterval(() => {
       confetti({
-        particleCount: 30,
-        spread: 70,
+        particleCount: 40,
+        spread: 80,
         origin: { y: Math.random() * 0.3 + 0.2, x: Math.random() },
-        colors: ['#1EAEDB', '#8B5CF6', '#F97316', '#10B981']
+        colors: ['#1EAEDB', '#8B5CF6', '#F97316', '#10B981', '#FFD166']
       });
-    }, 3500);
+    }, 3000);
+    
+    // Show celebration toast
+    toast.success(`🎉 ${winner.name} remporte la partie !`, {
+      duration: 5000,
+      position: 'top-center',
+    });
     
     return () => clearInterval(confettiInterval);
-  }, []);
+  }, [winner.name]);
 
   // Continue game with a new limit
   const handleContinueGame = (newLimit: number) => {
@@ -92,19 +120,20 @@ const GameOverScreen: React.FC<GameOverScreenProps> = ({
         <AnimatedBackground variant="default" />
         
         {/* Overlay with festive gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-orange-500/10"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-500/15 via-transparent to-orange-500/15"></div>
       </div>
       
       {/* Animation of luminous particles */}
       <div className="absolute inset-0 overflow-hidden">
-        {Array.from({ length: 10 }).map((_, i) => (
+        {Array.from({ length: 15 }).map((_, i) => (
           <motion.div 
             key={i}
             className="absolute w-3 h-3 rounded-full bg-yellow-400/30 blur-sm"
             animate={{
               x: [Math.random() * 100, Math.random() * window.innerWidth],
               y: [Math.random() * 100, Math.random() * window.innerHeight],
-              opacity: [0.2, 0.8, 0.2]
+              opacity: [0.2, 0.8, 0.2],
+              scale: [1, 1.2, 1],
             }}
             transition={{
               duration: Math.random() * 10 + 10,
@@ -114,6 +143,20 @@ const GameOverScreen: React.FC<GameOverScreenProps> = ({
           />
         ))}
       </div>
+      
+      {/* Pulsing ring effect around victorious message */}
+      <motion.div
+        className="absolute left-1/2 top-1/4 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full bg-dutch-blue/5"
+        animate={{
+          scale: [1, 1.5, 1],
+          opacity: [0.3, 0.1, 0.3]
+        }}
+        transition={{
+          duration: 4,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+      />
       
       {/* Header with congratulations message */}
       <GameOverHeader winner={winner} />

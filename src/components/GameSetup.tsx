@@ -50,6 +50,10 @@ const GameSetup: React.FC<GameSetupProps> = ({ onStartGame }) => {
       return;
     }
     
+    // Nettoyer les parties précédentes
+    localStorage.removeItem('current_dutch_game');
+    localStorage.removeItem('dutch_new_game_requested');
+    
     // Marquer qu'une nouvelle partie a été demandée
     localStorage.setItem('dutch_new_game_requested', 'true');
     

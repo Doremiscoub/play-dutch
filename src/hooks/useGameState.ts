@@ -181,7 +181,10 @@ export const useGameState = () => {
   // Redémarrer avec un nouveau jeu
   const handleRestart = useCallback(() => {
     try {
+      // Effacer complètement l'état de jeu actuel
       localStorage.removeItem('current_dutch_game');
+      // Définir le flag pour forcer une nouvelle partie
+      localStorage.setItem('dutch_new_game_requested', 'true');
       navigate('/game/setup');
     } catch (error) {
       console.error("Erreur lors du redémarrage de la partie:", error);

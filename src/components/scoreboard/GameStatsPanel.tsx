@@ -98,67 +98,77 @@ const GameStatsPanel: React.FC<GameStatsPanelProps> = ({ players, roundHistory }
           >
             <motion.div className={statItemClass} variants={itemVariants}>
               <div className="flex items-center">
-                <Users className="h-5 w-5 text-dutch-blue mr-3" />
-                <span className="text-gray-700">Joueurs</span>
+                <Users className="h-6 w-6 text-dutch-blue mr-3" />
+                <span className="text-gray-700 text-md">Joueurs</span>
               </div>
-              <span className="text-lg font-bold text-dutch-blue">{players.length}</span>
+              <div className="bg-dutch-blue/10 px-3 py-1 rounded-full">
+                <span className="text-lg font-bold text-dutch-blue">{players.length}</span>
+              </div>
             </motion.div>
             
-            <Separator className="my-2" />
+            <Separator className="my-3" />
             
             <motion.div className={statItemClass} variants={itemVariants}>
               <div className="flex items-center">
-                <Flag className="h-5 w-5 text-dutch-purple mr-3" />
-                <span className="text-gray-700">Manches jouées</span>
+                <Flag className="h-6 w-6 text-dutch-purple mr-3" />
+                <span className="text-gray-700 text-md">Manches jouées</span>
               </div>
-              <span className="text-lg font-bold text-dutch-purple">{totalRounds}</span>
+              <div className="bg-dutch-purple/10 px-3 py-1 rounded-full">
+                <span className="text-lg font-bold text-dutch-purple">{totalRounds}</span>
+              </div>
             </motion.div>
             
-            <Separator className="my-2" />
+            <Separator className="my-3" />
             
             <motion.div className={statItemClass} variants={itemVariants}>
               <div className="flex items-center">
-                <Target className="h-5 w-5 text-dutch-orange mr-3" />
-                <span className="text-gray-700">Score moyen</span>
+                <Target className="h-6 w-6 text-dutch-orange mr-3" />
+                <span className="text-gray-700 text-md">Score moyen</span>
               </div>
-              <span className="text-lg font-bold text-dutch-orange">{averageRoundScore.toFixed(1)}</span>
+              <div className="bg-dutch-orange/10 px-3 py-1 rounded-full">
+                <span className="text-lg font-bold text-dutch-orange">{averageRoundScore.toFixed(1)}</span>
+              </div>
             </motion.div>
             
-            <Separator className="my-2" />
+            <Separator className="my-3" />
             
             <motion.div className={statItemClass} variants={itemVariants}>
               <div className="flex items-center">
-                <TrendingDown className="h-5 w-5 text-green-500 mr-3" />
-                <span className="text-gray-700">Meilleur score</span>
+                <TrendingDown className="h-6 w-6 text-green-500 mr-3" />
+                <span className="text-gray-700 text-md">Meilleur score</span>
               </div>
-              <span className="text-lg font-bold text-green-500">{lowestRoundScore}</span>
+              <div className="bg-green-100 px-3 py-1 rounded-full">
+                <span className="text-lg font-bold text-green-500">{lowestRoundScore}</span>
+              </div>
             </motion.div>
             
-            <Separator className="my-2" />
+            <Separator className="my-3" />
             
             <motion.div className={statItemClass} variants={itemVariants}>
               <div className="flex items-center">
-                <Award className="h-5 w-5 text-dutch-purple mr-3" />
-                <span className="text-gray-700">Total Dutch</span>
+                <Award className="h-6 w-6 text-dutch-purple mr-3" />
+                <span className="text-gray-700 text-md">Total Dutch</span>
               </div>
-              <span className="text-lg font-bold text-dutch-purple">{totalDutchCount}</span>
+              <div className="bg-dutch-purple/10 px-3 py-1 rounded-full">
+                <span className="text-lg font-bold text-dutch-purple">{totalDutchCount}</span>
+              </div>
             </motion.div>
             
             {bestPlayerName && (
               <>
-                <Separator className="my-2" />
+                <Separator className="my-3" />
                 
                 <motion.div className={statItemClass} variants={itemVariants}>
                   <div className="flex items-center">
-                    <Medal className="h-5 w-5 text-amber-500 mr-3" />
-                    <span className="text-gray-700">Meilleur joueur</span>
+                    <Medal className="h-6 w-6 text-amber-500 mr-3" />
+                    <span className="text-gray-700 text-md">Meilleur joueur</span>
                   </div>
-                  <div className="text-right">
+                  <div className="flex flex-col items-end">
                     <span className="text-lg font-bold text-amber-500">
                       {bestPlayerName}
                     </span>
-                    <div className="text-sm text-amber-500/80">
-                      ({bestPlayerScore} pts)
+                    <div className="text-sm bg-amber-100 px-2 py-0.5 rounded-full font-semibold text-amber-500 mt-1">
+                      {bestPlayerScore} pts
                     </div>
                   </div>
                 </motion.div>
@@ -167,19 +177,19 @@ const GameStatsPanel: React.FC<GameStatsPanelProps> = ({ players, roundHistory }
             
             {worstPlayerName && players.length > 1 && (
               <>
-                <Separator className="my-2" />
+                <Separator className="my-3" />
                 
                 <motion.div className={statItemClass} variants={itemVariants}>
                   <div className="flex items-center">
-                    <Zap className="h-5 w-5 text-red-500 mr-3" />
-                    <span className="text-gray-700">Joueur en difficulté</span>
+                    <Zap className="h-6 w-6 text-red-500 mr-3" />
+                    <span className="text-gray-700 text-md">Joueur en difficulté</span>
                   </div>
-                  <div className="text-right">
+                  <div className="flex flex-col items-end">
                     <span className="text-lg font-bold text-red-500">
                       {worstPlayerName}
                     </span>
-                    <div className="text-sm text-red-500/80">
-                      ({worstPlayerScore} pts)
+                    <div className="text-sm bg-red-100 px-2 py-0.5 rounded-full font-semibold text-red-500 mt-1">
+                      {worstPlayerScore} pts
                     </div>
                   </div>
                 </motion.div>

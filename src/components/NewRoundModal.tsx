@@ -29,6 +29,7 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(true);
   const firstInputRef = useRef<HTMLInputElement>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (firstInputRef.current) {
@@ -59,7 +60,11 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
   // Gestion de la soumission du formulaire pour éviter la double soumission
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmitting) return;
+    
+    setIsSubmitting(true);
     onAddRound();
+    // Pas besoin d'appeler handleClose car onAddRound devrait déjà fermer la modale
   };
 
   // Fonction utilitaire pour valider l'entrée numérique, acceptant les valeurs négatives
@@ -157,8 +162,9 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
             <Button
               variant="dutch-blue"
               type="submit"
+              disabled={isSubmitting}
             >
-              Ajouter la manche
+              {isSubmitting ? 'Ajout...' : 'Ajouter la manche'}
             </Button>
           </DialogFooter>
         </form>

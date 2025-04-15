@@ -43,12 +43,12 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
       opacity: number;
     }[] = [];
 
-    // Waves params - Améliorées avec plus de vagues et d'animation
+    // Waves params - Animation améliorée avec plusieurs niveaux de vagues
     const waves = [
-      { height: 0.25, color: '#E9D5FF', speed: 0.02, amplitude: 15, offset: 0 },
-      { height: 0.3, color: '#FDE68A', speed: 0.03, amplitude: 20, offset: Math.PI / 3 },
-      { height: 0.2, color: '#BFDBFE', speed: 0.025, amplitude: 12, offset: Math.PI / 5 },
-      { height: 0.28, color: '#A7F3D0', speed: 0.015, amplitude: 18, offset: Math.PI / 4 }
+      { height: 0.25, color: '#E9D5FF', speed: 0.04, amplitude: 18, offset: 0 },
+      { height: 0.3, color: '#FDE68A', speed: 0.05, amplitude: 22, offset: Math.PI / 3 },
+      { height: 0.2, color: '#BFDBFE', speed: 0.03, amplitude: 15, offset: Math.PI / 5 },
+      { height: 0.28, color: '#A7F3D0', speed: 0.025, amplitude: 20, offset: Math.PI / 4 }
     ];
 
     // Create dots - Augmentation du nombre pour plus d'animation
@@ -128,34 +128,47 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
         if (dot.y < 0 || dot.y > canvas.height) dot.speedY *= -1;
       });
 
-      // Draw stylized waves at the bottom - Animation améliorée
+      // Draw stylized waves at the bottom - Animation considérablement améliorée
       const drawWaves = () => {
         const now = Date.now() / 1000;
         
         waves.forEach((wave, index) => {
           // Ajuster l'opacité selon la profondeur de la vague
-          const opacity = 0.8 - (index * 0.15);
+          const opacity = 0.85 - (index * 0.15);
           const waveHeight = canvas.height * wave.height;
           const yPos = canvas.height - waveHeight;
           
           ctx.beginPath();
           ctx.moveTo(0, canvas.height);
           
-          for (let x = 0; x < canvas.width; x += 5) {
+          // Augmentation de la résolution pour des vagues plus fluides
+          const step = 3; // Réduction du pas pour plus de détails
+          
+          for (let x = 0; x < canvas.width; x += step) {
             // Animation plus complexe avec des variations de fréquence
+            // Première fréquence - ondulation principale
             const distortY = Math.sin(x / 100 + now * wave.speed + wave.offset) * wave.amplitude;
-            // Ajouter une seconde fréquence pour plus de naturel
-            const distortY2 = Math.sin(x / 200 + now * (wave.speed * 0.7) + wave.offset * 1.5) * (wave.amplitude * 0.5);
-            const y = yPos + distortY + distortY2;
+            // Deuxième fréquence - ondulation secondaire pour plus de naturel
+            const distortY2 = Math.sin(x / 220 + now * (wave.speed * 0.7) + wave.offset * 1.5) * (wave.amplitude * 0.5);
+            // Troisième fréquence - micro ondulation pour l'effet "eau"
+            const distortY3 = Math.sin(x / 30 + now * (wave.speed * 1.3) + wave.offset * 2) * (wave.amplitude * 0.2);
+            
+            // Mouvement de translation horizontal lent
+            const horizontalShift = (now * 15) % canvas.width;
+            const xPos = (x + horizontalShift) % canvas.width;
+            
+            // Combiner toutes les fréquences
+            const y = yPos + distortY + distortY2 + distortY3;
+            
             ctx.lineTo(x, y);
           }
           
           ctx.lineTo(canvas.width, canvas.height);
           ctx.closePath();
           
-          // Créer un dégradé pour chaque vague
+          // Créer un dégradé pour chaque vague avec plus d'effet de transparence
           const gradient = ctx.createLinearGradient(0, yPos, 0, canvas.height);
-          gradient.addColorStop(0, wave.color + '88'); // Semi-transparent at top
+          gradient.addColorStop(0, wave.color + (opacity * 100).toString(16).substring(0, 2)); // Semi-transparent at top
           gradient.addColorStop(1, wave.color + '44'); // More transparent at bottom
           
           ctx.fillStyle = gradient;
