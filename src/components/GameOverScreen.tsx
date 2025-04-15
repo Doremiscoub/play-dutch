@@ -343,15 +343,18 @@ const GameOverScreen: React.FC<GameOverScreenProps> = ({
         </motion.div>
       </div>
       
-      {/* Style pour l'animation de gradient */}
-      <style jsx>{`
-        @keyframes gradient-x {
-          0% { background-position: 0% 0%; }
-          100% { background-position: 200% 0%; }
-        }
-      `}</style>
+      {/* Style pour l'animation de gradient - Removing the jsx property which causes the error */}
+      <style>
+        {`
+          @keyframes gradient-x {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 200% 0%; }
+          }
+        `}
+      </style>
     </div>
   );
 };
 
 export default GameOverScreen;
+
