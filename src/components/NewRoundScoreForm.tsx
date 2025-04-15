@@ -25,6 +25,7 @@ const NewRoundScoreForm: React.FC<NewRoundScoreFormProps> = ({
 }) => {
   const [scores, setScores] = useState<{ [key: string]: number }>({});
   const [dutchPlayer, setDutchPlayer] = useState<string | undefined>(undefined);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const firstInputRef = useRef<HTMLInputElement>(null);
   
   // Réinitialiser les scores à l'ouverture du dialog
@@ -36,6 +37,7 @@ const NewRoundScoreForm: React.FC<NewRoundScoreFormProps> = ({
       });
       setScores(initialScores);
       setDutchPlayer(undefined);
+      setIsSubmitting(false);
       
       // Focus sur le premier input après l'ouverture
       setTimeout(() => {
@@ -83,15 +85,24 @@ const NewRoundScoreForm: React.FC<NewRoundScoreFormProps> = ({
   };
   
   const handleSubmit = () => {
+    if (isSubmitting) return; // Éviter la double soumission
+    
     if (!validateScores()) return;
+    
+    setIsSubmitting(true); // Marquer comme en cours de soumission
     
     // Convertir l'objet scores en array de scores dans le même ordre que les joueurs
     const scoresArray = players.map(player => scores[player.id] || 0);
+    
+    // Soumettre les scores et fermer le dialogue
     onSubmit(scoresArray, dutchPlayer);
+    // Le onClose sera appelé par le composant parent après traitement
   };
   
   return (
-    <Dialog open={open} onOpenChange={onClose}>
+    <Dialog open={open} onOpenChange={(isOpen) => {
+      if (!isOpen && !isSubmitting) onClose();
+    }}>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
           <DialogTitle className="text-center text-xl bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">
@@ -163,14 +174,20 @@ const NewRoundScoreForm: React.FC<NewRoundScoreFormProps> = ({
         </div>
         
         <DialogFooter className="flex gap-2">
-          <Button variant="outline" onClick={onClose} className="flex-1 sm:flex-none">
+          <Button 
+            variant="outline" 
+            onClick={onClose} 
+            className="flex-1 sm:flex-none"
+            disabled={isSubmitting}
+          >
             Annuler
           </Button>
           <Button 
             onClick={handleSubmit}
             className="bg-dutch-blue text-white hover:bg-dutch-blue/90 flex-1 sm:flex-none"
+            disabled={isSubmitting}
           >
-            Enregistrer
+            {isSubmitting ? 'Enregistrement...' : 'Enregistrer'}
           </Button>
         </DialogFooter>
       </DialogContent>

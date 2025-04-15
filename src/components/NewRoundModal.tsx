@@ -53,8 +53,10 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
   };
 
   const handleClose = () => {
-    setIsOpen(false);
-    setTimeout(onClose, 300);  // Délai pour l'animation
+    if (!isSubmitting) {
+      setIsOpen(false);
+      setTimeout(onClose, 300);  // Délai pour l'animation
+    }
   };
   
   // Gestion de la soumission du formulaire pour éviter la double soumission
@@ -156,7 +158,12 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
           ))}
 
           <DialogFooter className="mt-6 gap-2">
-            <Button variant="outline" type="button" onClick={handleClose}>
+            <Button 
+              variant="outline" 
+              type="button" 
+              onClick={handleClose}
+              disabled={isSubmitting}
+            >
               Annuler
             </Button>
             <Button
