@@ -31,6 +31,21 @@ export const useGameState = () => {
   useEffect(() => {
     try {
       const initializeGame = () => {
+        // Vérifier s'il s'agit d'une nouvelle partie
+        const isNewGame = localStorage.getItem('dutch_new_game_requested') === 'true';
+        
+        if (isNewGame) {
+          console.log('Création d\'une nouvelle partie demandée');
+          // Supprimer le drapeau de nouvelle partie
+          localStorage.removeItem('dutch_new_game_requested');
+          // Supprimer l'ancienne partie en cours
+          localStorage.removeItem('current_dutch_game');
+          // Créer une nouvelle partie
+          createNewGame();
+          return;
+        }
+        
+        // Sinon, charger la partie existante si elle existe
         const savedGame = loadGameState();
         
         if (savedGame) {

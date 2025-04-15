@@ -128,7 +128,7 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
         if (dot.y < 0 || dot.y > canvas.height) dot.speedY *= -1;
       });
 
-      // Draw stylized waves at the bottom - Améliorées et présentes sur tous les écrans
+      // Draw stylized waves at the bottom - Animation améliorée
       const drawWaves = () => {
         const now = Date.now() / 1000;
         

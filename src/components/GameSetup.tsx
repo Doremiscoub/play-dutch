@@ -50,6 +50,9 @@ const GameSetup: React.FC<GameSetupProps> = ({ onStartGame }) => {
       return;
     }
     
+    // Marquer qu'une nouvelle partie a été demandée
+    localStorage.setItem('dutch_new_game_requested', 'true');
+    
     // Store player names in localStorage to be picked up by GamePage
     localStorage.setItem('dutch_player_setup', JSON.stringify(validPlayerNames));
     

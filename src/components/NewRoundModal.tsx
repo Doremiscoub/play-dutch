@@ -55,6 +55,12 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
     setIsOpen(false);
     setTimeout(onClose, 300);  // Délai pour l'animation
   };
+  
+  // Gestion de la soumission du formulaire pour éviter la double soumission
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onAddRound();
+  };
 
   // Fonction utilitaire pour valider l'entrée numérique, acceptant les valeurs négatives
   const validateNumberInput = (input: string): boolean => {
@@ -75,7 +81,7 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
           <DialogTitle>Ajouter une manche</DialogTitle>
         </DialogHeader>
 
-        <div className="mt-4 space-y-4">
+        <form onSubmit={handleSubmit} className="mt-4 space-y-4">
           {players.map((player, index) => (
             <motion.div
               key={player.id}
@@ -143,19 +149,19 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
               </div>
             </motion.div>
           ))}
-        </div>
 
-        <DialogFooter className="mt-6 gap-2">
-          <Button variant="outline" onClick={handleClose}>
-            Annuler
-          </Button>
-          <Button
-            variant="dutch-blue"
-            onClick={onAddRound}
-          >
-            Ajouter la manche
-          </Button>
-        </DialogFooter>
+          <DialogFooter className="mt-6 gap-2">
+            <Button variant="outline" type="button" onClick={handleClose}>
+              Annuler
+            </Button>
+            <Button
+              variant="dutch-blue"
+              type="submit"
+            >
+              Ajouter la manche
+            </Button>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   );
