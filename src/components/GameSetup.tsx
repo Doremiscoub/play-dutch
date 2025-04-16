@@ -23,8 +23,12 @@ const GameSetup: React.FC<GameSetupProps> = ({ onStartGame }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   useEffect(() => {
-    // Nettoyage proactif au chargement de l'écran de configuration
+    // Nettoyage complet au chargement de l'écran de configuration
     cleanupGameState();
+    // Supprimer explicitement les drapeaux qui pourraient causer des problèmes
+    localStorage.removeItem('dutch_new_game_requested');
+    localStorage.removeItem('current_dutch_game');
+    localStorage.removeItem('dutch_player_setup');
   }, []);
   
   const handleNumPlayersChange = (increment: boolean) => {
@@ -48,25 +52,31 @@ const GameSetup: React.FC<GameSetupProps> = ({ onStartGame }) => {
     setPlayerNames(newNames);
   };
 
-  const handleStartGame = () => {
+  const handleStartGame = async (e: React.MouseEvent) => {
+    e.preventDefault(); // Empêcher le comportement par défaut du formulaire
+    
     // Éviter les soumissions multiples
     if (isSubmitting) return;
     setIsSubmitting(true);
     
-    // Validate player names (ensure no empty names)
-    const validPlayerNames = playerNames.map(name => name.trim() === '' ? `Joueur ${playerNames.indexOf(name) + 1}` : name);
-    
-    if (gameMode === 'multiplayer') {
-      toast.info('Le mode multijoueur sera disponible prochainement !');
-      setIsSubmitting(false);
-      return;
-    }
-    
     try {
-      // Nettoyer COMPLÈTEMENT les parties précédentes
+      // Nettoyer COMPLÈTEMENT toutes les données précédentes
       cleanupGameState();
+      localStorage.removeItem('dutch_new_game_requested');
+      localStorage.removeItem('current_dutch_game');
       
-      // Store player names in localStorage to be picked up by GamePage
+      // Validate player names (ensure no empty names)
+      const validPlayerNames = playerNames.map(name => 
+        name.trim() === '' ? `Joueur ${playerNames.indexOf(name) + 1}` : name
+      );
+      
+      if (gameMode === 'multiplayer') {
+        toast.info('Le mode multijoueur sera disponible prochainement !');
+        setIsSubmitting(false);
+        return;
+      }
+      
+      // Store player names in localStorage
       localStorage.setItem('dutch_player_setup', JSON.stringify(validPlayerNames));
       localStorage.setItem('dutch_new_game_requested', 'true');
       
@@ -75,11 +85,14 @@ const GameSetup: React.FC<GameSetupProps> = ({ onStartGame }) => {
         onStartGame(validPlayerNames);
       }
       
-      // Navigate to the game page
-      navigate('/game');
+      // Force navigation avec un délai court pour s'assurer que les données sont sauvegardées
+      setTimeout(() => {
+        navigate('/game');
+      }, 100);
     } catch (error) {
       console.error("Erreur lors du démarrage de la partie:", error);
       toast.error("Une erreur est survenue lors de la création de la partie");
+    } finally {
       setIsSubmitting(false);
     }
   };
@@ -244,6 +257,7 @@ const GameSetup: React.FC<GameSetupProps> = ({ onStartGame }) => {
             variant="floating"
             size="game-action"
             className="w-full shadow-lg transition-all relative overflow-hidden rounded-2xl border border-white/20 backdrop-blur-md bg-gradient-to-r from-dutch-blue/90 via-dutch-purple/90 to-dutch-blue/90 h-16"
+            disabled={isSubmitting}
           >
             <motion.div 
               className="absolute inset-0 bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-blue bg-[length:200%_100%]"
@@ -251,7 +265,11 @@ const GameSetup: React.FC<GameSetupProps> = ({ onStartGame }) => {
               transition={{ duration: 10, repeat: Infinity }}
             />
             <span className="absolute inset-0 flex items-center justify-center gap-2 text-lg font-medium text-white">
-              <Play className="h-6 w-6" /> Commencer la partie
+              {isSubmitting ? 'Création de la partie...' : (
+                <>
+                  <Play className="h-6 w-6" /> Commencer la partie
+                </>
+              )}
             </span>
           </Button>
         </motion.div>

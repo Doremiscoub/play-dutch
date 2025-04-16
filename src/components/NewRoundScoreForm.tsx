@@ -27,6 +27,7 @@ const NewRoundScoreForm: React.FC<NewRoundScoreFormProps> = ({
   const [dutchPlayer, setDutchPlayer] = useState<string | undefined>(undefined);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const firstInputRef = useRef<HTMLInputElement>(null);
+  const submitHandled = useRef<boolean>(false);
   
   // Réinitialiser les scores à l'ouverture du dialog
   useEffect(() => {
@@ -38,6 +39,7 @@ const NewRoundScoreForm: React.FC<NewRoundScoreFormProps> = ({
       setScores(initialScores);
       setDutchPlayer(undefined);
       setIsSubmitting(false);
+      submitHandled.current = false;
       
       // Focus sur le premier input après l'ouverture
       setTimeout(() => {
@@ -85,23 +87,41 @@ const NewRoundScoreForm: React.FC<NewRoundScoreFormProps> = ({
   };
   
   const handleSubmit = () => {
-    if (isSubmitting) return; // Éviter la double soumission
+    // Protection contre la double soumission
+    if (isSubmitting || submitHandled.current) {
+      return;
+    }
     
-    if (!validateScores()) return;
+    if (!validateScores()) {
+      return;
+    }
     
-    setIsSubmitting(true); // Marquer comme en cours de soumission
+    setIsSubmitting(true);
+    submitHandled.current = true;
     
-    // Convertir l'objet scores en array de scores dans le même ordre que les joueurs
-    const scoresArray = players.map(player => scores[player.id] || 0);
-    
-    // Soumettre les scores et fermer le dialogue immédiatement
-    onSubmit(scoresArray, dutchPlayer);
-    onClose();
+    try {
+      // Convertir l'objet scores en array de scores dans le même ordre que les joueurs
+      const scoresArray = players.map(player => scores[player.id] || 0);
+      
+      // Fermer immédiatement le dialogue pour éviter la double soumission
+      onClose();
+      
+      // APRÈS la fermeture, soumettre les scores
+      // Petit délai pour s'assurer que le dialogue est bien fermé
+      setTimeout(() => {
+        onSubmit(scoresArray, dutchPlayer);
+      }, 10);
+    } catch (error) {
+      console.error("Erreur lors de la soumission des scores:", error);
+      toast.error("Une erreur est survenue lors de l'enregistrement des scores");
+      setIsSubmitting(false);
+      submitHandled.current = false;
+    }
   };
   
   return (
     <Dialog open={open} onOpenChange={(isOpen) => {
-      if (!isOpen && !isSubmitting) onClose();
+      if (!isOpen && !isSubmitting && !submitHandled.current) onClose();
     }}>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
@@ -141,7 +161,7 @@ const NewRoundScoreForm: React.FC<NewRoundScoreFormProps> = ({
                     className="w-20 text-center"
                     placeholder="0"
                     onKeyDown={(e) => {
-                      if (e.key === 'Enter') {
+                      if (e.key === 'Enter' && !isSubmitting && !submitHandled.current) {
                         handleSubmit();
                       }
                     }}
@@ -178,14 +198,14 @@ const NewRoundScoreForm: React.FC<NewRoundScoreFormProps> = ({
             variant="outline" 
             onClick={onClose} 
             className="flex-1 sm:flex-none"
-            disabled={isSubmitting}
+            disabled={isSubmitting || submitHandled.current}
           >
             Annuler
           </Button>
           <Button 
             onClick={handleSubmit}
             className="bg-dutch-blue text-white hover:bg-dutch-blue/90 flex-1 sm:flex-none"
-            disabled={isSubmitting}
+            disabled={isSubmitting || submitHandled.current}
           >
             {isSubmitting ? 'Enregistrement...' : 'Enregistrer'}
           </Button>

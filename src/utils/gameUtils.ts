@@ -1,4 +1,3 @@
-
 /**
  * Utilitaires pour la gestion des parties
  */
@@ -43,10 +42,27 @@ export const initializePlayers = (): Player[] | null => {
  * Force la réinitialisation complète de l'état de jeu
  */
 export const cleanupGameState = () => {
-  // Supprimer toutes les données relatives à une partie en cours
+  // Supprimer TOUTES les données relatives à une partie en cours
   localStorage.removeItem('current_dutch_game');
   localStorage.removeItem('dutch_new_game_requested');
   localStorage.removeItem('dutch_player_setup');
+  
+  // Nettoyer également tous les autres éléments potentiellement problématiques
+  localStorage.removeItem('dutch_game_history');
+  localStorage.removeItem('dutch_round_history');
+  localStorage.removeItem('dutch_players');
+  localStorage.removeItem('dutch_score_limit');
+  localStorage.removeItem('dutch_game_start_time');
+  
+  // Vérifier pour être sûr que tout a bien été nettoyé
+  const allKeys = Object.keys(localStorage);
+  for (const key of allKeys) {
+    if (key.startsWith('dutch_game_') || key.startsWith('dutch_round_')) {
+      localStorage.removeItem(key);
+    }
+  }
+  
+  console.info("État du jeu complètement nettoyé");
 };
 
 /**

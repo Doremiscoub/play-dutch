@@ -2,7 +2,7 @@
 /**
  * Hook de gestion d'état de jeu avec optimisation des performances
  */
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Player } from '@/types';
 import { toast } from 'sonner';
@@ -23,6 +23,7 @@ export const useGameState = () => {
   const [scoreLimit, setScoreLimit] = useState<number>(100);
   const [gameStartTime, setGameStartTime] = useState<Date | null>(null);
   const [soundEnabled] = useLocalStorage('dutch_sound_enabled', true);
+  const initializationCompleted = useRef(false);
   
   const { loadGameState, saveGameState, saveGameToHistory } = useGamePersistence();
   const { roundHistory, setRoundHistory, addRound, undoLastRound } = useRoundManagement(scoreLimit, soundEnabled);
@@ -30,18 +31,27 @@ export const useGameState = () => {
   // Initialisation du jeu depuis localStorage
   useEffect(() => {
     try {
+      if (initializationCompleted.current) {
+        return; // Évite les doubles initialisations
+      }
+      
       const initializeGame = () => {
+        console.info('Initialisation du jeu...');
+        
         // Vérifier s'il s'agit d'une nouvelle partie
         const isNewGame = localStorage.getItem('dutch_new_game_requested') === 'true';
         
         if (isNewGame) {
-          console.log('Création d\'une nouvelle partie demandée');
+          console.info('Création d\'une nouvelle partie demandée');
           // Supprimer le drapeau de nouvelle partie
           localStorage.removeItem('dutch_new_game_requested');
           // Supprimer l'ancienne partie en cours
           localStorage.removeItem('current_dutch_game');
           // Créer une nouvelle partie
           createNewGame();
+          
+          // Marquer l'initialisation comme terminée
+          initializationCompleted.current = true;
           return;
         }
         
@@ -60,6 +70,9 @@ export const useGameState = () => {
           if (savedGame.isGameOver) {
             setShowGameOver(true);
           }
+          
+          // Marquer l'initialisation comme terminée
+          initializationCompleted.current = true;
         } else {
           createNewGame();
         }
@@ -96,7 +109,9 @@ export const useGameState = () => {
   // Créer un nouveau jeu avec les noms des joueurs de la configuration
   const createNewGame = useCallback(() => {
     try {
-      // Nettoyage pour s'assurer qu'il n'y a pas de résidus
+      console.info('Création d\'une nouvelle partie...');
+      
+      // Nettoyage complet pour s'assurer qu'il n'y a pas de résidus
       cleanupGameState();
       
       const newPlayers = initializePlayers();
@@ -105,7 +120,13 @@ export const useGameState = () => {
         setRoundHistory([]);
         setShowGameOver(false);
         setGameStartTime(new Date());
+        
+        // Marquer l'initialisation comme terminée
+        initializationCompleted.current = true;
+        
+        toast.success('Nouvelle partie créée !');
       } else {
+        console.error('Impossible de créer une partie: aucun joueur trouvé dans la configuration');
         navigate('/game/setup');
       }
     } catch (error) {
@@ -218,11 +239,45 @@ export const useGameState = () => {
     gameStartTime,
     handleAddRound,
     handleUndoLastRound,
-    handleRequestEndGame,
-    handleConfirmEndGame,
-    handleCancelEndGame,
-    handleContinueGame,
-    handleRestart
+    handleRequestEndGame: useCallback(() => {
+      setShowGameEndConfirmation(true);
+    }, []),
+    handleConfirmEndGame: useCallback(() => {
+      try {
+        saveGameToHistory(players, gameStartTime);
+        setShowGameOver(true);
+        setShowGameEndConfirmation(false);
+        return true;
+      } catch (error) {
+        console.error("Erreur lors de la confirmation de fin de partie:", error);
+        toast.error("Une erreur est survenue lors de la sauvegarde de la partie");
+        return false;
+      }
+    }, [saveGameToHistory, players, gameStartTime]),
+    handleCancelEndGame: useCallback(() => {
+      setShowGameEndConfirmation(false);
+    }, []),
+    handleContinueGame: useCallback((newLimit: number) => {
+      setScoreLimit(prevLimit => prevLimit + newLimit);
+      setShowGameOver(false);
+      toast.success(`La partie continue ! Nouvelle limite: ${scoreLimit + newLimit} points`);
+    }, [scoreLimit]),
+    handleRestart: useCallback(() => {
+      try {
+        // Effectuer un nettoyage complet
+        cleanupGameState();
+        
+        // Définir le flag pour forcer une nouvelle partie
+        localStorage.setItem('dutch_new_game_requested', 'true');
+        navigate('/game/setup');
+        
+        return true;
+      } catch (error) {
+        console.error("Erreur lors du redémarrage de la partie:", error);
+        toast.error("Une erreur est survenue lors du redémarrage");
+        return false;
+      }
+    }, [navigate])
   };
 };
 
