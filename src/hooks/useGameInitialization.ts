@@ -6,7 +6,8 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Player } from '@/types';
 import { toast } from 'sonner';
-import { initializePlayers, cleanupGameState } from '@/utils/gameUtils';
+import { initializePlayers, clearPlayerSetup } from '@/utils/playerInitializer';
+import { cleanupGameState } from '@/utils/gameUtils';
 
 export const useGameInitialization = () => {
   const navigate = useNavigate();
@@ -24,20 +25,25 @@ export const useGameInitialization = () => {
       cleanupGameState();
       
       const newPlayers = initializePlayers();
-      if (newPlayers && newPlayers.length > 0) {
-        setPlayers(newPlayers);
-        setGameStartTime(new Date());
-        
-        // Mark initialization as completed
-        initializationCompleted.current = true;
-        
-        toast.success('Nouvelle partie créée !');
-        return true;
-      } else {
+      if (!newPlayers || newPlayers.length === 0) {
         console.error('Impossible de créer une partie: aucun joueur trouvé dans la configuration');
+        toast.error('Configuration de la partie invalide');
         navigate('/game/setup');
         return false;
       }
+      
+      // Ensure we're starting with a clean state
+      setPlayers(newPlayers);
+      setGameStartTime(new Date());
+      
+      // Mark initialization as completed
+      initializationCompleted.current = true;
+      
+      // Clean up the setup data
+      clearPlayerSetup();
+      
+      toast.success('Nouvelle partie créée !');
+      return true;
     } catch (error) {
       console.error("Erreur lors de la création d'une nouvelle partie:", error);
       toast.error("Une erreur est survenue lors de la création de la partie");
@@ -45,6 +51,12 @@ export const useGameInitialization = () => {
       return false;
     }
   }, [navigate]);
+
+  // Clean up function to ensure we don't leave partial state
+  const cleanup = useCallback(() => {
+    cleanupGameState();
+    clearPlayerSetup();
+  }, []);
 
   return {
     players,
@@ -54,6 +66,7 @@ export const useGameInitialization = () => {
     scoreLimit,
     setScoreLimit,
     createNewGame,
+    cleanup,
     initializationCompleted
   };
 };

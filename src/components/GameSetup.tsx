@@ -1,21 +1,16 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Plus, Minus, Play, Sparkles, Users, Computer } from 'lucide-react';
+import { Plus, Minus, Play, Users, Computer } from 'lucide-react';
 import { motion } from 'framer-motion';
 import AnimatedBackground from './AnimatedBackground';
 import { useNavigate } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { cleanupGameState } from '@/utils/gameUtils';
+import { clearPlayerSetup } from '@/utils/playerInitializer';
 
-interface GameSetupProps {
-  onStartGame?: (players: string[]) => void;
-}
-
-const GameSetup: React.FC<GameSetupProps> = ({ onStartGame }) => {
+const GameSetup: React.FC = () => {
   const navigate = useNavigate();
   const [numPlayers, setNumPlayers] = useState(4);
   const [playerNames, setPlayerNames] = useState<string[]>(Array(4).fill('').map((_, i) => `Joueur ${i + 1}`));
@@ -23,12 +18,8 @@ const GameSetup: React.FC<GameSetupProps> = ({ onStartGame }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   useEffect(() => {
-    // Nettoyage complet au chargement de l'écran de configuration
     cleanupGameState();
-    // Supprimer explicitement les drapeaux qui pourraient causer des problèmes
-    localStorage.removeItem('dutch_new_game_requested');
-    localStorage.removeItem('current_dutch_game');
-    localStorage.removeItem('dutch_player_setup');
+    clearPlayerSetup();
   }, []);
   
   const handleNumPlayersChange = (increment: boolean) => {
@@ -38,7 +29,6 @@ const GameSetup: React.FC<GameSetupProps> = ({ onStartGame }) => {
     
     setNumPlayers(newNum);
     
-    // Adjust player names array
     if (increment && numPlayers < 10) {
       setPlayerNames([...playerNames, `Joueur ${numPlayers + 1}`]);
     } else if (!increment && numPlayers > 2) {
@@ -52,22 +42,20 @@ const GameSetup: React.FC<GameSetupProps> = ({ onStartGame }) => {
     setPlayerNames(newNames);
   };
 
-  const handleStartGame = async (e: React.MouseEvent) => {
-    e.preventDefault(); // Empêcher le comportement par défaut du formulaire
+  const handleStartGame = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     
-    // Éviter les soumissions multiples
     if (isSubmitting) return;
     setIsSubmitting(true);
     
     try {
-      // Nettoyer COMPLÈTEMENT toutes les données précédentes
-      cleanupGameState();
-      localStorage.removeItem('dutch_new_game_requested');
-      localStorage.removeItem('current_dutch_game');
+      console.info('Démarrage de la partie...');
       
-      // Validate player names (ensure no empty names)
+      cleanupGameState();
+      clearPlayerSetup();
+      
       const validPlayerNames = playerNames.map(name => 
-        name.trim() === '' ? `Joueur ${playerNames.indexOf(name) + 1}` : name
+        name.trim() === '' ? `Joueur ${playerNames.indexOf(name) + 1}` : name.trim()
       );
       
       if (gameMode === 'multiplayer') {
@@ -76,16 +64,12 @@ const GameSetup: React.FC<GameSetupProps> = ({ onStartGame }) => {
         return;
       }
       
-      // Store player names in localStorage
-      localStorage.setItem('dutch_player_setup', JSON.stringify(validPlayerNames));
+      const setupKey = 'dutch_player_setup';
+      localStorage.setItem(setupKey, JSON.stringify(validPlayerNames));
       localStorage.setItem('dutch_new_game_requested', 'true');
       
-      // Call the onStartGame prop if provided
-      if (onStartGame) {
-        onStartGame(validPlayerNames);
-      }
+      console.info('Redirection vers /game...');
       
-      // Force navigation avec un délai court pour s'assurer que les données sont sauvegardées
       setTimeout(() => {
         navigate('/game');
       }, 100);
@@ -93,7 +77,9 @@ const GameSetup: React.FC<GameSetupProps> = ({ onStartGame }) => {
       console.error("Erreur lors du démarrage de la partie:", error);
       toast.error("Une erreur est survenue lors de la création de la partie");
     } finally {
-      setIsSubmitting(false);
+      setTimeout(() => {
+        setIsSubmitting(false);
+      }, 1000);
     }
   };
 
@@ -105,7 +91,6 @@ const GameSetup: React.FC<GameSetupProps> = ({ onStartGame }) => {
 
   return (
     <div className="min-h-screen w-full relative">
-      {/* Background elements - now full width */}
       <div className="fixed inset-0 -z-10">
         <AnimatedBackground variant="default" />
       </div>
@@ -120,17 +105,16 @@ const GameSetup: React.FC<GameSetupProps> = ({ onStartGame }) => {
           className="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-pink bg-clip-text text-transparent"
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={transitionProps}
+          transition={{ type: "spring", stiffness: 260, damping: 20 }}
         >
           Nouvelle Partie
         </motion.h1>
         
-        {/* Sélecteur de mode de jeu */}
         <motion.div 
           className="dutch-card mb-8 backdrop-blur-md border border-white/40 bg-white/80 hover:shadow-lg transition-all duration-300 rounded-2xl overflow-hidden p-6"
           initial={{ scale: 0.95, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          transition={{ ...transitionProps, delay: 0.1 }}
+          transition={{ type: "spring", stiffness: 260, damping: 20, delay: 0.1 }}
           whileHover={{ y: -3, boxShadow: "0 15px 30px rgba(0,0,0,0.1)" }}
         >
           <h2 className="text-xl font-semibold mb-4 text-dutch-blue">Mode de jeu</h2>
@@ -161,7 +145,7 @@ const GameSetup: React.FC<GameSetupProps> = ({ onStartGame }) => {
           className="dutch-card mb-8 backdrop-blur-md border border-white/40 bg-white/80 hover:shadow-lg transition-all duration-300 rounded-2xl overflow-hidden p-6"
           initial={{ scale: 0.95, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          transition={{ ...transitionProps, delay: 0.2 }}
+          transition={{ type: "spring", stiffness: 260, damping: 20, delay: 0.2 }}
           whileHover={{ y: -3, boxShadow: "0 15px 30px rgba(0,0,0,0.1)" }}
         >
           <h2 className="text-xl font-semibold mb-4 text-dutch-blue">Nombre de joueurs</h2>
@@ -204,7 +188,7 @@ const GameSetup: React.FC<GameSetupProps> = ({ onStartGame }) => {
           className="dutch-card mb-8 backdrop-blur-md border border-white/40 bg-white/80 hover:shadow-lg transition-all duration-300 rounded-2xl overflow-hidden p-6"
           initial={{ scale: 0.95, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          transition={{ ...transitionProps, delay: 0.3 }}
+          transition={{ type: "spring", stiffness: 260, damping: 20, delay: 0.3 }}
           whileHover={{ y: -3, boxShadow: "0 15px 30px rgba(0,0,0,0.1)" }}
         >
           <h2 className="text-xl font-semibold mb-4 text-dutch-blue">Noms des joueurs</h2>
@@ -240,7 +224,6 @@ const GameSetup: React.FC<GameSetupProps> = ({ onStartGame }) => {
         </motion.div>
       </motion.div>
       
-      {/* Bouton Commencer flottant */}
       <motion.div
         className="fixed left-0 right-0 bottom-8 flex justify-center z-50 px-6"
         initial={{ y: 100, opacity: 0 }}
