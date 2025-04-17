@@ -3,17 +3,26 @@ import { Player } from '@/types';
 import { v4 as uuidv4 } from 'uuid';
 import { toast } from 'sonner';
 
+// Flag to prevent duplicate notifications
+let errorNotificationShown = false;
+
 /**
  * Initialize players from localStorage configuration
  * @returns Array of initialized players or null if configuration is invalid
  */
 export const initializePlayers = (): Player[] | null => {
   try {
+    // Reset notification flag when explicitly initializing
+    errorNotificationShown = false;
+    
     const playerSetup = localStorage.getItem('dutch_player_setup');
     
     if (!playerSetup) {
       console.error('Aucune configuration de joueurs trouvée dans localStorage');
-      toast.error('Configuration de partie manquante');
+      if (!errorNotificationShown) {
+        toast.error('Configuration de partie manquante');
+        errorNotificationShown = true;
+      }
       return null;
     }
     
@@ -21,7 +30,10 @@ export const initializePlayers = (): Player[] | null => {
     
     if (!Array.isArray(playerNames) || playerNames.length < 2) {
       console.error('Configuration de joueurs invalide:', playerNames);
-      toast.error('Configuration de partie invalide');
+      if (!errorNotificationShown) {
+        toast.error('Configuration de partie invalide');
+        errorNotificationShown = true;
+      }
       return null;
     }
     
@@ -37,7 +49,10 @@ export const initializePlayers = (): Player[] | null => {
     return newPlayers;
   } catch (error) {
     console.error('Erreur lors de la création de la partie :', error);
-    toast.error('Erreur lors de la création de la partie');
+    if (!errorNotificationShown) {
+      toast.error('Erreur lors de la création de la partie');
+      errorNotificationShown = true;
+    }
     return null;
   }
 };
@@ -48,6 +63,8 @@ export const initializePlayers = (): Player[] | null => {
 export const clearPlayerSetup = () => {
   localStorage.removeItem('dutch_player_setup');
   console.info('Configuration des joueurs nettoyée');
+  // Reset notification flag when clearing setup
+  errorNotificationShown = false;
 };
 
 /**

@@ -1,6 +1,9 @@
 
 import { toast } from 'sonner';
 
+// Flag to prevent duplicate error notifications
+let validationErrorShown = false;
+
 /**
  * Validate player scores before submission
  * @param scores Object mapping player IDs to scores
@@ -9,8 +12,14 @@ import { toast } from 'sonner';
  */
 export const validateScores = (scores: { [key: string]: number }, playerIds: string[]): boolean => {
   try {
+    // Reset notification flag for new validation
+    validationErrorShown = false;
+    
     if (!scores || !playerIds || playerIds.length === 0) {
-      toast.error('Données de score invalides');
+      if (!validationErrorShown) {
+        toast.error('Données de score invalides');
+        validationErrorShown = true;
+      }
       return false;
     }
     
@@ -20,7 +29,10 @@ export const validateScores = (scores: { [key: string]: number }, playerIds: str
     );
     
     if (!allPlayersHaveScores) {
-      toast.error('Tous les joueurs doivent avoir un score');
+      if (!validationErrorShown) {
+        toast.error('Tous les joueurs doivent avoir un score');
+        validationErrorShown = true;
+      }
       return false;
     }
 
@@ -31,14 +43,20 @@ export const validateScores = (scores: { [key: string]: number }, playerIds: str
     });
     
     if (!allScoresValid) {
-      toast.error('Tous les scores doivent être des nombres valides');
+      if (!validationErrorShown) {
+        toast.error('Tous les scores doivent être des nombres valides');
+        validationErrorShown = true;
+      }
       return false;
     }
     
     return true;
   } catch (error) {
     console.error('Erreur de validation des scores:', error);
-    toast.error('Erreur lors de la validation des scores');
+    if (!validationErrorShown) {
+      toast.error('Erreur lors de la validation des scores');
+      validationErrorShown = true;
+    }
     return false;
   }
 };

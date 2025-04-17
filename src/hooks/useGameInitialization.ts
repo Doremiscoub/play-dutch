@@ -15,10 +15,17 @@ export const useGameInitialization = () => {
   const [gameStartTime, setGameStartTime] = useState<Date | null>(null);
   const [scoreLimit, setScoreLimit] = useState<number>(100);
   const initializationCompleted = useRef(false);
+  const initializationAttempted = useRef(false);
   
   // Create a new game with player names from configuration
   const createNewGame = useCallback(() => {
     try {
+      // Prevent multiple initialization attempts
+      if (initializationAttempted.current) {
+        return false;
+      }
+      
+      initializationAttempted.current = true;
       console.info('Création d\'une nouvelle partie...');
       
       // Complete cleanup to ensure no residual data
@@ -47,7 +54,7 @@ export const useGameInitialization = () => {
       // Mark initialization as completed
       initializationCompleted.current = true;
       
-      // Make sure to NOT clear playerSetup here - we only remove it after successful initialization
+      // Only clear playerSetup after successful initialization
       toast.success('Nouvelle partie créée !');
       return true;
     } catch (error) {
@@ -55,6 +62,11 @@ export const useGameInitialization = () => {
       toast.error("Une erreur est survenue lors de la création de la partie");
       navigate('/game/setup');
       return false;
+    } finally {
+      // Reset attempt flag after a delay to allow for further attempts if needed
+      setTimeout(() => {
+        initializationAttempted.current = false;
+      }, 1000);
     }
   }, [navigate]);
 
@@ -62,6 +74,8 @@ export const useGameInitialization = () => {
   const cleanup = useCallback(() => {
     cleanupGameState();
     clearPlayerSetup();
+    initializationCompleted.current = false;
+    initializationAttempted.current = false;
   }, []);
 
   return {

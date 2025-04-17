@@ -1,6 +1,5 @@
 
 import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
 import { Plus, Minus, Play, Users, Computer } from 'lucide-react';
 import { motion } from 'framer-motion';
 import AnimatedBackground from './AnimatedBackground';
@@ -27,7 +26,7 @@ const GameSetup: React.FC = () => {
   useEffect(() => {
     cleanupGameState();
     clearPlayerSetup();
-    console.info("Configuration de jeu nettoyée au montage du composant");
+    console.info("Configuration de jeu nettoyée au montage du composant GameSetup");
   }, []);
   
   const handleNumPlayersChange = (increment: boolean) => {
