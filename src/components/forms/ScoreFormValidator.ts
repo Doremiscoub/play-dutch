@@ -9,6 +9,11 @@ import { toast } from 'sonner';
  */
 export const validateScores = (scores: { [key: string]: number }, playerIds: string[]): boolean => {
   try {
+    if (!scores || !playerIds || playerIds.length === 0) {
+      toast.error('Données de score invalides');
+      return false;
+    }
+    
     // Verify all players have scores
     const allPlayersHaveScores = playerIds.every(id => 
       typeof scores[id] === 'number' || typeof scores[id] === 'string'

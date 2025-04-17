@@ -25,6 +25,7 @@ const GameSetup: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   useEffect(() => {
+    // Clean up any existing game setup data when component mounts
     cleanupGameState();
     clearPlayerSetup();
   }, []);
@@ -60,7 +61,6 @@ const GameSetup: React.FC = () => {
       
       // Nettoyer tout état de jeu existant avant de créer une nouvelle configuration
       cleanupGameState();
-      clearPlayerSetup();
       
       // S'assurer que tous les noms de joueurs sont valides
       const validPlayerNames = playerNames.map(name => 
@@ -80,8 +80,7 @@ const GameSetup: React.FC = () => {
       }
       
       // Sauvegarder la configuration des joueurs dans localStorage
-      const setupKey = 'dutch_player_setup';
-      localStorage.setItem(setupKey, JSON.stringify(validPlayerNames));
+      localStorage.setItem('dutch_player_setup', JSON.stringify(validPlayerNames));
       localStorage.setItem('dutch_new_game_requested', 'true');
       
       console.info('Configuration des joueurs enregistrée:', validPlayerNames);

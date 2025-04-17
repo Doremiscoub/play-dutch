@@ -47,11 +47,7 @@ export const useGameInitialization = () => {
       // Mark initialization as completed
       initializationCompleted.current = true;
       
-      // Clean up the setup data to prevent reuse
-      setTimeout(() => {
-        clearPlayerSetup();
-      }, 1000);
-      
+      // Make sure to NOT clear playerSetup here - we only remove it after successful initialization
       toast.success('Nouvelle partie créée !');
       return true;
     } catch (error) {

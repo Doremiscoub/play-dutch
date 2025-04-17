@@ -57,17 +57,21 @@ export const verifyPlayerSetup = (): boolean => {
     const playerSetup = localStorage.getItem('dutch_player_setup');
     
     if (!playerSetup) {
+      console.error('Vérification: Aucune configuration de joueurs trouvée');
       return false;
     }
     
     const playerNames = JSON.parse(playerSetup);
     
     if (!Array.isArray(playerNames) || playerNames.length < 2) {
+      console.error('Vérification: Configuration de joueurs invalide:', playerNames);
       return false;
     }
     
+    console.info('Vérification: Configuration de joueurs valide');
     return true;
   } catch (error) {
+    console.error('Erreur lors de la vérification de la configuration:', error);
     return false;
   }
 };
