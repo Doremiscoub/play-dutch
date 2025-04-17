@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -49,7 +48,7 @@ const GameSetup: React.FC = () => {
     setPlayerNames(newNames);
   };
 
-  const handleStartGame = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleStartGame = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     
     if (isSubmitting) return;

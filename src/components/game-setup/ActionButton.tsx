@@ -5,7 +5,7 @@ import { Play } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 interface ActionButtonProps {
-  onClick: () => void;
+  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
   label: string;
   icon?: React.ReactNode;
 }
