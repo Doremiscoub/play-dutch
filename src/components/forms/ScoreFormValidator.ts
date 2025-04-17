@@ -1,11 +1,17 @@
 
 import { toast } from 'sonner';
 
+/**
+ * Validate player scores before submission
+ * @param scores Object mapping player IDs to scores
+ * @param playerIds Array of player IDs to validate
+ * @returns boolean indicating if scores are valid
+ */
 export const validateScores = (scores: { [key: string]: number }, playerIds: string[]): boolean => {
   try {
     // Verify all players have scores
     const allPlayersHaveScores = playerIds.every(id => 
-      typeof scores[id] === 'number'
+      typeof scores[id] === 'number' || typeof scores[id] === 'string'
     );
     
     if (!allPlayersHaveScores) {
@@ -13,10 +19,11 @@ export const validateScores = (scores: { [key: string]: number }, playerIds: str
       return false;
     }
 
-    // Verify scores are numeric
-    const allScoresValid = playerIds.every(id => 
-      !isNaN(scores[id]) && isFinite(scores[id])
-    );
+    // Verify scores are numeric and valid
+    const allScoresValid = playerIds.every(id => {
+      const score = typeof scores[id] === 'string' ? parseFloat(scores[id]) : scores[id];
+      return !isNaN(score) && isFinite(score);
+    });
     
     if (!allScoresValid) {
       toast.error('Tous les scores doivent être des nombres valides');

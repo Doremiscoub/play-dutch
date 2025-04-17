@@ -6,7 +6,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Player } from '@/types';
 import { toast } from 'sonner';
-import { initializePlayers, clearPlayerSetup } from '@/utils/playerInitializer';
+import { initializePlayers, clearPlayerSetup, verifyPlayerSetup } from '@/utils/playerInitializer';
 import { cleanupGameState } from '@/utils/gameUtils';
 
 export const useGameInitialization = () => {
@@ -24,10 +24,18 @@ export const useGameInitialization = () => {
       // Complete cleanup to ensure no residual data
       cleanupGameState();
       
-      const newPlayers = initializePlayers();
-      if (!newPlayers || newPlayers.length === 0) {
-        console.error('Impossible de créer une partie: aucun joueur trouvé dans la configuration');
+      // Verify setup exists before initializing
+      if (!verifyPlayerSetup()) {
+        console.error('Impossible de créer une partie: la configuration des joueurs est invalide ou inexistante');
         toast.error('Configuration de la partie invalide');
+        navigate('/game/setup');
+        return false;
+      }
+      
+      const newPlayers = initializePlayers();
+      if (!newPlayers || newPlayers.length < 2) {
+        console.error('Impossible de créer une partie: moins de 2 joueurs configurés');
+        toast.error('Il faut au moins 2 joueurs pour commencer une partie');
         navigate('/game/setup');
         return false;
       }
@@ -39,8 +47,10 @@ export const useGameInitialization = () => {
       // Mark initialization as completed
       initializationCompleted.current = true;
       
-      // Clean up the setup data
-      clearPlayerSetup();
+      // Clean up the setup data to prevent reuse
+      setTimeout(() => {
+        clearPlayerSetup();
+      }, 1000);
       
       toast.success('Nouvelle partie créée !');
       return true;
