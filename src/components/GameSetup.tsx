@@ -1,7 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Plus, Minus, Play, Users, Computer } from 'lucide-react';
 import { motion } from 'framer-motion';
 import AnimatedBackground from './AnimatedBackground';
@@ -24,10 +23,11 @@ const GameSetup: React.FC = () => {
   const [gameMode, setGameMode] = useState<'local' | 'multiplayer'>('local');
   const [isSubmitting, setIsSubmitting] = useState(false);
   
+  // Clean up any existing game state when component mounts
   useEffect(() => {
-    // Clean up any existing game setup data when component mounts
     cleanupGameState();
     clearPlayerSetup();
+    console.info("Configuration de jeu nettoyée au montage du composant");
   }, []);
   
   const handleNumPlayersChange = (increment: boolean) => {
@@ -68,6 +68,7 @@ const GameSetup: React.FC = () => {
       );
       
       if (validPlayerNames.length < 2) {
+        console.error("Erreur: moins de 2 joueurs");
         toast.error('Il faut au moins 2 joueurs pour commencer une partie');
         setIsSubmitting(false);
         return;
@@ -79,12 +80,14 @@ const GameSetup: React.FC = () => {
         return;
       }
       
+      // Vérifier et afficher les données avant sauvegarde
+      console.info('Noms des joueurs validés:', validPlayerNames);
+      
       // Sauvegarder la configuration des joueurs dans localStorage
       localStorage.setItem('dutch_player_setup', JSON.stringify(validPlayerNames));
       localStorage.setItem('dutch_new_game_requested', 'true');
       
-      console.info('Configuration des joueurs enregistrée:', validPlayerNames);
-      console.info('Redirection vers /game...');
+      console.info('Configuration des joueurs enregistrée. Redirection vers /game...');
       
       // Rediriger après un court délai pour s'assurer que le stockage est mis à jour
       setTimeout(() => {

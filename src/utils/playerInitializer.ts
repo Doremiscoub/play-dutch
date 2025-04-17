@@ -13,6 +13,7 @@ export const initializePlayers = (): Player[] | null => {
     
     if (!playerSetup) {
       console.error('Aucune configuration de joueurs trouvée dans localStorage');
+      toast.error('Configuration de partie manquante');
       return null;
     }
     
@@ -20,6 +21,7 @@ export const initializePlayers = (): Player[] | null => {
     
     if (!Array.isArray(playerNames) || playerNames.length < 2) {
       console.error('Configuration de joueurs invalide:', playerNames);
+      toast.error('Configuration de partie invalide');
       return null;
     }
     

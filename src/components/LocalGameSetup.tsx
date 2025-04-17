@@ -38,9 +38,19 @@ const LocalGameSetup: React.FC<LocalGameSetupProps> = ({ onStartGame }) => {
     setPlayerNames(newNames);
   };
 
-  const handleStartGame = () => {
+  const handleStartGame = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     // Validate player names (ensure no empty names)
-    const validPlayerNames = playerNames.map(name => name.trim() === '' ? `Joueur ${playerNames.indexOf(name) + 1}` : name);
+    const validPlayerNames = playerNames.map(name => 
+      name.trim() === '' ? `Joueur ${playerNames.indexOf(name) + 1}` : name.trim()
+    );
+    
+    if (validPlayerNames.length < 2) {
+      console.error("Erreur: moins de 2 joueurs");
+      return;
+    }
+    
+    // Call the parent component's handler
     onStartGame(validPlayerNames);
   };
 
