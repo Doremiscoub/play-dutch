@@ -21,14 +21,14 @@ const ActionButton: React.FC<ActionButtonProps> = ({ onClick, label, icon }) => 
         onClick={onClick}
         variant="floating"
         size="game-action"
-        className="w-full shadow-lg transition-all relative overflow-hidden rounded-2xl border border-white/20 backdrop-blur-md bg-gradient-to-r from-dutch-blue/90 via-dutch-purple/90 to-dutch-blue/90"
+        className="w-full shadow-lg transition-all relative overflow-hidden rounded-2xl border border-white/20 backdrop-blur-md bg-gradient-to-r from-dutch-blue/90 via-dutch-purple/90 to-dutch-blue/90 text-white"
       >
         <motion.div 
           className="absolute inset-0 bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-blue bg-[length:200%_100%]"
           animate={{ backgroundPosition: ['0% 0%', '100% 0%', '0% 0%'] }}
           transition={{ duration: 10, repeat: Infinity }}
         />
-        <span className="absolute inset-0 flex items-center justify-center gap-2 text-lg font-medium">
+        <span className="absolute inset-0 flex items-center justify-center gap-2 text-lg font-medium text-white">
           {icon || <Play className="h-5 w-5" />} {label}
         </span>
       </Button>

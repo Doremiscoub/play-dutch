@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -57,11 +58,11 @@ const GameSetup: React.FC = () => {
     try {
       console.info('Démarrage de la partie...');
       
-      // Clean up any existing game state
+      // Nettoyer tout état de jeu existant avant de créer une nouvelle configuration
       cleanupGameState();
       clearPlayerSetup();
       
-      // Ensure all player names are valid
+      // S'assurer que tous les noms de joueurs sont valides
       const validPlayerNames = playerNames.map(name => 
         name.trim() === '' ? `Joueur ${playerNames.indexOf(name) + 1}` : name.trim()
       );
@@ -78,7 +79,7 @@ const GameSetup: React.FC = () => {
         return;
       }
       
-      // Save player setup to localStorage
+      // Sauvegarder la configuration des joueurs dans localStorage
       const setupKey = 'dutch_player_setup';
       localStorage.setItem(setupKey, JSON.stringify(validPlayerNames));
       localStorage.setItem('dutch_new_game_requested', 'true');
@@ -86,7 +87,7 @@ const GameSetup: React.FC = () => {
       console.info('Configuration des joueurs enregistrée:', validPlayerNames);
       console.info('Redirection vers /game...');
       
-      // Redirect after a short delay to ensure storage is updated
+      // Rediriger après un court délai pour s'assurer que le stockage est mis à jour
       setTimeout(() => {
         navigate('/game');
       }, 300);
