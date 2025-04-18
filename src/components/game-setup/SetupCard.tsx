@@ -8,7 +8,7 @@ interface SetupCardProps {
   delay?: number;
 }
 
-const SetupCard: React.FC<SetupCardProps> = ({ title, children, delay = 0 }) => {
+export default function SetupCard({ title, children, delay = 0 }: SetupCardProps) {
   const transitionProps = {
     type: "spring",
     stiffness: 260,
@@ -27,6 +27,4 @@ const SetupCard: React.FC<SetupCardProps> = ({ title, children, delay = 0 }) => 
       {children}
     </motion.div>
   );
-};
-
-export default SetupCard;
+}

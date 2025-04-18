@@ -1,8 +1,7 @@
 
 /// <reference types="vitest" />
-import React from 'react';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
 import { BrowserRouter } from 'react-router-dom';
 import ScoreBoard from '@/components/scoreboard/ScoreBoard';
 import { Player } from '@/types';
@@ -11,51 +10,39 @@ const mockPlayers: Player[] = [
   {
     id: '1',
     name: 'Alice',
-    totalScore: 0,
     avatarColor: 'blue',
     rounds: [],
     stats: {
-      averageScore: 0,
-      bestRound: 0,
-      worstRound: 0,
-      dutchCount: 0,
-      improvementRate: 0,
-      consistencyScore: 0,
-      winStreak: 0
-      // Removed 'rank' property which doesn't exist in PlayerStatistics
+      playerId: '1',
+      roundsPlayed: 0,
+      meanScore: 0
     }
   },
   {
     id: '2',
     name: 'Bob',
-    totalScore: 0,
     avatarColor: 'green',
     rounds: [],
     stats: {
-      averageScore: 0,
-      bestRound: 0,
-      worstRound: 0,
-      dutchCount: 0,
-      improvementRate: 0,
-      consistencyScore: 0,
-      winStreak: 0
-      // Removed 'rank' property which doesn't exist in PlayerStatistics
+      playerId: '2',
+      roundsPlayed: 0,
+      meanScore: 0
     }
   }
 ];
 
-const mockRoundHistory = [];
-
 describe('Statistiques après ajout de manche', () => {
+  let handleAddRound: ReturnType<typeof vi.fn>;
+  let handleUndoLastRound: ReturnType<typeof vi.fn>;
+  let handleEndGame: ReturnType<typeof vi.fn>;
+  
+  beforeEach(() => {
+    handleAddRound = vi.fn();
+    handleUndoLastRound = vi.fn();
+    handleEndGame = vi.fn();
+  });
+
   it('Les statistiques sont mises à jour après l\'ajout d\'une manche', async () => {
-    const handleAddRound = vi.fn((scores, dutchPlayerId) => {
-      mockRoundHistory.push({ scores, dutchPlayerId });
-      return true;
-    });
-    
-    const handleUndoLastRound = vi.fn();
-    const handleEndGame = vi.fn();
-    
     render(
       <BrowserRouter>
         <ScoreBoard
@@ -63,7 +50,7 @@ describe('Statistiques après ajout de manche', () => {
           onAddRound={handleAddRound}
           onUndoLastRound={handleUndoLastRound}
           onEndGame={handleEndGame}
-          roundHistory={mockRoundHistory}
+          roundHistory={[]}
           scoreLimit={100}
         />
       </BrowserRouter>
@@ -81,7 +68,5 @@ describe('Statistiques après ajout de manche', () => {
     await waitFor(() => {
       expect(handleAddRound).toHaveBeenCalled();
     });
-    
-    // Vérifier la mise à jour des statistiques (si possible)
   });
 });

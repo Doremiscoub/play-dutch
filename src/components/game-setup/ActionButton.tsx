@@ -11,7 +11,12 @@ interface ActionButtonProps {
   isLoading?: boolean;
 }
 
-const ActionButton: React.FC<ActionButtonProps> = ({ onClick, label, disabled = false, isLoading = false }) => {
+const ActionButton: React.FC<ActionButtonProps> = ({ 
+  onClick, 
+  label, 
+  disabled = false, 
+  isLoading = false 
+}) => {
   return (
     <motion.div 
       whileHover={{ scale: 1.03 }}

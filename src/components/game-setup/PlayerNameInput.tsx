@@ -10,7 +10,12 @@ interface PlayerNameInputProps {
   placeholder?: string;
 }
 
-const PlayerNameInput: React.FC<PlayerNameInputProps> = ({ index, name, onChange, placeholder }) => {
+const PlayerNameInput: React.FC<PlayerNameInputProps> = ({ 
+  index, 
+  name, 
+  onChange, 
+  placeholder 
+}) => {
   return (
     <motion.div 
       key={index} 
