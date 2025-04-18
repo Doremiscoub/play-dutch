@@ -7,6 +7,7 @@ interface Wave {
   frequency: number;
   opacity: number;
   direction: 'left' | 'right';
+  yOffset: number; // Nouvel attribut pour décaler verticalement
 }
 
 export const waves: Wave[] = [
@@ -17,7 +18,8 @@ export const waves: Wave[] = [
     amplitude: 50,
     frequency: 0.005,
     opacity: 1.0,
-    direction: 'right'
+    direction: 'right',
+    yOffset: 0 // Pas de décalage pour la première vague
   },
   { 
     height: 0.55, // Légèrement plus haute que la première
@@ -26,7 +28,8 @@ export const waves: Wave[] = [
     amplitude: 40,
     frequency: 0.006,
     opacity: 0.9,
-    direction: 'left'
+    direction: 'left',
+    yOffset: 40 // Décalage vers le bas pour la superposition
   }
 ];
 
@@ -35,8 +38,10 @@ export const drawWaves = (
   canvas: HTMLCanvasElement,
   time: number
 ) => {
-  waves.forEach((wave) => {
-    const yBase = canvas.height - (canvas.height * wave.height);
+  // D'abord dessiner la vague d'arrière-plan, puis celle du premier plan pour une superposition correcte
+  for (let i = waves.length - 1; i >= 0; i--) {
+    const wave = waves[i];
+    const yBase = canvas.height - (canvas.height * wave.height) + wave.yOffset;
     ctx.beginPath();
     ctx.moveTo(0, canvas.height);
     
@@ -58,5 +63,5 @@ export const drawWaves = (
     
     ctx.fillStyle = gradient;
     ctx.fill();
-  });
+  }
 };

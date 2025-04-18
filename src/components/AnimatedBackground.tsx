@@ -21,7 +21,7 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
     const draw = (time: number) => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
-      // Background gradient
+      // Background gradient - consistant sur toutes les pages
       const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
       gradient.addColorStop(0, '#F8F9FA');
       gradient.addColorStop(1, '#FFFFFF');
@@ -39,7 +39,11 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
 
       // Animated elements - ordre important: d'abord les dots (arrière-plan), puis les vagues (premier plan)
       drawDots({ ctx, canvas, time });
-      drawWaves(ctx, canvas, time);
+      
+      // Assurer que les vagues sont toujours visibles même sur les écrans courts
+      if (canvas.height > 300) {
+        drawWaves(ctx, canvas, time);
+      }
     };
 
     const animation = createAnimationLoop(draw);

@@ -31,18 +31,18 @@ const NewRoundScoreForm: React.FC<NewRoundScoreFormProps> = ({
     handleSubmitForm
   } = useScoreForm(players, open, onClose, onSubmit);
   
-  // Fonction pour gérer la fermeture manuelle du modal
+  // Si le dialogue n'est pas ouvert ou si le formulaire a déjà été soumis,
+  // on ne rend pas le composant
+  if (!open || submitHandled.current) {
+    return null;
+  }
+  
+  // Fonction pour gérer la fermeture manuelle du modal sans soumettre
   const handleOpenChange = (isOpen: boolean) => {
     if (!isOpen && !isSubmitting && !submitHandled.current) {
       onClose();
     }
   };
-  
-  // Si le formulaire a déjà été soumis ou est en cours de soumission,
-  // on peut forcer la fermeture du dialog
-  if (!open || submitHandled.current) {
-    return null;
-  }
   
   return (
     <Dialog 

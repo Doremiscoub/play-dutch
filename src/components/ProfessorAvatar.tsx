@@ -6,8 +6,8 @@ import { Button } from './ui/button';
 import { useElevenLabs } from '@/hooks/use-eleven-labs';
 import { useSound } from '@/hooks/use-sound';
 
-// Chemin EXACT vers l'image fournie
-const PROFESSOR_IMAGE = '/lovable-uploads/4257e746-36cc-49f2-9457-6bc4e570f1b4.png';
+// Chemin corrigé vers l'image du professeur
+const PROFESSOR_IMAGE = '/images/professor-cartouche.png';
 
 interface ProfessorAvatarProps {
   message: string;
@@ -47,6 +47,11 @@ const ProfessorAvatar: React.FC<ProfessorAvatarProps> = ({ message, onSpeakMessa
           src={PROFESSOR_IMAGE}
           alt="Professeur Cartouche" 
           className="w-full h-full object-cover bg-white"
+          onError={(e) => {
+            console.error("Erreur de chargement du Professeur Cartouche:", e);
+            // Image de secours
+            e.currentTarget.src = '/professor.png';
+          }}
         />
       </motion.div>
       

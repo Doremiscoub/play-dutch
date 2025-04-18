@@ -9,11 +9,14 @@ import { useLocalStorage } from './use-local-storage';
 import { v4 as uuidv4 } from 'uuid';
 import { calculateGameDuration } from '@/utils/gameUtils';
 
+const GAME_STORAGE_KEY = 'current_dutch_game';
+const GAMES_HISTORY_KEY = 'dutch_games';
+
 /**
  * Hook pour gérer la persistance des données de jeu
  */
 export const useGamePersistence = () => {
-  const [games, setGames] = useLocalStorage<Game[]>('dutch_games', []);
+  const [games, setGames] = useLocalStorage<Game[]>(GAMES_HISTORY_KEY, []);
 
   /**
    * Sauvegarde une partie terminée dans l'historique
@@ -72,7 +75,7 @@ export const useGamePersistence = () => {
    */
   const hasActiveGame = useCallback((): boolean => {
     try {
-      const savedGame = localStorage.getItem('current_dutch_game');
+      const savedGame = localStorage.getItem(GAME_STORAGE_KEY);
       if (!savedGame) return false;
       
       const parsedGame = JSON.parse(savedGame);
@@ -107,7 +110,7 @@ export const useGamePersistence = () => {
    */
   const loadGameState = useCallback(() => {
     try {
-      const savedGame = localStorage.getItem('current_dutch_game');
+      const savedGame = localStorage.getItem(GAME_STORAGE_KEY);
       
       if (savedGame) {
         const parsedGame = JSON.parse(savedGame);
@@ -135,11 +138,12 @@ export const useGamePersistence = () => {
           }
         }
         
+        console.info("Partie chargée avec succès:", parsedGame.players.length, "joueurs");
         return parsedGame;
       }
     } catch (error) {
       console.error('Erreur lors du chargement de la partie :', error);
-      localStorage.removeItem('current_dutch_game'); // Supprimer les données corrompues
+      localStorage.removeItem(GAME_STORAGE_KEY); // Supprimer les données corrompues
       toast.error('Erreur lors du chargement de la partie');
     }
     
@@ -173,7 +177,7 @@ export const useGamePersistence = () => {
         lastUpdated: new Date()
       };
       
-      localStorage.setItem('current_dutch_game', JSON.stringify(stateToSave));
+      localStorage.setItem(GAME_STORAGE_KEY, JSON.stringify(stateToSave));
       console.info('État de jeu sauvegardé avec succès:', new Date().toLocaleTimeString());
       return true;
     } catch (error) {
