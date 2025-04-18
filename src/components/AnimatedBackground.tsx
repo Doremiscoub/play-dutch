@@ -51,6 +51,7 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
     <canvas 
       ref={canvasRef} 
       className="fixed inset-0 w-full h-full -z-10"
+      style={{ display: 'block' }} // S'assurer que le canvas est visible
     />
   );
 };

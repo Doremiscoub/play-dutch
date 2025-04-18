@@ -40,8 +40,9 @@ export const createAnimationLoop = (
       // Ajuster le temps précédent pour éviter l'accumulation
       previousTime = timestamp - (elapsed % frameInterval);
       
-      // Convertir les millisecondes en secondes pour un mouvement plus lent et contrôlé
-      draw(timestamp / 1000);
+      // Convertir les millisecondes en secondes pour un mouvement plus contrôlé
+      // Utiliser une vitesse réduite pour un mouvement plus lent
+      draw(timestamp / 2000); // Divisé par 2000 au lieu de 1000 pour ralentir encore plus
     }
   };
   

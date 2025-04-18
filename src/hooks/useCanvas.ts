@@ -12,7 +12,7 @@ export const useCanvas = ({ onResize }: UseCanvasProps = {}) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d', { alpha: false });
+    const ctx = canvas.getContext('2d', { alpha: true }); // Changé pour permettre la transparence
     if (!ctx) return;
 
     const resizeCanvas = () => {
