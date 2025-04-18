@@ -5,10 +5,10 @@ import { Volume2 } from 'lucide-react';
 import { Button } from './ui/button';
 import { useElevenLabs } from '@/hooks/use-eleven-labs';
 import { useSound } from '@/hooks/use-sound';
-import { useImageLoader } from '@/hooks/useImageLoader';
 
-// Chemin de l'image du professeur
-const PROFESSOR_IMAGE = '/lovable-uploads/eec3a146-6881-46bc-ae99-a31c48c67c5e.png';
+// Utilisation d'une image qui existe déjà dans le projet
+// Nous utilisons un chemin absolu vers une image disponible dans le projet
+const PROFESSOR_IMAGE = '/lovable-uploads/4cc61ce9-4985-48a5-9867-60bb7457e484.png';
 
 interface ProfessorAvatarProps {
   message: string;
@@ -18,7 +18,6 @@ interface ProfessorAvatarProps {
 const ProfessorAvatar: React.FC<ProfessorAvatarProps> = ({ message, onSpeakMessage }) => {
   const { config: elevenLabsConfig, speakWithFallback, isLoading: isSpeaking } = useElevenLabs();
   const { isSoundEnabled } = useSound();
-  const { currentImageUrl } = useImageLoader(PROFESSOR_IMAGE);
   
   const handleSpeak = async () => {
     if (isSoundEnabled) {
@@ -46,7 +45,7 @@ const ProfessorAvatar: React.FC<ProfessorAvatarProps> = ({ message, onSpeakMessa
         whileHover={{ scale: 1.1, rotate: [-2, 2, -2] }}
       >
         <img 
-          src={currentImageUrl}
+          src={PROFESSOR_IMAGE}
           alt="Professeur Cartouche" 
           className="w-full h-full object-cover bg-white"
         />
