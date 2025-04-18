@@ -1,7 +1,4 @@
 
-/**
- * En-tête du tableau des scores
- */
 import React from 'react';
 import { Trophy, Settings, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -42,18 +39,14 @@ const ScoreBoardHeader: React.FC<ScoreBoardHeaderProps> = ({
           Tableau des scores
         </motion.h1>
         
-        <div className="flex items-center gap-2">
-          <ProfessorAvatar />
-          
-          <Button
-            variant="ghost"
-            size="icon"
-            className="text-gray-600 hover:text-dutch-purple"
-            onClick={() => navigate('/settings')}
-          >
-            <Settings className="h-5 w-5" />
-          </Button>
-        </div>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="text-gray-600 hover:text-dutch-purple"
+          onClick={() => navigate('/settings')}
+        >
+          <Settings className="h-5 w-5" />
+        </Button>
       </div>
       
       <motion.div 
