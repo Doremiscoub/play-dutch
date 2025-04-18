@@ -41,9 +41,8 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
       drawDots({ ctx, canvas, time });
       
       // Assurer que les vagues sont toujours visibles même sur les écrans courts
-      if (canvas.height > 300) {
-        drawWaves(ctx, canvas, time);
-      }
+      // Les vagues sont un élément clé du design language, les inclure sur tous les écrans
+      drawWaves(ctx, canvas, time);
     };
 
     const animation = createAnimationLoop(draw);

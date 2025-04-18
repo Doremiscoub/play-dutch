@@ -78,7 +78,7 @@ export const useScoreForm = (
   };
   
   const handleSubmitForm = () => {
-    // Protection contre la double soumission
+    // Protection renforcée contre la double soumission
     if (isSubmitting || submitHandled.current) {
       console.info("Soumission déjà en cours ou traitée, ignorer");
       return;
@@ -101,11 +101,9 @@ export const useScoreForm = (
       // Fermer immédiatement le dialogue pour éviter les doubles clics
       onClose();
       
-      // Soumettre les scores avec un petit délai pour s'assurer que le dialogue est fermé
-      setTimeout(() => {
-        console.info("Envoi des scores:", scoresArray, "Dutch:", dutchPlayer);
-        onSubmit(scoresArray, dutchPlayer);
-      }, 10);
+      // Soumettre les scores immédiatement sans délai
+      console.info("Envoi des scores:", scoresArray, "Dutch:", dutchPlayer);
+      onSubmit(scoresArray, dutchPlayer);
     } catch (error) {
       console.error("Erreur lors de la soumission des scores:", error);
       toast.error("Une erreur est survenue lors de l'enregistrement des scores");

@@ -43,8 +43,9 @@ export const drawDots = ({ ctx, canvas, time }: AnimatedDotsProps) => {
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
         size: 3 + Math.random() * 4,
-        speedX: (Math.random() - 0.5) * 0.2, // Vitesse augmentée de ~35%
-        speedY: (Math.random() - 0.5) * 0.2,
+        // Vitesse réduite considérablement pour un mouvement plus lent et subtil
+        speedX: (Math.random() - 0.5) * 0.05,
+        speedY: (Math.random() - 0.5) * 0.05,
         color: `rgba(${color.r}, ${color.g}, ${color.b}, ${opacity})`,
         opacity,
         phase: Math.random() * Math.PI * 2
@@ -64,31 +65,32 @@ export const drawDots = ({ ctx, canvas, time }: AnimatedDotsProps) => {
 
   // Dessin et mise à jour des points
   dotsCache.dots.forEach(dot => {
-    // Mouvement plus fluide avec une légère accélération
-    const offsetX = Math.sin(time * 0.3 + dot.phase) * 2;
-    const offsetY = Math.cos(time * 0.25 + dot.phase) * 2;
+    // Mouvement plus fluide et beaucoup plus lent
+    // Réduction de la vitesse d'oscillation également
+    const offsetX = Math.sin(time * 0.15 + dot.phase) * 1;
+    const offsetY = Math.cos(time * 0.1 + dot.phase) * 1;
     
     ctx.beginPath();
     ctx.arc(dot.x + offsetX, dot.y + offsetY, dot.size, 0, Math.PI * 2);
     ctx.fillStyle = dot.color;
     ctx.fill();
 
-    // Mise à jour de la position
+    // Mise à jour de la position avec vitesse réduite
     dot.x += dot.speedX;
     dot.y += dot.speedY;
 
     // Rebond aux bords avec transition douce
     if (dot.x < 0 || dot.x > canvas.width) {
-      dot.speedX *= -1;
+      dot.speedX *= -0.8; // Absorption d'énergie pour mouvement plus réaliste et lent
       dot.x = Math.max(0, Math.min(dot.x, canvas.width));
     }
     if (dot.y < 0 || dot.y > canvas.height) {
-      dot.speedY *= -1;
+      dot.speedY *= -0.8;
       dot.y = Math.max(0, Math.min(dot.y, canvas.height));
     }
     
-    // Limitation de la vitesse pour éviter les mouvements trop brusques
-    dot.speedX = Math.max(-0.2, Math.min(0.2, dot.speedX));
-    dot.speedY = Math.max(-0.2, Math.min(0.2, dot.speedY));
+    // Limitation de la vitesse pour éviter les mouvements brusques
+    dot.speedX = Math.max(-0.05, Math.min(0.05, dot.speedX));
+    dot.speedY = Math.max(-0.05, Math.min(0.05, dot.speedY));
   });
 };

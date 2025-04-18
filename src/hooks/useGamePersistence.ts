@@ -76,11 +76,14 @@ export const useGamePersistence = () => {
   const hasActiveGame = useCallback((): boolean => {
     try {
       const savedGame = localStorage.getItem(GAME_STORAGE_KEY);
-      if (!savedGame) return false;
+      if (!savedGame) {
+        console.info("Pas de partie active: aucune donnée trouvée");
+        return false;
+      }
       
       const parsedGame = JSON.parse(savedGame);
       
-      // Vérification de validité de base
+      // Vérification de validité améliorée
       if (!parsedGame.players || !Array.isArray(parsedGame.players) || parsedGame.players.length === 0) {
         console.info("Pas de partie active: données de joueurs manquantes ou invalides");
         return false;
@@ -92,13 +95,9 @@ export const useGamePersistence = () => {
         return false;
       }
 
-      // Vérifier si des manches ont été jouées (partie réellement commencée)
-      const hasPlayedRounds = parsedGame.players.some((p: any) => 
-        p.rounds && Array.isArray(p.rounds) && p.rounds.length > 0
-      );
-
-      // Une partie est considérée active uniquement si elle a au moins une manche jouée
-      return hasPlayedRounds;
+      // Une partie est considérée active si elle a au moins des joueurs valides
+      // On ne contraint plus à avoir des manches jouées
+      return true;
     } catch (error) {
       console.error('Erreur lors de la vérification de partie active:', error);
       return false;
@@ -112,42 +111,47 @@ export const useGamePersistence = () => {
     try {
       const savedGame = localStorage.getItem(GAME_STORAGE_KEY);
       
-      if (savedGame) {
-        const parsedGame = JSON.parse(savedGame);
-        
-        // Vérification de base des données chargées
-        if (!parsedGame.players || !Array.isArray(parsedGame.players)) {
-          console.error("Format de partie invalide lors du chargement");
-          throw new Error("Format de partie invalide");
-        }
-        
-        // Vérification de la structure attendue
-        if (parsedGame.players.some((p: any) => !p.id || !p.name || p.totalScore === undefined)) {
-          console.error("Structure de joueurs invalide lors du chargement");
-          throw new Error("Structure de joueurs invalide");
-        }
-        
-        // Vérifier la fraîcheur des données
-        if (parsedGame.lastUpdated) {
-          const lastUpdated = new Date(parsedGame.lastUpdated);
-          const now = new Date();
-          // Si plus de 7 jours, considérer comme périmée
-          if ((now.getTime() - lastUpdated.getTime()) > 7 * 24 * 60 * 60 * 1000) {
-            console.warn("Données de partie trop anciennes, création d'une nouvelle partie");
-            return null;
-          }
-        }
-        
-        console.info("Partie chargée avec succès:", parsedGame.players.length, "joueurs");
-        return parsedGame;
+      if (!savedGame) {
+        console.info("Aucune partie sauvegardée trouvée");
+        return null;
       }
+      
+      const parsedGame = JSON.parse(savedGame);
+      
+      // Vérification de base des données chargées
+      if (!parsedGame.players || !Array.isArray(parsedGame.players)) {
+        console.error("Format de partie invalide lors du chargement");
+        localStorage.removeItem(GAME_STORAGE_KEY); // Nettoyer les données invalides
+        throw new Error("Format de partie invalide");
+      }
+      
+      // Vérification de la structure attendue
+      if (parsedGame.players.some((p: any) => !p.id || !p.name || p.totalScore === undefined)) {
+        console.error("Structure de joueurs invalide lors du chargement");
+        localStorage.removeItem(GAME_STORAGE_KEY); // Nettoyer les données invalides
+        throw new Error("Structure de joueurs invalide");
+      }
+      
+      // Vérifier la fraîcheur des données - augmenter à 30 jours
+      if (parsedGame.lastUpdated) {
+        const lastUpdated = new Date(parsedGame.lastUpdated);
+        const now = new Date();
+        // Si plus de 30 jours, considérer comme périmée
+        if ((now.getTime() - lastUpdated.getTime()) > 30 * 24 * 60 * 60 * 1000) {
+          console.warn("Données de partie trop anciennes, création d'une nouvelle partie");
+          localStorage.removeItem(GAME_STORAGE_KEY);
+          return null;
+        }
+      }
+      
+      console.info("Partie chargée avec succès:", parsedGame.players.length, "joueurs");
+      return parsedGame;
     } catch (error) {
       console.error('Erreur lors du chargement de la partie :', error);
       localStorage.removeItem(GAME_STORAGE_KEY); // Supprimer les données corrompues
       toast.error('Erreur lors du chargement de la partie');
+      return null;
     }
-    
-    return null;
   }, []);
 
   /**

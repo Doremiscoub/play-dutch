@@ -16,9 +16,11 @@ const SettingsPage: React.FC = () => {
   const isFromGame = location.state?.from === '/game';
   
   const handleBack = () => {
-    if (isFromGame) {
-      navigate('/game');
+    if (location.state?.from) {
+      // Navigation vers l'écran précédent spécifique si fourni
+      navigate(location.state.from);
     } else {
+      // Utilisation de navigate(-1) pour revenir à l'écran précédent
       navigate(-1);
     }
   };
@@ -43,7 +45,7 @@ const SettingsPage: React.FC = () => {
               className="flex items-center gap-2 bg-white/70 hover:bg-white/90 backdrop-blur-sm rounded-full border border-gray-200/50 shadow-sm"
             >
               <ArrowLeft className="w-4 h-4" />
-              {isFromGame ? 'Retour au jeu' : 'Retour'}
+              Retour
             </Button>
             
             {isFromGame && (
