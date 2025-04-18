@@ -1,10 +1,11 @@
+
 /**
  * Contenu principal de la page de jeu avec gestion d'erreurs renforcée
  */
 import React, { useEffect, useState } from 'react';
 import { Player } from '@/types';
 import ErrorBoundary from './ErrorBoundary';
-import ScoreBoard from './ScoreBoard';
+import ScoreBoard from './scoreboard/ScoreBoard';
 import GameResultOverlay from './game/GameResultOverlay';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 
