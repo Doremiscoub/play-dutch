@@ -5,7 +5,7 @@ import { useLocalStorage } from './use-local-storage';
 import { useGamePersistence } from './useGamePersistence';
 import { useGameInitialization } from './useGameInitialization';
 import { useGameContinuation } from './useGameContinuation';
-import { initializePlayers, verifyPlayerSetup } from '@/utils/playerInitializer';
+import { verifyPlayerSetup } from '@/utils/playerInitializer';
 import { useCurrentGame } from './game/useCurrentGame';
 import { useRounds } from './game/useRounds';
 import { useScoreLimit } from './game/useScoreLimit';
@@ -14,7 +14,7 @@ import { toast } from 'sonner';
 export const useGameState = () => {
   const navigate = useNavigate();
   const initializationAttempted = useRef(false);
-  const initializationInProgress = useRef(false);
+  const initializationProcessed = useRef(false);
   const [soundEnabled] = useLocalStorage('dutch_sound_enabled', true);
 
   const {
@@ -40,7 +40,8 @@ export const useGameState = () => {
     gameStartTime,
     setGameStartTime,
     createNewGame,
-    initializationCompleted
+    initializationCompleted,
+    initializationInProgress
   } = useGameInitialization();
 
   const {
@@ -75,22 +76,14 @@ export const useGameState = () => {
     }
   }, [players, roundHistory, showGameOver, saveCurrentGameState]);
 
-  // Effet d'initialisation du jeu - Version simplifiée et plus robuste
+  // Effet d'initialisation du jeu - Corrigé pour éviter les boucles infinies
   useEffect(() => {
-    if (initializationInProgress.current) {
-      console.info("Initialisation déjà en cours, ignorer");
+    // Éviter les initialisation multiples dans la même session
+    if (initializationProcessed.current) {
       return;
     }
     
-    // Éviter les initialisations multiples
-    if (initializationAttempted.current) {
-      console.info("Initialisation déjà tentée pendant cette session, ignorer");
-      return;
-    }
-    
-    // Marquer la tentative comme en cours
-    initializationInProgress.current = true;
-    initializationAttempted.current = true;
+    initializationProcessed.current = true;
     
     console.info('Initialisation du jeu...');
     
@@ -101,14 +94,12 @@ export const useGameState = () => {
     if (isNewGameRequested) {
       console.info("Création d'une nouvelle partie demandée explicitement");
       
-      // Création de la partie via la fonction dédiée - CORRECTION: Ne pas utiliser .then() sur un boolean
       const success = createNewGame();
       if (!success) {
         console.error("Échec lors de la création de la nouvelle partie");
-        toast.error("Impossible de créer une nouvelle partie");
-        navigate('/game/setup');
+        // Ne pas rediriger à nouveau ici pour éviter une boucle
+        // La navigation est déjà gérée dans createNewGame
       }
-      initializationInProgress.current = false;
       return;
     }
     
@@ -134,7 +125,6 @@ export const useGameState = () => {
       localStorage.setItem('dutch_initialization_completed', 'true');
       
       toast.success('Partie existante chargée !');
-      initializationInProgress.current = false;
     } else {
       // Étape 3: Si aucune partie n'est trouvée, vérifier s'il y a une configuration de joueurs
       console.info("Aucune partie sauvegardée trouvée, vérification de la configuration des joueurs");
@@ -142,23 +132,16 @@ export const useGameState = () => {
       const setupValid = verifyPlayerSetup();
       if (setupValid) {
         console.info("Configuration de joueurs valide trouvée, création d'une nouvelle partie");
-        
-        // Force la création d'une nouvelle partie
-        localStorage.setItem('dutch_new_game_requested', 'true');
-        
-        // CORRECTION: Ne pas utiliser .then() sur un boolean
         const success = createNewGame();
         if (!success) {
           console.error("Échec lors de la création de la nouvelle partie");
-          toast.error("Impossible de créer une nouvelle partie");
-          navigate('/game/setup');
+          // Ne pas rediriger ici pour éviter une boucle
+          // La navigation est gérée dans createNewGame
         }
-        initializationInProgress.current = false;
       } else {
         console.info("Aucune configuration de joueurs valide, redirection vers la configuration");
         toast.info("Veuillez configurer une nouvelle partie");
         navigate('/game/setup');
-        initializationInProgress.current = false;
       }
     }
   }, [createNewGame, loadGameState, navigate, setGameStartTime, setPlayers, setRoundHistory, setScoreLimit, setShowGameOver]);

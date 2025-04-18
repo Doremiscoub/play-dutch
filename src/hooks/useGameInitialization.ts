@@ -34,6 +34,16 @@ export const useGameInitialization = () => {
       console.info('Nettoyage de la partie existante avant création...');
       localStorage.removeItem('current_dutch_game');
       
+      // Obtenir la configuration des joueurs
+      const playerSetup = localStorage.getItem('dutch_player_setup');
+      if (!playerSetup) {
+        console.error('Configuration des joueurs non trouvée dans localStorage');
+        initializationInProgress.current = false;
+        toast.error("Configuration des joueurs introuvable");
+        navigate('/game/setup');
+        return false;
+      }
+      
       // Initialiser les joueurs à partir des données localStorage
       const newPlayers = initializePlayers();
       console.info('Joueurs initialisés:', newPlayers);
@@ -73,11 +83,6 @@ export const useGameInitialization = () => {
       
       // Ne pas supprimer la configuration des joueurs immédiatement 
       // pour permettre une récupération en cas d'erreur
-      setTimeout(() => {
-        if (initializationCompleted.current) {
-          clearPlayerSetup();
-        }
-      }, 2000);
       
       return true;
     } catch (error) {
