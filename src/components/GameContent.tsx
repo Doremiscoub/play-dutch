@@ -125,10 +125,6 @@ const GameContent: React.FC<GameContentProps> = ({
     </div>
   );
 
-  // Vérification de la validité des données
-  const validPlayers = Array.isArray(players) ? players : [];
-  const validRoundHistory = Array.isArray(roundHistory) ? roundHistory : [];
-  
   // Protection contre l'affichage pendant l'initialisation
   if (!hasMounted || !isInitialized) {
     return (
@@ -141,13 +137,13 @@ const GameContent: React.FC<GameContentProps> = ({
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
       {/* Tableau des scores */}
-      {validPlayers.length > 0 ? (
+      {players.length > 0 ? (
         <ScoreBoard
-          players={validPlayers}
+          players={players}
           onAddRound={onAddRound}
           onUndoLastRound={onUndoLastRound}
           onEndGame={onRequestEndGame}
-          roundHistory={validRoundHistory}
+          roundHistory={roundHistory}
           showGameEndConfirmation={showGameEndConfirmation}
           onConfirmEndGame={onConfirmEndGame}
           onCancelEndGame={onCancelEndGame}
@@ -160,10 +156,10 @@ const GameContent: React.FC<GameContentProps> = ({
       )}
 
       {/* Overlay de fin de partie - Implémentation plus robuste */}
-      {showGameOver && validPlayers.length > 0 && (
+      {showGameOver && players.length > 0 && (
         <GameResultOverlay
           key={`game-over`}
-          players={validPlayers}
+          players={players}
           onContinue={onContinueGame}
           onRestart={onRestart}
           scoreLimit={scoreLimit}
