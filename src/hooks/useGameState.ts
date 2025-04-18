@@ -1,53 +1,57 @@
-
-/**
- * Main hook for game state management
- */
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Player } from '@/types';
-import { toast } from 'sonner';
 import { useLocalStorage } from './use-local-storage';
 import { useGamePersistence } from './useGamePersistence';
-import { useRoundManagement } from './useRoundManagement';
 import { useGameInitialization } from './useGameInitialization';
 import { useGameContinuation } from './useGameContinuation';
 import { resetNotificationFlags } from '@/utils/playerInitializer';
+import { useCurrentGame } from './game/useCurrentGame';
+import { useRounds } from './game/useRounds';
+import { useScoreLimit } from './game/useScoreLimit';
 
-/**
- * Main hook for complete game state management
- */
 export const useGameState = () => {
   const navigate = useNavigate();
-  const [showGameOver, setShowGameOver] = useState<boolean>(false);
-  const [soundEnabled] = useLocalStorage('dutch_sound_enabled', true);
   const initializationAttempted = useRef(false);
-  
-  // Use our modular hooks
+  const [soundEnabled] = useLocalStorage('dutch_sound_enabled', true);
+
   const {
-    players, 
-    setPlayers, 
-    gameStartTime, 
-    setGameStartTime,
+    players,
+    setPlayers,
+    showGameOver,
+    setShowGameOver,
+    handleAddRound
+  } = useCurrentGame();
+
+  const {
+    roundHistory,
+    setRoundHistory,
+    undoLastRound
+  } = useRounds(soundEnabled);
+
+  const {
     scoreLimit,
-    setScoreLimit, 
-    createNewGame, 
+    setScoreLimit
+  } = useScoreLimit();
+
+  const {
+    gameStartTime,
+    setGameStartTime,
+    createNewGame,
     initializationCompleted,
     initializationInProgress
   } = useGameInitialization();
-  
-  const { 
-    showGameEndConfirmation, 
-    setShowGameEndConfirmation, 
-    handleRequestEndGame, 
-    handleCancelEndGame, 
+
+  const {
+    showGameEndConfirmation,
+    setShowGameEndConfirmation,
+    handleRequestEndGame,
+    handleCancelEndGame,
     handleContinueGame,
     handleRestart
   } = useGameContinuation(setShowGameOver, setScoreLimit, scoreLimit);
-  
+
   const { loadGameState, saveGameState, saveGameToHistory } = useGamePersistence();
-  const { roundHistory, setRoundHistory, addRound, undoLastRound } = useRoundManagement(scoreLimit, soundEnabled);
-  
-  // Initialize game from localStorage or URL parameters
+
   useEffect(() => {
     try {
       if (initializationCompleted.current || initializationAttempted.current || initializationInProgress.current) {
@@ -107,7 +111,6 @@ export const useGameState = () => {
       initializeGame();
     } catch (error) {
       console.error("Erreur lors de l'initialisation du jeu:", error);
-      toast.error("Une erreur est survenue lors du chargement de la partie");
       navigate('/game/setup');
     } finally {
       // Réinitialiser le flag après un délai
@@ -116,74 +119,23 @@ export const useGameState = () => {
       }, 1000);
     }
   }, [loadGameState, navigate, setRoundHistory, createNewGame, setPlayers, setGameStartTime, setScoreLimit]);
-  
-  // Sauvegarde automatique lorsque l'état du jeu change
-  useEffect(() => {
-    try {
-      if (players.length > 0) {
-        const gameState = {
-          players,
-          roundHistory,
-          isGameOver: showGameOver,
-          scoreLimit,
-          gameStartTime,
-          lastUpdated: new Date()
-        };
-        
-        saveGameState(gameState);
-      }
-    } catch (error) {
-      console.error("Erreur lors de la sauvegarde de l'état du jeu:", error);
-    }
-  }, [players, roundHistory, showGameOver, scoreLimit, gameStartTime, saveGameState]);
-  
-  // Ajout d'une nouvelle manche avec protection contre les doubles soumissions
-  const handleAddRound = (scores: number[], dutchPlayerId?: string) => {
-    try {
-      console.info("Ajout d'une nouvelle manche:", scores, "Dutch:", dutchPlayerId);
-      const result = addRound(players, scores, dutchPlayerId);
-      
-      if (result) {
-        const { updatedPlayers, isGameOver: gameOver } = result;
-        setPlayers(updatedPlayers);
-        
-        if (gameOver) {
-          setTimeout(() => {
-            setShowGameOver(true);
-          }, 500);
-        }
-        
-        return true; // Indiquer que l'ajout a réussi
-      }
-      
-      return false; // Indiquer que l'ajout a échoué
-    } catch (error) {
-      console.error("Erreur lors de l'ajout d'une manche:", error);
-      toast.error("Une erreur est survenue lors de l'ajout de la manche");
-      return false;
-    }
-  };
-  
-  // Annulation de la dernière manche
+
   const handleUndoLastRound = () => {
     try {
-      const updatedPlayers = undoLastRound(players, soundEnabled);
+      const updatedPlayers = undoLastRound(players);
       setPlayers(updatedPlayers);
-      
-      // Si l'écran de fin de partie était affiché, le masquer
+
       if (showGameOver) {
         setShowGameOver(false);
       }
-      
-      return true; // Indiquer que l'annulation a réussi
+
+      return true;
     } catch (error) {
       console.error("Erreur lors de l'annulation de la dernière manche:", error);
-      toast.error("Une erreur est survenue lors de l'annulation de la manche");
       return false;
     }
   };
-  
-  // Confirmation de fin de partie avec sauvegarde dans l'historique
+
   const handleConfirmEndGame = () => {
     try {
       saveGameToHistory(players, gameStartTime);
@@ -192,7 +144,6 @@ export const useGameState = () => {
       return true;
     } catch (error) {
       console.error("Erreur lors de la confirmation de fin de partie:", error);
-      toast.error("Une erreur est survenue lors de la sauvegarde de la partie");
       return false;
     }
   };
