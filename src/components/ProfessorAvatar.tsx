@@ -1,14 +1,18 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Volume2 } from 'lucide-react';
+import { Volume2, AlertCircle } from 'lucide-react';
 import { Button } from './ui/button';
 import { useElevenLabs } from '@/hooks/use-eleven-labs';
 import { useSound } from '@/hooks/use-sound';
-import { useImageLoader } from '@/hooks/useImageLoader';
 
-// Use the uploaded image URL
-const PROFESSOR_IMAGE = '/lovable-uploads/fb92f04b-fff7-4371-8b77-4aa21a3d4e6b.png';
+// Utilisons toutes les sources d'images possibles comme fallback
+const FALLBACK_IMAGES = [
+  '/images/professor-cartouche.png',                                 // Chemin standard dans /public
+  '/public/images/professor-cartouche.png',                          // Chemin alternatif
+  '/lovable-uploads/fb92f04b-fff7-4371-8b77-4aa21a3d4e6b.png',      // Chemin uploadé précédent
+  '/professor.png',                                                  // Image SVG de fallback
+];
 
 interface ProfessorAvatarProps {
   message: string;
@@ -18,7 +22,9 @@ interface ProfessorAvatarProps {
 const ProfessorAvatar: React.FC<ProfessorAvatarProps> = ({ message, onSpeakMessage }) => {
   const { config: elevenLabsConfig, speakWithFallback, isLoading: isSpeaking } = useElevenLabs();
   const { isSoundEnabled } = useSound();
-  const { imageLoaded, handleImageLoaded } = useImageLoader();
+  const [imageLoaded, setImageLoaded] = useState<boolean>(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
+  const [imageError, setImageError] = useState<boolean>(false);
   
   const handleSpeak = async () => {
     if (isSoundEnabled) {
@@ -28,6 +34,24 @@ const ProfessorAvatar: React.FC<ProfessorAvatarProps> = ({ message, onSpeakMessa
         await speakWithFallback(message);
       }
     }
+  };
+
+  const handleImageError = () => {
+    console.error(`Erreur lors du chargement de l'image: ${FALLBACK_IMAGES[currentImageIndex]}`);
+    
+    // Essayer l'image suivante dans notre liste de fallback
+    if (currentImageIndex < FALLBACK_IMAGES.length - 1) {
+      setCurrentImageIndex(prevIndex => prevIndex + 1);
+    } else {
+      // Si toutes les images ont échoué, marquer l'erreur définitive
+      setImageError(true);
+      console.error("Toutes les tentatives de chargement d'image ont échoué");
+    }
+  };
+
+  const handleImageLoaded = () => {
+    console.info(`L'image s'est chargée avec succès: ${FALLBACK_IMAGES[currentImageIndex]}`);
+    setImageLoaded(true);
   };
 
   return (
@@ -45,18 +69,27 @@ const ProfessorAvatar: React.FC<ProfessorAvatarProps> = ({ message, onSpeakMessa
         }}
         whileHover={{ scale: 1.1, rotate: [-2, 2, -2] }}
       >
-        <motion.img 
-          src={PROFESSOR_IMAGE}
-          alt="Professeur Cartouche"
-          className="w-full h-full object-cover"
-          onLoad={handleImageLoaded}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: imageLoaded ? 1 : 0 }}
-          transition={{ duration: 0.5 }}
-          onError={(e) => {
-            console.error("Erreur lors du chargement de l'image du Professeur Cartouche :", e);
-          }}
-        />
+        {imageError ? (
+          // Afficher un placeholder SVG si toutes les images ont échoué
+          <div className="w-full h-full flex items-center justify-center bg-dutch-purple/10 text-dutch-purple">
+            <AlertCircle className="w-8 h-8" />
+          </div>
+        ) : (
+          <motion.img 
+            key={currentImageIndex} // Important pour forcer le rechargement quand on change de source
+            src={FALLBACK_IMAGES[currentImageIndex]}
+            alt="Professeur Cartouche"
+            className="w-full h-full object-cover"
+            onLoad={handleImageLoaded}
+            onError={handleImageError}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: imageLoaded ? 1 : 0 }}
+            transition={{ duration: 0.5 }}
+            style={{ 
+              backgroundColor: "#FFFFFF" // Ajouter un fond blanc pour éviter la transparence
+            }}
+          />
+        )}
       </motion.div>
       
       <Button
