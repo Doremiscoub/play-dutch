@@ -77,6 +77,11 @@ export const initializePlayers = (): Player[] | null => {
     }));
     
     console.info("Joueurs initialisés:", newPlayers);
+    
+    // IMPORTANT: Ne pas supprimer la configuration tant que les données ne sont pas sauvegardées ailleurs
+    //console.info('Configuration des joueurs nettoyée après initialisation réussie');
+    //localStorage.removeItem('dutch_player_setup');
+    
     return newPlayers;
   } catch (error) {
     console.error('Erreur lors de la création de la partie :', error);

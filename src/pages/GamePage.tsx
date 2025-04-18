@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { useGameState } from '@/hooks/useGameState';
 import GameContent from '@/components/GameContent';
@@ -53,11 +54,11 @@ const GamePageErrorFallback = ({ error, errorInfo, errorCode, reset }: {
         </Button>
         
         <Button 
-          onClick={() => window.location.href = '/'} 
+          onClick={() => window.location.href = '/game/setup'} 
           className="w-full flex items-center gap-2"
         >
           <Home className="h-4 w-4" />
-          Retour à l'accueil
+          Configurer une nouvelle partie
         </Button>
       </div>
     </div>
@@ -85,9 +86,14 @@ const GamePage: React.FC = () => {
   useEffect(() => {
     console.info("GamePage: Montage du composant");
     
+    // Reset flag
+    localStorage.removeItem('dutch_game_page_visited');
+    localStorage.setItem('dutch_game_page_visited', 'true');
+    
+    // Ajouter un délai pour s'assurer que l'initialisation est terminée
     const initTimer = setTimeout(() => {
       setIsReady(true);
-    }, 200);
+    }, 300);
     
     return () => {
       console.info("GamePage: Démontage du composant");
@@ -106,43 +112,20 @@ const GamePage: React.FC = () => {
     }
   }, [players, roundHistory, showGameOver]);
   
+  // Vérifier si l'état du jeu est valide
+  const gameStateValid = Array.isArray(players) && players.length > 0;
+  
+  // Si la page est prête mais qu'aucun joueur n'est défini, rediriger vers la configuration
   useEffect(() => {
-    const checkInactivity = () => {
-      try {
-        const savedGame = localStorage.getItem('current_dutch_game');
-        if (!savedGame) return;
-        
-        const parsedGame = JSON.parse(savedGame);
-        if (!parsedGame.lastUpdated) return;
-        
-        const lastUpdated = new Date(parsedGame.lastUpdated);
-        const now = new Date();
-        const hoursSinceLastUpdate = (now.getTime() - lastUpdated.getTime()) / (1000 * 60 * 60);
-        
-        if (hoursSinceLastUpdate > 24) {
-          const confirmResume = window.confirm('Une partie non terminée a été trouvée, mais elle n\'a pas été mise à jour depuis plus de 24 heures. Voulez-vous la reprendre?');
-          
-          if (!confirmResume) {
-            localStorage.removeItem('current_dutch_game');
-            handleRestart();
-          }
-        }
-      } catch (error) {
-        console.error("Erreur lors de l'analyse de la partie sauvegardée:", error);
-      }
-    };
-    
-    if (isReady) {
-      const timeoutId = setTimeout(checkInactivity, 500);
-      return () => clearTimeout(timeoutId);
+    if (isReady && !gameStateValid) {
+      const redirectTimer = setTimeout(() => {
+        console.warn("Aucun joueur disponible après initialisation, redirection vers la configuration");
+        window.location.href = '/game/setup';
+      }, 500);
+      
+      return () => clearTimeout(redirectTimer);
     }
-  }, [handleRestart, isReady]);
-  
-  const safePlayersWithStats = Array.isArray(players) && players.length > 0
-    ? updateAllPlayersStats(players)
-    : [];
-  
-  const safeRoundHistory = Array.isArray(roundHistory) ? roundHistory : [];
+  }, [isReady, gameStateValid]);
   
   useEffect(() => {
     localStorage.setItem('dutch_previous_route', location.pathname);
@@ -155,6 +138,12 @@ const GamePage: React.FC = () => {
       </div>
     );
   }
+  
+  const safePlayersWithStats = Array.isArray(players) && players.length > 0
+    ? updateAllPlayersStats(players)
+    : [];
+  
+  const safeRoundHistory = Array.isArray(roundHistory) ? roundHistory : [];
   
   return (
     <ErrorBoundary FallbackComponent={GamePageErrorFallback}>

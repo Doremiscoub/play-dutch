@@ -48,27 +48,29 @@ const LocalGameSetup: React.FC<LocalGameSetupProps> = ({ onStartGame }) => {
       
       console.info('Configuration des joueurs:', validPlayerNames);
       
-      // Réinitialiser le flag de jeu en cours pour garantir une nouvelle partie
+      // IMPORTANT: Nettoyage complet des données précédentes pour éviter les conflits
       localStorage.removeItem('current_dutch_game');
       
-      // Stocker les noms dans localStorage avant d'appeler onStartGame
-      localStorage.setItem('dutch_player_setup', JSON.stringify(validPlayerNames));
-      localStorage.setItem('dutch_new_game_requested', 'true');
+      // Stocker explicitement le mode de jeu
       localStorage.setItem('dutch_game_mode', 'local');
+      
+      // Forcer un flag de création de nouvelle partie
+      localStorage.setItem('dutch_new_game_requested', 'true');
+      
+      // Stocker les noms dans localStorage APRÈS avoir nettoyé les autres données
+      localStorage.setItem('dutch_player_setup', JSON.stringify(validPlayerNames));
       
       toast.success("Configuration des joueurs enregistrée");
       
-      // Petite pause pour s'assurer que localStorage est bien mis à jour
+      // Ajouter un délai pour s'assurer que localStorage est bien mis à jour
       setTimeout(() => {
         onStartGame(validPlayerNames);
-      }, 100);
+        setIsSubmitting(false);
+      }, 200);
     } catch (error) {
       console.error("Erreur lors de la configuration des joueurs:", error);
       toast.error("Erreur lors de la configuration des joueurs");
-    } finally {
-      setTimeout(() => {
-        setIsSubmitting(false);
-      }, 500);
+      setIsSubmitting(false);
     }
   };
 

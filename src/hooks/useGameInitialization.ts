@@ -20,7 +20,7 @@ export const useGameInitialization = () => {
   const initializationAttempted = useRef(false);
   const initializationInProgress = useRef(false);
   
-  // Create a new game with player names from URL parameters or configuration
+  // Create a new game with player names from localStorage configuration
   const createNewGame = useCallback(() => {
     try {
       console.info('Tentative de création d\'une nouvelle partie...');
@@ -29,28 +29,16 @@ export const useGameInitialization = () => {
       resetNotificationFlags();
       
       // Protection contre les initialisations multiples
-      if (initializationAttempted.current) {
-        console.info('Une initialisation a déjà été tentée, annulation de cette tentative');
-        return false;
-      }
-      
       if (initializationInProgress.current) {
         console.info('Initialisation déjà en cours, annulation de cette tentative');
         return false;
       }
       
-      initializationAttempted.current = true;
       initializationInProgress.current = true;
       
-      // Vérification si une nouvelle partie est explicitement demandée
-      const isNewGameRequested = localStorage.getItem('dutch_new_game_requested') === 'true';
-      console.info('Nouvelle partie demandée:', isNewGameRequested);
-      
-      if (isNewGameRequested) {
-        console.info('Nouvelle partie explicitement demandée');
-        // Supprimer le flag pour éviter la réinitialisation accidentelle
-        localStorage.removeItem('dutch_new_game_requested');
-      }
+      // IMPORTANT: Nettoyer la partie en cours AVANT de créer une nouvelle partie
+      console.info('Nettoyage de la partie existante avant création...');
+      localStorage.removeItem('current_dutch_game');
       
       console.info('Tentative d\'initialisation via localStorage');
       
@@ -61,7 +49,6 @@ export const useGameInitialization = () => {
         console.error('Impossible de créer une partie: la configuration des joueurs est invalide');
         
         // Réinitialisation des flags
-        initializationAttempted.current = false;
         initializationInProgress.current = false;
         
         // Redirection vers la configuration
@@ -76,7 +63,6 @@ export const useGameInitialization = () => {
         console.error('Impossible de créer une partie: moins de 2 joueurs configurés ou erreur d\'initialisation');
         
         // Réinitialisation des flags
-        initializationAttempted.current = false;
         initializationInProgress.current = false;
         
         // Redirection vers la configuration
@@ -100,16 +86,10 @@ export const useGameInitialization = () => {
       toast.error("Une erreur est survenue lors de la création de la partie");
       
       // Réinitialisation des flags
-      initializationAttempted.current = false;
       initializationInProgress.current = false;
       
       navigate('/game/setup');
       return false;
-    } finally {
-      // Réinitialiser le flag d'initialisation après un délai
-      setTimeout(() => {
-        initializationAttempted.current = false;
-      }, 1000);
     }
   }, [navigate]);
 

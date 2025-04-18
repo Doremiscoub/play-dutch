@@ -32,10 +32,13 @@ export const useCurrentGame = () => {
           isDutch 
         };
         
+        // Vérifier que player.rounds est bien un tableau
+        const existingRounds = Array.isArray(player.rounds) ? player.rounds : [];
+        
         return {
           ...player,
-          rounds: [...player.rounds, newRound],
-          totalScore: player.totalScore + scores[index]
+          rounds: [...existingRounds, newRound],
+          totalScore: (player.totalScore || 0) + scores[index]
         };
       });
 

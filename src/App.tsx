@@ -43,10 +43,29 @@ const App: React.FC = () => {
     }
   }, []);
   
-  // Vérifier si une nouvelle partie est explicitement demandée
-  const isNewGameRequested = () => {
-    return localStorage.getItem('dutch_new_game_requested') === 'true';
-  };
+  // Nettoyer les flags de navigation problématiques
+  useEffect(() => {
+    const cleanup = () => {
+      // Ne nettoie pas dutch_player_setup pour permettre l'initialisation
+      const keysToKeep = ['dutch_player_setup', 'dutch_game_mode'];
+      
+      // Nettoyer uniquement les flags de navigation et non les données de jeu
+      const flagsToRemove = [
+        'dutch_previous_route',
+        'dutch_game_page_visited'
+      ];
+      
+      flagsToRemove.forEach(key => {
+        try {
+          localStorage.removeItem(key);
+        } catch (e) {
+          console.error(`Erreur lors du nettoyage de ${key}:`, e);
+        }
+      });
+    };
+    
+    cleanup();
+  }, []);
   
   return (
     <AuthProvider>

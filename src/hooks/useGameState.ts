@@ -75,7 +75,7 @@ export const useGameState = () => {
     }
   }, [players, roundHistory, showGameOver, saveCurrentGameState]);
 
-  // Effet d'initialisation - C'est ici que nous devons corriger le problème
+  // Effet d'initialisation du jeu - Corrigé pour éviter les problèmes de création de partie
   useEffect(() => {
     try {
       console.info("Tentative d'initialisation du jeu...");
@@ -90,11 +90,6 @@ export const useGameState = () => {
         return;
       }
       
-      if (initializationInProgress.current) {
-        console.info("Initialisation déjà en cours, ignorer");
-        return;
-      }
-      
       initializationAttempted.current = true;
       resetNotificationFlags();
       
@@ -105,31 +100,32 @@ export const useGameState = () => {
         const isNewGameRequested = localStorage.getItem('dutch_new_game_requested') === 'true';
         console.info('Nouvelle partie demandée:', isNewGameRequested);
         
-        // Vérifier le mode de jeu (local ou multijoueur)
-        const gameMode = localStorage.getItem('dutch_game_mode') || 'local';
-        console.info('Mode de jeu détecté:', gameMode);
+        // Vérifier et définir explicitement le mode de jeu (toujours local pour l'instant)
+        const gameMode = localStorage.getItem('dutch_game_mode');
+        if (!gameMode) {
+          console.info('Mode de jeu non défini, définition à local par défaut');
+          localStorage.setItem('dutch_game_mode', 'local');
+        }
+        console.info('Mode de jeu détecté:', gameMode || 'local');
         
+        // Si une nouvelle partie est demandée, la créer immédiatement
         if (isNewGameRequested) {
-          console.info("Nouvelle partie demandée, création...");
-          if (gameMode === 'local') {
-            const success = await createNewGame();
-            if (!success) {
-              console.error("Échec de création de la nouvelle partie locale");
-              toast.error("Impossible de créer une nouvelle partie");
-              navigate('/game/setup');
-            }
-            return;
-          } else {
-            // Gérer le mode multijoueur (à implémenter plus tard)
-            console.info("Mode multijoueur demandé mais non implémenté, création d'une partie locale");
-            const success = await createNewGame();
-            if (!success) {
-              console.error("Échec de création de la partie");
-              toast.error("Impossible de créer une nouvelle partie");
-              navigate('/game/setup');
-            }
-            return;
+          console.info("Nouvelle partie explicitement demandée, création...");
+          // Supprimer le flag pour éviter la réinitialisation accidentelle
+          localStorage.removeItem('dutch_new_game_requested');
+          
+          // TOUJOURS créer une nouvelle partie locale
+          const success = await createNewGame();
+          if (!success) {
+            console.error("Échec de création de la nouvelle partie locale");
+            toast.error("Impossible de créer une nouvelle partie");
+            
+            // Réinitialisation des flags
+            initializationAttempted.current = false;
+            
+            navigate('/game/setup');
           }
+          return;
         }
         
         // Sinon, essayer de charger une partie existante
@@ -152,15 +148,10 @@ export const useGameState = () => {
           
           // Marquer l'initialisation comme terminée
           initializationCompleted.current = true;
+          toast.success('Partie existante chargée !');
         } else {
-          console.info("Aucune partie sauvegardée trouvée, tentative de création d'une nouvelle partie");
-          // Tenter de créer une nouvelle partie avec la config existante
-          const success = await createNewGame();
-          if (!success) {
-            console.error("Échec de création de la nouvelle partie et aucune partie sauvegardée");
-            toast.error("Impossible de créer ou charger une partie");
-            navigate('/game/setup');
-          }
+          console.info("Aucune partie sauvegardée trouvée, redirection vers la configuration");
+          navigate('/game/setup');
         }
       };
       
