@@ -57,6 +57,7 @@ export const useGameState = () => {
   // Cette fonction sauvegarde l'état actuel du jeu
   const saveCurrentGameState = useCallback(() => {
     if (players.length > 0) {
+      console.info('Sauvegarde de l\'état du jeu');
       saveGameState({
         players,
         roundHistory,
@@ -74,61 +75,63 @@ export const useGameState = () => {
     }
   }, [players, roundHistory, showGameOver, saveCurrentGameState]);
 
+  // Effet d'initialisation - C'est ici que nous devons corriger le problème
   useEffect(() => {
     try {
       if (initializationCompleted.current || initializationAttempted.current || initializationInProgress.current) {
         console.info("Initialisation déjà tentée ou en cours, ignorer");
-        return; // Avoid double initialization
+        return;
       }
       
       initializationAttempted.current = true;
       console.info("Tentative d'initialisation du jeu...");
-      resetNotificationFlags(); // Réinitialiser les flags de notification
+      resetNotificationFlags();
       
       const initializeGame = async () => {
         console.info('Initialisation du jeu...');
         
         // Vérifier si une nouvelle partie est explicitement demandée
         const isNewGameRequested = localStorage.getItem('dutch_new_game_requested') === 'true';
+        console.info('Nouvelle partie demandée:', isNewGameRequested);
         
         if (isNewGameRequested) {
           console.info("Nouvelle partie demandée, création...");
-          localStorage.removeItem('dutch_new_game_requested');
           const success = await createNewGame();
           if (!success) {
             console.error("Échec de création de la nouvelle partie");
             toast.error("Impossible de créer une nouvelle partie");
+            navigate('/game/setup');
           }
           return;
         }
         
-        // Sinon, créer une nouvelle partie ou charger une existante
-        const success = await createNewGame();
+        // Sinon, essayer de charger une partie existante
+        console.info("Tentative de chargement d'une partie existante");
+        const savedGame = loadGameState();
         
-        // Si la création échoue, essayer de charger une partie existante
-        if (!success) {
-          console.info("Tentative de chargement d'une partie existante");
-          const savedGame = loadGameState();
+        if (savedGame && savedGame.players && savedGame.players.length > 0) {
+          console.info("Chargement d'une partie existante avec", savedGame.players.length, "joueurs");
+          setPlayers(savedGame.players);
+          setRoundHistory(savedGame.roundHistory || []);
+          setScoreLimit(savedGame.scoreLimit || 100);
           
-          if (savedGame) {
-            console.info("Chargement d'une partie existante");
-            setPlayers(savedGame.players);
-            setRoundHistory(savedGame.roundHistory || []);
-            setScoreLimit(savedGame.scoreLimit || 100);
-            
-            if (savedGame.gameStartTime) {
-              setGameStartTime(new Date(savedGame.gameStartTime));
-            }
-            
-            if (savedGame.isGameOver) {
-              setShowGameOver(true);
-            }
-            
-            // Marquer l'initialisation comme terminée
-            initializationCompleted.current = true;
-            console.info("Initialisation depuis une sauvegarde réussie");
-          } else {
-            console.info("Aucune partie sauvegardée trouvée, redirection vers la configuration");
+          if (savedGame.gameStartTime) {
+            setGameStartTime(new Date(savedGame.gameStartTime));
+          }
+          
+          if (savedGame.isGameOver) {
+            setShowGameOver(true);
+          }
+          
+          // Marquer l'initialisation comme terminée
+          initializationCompleted.current = true;
+        } else {
+          console.info("Aucune partie sauvegardée trouvée, tentative de création d'une nouvelle partie");
+          // Tenter de créer une nouvelle partie avec la config existante
+          const success = await createNewGame();
+          if (!success) {
+            console.error("Échec de création de la nouvelle partie et aucune partie sauvegardée");
+            toast.error("Impossible de créer ou charger une partie");
             navigate('/game/setup');
           }
         }
@@ -137,6 +140,7 @@ export const useGameState = () => {
       initializeGame();
     } catch (error) {
       console.error("Erreur lors de l'initialisation du jeu:", error);
+      toast.error("Erreur lors de l'initialisation du jeu");
       navigate('/game/setup');
     } finally {
       // Réinitialiser le flag après un délai
@@ -144,7 +148,7 @@ export const useGameState = () => {
         initializationAttempted.current = false;
       }, 1000);
     }
-  }, [loadGameState, navigate, setRoundHistory, createNewGame, setPlayers, setGameStartTime, setScoreLimit]);
+  }, [createNewGame, loadGameState, navigate, setGameStartTime, setPlayers, setRoundHistory, setScoreLimit, setShowGameOver]);
 
   const handleUndoLastRound = useCallback(() => {
     try {

@@ -46,22 +46,21 @@ const LocalGameSetup: React.FC<LocalGameSetupProps> = ({ onStartGame }) => {
         name.trim() === '' ? `Joueur ${i + 1}` : name.trim()
       );
       
-      // Sauvegarder les noms dans localStorage
-      localStorage.setItem('dutch_player_setup', JSON.stringify(validPlayerNames));
-      console.info('Configuration des joueurs sauvegardée:', validPlayerNames);
+      console.info('Configuration des joueurs:', validPlayerNames);
       
-      // Attendre un peu pour s'assurer que localStorage est bien mis à jour
+      // Stocker les noms dans localStorage avant d'appeler onStartGame
+      localStorage.setItem('dutch_player_setup', JSON.stringify(validPlayerNames));
+      localStorage.setItem('dutch_new_game_requested', 'true');
+      
+      // Petite pause pour s'assurer que localStorage est bien mis à jour
       setTimeout(() => {
         try {
-          // Définir explicitement le flag pour une nouvelle partie
-          localStorage.setItem('dutch_new_game_requested', 'true');
-          // Appeler la fonction de démarrage
           onStartGame(validPlayerNames);
         } catch (innerError) {
           console.error("Erreur lors du démarrage de la partie:", innerError);
           toast.error("Erreur lors du démarrage de la partie");
         }
-      }, 200);
+      }, 100);
     } catch (error) {
       console.error("Erreur lors de la configuration des joueurs:", error);
       toast.error("Erreur lors de la configuration des joueurs");

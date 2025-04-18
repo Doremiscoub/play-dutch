@@ -44,9 +44,11 @@ export const useGameInitialization = () => {
       
       // Vérification si une nouvelle partie est explicitement demandée
       const isNewGameRequested = localStorage.getItem('dutch_new_game_requested') === 'true';
+      console.info('Nouvelle partie demandée:', isNewGameRequested);
+      
       if (isNewGameRequested) {
-        console.info('Nouvelle partie explicitement demandée, nettoyage complet');
-        cleanupGameState();
+        console.info('Nouvelle partie explicitement demandée');
+        // Ne pas nettoyer dutch_player_setup car on en a besoin pour initialiser
         localStorage.removeItem('dutch_new_game_requested');
       }
       
@@ -68,8 +70,10 @@ export const useGameInitialization = () => {
       }
       
       const newPlayers = initializePlayers();
+      console.info('Joueurs initialisés:', newPlayers);
+      
       if (!newPlayers || newPlayers.length < 2) {
-        console.error('Impossible de créer une partie: moins de 2 joueurs configurés');
+        console.error('Impossible de créer une partie: moins de 2 joueurs configurés ou erreur d\'initialisation');
         
         // Réinitialisation des flags
         initializationAttempted.current = false;
@@ -80,7 +84,8 @@ export const useGameInitialization = () => {
         return false;
       }
       
-      console.info('Joueurs initialisés avec succès:', newPlayers.map(p => p.name).join(', '));
+      console.info('Joueurs initialisés avec succès:', newPlayers.length, 'joueurs');
+      
       setPlayers(newPlayers);
       setGameStartTime(new Date());
       
@@ -88,7 +93,7 @@ export const useGameInitialization = () => {
       initializationCompleted.current = true;
       initializationInProgress.current = false;
       
-      // Ne pas nettoyer après initialisation réussie pour que LocalGameSetup puisse récupérer les données
+      // Ne pas nettoyer après initialisation réussie
       
       toast.success('Nouvelle partie créée !');
       return true;
@@ -113,7 +118,7 @@ export const useGameInitialization = () => {
   // Nettoyage complet pour éviter les états partiels
   const cleanup = useCallback(() => {
     cleanupGameState();
-    clearPlayerSetup();
+    // NE PAS nettoyer dutch_player_setup pour permettre l'initialisation
     initializationCompleted.current = false;
     initializationAttempted.current = false;
     initializationInProgress.current = false;

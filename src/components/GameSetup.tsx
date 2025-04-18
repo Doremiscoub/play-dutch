@@ -4,7 +4,6 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { cleanupGameState } from '@/utils/gameUtils';
-import { clearPlayerSetup } from '@/utils/playerInitializer';
 import AnimatedBackground from './AnimatedBackground';
 import { Tabs, TabsContent } from '@/components/ui/tabs';
 import GameModeTabs from './game-setup/GameModeTabs';
@@ -15,12 +14,16 @@ const GameSetup: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>("local");
   const [isSubmitting, setIsSubmitting] = useState(false);
   
-  // Nettoyage complet de l'état lors de l'entrée sur la page de configuration
+  // Nettoyage partiel de l'état lors de l'entrée sur la page de configuration
   useEffect(() => {
-    console.info("Nettoyage de l'état du jeu au montage de GameSetup");
-    cleanupGameState();
-    clearPlayerSetup(); // Ajout explicite pour garantir un nettoyage complet
-    localStorage.removeItem('dutch_new_game_requested'); // S'assurer que le flag est nettoyé aussi
+    console.info("Nettoyage partiel de l'état du jeu au montage de GameSetup");
+    
+    // Ne pas supprimer dutch_player_setup pour permettre la reprise
+    // Supprimer uniquement le flag de demande de nouvelle partie
+    localStorage.removeItem('dutch_new_game_requested');
+    
+    // Supprimer la partie en cours
+    localStorage.removeItem('current_dutch_game');
   }, []);
 
   const handleStartGame = (playerNames: string[]) => {
@@ -41,13 +44,15 @@ const GameSetup: React.FC = () => {
         return;
       }
       
-      // Stockage temporaire des noms des joueurs pour l'initialisation
+      // Stockage des noms des joueurs pour l'initialisation
       localStorage.setItem('dutch_player_setup', JSON.stringify(playerNames));
       
       // Ajouter un flag pour forcer une nouvelle partie
       localStorage.setItem('dutch_new_game_requested', 'true');
       
-      // Navigation directe vers la page de jeu
+      console.info("Configuration sauvegardée, navigation vers /game");
+      
+      // Navigation vers la page de jeu
       navigate('/game');
       
     } catch (error) {

@@ -13,11 +13,13 @@ export const useCurrentGame = () => {
       console.info("Ajout d'une nouvelle manche:", scores, "Dutch:", dutchPlayerId);
       
       if (!players || players.length === 0) {
+        console.error("Tentative d'ajout de manche sans joueurs");
         toast.error("Aucun joueur trouvé");
         return false;
       }
 
       if (!scores || scores.length !== players.length) {
+        console.error("Scores invalides pour la manche");
         toast.error("Scores invalides");
         return false;
       }
@@ -39,7 +41,8 @@ export const useCurrentGame = () => {
       // Mise à jour des statistiques
       const playersWithStats = updateAllPlayersStats(updatedPlayers);
       setPlayers(playersWithStats);
-
+      
+      console.info("Manche ajoutée avec succès");
       return true;
     } catch (error) {
       console.error("Erreur lors de l'ajout d'une manche:", error);
