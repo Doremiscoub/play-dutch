@@ -72,6 +72,10 @@ const GamePage: React.FC = () => {
   const navigate = useNavigate();
   const [isReady, setIsReady] = useState(false);
   const [initializationTimeout, setInitializationTimeout] = useState(false);
+  const [errorState, setErrorState] = useState<{hasError: boolean, message: string}>({
+    hasError: false,
+    message: ""
+  });
   
   const gameState = useGameState();
   const { players, roundHistory, showGameOver, showGameEndConfirmation, scoreLimit } = gameState;
@@ -83,11 +87,19 @@ const GamePage: React.FC = () => {
     });
     
     if (!Array.isArray(players) || players.length === 0) {
-      console.warn("Aucun joueur disponible, redirection vers la configuration");
+      console.warn("Aucun joueur disponible, vérification des causes possibles");
       
-      localStorage.removeItem('current_dutch_game');
-      localStorage.removeItem('dutch_new_game_requested');
+      // Vérifier si une configuration existe
+      const playerSetup = localStorage.getItem('dutch_player_setup');
+      if (playerSetup) {
+        console.info("Configuration trouvée mais non initialisée, forçage de création");
+        // Forcer une nouvelle tentative d'initialisation
+        localStorage.setItem('dutch_new_game_requested', 'true');
+        window.location.reload();
+        return false;
+      }
       
+      // Sinon, redirection vers configuration
       toast.error("Aucun joueur disponible. Veuillez configurer une nouvelle partie.");
       navigate('/game/setup');
       return false;
@@ -106,11 +118,11 @@ const GamePage: React.FC = () => {
         setInitializationTimeout(true);
         console.warn("Timeout d'initialisation atteint");
       }
-    }, 1500);
+    }, 2500); // Augmentation du timeout pour permettre l'initialisation
     
     const initTimer = setTimeout(() => {
       setIsReady(true);
-    }, 300);
+    }, 500); // Augmentation du délai d'initialisation
     
     return () => {
       console.info("GamePage: Démontage du composant");
@@ -122,18 +134,16 @@ const GamePage: React.FC = () => {
   }, []);
   
   useEffect(() => {
-    if (isReady && players) {
-      console.info("GamePage: Mise à jour des données", {
-        playerCount: Array.isArray(players) ? players.length : 0,
-        roundCount: Array.isArray(roundHistory) ? roundHistory.length : 0,
-        showGameOver
-      });
-    }
-  }, [isReady, players, roundHistory, showGameOver]);
-  
-  useEffect(() => {
     if (isReady) {
-      checkGameState();
+      try {
+        checkGameState();
+      } catch (error) {
+        console.error("Erreur lors de la vérification de l'état du jeu:", error);
+        setErrorState({
+          hasError: true,
+          message: "Erreur lors de la vérification de l'état du jeu"
+        });
+      }
     }
   }, [isReady, checkGameState]);
   
@@ -152,6 +162,26 @@ const GamePage: React.FC = () => {
     return (
       <div className="flex justify-center items-center min-h-screen">
         <div className="h-10 w-10 animate-spin rounded-full border-4 border-dutch-blue border-t-transparent"></div>
+      </div>
+    );
+  }
+  
+  if (errorState.hasError) {
+    return (
+      <div className="flex justify-center items-center min-h-screen flex-col p-6">
+        <div className="fixed inset-0 -z-10">
+          <AnimatedBackground variant="default" />
+        </div>
+        <Alert variant="destructive" className="mb-6 max-w-md">
+          <AlertTitle>Erreur</AlertTitle>
+          <AlertDescription>{errorState.message}</AlertDescription>
+        </Alert>
+        <Button 
+          onClick={() => navigate('/game/setup')} 
+          className="mt-4 bg-dutch-blue text-white"
+        >
+          Configurer une nouvelle partie
+        </Button>
       </div>
     );
   }

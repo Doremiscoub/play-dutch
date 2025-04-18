@@ -117,7 +117,9 @@ export const useGameState = () => {
             // Réinitialisation des flags
             initializationAttempted.current = false;
             
+            // Redirection explicite vers la page de configuration
             navigate('/game/setup');
+            return;
           }
           return;
         }
@@ -146,11 +148,33 @@ export const useGameState = () => {
         } else {
           console.info("Aucune partie sauvegardée trouvée, tentative de création d'une nouvelle partie");
           
-          // Tentative de création d'une nouvelle partie avec les données existantes
-          const success = await createNewGame();
-          
-          if (!success) {
-            console.info("Redirection vers la configuration");
+          // Vérifier si des noms de joueurs sont disponibles pour la création
+          const playerSetup = localStorage.getItem('dutch_player_setup');
+          if (playerSetup) {
+            console.info("Configuration de joueurs trouvée, création d'une nouvelle partie");
+            
+            // Forcer la création d'une nouvelle partie
+            localStorage.setItem('dutch_new_game_requested', 'true');
+            
+            const success = await createNewGame();
+            if (!success) {
+              console.error("Échec lors de la création de la partie");
+              toast.error("Impossible de créer une nouvelle partie");
+              
+              // Réinitialisation du flag
+              initializationAttempted.current = false;
+              
+              // Redirection explicite vers la configuration
+              navigate('/game/setup');
+            }
+          } else {
+            console.info("Aucune configuration de joueurs, redirection vers la configuration");
+            toast.info("Veuillez configurer une nouvelle partie");
+            
+            // Réinitialisation du flag
+            initializationAttempted.current = false;
+            
+            // Redirection explicite vers la configuration
             navigate('/game/setup');
           }
         }
@@ -160,6 +184,11 @@ export const useGameState = () => {
     } catch (error) {
       console.error("Erreur lors de l'initialisation du jeu:", error);
       toast.error("Erreur lors de l'initialisation du jeu");
+      
+      // Réinitialisation du flag
+      initializationAttempted.current = false;
+      
+      // Redirection explicite vers la configuration en cas d'erreur
       navigate('/game/setup');
     } finally {
       // Réinitialiser le flag après un délai

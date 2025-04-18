@@ -24,6 +24,7 @@ const LocalGameSetupContainer: React.FC<{
       // IMPORTANT: Nettoyage complet des données précédentes pour éviter les conflits
       console.info('LocalGameSetupContainer: Nettoyage des données précédentes');
       localStorage.removeItem('current_dutch_game');
+      localStorage.removeItem('dutch_new_game_requested');
       
       // Forcer un flag de création de nouvelle partie
       localStorage.setItem('dutch_new_game_requested', 'true');

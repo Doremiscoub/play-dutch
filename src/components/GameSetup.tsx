@@ -42,6 +42,9 @@ const GameSetup: React.FC = () => {
         return;
       }
       
+      // IMPORTANT: Nettoyer complètement la partie existante pour éviter les conflits
+      localStorage.removeItem('current_dutch_game');
+      
       // Vérification que les données sont bien en localStorage
       const storedPlayers = localStorage.getItem('dutch_player_setup');
       if (!storedPlayers) {
