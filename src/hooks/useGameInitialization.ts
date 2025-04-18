@@ -43,9 +43,6 @@ export const useGameInitialization = () => {
       initializationInProgress.current = true;
       console.info('Création d\'une nouvelle partie...');
       
-      // Complete cleanup to ensure no residual data
-      cleanupGameState();
-      
       // 1. Vérifier si les données sont disponibles dans l'URL
       const searchParams = new URLSearchParams(location.search);
       const playersParam = searchParams.get('players');
@@ -77,8 +74,13 @@ export const useGameInitialization = () => {
             initializationCompleted.current = true;
             initializationInProgress.current = false;
             
+            // Nettoyage après initialisation réussie
+            clearPlayerSetup();
+            
             toast.success('Nouvelle partie créée !');
             return true;
+          } else {
+            console.warn('Format de données URL invalide, tentative avec localStorage');
           }
         } catch (error) {
           console.error("Erreur lors du parsing des paramètres URL:", error);

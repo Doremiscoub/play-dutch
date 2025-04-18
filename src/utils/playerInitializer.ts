@@ -68,10 +68,9 @@ export const initializePlayers = (): Player[] | null => {
       totalScore: 0,
       rounds: []
     }));
-
-    // Une fois les joueurs initialisés avec succès, nous pouvons nettoyer la configuration
-    // pour éviter de réutiliser les mêmes données ultérieurement
-    clearPlayerSetup();
+    
+    // NE PAS nettoyer la configuration ici, laissons le composant supérieur le faire
+    // après avoir vérifié que l'initialisation est réussie
     
     return newPlayers;
   } catch (error) {
