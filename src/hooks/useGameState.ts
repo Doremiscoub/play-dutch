@@ -15,6 +15,7 @@ export const useGameState = () => {
   const navigate = useNavigate();
   const initializationAttempted = useRef(false);
   const initializationProcessed = useRef(false);
+  const maxInitWaitTime = useRef<NodeJS.Timeout | null>(null);
   const [soundEnabled] = useLocalStorage('dutch_sound_enabled', true);
 
   const {
@@ -76,12 +77,20 @@ export const useGameState = () => {
     }
   }, [players, roundHistory, showGameOver, saveCurrentGameState]);
 
-  // Effet d'initialisation du jeu - Corrigé pour éviter les boucles infinies
+  // Effet d'initialisation du jeu - Amélioré pour éviter les boucles infinies et gérer l'attente
   useEffect(() => {
     // Éviter les initialisation multiples dans la même session
     if (initializationProcessed.current) {
       return;
     }
+    
+    // Debug des valeurs au démarrage
+    console.debug('Valeurs localStorage au démarrage:', {
+      dutch_player_setup: localStorage.getItem('dutch_player_setup'),
+      current_dutch_game: localStorage.getItem('current_dutch_game'),
+      dutch_new_game_requested: localStorage.getItem('dutch_new_game_requested'),
+      dutch_initialization_completed: localStorage.getItem('dutch_initialization_completed')
+    });
     
     initializationProcessed.current = true;
     
@@ -94,11 +103,31 @@ export const useGameState = () => {
     if (isNewGameRequested) {
       console.info("Création d'une nouvelle partie demandée explicitement");
       
+      // Vérifier si nous avons déjà des joueurs valides
+      if (players && players.length > 0) {
+        console.info("Joueurs déjà chargés, pas besoin de recréer");
+        return;
+      }
+      
+      // Définir un timeout de sécurité pour éviter de bloquer indéfiniment
+      maxInitWaitTime.current = setTimeout(() => {
+        if (!initializationCompleted.current && players.length === 0) {
+          console.warn("Délai d'initialisation dépassé, vérification des joueurs");
+          
+          // Vérifier si nous pouvons quand même créer une partie
+          if (verifyPlayerSetup()) {
+            createNewGame();
+          } else {
+            console.error("Configuration de joueurs invalide après délai d'attente");
+            navigate('/game/setup');
+          }
+        }
+      }, 5000); // 5 secondes maximum d'attente
+      
       const success = createNewGame();
-      if (!success) {
+      if (!success && !initializationInProgress.current) {
         console.error("Échec lors de la création de la nouvelle partie");
         // Ne pas rediriger à nouveau ici pour éviter une boucle
-        // La navigation est déjà gérée dans createNewGame
       }
       return;
     }
@@ -133,10 +162,9 @@ export const useGameState = () => {
       if (setupValid) {
         console.info("Configuration de joueurs valide trouvée, création d'une nouvelle partie");
         const success = createNewGame();
-        if (!success) {
+        if (!success && !initializationInProgress.current) {
           console.error("Échec lors de la création de la nouvelle partie");
-          // Ne pas rediriger ici pour éviter une boucle
-          // La navigation est gérée dans createNewGame
+          navigate('/game/setup');
         }
       } else {
         console.info("Aucune configuration de joueurs valide, redirection vers la configuration");
@@ -144,7 +172,22 @@ export const useGameState = () => {
         navigate('/game/setup');
       }
     }
-  }, [createNewGame, loadGameState, navigate, setGameStartTime, setPlayers, setRoundHistory, setScoreLimit, setShowGameOver]);
+    
+    // Debug des valeurs après initialisation
+    console.debug('Valeurs localStorage après initialisation:', {
+      dutch_player_setup: localStorage.getItem('dutch_player_setup'),
+      current_dutch_game: localStorage.getItem('current_dutch_game'),
+      dutch_new_game_requested: localStorage.getItem('dutch_new_game_requested'),
+      dutch_initialization_completed: localStorage.getItem('dutch_initialization_completed')
+    });
+    
+    return () => {
+      // Nettoyage du timeout de sécurité si nécessaire
+      if (maxInitWaitTime.current) {
+        clearTimeout(maxInitWaitTime.current);
+      }
+    };
+  }, [createNewGame, loadGameState, navigate, setGameStartTime, setPlayers, setRoundHistory, setScoreLimit, setShowGameOver, players]);
 
   const handleUndoLastRound = useCallback(() => {
     try {

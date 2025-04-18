@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useGameState } from '@/hooks/useGameState';
 import GameContent from '@/components/GameContent';
 import ErrorBoundary from '@/components/ErrorBoundary';
@@ -14,13 +14,24 @@ const GamePage: React.FC = () => {
   const gameState = useGameState();
   const { players, roundHistory, showGameOver, showGameEndConfirmation, scoreLimit } = gameState;
   
+  // Debug des valeurs localStorage au montage de la page
+  useEffect(() => {
+    console.debug('GamePage - Valeurs localStorage:', {
+      dutch_player_setup: localStorage.getItem('dutch_player_setup'),
+      current_dutch_game: localStorage.getItem('current_dutch_game'),
+      dutch_new_game_requested: localStorage.getItem('dutch_new_game_requested'),
+      dutch_initialization_completed: localStorage.getItem('dutch_initialization_completed')
+    });
+  }, []);
+  
   // Protection contre l'affichage pendant l'initialisation
   if (!isReady) {
-    return <GameLoader />;
+    return <GameLoader message="Initialisation de la partie..." />;
   }
 
   // Affichage si aucun joueur n'est disponible après l'initialisation
   if (!players || players.length === 0) {
+    console.warn("GamePage: Aucun joueur disponible après initialisation");
     return <NoPlayersAlert />;
   }
 

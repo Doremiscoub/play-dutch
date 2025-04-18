@@ -28,6 +28,14 @@ export const useGameInitialization = () => {
         return false;
       }
       
+      // Debug des valeurs localStorage avant initialisation
+      console.debug('Valeurs localStorage avant initialisation:', {
+        dutch_player_setup: localStorage.getItem('dutch_player_setup'),
+        current_dutch_game: localStorage.getItem('current_dutch_game'),
+        dutch_new_game_requested: localStorage.getItem('dutch_new_game_requested'),
+        dutch_initialization_completed: localStorage.getItem('dutch_initialization_completed')
+      });
+      
       initializationInProgress.current = true;
       
       // IMPORTANT: Nettoyer la partie en cours AVANT de créer une nouvelle partie
@@ -62,14 +70,14 @@ export const useGameInitialization = () => {
       
       console.info('Joueurs initialisés avec succès:', newPlayers.length, 'joueurs');
       
-      // Mise à jour de l'état des joueurs
+      // Mise à jour de l'état des joueurs - IMPORTANT: on attend que ce soit fait avant de marquer comme terminé
       setPlayers(newPlayers);
       
       // Initialisation du temps de départ
       const now = new Date();
       setGameStartTime(now);
       
-      // Marquer l'initialisation comme terminée
+      // Marquer l'initialisation comme terminée UNIQUEMENT après avoir confirmé que les joueurs sont bien créés
       initializationCompleted.current = true;
       initializationInProgress.current = false;
       
@@ -81,8 +89,16 @@ export const useGameInitialization = () => {
       
       toast.success('Nouvelle partie locale créée !');
       
-      // Ne pas supprimer la configuration des joueurs immédiatement 
-      // pour permettre une récupération en cas d'erreur
+      // NE PAS supprimer la configuration des joueurs pour permettre une récupération en cas d'erreur
+      // La suppresssion devra être faite explicitement plus tard si nécessaire
+      
+      // Debug des valeurs localStorage après initialisation
+      console.debug('Valeurs localStorage après initialisation:', {
+        dutch_player_setup: localStorage.getItem('dutch_player_setup'),
+        current_dutch_game: localStorage.getItem('current_dutch_game'),
+        dutch_new_game_requested: localStorage.getItem('dutch_new_game_requested'),
+        dutch_initialization_completed: localStorage.getItem('dutch_initialization_completed')
+      });
       
       return true;
     } catch (error) {
