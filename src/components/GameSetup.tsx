@@ -17,11 +17,13 @@ const GameSetup: React.FC = () => {
   useEffect(() => {
     console.info("GameSetup: Nettoyage de l'état du jeu au montage");
     
+    // Nettoyer complètement tout état de jeu précédent
+    localStorage.removeItem('dutch_game_page_visited');
+    localStorage.removeItem('dutch_initialization_attempted');
+    localStorage.removeItem('dutch_initialization_completed');
+    
     // Définir le mode par défaut à local
     localStorage.setItem('dutch_game_mode', 'local');
-    
-    // Nous ne supprimons pas la partie en cours ni la configuration des joueurs ici
-    // pour permettre une reprise éventuelle
   }, []);
 
   const handleStartGame = (playerNames: string[]) => {
@@ -65,7 +67,7 @@ const GameSetup: React.FC = () => {
         setTimeout(() => {
           setIsSubmitting(false);
         }, 300);
-      }, 200);
+      }, 500); // Augmenté pour assurer la synchronisation
       
     } catch (error) {
       console.error("GameSetup: Erreur lors du démarrage de la partie:", error);

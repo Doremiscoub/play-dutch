@@ -80,50 +80,75 @@ const GamePage: React.FC = () => {
   const gameState = useGameState();
   const { players, roundHistory, showGameOver, showGameEndConfirmation, scoreLimit } = gameState;
   
+  // Vérification de l'état du jeu
   const checkGameState = useCallback(() => {
     console.info("Vérification de l'état du jeu:", {
       playersExist: Array.isArray(players) && players.length > 0,
       playerCount: Array.isArray(players) ? players.length : 0
     });
     
+    // Si aucun joueur n'est disponible, vérifier les causes possibles
     if (!Array.isArray(players) || players.length === 0) {
       console.warn("Aucun joueur disponible, vérification des causes possibles");
       
       // Vérifier si une configuration existe
       const playerSetup = localStorage.getItem('dutch_player_setup');
+      
+      // Vérifier si une initialisation est en cours
+      const initCompleted = localStorage.getItem('dutch_initialization_completed') === 'true';
+      
       if (playerSetup) {
         console.info("Configuration trouvée mais non initialisée, forçage de création");
+        
         // Forcer une nouvelle tentative d'initialisation
         localStorage.setItem('dutch_new_game_requested', 'true');
-        window.location.reload();
+        localStorage.removeItem('dutch_initialization_completed');
+        
+        // Recharger la page pour forcer l'initialisation
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
+        
+        return false;
+      } else if (!initCompleted) {
+        console.info("Initialisation non terminée ou échouée");
+        
+        // Rediriger vers la page de configuration
+        toast.error("Initialisation de la partie incomplète");
+        navigate('/game/setup');
+        return false;
+      } else {
+        // Redirection vers configuration
+        toast.error("Aucun joueur disponible. Veuillez configurer une nouvelle partie.");
+        navigate('/game/setup');
         return false;
       }
-      
-      // Sinon, redirection vers configuration
-      toast.error("Aucun joueur disponible. Veuillez configurer une nouvelle partie.");
-      navigate('/game/setup');
-      return false;
     }
     
     return true;
   }, [players, navigate]);
   
+  // Initialisation lors du montage du composant
   useEffect(() => {
     console.info("GamePage: Montage du composant");
     
+    // Marquer la page comme visitée
     localStorage.setItem('dutch_game_page_visited', 'true');
     
+    // Définir un timeout pour détecter les problèmes d'initialisation
     const timeoutHandler = setTimeout(() => {
       if (!Array.isArray(players) || players.length === 0) {
         setInitializationTimeout(true);
         console.warn("Timeout d'initialisation atteint");
       }
-    }, 2500); // Augmentation du timeout pour permettre l'initialisation
+    }, 3000); // Augmentation du timeout pour permettre l'initialisation
     
+    // Définir un délai pour considérer la page comme prête
     const initTimer = setTimeout(() => {
       setIsReady(true);
-    }, 500); // Augmentation du délai d'initialisation
+    }, 800); // Augmentation du délai d'initialisation
     
+    // Nettoyage lors du démontage
     return () => {
       console.info("GamePage: Démontage du composant");
       clearTimeout(initTimer);
@@ -133,6 +158,7 @@ const GamePage: React.FC = () => {
     };
   }, []);
   
+  // Vérification de l'état du jeu une fois prêt
   useEffect(() => {
     if (isReady) {
       try {
@@ -147,17 +173,22 @@ const GamePage: React.FC = () => {
     }
   }, [isReady, checkGameState]);
   
+  // Gestion du timeout d'initialisation
   useEffect(() => {
     if (initializationTimeout) {
       console.warn("Timeout d'initialisation atteint, navigation vers la configuration");
+      
+      // En cas de timeout, forcer la redirection vers la configuration
       navigate('/game/setup');
     }
   }, [initializationTimeout, navigate]);
   
+  // Enregistrement du chemin précédent pour la navigation
   useEffect(() => {
     localStorage.setItem('dutch_previous_route', location.pathname);
   }, [location]);
   
+  // Affichage d'un loader pendant l'initialisation
   if (!isReady) {
     return (
       <div className="flex justify-center items-center min-h-screen">
@@ -166,6 +197,7 @@ const GamePage: React.FC = () => {
     );
   }
   
+  // Affichage d'une erreur en cas de problème
   if (errorState.hasError) {
     return (
       <div className="flex justify-center items-center min-h-screen flex-col p-6">
@@ -186,6 +218,7 @@ const GamePage: React.FC = () => {
     );
   }
   
+  // Affichage si aucun joueur n'est disponible
   if (!Array.isArray(players) || players.length === 0) {
     return (
       <div className="flex justify-center items-center min-h-screen flex-col p-6">
@@ -208,9 +241,11 @@ const GamePage: React.FC = () => {
     );
   }
   
+  // Préparation des données pour l'affichage
   const safePlayersWithStats = updateAllPlayersStats(players);
   const safeRoundHistory = Array.isArray(roundHistory) ? roundHistory : [];
   
+  // Rendu du contenu du jeu
   return (
     <ErrorBoundary FallbackComponent={GamePageErrorFallback}>
       <GameContent

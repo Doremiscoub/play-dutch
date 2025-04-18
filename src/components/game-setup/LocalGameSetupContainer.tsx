@@ -12,6 +12,11 @@ const LocalGameSetupContainer: React.FC<{
 
   const handleStartGame = (playerNames: string[]) => {
     try {
+      if (isProcessing) {
+        console.info("Traitement déjà en cours, ignorer les clics multiples");
+        return;
+      }
+      
       setIsProcessing(true);
       console.info('LocalGameSetupContainer: Démarrage de la partie avec les joueurs:', playerNames);
       
@@ -25,6 +30,7 @@ const LocalGameSetupContainer: React.FC<{
       console.info('LocalGameSetupContainer: Nettoyage des données précédentes');
       localStorage.removeItem('current_dutch_game');
       localStorage.removeItem('dutch_new_game_requested');
+      localStorage.removeItem('dutch_game_page_visited');
       
       // Forcer un flag de création de nouvelle partie
       localStorage.setItem('dutch_new_game_requested', 'true');
@@ -42,7 +48,7 @@ const LocalGameSetupContainer: React.FC<{
       setTimeout(() => {
         onStartGame(playerNames);
         setIsProcessing(false);
-      }, 200);
+      }, 500); // Augmenter légèrement le délai pour s'assurer que tout est bien synchronisé
     } catch (error) {
       console.error("LocalGameSetupContainer: Erreur lors de la configuration des joueurs:", error);
       toast.error("Erreur lors de la configuration des joueurs");

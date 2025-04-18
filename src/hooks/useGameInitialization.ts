@@ -41,6 +41,7 @@ export const useGameInitialization = () => {
       
       console.info('Tentative d\'initialisation via localStorage');
       
+      // Vérifier si la configuration des joueurs est valide
       const setupValid = verifyPlayerSetup();
       console.info('Vérification de la configuration localStorage:', setupValid ? 'VALIDE' : 'INVALIDE');
       
@@ -60,6 +61,7 @@ export const useGameInitialization = () => {
       console.info('Nettoyage de la partie existante avant création...');
       localStorage.removeItem('current_dutch_game');
       
+      // Initialiser les joueurs à partir des données localStorage
       const newPlayers = initializePlayers();
       console.info('Joueurs initialisés:', newPlayers);
       
@@ -77,7 +79,10 @@ export const useGameInitialization = () => {
       
       console.info('Joueurs initialisés avec succès:', newPlayers.length, 'joueurs');
       
+      // Mise à jour de l'état des joueurs
       setPlayers(newPlayers);
+      
+      // Initialisation du temps de départ
       const now = new Date();
       setGameStartTime(now);
       
@@ -85,14 +90,22 @@ export const useGameInitialization = () => {
       initializationCompleted.current = true;
       initializationInProgress.current = false;
       
+      // Confirmer dans localStorage que l'initialisation est terminée
+      localStorage.setItem('dutch_initialization_completed', 'true');
+      
       // Supprimer le flag de nouvelle partie après initialisation réussie
       localStorage.removeItem('dutch_new_game_requested');
       
-      // Complètement supprimer la configuration des joueurs pour éviter les confusions
-      // Nous le faisons seulement après avoir validé que setPlayers a été appelé avec succès
-      clearPlayerSetup();
-      
       toast.success('Nouvelle partie locale créée !');
+      
+      // Ne pas supprimer la configuration des joueurs immédiatement 
+      // pour permettre une récupération en cas d'erreur
+      setTimeout(() => {
+        if (initializationCompleted.current) {
+          clearPlayerSetup();
+        }
+      }, 2000);
+      
       return true;
     } catch (error) {
       console.error("Erreur lors de la création d'une nouvelle partie:", error);

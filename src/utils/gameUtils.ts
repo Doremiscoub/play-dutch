@@ -1,3 +1,4 @@
+
 /**
  * Utilitaires pour la gestion des parties
  */
@@ -28,8 +29,8 @@ export const initializePlayers = (): Player[] | null => {
       rounds: []
     }));
     
-    // Suppression des données d'initialisation après usage
-    localStorage.removeItem('dutch_player_setup');
+    // On ne supprime pas immédiatement les données d'initialisation
+    // pour permettre une récupération en cas d'erreur
     
     return players;
   } catch (error) {
@@ -46,6 +47,8 @@ export const cleanupGameState = () => {
   localStorage.removeItem('current_dutch_game');
   localStorage.removeItem('dutch_new_game_requested');
   localStorage.removeItem('dutch_player_setup');
+  localStorage.removeItem('dutch_game_page_visited');
+  localStorage.removeItem('dutch_initialization_completed');
   
   // Nettoyer également tous les autres éléments potentiellement problématiques
   localStorage.removeItem('dutch_game_history');
@@ -57,7 +60,7 @@ export const cleanupGameState = () => {
   // Vérifier pour être sûr que tout a bien été nettoyé
   const allKeys = Object.keys(localStorage);
   for (const key of allKeys) {
-    if (key.startsWith('dutch_game_') || key.startsWith('dutch_round_')) {
+    if (key.startsWith('dutch_') && key !== 'dutch_sound_enabled' && key !== 'dutch_games') {
       localStorage.removeItem(key);
     }
   }

@@ -36,17 +36,24 @@ const LocalGameSetup: React.FC<LocalGameSetupProps> = ({ onStartGame, isSubmitti
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (isSubmitting) return;
     
-    console.log("LocalGameSetup: Soumission du formulaire");
+    // Protection contre les soumissions multiples
+    if (isSubmitting) {
+      console.info("LocalGameSetup: Soumission déjà en cours, ignorer");
+      return;
+    }
+    
+    console.info("LocalGameSetup: Soumission du formulaire");
     
     try {
-      // Vérification des noms des joueurs
+      // Assurer que tous les noms sont valides
       const validPlayerNames = playerNames.map((name, index) => 
         name.trim() === '' ? `Joueur ${index + 1}` : name.trim()
       );
       
-      console.log("LocalGameSetup: Noms validés:", validPlayerNames);
+      console.info("LocalGameSetup: Noms validés:", validPlayerNames);
+      
+      // Appeler la fonction de démarrage de partie du parent
       onStartGame(validPlayerNames);
     } catch (error) {
       console.error("LocalGameSetup: Erreur lors de la soumission:", error);
