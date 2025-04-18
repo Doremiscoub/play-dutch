@@ -34,7 +34,7 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
         });
       }
 
-      // Animated elements
+      // Animated elements - ordre important: d'abord les dots (arrière-plan), puis les vagues (premier plan)
       drawDots({ ctx, canvas, time });
       drawWaves(ctx, canvas, time);
     };

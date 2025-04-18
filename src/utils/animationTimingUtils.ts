@@ -11,7 +11,7 @@ export const requestAnimationFrameWithLimit = (
   const animate = (timestamp: number) => {
     const elapsed = timestamp - lastFrameTime;
     
-    if (elapsed > FRAME_DURATION) {
+    if (elapsed > 1000 / fps) {
       lastFrameTime = timestamp;
       callback(timestamp);
     }
@@ -27,11 +27,27 @@ export const createAnimationLoop = (
   cleanup?: () => void
 ) => {
   let animationId: number;
+  let previousTime = 0;
+  const targetFPS = 60;
+  const frameInterval = 1000 / targetFPS;
+  
+  const loop = (timestamp: number) => {
+    animationId = requestAnimationFrame(loop);
+    
+    const elapsed = timestamp - previousTime;
+    
+    if (elapsed > frameInterval) {
+      // Ajuster le temps précédent pour éviter l'accumulation
+      previousTime = timestamp - (elapsed % frameInterval);
+      
+      // Convertir les millisecondes en secondes pour un mouvement plus lent et contrôlé
+      draw(timestamp / 1000);
+    }
+  };
   
   const start = () => {
-    animationId = requestAnimationFrameWithLimit((timestamp) => {
-      draw(timestamp / 1000); // Convert to seconds
-    });
+    previousTime = performance.now();
+    animationId = requestAnimationFrame(loop);
   };
   
   const stop = () => {
