@@ -7,6 +7,7 @@ interface GridConfig {
 
 export const drawGrid = (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement, config: GridConfig) => {
   ctx.strokeStyle = `rgba(218, 218, 218, ${config.opacity})`;
+  ctx.lineWidth = 1;
   ctx.beginPath();
 
   // Draw vertical lines

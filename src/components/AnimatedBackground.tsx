@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { drawWaves } from '@/utils/waveAnimations';
 import { drawDots } from '@/components/background/AnimatedDots';
 import { drawGrid } from '@/utils/gridUtils';
@@ -37,10 +37,10 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
         });
       }
 
-      // Animated elements - ordre important: d'abord les dots (arrière-plan), puis les vagues (premier plan)
+      // Animated dots
       drawDots({ ctx, canvas, time });
       
-      // Assurer que les deux vagues sont visibles (orange et violette)
+      // Waves
       drawWaves(ctx, canvas, time);
     };
 
