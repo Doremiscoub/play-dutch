@@ -1,33 +1,23 @@
 
-import React, { useRef, useEffect } from 'react';
+import React from 'react';
 import { drawWaves } from '@/utils/waveAnimations';
 import { drawDots } from '@/components/background/AnimatedDots';
 import { drawGrid } from '@/utils/gridUtils';
 import { createAnimationLoop } from '@/utils/animationTimingUtils';
+import { useCanvas } from '@/hooks/useCanvas';
 
 interface AnimatedBackgroundProps {
   variant?: 'default' | 'subtle' | 'minimal';
 }
 
 const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'default' }) => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const { canvasRef, getContext, getCanvas } = useCanvas();
   
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    const resizeCanvas = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
+  React.useEffect(() => {
+    const ctx = getContext();
+    const canvas = getCanvas();
+    if (!ctx || !canvas) return;
     
-    // Animation setup with utilities
     const draw = (time: number) => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
@@ -53,10 +43,9 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
     animation.start();
     
     return () => {
-      window.removeEventListener('resize', resizeCanvas);
       animation.stop();
     };
-  }, [variant]);
+  }, [variant, getContext, getCanvas]);
 
   return (
     <canvas 
