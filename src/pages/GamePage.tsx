@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useCallback } from 'react';
 import { useGameState } from '@/hooks/useGameState';
 import GameContent from '@/components/GameContent';
@@ -75,7 +74,6 @@ const GamePage: React.FC = () => {
   const gameState = useGameState();
   const { players, roundHistory, showGameOver, showGameEndConfirmation, scoreLimit } = gameState;
   
-  // Fonction de vérification d'état de jeu valide avec navigation de secours
   const checkGameState = useCallback(() => {
     console.info("Vérification de l'état du jeu:", {
       playersExist: Array.isArray(players) && players.length > 0,
@@ -85,11 +83,9 @@ const GamePage: React.FC = () => {
     if (!Array.isArray(players) || players.length === 0) {
       console.warn("Aucun joueur disponible, redirection vers la configuration");
       
-      // Réinitialiser localStorage pour éviter les boucles de redirection
       localStorage.removeItem('current_dutch_game');
       localStorage.removeItem('dutch_new_game_requested');
       
-      // Forcer une navigation vers l'écran de configuration
       toast.error("Aucun joueur disponible. Veuillez configurer une nouvelle partie.");
       navigate('/game/setup');
       return false;
@@ -101,19 +97,15 @@ const GamePage: React.FC = () => {
   useEffect(() => {
     console.info("GamePage: Montage du composant");
     
-    // Reset flag
     localStorage.setItem('dutch_game_page_visited', 'true');
     
-    // Délai pour vérifier l'initialisation
     const timeoutHandler = setTimeout(() => {
-      // Si après 1.5 secondes, nous n'avons toujours pas de joueurs, considérons que c'est un timeout
       if (!Array.isArray(players) || players.length === 0) {
         setInitializationTimeout(true);
         console.warn("Timeout d'initialisation atteint");
       }
     }, 1500);
     
-    // Délai pour marquer la page comme prête
     const initTimer = setTimeout(() => {
       setIsReady(true);
     }, 300);
@@ -127,7 +119,6 @@ const GamePage: React.FC = () => {
     };
   }, []);
   
-  // Effet pour vérifier l'état du jeu à chaque changement important
   useEffect(() => {
     if (isReady && players) {
       console.info("GamePage: Mise à jour des données", {
@@ -138,14 +129,12 @@ const GamePage: React.FC = () => {
     }
   }, [isReady, players, roundHistory, showGameOver]);
   
-  // Effet pour vérifier l'initialisation complète après que la page soit prête
   useEffect(() => {
     if (isReady) {
       checkGameState();
     }
   }, [isReady, checkGameState]);
   
-  // Effet pour gérer le timeout d'initialisation
   useEffect(() => {
     if (initializationTimeout) {
       console.warn("Timeout d'initialisation atteint, navigation vers la configuration");
@@ -153,12 +142,10 @@ const GamePage: React.FC = () => {
     }
   }, [initializationTimeout, navigate]);
   
-  // Mémoriser la route pour le retour des paramètres
   useEffect(() => {
     localStorage.setItem('dutch_previous_route', location.pathname);
   }, [location]);
   
-  // Afficher un indicateur de chargement si la page n'est pas prête
   if (!isReady) {
     return (
       <div className="flex justify-center items-center min-h-screen">
@@ -167,11 +154,10 @@ const GamePage: React.FC = () => {
     );
   }
   
-  // Vérifier à nouveau l'état du jeu avant de rendre le contenu
   if (!Array.isArray(players) || players.length === 0) {
     return (
       <div className="flex justify-center items-center min-h-screen flex-col p-6">
-        <Alert variant="warning" className="mb-6 max-w-md">
+        <Alert variant="destructive" className="mb-6 max-w-md">
           <AlertTitle>Aucun joueur disponible</AlertTitle>
           <AlertDescription>
             Veuillez configurer une nouvelle partie.
