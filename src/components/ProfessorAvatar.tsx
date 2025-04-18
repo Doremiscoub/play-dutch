@@ -7,7 +7,8 @@ import { useElevenLabs } from '@/hooks/use-eleven-labs';
 import { useSound } from '@/hooks/use-sound';
 import { useImageLoader } from '@/hooks/useImageLoader';
 
-const PROFESSOR_IMAGE = '/lovable-uploads/60f07be2-bcee-4ade-9356-f86b80d0774b.png';
+// Use the uploaded image URL
+const PROFESSOR_IMAGE = '/lovable-uploads/fb92f04b-fff7-4371-8b77-4aa21a3d4e6b.png';
 
 interface ProfessorAvatarProps {
   message: string;
@@ -32,7 +33,7 @@ const ProfessorAvatar: React.FC<ProfessorAvatarProps> = ({ message, onSpeakMessa
   return (
     <div className="flex items-center gap-3">
       <motion.div 
-        className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full shadow-lg border-2 border-dutch-purple overflow-hidden"
+        className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden border-2 border-dutch-purple bg-white shadow-lg"
         animate={{ 
           scale: [1, 1.05, 1],
           rotate: [0, 1, -1, 0],
@@ -52,6 +53,9 @@ const ProfessorAvatar: React.FC<ProfessorAvatarProps> = ({ message, onSpeakMessa
           initial={{ opacity: 0 }}
           animate={{ opacity: imageLoaded ? 1 : 0 }}
           transition={{ duration: 0.5 }}
+          onError={(e) => {
+            console.error("Erreur lors du chargement de l'image du Professeur Cartouche :", e);
+          }}
         />
       </motion.div>
       
