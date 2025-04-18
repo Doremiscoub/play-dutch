@@ -25,7 +25,7 @@ const SettingsPage: React.FC = () => {
 
   return (
     <PageLayout>
-      <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+      <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 py-10">
         <div className="flex justify-between items-center mb-8">
           <motion.h1 
             className="text-3xl font-bold bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent"

@@ -34,9 +34,6 @@ export const useImageLoader = (
       console.error(`Erreur critique: Impossible de charger l'image: ${primaryImageUrl}`);
       setError(true);
       setImageLoaded(false);
-      
-      // Nous ne changeons pas l'URL, même en cas d'erreur
-      // conformément aux instructions: aucun fallback ne doit être visible
     };
     
     return () => {

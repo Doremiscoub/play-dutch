@@ -1,7 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageCircle, Bot, Sparkles, BrainCircuit, Megaphone } from 'lucide-react';
 import { Player } from '@/types';
 import { getRandomComment } from '@/utils/commentGenerator';
 import ProfessorAvatar from './ProfessorAvatar';

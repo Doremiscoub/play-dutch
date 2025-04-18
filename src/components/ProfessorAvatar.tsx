@@ -6,9 +6,8 @@ import { Button } from './ui/button';
 import { useElevenLabs } from '@/hooks/use-eleven-labs';
 import { useSound } from '@/hooks/use-sound';
 
-// Utilisation d'une image qui existe déjà dans le projet
-// Nous utilisons un chemin absolu vers une image disponible dans le projet
-const PROFESSOR_IMAGE = '/lovable-uploads/4cc61ce9-4985-48a5-9867-60bb7457e484.png';
+// Chemin EXACT vers l'image fournie
+const PROFESSOR_IMAGE = '/lovable-uploads/4257e746-36cc-49f2-9457-6bc4e570f1b4.png';
 
 interface ProfessorAvatarProps {
   message: string;
