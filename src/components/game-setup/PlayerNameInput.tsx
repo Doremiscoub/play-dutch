@@ -7,9 +7,10 @@ interface PlayerNameInputProps {
   index: number;
   name: string;
   onChange: (index: number, name: string) => void;
+  placeholder?: string;
 }
 
-const PlayerNameInput: React.FC<PlayerNameInputProps> = ({ index, name, onChange }) => {
+const PlayerNameInput: React.FC<PlayerNameInputProps> = ({ index, name, onChange, placeholder }) => {
   return (
     <motion.div 
       key={index} 
@@ -30,7 +31,7 @@ const PlayerNameInput: React.FC<PlayerNameInputProps> = ({ index, name, onChange
         <Input
           value={name}
           onChange={(e) => onChange(index, e.target.value)}
-          placeholder={`Joueur ${index + 1}`}
+          placeholder={placeholder || `Joueur ${index + 1}`}
           className="dutch-input border border-white/40 shadow-sm relative z-10 backdrop-blur-sm"
           maxLength={20}
         />

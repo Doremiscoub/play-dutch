@@ -3,7 +3,7 @@ import React from 'react';
 import PlayerCountSelector from './PlayerCountSelector';
 import PlayerNameInput from './PlayerNameInput';
 import ActionButton from './ActionButton';
-import { SetupCard } from './SetupCard';
+import SetupCard from './SetupCard';
 import LocalGameSetupInfo from './LocalGameSetupInfo';
 
 interface LocalGameSetupContainerProps {
@@ -23,21 +23,26 @@ const LocalGameSetupContainer: React.FC<LocalGameSetupContainerProps> = ({
   onStartGame,
   isLoading = false
 }) => {
+  const handlePlayerCountChange = (increment: boolean) => {
+    const newCount = increment ? playerCount + 1 : playerCount - 1;
+    onPlayerCountChange(newCount);
+  };
+
   return (
     <SetupCard title="Nouvelle partie locale">
       <LocalGameSetupInfo />
       
       <PlayerCountSelector 
-        playerCount={playerCount} 
-        onChange={onPlayerCountChange}
+        count={playerCount} 
+        onChange={handlePlayerCountChange}
       />
       
       <div className="space-y-3 mt-6 mb-6">
         {Array.from({ length: playerCount }).map((_, index) => (
           <PlayerNameInput
             key={`player-${index}`}
-            value={playerNames[index] || ''}
-            onChange={(name) => onNameChange(index, name)}
+            name={playerNames[index] || ''}
+            onChange={onNameChange}
             placeholder={`Joueur ${index + 1}`}
             index={index}
           />
@@ -47,10 +52,8 @@ const LocalGameSetupContainer: React.FC<LocalGameSetupContainerProps> = ({
       <ActionButton
         onClick={onStartGame}
         disabled={playerNames.some(name => !name.trim()) || isLoading}
-        isLoading={isLoading}
-      >
-        Commencer la partie
-      </ActionButton>
+        label="Commencer la partie"
+      />
     </SetupCard>
   );
 };
