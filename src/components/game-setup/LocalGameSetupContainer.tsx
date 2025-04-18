@@ -1,9 +1,9 @@
 
 import React, { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
-import { Users, Smartphone } from 'lucide-react';
-import LocalGameSetup from './LocalGameSetup';
+import { Smartphone } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import LocalGameSetup from './LocalGameSetup';
 
 interface LocalGameSetupContainerProps {
   onStartGame: (playerNames: string[]) => void;
