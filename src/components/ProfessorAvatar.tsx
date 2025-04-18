@@ -1,18 +1,13 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Volume2 } from 'lucide-react';
 import { Button } from './ui/button';
 import { useElevenLabs } from '@/hooks/use-eleven-labs';
 import { useSound } from '@/hooks/use-sound';
 
-// Define image paths with proper public path prefixes
-const PROFESSOR_IMAGES = [
-  '/professor.png', // Try the root public directory first
-  '/lovable-uploads/37b79686-1328-46bb-aee6-44d0e904fc20.png', // Then the newly uploaded image
-  '/lovable-uploads/1dc0ac6d-dc08-4029-a06a-eec0c5a6ce7f.png', // Then the original path
-  '/lovable-uploads/a2234ca1-7b29-4c32-8167-2ff6be271875.png' // Final fallback
-];
+// Utilisation d'une image statique plutôt que d'un modèle 3D
+const PROFESSOR_IMAGE = '/professor.png';
 
 interface ProfessorAvatarProps {
   message: string;
@@ -20,27 +15,22 @@ interface ProfessorAvatarProps {
 }
 
 const ProfessorAvatar: React.FC<ProfessorAvatarProps> = ({ message, onSpeakMessage }) => {
-  const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
   const { config: elevenLabsConfig, speakWithFallback, isLoading: isSpeaking } = useElevenLabs();
   const { isSoundEnabled } = useSound();
+  const [imageLoaded, setImageLoaded] = useState(false);
   
-  // Log which image is being attempted
-  useEffect(() => {
-    console.info("Trying to load professor image:", PROFESSOR_IMAGES[currentImageIndex]);
-  }, [currentImageIndex]);
-  
-  // Handle image error by trying the next available image
-  const handleImageError = () => {
-    console.warn(`Professor image failed to load: ${PROFESSOR_IMAGES[currentImageIndex]}`);
-    
-    if (currentImageIndex < PROFESSOR_IMAGES.length - 1) {
-      setCurrentImageIndex(prevIndex => prevIndex + 1);
-    } else {
-      console.error("All professor images failed to load");
-    }
+  // Fonction pour gérer le chargement réussi de l'image
+  const handleImageLoaded = () => {
+    console.info("L'image du professeur s'est chargée avec succès");
+    setImageLoaded(true);
   };
   
-  // Function to handle speaking
+  // Fonction pour gérer l'erreur de chargement de l'image
+  const handleImageError = () => {
+    console.error("Erreur lors du chargement de l'image du professeur");
+  };
+  
+  // Fonction pour gérer la parole
   const handleSpeak = async () => {
     if (isSoundEnabled) {
       if (onSpeakMessage) {
@@ -67,12 +57,15 @@ const ProfessorAvatar: React.FC<ProfessorAvatarProps> = ({ message, onSpeakMessa
           }}
           whileHover={{ scale: 1.1 }}
         >
-          <img 
-            src={PROFESSOR_IMAGES[currentImageIndex]}
+          <motion.img 
+            src={PROFESSOR_IMAGE}
             alt="Professeur Cartouche"
             className="w-full h-full object-contain"
+            onLoad={handleImageLoaded}
             onError={handleImageError}
-            loading="eager"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: imageLoaded ? 1 : 0 }}
+            transition={{ duration: 0.5 }}
           />
         </motion.div>
         

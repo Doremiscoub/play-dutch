@@ -37,8 +37,10 @@ const CustomScoreBoardButtons: React.FC<CustomScoreBoardButtonsProps> = ({
   };
   
   // Fonction pour gérer la soumission des scores
+  // Modifiée pour éviter la réouverture immédiate du formulaire
   const handleSubmitScores = (scores: number[], dutchPlayerId?: string) => {
     onAddRound(scores, dutchPlayerId);
+    // Fermeture explicite du formulaire après traitement
     setShowScoreForm(false);
   };
 
@@ -94,12 +96,14 @@ const CustomScoreBoardButtons: React.FC<CustomScoreBoardButtonsProps> = ({
         </motion.div>
       </div>
       
-      <NewRoundScoreForm
-        players={players}
-        open={showScoreForm}
-        onClose={handleCloseScoreForm}
-        onSubmit={handleSubmitScores}
-      />
+      {showScoreForm && (
+        <NewRoundScoreForm
+          players={players}
+          open={showScoreForm}
+          onClose={handleCloseScoreForm}
+          onSubmit={handleSubmitScores}
+        />
+      )}
     </>
   );
 };

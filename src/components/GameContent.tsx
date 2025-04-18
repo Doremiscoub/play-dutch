@@ -6,7 +6,6 @@ import React from 'react';
 import { Player } from '@/types';
 import ErrorBoundary from './ErrorBoundary';
 import ScoreBoard from './ScoreBoard';
-import NewRoundScoreForm from './NewRoundScoreForm';
 import GameResultOverlay from './game/GameResultOverlay';
 
 interface GameContentProps {
@@ -38,21 +37,6 @@ const GameContent: React.FC<GameContentProps> = ({
   onContinueGame,
   onRestart
 }) => {
-  const [showScoreForm, setShowScoreForm] = React.useState(false);
-
-  const handleAddRoundClick = () => {
-    setShowScoreForm(true);
-  };
-
-  const handleCloseScoreForm = () => {
-    setShowScoreForm(false);
-  };
-
-  const handleAddRound = (scores: number[], dutchPlayerId?: string) => {
-    onAddRound(scores, dutchPlayerId);
-    setShowScoreForm(false);
-  };
-
   // Fallback UI en cas d'erreur
   const ErrorFallback = ({ error }: { error: Error }) => (
     <div className="p-6 bg-red-50 rounded-lg border border-red-200 m-4">
@@ -71,7 +55,7 @@ const GameContent: React.FC<GameContentProps> = ({
       {/* Tableau des scores */}
       <ScoreBoard
         players={players}
-        onAddRound={handleAddRoundClick}
+        onAddRound={onAddRound}
         onUndoLastRound={onUndoLastRound}
         onEndGame={onRequestEndGame}
         roundHistory={roundHistory}
@@ -79,14 +63,6 @@ const GameContent: React.FC<GameContentProps> = ({
         onConfirmEndGame={onConfirmEndGame}
         onCancelEndGame={onCancelEndGame}
         scoreLimit={scoreLimit}
-      />
-
-      {/* Formulaire d'ajout de score */}
-      <NewRoundScoreForm
-        players={players}
-        open={showScoreForm}
-        onClose={handleCloseScoreForm}
-        onSubmit={handleAddRound}
       />
 
       {/* Overlay de fin de partie */}
