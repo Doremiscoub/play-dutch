@@ -101,15 +101,14 @@ export const useGameState = () => {
     if (isNewGameRequested) {
       console.info("Création d'une nouvelle partie demandée explicitement");
       
-      // Création de la partie via la fonction dédiée
-      createNewGame().then(success => {
-        if (!success) {
-          console.error("Échec lors de la création de la nouvelle partie");
-          toast.error("Impossible de créer une nouvelle partie");
-          navigate('/game/setup');
-        }
-        initializationInProgress.current = false;
-      });
+      // Création de la partie via la fonction dédiée - CORRECTION: Ne pas utiliser .then() sur un boolean
+      const success = createNewGame();
+      if (!success) {
+        console.error("Échec lors de la création de la nouvelle partie");
+        toast.error("Impossible de créer une nouvelle partie");
+        navigate('/game/setup');
+      }
+      initializationInProgress.current = false;
       return;
     }
     
@@ -147,14 +146,14 @@ export const useGameState = () => {
         // Force la création d'une nouvelle partie
         localStorage.setItem('dutch_new_game_requested', 'true');
         
-        createNewGame().then(success => {
-          if (!success) {
-            console.error("Échec lors de la création de la nouvelle partie");
-            toast.error("Impossible de créer une nouvelle partie");
-            navigate('/game/setup');
-          }
-          initializationInProgress.current = false;
-        });
+        // CORRECTION: Ne pas utiliser .then() sur un boolean
+        const success = createNewGame();
+        if (!success) {
+          console.error("Échec lors de la création de la nouvelle partie");
+          toast.error("Impossible de créer une nouvelle partie");
+          navigate('/game/setup');
+        }
+        initializationInProgress.current = false;
       } else {
         console.info("Aucune configuration de joueurs valide, redirection vers la configuration");
         toast.info("Veuillez configurer une nouvelle partie");
