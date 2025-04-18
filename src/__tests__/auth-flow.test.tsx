@@ -1,6 +1,6 @@
 
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { vi } from 'vitest';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import SignedOutButtons from '@/components/home/SignedOutButtons';
@@ -20,7 +20,7 @@ describe('Authentication Flow', () => {
     localStorage.clear();
   });
 
-  test('clicking sign in button navigates to /sign-in', () => {
+  it('clicking sign in button navigates to /sign-in', () => {
     const navigate = vi.fn();
     (useNavigate as any).mockReturnValue(navigate);
 
@@ -32,7 +32,7 @@ describe('Authentication Flow', () => {
     expect(navigate).toHaveBeenCalledWith('/sign-in');
   });
 
-  test('clicking sign out button clears localStorage and navigates to home', async () => {
+  it('clicking sign out button clears localStorage and navigates to home', async () => {
     const navigate = vi.fn();
     const signOut = vi.fn();
     
