@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Player } from '@/types';
@@ -10,7 +11,7 @@ import { useMediaQuery } from '@/hooks/use-media-query';
 import EndGameConfirmationDialog from './EndGameConfirmationDialog';
 import UndoConfirmationDialog from './UndoConfirmationDialog';
 import ScoreBoardHeader from './ScoreBoardHeader';
-import ProfessorAvatar from '../ProfessorAvatar';
+import ProfessorAvatar from '../game/ProfessorAvatar';
 
 interface ScoreBoardProps {
   players: Player[];
