@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react';
+import React from 'react';
 
 interface Dot {
   x: number;
@@ -18,14 +18,12 @@ interface AnimatedDotsProps {
   time: number;
 }
 
-// Cache des points pour éviter de les recréer à chaque frame
 const dotsCache: { dots: Dot[], initialized: boolean } = {
   dots: [],
   initialized: false
 };
 
 export const drawDots = ({ ctx, canvas, time }: AnimatedDotsProps) => {
-  // Créer les points une seule fois s'ils n'existent pas
   if (!dotsCache.initialized) {
     const numDots = Math.min(25, Math.max(15, Math.floor(canvas.width * canvas.height / 50000)));
     
@@ -39,14 +37,14 @@ export const drawDots = ({ ctx, canvas, time }: AnimatedDotsProps) => {
     for (let i = 0; i < numDots; i++) {
       const colorIndex = Math.floor(Math.random() * colors.length);
       const color = colors[colorIndex];
-      const opacity = 0.6 + Math.random() * 0.3; // Opacité augmentée
+      const opacity = 0.5 + Math.random() * 0.3;
       
       dotsCache.dots.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        size: 4 + Math.random() * 5, // Taille plus importante
-        speedX: (Math.random() - 0.5) * 0.1, // Vitesse réduite
-        speedY: (Math.random() - 0.5) * 0.1, // Vitesse réduite
+        size: 3 + Math.random() * 4,
+        speedX: (Math.random() - 0.5) * 0.2, // Vitesse augmentée de ~35%
+        speedY: (Math.random() - 0.5) * 0.2,
         color: `rgba(${color.r}, ${color.g}, ${color.b}, ${opacity})`,
         opacity,
         phase: Math.random() * Math.PI * 2
@@ -56,7 +54,7 @@ export const drawDots = ({ ctx, canvas, time }: AnimatedDotsProps) => {
     dotsCache.initialized = true;
   }
 
-  // Adapter les points au redimensionnement de la fenêtre
+  // Ajustement au redimensionnement
   if (dotsCache.initialized && dotsCache.dots.length > 0) {
     dotsCache.dots.forEach(dot => {
       if (dot.x > canvas.width) dot.x = Math.random() * canvas.width;
@@ -64,31 +62,33 @@ export const drawDots = ({ ctx, canvas, time }: AnimatedDotsProps) => {
     });
   }
 
-  // Dessiner et mettre à jour les points
+  // Dessin et mise à jour des points
   dotsCache.dots.forEach(dot => {
-    // Mouvement lent et fluide
-    const offsetX = Math.sin(time * 0.2 + dot.phase) * 2;
-    const offsetY = Math.cos(time * 0.15 + dot.phase) * 2;
+    // Mouvement plus fluide avec une légère accélération
+    const offsetX = Math.sin(time * 0.3 + dot.phase) * 2;
+    const offsetY = Math.cos(time * 0.25 + dot.phase) * 2;
     
     ctx.beginPath();
     ctx.arc(dot.x + offsetX, dot.y + offsetY, dot.size, 0, Math.PI * 2);
     ctx.fillStyle = dot.color;
     ctx.fill();
 
-    // Mise à jour de la position avec une vitesse très lente
+    // Mise à jour de la position
     dot.x += dot.speedX;
     dot.y += dot.speedY;
 
-    // Rebond aux bords
+    // Rebond aux bords avec transition douce
     if (dot.x < 0 || dot.x > canvas.width) {
       dot.speedX *= -1;
+      dot.x = Math.max(0, Math.min(dot.x, canvas.width));
     }
     if (dot.y < 0 || dot.y > canvas.height) {
       dot.speedY *= -1;
+      dot.y = Math.max(0, Math.min(dot.y, canvas.height));
     }
     
-    // Limiter la vitesse maximale
-    dot.speedX = Math.max(-0.1, Math.min(0.1, dot.speedX));
-    dot.speedY = Math.max(-0.1, Math.min(0.1, dot.speedY));
+    // Limitation de la vitesse pour éviter les mouvements trop brusques
+    dot.speedX = Math.max(-0.2, Math.min(0.2, dot.speedX));
+    dot.speedY = Math.max(-0.2, Math.min(0.2, dot.speedY));
   });
 };

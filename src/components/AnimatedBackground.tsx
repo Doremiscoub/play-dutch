@@ -21,8 +21,11 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
     const draw = (time: number) => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
-      // Background
-      ctx.fillStyle = '#FFFFFF';
+      // Background gradient
+      const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+      gradient.addColorStop(0, '#F8F9FA');
+      gradient.addColorStop(1, '#FFFFFF');
+      ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       
       // Grid (if not minimal)
@@ -51,7 +54,7 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
     <canvas 
       ref={canvasRef} 
       className="fixed inset-0 w-full h-full -z-10"
-      style={{ display: 'block' }} // S'assurer que le canvas est visible
+      style={{ display: 'block' }}
     />
   );
 };

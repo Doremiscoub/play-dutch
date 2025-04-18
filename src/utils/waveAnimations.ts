@@ -6,24 +6,27 @@ interface Wave {
   amplitude: number;
   frequency: number;
   opacity: number;
+  direction: 'left' | 'right';
 }
 
 export const waves: Wave[] = [
   { 
-    height: 0.5, // Augmenté considérablement pour rendre les vagues visibles
-    color: '#E9D5FF', // Violet très pâle
-    speed: 0.02, // Vitesse modérée
-    amplitude: 50, // Amplitude très augmentée pour garantir la visibilité
+    height: 0.5,
+    color: '#E9D5FF', // Violet très pâle (vague du dessus)
+    speed: 0.015,
+    amplitude: 50,
     frequency: 0.005,
-    opacity: 1.0 // Opacité maximale
+    opacity: 1.0,
+    direction: 'right'
   },
   { 
-    height: 0.55, // Légèrement plus haut que la première vague 
-    color: '#FDE68A', // Orange très pâle
-    speed: 0.015, // Légèrement différent pour un effet naturel
-    amplitude: 40, // Amplitude importante
+    height: 0.55, // Légèrement plus haute que la première
+    color: '#FDE68A', // Orange très pâle (vague du dessous)
+    speed: 0.012, // Légèrement plus lente
+    amplitude: 40,
     frequency: 0.006,
-    opacity: 0.9 // Opacité élevée
+    opacity: 0.9,
+    direction: 'left'
   }
 ];
 
@@ -32,29 +35,25 @@ export const drawWaves = (
   canvas: HTMLCanvasElement,
   time: number
 ) => {
-  // Dessiner chaque vague
   waves.forEach((wave) => {
     const yBase = canvas.height - (canvas.height * wave.height);
-    
     ctx.beginPath();
-    
-    // Commencer en bas à gauche pour s'assurer que la vague est bien fermée
     ctx.moveTo(0, canvas.height);
     
-    // Dessiner la vague avec une méthode ultra-simplifiée pour garantir la visibilité
-    for (let x = 0; x <= canvas.width; x += 5) {
+    // Dessin de la vague avec une courbe naturelle
+    for (let x = 0; x <= canvas.width; x += 2) {
       const dx = x * wave.frequency;
-      const y = yBase + Math.sin(dx + time * wave.speed) * wave.amplitude;
+      const timeOffset = wave.direction === 'right' ? time * wave.speed : -time * wave.speed;
+      const y = yBase + Math.sin(dx + timeOffset) * wave.amplitude;
       ctx.lineTo(x, y);
     }
     
-    // Fermer la forme en bas à droite puis retour en bas à gauche
     ctx.lineTo(canvas.width, canvas.height);
     ctx.lineTo(0, canvas.height);
     
-    // Remplir avec un dégradé pour un effet plus visible
+    // Dégradé pour un effet plus naturel
     const gradient = ctx.createLinearGradient(0, yBase - wave.amplitude, 0, canvas.height);
-    gradient.addColorStop(0, wave.color); 
+    gradient.addColorStop(0, wave.color);
     gradient.addColorStop(1, wave.color + '80'); // Semi-transparent en bas
     
     ctx.fillStyle = gradient;
