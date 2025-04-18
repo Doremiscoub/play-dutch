@@ -53,16 +53,14 @@ const SettingsPage: React.FC = () => {
               Retour
             </Button>
             
-            {isFromGame && (
-              <Button
-                variant="outline"
-                onClick={() => navigate('/')}
-                className="flex items-center gap-2 bg-white/70 hover:bg-white/90 backdrop-blur-sm rounded-full border border-gray-200/50 shadow-sm"
-              >
-                <Home className="w-4 h-4" />
-                Accueil
-              </Button>
-            )}
+            <Button
+              variant="outline"
+              onClick={() => navigate('/')}
+              className="flex items-center gap-2 bg-white/70 hover:bg-white/90 backdrop-blur-sm rounded-full border border-gray-200/50 shadow-sm"
+            >
+              <Home className="w-4 h-4" />
+              Accueil
+            </Button>
           </div>
         </div>
 

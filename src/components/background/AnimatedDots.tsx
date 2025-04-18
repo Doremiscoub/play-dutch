@@ -43,9 +43,9 @@ export const drawDots = ({ ctx, canvas, time }: AnimatedDotsProps) => {
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
         size: 3 + Math.random() * 4,
-        // Vitesse considérablement réduite pour un mouvement très lent et subtil
-        speedX: (Math.random() - 0.5) * 0.02, // Réduit de 0.05 à 0.02
-        speedY: (Math.random() - 0.5) * 0.02, // Réduit de 0.05 à 0.02
+        // Vitesse TRÈS réduite pour un mouvement extrêmement lent et subtil
+        speedX: (Math.random() - 0.5) * 0.005, // Réduit drastiquement
+        speedY: (Math.random() - 0.5) * 0.005, // Réduit drastiquement
         color: `rgba(${color.r}, ${color.g}, ${color.b}, ${opacity})`,
         opacity,
         phase: Math.random() * Math.PI * 2
@@ -65,32 +65,32 @@ export const drawDots = ({ ctx, canvas, time }: AnimatedDotsProps) => {
 
   // Dessin et mise à jour des points
   dotsCache.dots.forEach(dot => {
-    // Mouvement plus fluide et beaucoup plus lent
-    // Réduction de la vitesse d'oscillation également
-    const offsetX = Math.sin(time * 0.08 + dot.phase) * 0.5; // Réduction de 0.15 à 0.08 et de 1 à 0.5
-    const offsetY = Math.cos(time * 0.05 + dot.phase) * 0.5; // Réduction de 0.1 à 0.05 et de 1 à 0.5
+    // Mouvement beaucoup plus fluide et extrêmement lent
+    // Réduction drastique de la vitesse d'oscillation
+    const offsetX = Math.sin(time * 0.02 + dot.phase) * 0.2; // Réduction forte
+    const offsetY = Math.cos(time * 0.015 + dot.phase) * 0.2; // Réduction forte
     
     ctx.beginPath();
     ctx.arc(dot.x + offsetX, dot.y + offsetY, dot.size, 0, Math.PI * 2);
     ctx.fillStyle = dot.color;
     ctx.fill();
 
-    // Mise à jour de la position avec vitesse très réduite
-    dot.x += dot.speedX * 0.5; // Réduit encore de 50%
-    dot.y += dot.speedY * 0.5; // Réduit encore de 50%
+    // Mise à jour de la position avec vitesse extrêmement réduite
+    dot.x += dot.speedX * 0.25; // Réduction drastique
+    dot.y += dot.speedY * 0.25; // Réduction drastique
 
     // Rebond aux bords avec transition douce
     if (dot.x < 0 || dot.x > canvas.width) {
-      dot.speedX *= -0.6; // Réduction de -0.8 à -0.6 pour ralentir encore plus
+      dot.speedX *= -0.5; // Ralentissement encore plus important
       dot.x = Math.max(0, Math.min(dot.x, canvas.width));
     }
     if (dot.y < 0 || dot.y > canvas.height) {
-      dot.speedY *= -0.6;
+      dot.speedY *= -0.5;
       dot.y = Math.max(0, Math.min(dot.y, canvas.height));
     }
     
     // Limitation de la vitesse pour éviter les mouvements brusques
-    dot.speedX = Math.max(-0.02, Math.min(0.02, dot.speedX)); // Réduit de 0.05 à 0.02
-    dot.speedY = Math.max(-0.02, Math.min(0.02, dot.speedY)); // Réduit de 0.05 à 0.02
+    dot.speedX = Math.max(-0.005, Math.min(0.005, dot.speedX)); // Valeur max très faible
+    dot.speedY = Math.max(-0.005, Math.min(0.005, dot.speedY)); // Valeur max très faible
   });
 };

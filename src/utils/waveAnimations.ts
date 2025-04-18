@@ -12,22 +12,22 @@ interface Wave {
 
 export const waves: Wave[] = [
   { 
-    height: 0.5, // Première vague (dessus)
+    height: 0.5, // Première vague (dessus) - violette
     color: '#E9D5FF', // Violet très pâle
-    speed: 0.015,
-    amplitude: 50,
+    speed: 0.008, // Ralenti pour éviter des animations trop rapides
+    amplitude: 30,
     frequency: 0.005,
-    opacity: 1.0,
+    opacity: 0.95,
     direction: 'right',
     yOffset: 0 // Pas de décalage
   },
   { 
-    height: 0.65, // Deuxième vague (dessous), plus haute pour être bien visible
+    height: 0.6, // Deuxième vague (dessous), plus haute pour être bien visible
     color: '#FDE68A', // Orange très pâle
-    speed: 0.012, // Plus lente
-    amplitude: 40,
+    speed: 0.006, // Encore plus lente
+    amplitude: 25,
     frequency: 0.006,
-    opacity: 0.9,
+    opacity: 0.85,
     direction: 'left', // Direction opposée
     yOffset: 20 // Décalée vers le bas pour mieux la voir
   }
@@ -50,7 +50,7 @@ export const drawWaves = (
     const adjustedAmplitude = Math.min(wave.amplitude, canvas.height * 0.1);
     
     // Dessin de la vague avec une courbe naturelle
-    for (let x = 0; x <= canvas.width; x += 2) {
+    for (let x = 0; x <= canvas.width; x += 1) { // Augmenter la précision
       const dx = x * wave.frequency;
       // La direction influence la direction de l'animation
       const timeOffset = wave.direction === 'right' ? time * wave.speed : -time * wave.speed;
@@ -64,7 +64,7 @@ export const drawWaves = (
     // Dégradé pour un effet plus naturel
     const gradient = ctx.createLinearGradient(0, yBase - adjustedAmplitude, 0, canvas.height);
     gradient.addColorStop(0, wave.color);
-    const colorWithAlpha = wave.color + Math.floor(wave.opacity * 128).toString(16).padStart(2, '0');
+    const colorWithAlpha = wave.color + Math.floor(wave.opacity * 255).toString(16).padStart(2, '0');
     gradient.addColorStop(1, colorWithAlpha);
     
     ctx.fillStyle = gradient;

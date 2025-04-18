@@ -33,7 +33,7 @@ const ProfessorAvatar: React.FC<ProfessorAvatarProps> = ({ message, onSpeakMessa
   return (
     <div className="flex items-center gap-3">
       <motion.div 
-        className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden border-2 border-dutch-purple bg-white shadow-lg"
+        className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden border-2 border-dutch-purple bg-white shadow-lg flex items-center justify-center"
         animate={{ 
           scale: [1, 1.05, 1],
           rotate: [0, 1, -1, 0],
@@ -49,10 +49,9 @@ const ProfessorAvatar: React.FC<ProfessorAvatarProps> = ({ message, onSpeakMessa
           <img 
             src={PROFESSOR_IMAGE}
             alt="Professeur Cartouche" 
-            className="w-full h-full object-cover bg-white"
+            className="w-full h-full object-cover"
             onError={(e) => {
               console.error("Erreur de chargement du Professeur Cartouche:", e);
-              // On n'utilise plus d'image de secours, mais un emoji
               e.currentTarget.style.display = 'none';
               const parent = e.currentTarget.parentElement;
               if (parent) {
