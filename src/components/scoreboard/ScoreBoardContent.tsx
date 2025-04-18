@@ -23,24 +23,42 @@ const ScoreBoardContent: React.FC<ScoreBoardContentProps> = ({
 }) => {
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isRendered, setIsRendered] = useState(false);
   
-  // Effet pour simuler un chargement initial et éviter les problèmes de rendu
+  // Effet pour garantir un montage sécurisé et éviter les problèmes de DOM
   useEffect(() => {
     console.info("ScoreBoardContent: Montage du composant");
     
-    const timer = setTimeout(() => {
+    // Premier timer pour indiquer que le composant est chargé
+    const loadTimer = setTimeout(() => {
       setIsLoading(false);
+      
+      // Second timer pour indiquer que le rendu est terminé (évite les manipulations DOM prématurées)
+      const renderTimer = setTimeout(() => {
+        setIsRendered(true);
+      }, 100);
+      
+      return () => clearTimeout(renderTimer);
     }, 100);
     
     return () => {
-      clearTimeout(timer);
       console.info("ScoreBoardContent: Démontage du composant");
+      clearTimeout(loadTimer);
+      setIsLoading(true);
+      setIsRendered(false);
     };
   }, []);
   
-  // Protection contre les valeurs null/undefined
+  // Protection renforcée contre les valeurs null/undefined
   const safeRoundHistory = Array.isArray(roundHistory) ? roundHistory : [];
-  const safePlayers = Array.isArray(players) ? players : [];
+  const safePlayers = Array.isArray(players) ? players.filter(p => p && p.id) : [];
+  
+  // Sélectionner automatiquement le premier joueur s'il y en a un et qu'aucun n'est sélectionné
+  useEffect(() => {
+    if (safePlayers.length > 0 && !selectedPlayer && isRendered) {
+      setSelectedPlayer(safePlayers[0]);
+    }
+  }, [safePlayers, selectedPlayer, isRendered]);
   
   if (isLoading) {
     return (
@@ -54,12 +72,13 @@ const ScoreBoardContent: React.FC<ScoreBoardContentProps> = ({
     <div className={`mt-8 ${isDesktop ? 'md:flex md:gap-6' : ''}`}>
       <div className={`${isDesktop ? 'md:w-3/4' : 'w-full'} z-20 relative`}>
         <AnimatePresence mode="wait">
-          {view === 'list' && (
+          {view === 'list' && isRendered && (
             <motion.div
               key="list-view"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
               className="w-full"
             >
               <PlayerListView 
@@ -71,12 +90,13 @@ const ScoreBoardContent: React.FC<ScoreBoardContentProps> = ({
             </motion.div>
           )}
           
-          {view === 'table' && (
+          {view === 'table' && isRendered && (
             <motion.div
               key="table-view"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
               className="bg-white/90 backdrop-blur-sm p-4 rounded-2xl shadow-lg border border-white"
             >
               <ScoreTableView 
@@ -88,7 +108,7 @@ const ScoreBoardContent: React.FC<ScoreBoardContentProps> = ({
         </AnimatePresence>
       </div>
       
-      {isDesktop && (
+      {isDesktop && isRendered && (
         <div className="md:w-1/4 md:max-h-screen md:sticky md:top-0">
           <GameStatsPanel
             players={safePlayers}

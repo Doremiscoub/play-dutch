@@ -33,21 +33,35 @@ export const waves: Wave[] = [
   }
 ];
 
+// Protection contre les erreurs de gestion du DOM lors des animations
 export const drawWaves = (
   ctx: CanvasRenderingContext2D | null,
   canvas: HTMLCanvasElement | null,
   time: number
 ) => {
-  // Protection contre les éléments null ou undefined
+  // Protection renforcée contre les éléments null ou undefined
   if (!ctx || !canvas) return;
   
   try {
-    // Vérifier si le contexte et le canvas sont toujours valides
-    // Cette vérification peut éviter des erreurs si le composant est démonté
-    if (canvas.width === 0 || canvas.height === 0) return;
+    // Vérification de sécurité supplémentaire pour le canvas
+    if (!canvas.isConnected || canvas.width === 0 || canvas.height === 0) {
+      console.info('Canvas non connecté au DOM ou dimensions invalides, animation ignorée');
+      return;
+    }
     
-    // Nettoyer le canvas avant de dessiner
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // Protection contre les opérations sur un contexte rendu invalide
+    if (typeof ctx.clearRect !== 'function') {
+      console.warn('Contexte de canvas invalide détecté, animation ignorée');
+      return;
+    }
+    
+    // Nettoyer le canvas avant de dessiner avec sécurité
+    try {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    } catch (clearError) {
+      console.error('Erreur lors du nettoyage du canvas:', clearError);
+      return; // Abandonner le dessin si le nettoyage échoue
+    }
     
     // D'abord dessiner la vague d'arrière-plan (orange), puis celle du premier plan (violette)
     // Ceci assure un ordre de superposition correct
@@ -55,32 +69,38 @@ export const drawWaves = (
       const wave = waves[i];
       const yBase = canvas.height - (canvas.height * wave.height) + wave.yOffset;
       
-      ctx.beginPath();
-      ctx.moveTo(0, canvas.height);
-      
-      // Ajuster l'amplitude en fonction de la hauteur du canvas pour garantir un aspect cohérent
-      const adjustedAmplitude = Math.min(wave.amplitude, canvas.height * 0.1);
-      
-      // Dessin de la vague avec une courbe naturelle
-      for (let x = 0; x <= canvas.width; x += 1) { // Augmenter la précision
-        const dx = x * wave.frequency;
-        // La direction influence la direction de l'animation
-        const timeOffset = wave.direction === 'right' ? time * wave.speed : -time * wave.speed;
-        const y = yBase + Math.sin(dx + timeOffset) * adjustedAmplitude;
-        ctx.lineTo(x, y);
+      try {
+        ctx.beginPath();
+        ctx.moveTo(0, canvas.height);
+        
+        // Ajuster l'amplitude en fonction de la hauteur du canvas pour garantir un aspect cohérent
+        const adjustedAmplitude = Math.min(wave.amplitude, canvas.height * 0.1);
+        
+        // Dessin de la vague avec une courbe naturelle - plus de précision
+        const step = 1; // Pas de 1px pour un dessin précis
+        for (let x = 0; x <= canvas.width; x += step) {
+          const dx = x * wave.frequency;
+          // La direction influence la direction de l'animation
+          const timeOffset = wave.direction === 'right' ? time * wave.speed : -time * wave.speed;
+          const y = yBase + Math.sin(dx + timeOffset) * adjustedAmplitude;
+          ctx.lineTo(x, y);
+        }
+        
+        ctx.lineTo(canvas.width, canvas.height);
+        ctx.lineTo(0, canvas.height);
+        
+        // Dégradé pour un effet plus naturel
+        const gradient = ctx.createLinearGradient(0, yBase - adjustedAmplitude, 0, canvas.height);
+        gradient.addColorStop(0, wave.color);
+        const colorWithAlpha = wave.color + Math.floor(wave.opacity * 255).toString(16).padStart(2, '0');
+        gradient.addColorStop(1, colorWithAlpha);
+        
+        ctx.fillStyle = gradient;
+        ctx.fill();
+      } catch (drawError) {
+        console.error("Erreur lors du dessin d'une vague:", drawError);
+        // Continue à la prochaine vague sans interrompre l'animation
       }
-      
-      ctx.lineTo(canvas.width, canvas.height);
-      ctx.lineTo(0, canvas.height);
-      
-      // Dégradé pour un effet plus naturel
-      const gradient = ctx.createLinearGradient(0, yBase - adjustedAmplitude, 0, canvas.height);
-      gradient.addColorStop(0, wave.color);
-      const colorWithAlpha = wave.color + Math.floor(wave.opacity * 255).toString(16).padStart(2, '0');
-      gradient.addColorStop(1, colorWithAlpha);
-      
-      ctx.fillStyle = gradient;
-      ctx.fill();
     }
   } catch (error) {
     console.error("Erreur lors du dessin des vagues:", error);

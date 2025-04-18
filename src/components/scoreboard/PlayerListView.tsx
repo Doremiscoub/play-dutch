@@ -1,6 +1,6 @@
 
 /**
- * Vue de la liste des joueurs avec leurs scores
+ * Vue de la liste des joueurs avec leurs scores - version optimisée
  */
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -24,23 +24,44 @@ const PlayerListView: React.FC<PlayerListViewProps> = ({
   // État pour suivre le joueur dont la carte est développée
   const [expandedPlayerId, setExpandedPlayerId] = useState<string | null>(null);
   const [isReady, setIsReady] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   
   // Protection contre les données invalides
   const validPlayers = Array.isArray(players) ? players.filter(p => p && p.id) : [];
   
-  // S'assurer que les données sont prêtes avant d'afficher
+  // Effet de montage/démontage avec protection optimisée
   useEffect(() => {
-    // Court délai pour s'assurer que les calculs sont terminés
-    const timer = setTimeout(() => {
-      setIsReady(true);
-    }, 50);
+    console.info("PlayerListView: Montage du composant");
+    setIsMounted(true);
     
-    return () => clearTimeout(timer);
-  }, [players]);
+    // Court délai pour s'assurer que les calculs sont terminés
+    const readyTimer = setTimeout(() => {
+      setIsReady(true);
+    }, 150);
+    
+    return () => {
+      console.info("PlayerListView: Démontage du composant");
+      clearTimeout(readyTimer);
+      setIsMounted(false);
+      setIsReady(false);
+      setExpandedPlayerId(null); // Réinitialiser l'état lors du démontage
+    };
+  }, []);
+  
+  // Effet de réinitialisation lorsque les joueurs changent
+  useEffect(() => {
+    if (isMounted && expandedPlayerId) {
+      // Vérifier si le joueur développé existe toujours
+      const playerExists = validPlayers.some(p => p.id === expandedPlayerId);
+      if (!playerExists) {
+        setExpandedPlayerId(null);
+      }
+    }
+  }, [validPlayers, expandedPlayerId, isMounted]);
   
   // Trier les joueurs par score (croissant)
   const sortedPlayers = [...validPlayers].sort((a, b) => 
-    (a.totalScore !== undefined && b.totalScore !== undefined) 
+    (typeof a.totalScore === 'number' && typeof b.totalScore === 'number') 
       ? a.totalScore - b.totalScore
       : 0
   );
@@ -48,11 +69,12 @@ const PlayerListView: React.FC<PlayerListViewProps> = ({
   // Calcul du seuil d'avertissement (80% de la limite)
   const warningThreshold = scoreLimit * 0.8;
   
-  // Gestion du clic sur une carte joueur
+  // Gestion du clic sur une carte joueur avec protection d'erreur
   const handlePlayerClick = (player: Player) => {
-    if (!player) return;
+    if (!player || !player.id) return;
     
     try {
+      // Notifier le conteneur de la sélection
       onPlayerSelect(player);
       
       // Si le joueur est déjà développé, on replie sa carte
@@ -64,9 +86,11 @@ const PlayerListView: React.FC<PlayerListViewProps> = ({
       }
     } catch (error) {
       console.error("Erreur lors de la gestion du clic sur un joueur:", error);
+      setExpandedPlayerId(null); // Réinitialiser en cas d'erreur
     }
   };
   
+  // Afficher un indicateur de chargement si les données ne sont pas encore prêtes
   if (!isReady) {
     return (
       <div className="flex justify-center items-center p-6">
@@ -75,6 +99,15 @@ const PlayerListView: React.FC<PlayerListViewProps> = ({
     );
   }
   
+  // Si aucun joueur valide n'est trouvé
+  if (validPlayers.length === 0) {
+    return (
+      <div className="bg-white/70 backdrop-blur-sm rounded-xl p-6 text-center text-gray-500 border border-gray-100">
+        <p>Aucun joueur disponible</p>
+      </div>
+    );
+  }
+
   return (
     <motion.div 
       className="space-y-3 md:space-y-4 pb-4"
@@ -94,7 +127,7 @@ const PlayerListView: React.FC<PlayerListViewProps> = ({
           <PlayerScoreCard
             player={player}
             position={index + 1}
-            isWinner={index === 0 && player.totalScore >= scoreLimit}
+            isWinner={index === 0 && typeof player.totalScore === 'number' && player.totalScore >= scoreLimit}
             lastRoundScore={
               player.rounds && player.rounds.length > 0 
                 ? player.rounds[player.rounds.length - 1].score 
@@ -113,12 +146,6 @@ const PlayerListView: React.FC<PlayerListViewProps> = ({
           />
         </motion.div>
       ))}
-      
-      {validPlayers.length === 0 && (
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl p-6 text-center text-gray-500 border border-gray-100">
-          <p>Aucun joueur disponible</p>
-        </div>
-      )}
     </motion.div>
   );
 };

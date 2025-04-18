@@ -1,12 +1,13 @@
 
 /**
- * Contenu principal de la page de jeu
+ * Contenu principal de la page de jeu avec gestion d'erreurs renforcée
  */
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Player } from '@/types';
 import ErrorBoundary from './ErrorBoundary';
 import ScoreBoard from './ScoreBoard';
 import GameResultOverlay from './game/GameResultOverlay';
+import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 
 interface GameContentProps {
   players: Player[];
@@ -37,52 +38,116 @@ const GameContent: React.FC<GameContentProps> = ({
   onContinueGame,
   onRestart
 }) => {
+  // État pour suivre l'initialisation sécurisée du composant
+  const [isInitialized, setIsInitialized] = useState<boolean>(false);
+  const [hasMounted, setHasMounted] = useState<boolean>(false);
+  
   // Journalisation pour suivre le cycle de vie
   useEffect(() => {
     console.info("GameContent: Montage du composant");
+    setHasMounted(true);
+    
+    // Délai court pour permettre aux sous-composants de s'initialiser correctement
+    const initTimer = setTimeout(() => {
+      setIsInitialized(true);
+    }, 100);
+    
     return () => {
       console.info("GameContent: Démontage du composant");
+      clearTimeout(initTimer);
+      setHasMounted(false);
+      setIsInitialized(false);
     };
   }, []);
   
   // Journalisation des changements dans les données principales
   useEffect(() => {
-    console.info("GameContent: Mise à jour du tableau des scores", {
-      playerCount: players.length,
-      roundCount: roundHistory.length,
-      showGameOver
-    });
-  }, [players, roundHistory, showGameOver]);
+    if (hasMounted) {
+      console.info("GameContent: Mise à jour du tableau des scores", {
+        playerCount: Array.isArray(players) ? players.length : 0,
+        roundCount: Array.isArray(roundHistory) ? roundHistory.length : 0,
+        showGameOver
+      });
+    }
+  }, [players, roundHistory, showGameOver, hasMounted]);
 
-  // Fallback UI en cas d'erreur
-  const ErrorFallback = ({ error }: { error: Error }) => (
-    <div className="p-6 bg-red-50 rounded-lg border border-red-200 m-4">
-      <h3 className="text-xl font-bold text-red-700 mb-2">Une erreur est survenue</h3>
-      <p className="text-red-600 mb-4">
-        {error.message}
-      </p>
-      <p className="text-gray-600 mb-4">
-        Essayez de rafraîchir la page ou de revenir à l'accueil.
-      </p>
-      <button 
-        onClick={() => window.location.href = '/'}
-        className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
-      >
-        Retour à l'accueil
-      </button>
+  // Fallback UI en cas d'erreur avec détails améliorés
+  const ErrorFallback = ({ error, errorInfo, errorCode, reset }: { 
+    error: Error; 
+    errorInfo: ErrorInfo; 
+    errorCode: string;
+    reset?: () => void;
+  }) => (
+    <div className="p-6 bg-white rounded-lg shadow-md m-4">
+      <Alert variant="destructive" className="mb-6">
+        <AlertTitle className="text-xl font-bold mb-2">Une erreur est survenue</AlertTitle>
+        <AlertDescription>
+          <p className="text-red-600 mb-4">{error.message}</p>
+          <div className="text-xs text-muted-foreground mt-2 font-mono">Code: {errorCode}</div>
+        </AlertDescription>
+      </Alert>
+      
+      <div className="text-gray-600 mb-4">
+        <p>Essayez de rafraîchir la page ou de revenir à l'accueil.</p>
+        
+        {process.env.NODE_ENV !== 'production' && (
+          <details className="mt-4 text-xs">
+            <summary className="cursor-pointer">Détails techniques</summary>
+            <pre className="mt-2 p-3 bg-gray-100 rounded overflow-auto">
+              {errorInfo?.componentStack || error.stack}
+            </pre>
+          </details>
+        )}
+      </div>
+      
+      <div className="flex gap-4">
+        {reset && (
+          <button 
+            onClick={reset}
+            className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors"
+          >
+            Réessayer
+          </button>
+        )}
+        <button 
+          onClick={() => window.location.reload()}
+          className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+        >
+          Rafraîchir
+        </button>
+        <button 
+          onClick={() => window.location.href = '/'}
+          className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors"
+        >
+          Accueil
+        </button>
+      </div>
     </div>
   );
+
+  // Vérification de la validité des données
+  const validPlayers = Array.isArray(players) ? players : [];
+  const validRoundHistory = Array.isArray(roundHistory) ? roundHistory : [];
+  
+  // Protection contre l'affichage pendant l'initialisation
+  if (!hasMounted || !isInitialized) {
+    return (
+      <div className="flex justify-center items-center min-h-[50vh]">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-dutch-blue border-t-transparent"></div>
+      </div>
+    );
+  }
 
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
       {/* Tableau des scores */}
-      {players && players.length > 0 ? (
+      {validPlayers.length > 0 ? (
         <ScoreBoard
-          players={players}
+          players={validPlayers}
           onAddRound={onAddRound}
           onUndoLastRound={onUndoLastRound}
           onEndGame={onRequestEndGame}
-          roundHistory={roundHistory}
+          roundHistory={validRoundHistory}
           showGameEndConfirmation={showGameEndConfirmation}
           onConfirmEndGame={onConfirmEndGame}
           onCancelEndGame={onCancelEndGame}
@@ -94,11 +159,11 @@ const GameContent: React.FC<GameContentProps> = ({
         </div>
       )}
 
-      {/* Overlay de fin de partie - Implémentation plus robuste avec clé qui ne change pas constamment */}
-      {showGameOver && players && players.length > 0 && (
+      {/* Overlay de fin de partie - Implémentation plus robuste */}
+      {showGameOver && validPlayers.length > 0 && (
         <GameResultOverlay
-          key={`game-over`} // Clé plus stable
-          players={players}
+          key={`game-over`}
+          players={validPlayers}
           onContinue={onContinueGame}
           onRestart={onRestart}
           scoreLimit={scoreLimit}
