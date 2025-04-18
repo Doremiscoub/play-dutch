@@ -1,38 +1,38 @@
+
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 
-const DEFAULT_MESSAGE = "Bonjour, je suis le Professeur Cartouche !";
-
 interface ProfessorAvatarProps {
   message?: string;
+  size?: number;
 }
 
-const PROFESSOR_IMAGE = 'https://play-dutch.com/images/professor-cartouche.png';
-const FALLBACK_IMAGE = '/images/professor-cartouche.png';
+const SOURCES = [
+  '/assets/professeur-cartouche-avatar.png',  // chemin public absolu
+  './assets/professeur-cartouche-avatar.png', // chemin relatif fallback
+];
 
-const ProfessorAvatar: React.FC<ProfessorAvatarProps> = ({ message = DEFAULT_MESSAGE }) => {
-  const [imageSrc, setImageSrc] = useState<string>(PROFESSOR_IMAGE);
-  const [imageError, setImageError] = useState<boolean>(false);
-  const [loadAttempt, setLoadAttempt] = useState<number>(0);
-
+const ProfessorAvatar: React.FC<ProfessorAvatarProps> = ({ 
+  message,
+  size = 96
+}) => {
+  const [srcIndex, setSrcIndex] = useState(0);
+  
   const handleImageError = () => {
-    console.error(`Erreur de chargement de l'image: ${imageSrc}, tentative ${loadAttempt+1}`);
-    
-    if (loadAttempt === 0) {
-      setImageSrc(FALLBACK_IMAGE);
-      setLoadAttempt(1);
-    } else if (loadAttempt === 1) {
-      setImageSrc('./images/professor-cartouche.png');
-      setLoadAttempt(2);
+    if (srcIndex < SOURCES.length - 1) {
+      setSrcIndex(i => i + 1);
     } else {
-      setImageError(true);
+      setSrcIndex(-1); // Affichera l'emoji
     }
   };
+
+  const avatarSrc = srcIndex >= 0 ? SOURCES[srcIndex] : null;
+  const sizeClass = `w-[${size}px] h-[${size}px]`;
 
   return (
     <div className="flex items-center gap-3">
       <motion.div 
-        className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden border-2 border-dutch-purple bg-white/10 shadow-lg flex items-center justify-center"
+        className={`relative rounded-full overflow-hidden border-2 border-dutch-purple bg-white/10 shadow-lg flex items-center justify-center ${sizeClass}`}
         animate={{ 
           scale: [1, 1.05, 1],
           rotate: [0, 1, -1, 0],
@@ -44,9 +44,9 @@ const ProfessorAvatar: React.FC<ProfessorAvatarProps> = ({ message = DEFAULT_MES
         }}
         whileHover={{ scale: 1.1, rotate: [-2, 2, -2] }}
       >
-        {!imageError ? (
+        {avatarSrc ? (
           <img 
-            src={imageSrc}
+            src={avatarSrc}
             alt="Professeur Cartouche"
             className="w-full h-full object-cover"
             onError={handleImageError}
