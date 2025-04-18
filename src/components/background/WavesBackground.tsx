@@ -3,7 +3,7 @@ import React from 'react';
 
 const YellowWave = () => (
   <svg
-    className="absolute bottom-[10vh] w-[200%] h-[16vh] animate-waveYellow"
+    className="absolute bottom-[3vh] w-[200%] h-[14vh] animate-waveYellow"
     viewBox="0 0 1440 200" 
     preserveAspectRatio="none"
   >
@@ -17,7 +17,7 @@ const YellowWave = () => (
 
 const PurpleWave = () => (
   <svg
-    className="absolute bottom-0 w-[200%] h-[14vh] animate-wavePurple"
+    className="absolute bottom-0 w-[200%] h-[12vh] animate-wavePurple"
     viewBox="0 0 1440 200" 
     preserveAspectRatio="none"
   >

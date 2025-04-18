@@ -253,9 +253,9 @@
 }
 
 .animate-waveYellow { 
-  animation: waveYellow 60s linear infinite; 
+  animation: waveYellow 40s linear infinite; 
 }
 
 .animate-wavePurple { 
-  animation: wavePurple 120s linear infinite; 
+  animation: wavePurple 80s linear infinite; 
 }
