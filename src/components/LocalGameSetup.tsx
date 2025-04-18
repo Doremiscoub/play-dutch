@@ -7,12 +7,12 @@ import PlayerCountSelector from './game-setup/PlayerCountSelector';
 
 interface LocalGameSetupProps {
   onStartGame: (playerNames: string[]) => void;
+  isSubmitting?: boolean;
 }
 
-const LocalGameSetup: React.FC<LocalGameSetupProps> = ({ onStartGame }) => {
+const LocalGameSetup: React.FC<LocalGameSetupProps> = ({ onStartGame, isSubmitting = false }) => {
   const [numPlayers, setNumPlayers] = useState(4);
   const [playerNames, setPlayerNames] = useState<string[]>(Array(4).fill('').map((_, i) => `Joueur ${i + 1}`));
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleNumPlayersChange = (increment: boolean) => {
     const newNum = increment 
@@ -38,21 +38,18 @@ const LocalGameSetup: React.FC<LocalGameSetupProps> = ({ onStartGame }) => {
     e.preventDefault();
     if (isSubmitting) return;
     
-    setIsSubmitting(true);
+    console.log("LocalGameSetup: Soumission du formulaire");
     
     try {
-      // Ensure all player names are valid
-      const validPlayerNames = playerNames.map(name => 
-        name.trim() === '' ? `Joueur ${playerNames.indexOf(name) + 1}` : name.trim()
+      // Vérification des noms des joueurs
+      const validPlayerNames = playerNames.map((name, index) => 
+        name.trim() === '' ? `Joueur ${index + 1}` : name.trim()
       );
       
+      console.log("LocalGameSetup: Noms validés:", validPlayerNames);
       onStartGame(validPlayerNames);
     } catch (error) {
-      console.error("Erreur lors de la configuration des joueurs:", error);
-    } finally {
-      setTimeout(() => {
-        setIsSubmitting(false);
-      }, 500);
+      console.error("LocalGameSetup: Erreur lors de la soumission:", error);
     }
   };
 

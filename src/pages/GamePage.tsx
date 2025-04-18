@@ -1,13 +1,14 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useGameState } from '@/hooks/useGameState';
 import GameContent from '@/components/GameContent';
 import { updateAllPlayersStats } from '@/utils/playerStatsCalculator';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Home, RefreshCw } from 'lucide-react';
+import { toast } from 'sonner';
 
 const GamePageErrorFallback = ({ error, errorInfo, errorCode, reset }: { 
   error: Error; 
@@ -67,30 +68,52 @@ const GamePageErrorFallback = ({ error, errorInfo, errorCode, reset }: {
 
 const GamePage: React.FC = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [isReady, setIsReady] = useState(false);
-  const {
-    players,
-    roundHistory,
-    showGameOver,
-    showGameEndConfirmation,
-    scoreLimit,
-    handleAddRound,
-    handleUndoLastRound,
-    handleRequestEndGame,
-    handleConfirmEndGame,
-    handleCancelEndGame,
-    handleContinueGame,
-    handleRestart
-  } = useGameState();
+  const [initializationTimeout, setInitializationTimeout] = useState(false);
+  
+  const gameState = useGameState();
+  const { players, roundHistory, showGameOver, showGameEndConfirmation, scoreLimit } = gameState;
+  
+  // Fonction de vérification d'état de jeu valide avec navigation de secours
+  const checkGameState = useCallback(() => {
+    console.info("Vérification de l'état du jeu:", {
+      playersExist: Array.isArray(players) && players.length > 0,
+      playerCount: Array.isArray(players) ? players.length : 0
+    });
+    
+    if (!Array.isArray(players) || players.length === 0) {
+      console.warn("Aucun joueur disponible, redirection vers la configuration");
+      
+      // Réinitialiser localStorage pour éviter les boucles de redirection
+      localStorage.removeItem('current_dutch_game');
+      localStorage.removeItem('dutch_new_game_requested');
+      
+      // Forcer une navigation vers l'écran de configuration
+      toast.error("Aucun joueur disponible. Veuillez configurer une nouvelle partie.");
+      navigate('/game/setup');
+      return false;
+    }
+    
+    return true;
+  }, [players, navigate]);
   
   useEffect(() => {
     console.info("GamePage: Montage du composant");
     
     // Reset flag
-    localStorage.removeItem('dutch_game_page_visited');
     localStorage.setItem('dutch_game_page_visited', 'true');
     
-    // Ajouter un délai pour s'assurer que l'initialisation est terminée
+    // Délai pour vérifier l'initialisation
+    const timeoutHandler = setTimeout(() => {
+      // Si après 1.5 secondes, nous n'avons toujours pas de joueurs, considérons que c'est un timeout
+      if (!Array.isArray(players) || players.length === 0) {
+        setInitializationTimeout(true);
+        console.warn("Timeout d'initialisation atteint");
+      }
+    }, 1500);
+    
+    // Délai pour marquer la page comme prête
     const initTimer = setTimeout(() => {
       setIsReady(true);
     }, 300);
@@ -98,39 +121,44 @@ const GamePage: React.FC = () => {
     return () => {
       console.info("GamePage: Démontage du composant");
       clearTimeout(initTimer);
+      clearTimeout(timeoutHandler);
       setIsReady(false);
+      setInitializationTimeout(false);
     };
   }, []);
   
+  // Effet pour vérifier l'état du jeu à chaque changement important
   useEffect(() => {
-    if (players && Array.isArray(players)) {
+    if (isReady && players) {
       console.info("GamePage: Mise à jour des données", {
-        playerCount: players.length,
-        roundCount: roundHistory?.length || 0,
+        playerCount: Array.isArray(players) ? players.length : 0,
+        roundCount: Array.isArray(roundHistory) ? roundHistory.length : 0,
         showGameOver
       });
     }
-  }, [players, roundHistory, showGameOver]);
+  }, [isReady, players, roundHistory, showGameOver]);
   
-  // Vérifier si l'état du jeu est valide
-  const gameStateValid = Array.isArray(players) && players.length > 0;
-  
-  // Si la page est prête mais qu'aucun joueur n'est défini, rediriger vers la configuration
+  // Effet pour vérifier l'initialisation complète après que la page soit prête
   useEffect(() => {
-    if (isReady && !gameStateValid) {
-      const redirectTimer = setTimeout(() => {
-        console.warn("Aucun joueur disponible après initialisation, redirection vers la configuration");
-        window.location.href = '/game/setup';
-      }, 500);
-      
-      return () => clearTimeout(redirectTimer);
+    if (isReady) {
+      checkGameState();
     }
-  }, [isReady, gameStateValid]);
+  }, [isReady, checkGameState]);
   
+  // Effet pour gérer le timeout d'initialisation
+  useEffect(() => {
+    if (initializationTimeout) {
+      console.warn("Timeout d'initialisation atteint, navigation vers la configuration");
+      navigate('/game/setup');
+    }
+  }, [initializationTimeout, navigate]);
+  
+  // Mémoriser la route pour le retour des paramètres
   useEffect(() => {
     localStorage.setItem('dutch_previous_route', location.pathname);
   }, [location]);
   
+  // Afficher un indicateur de chargement si la page n'est pas prête
   if (!isReady) {
     return (
       <div className="flex justify-center items-center min-h-screen">
@@ -139,10 +167,27 @@ const GamePage: React.FC = () => {
     );
   }
   
-  const safePlayersWithStats = Array.isArray(players) && players.length > 0
-    ? updateAllPlayersStats(players)
-    : [];
+  // Vérifier à nouveau l'état du jeu avant de rendre le contenu
+  if (!Array.isArray(players) || players.length === 0) {
+    return (
+      <div className="flex justify-center items-center min-h-screen flex-col p-6">
+        <Alert variant="warning" className="mb-6 max-w-md">
+          <AlertTitle>Aucun joueur disponible</AlertTitle>
+          <AlertDescription>
+            Veuillez configurer une nouvelle partie.
+          </AlertDescription>
+        </Alert>
+        <Button 
+          onClick={() => navigate('/game/setup')} 
+          className="mt-4 bg-dutch-blue text-white"
+        >
+          Configurer une partie
+        </Button>
+      </div>
+    );
+  }
   
+  const safePlayersWithStats = updateAllPlayersStats(players);
   const safeRoundHistory = Array.isArray(roundHistory) ? roundHistory : [];
   
   return (
@@ -153,13 +198,13 @@ const GamePage: React.FC = () => {
         showGameOver={showGameOver}
         showGameEndConfirmation={showGameEndConfirmation}
         scoreLimit={scoreLimit}
-        onAddRound={handleAddRound}
-        onUndoLastRound={handleUndoLastRound}
-        onRequestEndGame={handleRequestEndGame}
-        onConfirmEndGame={handleConfirmEndGame}
-        onCancelEndGame={handleCancelEndGame}
-        onContinueGame={handleContinueGame}
-        onRestart={handleRestart}
+        onAddRound={gameState.handleAddRound}
+        onUndoLastRound={gameState.handleUndoLastRound}
+        onRequestEndGame={gameState.handleRequestEndGame}
+        onConfirmEndGame={gameState.handleConfirmEndGame}
+        onCancelEndGame={gameState.handleCancelEndGame}
+        onContinueGame={gameState.handleContinueGame}
+        onRestart={gameState.handleRestart}
       />
     </ErrorBoundary>
   );

@@ -101,18 +101,12 @@ export const useGameState = () => {
         console.info('Nouvelle partie demandée:', isNewGameRequested);
         
         // Vérifier et définir explicitement le mode de jeu (toujours local pour l'instant)
-        const gameMode = localStorage.getItem('dutch_game_mode');
-        if (!gameMode) {
-          console.info('Mode de jeu non défini, définition à local par défaut');
-          localStorage.setItem('dutch_game_mode', 'local');
-        }
-        console.info('Mode de jeu détecté:', gameMode || 'local');
+        const gameMode = localStorage.getItem('dutch_game_mode') || 'local';
+        console.info('Mode de jeu détecté:', gameMode);
         
         // Si une nouvelle partie est demandée, la créer immédiatement
         if (isNewGameRequested) {
           console.info("Nouvelle partie explicitement demandée, création...");
-          // Supprimer le flag pour éviter la réinitialisation accidentelle
-          localStorage.removeItem('dutch_new_game_requested');
           
           // TOUJOURS créer une nouvelle partie locale
           const success = await createNewGame();
@@ -150,8 +144,15 @@ export const useGameState = () => {
           initializationCompleted.current = true;
           toast.success('Partie existante chargée !');
         } else {
-          console.info("Aucune partie sauvegardée trouvée, redirection vers la configuration");
-          navigate('/game/setup');
+          console.info("Aucune partie sauvegardée trouvée, tentative de création d'une nouvelle partie");
+          
+          // Tentative de création d'une nouvelle partie avec les données existantes
+          const success = await createNewGame();
+          
+          if (!success) {
+            console.info("Redirection vers la configuration");
+            navigate('/game/setup');
+          }
         }
       };
       

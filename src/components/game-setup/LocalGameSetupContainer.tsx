@@ -1,42 +1,55 @@
 
-import React from 'react';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
-import { Smartphone } from 'lucide-react';
-import LocalGameSetup from './LocalGameSetup';
+import React, { useState } from 'react';
+import { toast } from 'sonner';
+import { useNavigate } from 'react-router-dom';
+import LocalGameSetup from '../LocalGameSetup';
 
-interface LocalGameSetupContainerProps {
+const LocalGameSetupContainer: React.FC<{
   onStartGame: (playerNames: string[]) => void;
-}
+}> = ({ onStartGame }) => {
+  const [isProcessing, setIsProcessing] = useState(false);
+  const navigate = useNavigate();
 
-const LocalGameSetupContainer: React.FC<LocalGameSetupContainerProps> = ({ onStartGame }) => {
-  return (
-    <div className="space-y-6">
-      <Card 
-        className="rounded-3xl border border-white/50 bg-white/80 backdrop-blur-md shadow-md"
-      >
-        <CardHeader className="pb-2">
-          <CardTitle className="text-xl font-semibold text-dutch-blue flex items-center gap-2">
-            <Smartphone className="h-5 w-5" />
-            Un seul téléphone
-          </CardTitle>
-          <CardDescription className="text-gray-600">
-            Tous les joueurs partagent le même appareil pour suivre les scores
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="bg-dutch-blue/5 rounded-xl p-4 text-sm text-gray-600">
-            <p>Parfait pour jouer ensemble autour d'une table. Chaque joueur entre son score à son tour sur cet appareil.</p>
-          </div>
-        </CardContent>
-      </Card>
+  const handleStartGame = (playerNames: string[]) => {
+    try {
+      setIsProcessing(true);
+      console.info('LocalGameSetupContainer: Démarrage de la partie avec les joueurs:', playerNames);
+      
+      if (playerNames.length < 2) {
+        toast.error('Il faut au moins 2 joueurs pour commencer une partie');
+        setIsProcessing(false);
+        return;
+      }
 
-      <Card className="rounded-3xl border border-white/50 bg-white/90 backdrop-blur-md shadow-md">
-        <CardContent className="pt-6">
-          <LocalGameSetup onStartGame={onStartGame} />
-        </CardContent>
-      </Card>
-    </div>
-  );
+      // IMPORTANT: Nettoyage complet des données précédentes pour éviter les conflits
+      console.info('LocalGameSetupContainer: Nettoyage des données précédentes');
+      localStorage.removeItem('current_dutch_game');
+      
+      // Forcer un flag de création de nouvelle partie
+      localStorage.setItem('dutch_new_game_requested', 'true');
+      
+      // Stocker explicitement le mode de jeu
+      localStorage.setItem('dutch_game_mode', 'local');
+      
+      // Stocker les noms dans localStorage APRÈS avoir nettoyé les autres données
+      console.info('LocalGameSetupContainer: Enregistrement des noms de joueurs:', playerNames);
+      localStorage.setItem('dutch_player_setup', JSON.stringify(playerNames));
+      
+      toast.success("Configuration des joueurs enregistrée");
+      
+      // Délai pour s'assurer que localStorage est bien mis à jour
+      setTimeout(() => {
+        onStartGame(playerNames);
+        setIsProcessing(false);
+      }, 200);
+    } catch (error) {
+      console.error("LocalGameSetupContainer: Erreur lors de la configuration des joueurs:", error);
+      toast.error("Erreur lors de la configuration des joueurs");
+      setIsProcessing(false);
+    }
+  };
+
+  return <LocalGameSetup onStartGame={handleStartGame} isSubmitting={isProcessing} />;
 };
 
 export default LocalGameSetupContainer;

@@ -24,6 +24,9 @@ export const useGameInitialization = () => {
   const createNewGame = useCallback(() => {
     try {
       console.info('Tentative de création d\'une nouvelle partie...');
+      console.info('État actuel - initializationCompleted:', initializationCompleted.current);
+      console.info('État actuel - initializationAttempted:', initializationAttempted.current);
+      console.info('État actuel - initializationInProgress:', initializationInProgress.current);
       
       // Réinitialiser les flags de notification pour éviter les doublons
       resetNotificationFlags();
@@ -35,10 +38,6 @@ export const useGameInitialization = () => {
       }
       
       initializationInProgress.current = true;
-      
-      // IMPORTANT: Nettoyer la partie en cours AVANT de créer une nouvelle partie
-      console.info('Nettoyage de la partie existante avant création...');
-      localStorage.removeItem('current_dutch_game');
       
       console.info('Tentative d\'initialisation via localStorage');
       
@@ -52,9 +51,14 @@ export const useGameInitialization = () => {
         initializationInProgress.current = false;
         
         // Redirection vers la configuration
+        toast.error("Configuration de la partie invalide");
         navigate('/game/setup');
         return false;
       }
+      
+      // IMPORTANT: Nettoyer la partie en cours AVANT de créer une nouvelle partie
+      console.info('Nettoyage de la partie existante avant création...');
+      localStorage.removeItem('current_dutch_game');
       
       const newPlayers = initializePlayers();
       console.info('Joueurs initialisés:', newPlayers);
@@ -66,6 +70,7 @@ export const useGameInitialization = () => {
         initializationInProgress.current = false;
         
         // Redirection vers la configuration
+        toast.error("Impossible d'initialiser les joueurs");
         navigate('/game/setup');
         return false;
       }
@@ -73,11 +78,19 @@ export const useGameInitialization = () => {
       console.info('Joueurs initialisés avec succès:', newPlayers.length, 'joueurs');
       
       setPlayers(newPlayers);
-      setGameStartTime(new Date());
+      const now = new Date();
+      setGameStartTime(now);
       
       // Marquer l'initialisation comme terminée
       initializationCompleted.current = true;
       initializationInProgress.current = false;
+      
+      // Supprimer le flag de nouvelle partie après initialisation réussie
+      localStorage.removeItem('dutch_new_game_requested');
+      
+      // Complètement supprimer la configuration des joueurs pour éviter les confusions
+      // Nous le faisons seulement après avoir validé que setPlayers a été appelé avec succès
+      clearPlayerSetup();
       
       toast.success('Nouvelle partie locale créée !');
       return true;

@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
-import { cleanupGameState } from '@/utils/gameUtils';
 import AnimatedBackground from './AnimatedBackground';
 import { Tabs, TabsContent } from '@/components/ui/tabs';
 import GameModeTabs from './game-setup/GameModeTabs';
@@ -14,54 +13,59 @@ const GameSetup: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>("local");
   const [isSubmitting, setIsSubmitting] = useState(false);
   
-  // Nettoyage partiel de l'état lors de l'entrée sur la page de configuration
+  // Nettoyage de l'état lors de l'entrée sur la page de configuration
   useEffect(() => {
-    console.info("Nettoyage partiel de l'état du jeu au montage de GameSetup");
-    
-    // Supprimer le flag de demande de nouvelle partie
-    localStorage.removeItem('dutch_new_game_requested');
-    
-    // Supprimer la partie en cours
-    localStorage.removeItem('current_dutch_game');
+    console.info("GameSetup: Nettoyage de l'état du jeu au montage");
     
     // Définir le mode par défaut à local
     localStorage.setItem('dutch_game_mode', 'local');
+    
+    // Nous ne supprimons pas la partie en cours ni la configuration des joueurs ici
+    // pour permettre une reprise éventuelle
   }, []);
 
   const handleStartGame = (playerNames: string[]) => {
     if (isSubmitting) {
-      console.info("Soumission déjà en cours, éviter les clics multiples");
+      console.info("GameSetup: Soumission déjà en cours, éviter les clics multiples");
       return;
     }
     
     setIsSubmitting(true);
     
     try {
-      console.info('Démarrage de la partie avec les joueurs:', playerNames);
+      console.info('GameSetup: Démarrage de la partie avec les joueurs:', playerNames);
       
-      if (playerNames.length < 2) {
-        console.error("Erreur: moins de 2 joueurs");
+      if (!playerNames || playerNames.length < 2) {
+        console.error("GameSetup: Erreur: moins de 2 joueurs");
         toast.error('Il faut au moins 2 joueurs pour commencer une partie');
         setIsSubmitting(false);
         return;
       }
       
-      // Stockage des noms des joueurs pour l'initialisation
-      localStorage.setItem('dutch_player_setup', JSON.stringify(playerNames));
+      // Vérification que les données sont bien en localStorage
+      const storedPlayers = localStorage.getItem('dutch_player_setup');
+      if (!storedPlayers) {
+        console.info("GameSetup: Configuration des joueurs non trouvée, enregistrement...");
+        localStorage.setItem('dutch_player_setup', JSON.stringify(playerNames));
+      }
       
       // Ajouter un flag pour forcer une nouvelle partie
       localStorage.setItem('dutch_new_game_requested', 'true');
       
-      // Définir explicitement le mode de jeu
-      localStorage.setItem('dutch_game_mode', 'local');
+      console.info("GameSetup: Configuration sauvegardée, navigation vers /game");
       
-      console.info("Configuration sauvegardée, navigation vers /game");
-      
-      // Navigation vers la page de jeu
-      navigate('/game');
+      // Ajoutons un délai pour s'assurer que localStorage est à jour
+      setTimeout(() => {
+        navigate('/game');
+        
+        // Réinitialiser le flag de soumission après un délai supplémentaire
+        setTimeout(() => {
+          setIsSubmitting(false);
+        }, 300);
+      }, 200);
       
     } catch (error) {
-      console.error("Erreur lors du démarrage de la partie:", error);
+      console.error("GameSetup: Erreur lors du démarrage de la partie:", error);
       toast.error("Une erreur est survenue lors de la création de la partie");
       setIsSubmitting(false);
     }

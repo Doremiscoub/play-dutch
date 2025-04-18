@@ -78,9 +78,7 @@ export const initializePlayers = (): Player[] | null => {
     
     console.info("Joueurs initialisés:", newPlayers);
     
-    // IMPORTANT: Ne pas supprimer la configuration tant que les données ne sont pas sauvegardées ailleurs
-    //console.info('Configuration des joueurs nettoyée après initialisation réussie');
-    //localStorage.removeItem('dutch_player_setup');
+    // Ne pas supprimer la configuration tant que les données ne sont pas confirmées comme sauvegardées ailleurs
     
     return newPlayers;
   } catch (error) {
@@ -98,8 +96,8 @@ export const initializePlayers = (): Player[] | null => {
  */
 export const clearPlayerSetup = () => {
   try {
-    // NE PAS supprimer la configuration pour permettre l'initialisation de la partie
-    console.info('Configuration des joueurs conservée pour initialisation');
+    console.info('Suppression de la configuration des joueurs');
+    localStorage.removeItem('dutch_player_setup');
     // Reset notification flag when clearing setup
     errorNotificationShown = false;
     verificationErrorShown = false;
