@@ -1,3 +1,4 @@
+
 /**
  * Scène 3D complète pour le Professeur Cartouche
  * Optimisée pour les performances mobiles et avec fallback
@@ -7,6 +8,13 @@ import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Stage, useProgress } from '@react-three/drei';
 import { CartoucheAvatar } from './CartoucheAvatar';
 import ErrorBoundary from '../ErrorBoundary';
+
+// Alternative fallback images in case the 3D model fails
+const FALLBACK_IMAGES = [
+  '/professor.png',
+  '/lovable-uploads/37b79686-1328-46bb-aee6-44d0e904fc20.png',
+  '/lovable-uploads/a2234ca1-7b29-4c32-8167-2ff6be271875.png'
+];
 
 // Composant pour afficher une erreur de rendu 3D
 const FallbackErrorComponent = ({ error }: { error: Error }) => {
@@ -54,10 +62,12 @@ export default function CartoucheScene({
   className = '',
   autoRotate = true,
   enableZoom = false,
-  fallbackImage = '/lovable-uploads/37b79686-1328-46bb-aee6-44d0e904fc20.png'
+  fallbackImage
 }: CartoucheSceneProps) {
   const [hasError, setHasError] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [currentFallbackIndex, setCurrentFallbackIndex] = useState<number>(0);
+  const actualFallbackImage = fallbackImage || FALLBACK_IMAGES[currentFallbackIndex];
   
   // Vérifier l'existence du modèle 3D
   useEffect(() => {
@@ -66,6 +76,7 @@ export default function CartoucheScene({
         setIsLoading(true);
         const response = await fetch('/models/cartouche.glb');
         if (!response.ok) {
+          console.warn(`Modèle 3D non disponible: ${response.status}. Utilisation d'un fallback.`);
           throw new Error(`Modèle non disponible: ${response.status}`);
         }
         setHasError(false);
@@ -80,18 +91,25 @@ export default function CartoucheScene({
     checkModelAvailability();
   }, []);
   
+  // Handle fallback image error
+  const handleFallbackImageError = () => {
+    console.warn(`Fallback image failed: ${actualFallbackImage}`);
+    if (currentFallbackIndex < FALLBACK_IMAGES.length - 1) {
+      setCurrentFallbackIndex(prevIndex => prevIndex + 1);
+    } else {
+      console.error("All fallback images failed");
+    }
+  };
+  
   // Si une erreur est détectée ou le modèle est en cours de chargement, afficher l'image de secours
   if (hasError || isLoading) {
     return (
       <div className={`w-full h-full ${className} flex items-center justify-center`}>
         <img 
-          src={fallbackImage}
+          src={actualFallbackImage}
           alt="Professeur Cartouche"
           className="w-full h-full object-contain"
-          onError={(e) => {
-            e.currentTarget.onerror = null;
-            e.currentTarget.src = '/lovable-uploads/a2234ca1-7b29-4c32-8167-2ff6be271875.png';
-          }}
+          onError={handleFallbackImageError}
         />
       </div>
     );

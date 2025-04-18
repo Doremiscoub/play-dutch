@@ -1,14 +1,18 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Volume2 } from 'lucide-react';
 import { Button } from './ui/button';
 import { useElevenLabs } from '@/hooks/use-eleven-labs';
 import { useSound } from '@/hooks/use-sound';
 
-// Ensure these paths are correct and images exist
-const PROFESSOR_IMAGE_URL = '/lovable-uploads/1dc0ac6d-dc08-4029-a06a-eec0c5a6ce7f.png';
-const FALLBACK_IMAGE_URL = '/lovable-uploads/a2234ca1-7b29-4c32-8167-2ff6be271875.png';
-const NEWLY_UPLOADED_IMAGE = '/lovable-uploads/37b79686-1328-46bb-aee6-44d0e904fc20.png';
+// Define image paths with proper public path prefixes
+const PROFESSOR_IMAGES = [
+  '/professor.png', // Try the root public directory first
+  '/lovable-uploads/37b79686-1328-46bb-aee6-44d0e904fc20.png', // Then the newly uploaded image
+  '/lovable-uploads/1dc0ac6d-dc08-4029-a06a-eec0c5a6ce7f.png', // Then the original path
+  '/lovable-uploads/a2234ca1-7b29-4c32-8167-2ff6be271875.png' // Final fallback
+];
 
 interface ProfessorAvatarProps {
   message: string;
@@ -16,19 +20,27 @@ interface ProfessorAvatarProps {
 }
 
 const ProfessorAvatar: React.FC<ProfessorAvatarProps> = ({ message, onSpeakMessage }) => {
-  const [imageError, setImageError] = useState<boolean>(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
   const { config: elevenLabsConfig, speakWithFallback, isLoading: isSpeaking } = useElevenLabs();
   const { isSoundEnabled } = useSound();
   
-  // Function to handle multiple fallback images
-  const getImageSource = () => {
-    if (imageError) {
-      return FALLBACK_IMAGE_URL;
+  // Log which image is being attempted
+  useEffect(() => {
+    console.info("Trying to load professor image:", PROFESSOR_IMAGES[currentImageIndex]);
+  }, [currentImageIndex]);
+  
+  // Handle image error by trying the next available image
+  const handleImageError = () => {
+    console.warn(`Professor image failed to load: ${PROFESSOR_IMAGES[currentImageIndex]}`);
+    
+    if (currentImageIndex < PROFESSOR_IMAGES.length - 1) {
+      setCurrentImageIndex(prevIndex => prevIndex + 1);
+    } else {
+      console.error("All professor images failed to load");
     }
-    return [PROFESSOR_IMAGE_URL, NEWLY_UPLOADED_IMAGE].find(url => url) || FALLBACK_IMAGE_URL;
   };
   
-  // Speak function remains the same
+  // Function to handle speaking
   const handleSpeak = async () => {
     if (isSoundEnabled) {
       if (onSpeakMessage) {
@@ -56,13 +68,10 @@ const ProfessorAvatar: React.FC<ProfessorAvatarProps> = ({ message, onSpeakMessa
           whileHover={{ scale: 1.1 }}
         >
           <img 
-            src={getImageSource()}
+            src={PROFESSOR_IMAGES[currentImageIndex]}
             alt="Professeur Cartouche"
             className="w-full h-full object-contain"
-            onError={() => {
-              console.warn("Image principale du Professeur non chargée, utilisation du fallback");
-              setImageError(true);
-            }}
+            onError={handleImageError}
             loading="eager"
           />
         </motion.div>
