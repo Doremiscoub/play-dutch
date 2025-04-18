@@ -5,9 +5,10 @@ import { Volume2 } from 'lucide-react';
 import { Button } from './ui/button';
 import { useElevenLabs } from '@/hooks/use-eleven-labs';
 import { useSound } from '@/hooks/use-sound';
+import { useImageLoader } from '@/hooks/useImageLoader';
 
-// L'image uploadée par l'utilisateur via Lovable
-const PROFESSOR_IMAGE = '/lovable-uploads/1d25f29e-0bf1-4814-80e4-e49b9f499b7d.png';
+// Chemin de l'image du professeur
+const PROFESSOR_IMAGE = '/lovable-uploads/eec3a146-6881-46bc-ae99-a31c48c67c5e.png';
 
 interface ProfessorAvatarProps {
   message: string;
@@ -17,6 +18,7 @@ interface ProfessorAvatarProps {
 const ProfessorAvatar: React.FC<ProfessorAvatarProps> = ({ message, onSpeakMessage }) => {
   const { config: elevenLabsConfig, speakWithFallback, isLoading: isSpeaking } = useElevenLabs();
   const { isSoundEnabled } = useSound();
+  const { currentImageUrl } = useImageLoader(PROFESSOR_IMAGE);
   
   const handleSpeak = async () => {
     if (isSoundEnabled) {
@@ -44,13 +46,9 @@ const ProfessorAvatar: React.FC<ProfessorAvatarProps> = ({ message, onSpeakMessa
         whileHover={{ scale: 1.1, rotate: [-2, 2, -2] }}
       >
         <img 
-          src={PROFESSOR_IMAGE}
-          alt="Professeur Cartouche"
+          src={currentImageUrl}
+          alt="Professeur Cartouche" 
           className="w-full h-full object-cover bg-white"
-          onError={(e) => {
-            console.error("ERREUR CRITIQUE: L'image du professeur cartouche n'a pas pu être chargée");
-            // Ne pas définir de fallback, conformément aux instructions
-          }}
         />
       </motion.div>
       

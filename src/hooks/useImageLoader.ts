@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface UseImageLoaderOptions {
   fallbackImageUrl?: string;
@@ -7,8 +7,6 @@ interface UseImageLoaderOptions {
 
 interface UseImageLoaderResult {
   imageLoaded: boolean;
-  handleImageLoaded: () => void;
-  handleImageError: () => void;
   error: boolean;
   currentImageUrl: string;
 }
@@ -17,35 +15,40 @@ export const useImageLoader = (
   primaryImageUrl: string, 
   options: UseImageLoaderOptions = {}
 ): UseImageLoaderResult => {
-  const { fallbackImageUrl } = options;
   const [imageLoaded, setImageLoaded] = useState(false);
   const [error, setError] = useState(false);
   const [currentImageUrl, setCurrentImageUrl] = useState<string>(primaryImageUrl);
-
-  const handleImageLoaded = () => {
-    console.info(`Image chargée avec succès: ${currentImageUrl}`);
-    setImageLoaded(true);
-    setError(false);
-  };
-
-  const handleImageError = () => {
-    console.error(`Erreur lors du chargement de l'image: ${currentImageUrl}`);
+  
+  useEffect(() => {
+    // Préchargement de l'image pour vérifier si elle existe
+    const img = new Image();
+    img.src = primaryImageUrl;
     
-    if (fallbackImageUrl && currentImageUrl !== fallbackImageUrl) {
-      console.info(`Tentative avec l'image de fallback: ${fallbackImageUrl}`);
-      setCurrentImageUrl(fallbackImageUrl);
-    } else {
+    img.onload = () => {
+      setImageLoaded(true);
+      setError(false);
+      setCurrentImageUrl(primaryImageUrl);
+    };
+    
+    img.onerror = () => {
+      console.error(`Erreur critique: Impossible de charger l'image: ${primaryImageUrl}`);
       setError(true);
-    }
+      setImageLoaded(false);
+      
+      // Nous ne changeons pas l'URL, même en cas d'erreur
+      // conformément aux instructions: aucun fallback ne doit être visible
+    };
     
-    setImageLoaded(false);
-  };
+    return () => {
+      // Nettoyage
+      img.onload = null;
+      img.onerror = null;
+    };
+  }, [primaryImageUrl]);
 
   return { 
     imageLoaded, 
-    handleImageLoaded, 
-    handleImageError, 
-    error, 
+    error,
     currentImageUrl 
   };
 };
