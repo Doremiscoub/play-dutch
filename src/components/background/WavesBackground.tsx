@@ -5,7 +5,8 @@ const WavesBackground: React.FC = () => {
   return (
     <div className="fixed bottom-0 left-0 right-0 h-[16vh] z-[-1] overflow-hidden pointer-events-none">
       {/* Styles for wave animations */}
-      <style jsx>{`
+      <style>
+        {`
         @keyframes waveMotion1 {
           0% { transform: translateX(0%); }
           50% { transform: translateX(-25%); }
@@ -28,7 +29,8 @@ const WavesBackground: React.FC = () => {
           opacity: 0.85;
           animation-delay: -10s;
         }
-      `}</style>
+        `}
+      </style>
 
       {/* Background yellow wave */}
       <div className="absolute inset-0 wave-back" style={{ bottom: '-3vh' }}>

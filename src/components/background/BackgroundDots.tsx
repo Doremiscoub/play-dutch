@@ -35,7 +35,8 @@ const BackgroundDots: React.FC = () => {
   return (
     <div className="fixed inset-0 z-[-1] overflow-hidden pointer-events-none">
       {/* CSS Fallback Animation */}
-      <style jsx>{`
+      <style>
+        {`
         @keyframes float {
           0%, 100% {
             transform: translateY(0);
@@ -58,7 +59,8 @@ const BackgroundDots: React.FC = () => {
           animation: float var(--duration) ease-in-out infinite;
           animation-delay: var(--delay);
         }
-      `}</style>
+        `}
+      </style>
 
       {dots.map((dot) => (
         <motion.div
@@ -70,9 +72,10 @@ const BackgroundDots: React.FC = () => {
             width: `${dot.size}px`,
             height: `${dot.size}px`,
             backgroundColor: dot.color,
+            // Use CSS variables as string values
             '--duration': `${dot.duration}s`,
             '--delay': `${dot.delay}s`,
-          }}
+          } as React.CSSProperties}
           animate={{
             y: [0, -10, 0],
             opacity: [0.3, 0.6, 0.3],
