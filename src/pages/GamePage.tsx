@@ -3,8 +3,10 @@ import React, { useEffect } from 'react';
 import { useGameState } from '@/hooks/useGameState';
 import GameContent from '@/components/GameContent';
 import { updateAllPlayersStats } from '@/utils/playerStatsCalculator';
+import { useLocation } from 'react-router-dom';
 
 const GamePage: React.FC = () => {
+  const location = useLocation();
   const {
     players,
     roundHistory,
@@ -46,6 +48,11 @@ const GamePage: React.FC = () => {
   
   // Apply stats to players
   const playersWithStats = updateAllPlayersStats(players);
+  
+  // Store current path in localStorage for navigation history
+  useEffect(() => {
+    localStorage.setItem('dutch_previous_route', location.pathname);
+  }, [location]);
   
   return (
     <GameContent

@@ -67,6 +67,38 @@ export const useGamePersistence = () => {
   }, [setGames]);
 
   /**
+   * Vérifie si une partie est en cours
+   */
+  const hasActiveGame = useCallback((): boolean => {
+    try {
+      const savedGame = localStorage.getItem('current_dutch_game');
+      if (!savedGame) return false;
+      
+      const parsedGame = JSON.parse(savedGame);
+      
+      // Vérification de validité de base
+      if (!parsedGame.players || !Array.isArray(parsedGame.players) || parsedGame.players.length === 0) {
+        return false;
+      }
+      
+      // Si la partie est marquée comme terminée, elle n'est pas "active"
+      if (parsedGame.isGameOver === true) {
+        return false;
+      }
+
+      // Vérifier si des manches ont été jouées (partie réellement commencée)
+      const hasPlayedRounds = parsedGame.players.some((p: any) => 
+        p.rounds && Array.isArray(p.rounds) && p.rounds.length > 0
+      );
+      
+      return hasPlayedRounds;
+    } catch (error) {
+      console.error('Erreur lors de la vérification de partie active:', error);
+      return false;
+    }
+  }, []);
+
+  /**
    * Charge l'état initial du jeu depuis localStorage
    */
   const loadGameState = useCallback(() => {
@@ -134,6 +166,7 @@ export const useGamePersistence = () => {
       };
       
       localStorage.setItem('current_dutch_game', JSON.stringify(stateToSave));
+      console.info('État de jeu sauvegardé avec succès:', new Date().toLocaleTimeString());
       return true;
     } catch (error) {
       console.error('Erreur lors de la sauvegarde de l\'état du jeu :', error);
@@ -161,6 +194,7 @@ export const useGamePersistence = () => {
     loadGameState,
     saveGameState,
     saveGameToHistory,
-    deleteGameFromHistory
+    deleteGameFromHistory,
+    hasActiveGame
   };
 };

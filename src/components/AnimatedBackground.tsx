@@ -1,6 +1,4 @@
-
 import React, { useRef, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
 
 interface AnimatedBackgroundProps {
   variant?: 'default' | 'subtle' | 'minimal';
@@ -8,7 +6,6 @@ interface AnimatedBackgroundProps {
 
 const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'default' }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const location = useLocation();
   
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -41,27 +38,28 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
       speedY: number;
       color: string;
       opacity: number;
+      phase: number;
     }[] = [];
 
     // Waves params - Animation améliorée avec plusieurs niveaux de vagues
     const waves = [
-      { height: 0.25, color: '#E9D5FF', speed: 0.04, amplitude: 18, offset: 0 },
-      { height: 0.3, color: '#FDE68A', speed: 0.05, amplitude: 22, offset: Math.PI / 3 },
-      { height: 0.2, color: '#BFDBFE', speed: 0.03, amplitude: 15, offset: Math.PI / 5 },
-      { height: 0.28, color: '#A7F3D0', speed: 0.025, amplitude: 20, offset: Math.PI / 4 }
+      { height: 0.25, color: '#E9D5FF', speed: 0.04, amplitude: 22, offset: 0 },
+      { height: 0.20, color: '#FDE68A', speed: 0.03, amplitude: 26, offset: Math.PI / 3 },
+      { height: 0.22, color: '#BFDBFE', speed: 0.035, amplitude: 20, offset: Math.PI / 2.5 },
+      { height: 0.15, color: '#A7F3D0', speed: 0.045, amplitude: 18, offset: Math.PI / 4 }
     ];
 
     // Create dots - Augmentation du nombre pour plus d'animation
     const createDots = () => {
-      const numDots = Math.min(50, Math.max(20, Math.floor(canvas.width * canvas.height / 35000)));
+      const numDots = Math.min(50, Math.max(20, Math.floor(canvas.width * canvas.height / 30000)));
       
       const colors = [
-        { r: 167, g: 139, b: 250 }, // Violet
-        { r: 253, g: 186, b: 116 }, // Orange
-        { r: 110, g: 231, b: 183 }, // Green
-        { r: 96, g: 165, b: 250 }, // Blue
-        { r: 249, g: 115, b: 22 }, // Dutch Orange
-        { r: 139, g: 92, b: 246 }  // Dutch Purple
+        { r: 167, g: 139, b: 250 }, // Violet #A78BFA
+        { r: 253, g: 186, b: 116 }, // Orange #FDBA74
+        { r: 110, g: 231, b: 183 }, // Green #6EE7B7
+        { r: 96, g: 165, b: 250 }, // Blue #60A5FA
+        { r: 249, g: 115, b: 22 }, // Dutch Orange #F97316
+        { r: 139, g: 92, b: 246 }  // Dutch Purple #8B5CF6
       ];
       
       for (let i = 0; i < numDots; i++) {
@@ -76,7 +74,8 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
           speedX: (Math.random() - 0.5) * 0.3,
           speedY: (Math.random() - 0.5) * 0.3,
           color: `rgba(${color.r}, ${color.g}, ${color.b}, ${opacity})`,
-          opacity
+          opacity,
+          phase: Math.random() * Math.PI * 2
         });
       }
     };
@@ -84,7 +83,7 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
     createDots();
 
     // Draw function
-    const draw = () => {
+    const draw = (timestamp: number = 0) => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
       // Background color based on variant
@@ -113,9 +112,15 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
       }
 
       // Draw animated dots - Toujours visible sur tous les écrans
+      const time = timestamp / 1000;
+      
       dots.forEach(dot => {
+        // Ajouter une petite oscillation pour un mouvement plus organique
+        const offsetX = Math.sin(time * 0.5 + dot.phase) * 1;
+        const offsetY = Math.cos(time * 0.3 + dot.phase) * 1;
+        
         ctx.beginPath();
-        ctx.arc(dot.x, dot.y, dot.size, 0, Math.PI * 2);
+        ctx.arc(dot.x + offsetX, dot.y + offsetY, dot.size, 0, Math.PI * 2);
         ctx.fillStyle = dot.color;
         ctx.fill();
 
@@ -123,15 +128,23 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
         dot.x += dot.speedX;
         dot.y += dot.speedY;
 
-        // Bounce off the walls
-        if (dot.x < 0 || dot.x > canvas.width) dot.speedX *= -1;
-        if (dot.y < 0 || dot.y > canvas.height) dot.speedY *= -1;
+        // Bounce off the walls with a small random component
+        if (dot.x < 0 || dot.x > canvas.width) {
+          dot.speedX *= -1;
+          dot.speedX += (Math.random() - 0.5) * 0.1; // Add tiny variation
+        }
+        if (dot.y < 0 || dot.y > canvas.height) {
+          dot.speedY *= -1;
+          dot.speedY += (Math.random() - 0.5) * 0.1; // Add tiny variation
+        }
+        
+        // Keep speeds in check
+        dot.speedX = Math.max(-0.5, Math.min(0.5, dot.speedX));
+        dot.speedY = Math.max(-0.5, Math.min(0.5, dot.speedY));
       });
 
       // Draw stylized waves at the bottom - Animation considérablement améliorée
-      const drawWaves = () => {
-        const now = Date.now() / 1000;
-        
+      const drawWaves = (time: number) => {
         waves.forEach((wave, index) => {
           // Ajuster l'opacité selon la profondeur de la vague
           const opacity = 0.85 - (index * 0.15);
@@ -147,14 +160,14 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
           for (let x = 0; x < canvas.width; x += step) {
             // Animation plus complexe avec des variations de fréquence
             // Première fréquence - ondulation principale
-            const distortY = Math.sin(x / 100 + now * wave.speed + wave.offset) * wave.amplitude;
+            const distortY = Math.sin(x / 100 + time * wave.speed + wave.offset) * wave.amplitude;
             // Deuxième fréquence - ondulation secondaire pour plus de naturel
-            const distortY2 = Math.sin(x / 220 + now * (wave.speed * 0.7) + wave.offset * 1.5) * (wave.amplitude * 0.5);
+            const distortY2 = Math.sin(x / 220 + time * (wave.speed * 0.7) + wave.offset * 1.5) * (wave.amplitude * 0.5);
             // Troisième fréquence - micro ondulation pour l'effet "eau"
-            const distortY3 = Math.sin(x / 30 + now * (wave.speed * 1.3) + wave.offset * 2) * (wave.amplitude * 0.2);
+            const distortY3 = Math.sin(x / 30 + time * (wave.speed * 1.3) + wave.offset * 2) * (wave.amplitude * 0.2);
             
             // Mouvement de translation horizontal lent
-            const horizontalShift = (now * 15) % canvas.width;
+            const horizontalShift = (time * 15) % canvas.width;
             const xPos = (x + horizontalShift) % canvas.width;
             
             // Combiner toutes les fréquences
@@ -167,26 +180,32 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
           ctx.closePath();
           
           // Créer un dégradé pour chaque vague avec plus d'effet de transparence
-          const gradient = ctx.createLinearGradient(0, yPos, 0, canvas.height);
-          gradient.addColorStop(0, wave.color + (opacity * 100).toString(16).substring(0, 2)); // Semi-transparent at top
-          gradient.addColorStop(1, wave.color + '44'); // More transparent at bottom
+          const gradient = ctx.createLinearGradient(0, yPos - 30, 0, canvas.height);
+          gradient.addColorStop(0, wave.color + 'CC'); // Plus opaque en haut
+          gradient.addColorStop(1, wave.color + '44'); // Plus transparent en bas
           
           ctx.fillStyle = gradient;
           ctx.fill();
         });
       };
 
-      drawWaves();
+      drawWaves(time);
     };
 
     // Animation loop
     let animationId: number;
-    const animate = () => {
-      draw();
+    let lastTimestamp = 0;
+    
+    const animate = (timestamp: number) => {
+      // Limiter le framerate pour les performances
+      if (timestamp - lastTimestamp > 16) { // ~60fps
+        lastTimestamp = timestamp;
+        draw(timestamp);
+      }
       animationId = requestAnimationFrame(animate);
     };
 
-    animate();
+    animate(0);
 
     // Cleanup
     return () => {

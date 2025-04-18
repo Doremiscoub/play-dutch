@@ -1,140 +1,97 @@
 
-import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { useLocalStorage } from '@/hooks/use-local-storage';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
-import PageLayout from '@/components/PageLayout';
-import { SignOutButton, useUser } from '@clerk/clerk-react';
-import { ArrowLeft } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
-import { toast } from 'sonner';
+import React from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { Home, ArrowLeft } from 'lucide-react';
+
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import AnimatedBackground from '@/components/AnimatedBackground';
+import GameSettings from '@/components/GameSettings';
 import ElevenLabsSetup from '@/components/ElevenLabsSetup';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import ThemeSelector from '@/components/ThemeSelector';
+import AdvancedThemeSelector from '@/components/AdvancedThemeSelector';
+import PageLayout from '@/components/layouts/PageLayout';
 
-const SettingsPage = () => {
-  const [soundEnabled, setSoundEnabled] = useLocalStorage('dutch_sound_enabled', true);
-  const [resetConfirmationOpen, setResetConfirmationOpen] = useState(false);
-  const { user } = useUser();
-
-  const handleSoundToggle = (value: boolean) => {
-    setSoundEnabled(value);
-  };
-
-  const handleResetHistory = () => {
-    setResetConfirmationOpen(true);
-  };
-
-  const confirmResetHistory = () => {
-    localStorage.removeItem('dutch_games');
-    setResetConfirmationOpen(false);
-    toast.success('L\'historique a été effacé !');
-  };
-
-  const cancelResetHistory = () => {
-    setResetConfirmationOpen(false);
+const SettingsPage: React.FC = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const isFromGame = location.state?.from === '/game';
+  
+  // Fonction pour gérer le retour en arrière intelligent
+  const handleBack = () => {
+    if (isFromGame) {
+      // Si on vient de /game, on y retourne
+      navigate('/game');
+    } else {
+      // Sinon on retourne à l'accueil
+      navigate('/');
+    }
   };
 
   return (
-    <PageLayout title="Réglages" subtitle="Personnalisez votre expérience de jeu" backgroundVariant="subtle">
-      <div className="flex justify-between items-center mb-6">
-        <Link to="/">
-          <Button variant="ghost" size="sm" className="flex items-center gap-1 text-gray-600 hover:text-gray-900">
-            <ArrowLeft className="h-4 w-4" />
-            Retour à l'accueil
-          </Button>
-        </Link>
-      </div>
-
-      <Tabs defaultValue="general" className="w-full">
-        <TabsList className="grid grid-cols-2 mb-6 rounded-xl bg-white/50 backdrop-blur-md p-1 shadow-sm">
-          <TabsTrigger 
-            value="general" 
-            className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm py-2.5"
+    <PageLayout>
+      <motion.div
+        className="w-full max-w-4xl mx-auto px-2 sm:px-4"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -20 }}
+      >
+        <div className="flex justify-between items-center mb-6">
+          <motion.h1 
+            className="text-3xl font-bold text-gray-800"
+            initial={{ x: -20, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ delay: 0.2 }}
           >
-            Général
-          </TabsTrigger>
-          <TabsTrigger 
-            value="voice" 
-            className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm py-2.5"
-          >
-            Voix & Sons
-          </TabsTrigger>
-        </TabsList>
-        
-        <TabsContent value="general" className="space-y-8">
-          {/* Gestion des données */}
-          <div className="vision-card p-6">
-            <h2 className="text-xl font-semibold mb-4 text-dutch-blue">Gestion des données</h2>
-            <div className="space-y-4">
-              <div className="flex flex-col space-y-2">
-                <Button 
-                  variant="outline" 
-                  className="w-full justify-start text-red-500 hover:text-red-600 hover:bg-red-50"
-                  onClick={handleResetHistory}
-                >
-                  Effacer l'historique des parties
-                </Button>
-              </div>
-            </div>
-          </div>
-
-          {/* Compte */}
-          {user && (
-            <div className="vision-card p-6">
-              <h2 className="text-xl font-semibold mb-4 text-dutch-blue">Compte</h2>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="font-medium">{user.fullName || user.username}</p>
-                    <p className="text-sm text-gray-500">{user.primaryEmailAddress?.emailAddress}</p>
-                  </div>
-                  <SignOutButton>
-                    <Button variant="outline">Déconnexion</Button>
-                  </SignOutButton>
-                </div>
-              </div>
-            </div>
-          )}
-        </TabsContent>
-        
-        <TabsContent value="voice" className="space-y-8">
-          {/* Réglages du son */}
-          <div className="vision-card p-6">
-            <h2 className="text-xl font-semibold mb-4 text-dutch-blue">Effets sonores</h2>
-            <div className="flex items-center justify-between">
-              <Label htmlFor="sound-toggle" className="cursor-pointer">Activer les sons du jeu</Label>
-              <Switch 
-                id="sound-toggle" 
-                checked={soundEnabled}
-                onCheckedChange={handleSoundToggle}
-              />
-            </div>
-          </div>
+            Réglages
+          </motion.h1>
           
-          {/* Configuration d'Eleven Labs */}
-          <div className="vision-card p-6">
-            <ElevenLabsSetup />
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              onClick={handleBack}
+              className="flex items-center gap-2 bg-white/70 border-gray-200"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              {isFromGame ? 'Retour au jeu' : 'Accueil'}
+            </Button>
+            
+            {isFromGame && (
+              <Button
+                variant="outline"
+                onClick={() => navigate('/')}
+                className="flex items-center gap-2 bg-white/70 border-gray-200"
+              >
+                <Home className="w-4 h-4" />
+                Accueil
+              </Button>
+            )}
           </div>
-        </TabsContent>
-      </Tabs>
+        </div>
 
-      {/* Confirmation de réinitialisation */}
-      <AlertDialog open={resetConfirmationOpen}>
-        <AlertDialogContent className="bg-white rounded-2xl border-white/50">
-          <AlertDialogHeader>
-            <AlertDialogTitle>Effacer l'historique ?</AlertDialogTitle>
-            <AlertDialogDescription>
-              Cette action supprimera définitivement l'historique de toutes vos parties. Cette action ne peut pas être annulée.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel onClick={cancelResetHistory} className="bg-gray-100 hover:bg-gray-200 text-gray-700">Annuler</AlertDialogCancel>
-            <AlertDialogAction onClick={confirmResetHistory} className="bg-red-500 hover:bg-red-600 text-white">Effacer</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+        <Tabs defaultValue="game" className="bg-white/80 backdrop-blur-md rounded-2xl p-4 shadow-sm border border-gray-100">
+          <TabsList className="grid grid-cols-3 mb-6">
+            <TabsTrigger value="game">Jeu</TabsTrigger>
+            <TabsTrigger value="audio">Voix & Sons</TabsTrigger>
+            <TabsTrigger value="appearance">Apparence</TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="game" className="space-y-6">
+            <GameSettings />
+          </TabsContent>
+          
+          <TabsContent value="audio" className="space-y-6">
+            <ElevenLabsSetup />
+          </TabsContent>
+          
+          <TabsContent value="appearance" className="space-y-6">
+            <ThemeSelector />
+            <div className="h-6" />
+            <AdvancedThemeSelector />
+          </TabsContent>
+        </Tabs>
+      </motion.div>
     </PageLayout>
   );
 };

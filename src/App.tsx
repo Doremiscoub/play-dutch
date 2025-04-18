@@ -19,6 +19,7 @@ import SignUp from './pages/SignUp';
 
 // Composants
 import ProtectedRoute from './components/ProtectedRoute';
+import { useGamePersistence } from './hooks/useGamePersistence';
 
 // Contexte
 import { AuthProvider } from './context/AuthContext';
@@ -28,6 +29,8 @@ import { AuthProvider } from './context/AuthContext';
  * Gère le routage et l'initialisation globale
  */
 const App: React.FC = () => {
+  const { hasActiveGame } = useGamePersistence();
+  
   // Notification de mode hors-ligne si détecté
   useEffect(() => {
     try {
@@ -50,7 +53,10 @@ const App: React.FC = () => {
           
           {/* Pages principales */}
           <Route path="/" element={<Home />} />
-          <Route path="/game/setup" element={<GameSetup />} />
+          <Route path="/game/setup" element={
+            // Si une partie est en cours, rediriger vers le jeu au lieu de la configuration
+            hasActiveGame() ? <Navigate to="/game" replace /> : <GameSetup />
+          } />
           <Route path="/game" element={
             <ProtectedRoute>
               <GamePage />

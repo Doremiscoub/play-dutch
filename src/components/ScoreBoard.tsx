@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Player } from '@/types';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { toast } from 'sonner';
-import PageLayout from './layouts/PageLayout';
+import AnimatedBackground from './AnimatedBackground';
 import CustomScoreBoardButtons from './CustomScoreBoardButtons';
 import ScoreTableView from './ScoreTableView';
 import AICommentator from './AICommentator';
@@ -62,6 +62,11 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
     }
   }, [sortedPlayers, selectedPlayer]);
   
+  // Force scroll to top on component mount
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+  
   // Gestion de l'annulation d'une manche
   const handleRequestUndo = () => {
     // Vérification s'il y a des manches à annuler
@@ -87,7 +92,11 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
   };
 
   return (
-    <PageLayout backgroundVariant="default" className="pb-12 sm:pb-20">
+    <div className="min-h-screen w-full relative">
+      <div className="fixed inset-0 -z-10">
+        <AnimatedBackground variant="default" />
+      </div>
+      
       <div className="w-full max-w-6xl mx-auto px-1 sm:px-2">
         {/* En-tête avec boutons de navigation et titre */}
         <ScoreBoardHeader 
@@ -163,7 +172,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
         </div>
         
         {/* Boutons d'action */}
-        <div className="mt-4">
+        <div className="mt-4 pb-24">
           <CustomScoreBoardButtons
             players={players}
             onAddRound={onAddRound}
@@ -187,7 +196,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
         onConfirm={handleConfirmUndo}
         onCancel={handleCancelUndo}
       />
-    </PageLayout>
+    </div>
   );
 };
 
