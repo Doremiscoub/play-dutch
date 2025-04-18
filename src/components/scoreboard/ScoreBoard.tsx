@@ -11,7 +11,6 @@ import { useMediaQuery } from '@/hooks/use-media-query';
 import EndGameConfirmationDialog from './EndGameConfirmationDialog';
 import UndoConfirmationDialog from './UndoConfirmationDialog';
 import ScoreBoardHeader from './ScoreBoardHeader';
-import ProfessorAvatar from '../game/ProfessorAvatar';
 
 interface ScoreBoardProps {
   players: Player[];
@@ -62,14 +61,11 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
       </div>
 
       <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-12">
-        <div className="flex items-center justify-between mb-8 mt-4">
-          <ScoreBoardHeader 
-            roundCount={players.length > 0 ? players[0]?.rounds.length || 0 : 0}
-            scoreLimit={scoreLimit}
-          />
-          <ProfessorAvatar />
-        </div>
-
+        <ScoreBoardHeader 
+          roundCount={players.length > 0 ? players[0]?.rounds.length || 0 : 0}
+          scoreLimit={scoreLimit}
+        />
+        
         {showAICommentator && (
           <div className="mb-8">
             <AICommentator 

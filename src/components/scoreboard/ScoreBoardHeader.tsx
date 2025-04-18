@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
+import ProfessorAvatar from '../game/ProfessorAvatar';
 
 interface ScoreBoardHeaderProps {
   roundCount: number;
@@ -41,14 +42,18 @@ const ScoreBoardHeader: React.FC<ScoreBoardHeaderProps> = ({
           Tableau des scores
         </motion.h1>
         
-        <Button
-          variant="ghost"
-          size="icon"
-          className="text-gray-600 hover:text-dutch-purple"
-          onClick={() => navigate('/settings')}
-        >
-          <Settings className="h-5 w-5" />
-        </Button>
+        <div className="flex items-center gap-2">
+          <ProfessorAvatar />
+          
+          <Button
+            variant="ghost"
+            size="icon"
+            className="text-gray-600 hover:text-dutch-purple"
+            onClick={() => navigate('/settings')}
+          >
+            <Settings className="h-5 w-5" />
+          </Button>
+        </div>
       </div>
       
       <motion.div 
