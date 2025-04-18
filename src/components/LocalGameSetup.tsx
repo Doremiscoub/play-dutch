@@ -37,13 +37,10 @@ const LocalGameSetup: React.FC<LocalGameSetupProps> = ({ onStartGame, isSubmitti
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Protection contre les soumissions multiples
     if (isSubmitting) {
       console.info("LocalGameSetup: Soumission déjà en cours, ignorer");
       return;
     }
-    
-    console.info("LocalGameSetup: Soumission du formulaire");
     
     try {
       // Assurer que tous les noms sont valides

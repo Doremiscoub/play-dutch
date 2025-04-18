@@ -5,7 +5,7 @@ import { useLocalStorage } from './use-local-storage';
 import { useGamePersistence } from './useGamePersistence';
 import { useGameInitialization } from './useGameInitialization';
 import { useGameContinuation } from './useGameContinuation';
-import { resetNotificationFlags } from '@/utils/playerInitializer';
+import { initializePlayers, verifyPlayerSetup } from '@/utils/playerInitializer';
 import { useCurrentGame } from './game/useCurrentGame';
 import { useRounds } from './game/useRounds';
 import { useScoreLimit } from './game/useScoreLimit';
@@ -14,6 +14,7 @@ import { toast } from 'sonner';
 export const useGameState = () => {
   const navigate = useNavigate();
   const initializationAttempted = useRef(false);
+  const initializationInProgress = useRef(false);
   const [soundEnabled] = useLocalStorage('dutch_sound_enabled', true);
 
   const {
@@ -39,8 +40,7 @@ export const useGameState = () => {
     gameStartTime,
     setGameStartTime,
     createNewGame,
-    initializationCompleted,
-    initializationInProgress
+    initializationCompleted
   } = useGameInitialization();
 
   const {
@@ -56,7 +56,7 @@ export const useGameState = () => {
 
   // Cette fonction sauvegarde l'état actuel du jeu
   const saveCurrentGameState = useCallback(() => {
-    if (players.length > 0) {
+    if (players && players.length > 0) {
       console.info('Sauvegarde de l\'état du jeu');
       saveGameState({
         players,
@@ -70,153 +70,97 @@ export const useGameState = () => {
 
   // Sauvegarde automatique à chaque changement d'état important
   useEffect(() => {
-    if (players.length > 0) {
+    if (players && players.length > 0) {
       saveCurrentGameState();
     }
   }, [players, roundHistory, showGameOver, saveCurrentGameState]);
 
-  // Effet d'initialisation du jeu - Corrigé pour éviter les problèmes de création de partie
+  // Effet d'initialisation du jeu - Version simplifiée et plus robuste
   useEffect(() => {
-    try {
-      console.info("Tentative d'initialisation du jeu...");
+    if (initializationInProgress.current) {
+      console.info("Initialisation déjà en cours, ignorer");
+      return;
+    }
+    
+    // Éviter les initialisations multiples
+    if (initializationAttempted.current) {
+      console.info("Initialisation déjà tentée pendant cette session, ignorer");
+      return;
+    }
+    
+    // Marquer la tentative comme en cours
+    initializationInProgress.current = true;
+    initializationAttempted.current = true;
+    
+    console.info('Initialisation du jeu...');
+    
+    // Étape 1: Vérifier si une nouvelle partie est explicitement demandée
+    const isNewGameRequested = localStorage.getItem('dutch_new_game_requested') === 'true';
+    console.info('Nouvelle partie demandée:', isNewGameRequested);
+    
+    if (isNewGameRequested) {
+      console.info("Création d'une nouvelle partie demandée explicitement");
       
-      // Si déjà initialisé, ne rien faire
-      if (initializationCompleted.current) {
-        console.info("Initialisation déjà complétée, ignorer");
-        return;
+      // Création de la partie via la fonction dédiée
+      createNewGame().then(success => {
+        if (!success) {
+          console.error("Échec lors de la création de la nouvelle partie");
+          toast.error("Impossible de créer une nouvelle partie");
+          navigate('/game/setup');
+        }
+        initializationInProgress.current = false;
+      });
+      return;
+    }
+    
+    // Étape 2: S'il n'y a pas de demande explicite, essayer de charger une partie existante
+    console.info("Tentative de chargement d'une partie existante");
+    const savedGame = loadGameState();
+    
+    if (savedGame && savedGame.players && savedGame.players.length > 0) {
+      console.info("Chargement d'une partie existante");
+      setPlayers(savedGame.players);
+      setRoundHistory(savedGame.roundHistory || []);
+      setScoreLimit(savedGame.scoreLimit || 100);
+      
+      if (savedGame.gameStartTime) {
+        setGameStartTime(new Date(savedGame.gameStartTime));
       }
       
-      // Protection contre les tentatives multiples pendant une même session
-      if (initializationAttempted.current) {
-        console.info("Initialisation déjà tentée pendant cette session, ignorer");
-        return;
+      if (savedGame.isGameOver) {
+        setShowGameOver(true);
       }
       
-      // Marquer la tentative comme effectuée pour cette session
-      initializationAttempted.current = true;
+      initializationCompleted.current = true;
+      localStorage.setItem('dutch_initialization_completed', 'true');
       
-      // Réinitialiser les flags de notification
-      resetNotificationFlags();
+      toast.success('Partie existante chargée !');
+      initializationInProgress.current = false;
+    } else {
+      // Étape 3: Si aucune partie n'est trouvée, vérifier s'il y a une configuration de joueurs
+      console.info("Aucune partie sauvegardée trouvée, vérification de la configuration des joueurs");
       
-      const initializeGame = async () => {
-        console.info('Initialisation du jeu...');
+      const setupValid = verifyPlayerSetup();
+      if (setupValid) {
+        console.info("Configuration de joueurs valide trouvée, création d'une nouvelle partie");
         
-        // Vérifier si une nouvelle partie est explicitement demandée
-        const isNewGameRequested = localStorage.getItem('dutch_new_game_requested') === 'true';
-        console.info('Nouvelle partie demandée:', isNewGameRequested);
+        // Force la création d'une nouvelle partie
+        localStorage.setItem('dutch_new_game_requested', 'true');
         
-        // Définir explicitement le mode de jeu (toujours local pour l'instant)
-        const gameMode = localStorage.getItem('dutch_game_mode') || 'local';
-        console.info('Mode de jeu détecté:', gameMode);
-        
-        // Si une nouvelle partie est demandée, la créer immédiatement
-        if (isNewGameRequested) {
-          console.info("Nouvelle partie explicitement demandée, création...");
-          
-          // TOUJOURS créer une nouvelle partie locale
-          const success = await createNewGame();
+        createNewGame().then(success => {
           if (!success) {
-            console.error("Échec de création de la nouvelle partie locale");
+            console.error("Échec lors de la création de la nouvelle partie");
             toast.error("Impossible de créer une nouvelle partie");
-            
-            // Réinitialisation du flag pour permettre une nouvelle tentative
-            setTimeout(() => {
-              initializationAttempted.current = false;
-            }, 1000);
-            
-            // Redirection explicite vers la page de configuration
-            navigate('/game/setup');
-            return;
-          }
-          
-          // Succès: enregistrer qu'une partie est en cours
-          localStorage.setItem('dutch_game_page_visited', 'true');
-          return;
-        }
-        
-        // Si pas de nouvelle partie demandée, essayer de charger une partie existante
-        console.info("Tentative de chargement d'une partie existante");
-        const savedGame = loadGameState();
-        
-        // Si une partie sauvegardée existe, la charger
-        if (savedGame && savedGame.players && savedGame.players.length > 0) {
-          console.info("Chargement d'une partie existante avec", savedGame.players.length, "joueurs");
-          setPlayers(savedGame.players);
-          setRoundHistory(savedGame.roundHistory || []);
-          setScoreLimit(savedGame.scoreLimit || 100);
-          
-          if (savedGame.gameStartTime) {
-            setGameStartTime(new Date(savedGame.gameStartTime));
-          }
-          
-          if (savedGame.isGameOver) {
-            setShowGameOver(true);
-          }
-          
-          // Marquer l'initialisation comme terminée
-          initializationCompleted.current = true;
-          localStorage.setItem('dutch_initialization_completed', 'true');
-          localStorage.setItem('dutch_game_page_visited', 'true');
-          
-          toast.success('Partie existante chargée !');
-        } else {
-          // Aucune partie sauvegardée trouvée
-          console.info("Aucune partie sauvegardée trouvée, tentative de création d'une nouvelle partie");
-          
-          // Vérifier si des noms de joueurs sont disponibles pour la création
-          const playerSetup = localStorage.getItem('dutch_player_setup');
-          if (playerSetup) {
-            console.info("Configuration de joueurs trouvée, création d'une nouvelle partie");
-            
-            // Forcer la création d'une nouvelle partie
-            localStorage.setItem('dutch_new_game_requested', 'true');
-            
-            const success = await createNewGame();
-            if (!success) {
-              console.error("Échec lors de la création de la partie");
-              toast.error("Impossible de créer une nouvelle partie");
-              
-              // Réinitialisation du flag pour permettre une nouvelle tentative
-              setTimeout(() => {
-                initializationAttempted.current = false;
-              }, 1000);
-              
-              // Redirection explicite vers la configuration
-              navigate('/game/setup');
-            } else {
-              // Succès: enregistrer qu'une partie est en cours
-              localStorage.setItem('dutch_game_page_visited', 'true');
-            }
-          } else {
-            console.info("Aucune configuration de joueurs, redirection vers la configuration");
-            toast.info("Veuillez configurer une nouvelle partie");
-            
-            // Réinitialisation du flag pour permettre une nouvelle tentative
-            setTimeout(() => {
-              initializationAttempted.current = false;
-            }, 1000);
-            
-            // Redirection explicite vers la configuration
             navigate('/game/setup');
           }
-        }
-      };
-      
-      // Délai pour s'assurer que le composant est bien monté
-      setTimeout(() => {
-        initializeGame();
-      }, 300);
-    } catch (error) {
-      console.error("Erreur lors de l'initialisation du jeu:", error);
-      toast.error("Erreur lors de l'initialisation du jeu");
-      
-      // Réinitialisation du flag pour permettre une nouvelle tentative
-      setTimeout(() => {
-        initializationAttempted.current = false;
-      }, 1000);
-      
-      // Redirection explicite vers la configuration en cas d'erreur
-      navigate('/game/setup');
+          initializationInProgress.current = false;
+        });
+      } else {
+        console.info("Aucune configuration de joueurs valide, redirection vers la configuration");
+        toast.info("Veuillez configurer une nouvelle partie");
+        navigate('/game/setup');
+        initializationInProgress.current = false;
+      }
     }
   }, [createNewGame, loadGameState, navigate, setGameStartTime, setPlayers, setRoundHistory, setScoreLimit, setShowGameOver]);
 

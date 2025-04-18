@@ -10,11 +10,10 @@ import { Button } from '@/components/ui/button';
 import { Home, RefreshCw } from 'lucide-react';
 import { toast } from 'sonner';
 import AnimatedBackground from '@/components/AnimatedBackground';
+import { verifyPlayerSetup } from '@/utils/playerInitializer';
 
-const GamePageErrorFallback = ({ error, errorInfo, errorCode, reset }: { 
-  error: Error; 
-  errorInfo: React.ErrorInfo; 
-  errorCode: string;
+const GamePageErrorFallback = ({ error, reset }: { 
+  error: Error;
   reset?: () => void;
 }) => (
   <div className="flex items-center justify-center min-h-screen p-6 bg-gray-50">
@@ -25,13 +24,12 @@ const GamePageErrorFallback = ({ error, errorInfo, errorCode, reset }: {
         </AlertTitle>
         <AlertDescription>
           <p className="mb-4">{error.message}</p>
-          <div className="text-xs text-muted-foreground mt-2 font-mono">Code: {errorCode}</div>
           
           {process.env.NODE_ENV !== 'production' && (
             <details className="mt-4 text-xs">
               <summary className="cursor-pointer">Détails techniques</summary>
               <pre className="mt-2 p-3 bg-gray-100 rounded overflow-auto max-h-[300px]">
-                {errorInfo?.componentStack || error.stack}
+                {error.stack}
               </pre>
             </details>
           )}
@@ -71,7 +69,6 @@ const GamePage: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [isReady, setIsReady] = useState(false);
-  const [initializationTimeout, setInitializationTimeout] = useState(false);
   const [errorState, setErrorState] = useState<{hasError: boolean, message: string}>({
     hasError: false,
     message: ""
@@ -80,119 +77,78 @@ const GamePage: React.FC = () => {
   const gameState = useGameState();
   const { players, roundHistory, showGameOver, showGameEndConfirmation, scoreLimit } = gameState;
   
-  // Vérification de l'état du jeu
-  const checkGameState = useCallback(() => {
-    console.info("Vérification de l'état du jeu:", {
-      playersExist: Array.isArray(players) && players.length > 0,
-      playerCount: Array.isArray(players) ? players.length : 0
-    });
-    
-    // Si aucun joueur n'est disponible, vérifier les causes possibles
-    if (!Array.isArray(players) || players.length === 0) {
-      console.warn("Aucun joueur disponible, vérification des causes possibles");
-      
-      // Vérifier si une configuration existe
-      const playerSetup = localStorage.getItem('dutch_player_setup');
-      
-      // Vérifier si une initialisation est en cours
-      const initCompleted = localStorage.getItem('dutch_initialization_completed') === 'true';
-      
-      if (playerSetup) {
-        console.info("Configuration trouvée mais non initialisée, forçage de création");
-        
-        // Forcer une nouvelle tentative d'initialisation
-        localStorage.setItem('dutch_new_game_requested', 'true');
-        localStorage.removeItem('dutch_initialization_completed');
-        
-        // Recharger la page pour forcer l'initialisation
-        setTimeout(() => {
-          window.location.reload();
-        }, 500);
-        
-        return false;
-      } else if (!initCompleted) {
-        console.info("Initialisation non terminée ou échouée");
-        
-        // Rediriger vers la page de configuration
-        toast.error("Initialisation de la partie incomplète");
-        navigate('/game/setup');
-        return false;
-      } else {
-        // Redirection vers configuration
-        toast.error("Aucun joueur disponible. Veuillez configurer une nouvelle partie.");
-        navigate('/game/setup');
-        return false;
-      }
-    }
-    
-    return true;
-  }, [players, navigate]);
+  // Enregistrement du chemin précédent pour la navigation
+  useEffect(() => {
+    localStorage.setItem('dutch_previous_route', location.pathname);
+  }, [location]);
   
-  // Initialisation lors du montage du composant
+  // Initialisation lors du montage du composant avec délai pour que le hook useGameState ait le temps d'initialiser
   useEffect(() => {
     console.info("GamePage: Montage du composant");
     
     // Marquer la page comme visitée
     localStorage.setItem('dutch_game_page_visited', 'true');
     
-    // Définir un timeout pour détecter les problèmes d'initialisation
-    const timeoutHandler = setTimeout(() => {
-      if (!Array.isArray(players) || players.length === 0) {
-        setInitializationTimeout(true);
-        console.warn("Timeout d'initialisation atteint");
-      }
-    }, 3000); // Augmentation du timeout pour permettre l'initialisation
-    
     // Définir un délai pour considérer la page comme prête
     const initTimer = setTimeout(() => {
       setIsReady(true);
-    }, 800); // Augmentation du délai d'initialisation
+    }, 600);
     
     // Nettoyage lors du démontage
     return () => {
       console.info("GamePage: Démontage du composant");
       clearTimeout(initTimer);
-      clearTimeout(timeoutHandler);
       setIsReady(false);
-      setInitializationTimeout(false);
     };
   }, []);
   
-  // Vérification de l'état du jeu une fois prêt
+  // Vérification structurée des données après initialisation
   useEffect(() => {
-    if (isReady) {
-      try {
-        checkGameState();
-      } catch (error) {
-        console.error("Erreur lors de la vérification de l'état du jeu:", error);
-        setErrorState({
-          hasError: true,
-          message: "Erreur lors de la vérification de l'état du jeu"
-        });
+    // Ne vérifier qu'une fois que nous sommes prêts
+    if (!isReady) return;
+    
+    console.info("GamePage: Vérification de l'état une fois prêt:", {
+      playersExist: Array.isArray(players) && players.length > 0,
+      playersCount: players?.length || 0
+    });
+    
+    // Si aucun joueur n'est disponible, faire une vérification plus approfondie
+    if (!players || players.length === 0) {
+      // Vérifier si une configuration valide existe
+      const isValidSetup = verifyPlayerSetup();
+      
+      if (isValidSetup) {
+        console.info("Configuration de joueurs valide trouvée, mais non initialisée");
+        
+        // Forcer la création d'une nouvelle partie
+        localStorage.setItem('dutch_new_game_requested', 'true');
+        
+        // Recharger la page pour déclencher l'initialisation
+        window.location.reload();
+      } else {
+        console.warn("Aucune configuration de joueurs valide trouvée, redirection vers la configuration");
+        
+        // Même après délai, s'il n'y a pas de joueurs, rediriger vers setup
+        toast.error("Aucun joueur disponible. Configurez une nouvelle partie.");
+        
+        // Délai pour éviter les redirections trop rapides
+        setTimeout(() => {
+          navigate('/game/setup');
+        }, 300);
       }
     }
-  }, [isReady, checkGameState]);
-  
-  // Gestion du timeout d'initialisation
-  useEffect(() => {
-    if (initializationTimeout) {
-      console.warn("Timeout d'initialisation atteint, navigation vers la configuration");
-      
-      // En cas de timeout, forcer la redirection vers la configuration
-      navigate('/game/setup');
-    }
-  }, [initializationTimeout, navigate]);
-  
-  // Enregistrement du chemin précédent pour la navigation
-  useEffect(() => {
-    localStorage.setItem('dutch_previous_route', location.pathname);
-  }, [location]);
+  }, [isReady, players, navigate]);
   
   // Affichage d'un loader pendant l'initialisation
   if (!isReady) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="h-10 w-10 animate-spin rounded-full border-4 border-dutch-blue border-t-transparent"></div>
+      <div className="min-h-screen w-full relative">
+        <div className="fixed inset-0 -z-10">
+          <AnimatedBackground variant="default" />
+        </div>
+        <div className="flex justify-center items-center min-h-screen">
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-dutch-blue border-t-transparent"></div>
+        </div>
       </div>
     );
   }
@@ -200,43 +156,47 @@ const GamePage: React.FC = () => {
   // Affichage d'une erreur en cas de problème
   if (errorState.hasError) {
     return (
-      <div className="flex justify-center items-center min-h-screen flex-col p-6">
+      <div className="min-h-screen w-full relative">
         <div className="fixed inset-0 -z-10">
           <AnimatedBackground variant="default" />
         </div>
-        <Alert variant="destructive" className="mb-6 max-w-md">
-          <AlertTitle>Erreur</AlertTitle>
-          <AlertDescription>{errorState.message}</AlertDescription>
-        </Alert>
-        <Button 
-          onClick={() => navigate('/game/setup')} 
-          className="mt-4 bg-dutch-blue text-white"
-        >
-          Configurer une nouvelle partie
-        </Button>
+        <div className="flex justify-center items-center min-h-screen flex-col p-6">
+          <Alert variant="destructive" className="mb-6 max-w-md">
+            <AlertTitle>Erreur</AlertTitle>
+            <AlertDescription>{errorState.message}</AlertDescription>
+          </Alert>
+          <Button 
+            onClick={() => navigate('/game/setup')} 
+            className="mt-4 bg-dutch-blue text-white"
+          >
+            Configurer une nouvelle partie
+          </Button>
+        </div>
       </div>
     );
   }
   
-  // Affichage si aucun joueur n'est disponible
-  if (!Array.isArray(players) || players.length === 0) {
+  // Affichage si aucun joueur n'est disponible après l'initialisation
+  if (!players || players.length === 0) {
     return (
-      <div className="flex justify-center items-center min-h-screen flex-col p-6">
+      <div className="min-h-screen w-full relative">
         <div className="fixed inset-0 -z-10">
           <AnimatedBackground variant="default" />
         </div>
-        <Alert variant="destructive" className="mb-6 max-w-md">
-          <AlertTitle>Aucun joueur disponible</AlertTitle>
-          <AlertDescription>
-            Veuillez configurer une nouvelle partie.
-          </AlertDescription>
-        </Alert>
-        <Button 
-          onClick={() => navigate('/game/setup')} 
-          className="mt-4 bg-dutch-blue text-white"
-        >
-          Configurer une partie
-        </Button>
+        <div className="flex justify-center items-center min-h-screen flex-col p-6">
+          <Alert variant="warning" className="mb-6 max-w-md">
+            <AlertTitle>Configuration de partie requise</AlertTitle>
+            <AlertDescription>
+              Veuillez configurer une nouvelle partie pour commencer à jouer.
+            </AlertDescription>
+          </Alert>
+          <Button 
+            onClick={() => navigate('/game/setup')} 
+            className="mt-4 bg-dutch-blue text-white"
+          >
+            Configurer une partie
+          </Button>
+        </div>
       </div>
     );
   }

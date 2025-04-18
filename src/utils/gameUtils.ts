@@ -13,24 +13,36 @@ export const initializePlayers = (): Player[] | null => {
     const savedPlayersStr = localStorage.getItem('dutch_player_setup');
     
     if (!savedPlayersStr) {
+      console.error("Aucune configuration de joueurs trouvée");
       return null;
     }
     
-    const playerNames = JSON.parse(savedPlayersStr);
+    let playerNames;
+    try {
+      playerNames = JSON.parse(savedPlayersStr);
+    } catch (error) {
+      console.error("Format de configuration de joueurs invalide:", error);
+      return null;
+    }
     
     if (!Array.isArray(playerNames) || playerNames.length === 0) {
+      console.error("Configuration de joueurs invalide (pas un tableau ou vide)");
       return null;
     }
     
-    const players = playerNames.map((name: string) => ({
-      id: uuidv4(),
-      name: name || `Joueur ${Math.floor(Math.random() * 1000)}`,
-      totalScore: 0,
-      rounds: []
-    }));
-    
-    // On ne supprime pas immédiatement les données d'initialisation
-    // pour permettre une récupération en cas d'erreur
+    const players = playerNames.map((name: string, index: number) => {
+      // S'assurer qu'un nom vide est remplacé par un nom par défaut
+      const validName = name && typeof name === 'string' && name.trim() 
+        ? name.trim() 
+        : `Joueur ${index + 1}`;
+        
+      return {
+        id: uuidv4(),
+        name: validName,
+        totalScore: 0,
+        rounds: []
+      };
+    });
     
     return players;
   } catch (error) {
@@ -43,29 +55,26 @@ export const initializePlayers = (): Player[] | null => {
  * Force la réinitialisation complète de l'état de jeu
  */
 export const cleanupGameState = () => {
-  // Supprimer TOUTES les données relatives à une partie en cours
-  localStorage.removeItem('current_dutch_game');
-  localStorage.removeItem('dutch_new_game_requested');
-  localStorage.removeItem('dutch_player_setup');
-  localStorage.removeItem('dutch_game_page_visited');
-  localStorage.removeItem('dutch_initialization_completed');
+  // Liste des clés à supprimer explicitement
+  const keysToRemove = [
+    'current_dutch_game',
+    'dutch_new_game_requested',
+    'dutch_game_page_visited',
+    'dutch_initialization_completed',
+    'dutch_initialization_attempted',
+    'dutch_game_history',
+    'dutch_round_history',
+    'dutch_players',
+    'dutch_score_limit',
+    'dutch_game_start_time'
+  ];
   
-  // Nettoyer également tous les autres éléments potentiellement problématiques
-  localStorage.removeItem('dutch_game_history');
-  localStorage.removeItem('dutch_round_history');
-  localStorage.removeItem('dutch_players');
-  localStorage.removeItem('dutch_score_limit');
-  localStorage.removeItem('dutch_game_start_time');
-  
-  // Vérifier pour être sûr que tout a bien été nettoyé
-  const allKeys = Object.keys(localStorage);
-  for (const key of allKeys) {
-    if (key.startsWith('dutch_') && key !== 'dutch_sound_enabled' && key !== 'dutch_games') {
-      localStorage.removeItem(key);
-    }
+  // Supprimer chaque clé individuellement
+  for (const key of keysToRemove) {
+    localStorage.removeItem(key);
   }
   
-  console.info("État du jeu complètement nettoyé");
+  console.info("État du jeu nettoyé");
 };
 
 /**

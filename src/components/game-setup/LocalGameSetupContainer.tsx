@@ -2,7 +2,8 @@
 import React, { useState } from 'react';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
-import LocalGameSetup from '../LocalGameSetup';
+import LocalGameSetup from '@/components/LocalGameSetup';
+import { cleanupGameState } from '@/utils/gameUtils';
 
 const LocalGameSetupContainer: React.FC<{
   onStartGame: (playerNames: string[]) => void;
@@ -12,43 +13,48 @@ const LocalGameSetupContainer: React.FC<{
 
   const handleStartGame = (playerNames: string[]) => {
     try {
+      // Protection contre les clics multiples
       if (isProcessing) {
-        console.info("Traitement déjà en cours, ignorer les clics multiples");
+        console.info("LocalGameSetupContainer: Traitement déjà en cours, ignorer les clics multiples");
         return;
       }
       
       setIsProcessing(true);
       console.info('LocalGameSetupContainer: Démarrage de la partie avec les joueurs:', playerNames);
       
-      if (playerNames.length < 2) {
+      // Validation des joueurs
+      if (!playerNames || playerNames.length < 2) {
         toast.error('Il faut au moins 2 joueurs pour commencer une partie');
         setIsProcessing(false);
         return;
       }
 
-      // IMPORTANT: Nettoyage complet des données précédentes pour éviter les conflits
+      // 1. Nettoyage complet des données précédentes
       console.info('LocalGameSetupContainer: Nettoyage des données précédentes');
-      localStorage.removeItem('current_dutch_game');
-      localStorage.removeItem('dutch_new_game_requested');
-      localStorage.removeItem('dutch_game_page_visited');
+      cleanupGameState();
       
-      // Forcer un flag de création de nouvelle partie
-      localStorage.setItem('dutch_new_game_requested', 'true');
-      
-      // Stocker explicitement le mode de jeu
+      // 2. Stocker les informations de la partie dans un ordre précis
+      console.info('LocalGameSetupContainer: Configuration du mode de jeu');
       localStorage.setItem('dutch_game_mode', 'local');
       
-      // Stocker les noms dans localStorage APRÈS avoir nettoyé les autres données
       console.info('LocalGameSetupContainer: Enregistrement des noms de joueurs:', playerNames);
       localStorage.setItem('dutch_player_setup', JSON.stringify(playerNames));
       
+      // 3. Signaler qu'une nouvelle partie est demandée (EN DERNIER)
+      console.info('LocalGameSetupContainer: Définition du flag de nouvelle partie');
+      localStorage.setItem('dutch_new_game_requested', 'true');
+      
       toast.success("Configuration des joueurs enregistrée");
       
-      // Délai pour s'assurer que localStorage est bien mis à jour
+      // 4. Attente pour s'assurer que localStorage est bien mis à jour
       setTimeout(() => {
         onStartGame(playerNames);
-        setIsProcessing(false);
-      }, 500); // Augmenter légèrement le délai pour s'assurer que tout est bien synchronisé
+        
+        // Réinitialiser l'état uniquement APRÈS la navigation
+        setTimeout(() => {
+          setIsProcessing(false);
+        }, 500);
+      }, 300);
     } catch (error) {
       console.error("LocalGameSetupContainer: Erreur lors de la configuration des joueurs:", error);
       toast.error("Erreur lors de la configuration des joueurs");

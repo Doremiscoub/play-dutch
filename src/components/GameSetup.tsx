@@ -7,6 +7,7 @@ import AnimatedBackground from './AnimatedBackground';
 import { Tabs, TabsContent } from '@/components/ui/tabs';
 import GameModeTabs from './game-setup/GameModeTabs';
 import LocalGameSetupContainer from './game-setup/LocalGameSetupContainer';
+import { cleanupGameState } from '@/utils/gameUtils';
 
 const GameSetup: React.FC = () => {
   const navigate = useNavigate();
@@ -17,10 +18,11 @@ const GameSetup: React.FC = () => {
   useEffect(() => {
     console.info("GameSetup: Nettoyage de l'état du jeu au montage");
     
-    // Nettoyer complètement tout état de jeu précédent
+    // Nettoyer certains flags mais PAS dutch_player_setup pour permettre la reprise
     localStorage.removeItem('dutch_game_page_visited');
     localStorage.removeItem('dutch_initialization_attempted');
     localStorage.removeItem('dutch_initialization_completed');
+    localStorage.removeItem('dutch_new_game_requested');
     
     // Définir le mode par défaut à local
     localStorage.setItem('dutch_game_mode', 'local');
@@ -44,31 +46,26 @@ const GameSetup: React.FC = () => {
         return;
       }
       
-      // IMPORTANT: Nettoyer complètement la partie existante pour éviter les conflits
-      localStorage.removeItem('current_dutch_game');
-      
-      // Vérification que les données sont bien en localStorage
+      // Vérification finale que les données sont bien enregistrées
       const storedPlayers = localStorage.getItem('dutch_player_setup');
-      if (!storedPlayers) {
-        console.info("GameSetup: Configuration des joueurs non trouvée, enregistrement...");
+      const playerData = storedPlayers ? JSON.parse(storedPlayers) : null;
+      
+      if (!playerData || !Array.isArray(playerData) || playerData.length < 2) {
+        console.error("GameSetup: Configuration des joueurs invalide, essai de correction");
         localStorage.setItem('dutch_player_setup', JSON.stringify(playerNames));
       }
       
-      // Ajouter un flag pour forcer une nouvelle partie
-      localStorage.setItem('dutch_new_game_requested', 'true');
+      console.info("GameSetup: Navigation vers /game");
       
-      console.info("GameSetup: Configuration sauvegardée, navigation vers /game");
-      
-      // Ajoutons un délai pour s'assurer que localStorage est à jour
+      // Navigation avec délai pour s'assurer que localStorage est à jour
       setTimeout(() => {
         navigate('/game');
         
-        // Réinitialiser le flag de soumission après un délai supplémentaire
+        // Réinitialiser le flag de soumission après la navigation
         setTimeout(() => {
           setIsSubmitting(false);
-        }, 300);
-      }, 500); // Augmenté pour assurer la synchronisation
-      
+        }, 500);
+      }, 300);
     } catch (error) {
       console.error("GameSetup: Erreur lors du démarrage de la partie:", error);
       toast.error("Une erreur est survenue lors de la création de la partie");

@@ -3,39 +3,19 @@ import { Player } from '@/types';
 import { v4 as uuidv4 } from 'uuid';
 import { toast } from 'sonner';
 
-// Flags pour éviter les notifications multiples
-let errorNotificationShown = false;
-let verificationErrorShown = false;
-
-/**
- * Réinitialise tous les flags de notification
- */
-export const resetNotificationFlags = () => {
-  errorNotificationShown = false;
-  verificationErrorShown = false;
-  console.info("Flags de notification réinitialisés");
-};
-
 /**
  * Initialize players from localStorage configuration
  * @returns Array of initialized players or null if configuration is invalid
  */
 export const initializePlayers = (): Player[] | null => {
   try {
-    console.info("Tentative d'initialisation des joueurs...");
-    
-    // Reset notification flag when explicitly initializing
-    errorNotificationShown = false;
+    console.info("Initialisation des joueurs...");
     
     const playerSetup = localStorage.getItem('dutch_player_setup');
-    console.info("Configuration trouvée dans localStorage:", playerSetup);
+    console.info("Configuration trouvée dans localStorage:", playerSetup ? "OUI" : "NON");
     
     if (!playerSetup) {
       console.error('Aucune configuration de joueurs trouvée dans localStorage');
-      if (!errorNotificationShown) {
-        toast.error('Configuration de joueurs introuvable');
-        errorNotificationShown = true;
-      }
       return null;
     }
     
@@ -45,19 +25,11 @@ export const initializePlayers = (): Player[] | null => {
       console.info("Noms des joueurs parsés:", playerNames);
     } catch (parseError) {
       console.error("Erreur de parsing de la configuration:", parseError);
-      if (!errorNotificationShown) {
-        toast.error('Format de configuration invalide');
-        errorNotificationShown = true;
-      }
       return null;
     }
     
     if (!Array.isArray(playerNames) || playerNames.length < 2) {
       console.error('Configuration de joueurs invalide:', playerNames);
-      if (!errorNotificationShown) {
-        toast.error('Configuration de joueurs invalide');
-        errorNotificationShown = true;
-      }
       return null;
     }
     
@@ -81,10 +53,6 @@ export const initializePlayers = (): Player[] | null => {
     return newPlayers;
   } catch (error) {
     console.error('Erreur lors de la création de la partie :', error);
-    if (!errorNotificationShown) {
-      toast.error('Erreur lors de la création de la partie');
-      errorNotificationShown = true;
-    }
     return null;
   }
 };
@@ -96,9 +64,6 @@ export const clearPlayerSetup = () => {
   try {
     console.info('Suppression de la configuration des joueurs');
     localStorage.removeItem('dutch_player_setup');
-    // Reset notification flag when clearing setup
-    errorNotificationShown = false;
-    verificationErrorShown = false;
   } catch (error) {
     console.error("Erreur lors du nettoyage de la configuration des joueurs:", error);
   }
@@ -111,9 +76,6 @@ export const clearPlayerSetup = () => {
 export const verifyPlayerSetup = (): boolean => {
   try {
     console.info("Vérification de la configuration des joueurs...");
-    
-    // Réinitialiser le flag de vérification
-    verificationErrorShown = false;
     
     const playerSetup = localStorage.getItem('dutch_player_setup');
     console.info("Configuration trouvée:", playerSetup ? "OUI" : "NON");
@@ -137,7 +99,7 @@ export const verifyPlayerSetup = (): boolean => {
       return false;
     }
     
-    // Vérifier que chaque nom est utilisable (peut être vide, sera remplacé lors de l'initialisation)
+    // Vérifier que chaque nom est utilisable
     const anyInvalidName = playerNames.some(name => 
       name !== null && name !== undefined && typeof name !== 'string'
     );
@@ -153,4 +115,11 @@ export const verifyPlayerSetup = (): boolean => {
     console.error('Erreur lors de la vérification de la configuration:', error);
     return false;
   }
+};
+
+/**
+ * Reset all notification flags
+ */
+export const resetNotificationFlags = () => {
+  console.info("Flags de notification réinitialisés");
 };
