@@ -5,10 +5,11 @@ import { motion } from 'framer-motion';
 import { Home, ArrowLeft, Settings, Palette, Mic } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import PageLayout from '@/components/layouts/PageLayout';
+import PageLayout from '@/components/PageLayout';
 import GeneralSettings from '@/components/sections/GeneralSettings';
 import AppearanceSettings from '@/components/sections/AppearanceSettings';
 import VoiceSettings from '@/components/sections/VoiceSettings';
+import AnimatedBackground from '@/components/AnimatedBackground';
 
 const SettingsPage: React.FC = () => {
   const navigate = useNavigate();
@@ -26,8 +27,12 @@ const SettingsPage: React.FC = () => {
   };
 
   return (
-    <PageLayout>
-      <div className="min-h-screen w-full max-w-4xl mx-auto px-4 sm:px-6 py-10">
+    <div className="min-h-screen w-full relative">
+      <div className="fixed inset-0 -z-10">
+        <AnimatedBackground variant="default" />
+      </div>
+
+      <div className="relative z-10 min-h-screen w-full max-w-4xl mx-auto px-4 sm:px-6 py-10">
         <div className="flex justify-between items-center mb-8">
           <motion.h1 
             className="text-3xl font-bold bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent"
@@ -103,7 +108,7 @@ const SettingsPage: React.FC = () => {
           </Tabs>
         </div>
       </div>
-    </PageLayout>
+    </div>
   );
 };
 

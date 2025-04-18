@@ -40,8 +40,7 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
       // Animated elements - ordre important: d'abord les dots (arrière-plan), puis les vagues (premier plan)
       drawDots({ ctx, canvas, time });
       
-      // Assurer que les vagues sont toujours visibles même sur les écrans courts
-      // Les vagues sont un élément clé du design language, les inclure sur tous les écrans
+      // Assurer que les deux vagues sont visibles (orange et violette)
       drawWaves(ctx, canvas, time);
     };
 

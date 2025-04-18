@@ -58,13 +58,7 @@ const App: React.FC = () => {
           
           {/* Pages principales */}
           <Route path="/" element={<Home />} />
-          <Route path="/game/setup" element={
-            // Si une partie est en cours ET qu'aucune nouvelle partie n'est demandée,
-            // rediriger vers le jeu au lieu de la configuration
-            hasActiveGame() && !isNewGameRequested() ? 
-              <Navigate to="/game" replace /> : 
-              <GameSetup />
-          } />
+          <Route path="/game/setup" element={<GameSetup />} />
           <Route path="/game" element={
             <ProtectedRoute>
               <GamePage />
@@ -76,11 +70,7 @@ const App: React.FC = () => {
             </ProtectedRoute>
           } />
           <Route path="/rules" element={<Rules />} />
-          <Route path="/settings" element={
-            <ProtectedRoute>
-              <SettingsPage />
-            </ProtectedRoute>
-          } />
+          <Route path="/settings" element={<SettingsPage />} />
           
           {/* Redirection pour les routes non définies */}
           <Route path="*" element={<Navigate to="/" replace />} />

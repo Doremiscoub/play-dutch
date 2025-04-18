@@ -44,14 +44,11 @@ const GameSetup: React.FC = () => {
       // Stockage temporaire des noms des joueurs pour l'initialisation
       localStorage.setItem('dutch_player_setup', JSON.stringify(playerNames));
       
-      // Option 1 : Utiliser l'URL pour transmettre les noms des joueurs (plus fiable)
-      const playersQueryParam = encodeURIComponent(JSON.stringify(playerNames));
-      console.info('Redirection vers /game avec les paramètres des joueurs');
-      
       // Ajouter un flag pour forcer une nouvelle partie
       localStorage.setItem('dutch_new_game_requested', 'true');
       
-      navigate(`/game?players=${playersQueryParam}&new=true`);
+      // Navigation directe vers la page de jeu
+      navigate('/game');
       
     } catch (error) {
       console.error("Erreur lors du démarrage de la partie:", error);

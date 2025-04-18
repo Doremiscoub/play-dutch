@@ -5,9 +5,9 @@ import { Volume2 } from 'lucide-react';
 import { Button } from './ui/button';
 import { useElevenLabs } from '@/hooks/use-eleven-labs';
 import { useSound } from '@/hooks/use-sound';
+import { useImageLoader } from '@/hooks/useImageLoader';
 
 // Chemin corrigé vers l'image du professeur
-// Utiliser l'image directement uploadée dans le dossier /images
 const PROFESSOR_IMAGE = '/images/professor-cartouche.png';
 
 interface ProfessorAvatarProps {
@@ -18,6 +18,7 @@ interface ProfessorAvatarProps {
 const ProfessorAvatar: React.FC<ProfessorAvatarProps> = ({ message, onSpeakMessage }) => {
   const { config: elevenLabsConfig, speakWithFallback, isLoading: isSpeaking } = useElevenLabs();
   const { isSoundEnabled } = useSound();
+  const { error } = useImageLoader(PROFESSOR_IMAGE);
   
   const handleSpeak = async () => {
     if (isSoundEnabled) {
@@ -44,16 +45,26 @@ const ProfessorAvatar: React.FC<ProfessorAvatarProps> = ({ message, onSpeakMessa
         }}
         whileHover={{ scale: 1.1, rotate: [-2, 2, -2] }}
       >
-        <img 
-          src={PROFESSOR_IMAGE}
-          alt="Professeur Cartouche" 
-          className="w-full h-full object-cover bg-white"
-          onError={(e) => {
-            console.error("Erreur de chargement du Professeur Cartouche:", e);
-            // Image de secours en cas d'erreur seulement
-            e.currentTarget.src = '/professor.png';
-          }}
-        />
+        {!error ? (
+          <img 
+            src={PROFESSOR_IMAGE}
+            alt="Professeur Cartouche" 
+            className="w-full h-full object-cover bg-white"
+            onError={(e) => {
+              console.error("Erreur de chargement du Professeur Cartouche:", e);
+              // On n'utilise plus d'image de secours, mais un emoji
+              e.currentTarget.style.display = 'none';
+              const parent = e.currentTarget.parentElement;
+              if (parent) {
+                parent.innerHTML += '<div class="w-full h-full flex items-center justify-center text-4xl">👴🏼</div>';
+              }
+            }}
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center text-4xl">
+            👴🏼
+          </div>
+        )}
       </motion.div>
       
       <Button

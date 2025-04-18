@@ -46,12 +46,15 @@ export const drawWaves = (
     ctx.beginPath();
     ctx.moveTo(0, canvas.height);
     
+    // Ajuster l'amplitude en fonction de la hauteur du canvas pour garantir un aspect cohérent
+    const adjustedAmplitude = Math.min(wave.amplitude, canvas.height * 0.1);
+    
     // Dessin de la vague avec une courbe naturelle
     for (let x = 0; x <= canvas.width; x += 2) {
       const dx = x * wave.frequency;
       // La direction influence la direction de l'animation
       const timeOffset = wave.direction === 'right' ? time * wave.speed : -time * wave.speed;
-      const y = yBase + Math.sin(dx + timeOffset) * wave.amplitude;
+      const y = yBase + Math.sin(dx + timeOffset) * adjustedAmplitude;
       ctx.lineTo(x, y);
     }
     
@@ -59,9 +62,10 @@ export const drawWaves = (
     ctx.lineTo(0, canvas.height);
     
     // Dégradé pour un effet plus naturel
-    const gradient = ctx.createLinearGradient(0, yBase - wave.amplitude, 0, canvas.height);
+    const gradient = ctx.createLinearGradient(0, yBase - adjustedAmplitude, 0, canvas.height);
     gradient.addColorStop(0, wave.color);
-    gradient.addColorStop(1, wave.color + '80'); // Semi-transparent en bas
+    const colorWithAlpha = wave.color + Math.floor(wave.opacity * 128).toString(16).padStart(2, '0');
+    gradient.addColorStop(1, colorWithAlpha);
     
     ctx.fillStyle = gradient;
     ctx.fill();

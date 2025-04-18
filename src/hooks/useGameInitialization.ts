@@ -50,48 +50,7 @@ export const useGameInitialization = () => {
         localStorage.removeItem('dutch_new_game_requested');
       }
       
-      // 1. Priorité aux paramètres d'URL pour l'initialisation des joueurs
-      const searchParams = new URLSearchParams(location.search);
-      const playersParam = searchParams.get('players');
-      const isNewGame = searchParams.get('new') === 'true';
-      
-      if (playersParam && isNewGame) {
-        console.info('Initialisation depuis les paramètres URL');
-        try {
-          const playerNames = JSON.parse(decodeURIComponent(playersParam));
-          
-          if (Array.isArray(playerNames) && playerNames.length >= 2) {
-            // Créer les joueurs directement depuis les paramètres URL
-            const newPlayers: Player[] = playerNames.map(name => ({
-              id: uuidv4(),
-              name: name && name.trim() ? name.trim() : `Joueur ${Math.floor(Math.random() * 1000)}`,
-              totalScore: 0,
-              rounds: []
-            }));
-            
-            console.info('Joueurs initialisés avec succès depuis URL:', newPlayers.map(p => p.name).join(', '));
-            setPlayers(newPlayers);
-            setGameStartTime(new Date());
-            
-            // Effacer les paramètres URL après utilisation pour éviter double initialisation
-            navigate('/game', { replace: true });
-            
-            // Marquer l'initialisation comme terminée
-            initializationCompleted.current = true;
-            initializationInProgress.current = false;
-            
-            // Nettoyage après initialisation réussie
-            clearPlayerSetup();
-            
-            toast.success('Nouvelle partie créée !');
-            return true;
-          }
-        } catch (error) {
-          console.error("Erreur lors du parsing des paramètres URL:", error);
-        }
-      }
-      
-      // 2. Méthode de secours: initialisation via localStorage
+      // 1. Méthode via localStorage (plus fiable dans notre contexte)
       console.info('Tentative d\'initialisation via localStorage');
       
       const setupValid = verifyPlayerSetup();
@@ -130,6 +89,9 @@ export const useGameInitialization = () => {
       initializationCompleted.current = true;
       initializationInProgress.current = false;
       
+      // Nettoyage après initialisation réussie
+      clearPlayerSetup();
+      
       toast.success('Nouvelle partie créée !');
       return true;
     } catch (error) {
@@ -148,7 +110,7 @@ export const useGameInitialization = () => {
         initializationAttempted.current = false;
       }, 1000);
     }
-  }, [navigate, location.search]);
+  }, [navigate]);
 
   // Nettoyage complet pour éviter les états partiels
   const cleanup = useCallback(() => {
