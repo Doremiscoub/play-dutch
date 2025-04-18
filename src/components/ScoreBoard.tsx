@@ -1,4 +1,3 @@
-
 /**
  * Tableau des scores principal - Composant refactorisé
  */
@@ -97,16 +96,18 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
         <AnimatedBackground variant="default" />
       </div>
       
-      <div className="w-full max-w-6xl mx-auto px-1 sm:px-2">
+      <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
         {/* En-tête avec boutons de navigation et titre */}
-        <ScoreBoardHeader 
-          roundCount={players.length > 0 ? players[0]?.rounds.length || 0 : 0}
-          scoreLimit={scoreLimit}
-        />
+        <div className="mb-8">
+          <ScoreBoardHeader 
+            roundCount={players.length > 0 ? players[0]?.rounds.length || 0 : 0}
+            scoreLimit={scoreLimit}
+          />
+        </div>
         
         {/* Commentateur IA - sur mobile et desktop */}
         {showAICommentator && (
-          <div className="mb-4">
+          <div className="mb-6">
             <AICommentator 
               players={players}
               roundHistory={roundHistory}
@@ -120,8 +121,8 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
           onViewChange={(newView) => setView(newView)}
         />
         
-        {/* Contenu principal */}
-        <div className={`mt-4 ${isDesktop ? 'md:flex md:gap-4' : ''}`}>
+        {/* Contenu principal avec meilleur espacement */}
+        <div className={`mt-6 ${isDesktop ? 'md:flex md:gap-6' : ''}`}>
           {/* Colonne de gauche (classement ou tableau) - responsive */}
           <div className={`${isDesktop ? 'md:w-3/4' : 'w-full'} z-20 relative`}>
             <AnimatePresence mode="wait">

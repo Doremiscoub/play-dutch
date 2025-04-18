@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import GradientAnimationStyles from '../game/GradientAnimationStyles';
@@ -74,63 +73,63 @@ const PageLayout: React.FC<PageLayoutProps> = ({
     };
   }, [isMobile]);
 
-  // Styles pour les vagues animées
+  // Styles pour les vagues animées plus fluides et arrondies
   const waveStyles = `
     @keyframes waveAnimation1 {
-      0% { transform: translateX(0) translateZ(0); }
-      50% { transform: translateX(-25%) translateZ(0); }
-      100% { transform: translateX(0) translateZ(0); }
+      0% { transform: translateX(0) scale(1.02); }
+      50% { transform: translateX(-15%) scale(1); }
+      100% { transform: translateX(0) scale(1.02); }
     }
     
     @keyframes waveAnimation2 {
-      0% { transform: translateX(0) translateZ(0); }
-      50% { transform: translateX(25%) translateZ(0); }
-      100% { transform: translateX(0) translateZ(0); }
+      0% { transform: translateX(0) scale(1); }
+      50% { transform: translateX(15%) scale(1.05); }
+      100% { transform: translateX(0) scale(1); }
     }
     
     @keyframes waveAnimation3 {
-      0% { transform: translateX(0) translateZ(0) scale(1.05); }
-      50% { transform: translateX(-15%) translateZ(0) scale(1); }
-      100% { transform: translateX(0) translateZ(0) scale(1.05); }
+      0% { transform: translateX(0) scale(1.03); }
+      50% { transform: translateX(-10%) scale(1); }
+      100% { transform: translateX(0) scale(1.03); }
     }
     
     .wave-bottom-1 {
       position: absolute;
-      bottom: 0;
-      left: -5%;
-      right: -5%;
-      height: 15vh;
-      background: #E9D5FF;
-      border-radius: 100% 100% 0 0 / 100% 100% 0 0;
-      opacity: 0.5;
-      animation: waveAnimation1 15s ease-in-out infinite;
+      bottom: -10%;
+      left: -10%;
+      right: -10%;
+      height: 20vh;
+      background: linear-gradient(to right, #E9D5FF, #C4B5FD);
+      border-radius: 100% 100% 0 0;
+      opacity: 0.6;
+      animation: waveAnimation1 18s ease-in-out infinite;
       z-index: -3;
       transform-origin: center bottom;
     }
     
     .wave-bottom-2 {
       position: absolute;
-      bottom: 0;
-      left: -10%;
-      right: -10%;
-      height: 12vh;
-      background: #FDE68A;
-      border-radius: 100% 100% 0 0 / 100% 100% 0 0;
-      opacity: 0.4;
-      animation: waveAnimation2 18s ease-in-out infinite;
+      bottom: -15%;
+      left: -15%;
+      right: -15%;
+      height: 18vh;
+      background: linear-gradient(to right, #FDE68A, #FDBA74);
+      border-radius: 100% 100% 0 0;
+      opacity: 0.5;
+      animation: waveAnimation2 24s ease-in-out infinite;
       z-index: -4;
       transform-origin: center bottom;
     }
     
     .wave-bottom-3 {
       position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 8vh;
-      background: #BAE6FD;
-      border-radius: 100% 100% 0 0 / 100% 100% 0 0;
-      opacity: 0.3;
+      bottom: -5%;
+      left: -5%;
+      right: -5%;
+      height: 12vh;
+      background: linear-gradient(to right, #93C5FD, #60A5FA);
+      border-radius: 100% 100% 0 0;
+      opacity: 0.4;
       animation: waveAnimation3 20s ease-in-out infinite;
       z-index: -5;
       transform-origin: center bottom;
