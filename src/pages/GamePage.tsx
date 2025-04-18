@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState, useCallback } from 'react';
 import { useGameState } from '@/hooks/useGameState';
 import GameContent from '@/components/GameContent';
@@ -8,6 +9,7 @@ import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Home, RefreshCw } from 'lucide-react';
 import { toast } from 'sonner';
+import AnimatedBackground from '@/components/AnimatedBackground';
 
 const GamePageErrorFallback = ({ error, errorInfo, errorCode, reset }: { 
   error: Error; 
@@ -157,6 +159,9 @@ const GamePage: React.FC = () => {
   if (!Array.isArray(players) || players.length === 0) {
     return (
       <div className="flex justify-center items-center min-h-screen flex-col p-6">
+        <div className="fixed inset-0 -z-10">
+          <AnimatedBackground variant="default" />
+        </div>
         <Alert variant="destructive" className="mb-6 max-w-md">
           <AlertTitle>Aucun joueur disponible</AlertTitle>
           <AlertDescription>

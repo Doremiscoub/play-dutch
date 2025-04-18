@@ -44,7 +44,7 @@ const BackgroundDots: React.FC = () => {
     };
   }, [isMobile]);
 
-  return <div className="background-dots" />;
+  return <div className="background-dots absolute inset-0 z-[-3] overflow-hidden pointer-events-none" />;
 };
 
 export default BackgroundDots;

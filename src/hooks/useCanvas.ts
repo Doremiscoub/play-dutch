@@ -1,61 +1,79 @@
 
-import { useRef, useEffect } from 'react';
+import { useRef, useCallback, useState, useEffect } from 'react';
 
-interface UseCanvasProps {
-  onResize?: () => void;
+interface CanvasHook {
+  canvasRef: React.RefObject<HTMLCanvasElement>;
+  getContext: () => CanvasRenderingContext2D | null;
+  getCanvas: () => HTMLCanvasElement | null;
+  setDimensions: () => void;
+  dimensions: { width: number; height: number };
 }
 
-export const useCanvas = ({ onResize }: UseCanvasProps = {}) => {
+/**
+ * Hook pour gérer un canvas et son contexte avec redimensionnement automatique
+ */
+export const useCanvas = (): CanvasHook => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [dimensions, setDimensionsState] = useState({ width: 0, height: 0 });
 
-  useEffect(() => {
+  const getContext = useCallback((): CanvasRenderingContext2D | null => {
+    const canvas = canvasRef.current;
+    return canvas ? canvas.getContext('2d') : null;
+  }, []);
+
+  const getCanvas = useCallback((): HTMLCanvasElement | null => {
+    return canvasRef.current;
+  }, []);
+
+  /**
+   * Ajuste les dimensions du canvas pour qu'il corresponde à sa taille affichée
+   */
+  const setDimensions = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d', { alpha: true }); // Changé pour permettre la transparence
-    if (!ctx) return;
+    // Obtenir la taille affichée du canvas
+    const { width, height } = canvas.getBoundingClientRect();
+    
+    // DPI support pour éviter le flou sur les écrans haute résolution
+    const dpr = window.devicePixelRatio || 1;
+    
+    // Définir les dimensions du canvas en tenant compte du DPI
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    
+    // Ajuster le style pour maintenir la taille visuelle
+    canvas.style.width = `${width}px`;
+    canvas.style.height = `${height}px`;
+    
+    // Adapter le contexte au DPI
+    const ctx = getContext();
+    if (ctx) {
+      ctx.scale(dpr, dpr);
+    }
+    
+    setDimensionsState({ width, height });
+  }, [getContext]);
 
-    const resizeCanvas = () => {
-      if (canvas) {
-        const dpr = window.devicePixelRatio || 1;
-        const displayWidth = Math.floor(window.innerWidth);
-        const displayHeight = Math.floor(window.innerHeight);
-        
-        // Définir les dimensions réelles du canvas pour une meilleure netteté
-        canvas.width = displayWidth * dpr;
-        canvas.height = displayHeight * dpr;
-        
-        // Ajuster la taille d'affichage CSS
-        canvas.style.width = `${displayWidth}px`;
-        canvas.style.height = `${displayHeight}px`;
-        
-        // Ajuster l'échelle en fonction du DPR
-        ctx.scale(dpr, dpr);
-        
-        onResize?.();
-      }
+  // Définir les dimensions initiales et les mettre à jour lors des redimensionnements
+  useEffect(() => {
+    setDimensions();
+    
+    const handleResize = () => {
+      setDimensions();
     };
-
-    resizeCanvas();
     
-    // Écouter les événements de redimensionnement de la fenêtre
-    window.addEventListener('resize', resizeCanvas);
-    
-    // Écouter les changements d'orientation sur mobile
-    window.addEventListener('orientationchange', resizeCanvas);
-    
+    window.addEventListener('resize', handleResize);
     return () => {
-      window.removeEventListener('resize', resizeCanvas);
-      window.removeEventListener('orientationchange', resizeCanvas);
+      window.removeEventListener('resize', handleResize);
     };
-  }, [onResize]);
+  }, [setDimensions]);
 
   return {
     canvasRef,
-    getContext: () => {
-      const canvas = canvasRef.current;
-      return canvas ? canvas.getContext('2d') : null;
-    },
-    getCanvas: () => canvasRef.current,
+    getContext,
+    getCanvas,
+    setDimensions,
+    dimensions
   };
 };
