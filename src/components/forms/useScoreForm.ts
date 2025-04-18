@@ -65,6 +65,7 @@ export const useScoreForm = (
       return;
     }
     
+    // Validation des scores
     if (!validateScores(scores, players.map(p => p.id))) {
       return;
     }
@@ -76,11 +77,10 @@ export const useScoreForm = (
       // Convertir l'objet scores en array de scores dans le même ordre que les joueurs
       const scoresArray = players.map(player => scores[player.id] || 0);
       
-      // Fermer immédiatement le dialogue pour éviter la double soumission
+      // Fermer immédiatement le dialogue
       onClose();
       
-      // APRÈS la fermeture, soumettre les scores
-      // Petit délai pour s'assurer que le dialogue est bien fermé
+      // Soumettre les scores avec un petit délai pour s'assurer que le dialogue est fermé
       setTimeout(() => {
         onSubmit(scoresArray, dutchPlayer);
       }, 10);

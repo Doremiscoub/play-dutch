@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { Plus, Undo, Flag, CheckCircle2 } from 'lucide-react';
+import { Plus, Undo, Flag } from 'lucide-react';
 import NewRoundScoreForm from './NewRoundScoreForm';
 import { Player } from '@/types';
 import { toast } from 'sonner';
@@ -28,7 +28,11 @@ const CustomScoreBoardButtons: React.FC<CustomScoreBoardButtonsProps> = ({
       toast.error("Aucun joueur trouvé");
       return;
     }
-    setShowScoreForm(true);
+    
+    // S'assurer que le formulaire n'est pas déjà affiché
+    if (!showScoreForm) {
+      setShowScoreForm(true);
+    }
   };
   
   // Fonction pour fermer le formulaire de saisie de scores
@@ -37,11 +41,16 @@ const CustomScoreBoardButtons: React.FC<CustomScoreBoardButtonsProps> = ({
   };
   
   // Fonction pour gérer la soumission des scores
-  // Modifiée pour éviter la réouverture immédiate du formulaire
   const handleSubmitScores = (scores: number[], dutchPlayerId?: string) => {
-    onAddRound(scores, dutchPlayerId);
-    // Fermeture explicite du formulaire après traitement
-    setShowScoreForm(false);
+    try {
+      // Appel à la fonction de soumission
+      onAddRound(scores, dutchPlayerId);
+      // Fermeture explicite du formulaire
+      setShowScoreForm(false);
+    } catch (error) {
+      console.error("Erreur lors de la soumission des scores:", error);
+      toast.error("Une erreur est survenue lors de l'ajout de la manche");
+    }
   };
 
   return (
@@ -89,6 +98,7 @@ const CustomScoreBoardButtons: React.FC<CustomScoreBoardButtonsProps> = ({
           <Button
             onClick={handleOpenScoreForm}
             className="px-8 bg-gradient-to-r from-dutch-purple to-dutch-blue shadow-xl rounded-full h-14"
+            disabled={showScoreForm} // Désactiver le bouton si le formulaire est déjà ouvert
           >
             <Plus className="h-5 w-5 mr-2" />
             Nouvelle manche
