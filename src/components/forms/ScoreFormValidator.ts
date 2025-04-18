@@ -19,14 +19,16 @@ export const resetValidationErrorFlag = () => {
  */
 export const validateScores = (scores: { [key: string]: number }, playerIds: string[]): boolean => {
   try {
-    // Reset notification flag for new validation
-    validationErrorShown = false;
+    // Check if validation has already been done recently
+    if (validationErrorShown) {
+      console.info("Une validation d'erreur a déjà été affichée, pas de nouvelle notification");
+      return false;
+    }
     
     if (!scores || !playerIds || playerIds.length === 0) {
-      if (!validationErrorShown) {
-        toast.error('Données de score invalides');
-        validationErrorShown = true;
-      }
+      toast.error('Données de score invalides');
+      validationErrorShown = true;
+      setTimeout(() => { validationErrorShown = false; }, 3000);
       return false;
     }
     
@@ -36,10 +38,9 @@ export const validateScores = (scores: { [key: string]: number }, playerIds: str
     );
     
     if (!allPlayersHaveScores) {
-      if (!validationErrorShown) {
-        toast.error('Tous les joueurs doivent avoir un score');
-        validationErrorShown = true;
-      }
+      toast.error('Tous les joueurs doivent avoir un score');
+      validationErrorShown = true;
+      setTimeout(() => { validationErrorShown = false; }, 3000);
       return false;
     }
 
@@ -50,10 +51,9 @@ export const validateScores = (scores: { [key: string]: number }, playerIds: str
     });
     
     if (!allScoresValid) {
-      if (!validationErrorShown) {
-        toast.error('Tous les scores doivent être des nombres valides');
-        validationErrorShown = true;
-      }
+      toast.error('Tous les scores doivent être des nombres valides');
+      validationErrorShown = true;
+      setTimeout(() => { validationErrorShown = false; }, 3000);
       return false;
     }
     
@@ -63,6 +63,7 @@ export const validateScores = (scores: { [key: string]: number }, playerIds: str
     if (!validationErrorShown) {
       toast.error('Erreur lors de la validation des scores');
       validationErrorShown = true;
+      setTimeout(() => { validationErrorShown = false; }, 3000);
     }
     return false;
   }

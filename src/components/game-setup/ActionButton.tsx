@@ -22,7 +22,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({ onClick, label, disabled = 
         disabled={disabled}
         className="w-full h-14 rounded-full bg-gradient-to-r from-dutch-blue to-dutch-purple shadow-lg flex items-center justify-center gap-2 text-white font-medium"
       >
-        <Play className="h-5 w-5" />
+        <Play className="h-5 w-5 text-white" />
         <span className="text-white">{label}</span>
       </Button>
     </motion.div>

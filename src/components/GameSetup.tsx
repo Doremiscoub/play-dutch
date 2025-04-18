@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Plus, Minus, Play, Users, Computer } from 'lucide-react';
+import { Play, Users, Computer } from 'lucide-react';
 import { motion } from 'framer-motion';
 import AnimatedBackground from './AnimatedBackground';
 import { useNavigate } from 'react-router-dom';
@@ -24,11 +24,12 @@ const GameSetup: React.FC = () => {
   
   // Clean up any existing game state when component mounts
   useEffect(() => {
+    // Force clean all game state and player setup data
     cleanupGameState();
     clearPlayerSetup();
     console.info("Configuration de jeu nettoyée au montage du composant GameSetup");
     
-    // Supprimer également toutes les clés de localStorage qui pourraient interférer
+    // Also remove all localStorage keys that might interfere
     localStorage.removeItem('dutch_player_setup');
     localStorage.removeItem('dutch_new_game_requested');
     localStorage.removeItem('current_dutch_game');
@@ -55,10 +56,14 @@ const GameSetup: React.FC = () => {
     setPlayerNames(newNames);
   };
 
-  const handleStartGame = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleStartGame = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     
-    if (isSubmitting) return;
+    if (isSubmitting) {
+      console.info("Soumission déjà en cours, éviter les clics multiples");
+      return;
+    }
+    
     setIsSubmitting(true);
     
     try {
@@ -87,28 +92,15 @@ const GameSetup: React.FC = () => {
       
       console.info('Noms des joueurs validés:', validPlayerNames);
       
-      // Sauvegarder la configuration des joueurs dans localStorage de manière synchrone
-      localStorage.setItem('dutch_player_setup', JSON.stringify(validPlayerNames));
-      localStorage.setItem('dutch_new_game_requested', 'true');
+      // MÉTHODE DIRECTE: Au lieu de passer par localStorage, passons les joueurs directement par l'URL
+      // Encodage des noms des joueurs pour l'URL
+      const playersQueryParam = encodeURIComponent(JSON.stringify(validPlayerNames));
       
-      console.info('Configuration des joueurs enregistrée. Vérification...');
+      console.info('Redirection vers /game avec les paramètres des joueurs');
       
-      // Vérification immédiate que les données ont bien été enregistrées
-      const savedData = localStorage.getItem('dutch_player_setup');
-      if (!savedData) {
-        console.error("ERREUR CRITIQUE: Échec de l'enregistrement de la configuration des joueurs");
-        toast.error("Erreur lors de la création de la partie");
-        setIsSubmitting(false);
-        return;
-      }
+      // Navigation directe avec les données des joueurs
+      navigate(`/game?players=${playersQueryParam}&new=true`);
       
-      console.info('Configuration vérifiée avec succès. Données sauvegardées:', savedData);
-      console.info('Redirection vers /game...');
-      
-      // Attendre un peu pour s'assurer que localStorage est bien mis à jour
-      setTimeout(() => {
-        navigate('/game');
-      }, 300);
     } catch (error) {
       console.error("Erreur lors du démarrage de la partie:", error);
       toast.error("Une erreur est survenue lors de la création de la partie");

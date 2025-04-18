@@ -33,7 +33,7 @@ export const initializePlayers = (): Player[] | null => {
     if (!playerSetup) {
       console.error('Aucune configuration de joueurs trouvée dans localStorage');
       if (!errorNotificationShown) {
-        toast.error('Configuration de partie manquante');
+        // Ne pas afficher de toast ici pour éviter les doublons
         errorNotificationShown = true;
       }
       return null;
@@ -45,7 +45,7 @@ export const initializePlayers = (): Player[] | null => {
     } catch (parseError) {
       console.error("Erreur de parsing de la configuration:", parseError);
       if (!errorNotificationShown) {
-        toast.error('Configuration de partie corrompue');
+        // Ne pas afficher de toast ici pour éviter les doublons
         errorNotificationShown = true;
       }
       return null;
@@ -54,7 +54,7 @@ export const initializePlayers = (): Player[] | null => {
     if (!Array.isArray(playerNames) || playerNames.length < 2) {
       console.error('Configuration de joueurs invalide:', playerNames);
       if (!errorNotificationShown) {
-        toast.error('Configuration de partie invalide');
+        // Ne pas afficher de toast ici pour éviter les doublons
         errorNotificationShown = true;
       }
       return null;
@@ -77,7 +77,7 @@ export const initializePlayers = (): Player[] | null => {
   } catch (error) {
     console.error('Erreur lors de la création de la partie :', error);
     if (!errorNotificationShown) {
-      toast.error('Erreur lors de la création de la partie');
+      // Ne pas afficher de toast ici pour éviter les doublons
       errorNotificationShown = true;
     }
     return null;
@@ -88,11 +88,15 @@ export const initializePlayers = (): Player[] | null => {
  * Force clear all players setup data
  */
 export const clearPlayerSetup = () => {
-  localStorage.removeItem('dutch_player_setup');
-  console.info('Configuration des joueurs nettoyée');
-  // Reset notification flag when clearing setup
-  errorNotificationShown = false;
-  verificationErrorShown = false;
+  try {
+    localStorage.removeItem('dutch_player_setup');
+    console.info('Configuration des joueurs nettoyée');
+    // Reset notification flag when clearing setup
+    errorNotificationShown = false;
+    verificationErrorShown = false;
+  } catch (error) {
+    console.error("Erreur lors du nettoyage de la configuration des joueurs:", error);
+  }
 };
 
 /**
@@ -110,10 +114,6 @@ export const verifyPlayerSetup = (): boolean => {
     
     if (!playerSetup) {
       console.error('Vérification: Aucune configuration de joueurs trouvée');
-      if (!verificationErrorShown) {
-        // Ne pas afficher de toast ici pour éviter les doublons avec initializePlayers
-        verificationErrorShown = true;
-      }
       return false;
     }
     

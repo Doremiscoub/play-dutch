@@ -1,4 +1,3 @@
-
 /**
  * Main hook for game state management
  */
@@ -47,7 +46,7 @@ export const useGameState = () => {
   const { loadGameState, saveGameState, saveGameToHistory } = useGamePersistence();
   const { roundHistory, setRoundHistory, addRound, undoLastRound } = useRoundManagement(scoreLimit, soundEnabled);
   
-  // Initialize game from localStorage
+  // Initialize game from localStorage or URL parameters
   useEffect(() => {
     try {
       if (initializationCompleted.current || initializationAttempted.current || initializationInProgress.current) {
@@ -62,43 +61,35 @@ export const useGameState = () => {
       const initializeGame = () => {
         console.info('Initialisation du jeu...');
         
-        // Check if this is a new game
-        const isNewGame = localStorage.getItem('dutch_new_game_requested') === 'true';
+        // Créer une nouvelle partie (méthode mise à jour pour gérer les paramètres URL)
+        const success = createNewGame();
         
-        if (isNewGame) {
-          console.info('Création d\'une nouvelle partie demandée');
-          // Remove new game flag
-          localStorage.removeItem('dutch_new_game_requested');
-          // Remove old game in progress
-          localStorage.removeItem('current_dutch_game');
-          // Create a new game
-          createNewGame();
-          return;
-        }
-        
-        // Otherwise, load existing game if it exists
-        const savedGame = loadGameState();
-        
-        if (savedGame) {
-          console.info("Chargement d'une partie existante");
-          setPlayers(savedGame.players);
-          setRoundHistory(savedGame.roundHistory || []);
-          setScoreLimit(savedGame.scoreLimit || 100);
+        // Si la création échoue, charger une sauvegarde existante
+        if (!success) {
+          console.info("Tentative de chargement d'une partie existante");
+          const savedGame = loadGameState();
           
-          if (savedGame.gameStartTime) {
-            setGameStartTime(new Date(savedGame.gameStartTime));
+          if (savedGame) {
+            console.info("Chargement d'une partie existante");
+            setPlayers(savedGame.players);
+            setRoundHistory(savedGame.roundHistory || []);
+            setScoreLimit(savedGame.scoreLimit || 100);
+            
+            if (savedGame.gameStartTime) {
+              setGameStartTime(new Date(savedGame.gameStartTime));
+            }
+            
+            if (savedGame.isGameOver) {
+              setShowGameOver(true);
+            }
+            
+            // Mark initialization as completed
+            initializationCompleted.current = true;
+            console.info("Initialisation depuis une sauvegarde réussie");
+          } else {
+            console.info("Aucune partie sauvegardée trouvée, redirection vers la configuration");
+            navigate('/game/setup');
           }
-          
-          if (savedGame.isGameOver) {
-            setShowGameOver(true);
-          }
-          
-          // Mark initialization as completed
-          initializationCompleted.current = true;
-          console.info("Initialisation depuis une sauvegarde réussie");
-        } else {
-          console.info("Aucune partie sauvegardée trouvée, création d'une nouvelle partie");
-          createNewGame();
         }
       };
       
