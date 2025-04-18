@@ -2,6 +2,8 @@
 import React, { useRef, useEffect } from 'react';
 import { drawWaves } from '@/utils/waveAnimations';
 import { drawDots } from '@/components/background/AnimatedDots';
+import { drawGrid } from '@/utils/gridUtils';
+import { createAnimationLoop } from '@/utils/animationTimingUtils';
 
 interface AnimatedBackgroundProps {
   variant?: 'default' | 'subtle' | 'minimal';
@@ -24,56 +26,35 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
 
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
-
-    // Animation loop
-    let animationId: number;
-    let lastTimestamp = 0;
     
-    const draw = (timestamp: number = 0) => {
-      const time = timestamp / 1000;
-      
+    // Animation setup with utilities
+    const draw = (time: number) => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
-      // Background color based on variant
+      // Background
       ctx.fillStyle = '#FFFFFF';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       
-      // Draw grid (if not minimal)
+      // Grid (if not minimal)
       if (variant !== 'minimal') {
-        ctx.strokeStyle = 'rgba(218, 218, 218, 0.1)';
-        ctx.beginPath();
-
-        for (let x = 0; x <= canvas.width; x += 24) {
-          ctx.moveTo(x, 0);
-          ctx.lineTo(x, canvas.height);
-        }
-
-        for (let y = 0; y <= canvas.height; y += 24) {
-          ctx.moveTo(0, y);
-          ctx.lineTo(canvas.width, y);
-        }
-
-        ctx.stroke();
+        drawGrid(ctx, canvas, {
+          size: 24,
+          color: '#DADADA',
+          opacity: 0.1
+        });
       }
 
-      // Draw animated elements
+      // Animated elements
       drawDots({ ctx, canvas, time });
       drawWaves(ctx, canvas, time);
     };
 
-    const animate = (timestamp: number) => {
-      if (timestamp - lastTimestamp > 16) { // ~60fps
-        lastTimestamp = timestamp;
-        draw(timestamp);
-      }
-      animationId = requestAnimationFrame(animate);
-    };
-
-    animate(0);
+    const animation = createAnimationLoop(draw);
+    animation.start();
     
     return () => {
       window.removeEventListener('resize', resizeCanvas);
-      cancelAnimationFrame(animationId);
+      animation.stop();
     };
   }, [variant]);
 
