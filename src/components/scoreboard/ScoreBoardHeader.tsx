@@ -1,9 +1,11 @@
+
 import React from 'react';
 import { Trophy, Settings, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
+import ProfessorAvatar from '@/components/game/ProfessorAvatar';
 
 interface ScoreBoardHeaderProps {
   roundCount: number;

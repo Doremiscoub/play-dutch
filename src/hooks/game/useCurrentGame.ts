@@ -2,11 +2,14 @@
 import { useState, useCallback } from 'react';
 import { Player } from '@/types';
 import { toast } from 'sonner';
-import { updateAllPlayersStats } from '@/utils/playerStatsCalculator';
+import { useRounds } from './useRounds';
+import { useSound } from '@/hooks/use-sound';
 
 export const useCurrentGame = () => {
   const [showGameOver, setShowGameOver] = useState<boolean>(false);
   const [players, setPlayers] = useState<Player[]>([]);
+  const { isSoundEnabled } = useSound();
+  const { roundHistory, addRound: addRoundToHistory, undoLastRound: undoRoundFromHistory } = useRounds(isSoundEnabled);
 
   const handleAddRound = useCallback((scores: number[], dutchPlayerId?: string) => {
     try {
@@ -24,27 +27,9 @@ export const useCurrentGame = () => {
         return false;
       }
 
-      // Mise à jour des scores des joueurs
-      const updatedPlayers = players.map((player, index) => {
-        const isDutch = player.id === dutchPlayerId;
-        const newRound = { 
-          score: scores[index],
-          isDutch 
-        };
-        
-        // Vérifier que player.rounds est bien un tableau
-        const existingRounds = Array.isArray(player.rounds) ? player.rounds : [];
-        
-        return {
-          ...player,
-          rounds: [...existingRounds, newRound],
-          totalScore: (player.totalScore || 0) + scores[index]
-        };
-      });
-
-      // Mise à jour des statistiques
-      const playersWithStats = updateAllPlayersStats(updatedPlayers);
-      setPlayers(playersWithStats);
+      // Utiliser la fonction addRound de useRounds pour mettre à jour les joueurs
+      const updatedPlayers = addRoundToHistory(players, scores, dutchPlayerId);
+      setPlayers(updatedPlayers);
       
       console.info("Manche ajoutée avec succès");
       toast.success("Manche ajoutée");
@@ -54,13 +39,23 @@ export const useCurrentGame = () => {
       toast.error("Une erreur est survenue lors de l'ajout de la manche");
       return false;
     }
-  }, [players]);
+  }, [players, addRoundToHistory]);
+
+  const handleUndoLastRound = useCallback(() => {
+    const updatedPlayers = undoRoundFromHistory(players);
+    setPlayers(updatedPlayers);
+  }, [players, undoRoundFromHistory]);
 
   return {
     players,
     setPlayers,
     showGameOver,
     setShowGameOver,
-    handleAddRound
+    handleAddRound,
+    handleUndoLastRound,
+    roundHistory
   };
 };
+
+// Réexporter useRounds pour une source de vérité unique
+export { useRounds };

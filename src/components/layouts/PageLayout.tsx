@@ -3,7 +3,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import GradientAnimationStyles from '../game/GradientAnimationStyles';
 import BackgroundGrid from './BackgroundGrid';
-import BackgroundDots from './BackgroundDots';
+import BackgroundDots from '../background/BackgroundDots';
 import WavesBackground from '../background/WavesBackground';
 
 type BackgroundVariant = 'default' | 'blue' | 'purple';

@@ -13,6 +13,44 @@ export const useRounds = (soundEnabled: boolean) => {
   // Initialisation explicite avec un tableau vide pour éviter des problèmes de type
   const [roundHistory, setRoundHistory] = useState<RoundHistory[]>([]);
 
+  const addRound = (players: Player[], scores: number[], dutchPlayerId?: string): Player[] => {
+    try {
+      if (!players || players.length === 0 || !scores || scores.length !== players.length) {
+        toast.error("Données invalides pour l'ajout de la manche");
+        return players;
+      }
+
+      // Ajouter les scores à l'historique
+      const newRound = { scores, dutchPlayerId };
+      setRoundHistory(prev => [...prev, newRound]);
+
+      // Mise à jour des scores des joueurs
+      const updatedPlayers = players.map((player, index) => {
+        const isDutch = player.id === dutchPlayerId;
+        const newRoundData = { 
+          score: scores[index],
+          isDutch 
+        };
+        
+        // Vérifier que player.rounds est bien un tableau
+        const existingRounds = Array.isArray(player.rounds) ? player.rounds : [];
+        
+        return {
+          ...player,
+          rounds: [...existingRounds, newRoundData],
+          totalScore: (player.totalScore || 0) + scores[index]
+        };
+      });
+
+      // Mise à jour des statistiques
+      return updateAllPlayersStats(updatedPlayers);
+    } catch (error) {
+      console.error("Erreur lors de l'ajout d'une manche:", error);
+      toast.error("Une erreur est survenue lors de l'ajout de la manche");
+      return players;
+    }
+  };
+
   const undoLastRound = (players: Player[]): Player[] => {
     try {
       // Vérification que players est un tableau valide avec au moins un élément
@@ -63,6 +101,7 @@ export const useRounds = (soundEnabled: boolean) => {
   return {
     roundHistory,
     setRoundHistory,
+    addRound,
     undoLastRound
   };
 };

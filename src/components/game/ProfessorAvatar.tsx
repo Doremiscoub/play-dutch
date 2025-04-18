@@ -13,17 +13,18 @@ const ProfessorAvatar: React.FC<ProfessorAvatarProps> = ({
   message,
   size = 96
 }) => {
-  const [srcIndex, setSrcIndex] = useState(0);
+  const [imageError, setImageError] = useState<boolean>(false);
   
   const handleImageError = () => {
-    if (srcIndex < SOURCES.length - 1) {
-      setSrcIndex(i => i + 1);
-    } else {
-      setSrcIndex(-1); // Affichera l'emoji
-    }
+    setImageError(true);
   };
 
-  const avatarSrc = srcIndex >= 0 ? SOURCES[srcIndex] : null;
+  // Si l'image a échoué au chargement, ne rien afficher
+  if (imageError) {
+    return null;
+  }
+
+  const avatarSrc = SOURCES[0];
   const sizeClass = `w-[${size}px] h-[${size}px]`;
 
   return (
@@ -41,18 +42,12 @@ const ProfessorAvatar: React.FC<ProfessorAvatarProps> = ({
         }}
         whileHover={{ scale: 1.1, rotate: [-2, 2, -2] }}
       >
-        {avatarSrc ? (
-          <img 
-            src={avatarSrc}
-            alt="Professeur Cartouche"
-            className="w-full h-full object-cover"
-            onError={handleImageError}
-          />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center text-4xl">
-            🧠
-          </div>
-        )}
+        <img 
+          src={avatarSrc}
+          alt="Professeur Cartouche"
+          className="w-full h-full object-cover"
+          onError={handleImageError}
+        />
       </motion.div>
       
       {message && (
