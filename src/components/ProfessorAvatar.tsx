@@ -1,10 +1,11 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { Volume2 } from 'lucide-react';
 import { Button } from './ui/button';
 import { useElevenLabs } from '@/hooks/use-eleven-labs';
 import { useSound } from '@/hooks/use-sound';
+import { useImageLoader } from '@/hooks/useImageLoader';
 
 const PROFESSOR_IMAGE = '/lovable-uploads/60f07be2-bcee-4ade-9356-f86b80d0774b.png';
 
@@ -16,12 +17,7 @@ interface ProfessorAvatarProps {
 const ProfessorAvatar: React.FC<ProfessorAvatarProps> = ({ message, onSpeakMessage }) => {
   const { config: elevenLabsConfig, speakWithFallback, isLoading: isSpeaking } = useElevenLabs();
   const { isSoundEnabled } = useSound();
-  const [imageLoaded, setImageLoaded] = useState(false);
-  
-  const handleImageLoaded = () => {
-    console.info("L'image du professeur s'est chargée avec succès");
-    setImageLoaded(true);
-  };
+  const { imageLoaded, handleImageLoaded } = useImageLoader();
   
   const handleSpeak = async () => {
     if (isSoundEnabled) {
