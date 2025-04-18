@@ -1,76 +1,41 @@
 
 import React from 'react';
-import PlayerCountSelector from './PlayerCountSelector';
-import PlayerNameInput from './PlayerNameInput';
-import ActionButton from './ActionButton';
-import SetupCard from './SetupCard';
-import LocalGameSetupInfo from './LocalGameSetupInfo';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import { Smartphone } from 'lucide-react';
+import LocalGameSetup from './LocalGameSetup';
 
 interface LocalGameSetupContainerProps {
   onStartGame: (playerNames: string[]) => void;
-  isLoading?: boolean;
 }
 
-const LocalGameSetupContainer: React.FC<LocalGameSetupContainerProps> = ({
-  onStartGame,
-  isLoading = false
-}) => {
-  const [playerCount, setPlayerCount] = React.useState(4);
-  const [playerNames, setPlayerNames] = React.useState<string[]>(
-    Array(4).fill('').map((_, i) => `Joueur ${i + 1}`)
-  );
-
-  const handlePlayerCountChange = (increment: boolean) => {
-    const newNum = increment 
-      ? Math.min(playerCount + 1, 10) 
-      : Math.max(playerCount - 1, 2);
-    
-    setPlayerCount(newNum);
-    
-    if (increment && playerCount < 10) {
-      setPlayerNames([...playerNames, `Joueur ${playerCount + 1}`]);
-    } else if (!increment && playerCount > 2) {
-      setPlayerNames(playerNames.slice(0, -1));
-    }
-  };
-
-  const handleNameChange = (index: number, name: string) => {
-    const newNames = [...playerNames];
-    newNames[index] = name;
-    setPlayerNames(newNames);
-  };
-
-  const handleSubmit = () => {
-    onStartGame(playerNames);
-  };
-
+const LocalGameSetupContainer: React.FC<LocalGameSetupContainerProps> = ({ onStartGame }) => {
   return (
-    <SetupCard title="Nouvelle partie locale">
-      <LocalGameSetupInfo />
-      
-      <PlayerCountSelector 
-        count={playerCount} 
-        onChange={handlePlayerCountChange}
-      />
-      
-      <div className="space-y-3 mt-6 mb-6">
-        {playerNames.map((name, index) => (
-          <PlayerNameInput
-            key={`player-${index}`}
-            name={name}
-            onChange={handleNameChange}
-            placeholder={`Joueur ${index + 1}`}
-            index={index}
-          />
-        ))}
-      </div>
-      
-      <ActionButton
-        onClick={handleSubmit}
-        disabled={playerNames.some(name => !name.trim()) || isLoading}
-        label="Commencer la partie"
-      />
-    </SetupCard>
+    <div className="space-y-6">
+      <Card 
+        className="rounded-3xl border border-white/50 bg-white/80 backdrop-blur-md shadow-md"
+      >
+        <CardHeader className="pb-2">
+          <CardTitle className="text-xl font-semibold text-dutch-blue flex items-center gap-2">
+            <Smartphone className="h-5 w-5" />
+            Un seul téléphone
+          </CardTitle>
+          <CardDescription className="text-gray-600">
+            Tous les joueurs partagent le même appareil pour suivre les scores
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="bg-dutch-blue/5 rounded-xl p-4 text-sm text-gray-600">
+            <p>Parfait pour jouer ensemble autour d'une table. Chaque joueur entre son score à son tour sur cet appareil.</p>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card className="rounded-3xl border border-white/50 bg-white/90 backdrop-blur-md shadow-md">
+        <CardContent className="pt-6">
+          <LocalGameSetup onStartGame={onStartGame} />
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 

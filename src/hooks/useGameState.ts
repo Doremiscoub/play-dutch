@@ -1,183 +1,178 @@
-import { useEffect, useRef, useCallback } from 'react';
+/**
+ * Main hook for game state management
+ */
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Player } from '@/types';
+import { toast } from 'sonner';
 import { useLocalStorage } from './use-local-storage';
 import { useGamePersistence } from './useGamePersistence';
+import { useRoundManagement } from './useRoundManagement';
 import { useGameInitialization } from './useGameInitialization';
 import { useGameContinuation } from './useGameContinuation';
-import { verifyPlayerSetup } from '@/utils/playerInitializer';
-import { useCurrentGame } from './game/useCurrentGame';
-import { useRounds } from './game/useRounds';
-import { useScoreLimit } from './game/useScoreLimit';
-import { toast } from 'sonner';
+import { resetNotificationFlags } from '@/utils/playerInitializer';
 
+/**
+ * Main hook for complete game state management
+ */
 export const useGameState = () => {
   const navigate = useNavigate();
-  const initializationAttempted = useRef(false);
-  const initializationProcessed = useRef(false);
-  const maxInitWaitTime = useRef<NodeJS.Timeout | null>(null);
+  const [showGameOver, setShowGameOver] = useState<boolean>(false);
   const [soundEnabled] = useLocalStorage('dutch_sound_enabled', true);
-
+  const initializationAttempted = useRef(false);
+  
+  // Use our new modular hooks
   const {
-    players,
-    setPlayers,
-    showGameOver,
-    setShowGameOver,
-    handleAddRound
-  } = useCurrentGame();
-
-  const {
-    roundHistory,
-    setRoundHistory,
-    undoLastRound
-  } = useRounds(soundEnabled);
-
-  const {
-    scoreLimit,
-    setScoreLimit
-  } = useScoreLimit();
-
-  const {
-    gameStartTime,
+    players, 
+    setPlayers, 
+    gameStartTime, 
     setGameStartTime,
-    createNewGame,
+    scoreLimit,
+    setScoreLimit, 
+    createNewGame, 
     initializationCompleted,
     initializationInProgress
   } = useGameInitialization();
-
-  const {
-    showGameEndConfirmation,
-    setShowGameEndConfirmation,
-    handleRequestEndGame,
-    handleCancelEndGame,
+  
+  const { 
+    showGameEndConfirmation, 
+    setShowGameEndConfirmation, 
+    handleRequestEndGame, 
+    handleCancelEndGame, 
     handleContinueGame,
     handleRestart
   } = useGameContinuation(setShowGameOver, setScoreLimit, scoreLimit);
-
+  
   const { loadGameState, saveGameState, saveGameToHistory } = useGamePersistence();
-
-  const saveCurrentGameState = useCallback(() => {
-    if (players && players.length > 0) {
-      console.info('Sauvegarde de l\'état du jeu');
-      saveGameState({
-        players,
-        roundHistory,
-        isGameOver: showGameOver,
-        scoreLimit,
-        gameStartTime
-      });
+  const { roundHistory, setRoundHistory, addRound, undoLastRound } = useRoundManagement(scoreLimit, soundEnabled);
+  
+  // Initialize game from localStorage or URL parameters
+  useEffect(() => {
+    try {
+      if (initializationCompleted.current || initializationAttempted.current || initializationInProgress.current) {
+        console.info("Initialisation déjà tentée ou en cours, ignorer");
+        return; // Avoid double initialization
+      }
+      
+      initializationAttempted.current = true;
+      console.info("Tentative d'initialisation du jeu...");
+      resetNotificationFlags(); // Réinitialiser les flags de notification
+      
+      const initializeGame = () => {
+        console.info('Initialisation du jeu...');
+        
+        // Créer une nouvelle partie (méthode mise à jour pour gérer les paramètres URL)
+        const success = createNewGame();
+        
+        // Si la création échoue, charger une sauvegarde existante
+        if (!success) {
+          console.info("Tentative de chargement d'une partie existante");
+          const savedGame = loadGameState();
+          
+          if (savedGame) {
+            console.info("Chargement d'une partie existante");
+            setPlayers(savedGame.players);
+            setRoundHistory(savedGame.roundHistory || []);
+            setScoreLimit(savedGame.scoreLimit || 100);
+            
+            if (savedGame.gameStartTime) {
+              setGameStartTime(new Date(savedGame.gameStartTime));
+            }
+            
+            if (savedGame.isGameOver) {
+              setShowGameOver(true);
+            }
+            
+            // Mark initialization as completed
+            initializationCompleted.current = true;
+            console.info("Initialisation depuis une sauvegarde réussie");
+          } else {
+            console.info("Aucune partie sauvegardée trouvée, redirection vers la configuration");
+            navigate('/game/setup');
+          }
+        }
+      };
+      
+      initializeGame();
+    } catch (error) {
+      console.error("Erreur lors de l'initialisation du jeu:", error);
+      toast.error("Une erreur est survenue lors du chargement de la partie");
+      navigate('/game/setup');
+    } finally {
+      // Réinitialiser le flag après un délai
+      setTimeout(() => {
+        initializationAttempted.current = false;
+      }, 1000);
+    }
+  }, [loadGameState, navigate, setRoundHistory, createNewGame, setPlayers, setGameStartTime, setScoreLimit]);
+  
+  // Save game state to localStorage when it changes
+  useEffect(() => {
+    try {
+      if (players.length > 0) {
+        const gameState = {
+          players,
+          roundHistory,
+          isGameOver: showGameOver,
+          scoreLimit,
+          gameStartTime,
+          lastUpdated: new Date()
+        };
+        
+        saveGameState(gameState);
+      }
+    } catch (error) {
+      console.error("Erreur lors de la sauvegarde de l'état du jeu:", error);
     }
   }, [players, roundHistory, showGameOver, scoreLimit, gameStartTime, saveGameState]);
-
-  useEffect(() => {
-    if (players && players.length > 0) {
-      saveCurrentGameState();
-    }
-  }, [players, roundHistory, showGameOver, saveCurrentGameState]);
-
-  useEffect(() => {
-    if (initializationProcessed.current) {
-      return;
-    }
-    
-    initializationProcessed.current = true;
-    console.debug('Valeurs localStorage au démarrage:', {
-      dutch_player_setup: localStorage.getItem('dutch_player_setup'),
-      current_dutch_game: localStorage.getItem('current_dutch_game'),
-      dutch_new_game_requested: localStorage.getItem('dutch_new_game_requested'),
-      dutch_initialization_completed: localStorage.getItem('dutch_initialization_completed')
-    });
-    
-    const isNewGameRequested = localStorage.getItem('dutch_new_game_requested') === 'true';
-    
-    if (isNewGameRequested) {
-      console.info("Création d'une nouvelle partie demandée");
-      
-      const result = createNewGame();
-      if (result && result.players?.length) {
-        setPlayers(result.players);
-        setRoundHistory([]);
-        setScoreLimit(result.scoreLimit);
-        
-        // Charger l'état pour garantir la cohérence
-        loadGameState();
-        localStorage.removeItem('dutch_new_game_requested');
-      }
-      return;
-    }
-    
-    console.info("Tentative de chargement d'une partie existante");
-    const savedGame = loadGameState();
-    
-    if (savedGame && savedGame.players && savedGame.players.length > 0) {
-      console.info("Chargement d'une partie existante");
-      setPlayers(savedGame.players);
-      setRoundHistory(savedGame.roundHistory || []);
-      setScoreLimit(savedGame.scoreLimit || 100);
-      
-      if (savedGame.gameStartTime) {
-        setGameStartTime(new Date(savedGame.gameStartTime));
-      }
-      
-      if (savedGame.isGameOver) {
-        setShowGameOver(true);
-      }
-      
-      initializationCompleted.current = true;
-      localStorage.setItem('dutch_initialization_completed', 'true');
-      
-      toast.success('Partie existante chargée !');
-    } else {
-      console.info("Aucune partie sauvegardée trouvée, vérification de la configuration des joueurs");
-      
-      const setupValid = verifyPlayerSetup();
-      if (setupValid) {
-        console.info("Configuration de joueurs valide trouvée, création d'une nouvelle partie");
-        const success = createNewGame();
-        if (!success && !initializationInProgress.current) {
-          console.error("Échec lors de la création de la nouvelle partie");
-          navigate('/game/setup');
-        }
-      } else {
-        console.info("Aucune configuration de joueurs valide, redirection vers la configuration");
-        toast.info("Veuillez configurer une nouvelle partie");
-        navigate('/game/setup');
-      }
-    }
-    
-    console.debug('Valeurs localStorage après initialisation:', {
-      dutch_player_setup: localStorage.getItem('dutch_player_setup'),
-      current_dutch_game: localStorage.getItem('current_dutch_game'),
-      dutch_new_game_requested: localStorage.getItem('dutch_new_game_requested'),
-      dutch_initialization_completed: localStorage.getItem('dutch_initialization_completed')
-    });
-    
-    return () => {
-      if (maxInitWaitTime.current) {
-        clearTimeout(maxInitWaitTime.current);
-      }
-    };
-  }, [createNewGame, loadGameState, navigate, setGameStartTime, setPlayers, setRoundHistory, setScoreLimit, setShowGameOver, players]);
-
-  const handleUndoLastRound = useCallback(() => {
+  
+  // Add a new round
+  const handleAddRound = (scores: number[], dutchPlayerId?: string) => {
     try {
-      const updatedPlayers = undoLastRound(players);
+      const result = addRound(players, scores, dutchPlayerId);
       
-      if (updatedPlayers) {
+      if (result) {
+        const { updatedPlayers, isGameOver: gameOver } = result;
         setPlayers(updatedPlayers);
-
-        if (showGameOver) {
-          setShowGameOver(false);
+        
+        if (gameOver) {
+          setTimeout(() => {
+            setShowGameOver(true);
+          }, 500);
         }
+        
+        return true; // Indicate that the addition succeeded
       }
-
-      return true;
+      
+      return false; // Indicate that the addition failed
     } catch (error) {
-      console.error("Erreur lors de l'annulation de la dernière manche:", error);
+      console.error("Erreur lors de l'ajout d'une manche:", error);
+      toast.error("Une erreur est survenue lors de l'ajout de la manche");
       return false;
     }
-  }, [players, undoLastRound, showGameOver, setPlayers, setShowGameOver]);
-
-  const handleConfirmEndGame = useCallback(() => {
+  };
+  
+  // Undo last round
+  const handleUndoLastRound = () => {
+    try {
+      const updatedPlayers = undoLastRound(players, soundEnabled);
+      setPlayers(updatedPlayers);
+      
+      // If game over screen was displayed, hide it
+      if (showGameOver) {
+        setShowGameOver(false);
+      }
+      
+      return true; // Indicate that the undo succeeded
+    } catch (error) {
+      console.error("Erreur lors de l'annulation de la dernière manche:", error);
+      toast.error("Une erreur est survenue lors de l'annulation de la manche");
+      return false;
+    }
+  };
+  
+  // Confirm end of game
+  const handleConfirmEndGame = () => {
     try {
       saveGameToHistory(players, gameStartTime);
       setShowGameOver(true);
@@ -185,9 +180,10 @@ export const useGameState = () => {
       return true;
     } catch (error) {
       console.error("Erreur lors de la confirmation de fin de partie:", error);
+      toast.error("Une erreur est survenue lors de la sauvegarde de la partie");
       return false;
     }
-  }, [players, gameStartTime, saveGameToHistory, setShowGameOver, setShowGameEndConfirmation]);
+  };
 
   return {
     players,

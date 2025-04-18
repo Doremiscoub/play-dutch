@@ -10,24 +10,21 @@ interface GameModeTabsProps {
 
 const GameModeTabs: React.FC<GameModeTabsProps> = ({ activeTab, onTabChange }) => {
   return (
-    <TabsList className="grid grid-cols-2 mb-6 rounded-full border-2 border-white/20 bg-white/70 backdrop-blur-md shadow-sm overflow-hidden h-12">
+    <TabsList className="grid grid-cols-2 mb-6 rounded-full border-2 border-white/60 bg-white/90 backdrop-blur-md p-1 shadow-md w-full max-w-full overflow-hidden">
       <TabsTrigger 
         value="local" 
-        onClick={() => onTabChange("local")}
-        className="rounded-full data-[state=active]:bg-dutch-blue/90 data-[state=active]:text-white data-[state=inactive]:bg-transparent data-[state=inactive]:text-dutch-blue/70 flex items-center justify-center space-x-2 transition-all duration-300 h-full"
+        className="rounded-full data-[state=active]:bg-white data-[state=active]:shadow-md data-[state=active]:border-dutch-blue/20 data-[state=active]:border flex items-center justify-center space-x-1 py-2.5 text-dutch-blue data-[state=active]:text-dutch-blue data-[state=inactive]:text-dutch-blue/70 px-2 truncate"
       >
-        <User className="w-4 h-4 flex-shrink-0" />
-        <span className="font-medium">Local</span>
+        <User className="w-4 h-4 flex-shrink-0 mr-1" />
+        <span className="truncate">Local</span>
       </TabsTrigger>
       <TabsTrigger 
         value="online" 
-        onClick={() => onTabChange("online")}
-        className="rounded-full data-[state=active]:bg-dutch-orange/90 data-[state=active]:text-white data-[state=inactive]:bg-transparent data-[state=inactive]:text-dutch-orange/70 flex items-center justify-center space-x-2 transition-all duration-300 h-full"
+        className="rounded-full data-[state=active]:bg-white data-[state=active]:shadow-md data-[state=active]:border-dutch-orange/20 data-[state=active]:border flex items-center justify-center space-x-1 py-2.5 text-dutch-orange data-[state=active]:text-dutch-orange data-[state=inactive]:text-dutch-orange/70 px-2 truncate"
         disabled
       >
-        <Globe className="w-4 h-4 flex-shrink-0" />
-        <span className="font-medium">En ligne</span>
-        <span className="ml-1 text-xs bg-dutch-orange/20 text-dutch-orange/80 px-1.5 py-0.5 rounded-full">Bientôt</span>
+        <Globe className="w-4 h-4 flex-shrink-0 mr-1" />
+        <span className="truncate">En ligne</span>
       </TabsTrigger>
     </TabsList>
   );

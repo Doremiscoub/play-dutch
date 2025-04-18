@@ -1,3 +1,4 @@
+
 /**
  * Composant principal de l'application avec système de routes optimisé
  */
@@ -18,63 +19,30 @@ import SignUp from './pages/SignUp';
 
 // Composants
 import ProtectedRoute from './components/ProtectedRoute';
-import { useGamePersistence } from './hooks/useGamePersistence';
 
 // Contexte
 import { AuthProvider } from './context/AuthContext';
-
-// Fond animé
-import AnimatedBackground from './components/background/AnimatedBackground';
 
 /**
  * Composant principal de l'application
  * Gère le routage et l'initialisation globale
  */
 const App: React.FC = () => {
-  const { hasActiveGame } = useGamePersistence();
-  
   // Notification de mode hors-ligne si détecté
   useEffect(() => {
     try {
       const isOfflineMode = localStorage.getItem('clerk_auth_failed') === 'true';
       if (isOfflineMode) {
-        toast.info("Mode hors-ligne activé", { id: "offline-mode" });
+        toast.info("Mode hors-ligne activé");
       }
     } catch (error) {
       console.error("Erreur lors de la vérification du mode hors-ligne:", error);
     }
   }, []);
   
-  // Nettoyer les flags de navigation problématiques
-  useEffect(() => {
-    const cleanup = () => {
-      // Ne nettoie pas dutch_player_setup pour permettre l'initialisation
-      const keysToKeep = ['dutch_player_setup', 'dutch_game_mode'];
-      
-      // Nettoyer uniquement les flags de navigation et non les données de jeu
-      const flagsToRemove = [
-        'dutch_previous_route',
-        'dutch_game_page_visited'
-      ];
-      
-      flagsToRemove.forEach(key => {
-        try {
-          localStorage.removeItem(key);
-        } catch (e) {
-          console.error(`Erreur lors du nettoyage de ${key}:`, e);
-        }
-      });
-    };
-    
-    cleanup();
-  }, []);
-  
   return (
     <AuthProvider>
       <Router>
-        {/* Fond animé global */}
-        <AnimatedBackground />
-        
         <Routes>
           {/* Pages d'authentification */}
           <Route path="/sign-in" element={<SignIn />} />
@@ -94,7 +62,11 @@ const App: React.FC = () => {
             </ProtectedRoute>
           } />
           <Route path="/rules" element={<Rules />} />
-          <Route path="/settings" element={<SettingsPage />} />
+          <Route path="/settings" element={
+            <ProtectedRoute>
+              <SettingsPage />
+            </ProtectedRoute>
+          } />
           
           {/* Redirection pour les routes non définies */}
           <Route path="*" element={<Navigate to="/" replace />} />
@@ -112,8 +84,7 @@ const App: React.FC = () => {
             background: 'rgba(255, 255, 255, 0.9)',
             backdropFilter: 'blur(8px)',
             border: '1px solid rgba(255, 255, 255, 0.5)',
-          },
-          duration: 3000
+          }
         }}
       />
     </AuthProvider>

@@ -39,11 +39,6 @@ const GameSettings: React.FC<GameSettingsProps> = ({
     }, 1500);
   };
 
-  const handleBack = () => {
-    // Utilisation de navigate(-1) pour revenir à l'écran précédent
-    navigate(-1);
-  };
-
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -115,10 +110,10 @@ const GameSettings: React.FC<GameSettingsProps> = ({
               <Button 
                 variant="dutch-glass" 
                 className="justify-start rounded-xl"
-                onClick={handleBack}
+                onClick={() => navigate('/')}
               >
                 <Home className="h-4 w-4 mr-2" aria-hidden="true" />
-                Retour
+                Accueil
               </Button>
               
               <Button 

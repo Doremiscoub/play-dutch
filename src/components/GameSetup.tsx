@@ -3,72 +3,54 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
+import { cleanupGameState } from '@/utils/gameUtils';
+import { clearPlayerSetup } from '@/utils/playerInitializer';
 import AnimatedBackground from './AnimatedBackground';
 import { Tabs, TabsContent } from '@/components/ui/tabs';
 import GameModeTabs from './game-setup/GameModeTabs';
 import LocalGameSetupContainer from './game-setup/LocalGameSetupContainer';
-import { cleanupGameState } from '@/utils/gameUtils';
 
 const GameSetup: React.FC = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<string>("local");
   const [isSubmitting, setIsSubmitting] = useState(false);
   
-  // Nettoyage de l'état lors de l'entrée sur la page de configuration
   useEffect(() => {
-    console.info("GameSetup: Nettoyage de l'état du jeu au montage");
-    
-    // Nettoyer certains flags mais PAS dutch_player_setup pour permettre la reprise
-    localStorage.removeItem('dutch_game_page_visited');
-    localStorage.removeItem('dutch_initialization_attempted');
-    localStorage.removeItem('dutch_initialization_completed');
-    localStorage.removeItem('dutch_new_game_requested');
-    
-    // Définir le mode par défaut à local
-    localStorage.setItem('dutch_game_mode', 'local');
+    cleanupGameState();
+    console.info("Configuration de jeu nettoyée au montage du composant GameSetup");
   }, []);
 
-  // Update the function signature to accept playerNames parameter
-  const handleStartGame = (playerNames: string[] = []) => {
+  const handleStartGame = (playerNames: string[]) => {
     if (isSubmitting) {
-      console.info("GameSetup: Soumission déjà en cours, éviter les clics multiples");
+      console.info("Soumission déjà en cours, éviter les clics multiples");
       return;
     }
     
     setIsSubmitting(true);
     
     try {
-      console.info('GameSetup: Démarrage de la partie avec les joueurs:', playerNames);
+      console.info('Démarrage de la partie avec les joueurs:', playerNames);
       
-      if (!playerNames || playerNames.length < 2) {
-        console.error("GameSetup: Erreur: moins de 2 joueurs");
+      if (playerNames.length < 2) {
+        console.error("Erreur: moins de 2 joueurs");
         toast.error('Il faut au moins 2 joueurs pour commencer une partie');
         setIsSubmitting(false);
         return;
       }
       
-      // Vérification finale que les données sont bien enregistrées
-      const storedPlayers = localStorage.getItem('dutch_player_setup');
-      const playerData = storedPlayers ? JSON.parse(storedPlayers) : null;
+      // IMPORTANT: NE PAS nettoyer ici pour garder les données dans localStorage
+      // jusqu'à ce que l'initialisation soit terminée
       
-      if (!playerData || !Array.isArray(playerData) || playerData.length < 2) {
-        console.error("GameSetup: Configuration des joueurs invalide, essai de correction");
-        localStorage.setItem('dutch_player_setup', JSON.stringify(playerNames));
-      }
+      // Option 1 : Utiliser l'URL pour transmettre les noms des joueurs (plus fiable)
+      const playersQueryParam = encodeURIComponent(JSON.stringify(playerNames));
+      console.info('Redirection vers /game avec les paramètres des joueurs');
+      navigate(`/game?players=${playersQueryParam}&new=true`);
       
-      console.info("GameSetup: Navigation vers /game");
+      // Option 2 : Utiliser localStorage comme méthode de secours
+      // déjà fait dans le composant LocalGameSetup
       
-      // Navigation avec délai pour s'assurer que localStorage est à jour
-      setTimeout(() => {
-        navigate('/game');
-        
-        // Réinitialiser le flag de soumission après la navigation
-        setTimeout(() => {
-          setIsSubmitting(false);
-        }, 500);
-      }, 300);
     } catch (error) {
-      console.error("GameSetup: Erreur lors du démarrage de la partie:", error);
+      console.error("Erreur lors du démarrage de la partie:", error);
       toast.error("Une erreur est survenue lors de la création de la partie");
       setIsSubmitting(false);
     }

@@ -31,24 +31,10 @@ const NewRoundScoreForm: React.FC<NewRoundScoreFormProps> = ({
     handleSubmitForm
   } = useScoreForm(players, open, onClose, onSubmit);
   
-  // Si le dialogue n'est pas ouvert ou si le formulaire a déjà été soumis,
-  // on ne rend pas le composant
-  if (!open || submitHandled.current) {
-    return null;
-  }
-  
-  // Fonction pour gérer la fermeture manuelle du modal sans soumettre
-  const handleOpenChange = (isOpen: boolean) => {
-    if (!isOpen && !isSubmitting && !submitHandled.current) {
-      onClose();
-    }
-  };
-  
   return (
-    <Dialog 
-      open={open} 
-      onOpenChange={handleOpenChange}
-    >
+    <Dialog open={open} onOpenChange={(isOpen) => {
+      if (!isOpen && !isSubmitting && !submitHandled) onClose();
+    }}>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
           <DialogTitle className="text-center text-xl bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">
@@ -67,10 +53,10 @@ const NewRoundScoreForm: React.FC<NewRoundScoreFormProps> = ({
               onScoreChange={handleScoreChange}
               onAdjustScore={adjustScore}
               onDutchToggle={handleDutchToggle}
-              inputRef={index === 0 ? firstInputRef : undefined}
+              inputRef={firstInputRef}
               onEnterKey={handleSubmitForm}
               isSubmitting={isSubmitting}
-              submitHandled={submitHandled.current}
+              submitHandled={submitHandled}
             />
           ))}
         </div>
@@ -79,7 +65,7 @@ const NewRoundScoreForm: React.FC<NewRoundScoreFormProps> = ({
           onCancel={onClose}
           onSubmit={handleSubmitForm}
           isSubmitting={isSubmitting}
-          submitHandled={submitHandled.current}
+          submitHandled={submitHandled}
         />
       </DialogContent>
     </Dialog>

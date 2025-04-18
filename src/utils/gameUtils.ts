@@ -1,34 +1,68 @@
-
 /**
  * Utilitaires pour la gestion des parties
  */
 import { v4 as uuidv4 } from 'uuid';
-import { Player, Game } from '@/types';
+import { Player, Game, PlayerStatistics } from '@/types';
+
+/**
+ * Initialise les joueurs à partir des noms stockés
+ */
+export const initializePlayers = (): Player[] | null => {
+  try {
+    const savedPlayersStr = localStorage.getItem('dutch_player_setup');
+    
+    if (!savedPlayersStr) {
+      return null;
+    }
+    
+    const playerNames = JSON.parse(savedPlayersStr);
+    
+    if (!Array.isArray(playerNames) || playerNames.length === 0) {
+      return null;
+    }
+    
+    const players = playerNames.map((name: string) => ({
+      id: uuidv4(),
+      name: name || `Joueur ${Math.floor(Math.random() * 1000)}`,
+      totalScore: 0,
+      rounds: []
+    }));
+    
+    // Suppression des données d'initialisation après usage
+    localStorage.removeItem('dutch_player_setup');
+    
+    return players;
+  } catch (error) {
+    console.error("Erreur lors de l'initialisation des joueurs:", error);
+    return null;
+  }
+};
 
 /**
  * Force la réinitialisation complète de l'état de jeu
  */
 export const cleanupGameState = () => {
-  // Liste des clés à supprimer explicitement
-  const keysToRemove = [
-    'current_dutch_game',
-    'dutch_new_game_requested',
-    'dutch_game_page_visited',
-    'dutch_initialization_completed',
-    'dutch_initialization_attempted',
-    'dutch_game_history',
-    'dutch_round_history',
-    'dutch_players',
-    'dutch_score_limit',
-    'dutch_game_start_time'
-  ];
+  // Supprimer TOUTES les données relatives à une partie en cours
+  localStorage.removeItem('current_dutch_game');
+  localStorage.removeItem('dutch_new_game_requested');
+  localStorage.removeItem('dutch_player_setup');
   
-  // Supprimer chaque clé individuellement
-  for (const key of keysToRemove) {
-    localStorage.removeItem(key);
+  // Nettoyer également tous les autres éléments potentiellement problématiques
+  localStorage.removeItem('dutch_game_history');
+  localStorage.removeItem('dutch_round_history');
+  localStorage.removeItem('dutch_players');
+  localStorage.removeItem('dutch_score_limit');
+  localStorage.removeItem('dutch_game_start_time');
+  
+  // Vérifier pour être sûr que tout a bien été nettoyé
+  const allKeys = Object.keys(localStorage);
+  for (const key of allKeys) {
+    if (key.startsWith('dutch_game_') || key.startsWith('dutch_round_')) {
+      localStorage.removeItem(key);
+    }
   }
   
-  console.info("État du jeu nettoyé");
+  console.info("État du jeu complètement nettoyé");
 };
 
 /**

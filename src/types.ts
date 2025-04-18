@@ -3,23 +3,20 @@ export interface Player {
   id: string;
   name: string;
   totalScore: number;
-  avatarColor: string;
   rounds: { score: number; isDutch: boolean }[];
   stats?: PlayerStatistics;
 }
 
 export interface PlayerStatistics {
-  playerId: string;
-  roundsPlayed: number;
-  meanScore: number;
-  // Ajout des propriétés manquantes utilisées par les composants
   averageScore: number;
   bestRound: number | null;
-  worstRound: number | null;
   dutchCount: number;
+  worstRound: number | null;
   improvementRate: number;
   consistencyScore: number;
   winStreak: number;
+  highestRound?: number;
+  lowestRound?: number;
   streakInfo?: {
     current: number;
     best: number;
@@ -35,9 +32,10 @@ export interface Game {
   winner: string;
   isMultiplayer?: boolean;
   gameCode?: string;
-  duration?: string;
+  duration?: string;  // Added duration property
 }
 
+// Add these new props to the ScoreBoardProps interface
 export interface ScoreBoardProps {
   players: Player[];
   onAddRound: (scores: number[], dutchPlayerId?: string) => void;
@@ -51,6 +49,7 @@ export interface ScoreBoardProps {
   scoreLimit?: number;
 }
 
+// Add the AuthUser and AuthContextType interfaces
 export interface AuthUser {
   id: string;
   fullName: string | null;

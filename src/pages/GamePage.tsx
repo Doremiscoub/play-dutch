@@ -2,57 +2,66 @@
 import React, { useEffect } from 'react';
 import { useGameState } from '@/hooks/useGameState';
 import GameContent from '@/components/GameContent';
-import ErrorBoundary from '@/components/ErrorBoundary';
-import GameErrorBoundary from '@/components/game/GameErrorBoundary';
-import GameLoader from '@/components/game/GameLoader';
-import NoPlayersAlert from '@/components/game/NoPlayersAlert';
-import { useGamePageInitialization } from '@/hooks/game/useGamePageInitialization';
-import AnimatedBackground from '@/components/AnimatedBackground';
+import { updateAllPlayersStats } from '@/utils/playerStatsCalculator';
 
 const GamePage: React.FC = () => {
-  const { isReady } = useGamePageInitialization();
-  const gameState = useGameState();
-  const { players, roundHistory, showGameOver, showGameEndConfirmation, scoreLimit } = gameState;
+  const {
+    players,
+    roundHistory,
+    showGameOver,
+    showGameEndConfirmation,
+    scoreLimit,
+    handleAddRound,
+    handleUndoLastRound,
+    handleRequestEndGame,
+    handleConfirmEndGame,
+    handleCancelEndGame,
+    handleContinueGame,
+    handleRestart
+  } = useGameState();
   
-  // Debug des valeurs localStorage au montage de la page
+  // Check for long inactivity
   useEffect(() => {
-    console.debug('GamePage - Valeurs localStorage:', {
-      dutch_player_setup: localStorage.getItem('dutch_player_setup'),
-      current_dutch_game: localStorage.getItem('current_dutch_game'),
-      dutch_new_game_requested: localStorage.getItem('dutch_new_game_requested'),
-      dutch_initialization_completed: localStorage.getItem('dutch_initialization_completed')
-    });
-  }, []);
+    const savedGame = localStorage.getItem('current_dutch_game');
+    if (savedGame) {
+      try {
+        const parsedGame = JSON.parse(savedGame);
+        const lastUpdated = new Date(parsedGame.lastUpdated);
+        const now = new Date();
+        const hoursSinceLastUpdate = (now.getTime() - lastUpdated.getTime()) / (1000 * 60 * 60);
+        
+        if (hoursSinceLastUpdate > 24) {
+          const confirmResume = window.confirm('Une partie non terminée a été trouvée. Voulez-vous la reprendre?');
+          if (!confirmResume) {
+            localStorage.removeItem('current_dutch_game');
+            handleRestart();
+          }
+        }
+      } catch (error) {
+        console.error("Erreur lors de l'analyse de la partie sauvegardée:", error);
+        localStorage.removeItem('current_dutch_game');
+      }
+    }
+  }, [handleRestart]);
   
-  // Protection contre l'affichage pendant l'initialisation
-  if (!isReady) {
-    return <GameLoader message="Initialisation de la partie..." />;
-  }
-
-  // Affichage si aucun joueur n'est disponible après l'initialisation
-  if (!players || players.length === 0) {
-    console.warn("GamePage: Aucun joueur disponible après initialisation");
-    return <NoPlayersAlert />;
-  }
-
-  // Rendu principal avec gestion d'erreur
+  // Apply stats to players
+  const playersWithStats = updateAllPlayersStats(players);
+  
   return (
-    <ErrorBoundary FallbackComponent={GameErrorBoundary}>
-      <GameContent
-        players={players}
-        roundHistory={roundHistory}
-        showGameOver={showGameOver}
-        showGameEndConfirmation={showGameEndConfirmation}
-        scoreLimit={scoreLimit}
-        onAddRound={gameState.handleAddRound}
-        onUndoLastRound={gameState.handleUndoLastRound}
-        onRequestEndGame={gameState.handleRequestEndGame}
-        onConfirmEndGame={gameState.handleConfirmEndGame}
-        onCancelEndGame={gameState.handleCancelEndGame}
-        onContinueGame={gameState.handleContinueGame}
-        onRestart={gameState.handleRestart}
-      />
-    </ErrorBoundary>
+    <GameContent
+      players={playersWithStats}
+      roundHistory={roundHistory}
+      showGameOver={showGameOver}
+      showGameEndConfirmation={showGameEndConfirmation}
+      scoreLimit={scoreLimit}
+      onAddRound={handleAddRound}
+      onUndoLastRound={handleUndoLastRound}
+      onRequestEndGame={handleRequestEndGame}
+      onConfirmEndGame={handleConfirmEndGame}
+      onCancelEndGame={handleCancelEndGame}
+      onContinueGame={handleContinueGame}
+      onRestart={handleRestart}
+    />
   );
 };
 

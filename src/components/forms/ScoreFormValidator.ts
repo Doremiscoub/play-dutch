@@ -57,19 +57,6 @@ export const validateScores = (scores: { [key: string]: number }, playerIds: str
       return false;
     }
     
-    // Au moins un score doit être non-nul pour que ce soit une manche valide
-    const hasNonZeroScore = playerIds.some(id => {
-      const score = typeof scores[id] === 'string' ? parseFloat(scores[id]) : scores[id];
-      return score !== 0;
-    });
-    
-    if (!hasNonZeroScore) {
-      toast.error('Au moins un joueur doit avoir un score non nul');
-      validationErrorShown = true;
-      setTimeout(() => { validationErrorShown = false; }, 3000);
-      return false;
-    }
-    
     return true;
   } catch (error) {
     console.error('Erreur de validation des scores:', error);

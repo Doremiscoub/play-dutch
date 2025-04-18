@@ -8,15 +8,9 @@ interface ActionButtonProps {
   onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
   label: string;
   disabled?: boolean;
-  isLoading?: boolean;
 }
 
-const ActionButton: React.FC<ActionButtonProps> = ({ 
-  onClick, 
-  label, 
-  disabled = false, 
-  isLoading = false 
-}) => {
+const ActionButton: React.FC<ActionButtonProps> = ({ onClick, label, disabled = false }) => {
   return (
     <motion.div 
       whileHover={{ scale: 1.03 }}
@@ -25,7 +19,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({
     >
       <Button
         onClick={onClick}
-        disabled={disabled || isLoading}
+        disabled={disabled}
         className="w-full h-14 rounded-full bg-gradient-to-r from-dutch-blue to-dutch-purple shadow-lg flex items-center justify-center gap-2 text-white font-medium"
       >
         <Play className="h-5 w-5 text-white" />

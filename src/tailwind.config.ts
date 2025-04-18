@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 import { COLORS, TYPOGRAPHY, BORDERS, SHADOWS, ANIMATIONS } from "./config/theme";
 
