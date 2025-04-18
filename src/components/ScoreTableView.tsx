@@ -11,18 +11,41 @@ interface ScoreTableViewProps {
 }
 
 const ScoreTableView: React.FC<ScoreTableViewProps> = ({ players, roundHistory }) => {
-  if (!players.length) return (
+  // Protection contre les données manquantes
+  const safePlayers = Array.isArray(players) ? players : [];
+  const safeRoundHistory = Array.isArray(roundHistory) ? roundHistory : [];
+  
+  if (safePlayers.length === 0) return (
     <div className="text-center p-8">
       <p className="text-gray-500">Aucun joueur pour le moment</p>
     </div>
   );
+
+  // Calcul sécurisé des statistiques
+  const getPlayerStats = (player: Player) => {
+    try {
+      const rounds = player.rounds || [];
+      const total = player.totalScore ?? 0;
+      const average = rounds.length > 0 ? total / rounds.length : 0;
+      const minScore = rounds.length > 0 
+        ? Math.min(...rounds.map(r => r.score !== undefined ? r.score : Infinity))
+        : 0;
+      
+      const dutchCount = rounds.filter(r => r.isDutch === true).length;
+      
+      return { total, average, minScore, dutchCount };
+    } catch (error) {
+      console.error("Erreur lors du calcul des stats du joueur:", error);
+      return { total: 0, average: 0, minScore: 0, dutchCount: 0 };
+    }
+  };
 
   return (
     <div className="space-y-6 w-full">
       {/* Tableau des scores par manche */}
       <div>
         <h3 className="text-2xl font-medium mb-3 text-gray-700">Scores par manche</h3>
-        <DetailedScoreTable players={players} roundHistory={roundHistory} />
+        <DetailedScoreTable players={safePlayers} roundHistory={safeRoundHistory} />
       </div>
       
       {/* Tableau des statistiques globales */}
@@ -45,12 +68,8 @@ const ScoreTableView: React.FC<ScoreTableViewProps> = ({ players, roundHistory }
               </TableRow>
             </TableHeader>
             <TableBody>
-              {players.map((player) => {
-                const rounds = player.rounds || [];
-                const total = player.totalScore;
-                const average = rounds.length > 0 ? total / rounds.length : 0;
-                const minScore = rounds.length > 0 ? Math.min(...rounds.map(r => r.score)) : 0;
-                const dutchCount = rounds.filter(r => r.isDutch).length;
+              {safePlayers.map((player) => {
+                const { total, average, minScore, dutchCount } = getPlayerStats(player);
                 
                 return (
                   <TableRow key={player.id} className="hover:bg-dutch-blue/5">

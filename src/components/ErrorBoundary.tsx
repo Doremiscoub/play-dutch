@@ -25,6 +25,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
   static getDerivedStateFromError(error: Error): ErrorBoundaryState {
     // Met à jour l'état pour afficher l'UI de fallback
+    console.info("ErrorBoundary: Erreur capturée via getDerivedStateFromError");
     return {
       hasError: true,
       error
@@ -32,13 +33,15 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
-    // Vous pouvez également journaliser l'erreur dans un service de rapport d'erreurs
-    console.error('ErrorBoundary caught an error:', error, errorInfo);
+    // Journalisation détaillée de l'erreur
+    console.error('ErrorBoundary: Erreur capturée via componentDidCatch:', error);
+    console.error('ErrorBoundary: Informations additionnelles:', errorInfo);
   }
 
   componentDidUpdate(prevProps: ErrorBoundaryProps) {
     // Réinitialiser l'état d'erreur si les enfants changent
     if (prevProps.children !== this.props.children && this.state.hasError) {
+      console.info("ErrorBoundary: Réinitialisation après changement d'enfants");
       this.setState({ 
         hasError: false,
         error: null
@@ -51,6 +54,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     const { children, FallbackComponent } = this.props;
 
     if (hasError && error) {
+      console.info("ErrorBoundary: Affichage du composant de fallback");
       return <FallbackComponent error={error} />;
     }
 

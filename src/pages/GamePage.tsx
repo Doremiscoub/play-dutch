@@ -22,6 +22,21 @@ const GamePage: React.FC = () => {
     handleRestart
   } = useGameState();
   
+  // Journalisation pour le suivi du composant
+  useEffect(() => {
+    console.info("GamePage: Montage du composant");
+    return () => console.info("GamePage: Démontage du composant");
+  }, []);
+  
+  // Journalisation des états principaux
+  useEffect(() => {
+    console.info("GamePage: Mise à jour des données", {
+      playerCount: players?.length || 0,
+      roundCount: roundHistory?.length || 0,
+      showGameOver
+    });
+  }, [players, roundHistory, showGameOver]);
+  
   // Vérifier les longues périodes d'inactivité
   useEffect(() => {
     const checkInactivity = () => {
@@ -56,8 +71,12 @@ const GamePage: React.FC = () => {
     return () => clearTimeout(timeoutId);
   }, [handleRestart]);
   
-  // Appliquer les statistiques aux joueurs
-  const playersWithStats = updateAllPlayersStats(players);
+  // Protection contre les données invalides
+  const safePlayersWithStats = Array.isArray(players) && players.length > 0
+    ? updateAllPlayersStats(players)
+    : [];
+  
+  const safeRoundHistory = Array.isArray(roundHistory) ? roundHistory : [];
   
   // Stocker le chemin actuel dans localStorage pour l'historique de navigation
   useEffect(() => {
@@ -66,8 +85,8 @@ const GamePage: React.FC = () => {
   
   return (
     <GameContent
-      players={playersWithStats}
-      roundHistory={roundHistory}
+      players={safePlayersWithStats}
+      roundHistory={safeRoundHistory}
       showGameOver={showGameOver}
       showGameEndConfirmation={showGameEndConfirmation}
       scoreLimit={scoreLimit}

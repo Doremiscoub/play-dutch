@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Player } from '@/types';
 import PlayerListView from './PlayerListView';
@@ -22,6 +22,33 @@ const ScoreBoardContent: React.FC<ScoreBoardContentProps> = ({
   scoreLimit
 }) => {
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  
+  // Effet pour simuler un chargement initial et éviter les problèmes de rendu
+  useEffect(() => {
+    console.info("ScoreBoardContent: Montage du composant");
+    
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 100);
+    
+    return () => {
+      clearTimeout(timer);
+      console.info("ScoreBoardContent: Démontage du composant");
+    };
+  }, []);
+  
+  // Protection contre les valeurs null/undefined
+  const safeRoundHistory = Array.isArray(roundHistory) ? roundHistory : [];
+  const safePlayers = Array.isArray(players) ? players : [];
+  
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center p-8">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-dutch-blue border-t-transparent"></div>
+      </div>
+    );
+  }
 
   return (
     <div className={`mt-8 ${isDesktop ? 'md:flex md:gap-6' : ''}`}>
@@ -36,7 +63,7 @@ const ScoreBoardContent: React.FC<ScoreBoardContentProps> = ({
               className="w-full"
             >
               <PlayerListView 
-                players={players}
+                players={safePlayers}
                 isDesktop={isDesktop}
                 scoreLimit={scoreLimit}
                 onPlayerSelect={setSelectedPlayer}
@@ -53,8 +80,8 @@ const ScoreBoardContent: React.FC<ScoreBoardContentProps> = ({
               className="bg-white/90 backdrop-blur-sm p-4 rounded-2xl shadow-lg border border-white"
             >
               <ScoreTableView 
-                players={players}
-                roundHistory={roundHistory}
+                players={safePlayers}
+                roundHistory={safeRoundHistory}
               />
             </motion.div>
           )}
@@ -64,8 +91,8 @@ const ScoreBoardContent: React.FC<ScoreBoardContentProps> = ({
       {isDesktop && (
         <div className="md:w-1/4 md:max-h-screen md:sticky md:top-0">
           <GameStatsPanel
-            players={players}
-            roundHistory={roundHistory}
+            players={safePlayers}
+            roundHistory={safeRoundHistory}
           />
         </div>
       )}

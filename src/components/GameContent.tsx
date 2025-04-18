@@ -2,7 +2,7 @@
 /**
  * Contenu principal de la page de jeu
  */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Player } from '@/types';
 import ErrorBoundary from './ErrorBoundary';
 import ScoreBoard from './ScoreBoard';
@@ -37,6 +37,23 @@ const GameContent: React.FC<GameContentProps> = ({
   onContinueGame,
   onRestart
 }) => {
+  // Journalisation pour suivre le cycle de vie
+  useEffect(() => {
+    console.info("GameContent: Montage du composant");
+    return () => {
+      console.info("GameContent: Démontage du composant");
+    };
+  }, []);
+  
+  // Journalisation des changements dans les données principales
+  useEffect(() => {
+    console.info("GameContent: Mise à jour du tableau des scores", {
+      playerCount: players.length,
+      roundCount: roundHistory.length,
+      showGameOver
+    });
+  }, [players, roundHistory, showGameOver]);
+
   // Fallback UI en cas d'erreur
   const ErrorFallback = ({ error }: { error: Error }) => (
     <div className="p-6 bg-red-50 rounded-lg border border-red-200 m-4">
@@ -44,9 +61,15 @@ const GameContent: React.FC<GameContentProps> = ({
       <p className="text-red-600 mb-4">
         {error.message}
       </p>
-      <p className="text-gray-600">
+      <p className="text-gray-600 mb-4">
         Essayez de rafraîchir la page ou de revenir à l'accueil.
       </p>
+      <button 
+        onClick={() => window.location.href = '/'}
+        className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+      >
+        Retour à l'accueil
+      </button>
     </div>
   );
 
@@ -71,10 +94,10 @@ const GameContent: React.FC<GameContentProps> = ({
         </div>
       )}
 
-      {/* Overlay de fin de partie - Utilisez une clé pour forcer le remontage propre */}
+      {/* Overlay de fin de partie - Implémentation plus robuste avec clé qui ne change pas constamment */}
       {showGameOver && players && players.length > 0 && (
         <GameResultOverlay
-          key={`game-over-${Date.now()}`} // Forcer le remontage propre
+          key={`game-over`} // Clé plus stable
           players={players}
           onContinue={onContinueGame}
           onRestart={onRestart}
