@@ -14,17 +14,38 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Set canvas dimensions
     const resizeCanvas = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
     };
 
-    // Initial size
     resizeCanvas();
-
-    // Resize event
     window.addEventListener('resize', resizeCanvas);
+
+    // Configuration améliorée des vagues
+    const waves = [
+      { 
+        height: 0.25, 
+        color: '#E9D5FF', // Violet clair
+        speed: 0.03, 
+        amplitude: 25,
+        frequency: 0.02
+      },
+      { 
+        height: 0.22, 
+        color: '#FDE68A', // Jaune pâle
+        speed: 0.04, 
+        amplitude: 20,
+        frequency: 0.015
+      },
+      { 
+        height: 0.20, 
+        color: '#93C5FD', // Bleu clair
+        speed: 0.035, 
+        amplitude: 30,
+        frequency: 0.025
+      }
+    ];
 
     // Grid params
     const gridSize = 24;
@@ -40,14 +61,6 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
       opacity: number;
       phase: number;
     }[] = [];
-
-    // Waves params - Animation améliorée avec plusieurs niveaux de vagues
-    const waves = [
-      { height: 0.25, color: '#E9D5FF', speed: 0.04, amplitude: 22, offset: 0 },
-      { height: 0.20, color: '#FDE68A', speed: 0.03, amplitude: 26, offset: Math.PI / 3 },
-      { height: 0.22, color: '#BFDBFE', speed: 0.035, amplitude: 20, offset: Math.PI / 2.5 },
-      { height: 0.15, color: '#A7F3D0', speed: 0.045, amplitude: 18, offset: Math.PI / 4 }
-    ];
 
     // Create dots - Augmentation du nombre pour plus d'animation
     const createDots = () => {
@@ -144,46 +157,38 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
       });
 
       // Draw stylized waves at the bottom - Animation considérablement améliorée
-      const drawWaves = (time: number) => {
+      const drawWaves = (timestamp: number) => {
         waves.forEach((wave, index) => {
-          // Ajuster l'opacité selon la profondeur de la vague
-          const opacity = 0.85 - (index * 0.15);
-          const waveHeight = canvas.height * wave.height;
-          const yPos = canvas.height - waveHeight;
-          
+          const yBase = canvas.height - (canvas.height * wave.height);
+        
           ctx.beginPath();
           ctx.moveTo(0, canvas.height);
+        
+          // Utilisation de courbes de Bézier pour des vagues plus naturelles
+          for (let x = 0; x <= canvas.width; x += canvas.width / 20) {
+            const dx = x + (timestamp * wave.speed * 100);
+            const y = yBase + 
+              Math.sin(dx * wave.frequency) * wave.amplitude +
+              Math.sin(dx * wave.frequency * 2) * (wave.amplitude * 0.5);
           
-          // Augmentation de la résolution pour des vagues plus fluides
-          const step = 3; // Réduction du pas pour plus de détails
-          
-          for (let x = 0; x < canvas.width; x += step) {
-            // Animation plus complexe avec des variations de fréquence
-            // Première fréquence - ondulation principale
-            const distortY = Math.sin(x / 100 + time * wave.speed + wave.offset) * wave.amplitude;
-            // Deuxième fréquence - ondulation secondaire pour plus de naturel
-            const distortY2 = Math.sin(x / 220 + time * (wave.speed * 0.7) + wave.offset * 1.5) * (wave.amplitude * 0.5);
-            // Troisième fréquence - micro ondulation pour l'effet "eau"
-            const distortY3 = Math.sin(x / 30 + time * (wave.speed * 1.3) + wave.offset * 2) * (wave.amplitude * 0.2);
-            
-            // Mouvement de translation horizontal lent
-            const horizontalShift = (time * 15) % canvas.width;
-            const xPos = (x + horizontalShift) % canvas.width;
-            
-            // Combiner toutes les fréquences
-            const y = yPos + distortY + distortY2 + distortY3;
-            
-            ctx.lineTo(x, y);
+            if (x === 0) {
+              ctx.lineTo(x, y);
+            } else {
+              const xc = x - (canvas.width / 40);
+              const yc = y;
+              ctx.quadraticCurveTo(x, y, xc, yc);
+            }
           }
-          
+        
           ctx.lineTo(canvas.width, canvas.height);
           ctx.closePath();
-          
-          // Créer un dégradé pour chaque vague avec plus d'effet de transparence
-          const gradient = ctx.createLinearGradient(0, yPos - 30, 0, canvas.height);
-          gradient.addColorStop(0, wave.color + 'CC'); // Plus opaque en haut
-          gradient.addColorStop(1, wave.color + '44'); // Plus transparent en bas
-          
+
+          // Dégradé pour chaque vague
+          const gradient = ctx.createLinearGradient(0, yBase, 0, canvas.height);
+          const baseColor = wave.color;
+          gradient.addColorStop(0, baseColor + '80'); // Semi-transparent en haut
+          gradient.addColorStop(1, baseColor + '20'); // Très transparent en bas
+        
           ctx.fillStyle = gradient;
           ctx.fill();
         });
@@ -206,8 +211,7 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
     };
 
     animate(0);
-
-    // Cleanup
+    
     return () => {
       window.removeEventListener('resize', resizeCanvas);
       cancelAnimationFrame(animationId);
