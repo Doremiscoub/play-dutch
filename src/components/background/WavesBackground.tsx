@@ -1,39 +1,30 @@
 
 import React from 'react';
 
-const YellowWave = () => (
+const Wave = ({
+  color,
+  opacity,
+  duration,
+  offset,
+}: { color: string; opacity: number; duration: number; offset: string }) => (
   <svg
-    className="absolute bottom-[3vh] w-[200%] h-[14vh] animate-waveYellow"
-    viewBox="0 0 1440 200" 
-    preserveAspectRatio="none"
+    className="absolute bottom-0 w-[300%] h-[14vh] will-change-transform"
+    style={{ animation: `waveMove ${duration}s linear infinite`, transform: `translateX(${offset})` }}
+    viewBox="0 0 1440 200" preserveAspectRatio="none"
   >
-    <path 
-      fill="#FDE68A" 
-      fillOpacity="0.8"
-      d="M0,96L60,101.3C120,107,240,117,360,117.3C480,117,600,107,720,122.7C840,139,960,181,1080,197.3C1200,213,1320,203,1380,197.3L1440,192V0H0Z" 
-    />
-  </svg>
-);
-
-const PurpleWave = () => (
-  <svg
-    className="absolute bottom-0 w-[200%] h-[12vh] animate-wavePurple"
-    viewBox="0 0 1440 200" 
-    preserveAspectRatio="none"
-  >
-    <path 
-      fill="#E9D5FF" 
-      fillOpacity="0.85"
-      d="M0,160L60,154.7C120,149,240,139,360,128C480,117,600,107,720,112C840,117,960,139,1080,154.7C1200,171,1320,181,1380,186.7L1440,192V0H0Z" 
+    <path
+      d="M0,160 C240,80 480,240 720,160 C960,80 1200,240 1440,160 L1440,0 L0,0 Z"
+      fill={color}
+      fillOpacity={opacity}
     />
   </svg>
 );
 
 const WavesBackground: React.FC = () => {
   return (
-    <div className="pointer-events-none select-none">
-      <YellowWave />
-      <PurpleWave />
+    <div className="pointer-events-none select-none -z-10 absolute bottom-0 w-full">
+      <Wave color="#FDE68A" opacity={0.8}  duration={60}  offset="0%"  />
+      <Wave color="#E9D5FF" opacity={0.85} duration={120} offset="-15%" />
     </div>
   );
 };

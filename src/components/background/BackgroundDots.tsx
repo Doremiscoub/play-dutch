@@ -11,6 +11,7 @@ interface Dot {
   size: number;
   color: string;
   duration: number;
+  opacity: number;
 }
 
 const BackgroundDots: React.FC = () => {
@@ -24,6 +25,7 @@ const BackgroundDots: React.FC = () => {
       size: 2 + Math.random() * 6,
       color: COLORS[Math.floor(Math.random() * COLORS.length)],
       duration: 25 + Math.random() * 10,
+      opacity: 0.3 + Math.random() * 0.3
     }));
     
     setDots(newDots);
@@ -34,8 +36,8 @@ const BackgroundDots: React.FC = () => {
       <style>
         {`
           @keyframes float {
-            0%, 100% { transform: translateY(-10px); opacity: 0.3; }
-            50% { transform: translateY(10px); opacity: 0.6; }
+            0%, 100% { transform: translateY(-10px); }
+            50% { transform: translateY(10px); }
           }
           
           .animated-dot {
@@ -57,6 +59,7 @@ const BackgroundDots: React.FC = () => {
             height: `${dot.size}px`,
             backgroundColor: dot.color,
             animation: `float ${dot.duration}s ease-in-out infinite`,
+            opacity: dot.opacity,
           }}
         />
       ))}
