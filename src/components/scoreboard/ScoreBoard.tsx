@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Player } from '@/types';
@@ -11,6 +10,7 @@ import { useMediaQuery } from '@/hooks/use-media-query';
 import EndGameConfirmationDialog from './EndGameConfirmationDialog';
 import UndoConfirmationDialog from './UndoConfirmationDialog';
 import ScoreBoardHeader from './ScoreBoardHeader';
+import ProfessorAvatar from '../ProfessorAvatar';
 
 interface ScoreBoardProps {
   players: Player[];
@@ -57,15 +57,16 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
   return (
     <div className="min-h-screen w-full relative">
       <div className="fixed inset-0 -z-10">
-        <AnimatedBackground variant="default" />
+        <AnimatedBackground />
       </div>
 
       <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-12">
-        <div className="mb-8 mt-4">
+        <div className="flex items-center justify-between mb-8 mt-4">
           <ScoreBoardHeader 
             roundCount={players.length > 0 ? players[0]?.rounds.length || 0 : 0}
             scoreLimit={scoreLimit}
           />
+          <ProfessorAvatar />
         </div>
 
         {showAICommentator && (

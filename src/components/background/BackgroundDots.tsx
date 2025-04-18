@@ -10,7 +10,6 @@ const BackgroundDots: React.FC = () => {
     const container = containerRef.current;
     if (!container) return;
 
-    // Créer les points une seule fois au montage
     const dotCount = window.innerWidth < 640 ? 12 : 20;
     
     const dots = Array.from({ length: dotCount }, () => {
@@ -28,7 +27,7 @@ const BackgroundDots: React.FC = () => {
         opacity: ${0.3 + Math.random() * 0.4};
         animation-delay: ${-Math.random() * 20}s;
         animation-duration: ${20 + Math.random() * 10}s;
-        will-change: transform, opacity;
+        will-change: transform;
       `;
       
       return dot;
@@ -37,7 +36,11 @@ const BackgroundDots: React.FC = () => {
     dots.forEach(dot => container.appendChild(dot));
 
     return () => {
-      dots.forEach(dot => dot.remove());
+      dots.forEach(dot => {
+        if (dot.parentNode === container) {
+          container.removeChild(dot);
+        }
+      });
     };
   }, []);
 
