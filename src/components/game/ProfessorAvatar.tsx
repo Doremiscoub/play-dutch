@@ -7,10 +7,7 @@ interface ProfessorAvatarProps {
   size?: number;
 }
 
-const SOURCES = [
-  '/assets/professeur-cartouche-avatar.png',  // chemin public absolu
-  './assets/professeur-cartouche-avatar.png', // chemin relatif fallback
-];
+const SOURCES = ['/images/professeur-cartouche-avatar.png'];
 
 const ProfessorAvatar: React.FC<ProfessorAvatarProps> = ({ 
   message,
