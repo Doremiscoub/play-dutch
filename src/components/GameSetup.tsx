@@ -1,64 +1,32 @@
 
 import React, { useState, useEffect } from 'react';
-import { Play, Users, Computer } from 'lucide-react';
 import { motion } from 'framer-motion';
-import AnimatedBackground from './AnimatedBackground';
 import { useNavigate } from 'react-router-dom';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from 'sonner';
 import { cleanupGameState } from '@/utils/gameUtils';
 import { clearPlayerSetup } from '@/utils/playerInitializer';
-import PlayerNameInput from './game-setup/PlayerNameInput';
-import PlayerCountSelector from './game-setup/PlayerCountSelector';
-import GameModeSelector from './game-setup/GameModeSelector';
-import ActionButton from './game-setup/ActionButton';
-import SetupCard from './game-setup/SetupCard';
-import ComingSoonBanner from './game-setup/ComingSoonBanner';
+import AnimatedBackground from './AnimatedBackground';
+import { Tabs, TabsContent } from '@/components/ui/tabs';
+import GameModeTabs from './game-setup/GameModeTabs';
+import LocalGameSetupContainer from './game-setup/LocalGameSetupContainer';
 
 const GameSetup: React.FC = () => {
   const navigate = useNavigate();
-  const [numPlayers, setNumPlayers] = useState(4);
-  const [playerNames, setPlayerNames] = useState<string[]>(Array(4).fill('').map((_, i) => `Joueur ${i + 1}`));
-  const [gameMode, setGameMode] = useState<'local' | 'multiplayer'>('local');
+  const [activeTab, setActiveTab] = useState<string>("local");
   const [isSubmitting, setIsSubmitting] = useState(false);
   
-  // Clean up any existing game state when component mounts
   useEffect(() => {
-    // Force clean all game state and player setup data
     cleanupGameState();
     clearPlayerSetup();
     console.info("Configuration de jeu nettoyée au montage du composant GameSetup");
     
-    // Also remove all localStorage keys that might interfere
     localStorage.removeItem('dutch_player_setup');
     localStorage.removeItem('dutch_new_game_requested');
     localStorage.removeItem('current_dutch_game');
     console.info("Toutes les données de jeu existantes ont été nettoyées");
   }, []);
-  
-  const handleNumPlayersChange = (increment: boolean) => {
-    const newNum = increment 
-      ? Math.min(numPlayers + 1, 10) 
-      : Math.max(numPlayers - 1, 2);
-    
-    setNumPlayers(newNum);
-    
-    if (increment && numPlayers < 10) {
-      setPlayerNames([...playerNames, `Joueur ${numPlayers + 1}`]);
-    } else if (!increment && numPlayers > 2) {
-      setPlayerNames(playerNames.slice(0, -1));
-    }
-  };
 
-  const handleNameChange = (index: number, name: string) => {
-    const newNames = [...playerNames];
-    newNames[index] = name;
-    setPlayerNames(newNames);
-  };
-
-  const handleStartGame = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    
+  const handleStartGame = (playerNames: string[]) => {
     if (isSubmitting) {
       console.info("Soumission déjà en cours, éviter les clics multiples");
       return;
@@ -69,36 +37,17 @@ const GameSetup: React.FC = () => {
     try {
       console.info('Démarrage de la partie... Préparation de la configuration.');
       
-      // Nettoyer tout état de jeu existant avant de créer une nouvelle configuration
-      cleanupGameState();
-      
-      // S'assurer que tous les noms de joueurs sont valides
-      const validPlayerNames = playerNames.map(name => 
-        name.trim() === '' ? `Joueur ${playerNames.indexOf(name) + 1}` : name.trim()
-      );
-      
-      if (validPlayerNames.length < 2) {
+      if (playerNames.length < 2) {
         console.error("Erreur: moins de 2 joueurs");
         toast.error('Il faut au moins 2 joueurs pour commencer une partie');
         setIsSubmitting(false);
         return;
       }
       
-      if (gameMode === 'multiplayer') {
-        toast.info('Le mode multijoueur sera disponible prochainement !');
-        setIsSubmitting(false);
-        return;
-      }
+      console.info('Noms des joueurs validés:', playerNames);
       
-      console.info('Noms des joueurs validés:', validPlayerNames);
-      
-      // MÉTHODE DIRECTE: Au lieu de passer par localStorage, passons les joueurs directement par l'URL
-      // Encodage des noms des joueurs pour l'URL
-      const playersQueryParam = encodeURIComponent(JSON.stringify(validPlayerNames));
-      
+      const playersQueryParam = encodeURIComponent(JSON.stringify(playerNames));
       console.info('Redirection vers /game avec les paramètres des joueurs');
-      
-      // Navigation directe avec les données des joueurs
       navigate(`/game?players=${playersQueryParam}&new=true`);
       
     } catch (error) {
@@ -129,69 +78,25 @@ const GameSetup: React.FC = () => {
           Nouvelle Partie
         </motion.h1>
         
-        {/* Mode de jeu */}
-        <SetupCard title="Mode de jeu" delay={0.1}>
-          <Tabs 
-            defaultValue="local" 
-            value={gameMode} 
-            onValueChange={(value) => setGameMode(value as 'local' | 'multiplayer')}
-            className="w-full"
-          >
-            <TabsList className="grid grid-cols-2 w-full">
-              <TabsTrigger value="local" className="flex items-center gap-2">
-                <Users className="h-4 w-4" /> Local
-              </TabsTrigger>
-              <TabsTrigger value="multiplayer" className="flex items-center gap-2" disabled>
-                <Computer className="h-4 w-4" /> Multijoueur
-              </TabsTrigger>
-            </TabsList>
-          </Tabs>
-          
-          {gameMode === 'multiplayer' && (
-            <div className="mt-4 p-3 bg-dutch-purple/10 text-dutch-purple rounded-lg text-sm">
-              <p>À venir : mode multijoueur, connexion multi-appareil et plus encore.</p>
-            </div>
-          )}
-        </SetupCard>
+        <Tabs 
+          defaultValue="local" 
+          value={activeTab} 
+          onValueChange={setActiveTab}
+          className="w-full"
+        >
+          <GameModeTabs activeTab={activeTab} onTabChange={setActiveTab} />
         
-        {/* Information à venir - Teaser multijoueur */}
-        <ComingSoonBanner />
-        
-        {/* Nombre de joueurs */}
-        <SetupCard title="Nombre de joueurs" delay={0.2}>
-          <PlayerCountSelector 
-            numPlayers={numPlayers} 
-            onNumPlayersChange={handleNumPlayersChange} 
-          />
-        </SetupCard>
-        
-        {/* Noms des joueurs */}
-        <SetupCard title="Noms des joueurs" delay={0.3}>
-          <div className="space-y-3">
-            {playerNames.map((name, index) => (
-              <PlayerNameInput
-                key={index}
-                index={index}
-                name={name}
-                onChange={handleNameChange}
-              />
-            ))}
-          </div>
-        </SetupCard>
-      </motion.div>
-      
-      {/* Bouton Commencer flottant */}
-      <motion.div
-        className="fixed left-0 right-0 bottom-8 flex justify-center z-50 px-6"
-        initial={{ y: 100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.5, type: "spring", stiffness: 260, damping: 20 }}
-      >
-        <ActionButton 
-          onClick={handleStartGame} 
-          label={isSubmitting ? 'Création de la partie...' : 'Commencer la partie'} 
-          disabled={isSubmitting}
-        />
+          <TabsContent value="local">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+              className="grid grid-cols-1 gap-4"
+            >
+              <LocalGameSetupContainer onStartGame={handleStartGame} />
+            </motion.div>
+          </TabsContent>
+        </Tabs>
       </motion.div>
     </div>
   );
