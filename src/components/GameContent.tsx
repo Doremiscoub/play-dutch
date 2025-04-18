@@ -1,4 +1,3 @@
-
 /**
  * Contenu principal de la page de jeu avec gestion d'erreurs renforcée
  */
@@ -74,7 +73,7 @@ const GameContent: React.FC<GameContentProps> = ({
   // Fallback UI en cas d'erreur avec détails améliorés
   const ErrorFallback = ({ error, errorInfo, errorCode, reset }: { 
     error: Error; 
-    errorInfo: ErrorInfo; 
+    errorInfo: React.ErrorInfo; 
     errorCode: string;
     reset?: () => void;
   }) => (

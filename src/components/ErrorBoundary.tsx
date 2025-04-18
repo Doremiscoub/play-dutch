@@ -1,8 +1,7 @@
-
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
-import { Home, Refresh } from 'lucide-react';
+import { Home, RefreshCw } from 'lucide-react';
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -139,7 +138,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
                 variant="outline"
                 className="w-full flex items-center gap-2"
               >
-                <Refresh className="h-4 w-4" />
+                <RefreshCw className="h-4 w-4" />
                 Essayez de rafraîchir la page
               </Button>
               
