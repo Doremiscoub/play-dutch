@@ -1,4 +1,3 @@
-
 import { useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLocalStorage } from './use-local-storage';
@@ -56,7 +55,6 @@ export const useGameState = () => {
 
   const { loadGameState, saveGameState, saveGameToHistory } = useGamePersistence();
 
-  // Cette fonction sauvegarde l'état actuel du jeu
   const saveCurrentGameState = useCallback(() => {
     if (players && players.length > 0) {
       console.info('Sauvegarde de l\'état du jeu');
@@ -70,21 +68,18 @@ export const useGameState = () => {
     }
   }, [players, roundHistory, showGameOver, scoreLimit, gameStartTime, saveGameState]);
 
-  // Sauvegarde automatique à chaque changement d'état important
   useEffect(() => {
     if (players && players.length > 0) {
       saveCurrentGameState();
     }
   }, [players, roundHistory, showGameOver, saveCurrentGameState]);
 
-  // Effet d'initialisation du jeu - Amélioré pour éviter les boucles infinies et gérer l'attente
   useEffect(() => {
-    // Éviter les initialisation multiples dans la même session
     if (initializationProcessed.current) {
       return;
     }
     
-    // Debug des valeurs au démarrage
+    initializationProcessed.current = true;
     console.debug('Valeurs localStorage au démarrage:', {
       dutch_player_setup: localStorage.getItem('dutch_player_setup'),
       current_dutch_game: localStorage.getItem('current_dutch_game'),
@@ -92,47 +87,24 @@ export const useGameState = () => {
       dutch_initialization_completed: localStorage.getItem('dutch_initialization_completed')
     });
     
-    initializationProcessed.current = true;
-    
-    console.info('Initialisation du jeu...');
-    
-    // Étape 1: Vérifier si une nouvelle partie est explicitement demandée
     const isNewGameRequested = localStorage.getItem('dutch_new_game_requested') === 'true';
-    console.info('Nouvelle partie demandée:', isNewGameRequested);
     
     if (isNewGameRequested) {
-      console.info("Création d'une nouvelle partie demandée explicitement");
+      console.info("Création d'une nouvelle partie demandée");
       
-      // Vérifier si nous avons déjà des joueurs valides
-      if (players && players.length > 0) {
-        console.info("Joueurs déjà chargés, pas besoin de recréer");
-        return;
-      }
-      
-      // Définir un timeout de sécurité pour éviter de bloquer indéfiniment
-      maxInitWaitTime.current = setTimeout(() => {
-        if (!initializationCompleted.current && players.length === 0) {
-          console.warn("Délai d'initialisation dépassé, vérification des joueurs");
-          
-          // Vérifier si nous pouvons quand même créer une partie
-          if (verifyPlayerSetup()) {
-            createNewGame();
-          } else {
-            console.error("Configuration de joueurs invalide après délai d'attente");
-            navigate('/game/setup');
-          }
-        }
-      }, 5000); // 5 secondes maximum d'attente
-      
-      const success = createNewGame();
-      if (!success && !initializationInProgress.current) {
-        console.error("Échec lors de la création de la nouvelle partie");
-        // Ne pas rediriger à nouveau ici pour éviter une boucle
+      const result = createNewGame();
+      if (result && result.players?.length) {
+        setPlayers(result.players);
+        setRoundHistory([]);
+        setScoreLimit(result.scoreLimit);
+        
+        // Charger l'état pour garantir la cohérence
+        loadGameState();
+        localStorage.removeItem('dutch_new_game_requested');
       }
       return;
     }
     
-    // Étape 2: S'il n'y a pas de demande explicite, essayer de charger une partie existante
     console.info("Tentative de chargement d'une partie existante");
     const savedGame = loadGameState();
     
@@ -155,7 +127,6 @@ export const useGameState = () => {
       
       toast.success('Partie existante chargée !');
     } else {
-      // Étape 3: Si aucune partie n'est trouvée, vérifier s'il y a une configuration de joueurs
       console.info("Aucune partie sauvegardée trouvée, vérification de la configuration des joueurs");
       
       const setupValid = verifyPlayerSetup();
@@ -173,7 +144,6 @@ export const useGameState = () => {
       }
     }
     
-    // Debug des valeurs après initialisation
     console.debug('Valeurs localStorage après initialisation:', {
       dutch_player_setup: localStorage.getItem('dutch_player_setup'),
       current_dutch_game: localStorage.getItem('current_dutch_game'),
@@ -182,7 +152,6 @@ export const useGameState = () => {
     });
     
     return () => {
-      // Nettoyage du timeout de sécurité si nécessaire
       if (maxInitWaitTime.current) {
         clearTimeout(maxInitWaitTime.current);
       }
