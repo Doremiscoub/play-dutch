@@ -161,7 +161,7 @@ const GamePage: React.FC = () => {
           <AnimatedBackground variant="default" />
         </div>
         <div className="flex justify-center items-center min-h-screen flex-col p-6">
-          <Alert variant="destructive" className="mb-6 max-w-md">
+          <Alert variant="default" className="mb-6 max-w-md">
             <AlertTitle>Erreur</AlertTitle>
             <AlertDescription>{errorState.message}</AlertDescription>
           </Alert>

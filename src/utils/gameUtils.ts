@@ -3,53 +3,7 @@
  * Utilitaires pour la gestion des parties
  */
 import { v4 as uuidv4 } from 'uuid';
-import { Player, Game, PlayerStatistics } from '@/types';
-
-/**
- * Initialise les joueurs à partir des noms stockés
- */
-export const initializePlayers = (): Player[] | null => {
-  try {
-    const savedPlayersStr = localStorage.getItem('dutch_player_setup');
-    
-    if (!savedPlayersStr) {
-      console.error("Aucune configuration de joueurs trouvée");
-      return null;
-    }
-    
-    let playerNames;
-    try {
-      playerNames = JSON.parse(savedPlayersStr);
-    } catch (error) {
-      console.error("Format de configuration de joueurs invalide:", error);
-      return null;
-    }
-    
-    if (!Array.isArray(playerNames) || playerNames.length === 0) {
-      console.error("Configuration de joueurs invalide (pas un tableau ou vide)");
-      return null;
-    }
-    
-    const players = playerNames.map((name: string, index: number) => {
-      // S'assurer qu'un nom vide est remplacé par un nom par défaut
-      const validName = name && typeof name === 'string' && name.trim() 
-        ? name.trim() 
-        : `Joueur ${index + 1}`;
-        
-      return {
-        id: uuidv4(),
-        name: validName,
-        totalScore: 0,
-        rounds: []
-      };
-    });
-    
-    return players;
-  } catch (error) {
-    console.error("Erreur lors de l'initialisation des joueurs:", error);
-    return null;
-  }
-};
+import { Player, Game } from '@/types';
 
 /**
  * Force la réinitialisation complète de l'état de jeu
