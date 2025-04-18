@@ -1,54 +1,91 @@
 
-import React, { useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+
+interface Dot {
+  id: string;
+  x: string;
+  y: string;
+  size: number;
+  color: string;
+  duration: number;
+  delay: number;
+}
 
 const COLORS = ['#A78BFA', '#FDBA74', '#6EE7B7', '#60A5FA'];
 
 const BackgroundDots: React.FC = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [dots, setDots] = useState<Dot[]>([]);
 
   useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    const dotCount = window.innerWidth < 640 ? 12 : 20;
+    // Generate 40 random dots
+    const newDots = Array.from({ length: 40 }, (_, i) => ({
+      id: `dot-${i}`,
+      x: `${Math.random() * 100}%`,
+      y: `${Math.random() * 100}%`,
+      size: 2 + Math.random() * 6, // Size between 2-8px
+      color: COLORS[Math.floor(Math.random() * COLORS.length)],
+      duration: 25 + Math.random() * 10, // 25-35 seconds per animation cycle
+      delay: -Math.random() * 20, // Random starting point in the animation
+    }));
     
-    const dots = Array.from({ length: dotCount }, () => {
-      const dot = document.createElement('div');
-      const size = 2 + Math.random() * 6;
-      const color = COLORS[Math.floor(Math.random() * COLORS.length)];
-      
-      dot.className = 'absolute rounded-full animate-float';
-      dot.style.cssText = `
-        width: ${size}px;
-        height: ${size}px;
-        background-color: ${color};
-        left: ${Math.random() * 100}%;
-        top: ${Math.random() * 100}%;
-        opacity: ${0.3 + Math.random() * 0.4};
-        animation-delay: ${-Math.random() * 20}s;
-        animation-duration: ${20 + Math.random() * 10}s;
-        will-change: transform;
-      `;
-      
-      return dot;
-    });
-
-    dots.forEach(dot => container.appendChild(dot));
-
-    return () => {
-      dots.forEach(dot => {
-        if (dot.parentNode === container) {
-          container.removeChild(dot);
-        }
-      });
-    };
+    setDots(newDots);
   }, []);
 
   return (
-    <div 
-      ref={containerRef}
-      className="fixed inset-0 z-[-1] overflow-hidden pointer-events-none"
-    />
+    <div className="fixed inset-0 z-[-1] overflow-hidden pointer-events-none">
+      {/* CSS Fallback Animation */}
+      <style jsx>{`
+        @keyframes float {
+          0%, 100% {
+            transform: translateY(0);
+            opacity: 0.3;
+          }
+          50% {
+            transform: translateY(-10px);
+            opacity: 0.6;
+          }
+        }
+        
+        .animated-dot {
+          position: absolute;
+          border-radius: 50%;
+          will-change: transform, opacity;
+        }
+        
+        /* Fallback for when framer-motion is not available */
+        .animated-dot:not(.framer-motion-enabled) {
+          animation: float var(--duration) ease-in-out infinite;
+          animation-delay: var(--delay);
+        }
+      `}</style>
+
+      {dots.map((dot) => (
+        <motion.div
+          key={dot.id}
+          className="animated-dot framer-motion-enabled"
+          style={{
+            left: dot.x,
+            top: dot.y,
+            width: `${dot.size}px`,
+            height: `${dot.size}px`,
+            backgroundColor: dot.color,
+            '--duration': `${dot.duration}s`,
+            '--delay': `${dot.delay}s`,
+          }}
+          animate={{
+            y: [0, -10, 0],
+            opacity: [0.3, 0.6, 0.3],
+          }}
+          transition={{
+            duration: dot.duration,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: dot.delay,
+          }}
+        />
+      ))}
+    </div>
   );
 };
 

@@ -6,7 +6,7 @@ import WavesBackground from './WavesBackground';
 
 const AnimatedBackground: React.FC = () => {
   return (
-    <div className="fixed inset-0 z-[-2] overflow-hidden">
+    <div className="fixed inset-0 z-[-2] overflow-hidden pointer-events-none">
       <BackgroundGrid />
       <BackgroundDots />
       <WavesBackground />
