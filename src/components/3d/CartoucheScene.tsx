@@ -1,4 +1,3 @@
-
 /**
  * Scène 3D complète pour le Professeur Cartouche
  * Optimisée pour les performances mobiles et avec fallback
@@ -55,7 +54,7 @@ export default function CartoucheScene({
   className = '',
   autoRotate = true,
   enableZoom = false,
-  fallbackImage = '/lovable-uploads/1dc0ac6d-dc08-4029-a06a-eec0c5a6ce7f.png'
+  fallbackImage = '/lovable-uploads/37b79686-1328-46bb-aee6-44d0e904fc20.png'
 }: CartoucheSceneProps) {
   const [hasError, setHasError] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);

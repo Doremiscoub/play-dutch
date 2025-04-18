@@ -1,7 +1,3 @@
-
-/**
- * Avatar du Professeur Cartouche avec gestion robuste des fallbacks
- */
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Volume2 } from 'lucide-react';
@@ -9,10 +5,10 @@ import { Button } from './ui/button';
 import { useElevenLabs } from '@/hooks/use-eleven-labs';
 import { useSound } from '@/hooks/use-sound';
 
-// URL de l'image principale du professeur
+// Ensure these paths are correct and images exist
 const PROFESSOR_IMAGE_URL = '/lovable-uploads/1dc0ac6d-dc08-4029-a06a-eec0c5a6ce7f.png';
-// URL de l'image de fallback
 const FALLBACK_IMAGE_URL = '/lovable-uploads/a2234ca1-7b29-4c32-8167-2ff6be271875.png';
+const NEWLY_UPLOADED_IMAGE = '/lovable-uploads/37b79686-1328-46bb-aee6-44d0e904fc20.png';
 
 interface ProfessorAvatarProps {
   message: string;
@@ -24,7 +20,15 @@ const ProfessorAvatar: React.FC<ProfessorAvatarProps> = ({ message, onSpeakMessa
   const { config: elevenLabsConfig, speakWithFallback, isLoading: isSpeaking } = useElevenLabs();
   const { isSoundEnabled } = useSound();
   
-  // Fonction pour faire parler le professeur via Eleven Labs ou fallback
+  // Function to handle multiple fallback images
+  const getImageSource = () => {
+    if (imageError) {
+      return FALLBACK_IMAGE_URL;
+    }
+    return [PROFESSOR_IMAGE_URL, NEWLY_UPLOADED_IMAGE].find(url => url) || FALLBACK_IMAGE_URL;
+  };
+  
+  // Speak function remains the same
   const handleSpeak = async () => {
     if (isSoundEnabled) {
       if (onSpeakMessage) {
@@ -52,7 +56,7 @@ const ProfessorAvatar: React.FC<ProfessorAvatarProps> = ({ message, onSpeakMessa
           whileHover={{ scale: 1.1 }}
         >
           <img 
-            src={imageError ? FALLBACK_IMAGE_URL : PROFESSOR_IMAGE_URL}
+            src={getImageSource()}
             alt="Professeur Cartouche"
             className="w-full h-full object-contain"
             onError={() => {
@@ -63,7 +67,6 @@ const ProfessorAvatar: React.FC<ProfessorAvatarProps> = ({ message, onSpeakMessa
           />
         </motion.div>
         
-        {/* Bulle d'animation pour donner vie à l'avatar */}
         <motion.div 
           className="absolute -top-1 -right-1 bg-dutch-orange text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold"
           animate={{ 
