@@ -48,7 +48,7 @@ export const useGameInitialization = () => {
       
       if (isNewGameRequested) {
         console.info('Nouvelle partie explicitement demandée');
-        // Ne pas nettoyer dutch_player_setup car on en a besoin pour initialiser
+        // Supprimer le flag pour éviter la réinitialisation accidentelle
         localStorage.removeItem('dutch_new_game_requested');
       }
       
@@ -93,9 +93,7 @@ export const useGameInitialization = () => {
       initializationCompleted.current = true;
       initializationInProgress.current = false;
       
-      // Ne pas nettoyer après initialisation réussie
-      
-      toast.success('Nouvelle partie créée !');
+      toast.success('Nouvelle partie locale créée !');
       return true;
     } catch (error) {
       console.error("Erreur lors de la création d'une nouvelle partie:", error);
@@ -118,7 +116,6 @@ export const useGameInitialization = () => {
   // Nettoyage complet pour éviter les états partiels
   const cleanup = useCallback(() => {
     cleanupGameState();
-    // NE PAS nettoyer dutch_player_setup pour permettre l'initialisation
     initializationCompleted.current = false;
     initializationAttempted.current = false;
     initializationInProgress.current = false;

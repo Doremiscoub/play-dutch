@@ -78,13 +78,24 @@ export const useGameState = () => {
   // Effet d'initialisation - C'est ici que nous devons corriger le problème
   useEffect(() => {
     try {
-      if (initializationCompleted.current || initializationAttempted.current || initializationInProgress.current) {
-        console.info("Initialisation déjà tentée ou en cours, ignorer");
+      console.info("Tentative d'initialisation du jeu...");
+      
+      if (initializationCompleted.current) {
+        console.info("Initialisation déjà complétée, ignorer");
+        return;
+      }
+      
+      if (initializationAttempted.current) {
+        console.info("Initialisation déjà tentée, ignorer");
+        return;
+      }
+      
+      if (initializationInProgress.current) {
+        console.info("Initialisation déjà en cours, ignorer");
         return;
       }
       
       initializationAttempted.current = true;
-      console.info("Tentative d'initialisation du jeu...");
       resetNotificationFlags();
       
       const initializeGame = async () => {
@@ -94,15 +105,31 @@ export const useGameState = () => {
         const isNewGameRequested = localStorage.getItem('dutch_new_game_requested') === 'true';
         console.info('Nouvelle partie demandée:', isNewGameRequested);
         
+        // Vérifier le mode de jeu (local ou multijoueur)
+        const gameMode = localStorage.getItem('dutch_game_mode') || 'local';
+        console.info('Mode de jeu détecté:', gameMode);
+        
         if (isNewGameRequested) {
           console.info("Nouvelle partie demandée, création...");
-          const success = await createNewGame();
-          if (!success) {
-            console.error("Échec de création de la nouvelle partie");
-            toast.error("Impossible de créer une nouvelle partie");
-            navigate('/game/setup');
+          if (gameMode === 'local') {
+            const success = await createNewGame();
+            if (!success) {
+              console.error("Échec de création de la nouvelle partie locale");
+              toast.error("Impossible de créer une nouvelle partie");
+              navigate('/game/setup');
+            }
+            return;
+          } else {
+            // Gérer le mode multijoueur (à implémenter plus tard)
+            console.info("Mode multijoueur demandé mais non implémenté, création d'une partie locale");
+            const success = await createNewGame();
+            if (!success) {
+              console.error("Échec de création de la partie");
+              toast.error("Impossible de créer une nouvelle partie");
+              navigate('/game/setup');
+            }
+            return;
           }
-          return;
         }
         
         // Sinon, essayer de charger une partie existante

@@ -18,12 +18,14 @@ const GameSetup: React.FC = () => {
   useEffect(() => {
     console.info("Nettoyage partiel de l'état du jeu au montage de GameSetup");
     
-    // Ne pas supprimer dutch_player_setup pour permettre la reprise
-    // Supprimer uniquement le flag de demande de nouvelle partie
+    // Supprimer le flag de demande de nouvelle partie
     localStorage.removeItem('dutch_new_game_requested');
     
     // Supprimer la partie en cours
     localStorage.removeItem('current_dutch_game');
+    
+    // Définir le mode par défaut à local
+    localStorage.setItem('dutch_game_mode', 'local');
   }, []);
 
   const handleStartGame = (playerNames: string[]) => {
@@ -49,6 +51,9 @@ const GameSetup: React.FC = () => {
       
       // Ajouter un flag pour forcer une nouvelle partie
       localStorage.setItem('dutch_new_game_requested', 'true');
+      
+      // Définir explicitement le mode de jeu
+      localStorage.setItem('dutch_game_mode', 'local');
       
       console.info("Configuration sauvegardée, navigation vers /game");
       

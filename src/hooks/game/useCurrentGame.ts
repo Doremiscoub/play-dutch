@@ -31,6 +31,7 @@ export const useCurrentGame = () => {
           score: scores[index],
           isDutch 
         };
+        
         return {
           ...player,
           rounds: [...player.rounds, newRound],
@@ -43,6 +44,7 @@ export const useCurrentGame = () => {
       setPlayers(playersWithStats);
       
       console.info("Manche ajoutée avec succès");
+      toast.success("Manche ajoutée");
       return true;
     } catch (error) {
       console.error("Erreur lors de l'ajout d'une manche:", error);
