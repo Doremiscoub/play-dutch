@@ -36,12 +36,17 @@ const App: React.FC = () => {
     try {
       const isOfflineMode = localStorage.getItem('clerk_auth_failed') === 'true';
       if (isOfflineMode) {
-        toast.info("Mode hors-ligne activé");
+        toast.info("Mode hors-ligne activé", { id: "offline-mode" });
       }
     } catch (error) {
       console.error("Erreur lors de la vérification du mode hors-ligne:", error);
     }
   }, []);
+  
+  // Vérifier si une nouvelle partie est explicitement demandée
+  const isNewGameRequested = () => {
+    return localStorage.getItem('dutch_new_game_requested') === 'true';
+  };
   
   return (
     <AuthProvider>
@@ -54,8 +59,11 @@ const App: React.FC = () => {
           {/* Pages principales */}
           <Route path="/" element={<Home />} />
           <Route path="/game/setup" element={
-            // Si une partie est en cours, rediriger vers le jeu au lieu de la configuration
-            hasActiveGame() ? <Navigate to="/game" replace /> : <GameSetup />
+            // Si une partie est en cours ET qu'aucune nouvelle partie n'est demandée,
+            // rediriger vers le jeu au lieu de la configuration
+            hasActiveGame() && !isNewGameRequested() ? 
+              <Navigate to="/game" replace /> : 
+              <GameSetup />
           } />
           <Route path="/game" element={
             <ProtectedRoute>
@@ -90,7 +98,8 @@ const App: React.FC = () => {
             background: 'rgba(255, 255, 255, 0.9)',
             backdropFilter: 'blur(8px)',
             border: '1px solid rgba(255, 255, 255, 0.5)',
-          }
+          },
+          duration: 3000
         }}
       />
     </AuthProvider>

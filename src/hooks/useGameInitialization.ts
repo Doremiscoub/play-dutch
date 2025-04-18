@@ -28,7 +28,7 @@ export const useGameInitialization = () => {
       // Réinitialiser les flags de notification pour éviter les doublons
       resetNotificationFlags();
       
-      // Prevent multiple initialization attempts
+      // Protection contre les initialisations multiples
       if (initializationAttempted.current) {
         console.info('Une initialisation a déjà été tentée, annulation de cette tentative');
         return false;
@@ -41,14 +41,20 @@ export const useGameInitialization = () => {
       
       initializationAttempted.current = true;
       initializationInProgress.current = true;
-      console.info('Création d\'une nouvelle partie...');
       
-      // 1. Vérifier si les données sont disponibles dans l'URL
+      // Vérification si une nouvelle partie est explicitement demandée
+      const isNewGameRequested = localStorage.getItem('dutch_new_game_requested') === 'true';
+      if (isNewGameRequested) {
+        console.info('Nouvelle partie explicitement demandée, nettoyage complet');
+        cleanupGameState();
+        localStorage.removeItem('dutch_new_game_requested');
+      }
+      
+      // 1. Priorité aux paramètres d'URL pour l'initialisation des joueurs
       const searchParams = new URLSearchParams(location.search);
       const playersParam = searchParams.get('players');
       const isNewGame = searchParams.get('new') === 'true';
       
-      // Si les données sont dans l'URL et c'est une nouvelle partie
       if (playersParam && isNewGame) {
         console.info('Initialisation depuis les paramètres URL');
         try {
@@ -67,10 +73,10 @@ export const useGameInitialization = () => {
             setPlayers(newPlayers);
             setGameStartTime(new Date());
             
-            // Effacer les paramètres URL après utilisation pour éviter la double initialisation
+            // Effacer les paramètres URL après utilisation pour éviter double initialisation
             navigate('/game', { replace: true });
             
-            // Mark initialization as completed
+            // Marquer l'initialisation comme terminée
             initializationCompleted.current = true;
             initializationInProgress.current = false;
             
@@ -79,30 +85,26 @@ export const useGameInitialization = () => {
             
             toast.success('Nouvelle partie créée !');
             return true;
-          } else {
-            console.warn('Format de données URL invalide, tentative avec localStorage');
           }
         } catch (error) {
           console.error("Erreur lors du parsing des paramètres URL:", error);
-          // Si erreur avec paramètres URL, on continue avec l'ancienne méthode
         }
       }
       
       // 2. Méthode de secours: initialisation via localStorage
       console.info('Tentative d\'initialisation via localStorage');
       
-      // Verify setup exists before initializing
       const setupValid = verifyPlayerSetup();
       console.info('Vérification de la configuration localStorage:', setupValid ? 'VALIDE' : 'INVALIDE');
       
       if (!setupValid) {
-        console.error('Impossible de créer une partie: la configuration des joueurs est invalide ou inexistante');
+        console.error('Impossible de créer une partie: la configuration des joueurs est invalide');
         
-        // Nettoyer les flags et états
+        // Réinitialisation des flags
         initializationAttempted.current = false;
         initializationInProgress.current = false;
         
-        // Redirection uniquement si c'est la première tentative d'initialisation
+        // Redirection vers la configuration
         navigate('/game/setup');
         return false;
       }
@@ -111,21 +113,20 @@ export const useGameInitialization = () => {
       if (!newPlayers || newPlayers.length < 2) {
         console.error('Impossible de créer une partie: moins de 2 joueurs configurés');
         
-        // Nettoyer les flags et états
+        // Réinitialisation des flags
         initializationAttempted.current = false;
         initializationInProgress.current = false;
         
-        // Redirection uniquement si c'est la première tentative d'initialisation
+        // Redirection vers la configuration
         navigate('/game/setup');
         return false;
       }
       
-      // Ensure we're starting with a clean state
       console.info('Joueurs initialisés avec succès:', newPlayers.map(p => p.name).join(', '));
       setPlayers(newPlayers);
       setGameStartTime(new Date());
       
-      // Mark initialization as completed
+      // Marquer l'initialisation comme terminée
       initializationCompleted.current = true;
       initializationInProgress.current = false;
       
@@ -135,21 +136,21 @@ export const useGameInitialization = () => {
       console.error("Erreur lors de la création d'une nouvelle partie:", error);
       toast.error("Une erreur est survenue lors de la création de la partie");
       
-      // Nettoyer les flags et états
+      // Réinitialisation des flags
       initializationAttempted.current = false;
       initializationInProgress.current = false;
       
       navigate('/game/setup');
       return false;
     } finally {
-      // Reset attempt flag after a delay to allow for further attempts if needed
+      // Réinitialiser le flag d'initialisation après un délai
       setTimeout(() => {
         initializationAttempted.current = false;
       }, 1000);
     }
   }, [navigate, location.search]);
 
-  // Clean up function to ensure we don't leave partial state
+  // Nettoyage complet pour éviter les états partiels
   const cleanup = useCallback(() => {
     cleanupGameState();
     clearPlayerSetup();

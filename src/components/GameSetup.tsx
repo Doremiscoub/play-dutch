@@ -15,9 +15,12 @@ const GameSetup: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>("local");
   const [isSubmitting, setIsSubmitting] = useState(false);
   
+  // Nettoyage complet de l'état lors de l'entrée sur la page de configuration
   useEffect(() => {
+    console.info("Nettoyage de l'état du jeu au montage de GameSetup");
     cleanupGameState();
-    console.info("Configuration de jeu nettoyée au montage du composant GameSetup");
+    clearPlayerSetup(); // Ajout explicite pour garantir un nettoyage complet
+    localStorage.removeItem('dutch_new_game_requested'); // S'assurer que le flag est nettoyé aussi
   }, []);
 
   const handleStartGame = (playerNames: string[]) => {
@@ -38,16 +41,17 @@ const GameSetup: React.FC = () => {
         return;
       }
       
-      // IMPORTANT: NE PAS nettoyer ici pour garder les données dans localStorage
-      // jusqu'à ce que l'initialisation soit terminée
+      // Stockage temporaire des noms des joueurs pour l'initialisation
+      localStorage.setItem('dutch_player_setup', JSON.stringify(playerNames));
       
       // Option 1 : Utiliser l'URL pour transmettre les noms des joueurs (plus fiable)
       const playersQueryParam = encodeURIComponent(JSON.stringify(playerNames));
       console.info('Redirection vers /game avec les paramètres des joueurs');
-      navigate(`/game?players=${playersQueryParam}&new=true`);
       
-      // Option 2 : Utiliser localStorage comme méthode de secours
-      // déjà fait dans le composant LocalGameSetup
+      // Ajouter un flag pour forcer une nouvelle partie
+      localStorage.setItem('dutch_new_game_requested', 'true');
+      
+      navigate(`/game?players=${playersQueryParam}&new=true`);
       
     } catch (error) {
       console.error("Erreur lors du démarrage de la partie:", error);

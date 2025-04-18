@@ -51,6 +51,7 @@ export const useGamePersistence = () => {
         );
         
         if (isDuplicate) {
+          console.info("Partie déjà enregistrée dans l'historique, éviter le doublon");
           return prev;
         }
         
@@ -78,11 +79,13 @@ export const useGamePersistence = () => {
       
       // Vérification de validité de base
       if (!parsedGame.players || !Array.isArray(parsedGame.players) || parsedGame.players.length === 0) {
+        console.info("Pas de partie active: données de joueurs manquantes ou invalides");
         return false;
       }
       
       // Si la partie est marquée comme terminée, elle n'est pas "active"
       if (parsedGame.isGameOver === true) {
+        console.info("Partie terminée, considérée comme inactive");
         return false;
       }
 
@@ -90,7 +93,8 @@ export const useGamePersistence = () => {
       const hasPlayedRounds = parsedGame.players.some((p: any) => 
         p.rounds && Array.isArray(p.rounds) && p.rounds.length > 0
       );
-      
+
+      // Une partie est considérée active uniquement si elle a au moins une manche jouée
       return hasPlayedRounds;
     } catch (error) {
       console.error('Erreur lors de la vérification de partie active:', error);
@@ -110,11 +114,13 @@ export const useGamePersistence = () => {
         
         // Vérification de base des données chargées
         if (!parsedGame.players || !Array.isArray(parsedGame.players)) {
+          console.error("Format de partie invalide lors du chargement");
           throw new Error("Format de partie invalide");
         }
         
         // Vérification de la structure attendue
         if (parsedGame.players.some((p: any) => !p.id || !p.name || p.totalScore === undefined)) {
+          console.error("Structure de joueurs invalide lors du chargement");
           throw new Error("Structure de joueurs invalide");
         }
         
@@ -152,12 +158,14 @@ export const useGamePersistence = () => {
   }) => {
     try {
       if (!gameState || !gameState.players || gameState.players.length === 0) {
-        throw new Error("Impossible de sauvegarder un état de jeu invalide");
+        console.error("Tentative de sauvegarde avec un état de jeu invalide");
+        return false;
       }
       
       // Vérification de structure
       if (gameState.players.some(p => !p.id || !p.name || p.totalScore === undefined || !Array.isArray(p.rounds))) {
-        throw new Error("Structure de joueurs invalide pour la sauvegarde");
+        console.error("Structure de joueurs invalide pour la sauvegarde");
+        return false;
       }
       
       const stateToSave = {

@@ -62,9 +62,15 @@ export const initializePlayers = (): Player[] | null => {
     
     console.info(`Initialisation de ${playerNames.length} joueurs:`, playerNames);
     
-    const newPlayers: Player[] = playerNames.map((name, index) => ({
+    // Assurer que tous les noms sont valides
+    const sanitizedNames = playerNames.map((name, index) => {
+      const trimmedName = name && typeof name === 'string' ? name.trim() : '';
+      return trimmedName || `Joueur ${index + 1}`;
+    });
+    
+    const newPlayers: Player[] = sanitizedNames.map((name, index) => ({
       id: uuidv4(),
-      name: name && name.trim() ? name.trim() : `Joueur ${index + 1}`,
+      name: name,
       totalScore: 0,
       rounds: []
     }));
@@ -126,6 +132,16 @@ export const verifyPlayerSetup = (): boolean => {
     
     if (!Array.isArray(playerNames) || playerNames.length < 2) {
       console.error('Vérification: Configuration de joueurs invalide:', playerNames);
+      return false;
+    }
+    
+    // Vérifier que chaque nom est utilisable (peut être vide, sera remplacé lors de l'initialisation)
+    const anyInvalidName = playerNames.some(name => 
+      name !== null && name !== undefined && typeof name !== 'string'
+    );
+    
+    if (anyInvalidName) {
+      console.error('Vérification: Un ou plusieurs noms de joueurs sont invalides');
       return false;
     }
     

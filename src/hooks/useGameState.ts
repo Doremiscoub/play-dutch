@@ -22,7 +22,7 @@ export const useGameState = () => {
   const [soundEnabled] = useLocalStorage('dutch_sound_enabled', true);
   const initializationAttempted = useRef(false);
   
-  // Use our new modular hooks
+  // Use our modular hooks
   const {
     players, 
     setPlayers, 
@@ -62,10 +62,20 @@ export const useGameState = () => {
       const initializeGame = () => {
         console.info('Initialisation du jeu...');
         
-        // Créer une nouvelle partie (méthode mise à jour pour gérer les paramètres URL)
+        // Vérifier si une nouvelle partie est explicitement demandée
+        const isNewGameRequested = localStorage.getItem('dutch_new_game_requested') === 'true';
+        
+        if (isNewGameRequested) {
+          console.info("Nouvelle partie demandée, création...");
+          localStorage.removeItem('dutch_new_game_requested');
+          createNewGame();
+          return;
+        }
+        
+        // Sinon, créer une nouvelle partie ou charger une existante
         const success = createNewGame();
         
-        // Si la création échoue, charger une sauvegarde existante
+        // Si la création échoue, essayer de charger une partie existante
         if (!success) {
           console.info("Tentative de chargement d'une partie existante");
           const savedGame = loadGameState();
@@ -84,7 +94,7 @@ export const useGameState = () => {
               setShowGameOver(true);
             }
             
-            // Mark initialization as completed
+            // Marquer l'initialisation comme terminée
             initializationCompleted.current = true;
             console.info("Initialisation depuis une sauvegarde réussie");
           } else {
@@ -107,7 +117,7 @@ export const useGameState = () => {
     }
   }, [loadGameState, navigate, setRoundHistory, createNewGame, setPlayers, setGameStartTime, setScoreLimit]);
   
-  // Save game state to localStorage when it changes
+  // Sauvegarde automatique lorsque l'état du jeu change
   useEffect(() => {
     try {
       if (players.length > 0) {
@@ -127,9 +137,10 @@ export const useGameState = () => {
     }
   }, [players, roundHistory, showGameOver, scoreLimit, gameStartTime, saveGameState]);
   
-  // Add a new round
+  // Ajout d'une nouvelle manche avec protection contre les doubles soumissions
   const handleAddRound = (scores: number[], dutchPlayerId?: string) => {
     try {
+      console.info("Ajout d'une nouvelle manche:", scores, "Dutch:", dutchPlayerId);
       const result = addRound(players, scores, dutchPlayerId);
       
       if (result) {
@@ -142,10 +153,10 @@ export const useGameState = () => {
           }, 500);
         }
         
-        return true; // Indicate that the addition succeeded
+        return true; // Indiquer que l'ajout a réussi
       }
       
-      return false; // Indicate that the addition failed
+      return false; // Indiquer que l'ajout a échoué
     } catch (error) {
       console.error("Erreur lors de l'ajout d'une manche:", error);
       toast.error("Une erreur est survenue lors de l'ajout de la manche");
@@ -153,18 +164,18 @@ export const useGameState = () => {
     }
   };
   
-  // Undo last round
+  // Annulation de la dernière manche
   const handleUndoLastRound = () => {
     try {
       const updatedPlayers = undoLastRound(players, soundEnabled);
       setPlayers(updatedPlayers);
       
-      // If game over screen was displayed, hide it
+      // Si l'écran de fin de partie était affiché, le masquer
       if (showGameOver) {
         setShowGameOver(false);
       }
       
-      return true; // Indicate that the undo succeeded
+      return true; // Indiquer que l'annulation a réussi
     } catch (error) {
       console.error("Erreur lors de l'annulation de la dernière manche:", error);
       toast.error("Une erreur est survenue lors de l'annulation de la manche");
@@ -172,7 +183,7 @@ export const useGameState = () => {
     }
   };
   
-  // Confirm end of game
+  // Confirmation de fin de partie avec sauvegarde dans l'historique
   const handleConfirmEndGame = () => {
     try {
       saveGameToHistory(players, gameStartTime);
