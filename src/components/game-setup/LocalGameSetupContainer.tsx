@@ -1,8 +1,7 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Smartphone } from 'lucide-react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import LocalGameSetup from './LocalGameSetup';
 
 interface LocalGameSetupContainerProps {
@@ -10,18 +9,10 @@ interface LocalGameSetupContainerProps {
 }
 
 const LocalGameSetupContainer: React.FC<LocalGameSetupContainerProps> = ({ onStartGame }) => {
-  const [showLocalSetup, setShowLocalSetup] = useState(false);
-
-  const handleLocalStart = (playerNames: string[]) => {
-    onStartGame(playerNames);
-    setShowLocalSetup(false);
-  };
-
   return (
-    <>
+    <div className="space-y-6">
       <Card 
-        className="rounded-3xl border border-white/50 bg-white/80 backdrop-blur-md shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer"
-        onClick={() => setShowLocalSetup(true)}
+        className="rounded-3xl border border-white/50 bg-white/80 backdrop-blur-md shadow-md"
       >
         <CardHeader className="pb-2">
           <CardTitle className="text-xl font-semibold text-dutch-blue flex items-center gap-2">
@@ -39,18 +30,12 @@ const LocalGameSetupContainer: React.FC<LocalGameSetupContainerProps> = ({ onSta
         </CardContent>
       </Card>
 
-      <Dialog open={showLocalSetup} onOpenChange={setShowLocalSetup}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Configuration de la partie</DialogTitle>
-            <DialogDescription>
-              Configurer les joueurs pour une partie locale
-            </DialogDescription>
-          </DialogHeader>
-          <LocalGameSetup onStartGame={handleLocalStart} />
-        </DialogContent>
-      </Dialog>
-    </>
+      <Card className="rounded-3xl border border-white/50 bg-white/90 backdrop-blur-md shadow-md">
+        <CardContent className="pt-6">
+          <LocalGameSetup onStartGame={onStartGame} />
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 
