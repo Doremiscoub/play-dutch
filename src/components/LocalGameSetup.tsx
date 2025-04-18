@@ -62,8 +62,8 @@ const LocalGameSetup: React.FC<LocalGameSetupProps> = ({ onStartGame, isSubmitti
       <div className="space-y-2">
         <h3 className="text-lg font-medium">Nombre de joueurs</h3>
         <PlayerCountSelector 
-          numPlayers={numPlayers} 
-          onNumPlayersChange={handleNumPlayersChange} 
+          count={numPlayers}
+          onChange={handleNumPlayersChange}
         />
       </div>
       

@@ -21,8 +21,8 @@ const mockPlayers: Player[] = [
       dutchCount: 0,
       improvementRate: 0,
       consistencyScore: 0,
-      winStreak: 0,
-      rank: 1
+      winStreak: 0
+      // Removed 'rank' property which doesn't exist in PlayerStatistics
     }
   },
   {
@@ -38,8 +38,8 @@ const mockPlayers: Player[] = [
       dutchCount: 0,
       improvementRate: 0,
       consistencyScore: 0,
-      winStreak: 0,
-      rank: 2
+      winStreak: 0
+      // Removed 'rank' property which doesn't exist in PlayerStatistics
     }
   }
 ];

@@ -28,7 +28,8 @@ const GameSetup: React.FC = () => {
     localStorage.setItem('dutch_game_mode', 'local');
   }, []);
 
-  const handleStartGame = (playerNames: string[]) => {
+  // Update the function signature to accept playerNames parameter
+  const handleStartGame = (playerNames: string[] = []) => {
     if (isSubmitting) {
       console.info("GameSetup: Soumission déjà en cours, éviter les clics multiples");
       return;
