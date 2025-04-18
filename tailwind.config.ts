@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 import { COLORS, TYPOGRAPHY, BORDERS, SHADOWS, ANIMATIONS } from "./src/config/theme";
 
@@ -101,7 +100,8 @@ export default {
 					'light-gray': '#E5E5EA',
 					'ultra-light-gray': '#F2F2F7',
 					'dark-gray': '#8E8E93',
-				}
+				},
+				'badge-purple': '#D9D1FF',
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -115,6 +115,7 @@ export default {
 				card: SHADOWS.card,
 				glass: SHADOWS.glassCard,
 				button: SHADOWS.glassButton,
+				md: '0 6px 14px rgba(0,0,0,0.12)',
 			},
 			fontFamily: {
 				sans: ['SF Pro Text', 'SF Pro Display', 'system-ui', 'sans-serif'],
