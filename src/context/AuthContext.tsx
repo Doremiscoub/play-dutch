@@ -1,4 +1,3 @@
-
 /**
  * Contexte d'authentification avec gestion du mode hors-ligne
  */
@@ -28,10 +27,13 @@ export const useAuth = () => useContext(AuthContext);
  */
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [isOfflineMode, setIsOfflineMode] = useState<boolean>(
-    localStorage.getItem('clerk_auth_failed') === 'true'
+    localStorage.getItem('dutch_play_offline') === 'true'
   );
   
   useEffect(() => {
+    const playOffline = localStorage.getItem('dutch_play_offline') === 'true';
+    setIsOfflineMode(playOffline);
+    
     // Vérifier si nous sommes déjà en mode hors-ligne
     if (localStorage.getItem('clerk_auth_failed') === 'true') {
       setIsOfflineMode(true);
@@ -63,7 +65,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       window.removeEventListener('error', handleError);
       clearTimeout(timeout);
     };
-  }, [isOfflineMode]);
+  }, []);
 
   // Si nous sommes en mode hors-ligne, utiliser des valeurs par défaut
   if (isOfflineMode) {

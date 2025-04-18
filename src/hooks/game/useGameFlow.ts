@@ -26,6 +26,7 @@ export const useGameFlow = () => {
   const handleRestart = useCallback(() => {
     try {
       cleanupGameState();
+      localStorage.removeItem('dutch_play_offline');
       localStorage.setItem('dutch_new_game_requested', 'true');
       navigate('/game/setup');
       return true;

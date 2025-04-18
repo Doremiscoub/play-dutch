@@ -1,4 +1,3 @@
-
 import { History, BookOpen, Settings } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -16,6 +15,7 @@ const QuickNavigation = () => {
       >
         <History className="h-5 w-5 text-dutch-orange" />
       </Button>
+      
       <Button
         variant="outline"
         size="icon"
@@ -24,6 +24,7 @@ const QuickNavigation = () => {
       >
         <BookOpen className="h-5 w-5 text-dutch-purple" />
       </Button>
+      
       <Button
         variant="outline"
         size="icon"

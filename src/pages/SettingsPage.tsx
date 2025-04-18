@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -10,6 +9,7 @@ import GeneralSettings from '@/components/sections/GeneralSettings';
 import AppearanceSettings from '@/components/sections/AppearanceSettings';
 import VoiceSettings from '@/components/sections/VoiceSettings';
 import AnimatedBackground from '@/components/AnimatedBackground';
+import SignOutButton from '@/components/settings/SignOutButton';
 
 const SettingsPage: React.FC = () => {
   const navigate = useNavigate();
@@ -18,10 +18,8 @@ const SettingsPage: React.FC = () => {
   
   const handleBack = () => {
     if (location.state?.from) {
-      // Navigation vers l'écran précédent spécifique si fourni
       navigate(location.state.from);
     } else {
-      // Utilisation de navigate(-1) pour revenir à l'écran précédent
       navigate(-1);
     }
   };
@@ -104,6 +102,7 @@ const SettingsPage: React.FC = () => {
               </TabsContent>
             </div>
           </Tabs>
+          <SignOutButton />
         </div>
       </div>
     </div>
