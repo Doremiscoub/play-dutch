@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import GradientAnimationStyles from '../game/GradientAnimationStyles';
 import BackgroundGrid from './BackgroundGrid';
 import BackgroundDots from './BackgroundDots';
-import WavesBackground from './WavesBackground';
+import WavesBackground from '../background/WavesBackground';
 
 type BackgroundVariant = 'default' | 'blue' | 'purple';
 

@@ -29,11 +29,10 @@ const Wave = ({
 const WavesBackground: React.FC = () => {
   return (
     <div className="pointer-events-none select-none -z-10 absolute bottom-0 w-full">
-      {/* Augmente la durée des animations de 75% (60s → 240s, 120s → 480s) */}
-      {/* Réduit l'opacité à 0.5 */}
-      <Wave color="#FDE68A" opacity={0.5} duration={240} offset="0%" height="14vh" />
-      {/* La vague violette avec hauteur augmentée */}
-      <Wave color="#E9D5FF" opacity={0.5} duration={480} offset="-15%" height="20vh" />
+      {/* Vague orange très pâle - ralentie (240s → 960s) */}
+      <Wave color="#FDE68A" opacity={0.5} duration={960} offset="0%" height="14vh" />
+      {/* Vague violette avec hauteur augmentée - ralentie (480s → 1920s) */}
+      <Wave color="#E9D5FF" opacity={0.5} duration={1920} offset="-15%" height="20vh" />
     </div>
   );
 };
