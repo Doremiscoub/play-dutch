@@ -75,9 +75,6 @@ export const initializePlayers = (): Player[] | null => {
       rounds: []
     }));
     
-    // NE PAS nettoyer la configuration ici, laissons le composant supérieur le faire
-    // après avoir vérifié que l'initialisation est réussie
-    
     return newPlayers;
   } catch (error) {
     console.error('Erreur lors de la création de la partie :', error);
@@ -94,8 +91,9 @@ export const initializePlayers = (): Player[] | null => {
  */
 export const clearPlayerSetup = () => {
   try {
-    localStorage.removeItem('dutch_player_setup');
-    console.info('Configuration des joueurs nettoyée');
+    // NE PAS supprimer la configuration pour permettre l'initialisation de la partie
+    // localStorage.removeItem('dutch_player_setup');
+    console.info('Configuration des joueurs conservée pour initialisation');
     // Reset notification flag when clearing setup
     errorNotificationShown = false;
     verificationErrorShown = false;

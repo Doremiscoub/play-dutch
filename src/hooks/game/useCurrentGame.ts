@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { Player } from '@/types';
 import { toast } from 'sonner';
 import { updateAllPlayersStats } from '@/utils/playerStatsCalculator';
@@ -8,7 +8,7 @@ export const useCurrentGame = () => {
   const [showGameOver, setShowGameOver] = useState<boolean>(false);
   const [players, setPlayers] = useState<Player[]>([]);
 
-  const handleAddRound = (scores: number[], dutchPlayerId?: string) => {
+  const handleAddRound = useCallback((scores: number[], dutchPlayerId?: string) => {
     try {
       console.info("Ajout d'une nouvelle manche:", scores, "Dutch:", dutchPlayerId);
       
@@ -46,7 +46,7 @@ export const useCurrentGame = () => {
       toast.error("Une erreur est survenue lors de l'ajout de la manche");
       return false;
     }
-  };
+  }, [players]);
 
   return {
     players,

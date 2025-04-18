@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import PlayerNameInput from './PlayerNameInput';
 import PlayerCountSelector from './PlayerCountSelector';
+import { toast } from 'sonner';
 
 interface LocalGameSetupProps {
   onStartGame: (playerNames: string[]) => void;
@@ -40,21 +41,30 @@ const LocalGameSetup: React.FC<LocalGameSetupProps> = ({ onStartGame }) => {
     setIsSubmitting(true);
     
     try {
-      // Ensure all player names are valid
-      const validPlayerNames = playerNames.map(name => 
-        name.trim() === '' ? `Joueur ${playerNames.indexOf(name) + 1}` : name.trim()
+      // S'assurer que tous les noms sont valides
+      const validPlayerNames = playerNames.map((name, i) => 
+        name.trim() === '' ? `Joueur ${i + 1}` : name.trim()
       );
       
-      // Sauvegarder les noms dans localStorage avant de démarrer la partie
+      // Sauvegarder les noms dans localStorage
       localStorage.setItem('dutch_player_setup', JSON.stringify(validPlayerNames));
       console.info('Configuration des joueurs sauvegardée:', validPlayerNames);
       
       // Attendre un peu pour s'assurer que localStorage est bien mis à jour
       setTimeout(() => {
-        onStartGame(validPlayerNames);
-      }, 100);
+        try {
+          // Définir explicitement le flag pour une nouvelle partie
+          localStorage.setItem('dutch_new_game_requested', 'true');
+          // Appeler la fonction de démarrage
+          onStartGame(validPlayerNames);
+        } catch (innerError) {
+          console.error("Erreur lors du démarrage de la partie:", innerError);
+          toast.error("Erreur lors du démarrage de la partie");
+        }
+      }, 200);
     } catch (error) {
       console.error("Erreur lors de la configuration des joueurs:", error);
+      toast.error("Erreur lors de la configuration des joueurs");
     } finally {
       setTimeout(() => {
         setIsSubmitting(false);

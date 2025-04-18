@@ -1,4 +1,5 @@
-import { useEffect, useRef } from 'react';
+
+import { useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLocalStorage } from './use-local-storage';
 import { useGamePersistence } from './useGamePersistence';
@@ -8,6 +9,7 @@ import { resetNotificationFlags } from '@/utils/playerInitializer';
 import { useCurrentGame } from './game/useCurrentGame';
 import { useRounds } from './game/useRounds';
 import { useScoreLimit } from './game/useScoreLimit';
+import { toast } from 'sonner';
 
 export const useGameState = () => {
   const navigate = useNavigate();
@@ -52,6 +54,26 @@ export const useGameState = () => {
 
   const { loadGameState, saveGameState, saveGameToHistory } = useGamePersistence();
 
+  // Cette fonction sauvegarde l'état actuel du jeu
+  const saveCurrentGameState = useCallback(() => {
+    if (players.length > 0) {
+      saveGameState({
+        players,
+        roundHistory,
+        isGameOver: showGameOver,
+        scoreLimit,
+        gameStartTime
+      });
+    }
+  }, [players, roundHistory, showGameOver, scoreLimit, gameStartTime, saveGameState]);
+
+  // Sauvegarde automatique à chaque changement d'état important
+  useEffect(() => {
+    if (players.length > 0) {
+      saveCurrentGameState();
+    }
+  }, [players, roundHistory, showGameOver, saveCurrentGameState]);
+
   useEffect(() => {
     try {
       if (initializationCompleted.current || initializationAttempted.current || initializationInProgress.current) {
@@ -63,7 +85,7 @@ export const useGameState = () => {
       console.info("Tentative d'initialisation du jeu...");
       resetNotificationFlags(); // Réinitialiser les flags de notification
       
-      const initializeGame = () => {
+      const initializeGame = async () => {
         console.info('Initialisation du jeu...');
         
         // Vérifier si une nouvelle partie est explicitement demandée
@@ -72,12 +94,16 @@ export const useGameState = () => {
         if (isNewGameRequested) {
           console.info("Nouvelle partie demandée, création...");
           localStorage.removeItem('dutch_new_game_requested');
-          createNewGame();
+          const success = await createNewGame();
+          if (!success) {
+            console.error("Échec de création de la nouvelle partie");
+            toast.error("Impossible de créer une nouvelle partie");
+          }
           return;
         }
         
         // Sinon, créer une nouvelle partie ou charger une existante
-        const success = createNewGame();
+        const success = await createNewGame();
         
         // Si la création échoue, essayer de charger une partie existante
         if (!success) {
@@ -120,13 +146,16 @@ export const useGameState = () => {
     }
   }, [loadGameState, navigate, setRoundHistory, createNewGame, setPlayers, setGameStartTime, setScoreLimit]);
 
-  const handleUndoLastRound = () => {
+  const handleUndoLastRound = useCallback(() => {
     try {
       const updatedPlayers = undoLastRound(players);
-      setPlayers(updatedPlayers);
+      
+      if (updatedPlayers) {
+        setPlayers(updatedPlayers);
 
-      if (showGameOver) {
-        setShowGameOver(false);
+        if (showGameOver) {
+          setShowGameOver(false);
+        }
       }
 
       return true;
@@ -134,9 +163,9 @@ export const useGameState = () => {
       console.error("Erreur lors de l'annulation de la dernière manche:", error);
       return false;
     }
-  };
+  }, [players, undoLastRound, showGameOver, setPlayers, setShowGameOver]);
 
-  const handleConfirmEndGame = () => {
+  const handleConfirmEndGame = useCallback(() => {
     try {
       saveGameToHistory(players, gameStartTime);
       setShowGameOver(true);
@@ -146,7 +175,7 @@ export const useGameState = () => {
       console.error("Erreur lors de la confirmation de fin de partie:", error);
       return false;
     }
-  };
+  }, [players, gameStartTime, saveGameToHistory, setShowGameOver, setShowGameEndConfirmation]);
 
   return {
     players,

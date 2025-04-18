@@ -50,7 +50,6 @@ export const useGameInitialization = () => {
         localStorage.removeItem('dutch_new_game_requested');
       }
       
-      // 1. Méthode via localStorage (plus fiable dans notre contexte)
       console.info('Tentative d\'initialisation via localStorage');
       
       const setupValid = verifyPlayerSetup();
@@ -89,8 +88,7 @@ export const useGameInitialization = () => {
       initializationCompleted.current = true;
       initializationInProgress.current = false;
       
-      // Nettoyage après initialisation réussie
-      clearPlayerSetup();
+      // Ne pas nettoyer après initialisation réussie pour que LocalGameSetup puisse récupérer les données
       
       toast.success('Nouvelle partie créée !');
       return true;
