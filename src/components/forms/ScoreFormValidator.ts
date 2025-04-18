@@ -5,6 +5,13 @@ import { toast } from 'sonner';
 let validationErrorShown = false;
 
 /**
+ * Reset validation error flag
+ */
+export const resetValidationErrorFlag = () => {
+  validationErrorShown = false;
+};
+
+/**
  * Validate player scores before submission
  * @param scores Object mapping player IDs to scores
  * @param playerIds Array of player IDs to validate

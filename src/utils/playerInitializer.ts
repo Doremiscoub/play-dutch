@@ -3,8 +3,18 @@ import { Player } from '@/types';
 import { v4 as uuidv4 } from 'uuid';
 import { toast } from 'sonner';
 
-// Flag to prevent duplicate notifications
+// Flags pour éviter les notifications multiples
 let errorNotificationShown = false;
+let verificationErrorShown = false;
+
+/**
+ * Réinitialise tous les flags de notification
+ */
+export const resetNotificationFlags = () => {
+  errorNotificationShown = false;
+  verificationErrorShown = false;
+  console.info("Flags de notification réinitialisés");
+};
 
 /**
  * Initialize players from localStorage configuration
@@ -12,10 +22,13 @@ let errorNotificationShown = false;
  */
 export const initializePlayers = (): Player[] | null => {
   try {
+    console.info("Tentative d'initialisation des joueurs...");
+    
     // Reset notification flag when explicitly initializing
     errorNotificationShown = false;
     
     const playerSetup = localStorage.getItem('dutch_player_setup');
+    console.info("Configuration trouvée dans localStorage:", playerSetup);
     
     if (!playerSetup) {
       console.error('Aucune configuration de joueurs trouvée dans localStorage');
@@ -26,7 +39,17 @@ export const initializePlayers = (): Player[] | null => {
       return null;
     }
     
-    const playerNames = JSON.parse(playerSetup);
+    let playerNames;
+    try {
+      playerNames = JSON.parse(playerSetup);
+    } catch (parseError) {
+      console.error("Erreur de parsing de la configuration:", parseError);
+      if (!errorNotificationShown) {
+        toast.error('Configuration de partie corrompue');
+        errorNotificationShown = true;
+      }
+      return null;
+    }
     
     if (!Array.isArray(playerNames) || playerNames.length < 2) {
       console.error('Configuration de joueurs invalide:', playerNames);
@@ -45,6 +68,10 @@ export const initializePlayers = (): Player[] | null => {
       totalScore: 0,
       rounds: []
     }));
+
+    // Une fois les joueurs initialisés avec succès, nous pouvons nettoyer la configuration
+    // pour éviter de réutiliser les mêmes données ultérieurement
+    clearPlayerSetup();
     
     return newPlayers;
   } catch (error) {
@@ -65,6 +92,7 @@ export const clearPlayerSetup = () => {
   console.info('Configuration des joueurs nettoyée');
   // Reset notification flag when clearing setup
   errorNotificationShown = false;
+  verificationErrorShown = false;
 };
 
 /**
@@ -73,21 +101,36 @@ export const clearPlayerSetup = () => {
  */
 export const verifyPlayerSetup = (): boolean => {
   try {
+    console.info("Vérification de la configuration des joueurs...");
+    
+    // Réinitialiser le flag de vérification
+    verificationErrorShown = false;
+    
     const playerSetup = localStorage.getItem('dutch_player_setup');
     
     if (!playerSetup) {
       console.error('Vérification: Aucune configuration de joueurs trouvée');
+      if (!verificationErrorShown) {
+        // Ne pas afficher de toast ici pour éviter les doublons avec initializePlayers
+        verificationErrorShown = true;
+      }
       return false;
     }
     
-    const playerNames = JSON.parse(playerSetup);
+    let playerNames;
+    try {
+      playerNames = JSON.parse(playerSetup);
+    } catch (parseError) {
+      console.error("Erreur lors du parsing de la configuration:", parseError);
+      return false;
+    }
     
     if (!Array.isArray(playerNames) || playerNames.length < 2) {
       console.error('Vérification: Configuration de joueurs invalide:', playerNames);
       return false;
     }
     
-    console.info('Vérification: Configuration de joueurs valide');
+    console.info('Vérification: Configuration de joueurs valide avec', playerNames.length, 'joueurs');
     return true;
   } catch (error) {
     console.error('Erreur lors de la vérification de la configuration:', error);

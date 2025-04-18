@@ -1,7 +1,8 @@
+
 /**
  * Main hook for game state management
  */
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Player } from '@/types';
 import { toast } from 'sonner';
@@ -10,7 +11,7 @@ import { useGamePersistence } from './useGamePersistence';
 import { useRoundManagement } from './useRoundManagement';
 import { useGameInitialization } from './useGameInitialization';
 import { useGameContinuation } from './useGameContinuation';
-import { updateAllPlayersStats } from '@/utils/playerStatsCalculator';
+import { resetNotificationFlags } from '@/utils/playerInitializer';
 
 /**
  * Main hook for complete game state management
@@ -19,6 +20,7 @@ export const useGameState = () => {
   const navigate = useNavigate();
   const [showGameOver, setShowGameOver] = useState<boolean>(false);
   const [soundEnabled] = useLocalStorage('dutch_sound_enabled', true);
+  const initializationAttempted = useRef(false);
   
   // Use our new modular hooks
   const {
@@ -29,7 +31,8 @@ export const useGameState = () => {
     scoreLimit,
     setScoreLimit, 
     createNewGame, 
-    initializationCompleted
+    initializationCompleted,
+    initializationInProgress
   } = useGameInitialization();
   
   const { 
@@ -47,9 +50,14 @@ export const useGameState = () => {
   // Initialize game from localStorage
   useEffect(() => {
     try {
-      if (initializationCompleted.current) {
+      if (initializationCompleted.current || initializationAttempted.current || initializationInProgress.current) {
+        console.info("Initialisation déjà tentée ou en cours, ignorer");
         return; // Avoid double initialization
       }
+      
+      initializationAttempted.current = true;
+      console.info("Tentative d'initialisation du jeu...");
+      resetNotificationFlags(); // Réinitialiser les flags de notification
       
       const initializeGame = () => {
         console.info('Initialisation du jeu...');
@@ -72,6 +80,7 @@ export const useGameState = () => {
         const savedGame = loadGameState();
         
         if (savedGame) {
+          console.info("Chargement d'une partie existante");
           setPlayers(savedGame.players);
           setRoundHistory(savedGame.roundHistory || []);
           setScoreLimit(savedGame.scoreLimit || 100);
@@ -86,7 +95,9 @@ export const useGameState = () => {
           
           // Mark initialization as completed
           initializationCompleted.current = true;
+          console.info("Initialisation depuis une sauvegarde réussie");
         } else {
+          console.info("Aucune partie sauvegardée trouvée, création d'une nouvelle partie");
           createNewGame();
         }
       };
@@ -96,6 +107,11 @@ export const useGameState = () => {
       console.error("Erreur lors de l'initialisation du jeu:", error);
       toast.error("Une erreur est survenue lors du chargement de la partie");
       navigate('/game/setup');
+    } finally {
+      // Réinitialiser le flag après un délai
+      setTimeout(() => {
+        initializationAttempted.current = false;
+      }, 1000);
     }
   }, [loadGameState, navigate, setRoundHistory, createNewGame, setPlayers, setGameStartTime, setScoreLimit]);
   

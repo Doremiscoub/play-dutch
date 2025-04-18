@@ -27,6 +27,12 @@ const GameSetup: React.FC = () => {
     cleanupGameState();
     clearPlayerSetup();
     console.info("Configuration de jeu nettoyée au montage du composant GameSetup");
+    
+    // Supprimer également toutes les clés de localStorage qui pourraient interférer
+    localStorage.removeItem('dutch_player_setup');
+    localStorage.removeItem('dutch_new_game_requested');
+    localStorage.removeItem('current_dutch_game');
+    console.info("Toutes les données de jeu existantes ont été nettoyées");
   }, []);
   
   const handleNumPlayersChange = (increment: boolean) => {
@@ -49,14 +55,14 @@ const GameSetup: React.FC = () => {
     setPlayerNames(newNames);
   };
 
-  const handleStartGame = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleStartGame = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     
     if (isSubmitting) return;
     setIsSubmitting(true);
     
     try {
-      console.info('Démarrage de la partie...');
+      console.info('Démarrage de la partie... Préparation de la configuration.');
       
       // Nettoyer tout état de jeu existant avant de créer une nouvelle configuration
       cleanupGameState();
@@ -79,26 +85,34 @@ const GameSetup: React.FC = () => {
         return;
       }
       
-      // Vérifier et afficher les données avant sauvegarde
       console.info('Noms des joueurs validés:', validPlayerNames);
       
-      // Sauvegarder la configuration des joueurs dans localStorage
+      // Sauvegarder la configuration des joueurs dans localStorage de manière synchrone
       localStorage.setItem('dutch_player_setup', JSON.stringify(validPlayerNames));
       localStorage.setItem('dutch_new_game_requested', 'true');
       
-      console.info('Configuration des joueurs enregistrée. Redirection vers /game...');
+      console.info('Configuration des joueurs enregistrée. Vérification...');
       
-      // Rediriger après un court délai pour s'assurer que le stockage est mis à jour
+      // Vérification immédiate que les données ont bien été enregistrées
+      const savedData = localStorage.getItem('dutch_player_setup');
+      if (!savedData) {
+        console.error("ERREUR CRITIQUE: Échec de l'enregistrement de la configuration des joueurs");
+        toast.error("Erreur lors de la création de la partie");
+        setIsSubmitting(false);
+        return;
+      }
+      
+      console.info('Configuration vérifiée avec succès. Données sauvegardées:', savedData);
+      console.info('Redirection vers /game...');
+      
+      // Attendre un peu pour s'assurer que localStorage est bien mis à jour
       setTimeout(() => {
         navigate('/game');
       }, 300);
     } catch (error) {
       console.error("Erreur lors du démarrage de la partie:", error);
       toast.error("Une erreur est survenue lors de la création de la partie");
-    } finally {
-      setTimeout(() => {
-        setIsSubmitting(false);
-      }, 1000);
+      setIsSubmitting(false);
     }
   };
 
@@ -184,6 +198,7 @@ const GameSetup: React.FC = () => {
         <ActionButton 
           onClick={handleStartGame} 
           label={isSubmitting ? 'Création de la partie...' : 'Commencer la partie'} 
+          disabled={isSubmitting}
         />
       </motion.div>
     </div>
