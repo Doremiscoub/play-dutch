@@ -8,7 +8,6 @@ import ScoreBoardTabs from './ScoreBoardTabs';
 import ScoreBoardContent from './ScoreBoardContent';
 import CustomScoreBoardButtons from '../CustomScoreBoardButtons';
 import { useMediaQuery } from '@/hooks/use-media-query';
-import GameStatsPanel from './GameStatsPanel';
 import EndGameConfirmationDialog from './EndGameConfirmationDialog';
 import UndoConfirmationDialog from './UndoConfirmationDialog';
 import ScoreBoardHeader from './ScoreBoardHeader';

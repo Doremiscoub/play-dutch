@@ -25,15 +25,12 @@ const ScoreBoardContent: React.FC<ScoreBoardContentProps> = ({
   const [isLoading, setIsLoading] = useState(true);
   const [isRendered, setIsRendered] = useState(false);
   
-  // Effet pour garantir un montage sécurisé et éviter les problèmes de DOM
   useEffect(() => {
     console.info("ScoreBoardContent: Montage du composant");
     
-    // Premier timer pour indiquer que le composant est chargé
     const loadTimer = setTimeout(() => {
       setIsLoading(false);
       
-      // Second timer pour indiquer que le rendu est terminé (évite les manipulations DOM prématurées)
       const renderTimer = setTimeout(() => {
         setIsRendered(true);
       }, 100);
@@ -49,11 +46,9 @@ const ScoreBoardContent: React.FC<ScoreBoardContentProps> = ({
     };
   }, []);
   
-  // Protection renforcée contre les valeurs null/undefined
   const safeRoundHistory = Array.isArray(roundHistory) ? roundHistory : [];
   const safePlayers = Array.isArray(players) ? players.filter(p => p && p.id) : [];
   
-  // Sélectionner automatiquement le premier joueur s'il y en a un et qu'aucun n'est sélectionné
   useEffect(() => {
     if (safePlayers.length > 0 && !selectedPlayer && isRendered) {
       setSelectedPlayer(safePlayers[0]);
