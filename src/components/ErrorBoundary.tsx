@@ -24,6 +24,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   }
 
   static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+    // Met à jour l'état pour afficher l'UI de fallback
     return {
       hasError: true,
       error
@@ -31,7 +32,18 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
+    // Vous pouvez également journaliser l'erreur dans un service de rapport d'erreurs
     console.error('ErrorBoundary caught an error:', error, errorInfo);
+  }
+
+  componentDidUpdate(prevProps: ErrorBoundaryProps) {
+    // Réinitialiser l'état d'erreur si les enfants changent
+    if (prevProps.children !== this.props.children && this.state.hasError) {
+      this.setState({ 
+        hasError: false,
+        error: null
+      });
+    }
   }
 
   render(): ReactNode {

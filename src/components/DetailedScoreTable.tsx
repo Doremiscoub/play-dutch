@@ -11,9 +11,15 @@ interface DetailedScoreTableProps {
 }
 
 const DetailedScoreTable: React.FC<DetailedScoreTableProps> = ({ players, roundHistory }) => {
-  if (!players.length) return null;
+  if (!players?.length || !roundHistory?.length) return (
+    <div className="text-center p-4 text-gray-500">
+      Aucune donnée disponible pour le tableau détaillé
+    </div>
+  );
 
   const getBestPlayerInRound = (roundIndex: number): string | null => {
+    if (!roundHistory[roundIndex]?.scores) return null;
+    
     const roundScores = roundHistory[roundIndex].scores;
     const minScore = Math.min(...roundScores);
     const minIndex = roundScores.indexOf(minScore);
@@ -21,6 +27,8 @@ const DetailedScoreTable: React.FC<DetailedScoreTableProps> = ({ players, roundH
   };
 
   const getWorstPlayerInRound = (roundIndex: number): string | null => {
+    if (!roundHistory[roundIndex]?.scores) return null;
+    
     const roundScores = roundHistory[roundIndex].scores;
     const maxScore = Math.max(...roundScores);
     const maxIndex = roundScores.indexOf(maxScore);
@@ -67,7 +75,7 @@ const DetailedScoreTable: React.FC<DetailedScoreTableProps> = ({ players, roundH
             <TableHeader className="bg-dutch-blue/10">
               <TableRow>
                 {roundHistory.map((_, index) => (
-                  <TableHead key={index} className="text-center whitespace-nowrap font-medium text-dutch-blue/80">
+                  <TableHead key={`round-header-${index}`} className="text-center whitespace-nowrap font-medium text-dutch-blue/80">
                     Manche {index + 1}
                   </TableHead>
                 ))}
@@ -78,14 +86,17 @@ const DetailedScoreTable: React.FC<DetailedScoreTableProps> = ({ players, roundH
                 <TableRow key={`${player.id}-scrollable`} className="hover:bg-dutch-blue/5">
                   {roundHistory.map((round, roundIndex) => {
                     const playerIndex = players.findIndex(p => p.id === player.id);
-                    const score = round.scores[playerIndex];
+                    // Vérifier que le score existe
+                    const score = round?.scores && playerIndex >= 0 && playerIndex < round.scores.length 
+                      ? round.scores[playerIndex] 
+                      : 0;
                     const isDutch = round.dutchPlayerId === player.id;
                     const isBestInRound = getBestPlayerInRound(roundIndex) === player.id;
                     const isWorstInRound = getWorstPlayerInRound(roundIndex) === player.id;
                     
                     return (
                       <TableCell 
-                        key={roundIndex} 
+                        key={`${player.id}-round-${roundIndex}`} 
                         className={`text-center ${isDutch ? 'relative' : ''}`}
                       >
                         <div className="relative flex items-center justify-center">

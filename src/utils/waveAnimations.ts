@@ -14,7 +14,7 @@ export const waves: Wave[] = [
   { 
     height: 0.5, // Première vague (dessus) - violette
     color: '#E9D5FF', // Violet très pâle
-    speed: 0.008, // Ralenti pour éviter des animations trop rapides
+    speed: 0.004, // Ralenti pour éviter des animations trop rapides
     amplitude: 30,
     frequency: 0.005,
     opacity: 0.95,
@@ -24,7 +24,7 @@ export const waves: Wave[] = [
   { 
     height: 0.6, // Deuxième vague (dessous), plus haute pour être bien visible
     color: '#FDE68A', // Orange très pâle
-    speed: 0.006, // Encore plus lente
+    speed: 0.003, // Encore plus lente
     amplitude: 25,
     frequency: 0.006,
     opacity: 0.85,
@@ -38,6 +38,11 @@ export const drawWaves = (
   canvas: HTMLCanvasElement,
   time: number
 ) => {
+  if (!ctx || !canvas) return; // Protection contre les valeurs null/undefined
+  
+  // Nettoyer le canvas avant de dessiner
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
   // D'abord dessiner la vague d'arrière-plan (orange), puis celle du premier plan (violette)
   // Ceci assure un ordre de superposition correct
   for (let i = waves.length - 1; i >= 0; i--) {

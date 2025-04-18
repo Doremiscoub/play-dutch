@@ -24,6 +24,8 @@ const dotsCache: { dots: Dot[], initialized: boolean } = {
 };
 
 export const drawDots = ({ ctx, canvas, time }: AnimatedDotsProps) => {
+  if (!ctx || !canvas) return; // Protection contre les valeurs null/undefined
+  
   if (!dotsCache.initialized) {
     const numDots = Math.min(25, Math.max(15, Math.floor(canvas.width * canvas.height / 50000)));
     
@@ -33,6 +35,8 @@ export const drawDots = ({ ctx, canvas, time }: AnimatedDotsProps) => {
       { r: 110, g: 231, b: 183 }, // Green #6EE7B7
       { r: 96, g: 165, b: 250 }  // Blue #60A5FA
     ];
+    
+    dotsCache.dots = []; // Réinitialiser le tableau pour éviter des problèmes
     
     for (let i = 0; i < numDots; i++) {
       const colorIndex = Math.floor(Math.random() * colors.length);
@@ -44,8 +48,8 @@ export const drawDots = ({ ctx, canvas, time }: AnimatedDotsProps) => {
         y: Math.random() * canvas.height,
         size: 3 + Math.random() * 4,
         // Vitesse TRÈS réduite pour un mouvement extrêmement lent et subtil
-        speedX: (Math.random() - 0.5) * 0.005, // Réduit drastiquement
-        speedY: (Math.random() - 0.5) * 0.005, // Réduit drastiquement
+        speedX: (Math.random() - 0.5) * 0.003, // Réduit drastiquement
+        speedY: (Math.random() - 0.5) * 0.003, // Réduit drastiquement
         color: `rgba(${color.r}, ${color.g}, ${color.b}, ${opacity})`,
         opacity,
         phase: Math.random() * Math.PI * 2
@@ -67,8 +71,8 @@ export const drawDots = ({ ctx, canvas, time }: AnimatedDotsProps) => {
   dotsCache.dots.forEach(dot => {
     // Mouvement beaucoup plus fluide et extrêmement lent
     // Réduction drastique de la vitesse d'oscillation
-    const offsetX = Math.sin(time * 0.02 + dot.phase) * 0.2; // Réduction forte
-    const offsetY = Math.cos(time * 0.015 + dot.phase) * 0.2; // Réduction forte
+    const offsetX = Math.sin(time * 0.01 + dot.phase) * 0.2; // Réduction forte
+    const offsetY = Math.cos(time * 0.0075 + dot.phase) * 0.2; // Réduction forte
     
     ctx.beginPath();
     ctx.arc(dot.x + offsetX, dot.y + offsetY, dot.size, 0, Math.PI * 2);
@@ -76,8 +80,8 @@ export const drawDots = ({ ctx, canvas, time }: AnimatedDotsProps) => {
     ctx.fill();
 
     // Mise à jour de la position avec vitesse extrêmement réduite
-    dot.x += dot.speedX * 0.25; // Réduction drastique
-    dot.y += dot.speedY * 0.25; // Réduction drastique
+    dot.x += dot.speedX * 0.15; // Réduction drastique
+    dot.y += dot.speedY * 0.15; // Réduction drastique
 
     // Rebond aux bords avec transition douce
     if (dot.x < 0 || dot.x > canvas.width) {
@@ -90,7 +94,7 @@ export const drawDots = ({ ctx, canvas, time }: AnimatedDotsProps) => {
     }
     
     // Limitation de la vitesse pour éviter les mouvements brusques
-    dot.speedX = Math.max(-0.005, Math.min(0.005, dot.speedX)); // Valeur max très faible
-    dot.speedY = Math.max(-0.005, Math.min(0.005, dot.speedY)); // Valeur max très faible
+    dot.speedX = Math.max(-0.003, Math.min(0.003, dot.speedX)); // Valeur max très faible
+    dot.speedY = Math.max(-0.003, Math.min(0.003, dot.speedY)); // Valeur max très faible
   });
 };

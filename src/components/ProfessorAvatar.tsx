@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Volume2 } from 'lucide-react';
 import { Button } from './ui/button';
@@ -7,7 +7,7 @@ import { useElevenLabs } from '@/hooks/use-eleven-labs';
 import { useSound } from '@/hooks/use-sound';
 import { useImageLoader } from '@/hooks/useImageLoader';
 
-// Chemin corrigé vers l'image du professeur
+// Chemin vers l'image du professeur
 const PROFESSOR_IMAGE = '/images/professor-cartouche.png';
 
 interface ProfessorAvatarProps {
@@ -19,6 +19,12 @@ const ProfessorAvatar: React.FC<ProfessorAvatarProps> = ({ message, onSpeakMessa
   const { config: elevenLabsConfig, speakWithFallback, isLoading: isSpeaking } = useElevenLabs();
   const { isSoundEnabled } = useSound();
   const { error } = useImageLoader(PROFESSOR_IMAGE);
+  const [imageError, setImageError] = useState<boolean>(false);
+
+  const handleImageError = () => {
+    console.error("Erreur de chargement du Professeur Cartouche");
+    setImageError(true);
+  };
   
   const handleSpeak = async () => {
     if (isSoundEnabled) {
@@ -45,19 +51,12 @@ const ProfessorAvatar: React.FC<ProfessorAvatarProps> = ({ message, onSpeakMessa
         }}
         whileHover={{ scale: 1.1, rotate: [-2, 2, -2] }}
       >
-        {!error ? (
+        {!error && !imageError ? (
           <img 
             src={PROFESSOR_IMAGE}
             alt="Professeur Cartouche" 
             className="w-full h-full object-cover"
-            onError={(e) => {
-              console.error("Erreur de chargement du Professeur Cartouche:", e);
-              e.currentTarget.style.display = 'none';
-              const parent = e.currentTarget.parentElement;
-              if (parent) {
-                parent.innerHTML += '<div class="w-full h-full flex items-center justify-center text-4xl">👴🏼</div>';
-              }
-            }}
+            onError={handleImageError}
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-4xl">

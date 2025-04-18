@@ -53,21 +53,28 @@ const GameContent: React.FC<GameContentProps> = ({
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
       {/* Tableau des scores */}
-      <ScoreBoard
-        players={players}
-        onAddRound={onAddRound}
-        onUndoLastRound={onUndoLastRound}
-        onEndGame={onRequestEndGame}
-        roundHistory={roundHistory}
-        showGameEndConfirmation={showGameEndConfirmation}
-        onConfirmEndGame={onConfirmEndGame}
-        onCancelEndGame={onCancelEndGame}
-        scoreLimit={scoreLimit}
-      />
+      {players && players.length > 0 ? (
+        <ScoreBoard
+          players={players}
+          onAddRound={onAddRound}
+          onUndoLastRound={onUndoLastRound}
+          onEndGame={onRequestEndGame}
+          roundHistory={roundHistory}
+          showGameEndConfirmation={showGameEndConfirmation}
+          onConfirmEndGame={onConfirmEndGame}
+          onCancelEndGame={onCancelEndGame}
+          scoreLimit={scoreLimit}
+        />
+      ) : (
+        <div className="p-6 bg-white rounded-lg shadow-md m-4 text-center">
+          <p className="text-gray-700">Aucun joueur disponible. Veuillez configurer une nouvelle partie.</p>
+        </div>
+      )}
 
-      {/* Overlay de fin de partie */}
-      {showGameOver && (
+      {/* Overlay de fin de partie - Utilisez une clé pour forcer le remontage propre */}
+      {showGameOver && players && players.length > 0 && (
         <GameResultOverlay
+          key={`game-over-${Date.now()}`} // Forcer le remontage propre
           players={players}
           onContinue={onContinueGame}
           onRestart={onRestart}
