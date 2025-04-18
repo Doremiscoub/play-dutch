@@ -1,4 +1,3 @@
-
 /**
  * Composant principal de l'application avec système de routes optimisé
  */
@@ -23,6 +22,9 @@ import { useGamePersistence } from './hooks/useGamePersistence';
 
 // Contexte
 import { AuthProvider } from './context/AuthContext';
+
+// Fond animé
+import AnimatedBackground from './components/background/AnimatedBackground';
 
 /**
  * Composant principal de l'application
@@ -70,6 +72,9 @@ const App: React.FC = () => {
   return (
     <AuthProvider>
       <Router>
+        {/* Fond animé global */}
+        <AnimatedBackground />
+        
         <Routes>
           {/* Pages d'authentification */}
           <Route path="/sign-in" element={<SignIn />} />

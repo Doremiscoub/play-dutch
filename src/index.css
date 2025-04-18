@@ -1,382 +1,98 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-  :root, 
-  [data-theme="default"] {
-    --background: 210 40% 98%;
-    --foreground: 222.2 84% 4.9%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 211 100% 51%; /* iOS Blue */
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 250 96% 62%; /* iOS Purple */
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 47.4% 11.2%;
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 37 100% 52%; /* iOS Orange */
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%; /* iOS Red */
-    --destructive-foreground: 210 40% 98%;
-
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 47.4% 11.2%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 47.4% 11.2%;
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 211 100% 51%;
-
-    --radius: 1.5rem; /* VisionOS style rounded corners */
+    --ring: 222.2 84% 4.9%;
+    --primary: 222.1 83.2% 9.8%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --radius: 0.5rem;
   }
 
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.9%;
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
-
-    --primary: 211 100% 51%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 250 96% 62%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 37 100% 52%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
-    --ring: 211 100% 55%;
+    --ring: 212.7 26.8% 83.9%;
+    --primary: 212.8 100% 50%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
   }
 }
 
-@layer base {
-  * {
-    @apply border-border;
+  /* width */
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
   }
 
-  body {
-    @apply bg-gradient-to-br from-gray-50/80 to-white text-foreground antialiased min-h-screen;
-    background-attachment: fixed;
-    font-feature-settings: "cv02", "cv03", "cv04";
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-rendering: optimizeLegibility;
-    overflow-x: hidden;
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", system-ui, sans-serif;
-  }
-  
-  body.dark {
-    @apply bg-gradient-to-br from-gray-900/90 to-gray-800/90;
-  }
-  
-  /* Animation for ripple effect on buttons */
-  @keyframes ripple {
-    0% { transform: scale(0); opacity: 0.5; }
-    100% { transform: scale(100); opacity: 0; }
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f100;
   }
 
-  /* iOS text selection */
-  ::selection {
-    @apply bg-dutch-blue/20 text-dutch-blue;
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #8885;
+    border-radius: 10px;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #5555;
+  }
+
+@font-face {
+  font-family: 'CollegiateInsideFLF';
+  src: url('./assets/fonts/CollegiateInsideFLF.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translate(0, 0);
+    opacity: var(--dot-opacity, 0.6);
+  }
+  25% {
+    transform: translate(10px, -10px);
+    opacity: var(--dot-opacity-high, 0.8);
+  }
+  50% {
+    transform: translate(-5px, -15px);
+    opacity: var(--dot-opacity-low, 0.4);
+  }
+  75% {
+    transform: translate(-10px, -5px);
+    opacity: var(--dot-opacity, 0.6);
   }
 }
 
-@layer components {
-  /* VisionOS-inspired design elements */
-  .ios-card {
-    @apply rounded-3xl bg-white/70 backdrop-blur-xl shadow-sm border border-white/50 p-5 transition-all duration-300 hover:shadow-md hover:-translate-y-1 hover:bg-white/80;
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.03);
-  }
-  
-  .ios-button {
-    @apply rounded-2xl px-6 py-3 font-medium text-white shadow-sm transition-all duration-300 hover:-translate-y-1 active:translate-y-0 backdrop-blur-xl;
-    background: rgba(255, 255, 255, 0.25);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-  }
-  
-  .ios-input {
-    @apply rounded-2xl border border-white/50 bg-white/70 backdrop-blur-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-dutch-blue/20 transition-all;
-  }
-  
-  .ios-glass {
-    background: rgba(255, 255, 255, 0.6);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    @apply rounded-3xl transition-all shadow-sm;
-  }
-  
-  .ios-blur-bg {
-    @apply relative overflow-hidden;
-  }
-  
-  .ios-blur-bg::before {
-    content: '';
-    @apply absolute inset-0 -z-10 bg-gradient-to-b from-white/80 to-white/40 backdrop-blur-xl;
-  }
-
-  /* VisionOS card styles */
-  .visionos-card {
-    @apply rounded-3xl bg-white/70 backdrop-blur-xl border border-white/50 shadow-sm transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 hover:bg-white/80;
-  }
-  
-  .visionos-button {
-    @apply rounded-2xl bg-white/70 backdrop-blur-xl border border-white/50 shadow-sm hover:bg-white/80 transition-all hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-none;
-  }
-  
-  .visionos-input {
-    @apply rounded-xl bg-white/60 backdrop-blur-xl border border-white/40 focus:ring-2 focus:ring-dutch-blue/20 focus:border-dutch-blue/30 focus:outline-none transition-all;
-  }
-  
-  .visionos-header {
-    @apply bg-white/60 backdrop-blur-xl border-b border-white/30 shadow-sm;
-  }
-  
-  .visionos-footer {
-    @apply bg-white/60 backdrop-blur-xl border-t border-white/30 shadow-sm;
-  }
-
-  /* Button variants */
-  .dutch-button {
-    @apply rounded-full px-6 py-3 font-semibold text-white shadow-md transition-all duration-300 hover:translate-y-[-2px] hover:shadow-lg active:translate-y-0 active:shadow-md backdrop-blur-sm relative overflow-hidden;
-  }
-  
-  .dutch-button::after {
-    content: '';
-    @apply absolute inset-0 pointer-events-none opacity-0 bg-white rounded-full;
-    animation: ripple 0.6s ease-out;
-  }
-  
-  .dutch-button:active::after {
-    @apply opacity-10;
-  }
-
-  /* Vision card */
-  .dutch-card {
-    @apply rounded-3xl bg-white/70 backdrop-blur-xl p-5 shadow-sm transition-all hover:shadow-md hover:-translate-y-0.5 border border-white/40;
-  }
-
-  /* Vision input */
-  .dutch-input {
-    @apply rounded-2xl border border-white/50 bg-white/70 backdrop-blur-xl px-4 py-2 focus:border-dutch-blue/30 focus:outline-none focus:ring-2 focus:ring-dutch-blue/20 transition-all;
-  }
-  
-  /* Dialog / Modal styling */
-  .glass-dialog {
-    @apply bg-white/70 backdrop-blur-xl border border-white/40 shadow-xl rounded-3xl overflow-hidden;
-  }
-  
-  /* Floating buttons */
-  .float-button {
-    @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1 active:translate-y-0 active:shadow-md;
-  }
-  
-  /* Card hover effect */
-  .hover-lift {
-    @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-md;
-  }
-  
-  .scrollbar-none {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
-  }
-  
-  .scrollbar-none::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera */
-  }
-  
-  /* VisionOS blob shape for backgrounds */
-  .vision-blob {
-    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
-    animation: blob-morph 15s ease-in-out infinite;
-  }
-  
-  @keyframes blob-morph {
-    0% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
-    50% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
-    100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
-  }
-
-  /* VisionOS-style Button */
-  .vision-button {
-    @apply transition-all duration-300 relative overflow-hidden flex items-center justify-center px-6 py-3 rounded-2xl bg-white/70 backdrop-blur-xl border border-white/50 text-gray-800 font-medium shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-none;
-  }
-
-  .vision-button::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(255, 255, 255, 0.2),
-      transparent
-    );
-    transition: left 0.7s;
-  }
-
-  .vision-button:hover::before {
-    left: 100%;
-  }
-
-  /* Badge styles */
-  .player-badge {
-    @apply inline-flex items-center rounded-full text-xs font-medium transition-all hover:scale-105;
-    padding: 0.125rem 0.5rem;
-  }
-  
-  /* Effet de flottement pour les éléments */
-  .float-element {
-    animation: float 6s ease-in-out infinite;
-  }
-  
-  @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
-  }
-  
-  /* Effet de pulsation subtile */
-  .pulse-subtle {
-    animation: pulse-subtle 4s ease-in-out infinite;
-  }
-  
-  @keyframes pulse-subtle {
-    0%, 100% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.02); opacity: 0.95; }
-  }
-  
-  /* VisionOS shimmer effect */
-  .shimmer {
-    position: relative;
-    overflow: hidden;
-  }
-
-  .shimmer::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background-image: linear-gradient(
-      to right,
-      rgba(255, 255, 255, 0) 0%,
-      rgba(255, 255, 255, 0.2) 50%,
-      rgba(255, 255, 255, 0) 100%
-    );
-    background-repeat: no-repeat;
-    background-size: 200% 100%;
-    animation: shimmer 2s infinite;
-  }
-
-  @keyframes shimmer {
-    0% { background-position: -100% 0; }
-    100% { background-position: 200% 0; }
-  }
-  
-  /* Page transitions */
-  .page-transition-enter {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  
-  .page-transition-enter-active {
-    opacity: 1;
-    transform: translateY(0);
-    transition: opacity 300ms, transform 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
-  }
-  
-  .page-transition-exit {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  
-  .page-transition-exit-active {
-    opacity: 0;
-    transform: translateY(-10px);
-    transition: opacity 300ms, transform 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
-  }
-  
-  /* Styles pour les points flottants en arrière-plan */
-  .background-dots {
-    pointer-events: none;
-  }
-  
-  .background-dot {
-    position: absolute;
-    border-radius: 50%;
-    opacity: 0.6;
-    animation: float 15s ease-in-out infinite;
-  }
-  
-  /* Styles pour le quadrillage en arrière-plan */
-  .bg-grid {
-    background-image: linear-gradient(to right, rgba(218, 218, 218, 0.1) 1px, transparent 1px), 
-                      linear-gradient(to bottom, rgba(218, 218, 218, 0.1) 1px, transparent 1px);
-    background-size: 24px 24px;
-  }
-  
-  /* Styles pour les vagues en bas d'écran */
-  .wave-bottom-1 {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 20vh;
-    background: rgba(233, 213, 255, 0.95); /* Violet pâle */
-    border-radius: 100% 100% 0 0;
-    transform: scaleX(1.5);
-    z-index: -2;
-    animation: waveAnimation1 15s ease-in-out infinite;
-  }
-  
-  .wave-bottom-2 {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 25vh;
-    background: rgba(253, 230, 138, 0.85); /* Orange pâle */
-    border-radius: 100% 100% 0 0;
-    transform: scaleX(1.3);
-    z-index: -3;
-    animation: waveAnimation2 18s ease-in-out infinite;
-  }
-  
-  .wave-bottom-3 {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 30vh;
-    background: rgba(243, 244, 246, 0.5); /* Gris très pâle */
-    border-radius: 100% 100% 0 0;
-    transform: scaleX(1.4);
-    z-index: -4;
-    animation: waveAnimation3 20s ease-in-out infinite;
-  }
+.animate-float {
+  animation: float var(--float-duration, 25s) infinite ease-in-out;
 }
