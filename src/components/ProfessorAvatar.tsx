@@ -5,13 +5,9 @@ import { Volume2 } from 'lucide-react';
 import { Button } from './ui/button';
 import { useElevenLabs } from '@/hooks/use-eleven-labs';
 import { useSound } from '@/hooks/use-sound';
-import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar';
 
-// Nouvelle image fournie par l'utilisateur
-const PROFESSOR_IMAGE = '/lovable-uploads/746b6454-ed46-44ef-8556-fe77d6c5d5ba.png';
-
-// SVG en fallback (en cas d'échec ultime)
-const FALLBACK_SVG = `data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIiBmaWxsPSJub25lIj4KICA8Y2lyY2xlIGN4PSIxMDAiIGN5PSIxMDAiIHI9IjEwMCIgZmlsbD0iI0YyRjVGRiIvPgogIDxjaXJjbGUgY3g9IjEwMCIgY3k9IjcwIiByPSI0MCIgZmlsbD0iIzhCNUNGNiIvPgogIDxjaXJjbGUgY3g9Ijg1IiBjeT0iNjAiIHI9IjgiIGZpbGw9IndoaXRlIi8+CiAgPGNpcmNsZSBjeD0iMTE1IiBjeT0iNjAiIHI9IjgiIGZpbGw9IndoaXRlIi8+CiAgPHBhdGggZD0iTTg1IDgwSDExNUMxMjUgODAgMTI1IDEwMCAxMDAgMTAwQzc1IDEwMCA3NSA4MCA4NSA4MFoiIGZpbGw9IndoaXRlIi8+CiAgPHBhdGggZD0iTTYwIDEyMEM2MCAxMjAgNzAgMTYwIDEwMCAxNjBDMTMwIDE2MCAxNDAgMTIwIDE0MCAxMjAiIHN0cm9rZT0iIzhCNUNGNiIgc3Ryb2tlLXdpZHRoPSI4IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KICA8cGF0aCBkPSJNNjUgNDBDNjUgNDAgNzAgMzAgODUgMzBDMTAwIDMwIDEzMCAzMCAxMzAgNDUiIHN0cm9rZT0iIzhCNUNGNiIgc3Ryb2tlLXdpZHRoPSI0IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KICA8cGF0aCBkPSJNNzAgNDBDNzAgNDAgNjUgMjAgOTAgMjBDMTI1IDIwIDEzMCAzMCAxMzAgMzAiIHN0cm9rZT0iIzhCNUNGNiIgc3Ryb2tlLXdpZHRoPSI0IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KICA8Y2lyY2xlIGN4PSIxMzAiIGN5PSI1MCIgcj0iOCIgZmlsbD0iI0Y5NzMxNiIvPgogIDxwYXRoIGQ9Ik04NSAxMDBDODUgMTAwIDkwIDExMCAxMDAgMTEwQzExMCAxMTAgMTE1IDEwMCAxMTUgMTAwIiBzdHJva2U9IiNGOTczMTYiIHN0cm9rZS13aWR0aD0iMyIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgPHBhdGggZD0iTTc1IDUwQzc1IDUwIDgwIDQwIDg1IDUwIiBzdHJva2U9IiM4QjVDRjYiIHN0cm9rZS13aWR0aD0iMyIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgPHBhdGggZD0iTTEyNSA1MEMxMjUgNTAgMTIwIDQwIDExNSA1MCIgc3Ryb2tlPSIjOEI1Q0Y2IiBzdHJva2Utd2lkdGg9IjMiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogIDxwYXRoIGQ9Ik03NSAxNTBDNzUgMTUwIDEwMCAxNDAgMTI1IDE1MCIgc3Ryb2tlPSIjOEI1Q0Y2IiBzdHJva2Utd2lkdGg9IjQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8L3N2Zz4K`;
+// L'image uploadée par l'utilisateur via Lovable
+const PROFESSOR_IMAGE = '/lovable-uploads/1d25f29e-0bf1-4814-80e4-e49b9f499b7d.png';
 
 interface ProfessorAvatarProps {
   message: string;
@@ -47,20 +43,15 @@ const ProfessorAvatar: React.FC<ProfessorAvatarProps> = ({ message, onSpeakMessa
         }}
         whileHover={{ scale: 1.1, rotate: [-2, 2, -2] }}
       >
-        <Avatar className="w-full h-full border-0">
-          <AvatarImage 
-            src={PROFESSOR_IMAGE}
-            alt="Professeur Cartouche"
-            className="bg-white object-cover"
-            onError={(e) => {
-              console.error("L'image principale n'a pas pu être chargée, utilisation du fallback");
-              e.currentTarget.src = FALLBACK_SVG;
-            }}
-          />
-          <AvatarFallback className="bg-dutch-purple/20 text-dutch-purple">
-            PC
-          </AvatarFallback>
-        </Avatar>
+        <img 
+          src={PROFESSOR_IMAGE}
+          alt="Professeur Cartouche"
+          className="w-full h-full object-cover bg-white"
+          onError={(e) => {
+            console.error("ERREUR CRITIQUE: L'image du professeur cartouche n'a pas pu être chargée");
+            // Ne pas définir de fallback, conformément aux instructions
+          }}
+        />
       </motion.div>
       
       <Button
