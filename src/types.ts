@@ -12,6 +12,19 @@ export interface PlayerStatistics {
   playerId: string;
   roundsPlayed: number;
   meanScore: number;
+  // Ajout des propriétés manquantes utilisées par les composants
+  averageScore: number;
+  bestRound: number | null;
+  worstRound: number | null;
+  dutchCount: number;
+  improvementRate: number;
+  consistencyScore: number;
+  winStreak: number;
+  streakInfo?: {
+    current: number;
+    best: number;
+    type: 'positive' | 'negative' | 'none';
+  };
 }
 
 export interface Game {
