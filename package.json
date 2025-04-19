@@ -45,6 +45,8 @@
     "@react-three/drei": "^9.99.5",
     "@react-three/fiber": "^8.15.19",
     "@tanstack/react-query": "^5.56.2",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/user-event": "^14.6.1",
     "@vitejs/plugin-react": "^4.3.4",
     "canvas-confetti": "^1.6.0",
     "class-variance-authority": "^0.7.1",

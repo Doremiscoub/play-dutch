@@ -1,7 +1,7 @@
 
 /// <reference types="vitest" />
 import { describe, it, expect, vi } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import ProfessorAvatar from "../components/ProfessorAvatar";
 
 describe("UI: Professor Avatar", () => {
