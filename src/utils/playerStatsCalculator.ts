@@ -1,4 +1,3 @@
-
 /**
  * Utilitaires pour le calcul des statistiques des joueurs
  */
@@ -11,21 +10,25 @@ import { isGameOver } from './gameUtils';
 export function calculatePlayerStatistics(player: Player): PlayerStatistics {
   if (!player || !player.rounds || player.rounds.length === 0) {
     return {
+      playerId: player.id,
+      roundsPlayed: 0,
+      meanScore: 0,
+      totalScore: 0,
       averageScore: 0,
       bestRound: null,
       worstRound: null,
       dutchCount: 0,
       improvementRate: 0,
       consistencyScore: 0,
-      winStreak: 0,
+      winStreak: 0
     };
   }
 
-  // Calcul du score moyen
+  // Calculs existants
   const roundScores = player.rounds.map(round => round.score);
   const totalScore = roundScores.reduce((sum, score) => sum + score, 0);
-  const averageScore = player.rounds.length > 0 ? totalScore / player.rounds.length : 0;
-
+  const averageScore = totalScore / player.rounds.length;
+  
   // Meilleur et pire round
   const bestRound = Math.min(...roundScores);
   const worstRound = Math.max(...roundScores);
@@ -57,7 +60,12 @@ export function calculatePlayerStatistics(player: Player): PlayerStatistics {
   const streakInfo = calculateStreakInfo(player);
   const winStreak = streakInfo.best;
 
+  // Retourner avec les nouvelles propriétés requises
   return {
+    playerId: player.id,
+    roundsPlayed: player.rounds.length,
+    meanScore: averageScore,
+    totalScore,
     averageScore: parseFloat(averageScore.toFixed(1)),
     bestRound,
     worstRound,

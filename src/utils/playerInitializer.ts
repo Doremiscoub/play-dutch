@@ -1,4 +1,3 @@
-
 import { Player } from '@/types';
 import { v4 as uuidv4 } from 'uuid';
 import { toast } from 'sonner';
@@ -62,9 +61,12 @@ export const initializePlayers = (): Player[] | null => {
     
     console.info(`Initialisation de ${playerNames.length} joueurs:`, playerNames);
     
+    const playerColors = ['#8B5CF6', '#F97316', '#1EAEDB', '#10B981'];
+    
     const newPlayers: Player[] = playerNames.map((name, index) => ({
       id: uuidv4(),
       name: name && name.trim() ? name.trim() : `Joueur ${index + 1}`,
+      avatarColor: playerColors[index % playerColors.length],
       totalScore: 0,
       rounds: []
     }));

@@ -1,27 +1,30 @@
-
 /**
  * Types centralisés pour l'application Dutch
  */
 
-// Joueur et statistiques
+// Joueur et ses données de base
 export interface Player {
   id: string;
   name: string;
+  avatarColor: string;
   totalScore: number;
   rounds: { score: number; isDutch: boolean }[];
   stats?: PlayerStatistics;
 }
 
+// Statistiques détaillées d'un joueur
 export interface PlayerStatistics {
+  playerId: string;
+  roundsPlayed: number;
+  meanScore: number;
+  totalScore: number;
   averageScore: number;
   bestRound: number | null;
-  dutchCount: number;
   worstRound: number | null;
+  dutchCount: number;
   improvementRate: number;
   consistencyScore: number;
   winStreak: number;
-  highestRound?: number;
-  lowestRound?: number;
   streakInfo?: {
     current: number;
     best: number;
