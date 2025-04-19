@@ -2,7 +2,7 @@
 /**
  * Hook pour la gestion des rounds du jeu
  */
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { Player } from '@/types';
 import { toast } from 'sonner';
 import { updateAllPlayersStats } from '@/utils/playerStatsCalculator';
@@ -47,13 +47,8 @@ export const useRoundManagement = (scoreLimit: number, soundEnabled: boolean) =>
         return null;
       }
       
-      // Ajout à l'historique
-      setRoundHistory(prev => [...prev, { scores, dutchPlayerId }]);
-      
-      let gameIsOver = false;
-      
-      // Mise à jour des scores des joueurs
-      const updatedPlayers = players.map((player, index) => {
+      // Mise à jour des scores des joueurs de façon synchrone d'abord
+      let updatedPlayers = players.map((player, index) => {
         const isDutch = player.id === dutchPlayerId;
         const newRound = { 
           score: scores[index],
@@ -70,7 +65,10 @@ export const useRoundManagement = (scoreLimit: number, soundEnabled: boolean) =>
       
       // Vérification si le jeu est terminé et mise à jour des stats
       const playersWithStats = updateAllPlayersStats(updatedPlayers);
-      gameIsOver = isGameOver(playersWithStats, scoreLimit);
+      const gameIsOver = isGameOver(playersWithStats, scoreLimit);
+      
+      // Mise à jour de l'historique des rounds APRÈS avoir calculé les statistiques des joueurs
+      setRoundHistory(prev => [...prev, { scores, dutchPlayerId }]);
       
       // Son si activé
       if (soundEnabled) {

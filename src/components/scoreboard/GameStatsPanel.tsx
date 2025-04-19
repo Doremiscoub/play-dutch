@@ -1,8 +1,7 @@
-
 /**
  * Panneau de statistiques globales du jeu
  */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Player } from '@/types';
 import { TrendingDown, Award, Target, BarChart, Medal, Flag, Zap, Users } from 'lucide-react';
@@ -15,6 +14,16 @@ interface GameStatsPanelProps {
 }
 
 const GameStatsPanel: React.FC<GameStatsPanelProps> = ({ players, roundHistory }) => {
+  // État local pour suivre les changements dans les rounds
+  const [roundCount, setRoundCount] = useState(roundHistory.length);
+  
+  // Mettre à jour immédiatement quand roundHistory change
+  useEffect(() => {
+    setRoundCount(roundHistory.length);
+    // Console log pour débogage
+    console.log(`GameStatsPanel: Rounds mis à jour: ${roundHistory.length}`);
+  }, [roundHistory]);
+  
   // Calculer les statistiques globales de la partie
   const totalRounds = roundHistory.length;
   
