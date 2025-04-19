@@ -1,3 +1,4 @@
+
 /**
  * Main hook for game state management
  */
@@ -21,7 +22,7 @@ export const useGameState = () => {
   const [soundEnabled] = useLocalStorage('dutch_sound_enabled', true);
   const initializationAttempted = useRef(false);
   
-  // Use our new modular hooks
+  // Use our specialized hooks
   const {
     players, 
     setPlayers, 
@@ -50,27 +51,21 @@ export const useGameState = () => {
   useEffect(() => {
     try {
       if (initializationCompleted.current || initializationAttempted.current || initializationInProgress.current) {
-        console.info("Initialisation déjà tentée ou en cours, ignorer");
         return; // Avoid double initialization
       }
       
       initializationAttempted.current = true;
-      console.info("Tentative d'initialisation du jeu...");
-      resetNotificationFlags(); // Réinitialiser les flags de notification
+      resetNotificationFlags(); // Reset notification flags
       
       const initializeGame = () => {
-        console.info('Initialisation du jeu...');
-        
-        // Créer une nouvelle partie (méthode mise à jour pour gérer les paramètres URL)
+        // Create new game (updated method to handle URL parameters)
         const success = createNewGame();
         
-        // Si la création échoue, charger une sauvegarde existante
+        // If creation fails, load an existing save
         if (!success) {
-          console.info("Tentative de chargement d'une partie existante");
           const savedGame = loadGameState();
           
           if (savedGame) {
-            console.info("Chargement d'une partie existante");
             setPlayers(savedGame.players);
             setRoundHistory(savedGame.roundHistory || []);
             setScoreLimit(savedGame.scoreLimit || 100);
@@ -85,9 +80,7 @@ export const useGameState = () => {
             
             // Mark initialization as completed
             initializationCompleted.current = true;
-            console.info("Initialisation depuis une sauvegarde réussie");
           } else {
-            console.info("Aucune partie sauvegardée trouvée, redirection vers la configuration");
             navigate('/game/setup');
           }
         }
@@ -95,11 +88,11 @@ export const useGameState = () => {
       
       initializeGame();
     } catch (error) {
-      console.error("Erreur lors de l'initialisation du jeu:", error);
+      console.error("Error initializing game:", error);
       toast.error("Une erreur est survenue lors du chargement de la partie");
       navigate('/game/setup');
     } finally {
-      // Réinitialiser le flag après un délai
+      // Reset flag after delay
       setTimeout(() => {
         initializationAttempted.current = false;
       }, 1000);
@@ -122,7 +115,7 @@ export const useGameState = () => {
         saveGameState(gameState);
       }
     } catch (error) {
-      console.error("Erreur lors de la sauvegarde de l'état du jeu:", error);
+      console.error("Error saving game state:", error);
     }
   }, [players, roundHistory, showGameOver, scoreLimit, gameStartTime, saveGameState]);
   
@@ -141,12 +134,12 @@ export const useGameState = () => {
           }, 500);
         }
         
-        return true; // Indicate that the addition succeeded
+        return true;
       }
       
-      return false; // Indicate that the addition failed
+      return false;
     } catch (error) {
-      console.error("Erreur lors de l'ajout d'une manche:", error);
+      console.error("Error adding round:", error);
       toast.error("Une erreur est survenue lors de l'ajout de la manche");
       return false;
     }
@@ -163,9 +156,9 @@ export const useGameState = () => {
         setShowGameOver(false);
       }
       
-      return true; // Indicate that the undo succeeded
+      return true;
     } catch (error) {
-      console.error("Erreur lors de l'annulation de la dernière manche:", error);
+      console.error("Error undoing last round:", error);
       toast.error("Une erreur est survenue lors de l'annulation de la manche");
       return false;
     }
@@ -179,7 +172,7 @@ export const useGameState = () => {
       setShowGameEndConfirmation(false);
       return true;
     } catch (error) {
-      console.error("Erreur lors de la confirmation de fin de partie:", error);
+      console.error("Error confirming end game:", error);
       toast.error("Une erreur est survenue lors de la sauvegarde de la partie");
       return false;
     }

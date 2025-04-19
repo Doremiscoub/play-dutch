@@ -1,8 +1,12 @@
+
 /**
  * Utilitaires pour la gestion des parties
  */
 import { v4 as uuidv4 } from 'uuid';
 import { Player, Game, PlayerStatistics } from '@/types';
+
+// Liste des couleurs disponibles pour les avatars
+const avatarColors = ['#8B5CF6', '#F97316', '#1EAEDB', '#10B981', '#EC4899', '#6366F1'];
 
 /**
  * Initialise les joueurs à partir des noms stockés
@@ -21,11 +25,12 @@ export const initializePlayers = (): Player[] | null => {
       return null;
     }
     
-    const players = playerNames.map((name: string) => ({
+    const players = playerNames.map((name: string, index: number) => ({
       id: uuidv4(),
       name: name || `Joueur ${Math.floor(Math.random() * 1000)}`,
       totalScore: 0,
-      rounds: []
+      rounds: [],
+      avatarColor: avatarColors[index % avatarColors.length]
     }));
     
     // Suppression des données d'initialisation après usage

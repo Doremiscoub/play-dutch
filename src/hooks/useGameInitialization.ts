@@ -20,6 +20,9 @@ export const useGameInitialization = () => {
   const initializationAttempted = useRef(false);
   const initializationInProgress = useRef(false);
   
+  // Liste des couleurs disponibles pour les avatars
+  const avatarColors = ['#8B5CF6', '#F97316', '#1EAEDB', '#10B981', '#EC4899', '#6366F1'];
+  
   // Create a new game with player names from URL parameters or configuration
   const createNewGame = useCallback(() => {
     try {
@@ -56,11 +59,12 @@ export const useGameInitialization = () => {
           
           if (Array.isArray(playerNames) && playerNames.length >= 2) {
             // Créer les joueurs directement depuis les paramètres URL
-            const newPlayers: Player[] = playerNames.map(name => ({
+            const newPlayers: Player[] = playerNames.map((name, index) => ({
               id: uuidv4(),
               name: name && name.trim() ? name.trim() : `Joueur ${Math.floor(Math.random() * 1000)}`,
               totalScore: 0,
-              rounds: []
+              rounds: [],
+              avatarColor: avatarColors[index % avatarColors.length]
             }));
             
             console.info('Joueurs initialisés avec succès depuis URL:', newPlayers.map(p => p.name).join(', '));
@@ -147,7 +151,7 @@ export const useGameInitialization = () => {
         initializationAttempted.current = false;
       }, 1000);
     }
-  }, [navigate, location.search]);
+  }, [navigate, location.search, avatarColors]);
 
   // Clean up function to ensure we don't leave partial state
   const cleanup = useCallback(() => {
