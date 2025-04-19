@@ -1,8 +1,8 @@
-
 import React from 'react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Smartphone } from 'lucide-react';
 import LocalGameSetup from './LocalGameSetup';
+import LocalGameSetupInfo from './LocalGameSetupInfo';
 
 interface LocalGameSetupContainerProps {
   onStartGame: (playerNames: string[]) => void;
@@ -24,6 +24,7 @@ const LocalGameSetupContainer: React.FC<LocalGameSetupContainerProps> = ({ onSta
           </CardDescription>
         </CardHeader>
         <CardContent>
+          <LocalGameSetupInfo />
           <div className="bg-dutch-blue/5 rounded-xl p-4 text-sm text-gray-600">
             <p>Parfait pour jouer ensemble autour d'une table. Chaque joueur entre son score à son tour sur cet appareil.</p>
           </div>
