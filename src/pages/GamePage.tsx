@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { useGameState } from '@/hooks/useGameState';
 import GameContent from '@/components/GameContent';
 import { updateAllPlayersStats } from '@/utils/playerStatsCalculator';
+import { toast } from 'sonner';
 
 const GamePage: React.FC = () => {
   const {
@@ -17,8 +18,27 @@ const GamePage: React.FC = () => {
     handleConfirmEndGame,
     handleCancelEndGame,
     handleContinueGame,
-    handleRestart
+    handleRestart,
+    createNewGame,  // Ajout de la fonction createNewGame
   } = useGameState();
+  
+  // Initialiser le jeu au chargement du composant
+  useEffect(() => {
+    // Si aucun joueur n'est présent, tenter de créer une nouvelle partie
+    if (!players || players.length === 0) {
+      console.info("Aucun joueur trouvé, tentative de création d'une nouvelle partie...");
+      const success = createNewGame();
+      
+      if (!success) {
+        console.error("Échec de l'initialisation du jeu");
+        toast.error("Impossible de démarrer la partie");
+      } else {
+        console.info("Jeu initialisé avec succès avec", players.length, "joueurs");
+      }
+    } else {
+      console.info("Partie existante détectée avec", players.length, "joueurs");
+    }
+  }, [createNewGame, players.length]);
   
   // Check for long inactivity
   useEffect(() => {

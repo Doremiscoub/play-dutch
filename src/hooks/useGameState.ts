@@ -94,7 +94,8 @@ export const useGameState = () => {
     handleConfirmEndGame,
     handleCancelEndGame,
     handleContinueGame,
-    handleRestart
+    handleRestart,
+    createNewGame  // Exposer la fonction createNewGame
   };
 };
 
