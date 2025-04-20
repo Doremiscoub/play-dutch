@@ -3,10 +3,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Player } from '@/types';
 import { motion } from 'framer-motion';
 import { Button } from './ui/button';
-import { Minus, Plus } from 'lucide-react';
+import { Minus, Plus, User, Globe } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from './ui/dialog';
 import { UnifiedTabs } from './ui/unified-tabs';
-import { User, Globe } from "lucide-react";
 
 interface NewRoundModalProps {
   players: Player[];
@@ -56,19 +55,22 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
     }
   };
 
+  // Ce toggle n'a pas sa place dans ce composant selon le diagnostic
   const tabOptions = [
     { 
       value: "local", 
       label: "Local",
-      icon: <User className="w-4 h-4 mr-2" />
+      icon: <User className="w-4 h-4" />
     },
     { 
       value: "online", 
       label: "En ligne",
-      icon: <Globe className="w-4 h-4 mr-2" />,
+      icon: <Globe className="w-4 h-4" />,
       disabled: true 
     }
   ];
+
+  console.log("🗂️ NewRoundModal tabs:", tabOptions, "gameMode:", gameMode);
 
   const handleModeChange = (value: string) => {
     if (value === "local") {
@@ -107,6 +109,7 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
           <DialogTitle className="text-xl">Ajouter une manche</DialogTitle>
         </DialogHeader>
         
+        {/* Ce toggle doit être supprimé d'ici selon le diagnostic */}
         <div className="mt-4">
           <UnifiedTabs 
             value={gameMode}

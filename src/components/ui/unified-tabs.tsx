@@ -27,6 +27,8 @@ export function UnifiedTabs({
   variant = "default",
   className
 }: UnifiedTabsProps) {
+  console.log("🔄 UnifiedTabs rendu avec options:", options);
+  
   const variantStyles = {
     default: "from-dutch-blue to-dutch-purple",
     orange: "from-dutch-orange to-dutch-orange/80",

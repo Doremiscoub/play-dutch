@@ -1,8 +1,11 @@
+
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 
-const SOURCE = '/images/professeur-cartouche-avatar.png';
+// Temporairement changé pour une URL invalide pour tester le fallback
+// const SOURCE = '/images/professeur-cartouche-avatar.png';
+const SOURCE = '/invalid-image-path.png';
 
 interface ProfessorAvatarProps {
   className?: string;
@@ -10,6 +13,13 @@ interface ProfessorAvatarProps {
 
 export default function ProfessorAvatar({ className = '' }: ProfessorAvatarProps) {
   const [errored, setErrored] = useState(false);
+
+  console.log("❗ ProfessorAvatar rendu, SOURCE:", SOURCE, "errored:", errored);
+
+  const handleError = () => {
+    console.log("❌ Image error triggered");
+    setErrored(true);
+  };
 
   return (
     <motion.div 
@@ -21,7 +31,7 @@ export default function ProfessorAvatar({ className = '' }: ProfessorAvatarProps
           <AvatarImage
             src={SOURCE}
             alt="Professeur Cartouche"
-            onError={() => setErrored(true)}
+            onError={handleError}
           />
         )}
         <AvatarFallback className="text-2xl bg-gradient-to-r from-dutch-blue to-dutch-purple text-white">

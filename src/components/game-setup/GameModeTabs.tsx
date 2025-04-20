@@ -19,8 +19,11 @@ const GameModeTabs: React.FC<GameModeTabsProps> = ({ activeTab, onTabChange }) =
       value: "online",
       label: "En ligne",
       icon: <Globe className="h-4 w-4" />,
+      disabled: true
     }
   ];
+
+  console.log("🚩 GameModeTabs rendu:", { activeTab, tabOptions });
 
   return (
     <UnifiedTabs
