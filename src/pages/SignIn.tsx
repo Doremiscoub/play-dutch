@@ -1,7 +1,9 @@
+
 import React from 'react';
 import { SignIn as ClerkSignIn } from "@clerk/clerk-react";
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { Button } from '@/components/ui/button'; // Add Button import
 import PageHeader from '@/components/PageHeader';
 import AnimatedBackground from '../components/AnimatedBackground';
 import { useAuth } from '@/context/AuthContext';

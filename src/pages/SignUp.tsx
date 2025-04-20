@@ -3,7 +3,7 @@ import React from 'react';
 import { SignUp as ClerkSignUp } from "@clerk/clerk-react";
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/button'; // Add Button import
 import { ArrowLeft } from 'lucide-react';
 import AnimatedBackground from '../components/AnimatedBackground';
 import { useAuth } from '@/context/AuthContext';
