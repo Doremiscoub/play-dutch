@@ -2,9 +2,8 @@
 /**
  * Main hook for game state management
  */
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Player } from '@/types';
 import { toast } from 'sonner';
 import { useLocalStorage } from './use-local-storage';
 import { useGamePersistence } from './useGamePersistence';
@@ -20,43 +19,41 @@ export const useGameState = () => {
   const navigate = useNavigate();
   const [showGameOver, setShowGameOver] = useState<boolean>(false);
   const [soundEnabled] = useLocalStorage('dutch_sound_enabled', true);
-  const initializationAttempted = useRef(false);
-  
-  // Use notre nouveau hook de persistance
-  const { loadGameState, saveGameState, saveGameToHistory } = useGamePersistence();
   
   // Use our specialized hooks
   const {
-    players, 
-    setPlayers, 
-    gameStartTime, 
+    players,
+    setPlayers,
+    gameStartTime,
     setGameStartTime,
     scoreLimit,
-    setScoreLimit, 
-    createNewGame, 
+    setScoreLimit,
+    createNewGame,
     initializationCompleted,
     initializationInProgress
   } = useGameInitialization();
   
+  // Use other hooks
+  const { loadGameState, saveGameState, saveGameToHistory } = useGamePersistence();
+  
   const { 
-    showGameEndConfirmation, 
-    setShowGameEndConfirmation, 
-    handleRequestEndGame, 
-    handleCancelEndGame, 
+    showGameEndConfirmation,
+    setShowGameEndConfirmation,
+    handleRequestEndGame,
+    handleCancelEndGame,
     handleContinueGame,
     handleRestart
   } = useGameContinuation(setShowGameOver, setScoreLimit, scoreLimit);
   
   const { roundHistory, setRoundHistory, addRound, undoLastRound } = useRoundManagement(scoreLimit, soundEnabled);
-
+  
   // Initialize game from localStorage or URL parameters
   useEffect(() => {
     try {
-      if (initializationCompleted.current || initializationAttempted.current || initializationInProgress.current) {
+      if (initializationCompleted.current || initializationInProgress.current) {
         return; // Avoid double initialization
       }
       
-      initializationAttempted.current = true;
       resetNotificationFlags(); // Reset notification flags
       
       const initializeGame = () => {
@@ -79,9 +76,6 @@ export const useGameState = () => {
             if (savedGame.isGameOver) {
               setShowGameOver(true);
             }
-            
-            // Mark initialization as completed
-            initializationCompleted.current = true;
           } else {
             navigate('/game/setup');
           }
@@ -93,11 +87,6 @@ export const useGameState = () => {
       console.error("Error initializing game:", error);
       toast.error("Une erreur est survenue lors du chargement de la partie");
       navigate('/game/setup');
-    } finally {
-      // Reset flag after delay
-      setTimeout(() => {
-        initializationAttempted.current = false;
-      }, 1000);
     }
   }, [loadGameState, navigate, setRoundHistory, createNewGame, setPlayers, setGameStartTime, setScoreLimit]);
   
