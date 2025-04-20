@@ -1,21 +1,21 @@
-
 import React, { useState, useEffect } from 'react';
 import { Game } from '@/types';
 import { motion } from 'framer-motion';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Clock, Trophy, Users } from 'lucide-react';
-import { format } from 'date-fns';
-import { fr } from 'date-fns/locale';
-import GameHistory from '@/components/GameHistory';
-import AnimatedBackground from '@/components/AnimatedBackground';
+import { useNavigate } from 'react-router-dom';
 import PageLayout from '@/components/PageLayout';
 import PageHeader from '@/components/PageHeader';
-import { useNavigate } from 'react-router-dom';
+import GameHistory from '@/components/GameHistory';
+import { UnifiedTabs } from '@/components/ui/unified-tabs';
+import { Button } from '@/components/ui/button';
+import { Trophy, Calendar, Users, Clock } from 'lucide-react';
+import { format } from 'date-fns';
+import { fr } from 'date-fns/locale';
+import { Card, CardContent } from '@/components/ui/card';
 
 const HistoryPage: React.FC = () => {
   const navigate = useNavigate();
   const [games, setGames] = useState<Game[]>([]);
+  const [activeTab, setActiveTab] = useState("all");
   const [stats, setStats] = useState<{
     totalGames: number;
     totalRounds: number;
@@ -29,13 +29,11 @@ const HistoryPage: React.FC = () => {
   });
 
   useEffect(() => {
-    // Load games from localStorage
     const savedGames = localStorage.getItem('dutch_games');
     const parsedGames: Game[] = savedGames ? JSON.parse(savedGames) : [];
     
     setGames(parsedGames);
     
-    // Calculate stats
     if (parsedGames.length > 0) {
       const totalRounds = parsedGames.reduce((sum, game) => sum + game.rounds, 0);
       
@@ -46,7 +44,6 @@ const HistoryPage: React.FC = () => {
         });
       });
       
-      // Find most frequent winner
       const winnerCount: Record<string, number> = {};
       parsedGames.forEach(game => {
         winnerCount[game.winner] = (winnerCount[game.winner] || 0) + 1;
@@ -64,6 +61,12 @@ const HistoryPage: React.FC = () => {
       });
     }
   }, []);
+
+  const tabOptions = [
+    { value: "all", label: "Toutes les parties" },
+    { value: "local", label: "Parties locales" },
+    { value: "online", label: "Parties en ligne", disabled: true }
+  ];
 
   return (
     <PageLayout>
@@ -147,26 +150,20 @@ const HistoryPage: React.FC = () => {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, delay: 0.4 }}
+          className="mb-6"
         >
-          <Tabs defaultValue="all" className="w-full">
-            <TabsList className="w-full max-w-md mx-auto flex justify-center mb-6 bg-white/60 backdrop-blur-md border border-white/40 rounded-full p-1 shadow-sm">
-              <TabsTrigger value="all" className="rounded-full flex-1 data-[state=active]:bg-white data-[state=active]:shadow-sm">Toutes les parties</TabsTrigger>
-              <TabsTrigger value="multiplayer" className="rounded-full flex-1 data-[state=active]:bg-white data-[state=active]:shadow-sm">Multijoueur</TabsTrigger>
-              <TabsTrigger value="local" className="rounded-full flex-1 data-[state=active]:bg-white data-[state=active]:shadow-sm">Local</TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="all">
-              <GameHistory games={games} />
-            </TabsContent>
-            
-            <TabsContent value="multiplayer">
-              <GameHistory games={games.filter(game => game.isMultiplayer)} />
-            </TabsContent>
-            
-            <TabsContent value="local">
-              <GameHistory games={games.filter(game => !game.isMultiplayer)} />
-            </TabsContent>
-          </Tabs>
+          <UnifiedTabs
+            value={activeTab}
+            onValueChange={setActiveTab}
+            options={tabOptions}
+            variant="default"
+          />
+          
+          <div className="mt-6">
+            {activeTab === "all" && <GameHistory games={games} />}
+            {activeTab === "local" && <GameHistory games={games.filter(game => !game.isMultiplayer)} />}
+            {activeTab === "online" && <GameHistory games={games.filter(game => game.isMultiplayer)} />}
+          </div>
         </motion.div>
       </div>
     </PageLayout>

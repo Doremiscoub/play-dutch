@@ -1,10 +1,10 @@
-
 import React, { useEffect, useRef, useState } from 'react';
 import { Player } from '@/types';
 import { motion } from 'framer-motion';
 import { Button } from './ui/button';
 import { Minus, Plus } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from './ui/dialog';
+import { UnifiedTabs } from './ui/unified-tabs';
 
 interface NewRoundModalProps {
   players: Player[];
@@ -27,15 +27,14 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
   setDutchPlayerId,
   open
 }) => {
+  const [gameMode, setGameMode] = useState('local');
   const firstInputRef = useRef<HTMLInputElement>(null);
-  // État pour suivre si la soumission a été traitée
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (open && firstInputRef.current) {
       firstInputRef.current.focus();
     }
-    // Réinitialiser l'état de soumission quand la modal s'ouvre
     if (open) {
       setIsSubmitting(false);
     }
@@ -43,7 +42,6 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
 
   const handleScoreChange = (index: number, value: string) => {
     const newScores = [...scores];
-    // Permettre les valeurs négatives
     newScores[index] = value === '' ? 0 : parseInt(value);
     setScores(newScores);
   };
@@ -55,31 +53,30 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
       setDutchPlayerId(playerId);
     }
   };
-  
-  // Direct submission without intermediate state
+
+  const tabOptions = [
+    { value: "local", label: "Local" },
+    { value: "online", label: "En ligne", disabled: true }
+  ];
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Protection contre la double soumission
     if (isSubmitting) return;
     
     setIsSubmitting(true);
     
-    // Fermer la modal immédiatement
     onClose();
     
-    // Puis exécuter le callback d'ajout avec un léger délai
     setTimeout(() => {
       onAddRound();
     }, 10);
   };
 
-  // Fonction utilitaire pour valider l'entrée numérique, acceptant les valeurs négatives
   const validateNumberInput = (input: string): boolean => {
-    return /^-?\d*$/.test(input); // Accepte les chiffres et un signe négatif au début
+    return /^-?\d*$/.test(input);
   };
 
-  // Fonction pour incrémenter/décrémenter le score
   const adjustScore = (index: number, amount: number) => {
     const newScores = [...scores];
     newScores[index] = (newScores[index] || 0) + amount;
@@ -90,7 +87,15 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
     <Dialog open={open} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>Ajouter une manche</DialogTitle>
+          <DialogTitle className="text-xl">Ajouter une manche</DialogTitle>
+          <div className="mt-4">
+            <UnifiedTabs 
+              value={gameMode}
+              onValueChange={setGameMode}
+              options={tabOptions}
+              variant="orange"
+            />
+          </div>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="mt-4 space-y-4">
