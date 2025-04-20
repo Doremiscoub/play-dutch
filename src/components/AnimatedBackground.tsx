@@ -30,7 +30,7 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
     // Paramètres
     const gridSize = variant === 'minimal' ? 32 : 24; // Taille de la grille
     
-    // Configuration des points flottants
+    // Configuration des points flottants - Augmentation de 30% du nombre de points
     const dots: {
       x: number;
       y: number;
@@ -40,16 +40,23 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
       color: string;
     }[] = [];
     
-    // Création des points animés
+    // Création des points animés - Nombre augmenté de 30%
     const createDots = () => {
-      const numDots = variant === 'minimal' ? 15 : Math.min(30, Math.floor(canvas.width * canvas.height / 40000)); // Adapte le nombre de points à la taille de l'écran
+      // Augmenter le nombre de points de 30%
+      const numDots = variant === 'minimal' 
+        ? Math.floor(15 * 1.3) 
+        : Math.min(Math.floor(30 * 1.3), Math.floor(canvas.width * canvas.height / 30000)); 
       
-      // Palette de couleurs unifiée
+      // Palette de couleurs unifiée avec saturation augmentée de 10%
       const colors = [
-        { r: 167, g: 139, b: 250, o: variant === 'subtle' ? 0.15 : 0.2 }, // Violet clair
-        { r: 253, g: 186, b: 116, o: variant === 'subtle' ? 0.15 : 0.2 }, // Orange clair
-        { r: 110, g: 231, b: 183, o: variant === 'subtle' ? 0.1 : 0.15 }, // Vert très clair
-        { r: 96, g: 165, b: 250, o: variant === 'subtle' ? 0.1 : 0.15 }  // Bleu clair
+        // Violet clair - saturation augmentée de 10%
+        { r: 177, g: 145, b: 255, o: variant === 'subtle' ? 0.17 : 0.22 }, 
+        // Orange clair - saturation augmentée de 10%
+        { r: 255, g: 186, b: 116, o: variant === 'subtle' ? 0.17 : 0.22 }, 
+        // Vert très clair - saturation augmentée de 10%
+        { r: 115, g: 240, b: 190, o: variant === 'subtle' ? 0.12 : 0.17 }, 
+        // Bleu clair - saturation augmentée de 10%
+        { r: 105, g: 175, b: 255, o: variant === 'subtle' ? 0.12 : 0.17 }  
       ];
       
       // Création des points avec des tailles et positions aléatoires
@@ -119,7 +126,7 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
       if (variant !== 'minimal') {
         const now = Date.now() / 1000;
         
-        // Première vague (violet clair)
+        // Première vague (violet clair) - déplace de gauche à droite
         drawWave(
           canvas.height * 0.85,
           'rgba(233, 213, 255, 0.5)',
@@ -128,13 +135,13 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
           now
         );
         
-        // Deuxième vague (orange pâle)
+        // Deuxième vague (orange pâle) - déplace de droite à gauche (sens opposé)
         drawWave(
           canvas.height * 0.9,
           'rgba(253, 230, 138, 0.4)',
           variant === 'subtle' ? 20 : 25,
           0.025,
-          now + Math.PI
+          -now + Math.PI // Direction opposée
         );
       }
     };

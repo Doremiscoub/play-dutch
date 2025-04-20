@@ -172,8 +172,9 @@ const GameOverScreen: React.FC<GameOverScreenProps> = ({
         onContinueGame={handleContinueGame} 
       />
       
-      {/* Gradient animation styles - CSS in JS for this component */}
-      <style jsx>{`
+      {/* Fixed: Replace jsx prop with standard CSS */}
+      <style>
+        {`
         @keyframes gradientBg {
           0% { background-position: 0% 50%; }
           50% { background-position: 100% 50%; }
@@ -183,7 +184,8 @@ const GameOverScreen: React.FC<GameOverScreenProps> = ({
           animation: gradientBg 6s ease infinite;
           background-size: 200% 200%;
         }
-      `}</style>
+        `}
+      </style>
     </div>
   );
 };

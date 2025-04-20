@@ -19,4 +19,12 @@ describe('UI: Background', () => {
     
     expect(canvas?.classList.contains('pointer-events-none')).toBe(true);
   });
+  
+  it('should accept a variant prop', () => {
+    // This tests that the component accepts the variant prop without errors
+    const { container } = render(<AnimatedBackground variant="subtle" />);
+    const canvas = container.querySelector('canvas');
+    
+    expect(canvas).not.toBeNull();
+  });
 });
