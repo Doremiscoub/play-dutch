@@ -7,6 +7,7 @@ export interface UnifiedTabOption {
   value: string
   label: string
   icon?: React.ReactNode
+  disabled?: boolean
 }
 
 interface UnifiedTabsProps {
@@ -45,6 +46,7 @@ export function UnifiedTabs({
           <TabsTrigger
             key={option.value}
             value={option.value}
+            disabled={option.disabled}
             className={cn(
               "flex items-center gap-1.5 data-[state=active]:bg-gradient-to-r",
               `data-[state=active]:${variantStyles[variant]}`,

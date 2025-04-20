@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef, useState } from 'react';
 import { Player } from '@/types';
 import { motion } from 'framer-motion';
@@ -58,21 +59,13 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
   const tabOptions = [
     { 
       value: "local", 
-      label: (
-        <>
-          <User className="w-4 h-4 mr-2 inline" />
-          Local
-        </>
-      )
+      label: "Local",
+      icon: <User className="w-4 h-4 mr-2" />
     },
     { 
       value: "online", 
-      label: (
-        <>
-          <Globe className="w-4 h-4 mr-2 inline" />
-          En ligne
-        </>
-      ),
+      label: "En ligne",
+      icon: <Globe className="w-4 h-4 mr-2" />,
       disabled: true 
     }
   ];
