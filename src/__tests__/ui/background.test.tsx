@@ -1,20 +1,22 @@
 
 import { describe, it, expect } from 'vitest';
 import { render } from '@testing-library/react';
-import AnimatedBackground from '../../components/background/AnimatedBackground';
+import AnimatedBackground from '../../components/AnimatedBackground';
 
 describe('UI: Background', () => {
-  it('should render exactly two waves with correct animation durations', () => {
+  it('should render a canvas element for the background', () => {
     const { container } = render(<AnimatedBackground />);
-    const waves = container.querySelectorAll('svg');
+    const canvas = container.querySelector('canvas');
     
-    expect(waves.length).toBe(2);
+    expect(canvas).not.toBeNull();
+    expect(canvas?.classList.contains('fixed')).toBe(true);
+    expect(canvas?.classList.contains('inset-0')).toBe(true);
+  });
+  
+  it('should have pointer-events-none to not interfere with UI', () => {
+    const { container } = render(<AnimatedBackground />);
+    const canvas = container.querySelector('canvas');
     
-    const styles = Array.from(waves).map(wave => 
-      window.getComputedStyle(wave).animation
-    );
-    
-    expect(styles[0]).toContain('60s');
-    expect(styles[1]).toContain('120s');
+    expect(canvas?.classList.contains('pointer-events-none')).toBe(true);
   });
 });

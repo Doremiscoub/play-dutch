@@ -11,7 +11,6 @@ interface PageLayoutProps {
   children: React.ReactNode;
   title?: string;
   subtitle?: string;
-  backgroundVariant?: 'default' | 'subtle' | 'minimal'; // Ajout de la propriété backgroundVariant
   withAnimation?: boolean;
   className?: string;
   showThemeSelector?: boolean;
@@ -22,7 +21,6 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   children,
   title,
   subtitle,
-  backgroundVariant = 'default', // Valeur par défaut
   withAnimation = true,
   className = '',
   showThemeSelector = false,
@@ -36,7 +34,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   const shouldShowBackButton = showBackButton !== undefined ? showBackButton : (isRulesPage || isHistoryPage);
   
   const content = (
-    <div className={`relative min-h-screen w-full flex flex-col overflow-x-hidden ${className}`}>
+    <div className={`relative min-h-screen w-full flex flex-col ${className}`}>
       {/* Bouton retour */}
       {shouldShowBackButton && (
         <div className="absolute top-6 left-6 z-20">
@@ -87,7 +85,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
       animate="visible"
       exit="exit"
       variants={animationVariants.pageTransition}
-      className="min-h-screen flex flex-col w-full overflow-hidden"
+      className="min-h-screen flex flex-col w-full"
     >
       {content}
     </motion.div>
