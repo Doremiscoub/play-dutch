@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { toast } from 'sonner';
 import ElevenLabsSetup from '@/components/ElevenLabsSetup';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { UnifiedTabs } from '@/components/ui/unified-tabs';
 import { useAuth } from '@/context/AuthContext';
 import * as Sentry from '@sentry/react';
 import { addBreadcrumb } from '@/utils/sentryConfig';
@@ -19,8 +19,15 @@ import { isRunningAsPWA } from '@/utils/pwaUtils';
 const SettingsPage = () => {
   const [soundEnabled, setSoundEnabled] = useLocalStorage('dutch_sound_enabled', true);
   const [resetConfirmationOpen, setResetConfirmationOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState("general");
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
+
+  const tabOptions = [
+    { value: "general", label: "Général" },
+    { value: "voice", label: "Voix & Sons" },
+    { value: "diagnostic", label: "Diagnostic" },
+  ];
 
   const handleSoundToggle = (value: boolean) => {
     setSoundEnabled(value);
@@ -54,29 +61,15 @@ const SettingsPage = () => {
           showSettings={false}
         />
         
-        <Tabs defaultValue="general" className="w-full">
-          <TabsList className="grid grid-cols-3 mb-6 rounded-xl bg-white/50 backdrop-blur-md p-1 shadow-sm">
-            <TabsTrigger 
-              value="general" 
-              className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm py-2.5"
-            >
-              Général
-            </TabsTrigger>
-            <TabsTrigger 
-              value="voice" 
-              className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm py-2.5"
-            >
-              Voix & Sons
-            </TabsTrigger>
-            <TabsTrigger 
-              value="diagnostic" 
-              className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm py-2.5"
-            >
-              Diagnostic
-            </TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="general" className="space-y-8">
+        <UnifiedTabs 
+          value={activeTab} 
+          onValueChange={setActiveTab} 
+          options={tabOptions}
+          variant="default"
+        />
+        
+        {activeTab === "general" && (
+          <div className="space-y-8 mt-6">
             {/* Gestion des données */}
             <div className="vision-card p-6">
               <h2 className="text-2xl font-medium text-dutch-blue mb-4">Gestion des données</h2>
@@ -115,9 +108,11 @@ const SettingsPage = () => {
                 </div>
               </div>
             )}
-          </TabsContent>
-          
-          <TabsContent value="voice" className="space-y-8">
+          </div>
+        )}
+        
+        {activeTab === "voice" && (
+          <div className="space-y-8 mt-6">
             {/* Réglages du son */}
             <div className="vision-card p-6">
               <h2 className="text-2xl font-medium text-dutch-blue mb-4">Effets sonores</h2>
@@ -135,9 +130,11 @@ const SettingsPage = () => {
             <div className="vision-card p-6">
               <ElevenLabsSetup />
             </div>
-          </TabsContent>
-          
-          <TabsContent value="diagnostic" className="space-y-8">
+          </div>
+        )}
+        
+        {activeTab === "diagnostic" && (
+          <div className="space-y-8 mt-6">
             {/* Informations de diagnostic */}
             <div className="vision-card p-6">
               <h2 className="text-2xl font-medium text-dutch-blue mb-4">Diagnostic</h2>
@@ -162,8 +159,8 @@ const SettingsPage = () => {
                 </div>
               </div>
             </div>
-          </TabsContent>
-        </Tabs>
+          </div>
+        )}
 
         {/* Confirmation de réinitialisation */}
         <AlertDialog open={resetConfirmationOpen}>

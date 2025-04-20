@@ -2,7 +2,7 @@
 import React from 'react';
 import { Settings, Bell, VolumeX, Moon, Sun, Smartphone, Laptop, Home, Info, Trash2, Save, Database } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription, DialogFooter } from '@/components/ui/dialog';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { UnifiedTabs } from '@/components/ui/unified-tabs';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
@@ -29,6 +29,7 @@ const GameSettings: React.FC<GameSettingsProps> = ({
   const { currentTheme } = useTheme();
   const { isSoundEnabled, setSoundEnabled } = useSound();
   const [offlineModeEnabled, setOfflineModeEnabled] = useLocalStorage('dutch_offline_mode', false);
+  const [activeTab, setActiveTab] = React.useState("general");
 
   const handleClearData = () => {
     localStorage.clear();
@@ -38,6 +39,12 @@ const GameSettings: React.FC<GameSettingsProps> = ({
       window.location.reload();
     }, 1500);
   };
+
+  const tabOptions = [
+    { value: "general", label: "Général" },
+    { value: "appearance", label: "Apparence" },
+    { value: "data", label: "Données" },
+  ];
 
   return (
     <Dialog>
@@ -59,133 +66,124 @@ const GameSettings: React.FC<GameSettingsProps> = ({
           </DialogDescription>
         </DialogHeader>
 
-        <Tabs defaultValue="general" className="mt-4">
-          <TabsList className="grid grid-cols-3 mb-4 rounded-xl bg-white/50 backdrop-blur-md p-1 shadow-sm">
-            <TabsTrigger 
-              value="general" 
-              className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm py-2.5"
-            >
-              Général
-            </TabsTrigger>
-            <TabsTrigger 
-              value="appearance" 
-              className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm py-2.5"
-            >
-              Apparence
-            </TabsTrigger>
-            <TabsTrigger 
-              value="data" 
-              className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm py-2.5"
-            >
-              Données
-            </TabsTrigger>
-          </TabsList>
+        <div className="mt-4">
+          <UnifiedTabs
+            value={activeTab}
+            onValueChange={setActiveTab}
+            options={tabOptions}
+          />
           
-          <TabsContent value="general" className="space-y-4">
-            <div className="flex items-center justify-between p-4 bg-white/50 rounded-xl shadow-sm border border-white/30">
-              <Label htmlFor="sound-toggle" className="font-medium flex items-center gap-2">
-                {isSoundEnabled ? <Bell className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
-                Sons
-              </Label>
-              <Switch 
-                id="sound-toggle" 
-                checked={isSoundEnabled} 
-                onCheckedChange={setSoundEnabled} 
-              />
-            </div>
-            
-            <div className="flex items-center justify-between p-4 bg-white/50 rounded-xl shadow-sm border border-white/30">
-              <Label htmlFor="offline-mode" className="font-medium flex items-center gap-2">
-                <Smartphone className="h-4 w-4" />
-                Mode hors-ligne
-              </Label>
-              <Switch 
-                id="offline-mode" 
-                checked={offlineModeEnabled} 
-                onCheckedChange={setOfflineModeEnabled} 
-              />
-            </div>
-            
-            <div className="flex flex-col gap-2 mt-6">
-              <Button 
-                variant="dutch-glass" 
-                className="justify-start rounded-xl"
-                onClick={() => navigate('/')}
-              >
-                <Home className="h-4 w-4 mr-2" aria-hidden="true" />
-                Accueil
-              </Button>
+          {activeTab === "general" && (
+            <div className="space-y-4 mt-4">
+              <div className="flex items-center justify-between p-4 bg-white/50 rounded-xl shadow-sm border border-white/30">
+                <Label htmlFor="sound-toggle" className="font-medium flex items-center gap-2">
+                  {isSoundEnabled ? <Bell className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
+                  Sons
+                </Label>
+                <Switch 
+                  id="sound-toggle" 
+                  checked={isSoundEnabled} 
+                  onCheckedChange={setSoundEnabled} 
+                />
+              </div>
               
-              <Button 
-                variant="dutch-glass" 
-                className="justify-start rounded-xl"
-                onClick={() => navigate('/settings')}
-              >
-                <Settings className="h-4 w-4 mr-2" aria-hidden="true" />
-                Paramètres avancés
-              </Button>
-            </div>
-          </TabsContent>
-          
-          <TabsContent value="appearance" className="space-y-4">
-            <div className="bg-white/50 p-4 rounded-xl shadow-sm border border-white/30">
-              <Label className="font-medium mb-3 block">Thème de couleur</Label>
-              <ColorThemeSelector />
-            </div>
-          </TabsContent>
-          
-          <TabsContent value="data" className="space-y-4">
-            <div className="flex flex-col gap-3">
-              {onExport && (
+              <div className="flex items-center justify-between p-4 bg-white/50 rounded-xl shadow-sm border border-white/30">
+                <Label htmlFor="offline-mode" className="font-medium flex items-center gap-2">
+                  <Smartphone className="h-4 w-4" />
+                  Mode hors-ligne
+                </Label>
+                <Switch 
+                  id="offline-mode" 
+                  checked={offlineModeEnabled} 
+                  onCheckedChange={setOfflineModeEnabled} 
+                />
+              </div>
+              
+              <div className="flex flex-col gap-2 mt-6">
                 <Button 
-                  variant="outline" 
-                  className="justify-start"
-                  onClick={onExport}
+                  variant="dutch-glass" 
+                  className="justify-start rounded-xl"
+                  onClick={() => navigate('/')}
                 >
-                  <Save className="h-4 w-4 mr-2" />
-                  Exporter les données
+                  <Home className="h-4 w-4 mr-2" aria-hidden="true" />
+                  Accueil
                 </Button>
-              )}
-              
-              {onImport && (
+                
                 <Button 
-                  variant="outline" 
-                  className="justify-start"
-                  onClick={onImport}
+                  variant="dutch-glass" 
+                  className="justify-start rounded-xl"
+                  onClick={() => navigate('/settings')}
                 >
-                  <Database className="h-4 w-4 mr-2" />
-                  Importer des données
+                  <Settings className="h-4 w-4 mr-2" aria-hidden="true" />
+                  Paramètres avancés
                 </Button>
-              )}
-              
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
+              </div>
+            </div>
+          )}
+          
+          {activeTab === "appearance" && (
+            <div className="space-y-4 mt-4">
+              <div className="bg-white/50 p-4 rounded-xl shadow-sm border border-white/30">
+                <Label className="font-medium mb-3 block">Thème de couleur</Label>
+                <ColorThemeSelector />
+              </div>
+            </div>
+          )}
+          
+          {activeTab === "data" && (
+            <div className="space-y-4 mt-4">
+              <div className="flex flex-col gap-3">
+                {onExport && (
                   <Button 
-                    variant="destructive" 
-                    className="justify-start mt-4"
+                    variant="outline" 
+                    className="justify-start"
+                    onClick={onExport}
                   >
-                    <Trash2 className="h-4 w-4 mr-2" />
-                    Effacer toutes les données
+                    <Save className="h-4 w-4 mr-2" />
+                    Exporter les données
                   </Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent className="rounded-3xl">
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Êtes-vous absolument sûr?</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      Cette action ne peut pas être annulée. Toutes vos parties et préférences seront définitivement effacées.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Annuler</AlertDialogCancel>
-                    <AlertDialogAction onClick={handleClearData}>
-                      Confirmer
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
+                )}
+                
+                {onImport && (
+                  <Button 
+                    variant="outline" 
+                    className="justify-start"
+                    onClick={onImport}
+                  >
+                    <Database className="h-4 w-4 mr-2" />
+                    Importer des données
+                  </Button>
+                )}
+                
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button 
+                      variant="destructive" 
+                      className="justify-start mt-4"
+                    >
+                      <Trash2 className="h-4 w-4 mr-2" />
+                      Effacer toutes les données
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent className="rounded-3xl">
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Êtes-vous absolument sûr?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Cette action ne peut pas être annulée. Toutes vos parties et préférences seront définitivement effacées.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Annuler</AlertDialogCancel>
+                      <AlertDialogAction onClick={handleClearData}>
+                        Confirmer
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </div>
             </div>
-          </TabsContent>
-        </Tabs>
+          )}
+        </div>
       </DialogContent>
     </Dialog>
   );
