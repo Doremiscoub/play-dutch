@@ -1,4 +1,3 @@
-
 /**
  * Composant principal de l'application avec système de routes optimisé
  */
@@ -14,7 +13,7 @@ import AnimatedBackground from './components/AnimatedBackground';
 import Home from './pages/Home';
 import GamePage from './pages/GamePage';
 import GameSetup from './components/GameSetup';
-import History from './pages/History';
+import HistoryPage from './pages/History';
 import Rules from './pages/Rules';
 import SettingsPage from './pages/SettingsPage';
 import SignIn from './pages/SignIn';
@@ -89,7 +88,7 @@ const App: React.FC = () => {
           } />
           <Route path="/history" element={
             <ProtectedRoute>
-              <History />
+              <HistoryPage />
             </ProtectedRoute>
           } />
           <Route path="/rules" element={<Rules />} />
