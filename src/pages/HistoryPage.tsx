@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Trophy, Calendar, Users, Clock } from 'lucide-react';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'; // Added these imports
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 const HistoryPage: React.FC = () => {
   const navigate = useNavigate();
