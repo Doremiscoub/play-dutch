@@ -11,7 +11,7 @@ describe('UI: Background', () => {
     expect(waves.length).toBe(2);
     
     const styles = Array.from(waves).map(wave => 
-      wave.style.animation
+      window.getComputedStyle(wave).animation
     );
     
     expect(styles[0]).toContain('60s');

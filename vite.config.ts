@@ -22,6 +22,9 @@ export default defineConfig(({ mode }) => ({
     globals: true,
     environment: 'jsdom',
     setupFiles: './src/setupTests.ts',
-    css: true
+    css: true,
+    typecheck: {
+      tsconfig: './tsconfig.test.json',
+    }
   }
 }));
