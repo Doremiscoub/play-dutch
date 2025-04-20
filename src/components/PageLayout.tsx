@@ -11,6 +11,7 @@ interface PageLayoutProps {
   children: React.ReactNode;
   title?: string;
   subtitle?: string;
+  backgroundVariant?: 'default' | 'subtle' | 'minimal'; // Ajout de la propriété backgroundVariant
   withAnimation?: boolean;
   className?: string;
   showThemeSelector?: boolean;
@@ -21,6 +22,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   children,
   title,
   subtitle,
+  backgroundVariant = 'default', // Valeur par défaut
   withAnimation = true,
   className = '',
   showThemeSelector = false,

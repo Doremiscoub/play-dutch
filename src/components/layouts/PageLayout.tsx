@@ -1,11 +1,10 @@
-
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import GradientAnimationStyles from '../game/GradientAnimationStyles';
 import { useMediaQuery } from '@/hooks/use-media-query';
 
 // Types de variantes pour les fonds
-type BackgroundVariant = 'default' | 'blue' | 'purple';
+type BackgroundVariant = 'default' | 'blue' | 'purple' | 'subtle' | 'minimal';
 
 interface PageLayoutProps {
   children: React.ReactNode;
