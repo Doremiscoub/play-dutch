@@ -89,7 +89,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
   };
 
   return (
-    <PageLayout backgroundVariant="default" className="pb-12 sm:pb-20">
+    <PageLayout className="pb-12 sm:pb-20">
       <div className="w-full max-w-6xl mx-auto px-1 sm:px-2">
         {/* En-tête avec boutons de navigation et titre */}
         <ScoreBoardHeader 

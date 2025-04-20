@@ -1,4 +1,3 @@
-
 /**
  * Composant principal de l'application avec système de routes optimisé
  */
@@ -8,6 +7,7 @@ import { toast } from 'sonner';
 import { Toaster } from "sonner";
 import * as Sentry from '@sentry/react';
 import { addBreadcrumb } from './utils/sentryConfig';
+import AnimatedBackground from './components/background/AnimatedBackground';
 
 // Pages
 import Home from './pages/Home';
@@ -71,6 +71,7 @@ const App: React.FC = () => {
   return (
     <AuthProvider>
       <Router>
+        <AnimatedBackground />
         <RouteTracker />
         <Routes>
           {/* Pages d'authentification */}

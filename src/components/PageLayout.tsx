@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import AnimatedBackground from './AnimatedBackground';
 import { animationVariants } from '@/utils/animationUtils';
 import ThemeSelector from './ThemeSelector';
 import { Button } from './ui/button';
@@ -12,22 +11,16 @@ interface PageLayoutProps {
   children: React.ReactNode;
   title?: string;
   subtitle?: string;
-  backgroundVariant?: 'default' | 'subtle' | 'minimal';
   withAnimation?: boolean;
   className?: string;
   showThemeSelector?: boolean;
   showBackButton?: boolean;
 }
 
-/**
- * Composant de mise en page cohérente pour toutes les pages
- * Inclut le fond animé, le quadrillage, et les animations de transition
- */
 const PageLayout: React.FC<PageLayoutProps> = ({
   children,
   title,
   subtitle,
-  backgroundVariant = 'default',
   withAnimation = true,
   className = '',
   showThemeSelector = false,
@@ -36,18 +29,12 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   const navigate = useNavigate();
   const location = useLocation();
   
-  // Automatically show back button on rules and history pages
   const isRulesPage = location.pathname === '/rules';
   const isHistoryPage = location.pathname === '/history';
   const shouldShowBackButton = showBackButton !== undefined ? showBackButton : (isRulesPage || isHistoryPage);
   
   const content = (
     <div className={`relative min-h-screen w-full flex flex-col overflow-x-hidden ${className}`}>
-      {/* Fond animé - couvre tout l'écran */}
-      <div className="fixed inset-0 z-0 w-full h-full overflow-hidden">
-        <AnimatedBackground variant={backgroundVariant} />
-      </div>
-      
       {/* Bouton retour */}
       {shouldShowBackButton && (
         <div className="absolute top-6 left-6 z-20">
@@ -71,7 +58,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
       
       {/* Contenu de la page */}
       <div className="relative z-10 py-4 sm:py-6 px-2 sm:px-4 lg:px-6 flex-grow w-full">
-        {/* Titre et sous-titre optionnels avec taille augmentée */}
+        {/* Titre et sous-titre optionnels */}
         {title && (
           <div className="text-center mb-6 sm:mb-8">
             <h1 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent mb-1">
@@ -84,7 +71,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
           </div>
         )}
         
-        {/* Contenu principal avec meilleure visibilité - utilise largeur maximale */}
+        {/* Contenu principal */}
         <div className="flex-grow w-full relative z-10 mx-auto">
           {children}
         </div>
