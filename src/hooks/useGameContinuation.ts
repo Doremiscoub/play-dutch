@@ -1,9 +1,8 @@
 
 /**
- * Hook for managing game continuation and ending
+ * Hook pour la gestion de la fin et continuation de partie
  */
 import { useState, useCallback } from 'react';
-import { Player } from '@/types';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { cleanupGameState } from '@/utils/gameUtils';
@@ -16,30 +15,30 @@ export const useGameContinuation = (
   const navigate = useNavigate();
   const [showGameEndConfirmation, setShowGameEndConfirmation] = useState<boolean>(false);
   
-  // Request to end game
+  // Demande de fin de partie
   const handleRequestEndGame = useCallback(() => {
     setShowGameEndConfirmation(true);
   }, []);
   
-  // Cancel end game
+  // Annulation de la fin de partie
   const handleCancelEndGame = useCallback(() => {
     setShowGameEndConfirmation(false);
   }, []);
   
-  // Continue game with a new score limit
+  // Continuer avec une nouvelle limite
   const handleContinueGame = useCallback((newLimit: number) => {
     setScoreLimit(prevLimit => prevLimit + newLimit);
     setShowGameOver(false);
     toast.success(`La partie continue ! Nouvelle limite: ${scoreLimit + newLimit} points`);
   }, [scoreLimit, setScoreLimit, setShowGameOver]);
   
-  // Restart with a new game
+  // Redémarrer avec une nouvelle partie
   const handleRestart = useCallback(() => {
     try {
-      // Complete cleanup
+      // Nettoyage complet
       cleanupGameState();
       
-      // Set flag to force a new game
+      // Flag pour forcer une nouvelle partie
       localStorage.setItem('dutch_new_game_requested', 'true');
       navigate('/game/setup');
       

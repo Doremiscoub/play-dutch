@@ -1,3 +1,4 @@
+
 /**
  * Main hook for game state management
  */
@@ -19,7 +20,7 @@ export const useGameState = () => {
   const [showGameOver, setShowGameOver] = useState<boolean>(false);
   const [soundEnabled] = useLocalStorage('dutch_sound_enabled', true);
   
-  // Use our specialized hooks
+  // Utilisation des hooks spécialisés
   const {
     players,
     setPlayers,
@@ -32,7 +33,6 @@ export const useGameState = () => {
     initializationInProgress
   } = useGameInitialization();
   
-  // Use other hooks
   const { loadGameState, saveGameState, saveGameToHistory } = useGamePersistence();
   
   const { 
