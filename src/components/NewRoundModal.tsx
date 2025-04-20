@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState } from 'react';
 import { Player } from '@/types';
 import { motion } from 'framer-motion';
@@ -6,6 +5,7 @@ import { Button } from './ui/button';
 import { Minus, Plus } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from './ui/dialog';
 import { UnifiedTabs } from './ui/unified-tabs';
+import { User, Globe } from "lucide-react";
 
 interface NewRoundModalProps {
   players: Player[];
@@ -56,8 +56,25 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
   };
 
   const tabOptions = [
-    { value: "local", label: "Local" },
-    { value: "online", label: "En ligne", disabled: true }
+    { 
+      value: "local", 
+      label: (
+        <>
+          <User className="w-4 h-4 mr-2 inline" />
+          Local
+        </>
+      )
+    },
+    { 
+      value: "online", 
+      label: (
+        <>
+          <Globe className="w-4 h-4 mr-2 inline" />
+          En ligne
+        </>
+      ),
+      disabled: true 
+    }
   ];
 
   const handleModeChange = (value: string) => {
@@ -95,15 +112,16 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
           <DialogTitle className="text-xl">Ajouter une manche</DialogTitle>
-          <div className="mt-4">
-            <UnifiedTabs 
-              value={gameMode}
-              onValueChange={handleModeChange}
-              options={tabOptions}
-              variant="orange"
-            />
-          </div>
         </DialogHeader>
+        
+        <div className="mt-4">
+          <UnifiedTabs 
+            value={gameMode}
+            onValueChange={(v) => v === "local" && setGameMode(v)}
+            options={tabOptions}
+            variant="orange"
+          />
+        </div>
 
         <form onSubmit={handleSubmit} className="mt-4 space-y-4">
           {players.map((player, index) => (
