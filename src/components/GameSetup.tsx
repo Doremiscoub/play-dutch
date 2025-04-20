@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
@@ -9,6 +8,7 @@ import AnimatedBackground from './AnimatedBackground';
 import { Tabs, TabsContent } from '@/components/ui/tabs';
 import GameModeTabs from './game-setup/GameModeTabs';
 import LocalGameSetupContainer from './game-setup/LocalGameSetupContainer';
+import PageHeader from '@/components/PageHeader';
 
 const GameSetup: React.FC = () => {
   const navigate = useNavigate();
@@ -68,14 +68,10 @@ const GameSetup: React.FC = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <motion.h1 
-          className="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-pink bg-clip-text text-transparent"
-          initial={{ y: -20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ type: "spring", stiffness: 260, damping: 20 }}
-        >
-          Nouvelle Partie
-        </motion.h1>
+        <PageHeader 
+          title="Nouvelle Partie"
+          onBack={() => navigate('/')}
+        />
         
         <Tabs 
           defaultValue="local" 

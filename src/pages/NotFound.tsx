@@ -1,18 +1,23 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import PageLayout from '@/components/PageLayout';
+import PageHeader from '@/components/PageHeader';
 
 const NotFound: React.FC = () => {
+  const navigate = useNavigate();
+  
   return (
-    <PageLayout
-      title="Page non trouvée"
-      subtitle="La page que vous recherchez n'existe pas ou a été déplacée."
-    >
-      <div className="flex flex-col items-center justify-center">
+    <PageLayout className="pb-12 sm:pb-20">
+      <div className="w-full max-w-6xl mx-auto px-1 sm:px-2">
+        <PageHeader 
+          title="Page non trouvée" 
+          onBack={() => navigate('/')} 
+        />
+        
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}

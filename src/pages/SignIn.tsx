@@ -1,10 +1,8 @@
-
 import React from 'react';
 import { SignIn as ClerkSignIn } from "@clerk/clerk-react";
 import { motion } from 'framer-motion';
-import { Link, useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { ArrowLeft } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import PageHeader from '@/components/PageHeader';
 import AnimatedBackground from '../components/AnimatedBackground';
 import { useAuth } from '@/context/AuthContext';
 import { toast } from 'sonner';
@@ -12,7 +10,7 @@ import { toast } from 'sonner';
 const SignIn: React.FC = () => {
   const { isOfflineMode } = useAuth();
   const navigate = useNavigate();
-
+  
   // En mode hors ligne, afficher une interface alternative
   if (isOfflineMode) {
     const enableOfflineMode = () => {
@@ -33,12 +31,10 @@ const SignIn: React.FC = () => {
           transition={{ duration: 0.5 }}
           className="w-full max-w-md z-10"
         >
-          <Link to="/" className="inline-block mb-8">
-            <Button variant="ghost" size="sm" className="gap-2">
-              <ArrowLeft className="h-4 w-4" />
-              Retour à l'accueil
-            </Button>
-          </Link>
+          <PageHeader 
+            title="Connexion" 
+            onBack={() => navigate('/')} 
+          />
           
           <div className="bg-white/70 backdrop-blur-md rounded-3xl shadow-lg border border-white/40 p-8">
             <h2 className="text-2xl font-bold text-dutch-blue mb-4">Mode hors ligne</h2>
@@ -80,12 +76,10 @@ const SignIn: React.FC = () => {
         transition={{ duration: 0.5 }}
         className="w-full max-w-md z-10"
       >
-        <Link to="/" className="inline-block mb-8">
-          <Button variant="ghost" size="sm" className="gap-2">
-            <ArrowLeft className="h-4 w-4" />
-            Retour à l'accueil
-          </Button>
-        </Link>
+        <PageHeader 
+          title="Connexion" 
+          onBack={() => navigate('/')} 
+        />
         
         <div className="bg-white/70 backdrop-blur-md rounded-3xl shadow-lg border border-white/40 p-6">
           <ClerkSignIn 
