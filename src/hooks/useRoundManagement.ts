@@ -2,7 +2,7 @@
 /**
  * Hook pour la gestion des rounds du jeu
  */
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { Player } from '@/types';
 import { toast } from 'sonner';
 import { updateAllPlayersStats } from '@/utils/playerStatsCalculator';

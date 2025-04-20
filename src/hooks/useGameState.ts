@@ -1,4 +1,3 @@
-
 /**
  * Main hook for game state management
  */
