@@ -1,1 +1,4 @@
+
 project_id = "ngtvzjgvvabortrdugty"
+
+[functions.get-sentry-dsn]

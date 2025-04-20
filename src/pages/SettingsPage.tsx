@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useLocalStorage } from '@/hooks/use-local-storage';
@@ -12,6 +11,8 @@ import { toast } from 'sonner';
 import ElevenLabsSetup from '@/components/ElevenLabsSetup';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/context/AuthContext';
+import * as Sentry from '@sentry/react';
+import { addBreadcrumb } from '@/utils/sentryConfig';
 
 const SettingsPage = () => {
   const [soundEnabled, setSoundEnabled] = useLocalStorage('dutch_sound_enabled', true);
@@ -20,20 +21,25 @@ const SettingsPage = () => {
 
   const handleSoundToggle = (value: boolean) => {
     setSoundEnabled(value);
+    addBreadcrumb('settings', 'Sound settings changed', { enabled: value });
   };
 
   const handleResetHistory = () => {
     setResetConfirmationOpen(true);
+    addBreadcrumb('settings', 'Reset history dialog opened');
   };
 
   const confirmResetHistory = () => {
     localStorage.removeItem('dutch_games');
     setResetConfirmationOpen(false);
     toast.success('L\'historique a été effacé !');
+    addBreadcrumb('settings', 'Game history was reset');
+    Sentry.captureMessage('User reset game history', 'info');
   };
 
   const cancelResetHistory = () => {
     setResetConfirmationOpen(false);
+    addBreadcrumb('settings', 'Reset history canceled');
   };
 
   return (
@@ -48,7 +54,7 @@ const SettingsPage = () => {
       </div>
 
       <Tabs defaultValue="general" className="w-full">
-        <TabsList className="grid grid-cols-2 mb-6 rounded-xl bg-white/50 backdrop-blur-md p-1 shadow-sm">
+        <TabsList className="grid grid-cols-3 mb-6 rounded-xl bg-white/50 backdrop-blur-md p-1 shadow-sm">
           <TabsTrigger 
             value="general" 
             className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm py-2.5"
@@ -60,6 +66,12 @@ const SettingsPage = () => {
             className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm py-2.5"
           >
             Voix & Sons
+          </TabsTrigger>
+          <TabsTrigger 
+            value="diagnostic" 
+            className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm py-2.5"
+          >
+            Diagnostic
           </TabsTrigger>
         </TabsList>
         
@@ -116,6 +128,33 @@ const SettingsPage = () => {
           {/* Configuration d'Eleven Labs */}
           <div className="vision-card p-6">
             <ElevenLabsSetup />
+          </div>
+        </TabsContent>
+        
+        <TabsContent value="diagnostic" className="space-y-8">
+          {/* Informations de diagnostic */}
+          <div className="vision-card p-6">
+            <h2 className="text-xl font-semibold mb-4 text-dutch-blue">Diagnostic</h2>
+            <div className="space-y-4">
+              <div className="flex flex-col space-y-2">
+                <p className="text-sm text-gray-600">Mode: {import.meta.env.MODE}</p>
+                <p className="text-sm text-gray-600">Connexion: {navigator.onLine ? 'En ligne' : 'Hors ligne'}</p>
+                <p className="text-sm text-gray-600">PWA: {isRunningAsPWA() ? 'Oui' : 'Non'}</p>
+                <p className="text-sm text-gray-600">Cache DB: {localStorage.getItem('dutch_games') ? 'Présent' : 'Vide'}</p>
+                
+                <Button 
+                  variant="outline" 
+                  className="mt-4"
+                  onClick={() => {
+                    addBreadcrumb('diagnostic', 'Test error triggered');
+                    Sentry.captureMessage('Test error from settings', 'warning');
+                    toast.info('Test d\'erreur envoyé à Sentry');
+                  }}
+                >
+                  Tester la connexion Sentry
+                </Button>
+              </div>
+            </div>
           </div>
         </TabsContent>
       </Tabs>

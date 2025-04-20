@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Download } from 'lucide-react';
 import { isRunningAsPWA } from '@/utils/pwaUtils';
+import { addBreadcrumb } from '@/utils/sentryConfig';
 
 let deferredPrompt: any = null;
 
@@ -17,6 +18,9 @@ const PWAInstallPrompt = () => {
       e.preventDefault();
       deferredPrompt = e;
       setShowInstallButton(true);
+      
+      // Track PWA install prompt shown
+      addBreadcrumb('pwa', 'Install prompt shown to user');
     };
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
@@ -29,12 +33,18 @@ const PWAInstallPrompt = () => {
   const handleInstallClick = async () => {
     if (!deferredPrompt) return;
 
+    // Track install attempt
+    addBreadcrumb('pwa', 'User clicked install button');
+
     deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
     
     if (outcome === 'accepted') {
       console.log('PWA installée avec succès');
+      addBreadcrumb('pwa', 'PWA installation accepted');
       setShowInstallButton(false);
+    } else {
+      addBreadcrumb('pwa', 'PWA installation rejected');
     }
     
     deferredPrompt = null;

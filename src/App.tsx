@@ -1,10 +1,13 @@
+
 /**
  * Composant principal de l'application avec système de routes optimisé
  */
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate, useLocation } from 'react-router-dom';
 import { toast } from 'sonner';
 import { Toaster } from "sonner";
+import * as Sentry from '@sentry/react';
+import { addBreadcrumb } from './utils/sentryConfig';
 
 // Pages
 import Home from './pages/Home';
@@ -26,6 +29,24 @@ import { AuthProvider } from './context/AuthContext';
 // Flag pour suivre si la notification a déjà été affichée
 const offlineNotificationDisplayed = { shown: false };
 
+// Composant pour suivre les changements de route pour Sentry
+const RouteTracker = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    addBreadcrumb(
+      'navigation', 
+      `Navigated to ${location.pathname}${location.search}`,
+      { 
+        path: location.pathname,
+        search: location.search
+      }
+    );
+  }, [location]);
+
+  return null;
+};
+
 /**
  * Composant principal de l'application
  * Gère le routage et l'initialisation globale
@@ -39,15 +60,18 @@ const App: React.FC = () => {
       if (isOfflineMode && !offlineNotificationDisplayed.shown) {
         toast.info("Mode hors-ligne activé");
         offlineNotificationDisplayed.shown = true;
+        addBreadcrumb('app_state', 'Offline mode activated');
       }
     } catch (error) {
       console.error("Erreur lors de la vérification du mode hors-ligne:", error);
+      Sentry.captureException(error);
     }
   }, []);
   
   return (
     <AuthProvider>
       <Router>
+        <RouteTracker />
         <Routes>
           {/* Pages d'authentification */}
           <Route path="/sign-in" element={<SignIn />} />
@@ -98,4 +122,4 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+export default Sentry.withProfiler(App, { name: 'App' });
