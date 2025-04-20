@@ -1,5 +1,5 @@
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Player } from '@/types';
 import { motion } from 'framer-motion';
 import { Button } from './ui/button';
@@ -15,6 +15,7 @@ interface NewRoundModalProps {
   setScores: React.Dispatch<React.SetStateAction<number[]>>;
   setDutchPlayerId: React.Dispatch<React.SetStateAction<string | undefined>>;
   modalRef?: React.RefObject<HTMLDialogElement>;
+  open: boolean;
 }
 
 const NewRoundModal: React.FC<NewRoundModalProps> = ({
@@ -25,17 +26,16 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
   onAddRound,
   setScores,
   setDutchPlayerId,
-  modalRef
+  modalRef,
+  open
 }) => {
-  const [isOpen, setIsOpen] = useState(true);
   const firstInputRef = useRef<HTMLInputElement>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    if (firstInputRef.current) {
+    if (open && firstInputRef.current) {
       firstInputRef.current.focus();
     }
-  }, []);
+  }, [open]);
 
   const handleScoreChange = (index: number, value: string) => {
     const newScores = [...scores];
@@ -51,23 +51,12 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
       setDutchPlayerId(playerId);
     }
   };
-
-  const handleClose = () => {
-    if (!isSubmitting) {
-      setIsOpen(false);
-      onClose();
-    }
-  };
   
-  // Gestion de la soumission du formulaire pour éviter la double soumission
+  // Soumission directe sans gestion d'état intermédiaire
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (isSubmitting) return;
-    
-    setIsSubmitting(true);
+    // Suppression du flag isSubmitting pour éviter tout délai
     onAddRound();
-    handleClose(); // Fermer immédiatement après soumission
   };
 
   // Fonction utilitaire pour valider l'entrée numérique, acceptant les valeurs négatives
@@ -83,7 +72,7 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => !open && handleClose()}>
+    <Dialog open={open} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
           <DialogTitle>Ajouter une manche</DialogTitle>
@@ -162,17 +151,15 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
             <Button 
               variant="outline" 
               type="button" 
-              onClick={handleClose}
-              disabled={isSubmitting}
+              onClick={onClose}
             >
               Annuler
             </Button>
             <Button
               variant="dutch-blue"
               type="submit"
-              disabled={isSubmitting}
             >
-              {isSubmitting ? 'Ajout...' : 'Ajouter la manche'}
+              Valider
             </Button>
           </DialogFooter>
         </form>

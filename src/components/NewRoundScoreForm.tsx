@@ -1,10 +1,10 @@
 
-import React from 'react';
+/**
+ * Formulaire pour ajouter une nouvelle manche
+ */
+import React, { useState } from 'react';
 import { Player } from '@/types';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import PlayerScoreInput from './forms/PlayerScoreInput';
-import ScoreFormFooter from './forms/ScoreFormFooter';
-import { useScoreForm } from './forms/useScoreForm';
+import NewRoundModal from './NewRoundModal';
 
 interface NewRoundScoreFormProps {
   players: Player[];
@@ -19,56 +19,35 @@ const NewRoundScoreForm: React.FC<NewRoundScoreFormProps> = ({
   onClose,
   onSubmit
 }) => {
-  const {
-    scores,
-    dutchPlayer,
-    isSubmitting,
-    submitHandled,
-    firstInputRef,
-    handleScoreChange,
-    adjustScore,
-    handleDutchToggle,
-    handleSubmitForm
-  } = useScoreForm(players, open, onClose, onSubmit);
+  const [scores, setScores] = useState<number[]>(players.map(() => 0));
+  const [dutchPlayerId, setDutchPlayerId] = useState<string | undefined>(undefined);
+  const modalRef = React.useRef<HTMLDialogElement>(null);
+  
+  // Reset form when players change or when modal opens
+  React.useEffect(() => {
+    if (open) {
+      setScores(players.map(() => 0));
+      setDutchPlayerId(undefined);
+    }
+  }, [players, open]);
+  
+  const handleAddRound = () => {
+    // Appel direct sans aucun traitement intermédiaire
+    onSubmit(scores, dutchPlayerId);
+  };
   
   return (
-    <Dialog open={open} onOpenChange={(isOpen) => {
-      if (!isOpen && !isSubmitting && !submitHandled) onClose();
-    }}>
-      <DialogContent className="sm:max-w-lg">
-        <DialogHeader>
-          <DialogTitle className="text-center text-xl bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">
-            Ajouter une manche
-          </DialogTitle>
-        </DialogHeader>
-        
-        <div className="py-4 space-y-6">
-          {players.map((player, index) => (
-            <PlayerScoreInput
-              key={player.id}
-              player={player}
-              index={index}
-              score={scores[player.id] || 0}
-              isDutch={dutchPlayer === player.id}
-              onScoreChange={handleScoreChange}
-              onAdjustScore={adjustScore}
-              onDutchToggle={handleDutchToggle}
-              inputRef={firstInputRef}
-              onEnterKey={handleSubmitForm}
-              isSubmitting={isSubmitting}
-              submitHandled={submitHandled}
-            />
-          ))}
-        </div>
-        
-        <ScoreFormFooter
-          onCancel={onClose}
-          onSubmit={handleSubmitForm}
-          isSubmitting={isSubmitting}
-          submitHandled={submitHandled}
-        />
-      </DialogContent>
-    </Dialog>
+    <NewRoundModal
+      players={players}
+      scores={scores}
+      dutchPlayerId={dutchPlayerId}
+      onClose={onClose}
+      onAddRound={handleAddRound}
+      setScores={setScores}
+      setDutchPlayerId={setDutchPlayerId}
+      modalRef={modalRef}
+      open={open}
+    />
   );
 };
 
