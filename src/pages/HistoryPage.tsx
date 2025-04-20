@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Game } from '@/types';
 import { motion } from 'framer-motion';
@@ -72,7 +73,7 @@ const HistoryPage: React.FC = () => {
       <div className="w-full max-w-6xl mx-auto px-4">
         <PageHeader 
           title="Historique des parties" 
-          variant="gradient"
+          className="mb-6"
         />
 
         <div className="mb-6">
