@@ -31,6 +31,7 @@ interface ScoreBoardProps {
   onConfirmEndGame?: () => void;
   onCancelEndGame?: () => void;
   scoreLimit?: number;
+  openScoreForm?: () => void; // Nouvelle prop pour ouvrir le formulaire
 }
 
 const ScoreBoard: React.FC<ScoreBoardProps> = ({
@@ -43,7 +44,8 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
   showGameEndConfirmation = false,
   onConfirmEndGame,
   onCancelEndGame,
-  scoreLimit = 100
+  scoreLimit = 100,
+  openScoreForm // Nouvelle prop pour ouvrir le formulaire
 }) => {
   // État local pour la gestion de l'interface
   const [view, setView] = useState<'list' | 'table'>('list');
@@ -166,7 +168,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
         <div className="mt-4">
           <CustomScoreBoardButtons
             players={players}
-            onAddRound={onAddRound}
+            onAddRound={openScoreForm} // Utilisation de la nouvelle prop
             onRequestUndoLastRound={handleRequestUndo}
             onEndGame={onEndGame}
           />

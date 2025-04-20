@@ -1,8 +1,9 @@
-import React, { useEffect, useRef } from 'react';
+
+import React, { useEffect, useRef, useState } from 'react';
 import { Player } from '@/types';
 import { motion } from 'framer-motion';
 import { Button } from './ui/button';
-import { Minus, Plus, X } from 'lucide-react';
+import { Minus, Plus } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from './ui/dialog';
 
 interface NewRoundModalProps {
@@ -27,10 +28,16 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
   open
 }) => {
   const firstInputRef = useRef<HTMLInputElement>(null);
+  // État pour suivre si la soumission a été traitée
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (open && firstInputRef.current) {
       firstInputRef.current.focus();
+    }
+    // Réinitialiser l'état de soumission quand la modal s'ouvre
+    if (open) {
+      setIsSubmitting(false);
     }
   }, [open]);
 
@@ -52,7 +59,19 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
   // Direct submission without intermediate state
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onAddRound();
+    
+    // Protection contre la double soumission
+    if (isSubmitting) return;
+    
+    setIsSubmitting(true);
+    
+    // Fermer la modal immédiatement
+    onClose();
+    
+    // Puis exécuter le callback d'ajout avec un léger délai
+    setTimeout(() => {
+      onAddRound();
+    }, 10);
   };
 
   // Fonction utilitaire pour valider l'entrée numérique, acceptant les valeurs négatives
@@ -98,6 +117,7 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
                     variant="outline"
                     onClick={() => adjustScore(index, -1)}
                     className="rounded-full"
+                    disabled={isSubmitting}
                   >
                     <Minus className="h-3 w-3" />
                   </Button>
@@ -113,6 +133,7 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
                     }}
                     className="w-14 h-10 px-2 text-center border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-dutch-blue"
                     placeholder="0"
+                    disabled={isSubmitting}
                   />
 
                   <Button
@@ -121,6 +142,7 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
                     variant="outline"
                     onClick={() => adjustScore(index, 1)}
                     className="rounded-full"
+                    disabled={isSubmitting}
                   >
                     <Plus className="h-3 w-3" />
                   </Button>
@@ -135,6 +157,7 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
                         : "text-dutch-orange border-dutch-orange/30"
                     }`}
                     onClick={() => handleDutchToggle(player.id)}
+                    disabled={isSubmitting}
                   >
                     Dutch
                   </Button>
@@ -148,14 +171,16 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
               variant="outline" 
               type="button" 
               onClick={onClose}
+              disabled={isSubmitting}
             >
               Annuler
             </Button>
             <Button
               variant="dutch-blue"
               type="submit"
+              disabled={isSubmitting}
             >
-              Valider
+              {isSubmitting ? 'Validation...' : 'Valider'}
             </Button>
           </DialogFooter>
         </form>

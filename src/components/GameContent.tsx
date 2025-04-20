@@ -2,7 +2,7 @@
 /**
  * Contenu principal de la page de jeu
  */
-import React from 'react';
+import React, { useState } from 'react';
 import { Player } from '@/types';
 import ErrorBoundary from './ErrorBoundary';
 import ScoreBoard from './ScoreBoard';
@@ -38,9 +38,9 @@ const GameContent: React.FC<GameContentProps> = ({
   onContinueGame,
   onRestart
 }) => {
-  const [showScoreForm, setShowScoreForm] = React.useState(false);
+  const [showScoreForm, setShowScoreForm] = useState(false);
 
-  const handleAddRoundClick = () => {
+  const handleOpenScoreForm = () => {
     setShowScoreForm(true);
   };
 
@@ -71,7 +71,7 @@ const GameContent: React.FC<GameContentProps> = ({
       {/* Tableau des scores */}
       <ScoreBoard
         players={players}
-        onAddRound={handleAddRoundClick}
+        openScoreForm={handleOpenScoreForm} // Passons cette fonction au lieu d'onAddRound
         onUndoLastRound={onUndoLastRound}
         onEndGame={onRequestEndGame}
         roundHistory={roundHistory}
@@ -81,7 +81,7 @@ const GameContent: React.FC<GameContentProps> = ({
         scoreLimit={scoreLimit}
       />
 
-      {/* Formulaire d'ajout de score */}
+      {/* Formulaire d'ajout de score - maintenant unique */}
       <NewRoundScoreForm
         players={players}
         open={showScoreForm}
