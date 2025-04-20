@@ -1,4 +1,3 @@
-
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
@@ -19,18 +18,13 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        gradient: "bg-gradient-to-r from-dutch-blue to-dutch-purple text-white",
-        "ios-blue": "bg-ios-blue text-white hover:bg-ios-blue/90",
-        "ios-purple": "bg-ios-purple text-white hover:bg-ios-purple/90",
-        "ios-orange": "bg-ios-orange text-white hover:bg-ios-orange/90",
-        "ios-outline": "border border-ios-blue/20 text-ios-blue bg-white hover:bg-white/90",
-        "ios-glass": "bg-white/70 backdrop-blur-sm border border-white/50 shadow-sm text-gray-800 hover:bg-white/80",
+        gradient: "bg-gradient-to-r from-dutch-blue to-dutch-purple text-white hover:opacity-90 transition-all",
         "vision-glass": "bg-white/70 backdrop-blur-xl border border-white/50 shadow-sm text-gray-800 hover:bg-white/80 transition-all hover:-translate-y-0.5",
+        "dutch-glass": "bg-white/70 backdrop-blur-xl border border-white/50 shadow-sm hover:bg-white/80",
         "vision-blue": "bg-dutch-blue text-white hover:bg-dutch-blue/90",
         "vision-purple": "bg-dutch-purple text-white hover:bg-dutch-purple/90",
         "vision-orange": "bg-dutch-orange text-white hover:bg-dutch-orange/90",
         "dutch-blue": "bg-dutch-blue text-white hover:bg-dutch-blue/90",
-        "dutch-glass": "bg-white/70 backdrop-blur-xl border border-white/50 shadow-sm hover:bg-white/80",
         "floating": "bg-white shadow-lg text-gray-800 hover:shadow-xl",
         "pill-glass": "rounded-full bg-white/70 backdrop-blur-xl border border-white/50 shadow-sm",
         "pill-orange": "rounded-full bg-dutch-orange text-white shadow-sm",
