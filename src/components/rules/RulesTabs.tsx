@@ -1,10 +1,11 @@
 
 import React from 'react';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { ToggleTabs } from '@/components/ui/toggle-tabs';
 import IntroductionTab from './IntroductionTab';
 import SetupTab from './SetupTab';
 import GameplayTab from './GameplayTab';
 import SpecialCardsTab from './SpecialCardsTab';
+import { Tabs, TabsContent } from '@/components/ui/tabs';
 
 interface RulesTabsProps {
   activeTab: string;
@@ -12,14 +13,21 @@ interface RulesTabsProps {
 }
 
 const RulesTabs: React.FC<RulesTabsProps> = ({ activeTab, onTabChange }) => {
+  const tabOptions = [
+    { value: "introduction", label: "Introduction" },
+    { value: "setup", label: "Mise en place" },
+    { value: "gameplay", label: "Déroulement" },
+    { value: "special", label: "Cartes spéciales" },
+  ];
+
   return (
-    <Tabs defaultValue="introduction" onValueChange={onTabChange} value={activeTab}>
-      <TabsList className="w-full max-w-md mx-auto flex justify-center mb-6 bg-white/60 backdrop-blur-md border border-white/40 rounded-full p-1 shadow-sm">
-        <TabsTrigger value="introduction" className="rounded-full flex-1 data-[state=active]:bg-white data-[state=active]:shadow-sm">Introduction</TabsTrigger>
-        <TabsTrigger value="setup" className="rounded-full flex-1 data-[state=active]:bg-white data-[state=active]:shadow-sm">Mise en place</TabsTrigger>
-        <TabsTrigger value="gameplay" className="rounded-full flex-1 data-[state=active]:bg-white data-[state=active]:shadow-sm">Déroulement</TabsTrigger>
-        <TabsTrigger value="special" className="rounded-full flex-1 data-[state=active]:bg-white data-[state=active]:shadow-sm">Cartes spéciales</TabsTrigger>
-      </TabsList>
+    <Tabs value={activeTab} onValueChange={onTabChange}>
+      <ToggleTabs
+        value={activeTab}
+        onValueChange={onTabChange}
+        options={tabOptions}
+        variant="purple"
+      />
       
       <TabsContent value="introduction">
         <IntroductionTab />
