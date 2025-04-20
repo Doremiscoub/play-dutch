@@ -1,6 +1,7 @@
 
 /**
- * Main hook for game state management
+ * Main hook for complete game state management
+ * Orchestrates specialized hooks for initialization, persistence, rounds and continuation
  */
 import { useState } from 'react';
 import { useLocalStorage } from './use-local-storage';
@@ -9,14 +10,10 @@ import { useGameInitialization } from './useGameInitialization';
 import { useGameContinuation } from './useGameContinuation';
 import { useRoundManagement } from './useRoundManagement';
 
-/**
- * Main hook for complete game state management
- */
 export const useGameState = () => {
   const [showGameOver, setShowGameOver] = useState<boolean>(false);
   const [soundEnabled] = useLocalStorage('dutch_sound_enabled', true);
   
-  // Initialize specialized hooks
   const {
     players,
     setPlayers,
@@ -47,7 +44,6 @@ export const useGameState = () => {
     handleRestart
   } = useGameContinuation(setShowGameOver, setScoreLimit, scoreLimit);
 
-  // Add/handle rounds
   const handleAddRound = (scores: number[], dutchPlayerId?: string) => {
     const result = addRound(players, scores, dutchPlayerId);
     
@@ -61,11 +57,9 @@ export const useGameState = () => {
       
       return true;
     }
-    
     return false;
   };
 
-  // Handle undo last round
   const handleUndoLastRound = () => {
     const updatedPlayers = undoLastRound(players, soundEnabled);
     setPlayers(updatedPlayers);
@@ -77,7 +71,6 @@ export const useGameState = () => {
     return true;
   };
 
-  // Handle game end confirmation
   const handleConfirmEndGame = () => {
     try {
       saveGameToHistory(players, gameStartTime);
@@ -89,19 +82,14 @@ export const useGameState = () => {
   };
 
   return {
-    // Game state
     players,
     roundHistory,
     showGameOver,
     showGameEndConfirmation,
     scoreLimit,
     gameStartTime,
-    
-    // Round management
     handleAddRound,
     handleUndoLastRound,
-    
-    // Game flow
     handleRequestEndGame,
     handleConfirmEndGame,
     handleCancelEndGame,
