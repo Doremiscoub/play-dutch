@@ -54,7 +54,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
             <Settings className="h-5 w-5" />
           </Button>
         ) : (
-          <div className="w-10" /> {/* Spacer pour maintenir l'alignement */}
+          <div className="w-10">{/* Spacer pour maintenir l'alignement */}</div>
         )}
       </div>
     </div>
