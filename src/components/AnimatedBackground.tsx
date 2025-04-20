@@ -31,7 +31,7 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
     const waveConfig = {
       baselineHeight: canvas.height * 0.85,
       frequencyViolet: 0.008,
-      frequencyYellow: 0.015,
+      frequencyYellow: 0.012,
       animationSpeed: 0.05,
       phaseIncrement: 0.0125
     };
@@ -148,7 +148,7 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
         drawWave(
           waveConfig.baselineHeight,
           'rgba(255, 223, 117, 0.15)',
-          25,
+          21,
           currentPhase,
           'left',
           waveConfig.frequencyYellow
