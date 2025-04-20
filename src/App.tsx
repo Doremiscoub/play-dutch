@@ -1,4 +1,3 @@
-
 /**
  * Composant principal de l'application avec système de routes optimisé
  */
@@ -19,6 +18,7 @@ import SignUp from './pages/SignUp';
 
 // Composants
 import ProtectedRoute from './components/ProtectedRoute';
+import PWAInstallPrompt from './components/PWAInstallPrompt';
 
 // Contexte
 import { AuthProvider } from './context/AuthContext';
@@ -92,6 +92,8 @@ const App: React.FC = () => {
           }
         }}
       />
+      
+      <PWAInstallPrompt />
     </AuthProvider>
   );
 };
