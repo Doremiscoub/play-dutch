@@ -3,8 +3,8 @@ import React from 'react';
 import { SignUp as ClerkSignUp } from "@clerk/clerk-react";
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button'; // Add Button import
-import { ArrowLeft } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import PageHeader from '@/components/PageHeader';
 import AnimatedBackground from '../components/AnimatedBackground';
 import { useAuth } from '@/context/AuthContext';
 import { toast } from 'sonner';
@@ -33,22 +33,21 @@ const SignUp: React.FC = () => {
           transition={{ duration: 0.5 }}
           className="w-full max-w-md z-10"
         >
-          <Link to="/" className="inline-block mb-8">
-            <Button variant="ghost" size="sm" className="gap-2">
-              <ArrowLeft className="h-4 w-4" />
-              Retour à l'accueil
-            </Button>
-          </Link>
+          <PageHeader 
+            title="Inscription" 
+            onBack={() => navigate('/')} 
+          />
           
           <div className="bg-white/70 backdrop-blur-md rounded-3xl shadow-lg border border-white/40 p-8">
-            <h2 className="text-2xl font-bold text-dutch-purple mb-4">Mode hors ligne</h2>
+            <h2 className="text-2xl font-medium text-dutch-purple mb-4">Mode hors ligne</h2>
             <p className="text-gray-600 mb-6">
               La création de compte n'est pas disponible en mode hors ligne. 
               Vous pouvez continuer à utiliser l'application sans compte.
             </p>
             <div className="flex flex-col gap-4">
               <Button 
-                className="w-full bg-dutch-purple text-white" 
+                variant="gradient"
+                className="w-full" 
                 onClick={enableOfflineMode}
               >
                 Continuer sans compte
@@ -80,12 +79,10 @@ const SignUp: React.FC = () => {
         transition={{ duration: 0.5 }}
         className="w-full max-w-md z-10"
       >
-        <Link to="/" className="inline-block mb-8">
-          <Button variant="ghost" size="sm" className="gap-2">
-            <ArrowLeft className="h-4 w-4" />
-            Retour à l'accueil
-          </Button>
-        </Link>
+        <PageHeader 
+          title="Inscription" 
+          onBack={() => navigate('/')} 
+        />
         
         <div className="bg-white/70 backdrop-blur-md rounded-3xl shadow-lg border border-white/40 p-6">
           <ClerkSignUp 
@@ -108,7 +105,7 @@ const SignUp: React.FC = () => {
                 formFieldLabel: "text-gray-700",
                 formFieldInput: "bg-white border-gray-300 focus:border-dutch-blue focus:ring-dutch-blue/20",
                 footerActionLink: "text-dutch-blue hover:text-dutch-blue-dark",
-                formButtonPrimary: "bg-dutch-blue hover:bg-dutch-blue-dark focus:ring-dutch-blue/30",
+                formButtonPrimary: "bg-gradient-to-r from-dutch-blue to-dutch-purple hover:opacity-90 focus:ring-dutch-blue/30",
               }
             }}
             redirectUrl="/game"

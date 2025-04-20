@@ -33,9 +33,9 @@ const NotFound: React.FC = () => {
             </p>
             <Link to="/">
               <Button 
-                variant="dutch-blue" 
+                variant="gradient" 
                 size="lg" 
-                className="rounded-xl bg-gradient-to-r from-dutch-blue to-dutch-purple text-white hover:opacity-90 transition-all shadow-md hover:shadow-lg"
+                className="rounded-xl shadow-md hover:shadow-lg"
               >
                 <ArrowLeft className="mr-2 h-5 w-5" />
                 Retour à l'accueil

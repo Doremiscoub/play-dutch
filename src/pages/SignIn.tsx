@@ -3,7 +3,7 @@ import React from 'react';
 import { SignIn as ClerkSignIn } from "@clerk/clerk-react";
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button'; // Add Button import
+import { Button } from '@/components/ui/button';
 import PageHeader from '@/components/PageHeader';
 import AnimatedBackground from '../components/AnimatedBackground';
 import { useAuth } from '@/context/AuthContext';
@@ -39,14 +39,15 @@ const SignIn: React.FC = () => {
           />
           
           <div className="bg-white/70 backdrop-blur-md rounded-3xl shadow-lg border border-white/40 p-8">
-            <h2 className="text-2xl font-bold text-dutch-blue mb-4">Mode hors ligne</h2>
+            <h2 className="text-2xl font-medium text-dutch-blue mb-4">Mode hors ligne</h2>
             <p className="text-gray-600 mb-6">
               La connexion au service d'authentification n'est pas disponible actuellement. 
               Vous pouvez continuer à utiliser l'application en mode hors ligne.
             </p>
             <div className="flex flex-col gap-4">
               <Button 
-                className="w-full bg-dutch-blue text-white" 
+                variant="gradient"
+                className="w-full" 
                 onClick={enableOfflineMode}
               >
                 Continuer sans compte
@@ -104,7 +105,7 @@ const SignIn: React.FC = () => {
                 formFieldLabel: "text-gray-700",
                 formFieldInput: "bg-white border-gray-300 focus:border-dutch-blue focus:ring-dutch-blue/20",
                 footerActionLink: "text-dutch-blue hover:text-dutch-blue-dark",
-                formButtonPrimary: "bg-dutch-blue hover:bg-dutch-blue-dark focus:ring-dutch-blue/30",
+                formButtonPrimary: "bg-gradient-to-r from-dutch-blue to-dutch-purple hover:opacity-90 focus:ring-dutch-blue/30",
               }
             }}
             redirectUrl="/game"
