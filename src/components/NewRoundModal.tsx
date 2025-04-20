@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState } from 'react';
 import { Player } from '@/types';
 import { motion } from 'framer-motion';
@@ -55,7 +54,6 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
     }
   };
 
-  // Modifié pour rendre l'onglet "En ligne" inactif
   const tabOptions = [
     { value: "local", label: "Local" },
     { value: "online", label: "En ligne", disabled: true }
@@ -94,7 +92,6 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
             <UnifiedTabs 
               value={gameMode}
               onValueChange={(value) => {
-                // N'autoriser que le changement vers "local"
                 if (value === "local") {
                   setGameMode(value);
                 }
