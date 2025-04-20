@@ -29,15 +29,18 @@ describe('Flow: Add Round with Single Click', () => {
     });
 
     // Fill in scores
-    const scoreInputs = screen.getAllByRole('spinbutton');
+    const scoreInputs = screen.getAllByRole('textbox');
     fireEvent.change(scoreInputs[0], { target: { value: '5' } });
     fireEvent.change(scoreInputs[1], { target: { value: '-5' } });
 
     // Submit the form with a single click
     fireEvent.click(screen.getByRole('button', { name: /valider/i }));
 
-    // Expect the round to be added immediately
+    // Expect the round to be added immediately and modal to be closed
     await waitFor(() => {
+      // Modal should be closed
+      expect(screen.queryByText(/ajouter une manche/i)).not.toBeInTheDocument();
+      
       // Check for updated UI elements that would reflect a new round
       expect(screen.getByText(/manches jouées/i)).toBeInTheDocument();
       const roundCountElement = screen.getByText(/manches jouées/i).nextElementSibling;

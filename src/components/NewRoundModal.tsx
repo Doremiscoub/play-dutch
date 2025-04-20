@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef } from 'react';
 import { Player } from '@/types';
 import { motion } from 'framer-motion';
@@ -14,7 +13,6 @@ interface NewRoundModalProps {
   onAddRound: () => void;
   setScores: React.Dispatch<React.SetStateAction<number[]>>;
   setDutchPlayerId: React.Dispatch<React.SetStateAction<string | undefined>>;
-  modalRef?: React.RefObject<HTMLDialogElement>;
   open: boolean;
 }
 
@@ -26,7 +24,6 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
   onAddRound,
   setScores,
   setDutchPlayerId,
-  modalRef,
   open
 }) => {
   const firstInputRef = useRef<HTMLInputElement>(null);
@@ -52,10 +49,9 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
     }
   };
   
-  // Soumission directe sans gestion d'état intermédiaire
+  // Direct submission without intermediate state
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Suppression du flag isSubmitting pour éviter tout délai
     onAddRound();
   };
 

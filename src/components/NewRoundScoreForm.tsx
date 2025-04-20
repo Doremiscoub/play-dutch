@@ -21,7 +21,6 @@ const NewRoundScoreForm: React.FC<NewRoundScoreFormProps> = ({
 }) => {
   const [scores, setScores] = useState<number[]>(players.map(() => 0));
   const [dutchPlayerId, setDutchPlayerId] = useState<string | undefined>(undefined);
-  const modalRef = React.useRef<HTMLDialogElement>(null);
   
   // Reset form when players change or when modal opens
   React.useEffect(() => {
@@ -32,8 +31,9 @@ const NewRoundScoreForm: React.FC<NewRoundScoreFormProps> = ({
   }, [players, open]);
   
   const handleAddRound = () => {
-    // Appel direct sans aucun traitement intermédiaire
+    // Submit scores and close modal in same tick
     onSubmit(scores, dutchPlayerId);
+    onClose();
   };
   
   return (
@@ -45,7 +45,6 @@ const NewRoundScoreForm: React.FC<NewRoundScoreFormProps> = ({
       onAddRound={handleAddRound}
       setScores={setScores}
       setDutchPlayerId={setDutchPlayerId}
-      modalRef={modalRef}
       open={open}
     />
   );
