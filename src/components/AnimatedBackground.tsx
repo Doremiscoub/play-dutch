@@ -7,6 +7,14 @@ interface AnimatedBackgroundProps {
 
 const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'default' }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  // Référence pour stocker et incrémenter la phase d'animation
+  const phaseRef = useRef<number>(0);
+  // Référence pour suivre les FPS
+  const fpsRef = useRef<{count: number, lastTime: number, value: number}>({
+    count: 0,
+    lastTime: 0,
+    value: 0
+  });
   
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -26,7 +34,8 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
     const waveConfig = {
       baselineHeight: canvas.height * 0.85,
       frequency: 0.014,
-      animationSpeed: 0.010
+      animationSpeed: 0.05, // Augmenté pour une animation plus visible
+      phaseIncrement: 0.05 // Valeur d'incrément de phase par frame
     };
 
     const dots: {
@@ -72,14 +81,18 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
       baseY: number,
       color: string,
       amplitude: number,
-      time: number,
+      phase: number,
       direction: 'left' | 'right' = 'left'
     ) => {
       ctx.beginPath();
       ctx.moveTo(0, canvas.height);
 
-      for (let x = 0; x <= canvas.width; x += 2) {
-        const y = baseY + (Math.sin(x * waveConfig.frequency + (direction === 'left' ? -time : time)) * amplitude);
+      // Pas plus petit pour un rendu plus fluide
+      const step = 1;
+      for (let x = 0; x <= canvas.width; x += step) {
+        // Utilisation de la phase pour l'animation, avec direction conditionnelle
+        const wavePhase = direction === 'left' ? phase : -phase;
+        const y = baseY + (Math.sin((x * waveConfig.frequency) + wavePhase) * amplitude);
         ctx.lineTo(x, y);
       }
 
@@ -87,6 +100,19 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
       ctx.lineTo(0, canvas.height);
       ctx.fillStyle = color;
       ctx.fill();
+    };
+
+    const updateFPS = () => {
+      const now = performance.now();
+      fpsRef.current.count++;
+      
+      // Calculer les FPS toutes les secondes
+      if (now - fpsRef.current.lastTime >= 1000) {
+        fpsRef.current.value = fpsRef.current.count;
+        fpsRef.current.count = 0;
+        fpsRef.current.lastTime = now;
+        console.log(`Wave Animation FPS: ${fpsRef.current.value}, Phase: ${phaseRef.current.toFixed(2)}`);
+      }
     };
 
     const draw = () => {
@@ -112,13 +138,14 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
       }
 
       if (variant !== 'minimal') {
-        const now = Date.now() / 1000 * waveConfig.animationSpeed;
+        // Utiliser la phase actuelle au lieu de Date.now()
+        const currentPhase = phaseRef.current;
         
         drawWave(
           waveConfig.baselineHeight,
           'rgba(193, 158, 255, 0.15)',
           28, // Réduit de 40px à 28px (-30%)
-          now,
+          currentPhase,
           'right'
         );
         
@@ -126,9 +153,12 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
           waveConfig.baselineHeight,
           'rgba(255, 223, 117, 0.15)',
           22, // Réduit de 31.5px à 22px (-30%)
-          now,
+          currentPhase,
           'left'
         );
+        
+        // Incrémenter la phase pour l'animation
+        phaseRef.current += waveConfig.phaseIncrement;
       }
 
       dots.forEach(dot => {
@@ -143,6 +173,9 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
         if (dot.x <= 0 || dot.x >= canvas.width) dot.speedX *= -1;
         if (dot.y <= 0 || dot.y >= canvas.height) dot.speedY *= -1;
       });
+      
+      // Mettre à jour les stats FPS
+      updateFPS();
     };
 
     let animationId: number;
