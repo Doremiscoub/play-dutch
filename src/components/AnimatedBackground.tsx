@@ -1,13 +1,9 @@
-
 import React, { useRef, useEffect } from 'react';
 
 interface AnimatedBackgroundProps {
   variant?: 'default' | 'subtle' | 'minimal';
 }
 
-/**
- * Composant global de fond animé unifié pour toute l'application
- */
 const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'default' }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   
@@ -27,10 +23,15 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
-    // Paramètres
-    const gridSize = variant === 'minimal' ? 32 : 24; // Taille de la grille
+    // Paramètres des vagues améliorés
+    const waveConfig = {
+      baselineHeight: canvas.height * 0.88, // Même hauteur de base pour les deux vagues
+      amplitude: variant === 'subtle' ? 24 : 30, // Amplitude augmentée de 20%
+      frequency: 0.02, // Fréquence réduite pour moins de creux/bosses
+      animationSpeed: 0.015 // Vitesse réduite de 10%
+    };
     
-    // Configuration des points flottants - Augmentation de 30% du nombre de points
+    // Configuration des points flottants avec saturation augmentée
     const dots: {
       x: number;
       y: number;
@@ -40,23 +41,22 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
       color: string;
     }[] = [];
     
-    // Création des points animés - Nombre augmenté de 30%
+    // Création des points animés avec saturation augmentée
     const createDots = () => {
-      // Augmenter le nombre de points de 30%
       const numDots = variant === 'minimal' 
         ? Math.floor(15 * 1.3) 
-        : Math.min(Math.floor(30 * 1.3), Math.floor(canvas.width * canvas.height / 30000)); 
+        : Math.min(Math.floor(30 * 1.3), Math.floor(canvas.width * canvas.height / 30000));
       
-      // Palette de couleurs unifiée avec saturation augmentée de 10%
+      // Palette de couleurs unifiée avec saturation augmentée de +10%
       const colors = [
-        // Violet clair - saturation augmentée de 10%
-        { r: 177, g: 145, b: 255, o: variant === 'subtle' ? 0.17 : 0.22 }, 
-        // Orange clair - saturation augmentée de 10%
-        { r: 255, g: 186, b: 116, o: variant === 'subtle' ? 0.17 : 0.22 }, 
-        // Vert très clair - saturation augmentée de 10%
-        { r: 115, g: 240, b: 190, o: variant === 'subtle' ? 0.12 : 0.17 }, 
-        // Bleu clair - saturation augmentée de 10%
-        { r: 105, g: 175, b: 255, o: variant === 'subtle' ? 0.12 : 0.17 }  
+        // Violet pastel (A18AFF) avec saturation +10%
+        { r: 177, g: 145, b: 255, o: variant === 'subtle' ? 0.2 : 0.25 },
+        // Jaune doux (FFD56B) avec saturation +10%
+        { r: 255, g: 213, b: 107, o: variant === 'subtle' ? 0.2 : 0.25 },
+        // Vert très clair avec saturation +10%
+        { r: 125, g: 250, b: 200, o: variant === 'subtle' ? 0.15 : 0.2 },
+        // Bleu clair avec saturation +10%
+        { r: 115, g: 185, b: 255, o: variant === 'subtle' ? 0.15 : 0.2 }
       ];
       
       // Création des points avec des tailles et positions aléatoires
@@ -77,7 +77,30 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
 
     createDots();
 
-    // Fonction de rendu principal
+    // Fonction améliorée pour dessiner les vagues
+    const drawWave = (
+      baseY: number,
+      color: string,
+      amplitude: number,
+      time: number,
+      direction: 'left' | 'right' = 'left'
+    ) => {
+      ctx.beginPath();
+      ctx.moveTo(0, canvas.height);
+
+      // Dessiner une courbe sinusoïdale plus douce
+      for (let x = 0; x <= canvas.width; x += 5) {
+        const y = baseY + (Math.sin(x * waveConfig.frequency + (direction === 'left' ? -time : time)) * amplitude);
+        ctx.lineTo(x, y);
+      }
+
+      ctx.lineTo(canvas.width, canvas.height);
+      ctx.lineTo(0, canvas.height);
+      ctx.fillStyle = color;
+      ctx.fill();
+    };
+
+    // Boucle de rendu principale
     const draw = () => {
       // Effacer le canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -92,18 +115,41 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
         ctx.beginPath();
 
         // Lignes verticales
-        for (let x = 0; x <= canvas.width; x += gridSize) {
+        for (let x = 0; x <= canvas.width; x += 24) {
           ctx.moveTo(x, 0);
           ctx.lineTo(x, canvas.height);
         }
 
         // Lignes horizontales
-        for (let y = 0; y <= canvas.height; y += gridSize) {
+        for (let y = 0; y <= canvas.height; y += 24) {
           ctx.moveTo(0, y);
           ctx.lineTo(canvas.width, y);
         }
 
         ctx.stroke();
+      }
+
+      // Dessiner les vagues avec paramètres améliorés
+      if (variant !== 'minimal') {
+        const now = Date.now() / 1000 * waveConfig.animationSpeed;
+        
+        // Première vague (violet pastel)
+        drawWave(
+          waveConfig.baselineHeight,
+          'rgba(161, 138, 255, 0.15)', // #A18AFF avec opacité 0.15
+          waveConfig.amplitude,
+          now,
+          'right'
+        );
+        
+        // Deuxième vague (jaune doux)
+        drawWave(
+          waveConfig.baselineHeight,
+          'rgba(255, 213, 107, 0.15)', // #FFD56B avec opacité 0.15
+          waveConfig.amplitude,
+          now,
+          'left'
+        );
       }
 
       // Dessiner les points animés
@@ -121,53 +167,6 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
         if (dot.x <= 0 || dot.x >= canvas.width) dot.speedX *= -1;
         if (dot.y <= 0 || dot.y >= canvas.height) dot.speedY *= -1;
       });
-
-      // Dessiner les vagues en bas pour les variants default et subtle
-      if (variant !== 'minimal') {
-        const now = Date.now() / 1000;
-        
-        // Première vague (violet clair) - déplace de gauche à droite
-        drawWave(
-          canvas.height * 0.85,
-          'rgba(233, 213, 255, 0.5)',
-          variant === 'subtle' ? 15 : 20,
-          0.03,
-          now
-        );
-        
-        // Deuxième vague (orange pâle) - déplace de droite à gauche (sens opposé)
-        drawWave(
-          canvas.height * 0.9,
-          'rgba(253, 230, 138, 0.4)',
-          variant === 'subtle' ? 20 : 25,
-          0.025,
-          -now + Math.PI // Direction opposée
-        );
-      }
-    };
-
-    // Fonction pour dessiner une vague
-    const drawWave = (
-      baseY: number,
-      color: string,
-      amplitude: number,
-      frequency: number,
-      time: number
-    ) => {
-      ctx.beginPath();
-      ctx.moveTo(0, canvas.height);
-
-      // Dessiner une courbe sinusoïdale
-      for (let x = 0; x <= canvas.width; x += 5) {
-        const y = baseY + Math.sin(x * frequency + time) * amplitude;
-        ctx.lineTo(x, y);
-      }
-
-      // Fermer le chemin
-      ctx.lineTo(canvas.width, canvas.height);
-      ctx.lineTo(0, canvas.height);
-      ctx.fillStyle = color;
-      ctx.fill();
     };
 
     // Boucle d'animation
