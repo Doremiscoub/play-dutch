@@ -20,7 +20,7 @@ const toggleGroupVariants = cva(
 );
 
 const toggleItemVariants = cva(
-  "inline-flex items-center justify-center rounded-full px-3 py-1.5 text-sm transition-all data-[state=active]:bg-white data-[state=active]:shadow-sm",
+  "inline-flex items-center justify-center whitespace-nowrap rounded-full px-3 py-1.5 text-sm font-medium transition-all data-[state=active]:bg-white data-[state=active]:shadow-sm",
   {
     variants: {
       variant: {
