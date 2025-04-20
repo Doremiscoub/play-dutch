@@ -1,7 +1,4 @@
 
-/**
- * Contenu principal de la page de jeu
- */
 import React, { useState } from 'react';
 import { Player } from '@/types';
 import ErrorBoundary from './ErrorBoundary';
@@ -48,12 +45,11 @@ const GameContent: React.FC<GameContentProps> = ({
     setShowScoreForm(false);
   };
 
-  const handleAddRound = (scores: number[], dutchPlayerId?: string) => {
+  const handleAddRoundWrapper = (scores: number[], dutchPlayerId?: string) => {
     onAddRound(scores, dutchPlayerId);
     setShowScoreForm(false);
   };
 
-  // Fallback UI en cas d'erreur
   const ErrorFallback = ({ error }: { error: Error }) => (
     <div className="p-6 bg-red-50 rounded-lg border border-red-200 m-4">
       <h3 className="text-xl font-bold text-red-700 mb-2">Une erreur est survenue</h3>
@@ -68,10 +64,10 @@ const GameContent: React.FC<GameContentProps> = ({
 
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
-      {/* Tableau des scores */}
       <ScoreBoard
         players={players}
-        openScoreForm={handleOpenScoreForm} // Passons cette fonction au lieu d'onAddRound
+        onAddRound={onAddRound} // Correction : passer onAddRound directement
+        openScoreForm={handleOpenScoreForm}
         onUndoLastRound={onUndoLastRound}
         onEndGame={onRequestEndGame}
         roundHistory={roundHistory}
@@ -81,15 +77,13 @@ const GameContent: React.FC<GameContentProps> = ({
         scoreLimit={scoreLimit}
       />
 
-      {/* Formulaire d'ajout de score - maintenant unique */}
       <NewRoundScoreForm
         players={players}
         open={showScoreForm}
         onClose={handleCloseScoreForm}
-        onSubmit={handleAddRound}
+        onSubmit={handleAddRoundWrapper}
       />
 
-      {/* Overlay de fin de partie */}
       {showGameOver && (
         <GameResultOverlay
           players={players}
