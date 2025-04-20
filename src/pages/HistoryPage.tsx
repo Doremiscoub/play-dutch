@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Game } from '@/types';
 import { motion } from 'framer-motion';
@@ -10,7 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Trophy, Calendar, Users, Clock } from 'lucide-react';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'; // Added these imports
 
 const HistoryPage: React.FC = () => {
   const navigate = useNavigate();
