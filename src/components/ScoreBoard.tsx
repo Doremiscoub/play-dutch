@@ -1,4 +1,3 @@
-
 /**
  * Tableau des scores principal - Composant refactorisé
  */
@@ -14,7 +13,7 @@ import AICommentator from './AICommentator';
 
 // Import des composants modulaires
 import ScoreBoardHeader from './scoreboard/ScoreBoardHeader';
-import ScoreBoardTabs from './ScoreBoardTabs';
+import ScoreBoardTabs from './scoreboard/ScoreBoardTabs';
 import PlayerListView from './scoreboard/PlayerListView';
 import GameStatsPanel from './scoreboard/GameStatsPanel';
 import UndoConfirmationDialog from './scoreboard/UndoConfirmationDialog';
