@@ -22,6 +22,9 @@ export const useGameState = () => {
   const [soundEnabled] = useLocalStorage('dutch_sound_enabled', true);
   const initializationAttempted = useRef(false);
   
+  // Use notre nouveau hook de persistance
+  const { loadGameState, saveGameState, saveGameToHistory } = useGamePersistence();
+  
   // Use our specialized hooks
   const {
     players, 
@@ -44,9 +47,8 @@ export const useGameState = () => {
     handleRestart
   } = useGameContinuation(setShowGameOver, setScoreLimit, scoreLimit);
   
-  const { loadGameState, saveGameState, saveGameToHistory } = useGamePersistence();
   const { roundHistory, setRoundHistory, addRound, undoLastRound } = useRoundManagement(scoreLimit, soundEnabled);
-  
+
   // Initialize game from localStorage or URL parameters
   useEffect(() => {
     try {
