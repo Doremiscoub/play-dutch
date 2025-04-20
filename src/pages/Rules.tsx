@@ -1,15 +1,16 @@
-
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, MessageCircle } from 'lucide-react';
+import { MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Card, CardContent } from '@/components/ui/card';
 import AnimatedBackground from '../components/AnimatedBackground';
+import PageHeader from '@/components/PageHeader';
+import { useNavigate } from 'react-router-dom';
 
 const Rules: React.FC = () => {
   const [activeTab, setActiveTab] = useState('introduction');
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen relative">
@@ -18,31 +19,18 @@ const Rules: React.FC = () => {
       </div>
       
       <div className="container mx-auto px-2 py-8 relative z-10">
-        <div className="flex justify-between items-center mb-6">
-          <Link to="/">
-            <Button variant="ghost" size="sm" className="flex items-center gap-1 text-gray-600 hover:text-gray-900">
-              <ArrowLeft className="h-4 w-4" />
-              Retour à l'accueil
-            </Button>
-          </Link>
-        </div>
-        
-        <motion.h1
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-4xl font-bold mb-8 bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent"
-        >
-          Règles du Dutch
-        </motion.h1>
+        <PageHeader 
+          title="Règles du Dutch" 
+          onBack={() => navigate('/')}
+        />
         
         <div className="mb-8">
           <Tabs defaultValue="introduction" onValueChange={setActiveTab} value={activeTab}>
-            <TabsList className="grid grid-cols-2 sm:grid-cols-4 mb-4">
-              <TabsTrigger value="introduction">Introduction</TabsTrigger>
-              <TabsTrigger value="setup">Mise en place</TabsTrigger>
-              <TabsTrigger value="gameplay">Déroulement</TabsTrigger>
-              <TabsTrigger value="special">Cartes spéciales</TabsTrigger>
+            <TabsList className="w-full max-w-md mx-auto flex justify-center mb-6 bg-white/60 backdrop-blur-md border border-white/40 rounded-full p-1 shadow-sm">
+              <TabsTrigger value="introduction" className="rounded-full flex-1 data-[state=active]:bg-white data-[state=active]:shadow-sm">Introduction</TabsTrigger>
+              <TabsTrigger value="setup" className="rounded-full flex-1 data-[state=active]:bg-white data-[state=active]:shadow-sm">Mise en place</TabsTrigger>
+              <TabsTrigger value="gameplay" className="rounded-full flex-1 data-[state=active]:bg-white data-[state=active]:shadow-sm">Déroulement</TabsTrigger>
+              <TabsTrigger value="special" className="rounded-full flex-1 data-[state=active]:bg-white data-[state=active]:shadow-sm">Cartes spéciales</TabsTrigger>
             </TabsList>
             
             <TabsContent value="introduction" className="space-y-4">

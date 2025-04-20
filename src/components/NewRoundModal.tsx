@@ -176,7 +176,7 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
               Annuler
             </Button>
             <Button
-              variant="dutch-blue"
+              variant="gradient"
               type="submit"
               disabled={isSubmitting}
             >
