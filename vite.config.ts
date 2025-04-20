@@ -115,6 +115,9 @@ export default defineConfig(({ mode }) => ({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  optimizeDeps: {
+    include: ['@sentry/react', '@sentry/tracing']
+  },
   server: {
     host: "::",
     port: 8080,

@@ -13,6 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/context/AuthContext';
 import * as Sentry from '@sentry/react';
 import { addBreadcrumb } from '@/utils/sentryConfig';
+import { isRunningAsPWA } from '@/utils/pwaUtils';
 
 const SettingsPage = () => {
   const [soundEnabled, setSoundEnabled] = useLocalStorage('dutch_sound_enabled', true);
