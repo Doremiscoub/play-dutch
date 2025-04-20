@@ -1,4 +1,3 @@
-
 /**
  * Tableau des scores principal - Composant refactorisé
  */

@@ -1,8 +1,10 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { Player } from '@/types';
+import { generateId } from '@/utils';
+import { useGame } from '@/context/GameContext';
+import { useAuth } from '@/context/AuthContext';
 import ScoreBoard from '@/components/ScoreBoard';
 import NewRoundScoreForm from '@/components/NewRoundScoreForm';
 import PageLayout from '@/components/PageLayout';
@@ -10,34 +12,26 @@ import PageHeader from '@/components/PageHeader';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import NewRoundModal from '@/components/NewRoundModal';
-import { v4 as uuidv4 } from 'uuid'; // Utilisation de uuid pour générer des IDs
 
 const GamePage: React.FC = () => {
   const navigate = useNavigate();
-  // Simuler un contexte de jeu simple pour cette correction
-  const [players, setPlayers] = useState<Player[]>([]);
-  const [isMultiplayer, setIsMultiplayer] = useState(false);
-  const [scoreLimit, setScoreLimit] = useState(100);
-  const [roundHistory, setRoundHistory] = useState<{ scores: number[], dutchPlayerId?: string }[]>([]);
+  const { user } = useAuth();
+  const { 
+    players, 
+    setPlayers, 
+    isMultiplayer, 
+    setIsMultiplayer,
+    scoreLimit,
+    setScoreLimit,
+    resetGame,
+    roundHistory,
+    addRoundToHistory,
+    undoLastRound
+  } = useGame();
   
   const [newRoundScores, setNewRoundScores] = useState<number[]>(players.map(() => 0));
   const [dutchPlayerId, setDutchPlayerId] = useState<string | undefined>(undefined);
   const [showNewRoundModal, setShowNewRoundModal] = useState(false);
-  
-  const resetGame = () => {
-    setPlayers([]);
-    setRoundHistory([]);
-  };
-  
-  const addRoundToHistory = (roundData: { scores: number[], dutchPlayerId?: string }) => {
-    setRoundHistory([...roundHistory, roundData]);
-  };
-  
-  const undoLastRound = () => {
-    if (roundHistory.length > 0) {
-      setRoundHistory(roundHistory.slice(0, -1));
-    }
-  };
   
   const handleAddRound = (scores: number[], dutchPlayerId?: string) => {
     const newPlayers = players.map((player, index) => {
@@ -92,7 +86,7 @@ const GamePage: React.FC = () => {
         scores={newRoundScores}
         dutchPlayerId={dutchPlayerId}
         onClose={() => setShowNewRoundModal(false)}
-        onAddRound={() => handleAddRound(newRoundScores, dutchPlayerId)}
+        onAddRound={handleAddRound}
         setScores={setNewRoundScores}
         setDutchPlayerId={setDutchPlayerId}
         open={showNewRoundModal}
