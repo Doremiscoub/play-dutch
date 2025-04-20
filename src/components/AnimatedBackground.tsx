@@ -1,10 +1,14 @@
 
 import React, { useRef, useEffect } from 'react';
 
+interface AnimatedBackgroundProps {
+  variant?: 'default' | 'subtle' | 'minimal';
+}
+
 /**
  * Composant global de fond animé unifié pour toute l'application
  */
-const AnimatedBackground: React.FC = () => {
+const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'default' }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   
   useEffect(() => {
@@ -24,7 +28,7 @@ const AnimatedBackground: React.FC = () => {
     window.addEventListener('resize', resizeCanvas);
 
     // Paramètres
-    const gridSize = 24; // Taille de la grille
+    const gridSize = variant === 'minimal' ? 32 : 24; // Taille de la grille
     
     // Configuration des points flottants
     const dots: {
@@ -38,14 +42,14 @@ const AnimatedBackground: React.FC = () => {
     
     // Création des points animés
     const createDots = () => {
-      const numDots = Math.min(30, Math.floor(canvas.width * canvas.height / 40000)); // Adapte le nombre de points à la taille de l'écran
+      const numDots = variant === 'minimal' ? 15 : Math.min(30, Math.floor(canvas.width * canvas.height / 40000)); // Adapte le nombre de points à la taille de l'écran
       
       // Palette de couleurs unifiée
       const colors = [
-        { r: 167, g: 139, b: 250, o: 0.2 }, // Violet clair
-        { r: 253, g: 186, b: 116, o: 0.2 }, // Orange clair
-        { r: 110, g: 231, b: 183, o: 0.15 }, // Vert très clair
-        { r: 96, g: 165, b: 250, o: 0.15 }  // Bleu clair
+        { r: 167, g: 139, b: 250, o: variant === 'subtle' ? 0.15 : 0.2 }, // Violet clair
+        { r: 253, g: 186, b: 116, o: variant === 'subtle' ? 0.15 : 0.2 }, // Orange clair
+        { r: 110, g: 231, b: 183, o: variant === 'subtle' ? 0.1 : 0.15 }, // Vert très clair
+        { r: 96, g: 165, b: 250, o: variant === 'subtle' ? 0.1 : 0.15 }  // Bleu clair
       ];
       
       // Création des points avec des tailles et positions aléatoires
@@ -75,23 +79,25 @@ const AnimatedBackground: React.FC = () => {
       ctx.fillStyle = '#ffffff';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       
-      // Dessiner la grille
-      ctx.strokeStyle = 'rgba(218, 218, 218, 0.1)'; // Gris très clair à 10%
-      ctx.beginPath();
+      // Dessiner la grille si pas en mode minimal
+      if (variant !== 'minimal') {
+        ctx.strokeStyle = 'rgba(218, 218, 218, 0.1)'; // Gris très clair à 10%
+        ctx.beginPath();
 
-      // Lignes verticales
-      for (let x = 0; x <= canvas.width; x += gridSize) {
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, canvas.height);
+        // Lignes verticales
+        for (let x = 0; x <= canvas.width; x += gridSize) {
+          ctx.moveTo(x, 0);
+          ctx.lineTo(x, canvas.height);
+        }
+
+        // Lignes horizontales
+        for (let y = 0; y <= canvas.height; y += gridSize) {
+          ctx.moveTo(0, y);
+          ctx.lineTo(canvas.width, y);
+        }
+
+        ctx.stroke();
       }
-
-      // Lignes horizontales
-      for (let y = 0; y <= canvas.height; y += gridSize) {
-        ctx.moveTo(0, y);
-        ctx.lineTo(canvas.width, y);
-      }
-
-      ctx.stroke();
 
       // Dessiner les points animés
       dots.forEach(dot => {
@@ -109,26 +115,28 @@ const AnimatedBackground: React.FC = () => {
         if (dot.y <= 0 || dot.y >= canvas.height) dot.speedY *= -1;
       });
 
-      // Dessiner les vagues en bas
-      const now = Date.now() / 1000;
-      
-      // Première vague (violet clair)
-      drawWave(
-        canvas.height * 0.85,
-        'rgba(233, 213, 255, 0.5)',
-        20,
-        0.03,
-        now
-      );
-      
-      // Deuxième vague (orange pâle)
-      drawWave(
-        canvas.height * 0.9,
-        'rgba(253, 230, 138, 0.4)',
-        25,
-        0.025,
-        now + Math.PI
-      );
+      // Dessiner les vagues en bas pour les variants default et subtle
+      if (variant !== 'minimal') {
+        const now = Date.now() / 1000;
+        
+        // Première vague (violet clair)
+        drawWave(
+          canvas.height * 0.85,
+          'rgba(233, 213, 255, 0.5)',
+          variant === 'subtle' ? 15 : 20,
+          0.03,
+          now
+        );
+        
+        // Deuxième vague (orange pâle)
+        drawWave(
+          canvas.height * 0.9,
+          'rgba(253, 230, 138, 0.4)',
+          variant === 'subtle' ? 20 : 25,
+          0.025,
+          now + Math.PI
+        );
+      }
     };
 
     // Fonction pour dessiner une vague
@@ -170,7 +178,7 @@ const AnimatedBackground: React.FC = () => {
       window.removeEventListener('resize', resizeCanvas);
       cancelAnimationFrame(animationId);
     };
-  }, []);
+  }, [variant]);
 
   return (
     <canvas 

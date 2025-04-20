@@ -15,6 +15,7 @@ interface PageLayoutProps {
   className?: string;
   showThemeSelector?: boolean;
   showBackButton?: boolean;
+  backgroundVariant?: 'default' | 'subtle' | 'minimal';
 }
 
 const PageLayout: React.FC<PageLayoutProps> = ({
@@ -24,7 +25,8 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   withAnimation = true,
   className = '',
   showThemeSelector = false,
-  showBackButton
+  showBackButton,
+  backgroundVariant = 'default'
 }) => {
   const navigate = useNavigate();
   const location = useLocation();

@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
-import AnimatedBackground from '@/components/AnimatedBackground';
+import AnimatedBackground from '../components/AnimatedBackground';
 import { useAuth } from '@/context/AuthContext';
 import { toast } from 'sonner';
 
@@ -24,7 +24,7 @@ const SignUp: React.FC = () => {
     return (
       <div className="relative min-h-screen flex items-center justify-center p-4">
         <div className="absolute inset-0 overflow-hidden">
-          <AnimatedBackground variant="default" />
+          <AnimatedBackground />
         </div>
         
         <motion.div
@@ -71,7 +71,7 @@ const SignUp: React.FC = () => {
   return (
     <div className="relative min-h-screen flex items-center justify-center p-4">
       <div className="absolute inset-0 overflow-hidden">
-        <AnimatedBackground variant="default" />
+        <AnimatedBackground />
       </div>
       
       <motion.div

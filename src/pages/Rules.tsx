@@ -6,7 +6,7 @@ import { ArrowLeft, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Card, CardContent } from '@/components/ui/card';
-import AnimatedBackground from '@/components/AnimatedBackground';
+import AnimatedBackground from '../components/AnimatedBackground';
 
 const Rules: React.FC = () => {
   const [activeTab, setActiveTab] = useState('introduction');
@@ -14,7 +14,7 @@ const Rules: React.FC = () => {
   return (
     <div className="min-h-screen relative">
       <div className="absolute inset-0">
-        <AnimatedBackground variant="subtle" />
+        <AnimatedBackground />
       </div>
       
       <div className="container mx-auto px-2 py-8 relative z-10">

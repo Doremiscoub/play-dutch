@@ -59,7 +59,7 @@ const GameSetup: React.FC = () => {
   return (
     <div className="min-h-screen w-full relative">
       <div className="fixed inset-0 -z-10">
-        <AnimatedBackground variant="default" />
+        <AnimatedBackground />
       </div>
       
       <motion.div 

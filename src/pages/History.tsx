@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
-import AnimatedBackground from '@/components/AnimatedBackground';
+import AnimatedBackground from '../components/AnimatedBackground';
 import { Game } from '@/types';
 
 interface GameHistoryProps {
@@ -103,7 +103,7 @@ const History: React.FC = () => {
   return (
     <div className="min-h-screen relative">
       <div className="absolute inset-0">
-        <AnimatedBackground variant="subtle" />
+        <AnimatedBackground />
       </div>
       
       <div className="container mx-auto px-4 py-8 relative z-10">

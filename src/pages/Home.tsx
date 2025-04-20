@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Plus, History, BookOpen, Settings, LogIn, ExternalLink, Trophy } from 'lucide-react';
-import AnimatedBackground from '@/components/AnimatedBackground';
+import AnimatedBackground from '../components/AnimatedBackground';
 import { animationVariants } from '@/utils/animationUtils';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Badge } from '@/components/ui/badge';
@@ -71,7 +71,7 @@ const Home: React.FC = () => {
     <div className="min-h-screen relative overflow-hidden">
       {/* Fond animé avec vagues fluides */}
       <div className="absolute inset-0">
-        <AnimatedBackground variant="default" />
+        <AnimatedBackground />
       </div>
       
       {/* Contenu principal */}

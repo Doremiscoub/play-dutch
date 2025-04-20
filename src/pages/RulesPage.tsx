@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -24,11 +23,9 @@ const RulesPage: React.FC = () => {
   const [inputValue, setInputValue] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   
-  // Fonction pour simuler une réponse de l'IA
   const simulateAIResponse = (question: string) => {
     setIsProcessing(true);
     
-    // Prévoir les questions courantes
     const responses: { [key: string]: string } = {
       'dutch': "Faire un Dutch signifie que vous n'avez plus qu'une carte en main. Vous devez alors annoncer 'Dutch !' à voix haute. Si vous ne le faites pas et qu'un autre joueur le remarque, vous recevez une pénalité.",
       'pénalité': "Si vous oubliez d'annoncer 'Dutch' quand vous n'avez plus qu'une carte, ou si vous l'annoncez par erreur, vous prenez une pénalité de 2 cartes du talon.",

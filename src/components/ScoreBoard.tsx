@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Player } from '@/types';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { toast } from 'sonner';
-import PageLayout from './layouts/PageLayout';
+import PageLayout from '@/components/PageLayout';
 import CustomScoreBoardButtons from './CustomScoreBoardButtons';
 import ScoreTableView from './ScoreTableView';
 import AICommentator from './AICommentator';

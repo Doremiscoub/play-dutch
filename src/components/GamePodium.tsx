@@ -64,7 +64,7 @@ const GamePodium: React.FC<GamePodiumProps> = ({
     <div className="min-h-screen w-full relative">
       {/* Background */}
       <div className="fixed inset-0 -z-10">
-        <AnimatedBackground variant="default" />
+        <AnimatedBackground />
       </div>
       
       <div className="container mx-auto px-4 py-16 relative z-10">

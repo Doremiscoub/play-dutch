@@ -9,7 +9,6 @@ import GameOverHeader from './game/GameOverHeader';
 import GamePodium from './game/GamePodium';
 import OtherPlayersRanking from './game/OtherPlayersRanking';
 import GameOverActionButtons from './game/GameOverActionButtons';
-import GradientAnimationStyles from './game/GradientAnimationStyles';
 
 interface GameOverScreenProps {
   players: Player[];
@@ -117,7 +116,7 @@ const GameOverScreen: React.FC<GameOverScreenProps> = ({
     <div className="min-h-screen p-4 flex flex-col items-center justify-center relative overflow-hidden">
       {/* Animated festive background */}
       <div className="absolute inset-0 -z-10">
-        <AnimatedBackground variant="default" />
+        <AnimatedBackground />
         
         {/* Overlay with festive gradient */}
         <div className="absolute inset-0 bg-gradient-to-br from-purple-500/15 via-transparent to-orange-500/15"></div>
@@ -173,8 +172,18 @@ const GameOverScreen: React.FC<GameOverScreenProps> = ({
         onContinueGame={handleContinueGame} 
       />
       
-      {/* Gradient animation styles */}
-      <GradientAnimationStyles />
+      {/* Gradient animation styles - CSS in JS for this component */}
+      <style jsx>{`
+        @keyframes gradientBg {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+        .gradient-animation {
+          animation: gradientBg 6s ease infinite;
+          background-size: 200% 200%;
+        }
+      `}</style>
     </div>
   );
 };
