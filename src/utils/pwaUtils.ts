@@ -19,7 +19,7 @@ export const isRunningAsPWA = (): boolean => {
   }
   
   // Check for standalone mode in Safari on iOS
-  if (window.navigator.standalone === true) {
+  if ('standalone' in window.navigator && (window.navigator as any).standalone === true) {
     return true;
   }
   

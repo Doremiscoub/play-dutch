@@ -35,13 +35,17 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     console.error('ErrorBoundary caught an error:', error, errorInfo);
     
     // Report error to Sentry
-    Sentry.captureException(error, {
-      contexts: {
-        react: {
-          componentStack: errorInfo.componentStack
+    try {
+      Sentry.captureException(error, {
+        contexts: {
+          react: {
+            componentStack: errorInfo.componentStack
+          }
         }
-      }
-    });
+      });
+    } catch (sentryError) {
+      console.error('Failed to report error to Sentry:', sentryError);
+    }
   }
 
   render(): ReactNode {

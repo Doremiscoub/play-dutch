@@ -118,6 +118,11 @@ export default defineConfig(({ mode }) => ({
   optimizeDeps: {
     include: ['@sentry/react', '@sentry/tracing']
   },
+  build: {
+    commonjsOptions: {
+      include: [/node_modules/],
+    },
+  },
   server: {
     host: "::",
     port: 8080,
