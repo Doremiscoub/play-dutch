@@ -1,4 +1,3 @@
-
 import React, { useRef, useEffect } from 'react';
 
 interface AnimatedBackgroundProps {
@@ -23,10 +22,9 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
-    // Configuration mise à jour des vagues
     const waveConfig = {
       baselineHeight: canvas.height * 0.85,
-      frequency: 0.016,
+      frequency: 0.014,
       animationSpeed: 0.010
     };
 
@@ -54,7 +52,7 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
       for (let i = 0; i < numDots; i++) {
         const colorIndex = Math.floor(Math.random() * colors.length);
         const color = colors[colorIndex];
-        const isLargeDot = Math.random() < 0.2; // 20% de chance d'être un gros point
+        const isLargeDot = Math.random() < 0.2;
         
         dots.push({
           x: Math.random() * canvas.width,
@@ -79,7 +77,7 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
       ctx.beginPath();
       ctx.moveTo(0, canvas.height);
 
-      for (let x = 0; x <= canvas.width; x += 5) {
+      for (let x = 0; x <= canvas.width; x += 2) {
         const y = baseY + (Math.sin(x * waveConfig.frequency + (direction === 'left' ? -time : time)) * amplitude);
         ctx.lineTo(x, y);
       }
@@ -115,26 +113,23 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
       if (variant !== 'minimal') {
         const now = Date.now() / 1000 * waveConfig.animationSpeed;
         
-        // Vague violette avec amplitude 45
         drawWave(
           waveConfig.baselineHeight,
           'rgba(193, 158, 255, 0.15)',
-          45,
+          40,
           now,
           'right'
         );
         
-        // Vague jaune avec amplitude 35
         drawWave(
           waveConfig.baselineHeight,
           'rgba(255, 223, 117, 0.15)',
-          35,
+          31.5,
           now,
           'left'
         );
       }
 
-      // Animation des points
       dots.forEach(dot => {
         ctx.beginPath();
         ctx.arc(dot.x, dot.y, dot.size, 0, Math.PI * 2);
