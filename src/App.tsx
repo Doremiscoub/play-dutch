@@ -14,7 +14,7 @@ import AnimatedBackground from './components/AnimatedBackground';
 import Home from './pages/Home';
 import GamePage from './pages/GamePage';
 import GameSetup from './components/GameSetup';
-import HistoryPage from './pages/HistoryPage';  // Corrigé: 'History' -> 'HistoryPage'
+import History from './pages/History';
 import Rules from './pages/Rules';
 import SettingsPage from './pages/SettingsPage';
 import SignIn from './pages/SignIn';
@@ -89,7 +89,7 @@ const App: React.FC = () => {
           } />
           <Route path="/history" element={
             <ProtectedRoute>
-              <HistoryPage />
+              <History />
             </ProtectedRoute>
           } />
           <Route path="/rules" element={<Rules />} />

@@ -10,7 +10,6 @@ import PageLayout from '@/components/PageLayout';
 import CustomScoreBoardButtons from './CustomScoreBoardButtons';
 import ScoreTableView from './ScoreTableView';
 import AICommentator from './AICommentator';
-import ProfessorAvatar from './game/ProfessorAvatar';
 
 // Import des composants modulaires
 import ScoreBoardHeader from './scoreboard/ScoreBoardHeader';
@@ -99,8 +98,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
         
         {/* Commentateur IA - sur mobile et desktop */}
         {showAICommentator && (
-          <div className="mb-4 flex items-center gap-4">
-            <ProfessorAvatar />
+          <div className="mb-4">
             <AICommentator 
               players={players}
               roundHistory={roundHistory}
