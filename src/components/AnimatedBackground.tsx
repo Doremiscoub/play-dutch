@@ -1,3 +1,4 @@
+
 import React, { useRef, useEffect } from 'react';
 
 interface AnimatedBackgroundProps {
@@ -116,7 +117,7 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
         drawWave(
           waveConfig.baselineHeight,
           'rgba(193, 158, 255, 0.15)',
-          40,
+          28, // Réduit de 40px à 28px (-30%)
           now,
           'right'
         );
@@ -124,7 +125,7 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
         drawWave(
           waveConfig.baselineHeight,
           'rgba(255, 223, 117, 0.15)',
-          31.5,
+          22, // Réduit de 31.5px à 22px (-30%)
           now,
           'left'
         );
@@ -151,7 +152,7 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
       animationId = requestAnimationFrame(animate);
     };
 
-    animate();
+    animate(); // Démarrer l'animation
 
     return () => {
       window.removeEventListener('resize', resizeCanvas);
