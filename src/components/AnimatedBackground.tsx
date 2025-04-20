@@ -1,3 +1,4 @@
+
 import React, { useRef, useEffect } from 'react';
 
 interface AnimatedBackgroundProps {
@@ -22,9 +23,9 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
+    // Configuration mise à jour des vagues
     const waveConfig = {
       baselineHeight: canvas.height * 0.85,
-      amplitude: variant === 'subtle' ? 31.2 : 39,
       frequency: 0.016,
       animationSpeed: 0.010
     };
@@ -44,23 +45,24 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
         : Math.min(Math.floor(30 * 1.3), Math.floor(canvas.width * canvas.height / 30000));
       
       const colors = [
-        { r: 193, g: 158, b: 255, o: variant === 'subtle' ? 0.2 : 0.25 },
-        { r: 255, g: 223, b: 117, o: variant === 'subtle' ? 0.2 : 0.25 },
-        { r: 137, g: 255, b: 210, o: variant === 'subtle' ? 0.15 : 0.2 },
-        { r: 126, g: 193, b: 255, o: variant === 'subtle' ? 0.15 : 0.2 }
+        { r: 193, g: 158, b: 255, o: variant === 'subtle' ? 0.30 : 0.35 },
+        { r: 255, g: 223, b: 117, o: variant === 'subtle' ? 0.30 : 0.35 },
+        { r: 137, g: 255, b: 210, o: variant === 'subtle' ? 0.25 : 0.30 },
+        { r: 126, g: 193, b: 255, o: variant === 'subtle' ? 0.25 : 0.30 }
       ];
 
       for (let i = 0; i < numDots; i++) {
         const colorIndex = Math.floor(Math.random() * colors.length);
         const color = colors[colorIndex];
+        const isLargeDot = Math.random() < 0.2; // 20% de chance d'être un gros point
         
         dots.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
-          size: 2 + Math.random() * 4,
+          size: isLargeDot ? 6 + Math.random() * 4 : 2 + Math.random() * 4,
           speedX: (Math.random() - 0.5) * 0.3,
           speedY: (Math.random() - 0.5) * 0.3,
-          color: `rgba(${color.r}, ${color.g}, ${color.b}, ${color.o})`
+          color: `rgba(${color.r}, ${color.g}, ${color.b}, ${color.o * 1.2})`
         });
       }
     };
@@ -113,23 +115,26 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
       if (variant !== 'minimal') {
         const now = Date.now() / 1000 * waveConfig.animationSpeed;
         
+        // Vague violette avec amplitude 45
         drawWave(
           waveConfig.baselineHeight,
           'rgba(193, 158, 255, 0.15)',
-          waveConfig.amplitude,
+          45,
           now,
           'right'
         );
         
+        // Vague jaune avec amplitude 35
         drawWave(
           waveConfig.baselineHeight,
           'rgba(255, 223, 117, 0.15)',
-          waveConfig.amplitude,
+          35,
           now,
           'left'
         );
       }
 
+      // Animation des points
       dots.forEach(dot => {
         ctx.beginPath();
         ctx.arc(dot.x, dot.y, dot.size, 0, Math.PI * 2);
