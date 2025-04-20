@@ -5,7 +5,6 @@ import { motion } from 'framer-motion';
 import { Button } from './ui/button';
 import { Minus, Plus, User, Globe } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from './ui/dialog';
-import { UnifiedTabs } from './ui/unified-tabs';
 
 interface NewRoundModalProps {
   players: Player[];
@@ -28,7 +27,6 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
   setDutchPlayerId,
   open
 }) => {
-  const [gameMode, setGameMode] = useState('local');
   const firstInputRef = useRef<HTMLInputElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -55,38 +53,15 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
     }
   };
 
-  // Ce toggle n'a pas sa place dans ce composant selon le diagnostic
-  const tabOptions = [
-    { 
-      value: "local", 
-      label: "Local",
-      icon: <User className="w-4 h-4" />
-    },
-    { 
-      value: "online", 
-      label: "En ligne",
-      icon: <Globe className="w-4 h-4" />,
-      disabled: true 
-    }
-  ];
-
-  console.log("🗂️ NewRoundModal tabs:", tabOptions, "gameMode:", gameMode);
-
-  const handleModeChange = (value: string) => {
-    if (value === "local") {
-      setGameMode(value);
-    }
-  };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (isSubmitting) return;
-    
+
     setIsSubmitting(true);
-    
+
     onClose();
-    
+
     setTimeout(() => {
       onAddRound();
     }, 10);
@@ -108,16 +83,6 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
         <DialogHeader>
           <DialogTitle className="text-xl">Ajouter une manche</DialogTitle>
         </DialogHeader>
-        
-        {/* Ce toggle doit être supprimé d'ici selon le diagnostic */}
-        <div className="mt-4">
-          <UnifiedTabs 
-            value={gameMode}
-            onValueChange={(v) => v === "local" && setGameMode(v)}
-            options={tabOptions}
-            variant="orange"
-          />
-        </div>
 
         <form onSubmit={handleSubmit} className="mt-4 space-y-4">
           {players.map((player, index) => (
