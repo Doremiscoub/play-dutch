@@ -5,18 +5,18 @@ import { useLocalStorage } from '@/hooks/use-local-storage';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import PageLayout from '@/components/PageLayout';
-import { SignOutButton, useUser } from '@clerk/clerk-react';
 import { ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { toast } from 'sonner';
 import ElevenLabsSetup from '@/components/ElevenLabsSetup';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useAuth } from '@/context/AuthContext';
 
 const SettingsPage = () => {
   const [soundEnabled, setSoundEnabled] = useLocalStorage('dutch_sound_enabled', true);
   const [resetConfirmationOpen, setResetConfirmationOpen] = useState(false);
-  const { user } = useUser();
+  const { user, signOut } = useAuth();
 
   const handleSoundToggle = (value: boolean) => {
     setSoundEnabled(value);
@@ -80,7 +80,7 @@ const SettingsPage = () => {
             </div>
           </div>
 
-          {/* Compte */}
+          {/* Compte - affiché uniquement si un utilisateur est connecté */}
           {user && (
             <div className="vision-card p-6">
               <h2 className="text-xl font-semibold mb-4 text-dutch-blue">Compte</h2>
@@ -88,11 +88,11 @@ const SettingsPage = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="font-medium">{user.fullName || user.username}</p>
-                    <p className="text-sm text-gray-500">{user.primaryEmailAddress?.emailAddress}</p>
+                    <p className="text-sm text-gray-500">{user.firstName} {user.lastName}</p>
                   </div>
-                  <SignOutButton>
-                    <Button variant="outline">Déconnexion</Button>
-                  </SignOutButton>
+                  {signOut && (
+                    <Button variant="outline" onClick={signOut}>Déconnexion</Button>
+                  )}
                 </div>
               </div>
             </div>
