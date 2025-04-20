@@ -1,4 +1,3 @@
-
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
@@ -117,6 +116,9 @@ export default defineConfig(({ mode }) => ({
   },
   optimizeDeps: {
     include: ['@sentry/react', '@sentry/tracing']
+  },
+  ssr: {
+    noExternal: ['@sentry/react', '@sentry/tracing']
   },
   build: {
     commonjsOptions: {

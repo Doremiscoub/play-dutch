@@ -44,6 +44,7 @@
     "@radix-ui/react-tooltip": "^1.1.4",
     "@react-three/drei": "^9.99.5",
     "@react-three/fiber": "^8.15.19",
+    "@sentry/react": "^7.120.3",
     "@sentry/tracing": "^7.86.0",
     "@supabase/supabase-js": "^2.49.4",
     "@tanstack/react-query": "^5.56.2",
