@@ -23,17 +23,22 @@ import ProtectedRoute from './components/ProtectedRoute';
 // Contexte
 import { AuthProvider } from './context/AuthContext';
 
+// Flag pour suivre si la notification a déjà été affichée
+const offlineNotificationDisplayed = { shown: false };
+
 /**
  * Composant principal de l'application
  * Gère le routage et l'initialisation globale
  */
 const App: React.FC = () => {
-  // Notification de mode hors-ligne si détecté
+  // Notification de mode hors-ligne si détecté (une seule fois)
   useEffect(() => {
     try {
       const isOfflineMode = localStorage.getItem('clerk_auth_failed') === 'true';
-      if (isOfflineMode) {
+      // Vérifier si on est en mode hors-ligne ET si la notification n'a pas déjà été affichée
+      if (isOfflineMode && !offlineNotificationDisplayed.shown) {
         toast.info("Mode hors-ligne activé");
+        offlineNotificationDisplayed.shown = true;
       }
     } catch (error) {
       console.error("Erreur lors de la vérification du mode hors-ligne:", error);

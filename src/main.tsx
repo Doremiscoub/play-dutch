@@ -17,7 +17,7 @@ const CLERK_PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY ||
                              'pk_test_YmFsYW5jZWQtYnJlYW0tMjguY2xlcmsuYWNjb3VudHMuZGV2JA'
 
 /**
- * Configure la gestion des erreurs globale pour Clerk
+ * Configure la gestion des erreurs globale pour Clerk sans déclenchement de rechargement
  */
 function setupErrorHandling() {
   // Si l'application est déjà en mode hors-ligne, pas besoin de configurer la gestion d'erreurs
@@ -32,7 +32,7 @@ function setupErrorHandling() {
         (event.reason.message.includes('Clerk') || event.reason.message.includes('ClerkJS'))) {
       console.error("Erreur d'initialisation de Clerk:", event.reason);
       localStorage.setItem('clerk_auth_failed', 'true');
-      window.location.reload();
+      // Ne pas recharger la page - l'état sera pris en compte au prochain rendu
     }
   });
   
@@ -42,7 +42,7 @@ function setupErrorHandling() {
         (event.error.message.includes('Clerk') || event.error.message.includes('ClerkJS'))) {
       console.error("Erreur Clerk détectée:", event.error);
       localStorage.setItem('clerk_auth_failed', 'true');
-      window.location.reload();
+      // Ne pas recharger la page - l'état sera pris en compte au prochain rendu
     }
   });
   
@@ -52,7 +52,7 @@ function setupErrorHandling() {
         !localStorage.getItem('clerk_auth_failed')) {
       console.warn("Clerk n'a pas pu être initialisé dans le délai imparti");
       localStorage.setItem('clerk_auth_failed', 'true');
-      window.location.reload();
+      // Ne pas recharger la page - l'état sera pris en compte au prochain rendu
     }
   }, 2000);
 }
