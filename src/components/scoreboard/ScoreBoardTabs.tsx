@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { ToggleTabs } from '@/components/ui/toggle-tabs';
+import { UnifiedTabs } from '@/components/ui/unified-tabs';
 import { LayoutGrid, LayoutList } from 'lucide-react';
 
 interface ScoreBoardTabsProps {
@@ -24,12 +24,11 @@ const ScoreBoardTabs: React.FC<ScoreBoardTabsProps> = ({ currentView, onViewChan
 
   return (
     <div className="flex justify-center mb-6">
-      <ToggleTabs
+      <UnifiedTabs
         value={currentView}
         onValueChange={onViewChange}
         options={tabOptions}
         variant="default"
-        size="full"
       />
     </div>
   );

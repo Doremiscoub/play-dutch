@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { ToggleTabs } from '@/components/ui/toggle-tabs';
+import { UnifiedTabs } from '@/components/ui/unified-tabs';
 import { User, Globe } from 'lucide-react';
 
 interface GameModeTabsProps {
@@ -13,22 +13,21 @@ const GameModeTabs: React.FC<GameModeTabsProps> = ({ activeTab, onTabChange }) =
     {
       value: "local",
       label: "Local",
-      icon: <User className="w-4 h-4" />
+      icon: <User className="h-4 w-4" />
     },
     {
       value: "online",
       label: "En ligne",
-      icon: <Globe className="w-4 h-4" />,
+      icon: <Globe className="h-4 w-4" />,
     }
   ];
 
   return (
-    <ToggleTabs
+    <UnifiedTabs
       value={activeTab}
       onValueChange={onTabChange}
       options={tabOptions}
       variant="orange"
-      size="full"
     />
   );
 };

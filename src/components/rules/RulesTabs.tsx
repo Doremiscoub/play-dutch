@@ -1,11 +1,11 @@
 
 import React from 'react';
-import { ToggleTabs } from '@/components/ui/toggle-tabs';
+import { Tabs, TabsContent } from '@/components/ui/tabs';
+import { UnifiedTabs } from '@/components/ui/unified-tabs';
 import IntroductionTab from './IntroductionTab';
 import SetupTab from './SetupTab';
 import GameplayTab from './GameplayTab';
 import SpecialCardsTab from './SpecialCardsTab';
-import { Tabs, TabsContent } from '@/components/ui/tabs';
 
 interface RulesTabsProps {
   activeTab: string;
@@ -22,7 +22,7 @@ const RulesTabs: React.FC<RulesTabsProps> = ({ activeTab, onTabChange }) => {
 
   return (
     <Tabs value={activeTab} onValueChange={onTabChange}>
-      <ToggleTabs
+      <UnifiedTabs
         value={activeTab}
         onValueChange={onTabChange}
         options={tabOptions}
