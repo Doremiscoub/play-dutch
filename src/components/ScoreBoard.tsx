@@ -10,6 +10,7 @@ import PageLayout from '@/components/PageLayout';
 import CustomScoreBoardButtons from './CustomScoreBoardButtons';
 import ScoreTableView from './ScoreTableView';
 import AICommentator from './AICommentator';
+import AdSenseSlot from './ads/AdSenseSlot';
 
 // Import des composants modulaires
 import ScoreBoardHeader from './scoreboard/ScoreBoardHeader';
@@ -112,44 +113,53 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
           onViewChange={(newView) => setView(newView)}
         />
         
-        {/* Contenu principal */}
+        {/* Contenu principal avec stats et publicité */}
         <div className={`mt-4 ${isDesktop ? 'md:flex md:gap-4' : ''}`}>
           {/* Colonne de gauche (classement ou tableau) - responsive */}
-          <div className={`${isDesktop ? 'md:w-3/4' : 'w-full'} z-20 relative`}>
-            <AnimatePresence mode="wait">
-              {view === 'list' && (
-                <motion.div
-                  key="list-view"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="w-full"
-                >
-                  {/* Vue liste des joueurs avec cartes dépliables */}
-                  <PlayerListView 
-                    players={players}
-                    isDesktop={isDesktop}
-                    scoreLimit={scoreLimit}
-                    onPlayerSelect={handlePlayerSelect}
-                  />
-                </motion.div>
-              )}
-              
-              {view === 'table' && (
-                <motion.div
-                  key="table-view"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="bg-white/90 backdrop-blur-sm p-4 rounded-2xl shadow-lg border border-white"
-                >
-                  <ScoreTableView 
-                    players={players}
-                    roundHistory={roundHistory || []}
-                  />
-                </motion.div>
-              )}
-            </AnimatePresence>
+          <div className="flex flex-col md:flex-row items-start md:items-stretch gap-4">
+            <div className="flex-1 w-full">
+              <AnimatePresence mode="wait">
+                {view === 'list' && (
+                  <motion.div
+                    key="list-view"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="w-full"
+                  >
+                    <PlayerListView 
+                      players={players}
+                      isDesktop={isDesktop}
+                      scoreLimit={scoreLimit}
+                      onPlayerSelect={handlePlayerSelect}
+                    />
+                  </motion.div>
+                )}
+                
+                {view === 'table' && (
+                  <motion.div
+                    key="table-view"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="bg-white/90 backdrop-blur-sm p-4 rounded-2xl shadow-lg border border-white"
+                  >
+                    <ScoreTableView 
+                      players={players}
+                      roundHistory={roundHistory || []}
+                    />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+            
+            {/* Encart publicitaire - responsive */}
+            <div className="w-full md:w-1/3 md:max-w-xs">
+              <AdSenseSlot
+                adSlot="8421933386"
+                className="sticky top-4"
+              />
+            </div>
           </div>
           
           {/* Panneau statistique de droite (desktop uniquement) */}
