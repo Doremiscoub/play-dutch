@@ -30,7 +30,7 @@ const AdSenseSlot: React.FC = () => {
           try {
             if (window.adsbygoogle && adRef.current) {
               console.info('Insertion de la publicité AdSense');
-              // @ts-expect-error: adsbygoogle injected by AdSense
+              // Initialisation de l'array si nécessaire
               (window.adsbygoogle = window.adsbygoogle || []).push({});
               setIsAdInjected(true);
             }
