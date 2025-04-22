@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef } from 'react';
 import { useGameState } from '@/hooks/useGameState';
 import GameContent from '@/components/GameContent';
@@ -163,4 +162,3 @@ const GamePage: React.FC = () => {
 };
 
 export default GamePage;
-
