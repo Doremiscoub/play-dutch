@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useGameState } from '@/hooks/useGameState';
 import GameContent from '@/components/GameContent';
 import { updateAllPlayersStats } from '@/utils/playerStatsCalculator';
