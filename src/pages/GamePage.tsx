@@ -1,9 +1,9 @@
-
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useGameState } from '@/hooks/useGameState';
 import GameContent from '@/components/GameContent';
 import { updateAllPlayersStats } from '@/utils/playerStatsCalculator';
 import { toast } from 'sonner';
+import AdSenseSlot from '@/components/AdSenseSlot';
 
 const GamePage: React.FC = () => {
   const {
@@ -19,12 +19,10 @@ const GamePage: React.FC = () => {
     handleCancelEndGame,
     handleContinueGame,
     handleRestart,
-    createNewGame,  // Ajout de la fonction createNewGame
+    createNewGame,
   } = useGameState();
-  
-  // Initialiser le jeu au chargement du composant
+
   useEffect(() => {
-    // Si aucun joueur n'est présent, tenter de créer une nouvelle partie
     if (!players || players.length === 0) {
       console.info("Aucun joueur trouvé, tentative de création d'une nouvelle partie...");
       const success = createNewGame();
@@ -39,8 +37,7 @@ const GamePage: React.FC = () => {
       console.info("Partie existante détectée avec", players.length, "joueurs");
     }
   }, [createNewGame, players.length]);
-  
-  // Check for long inactivity
+
   useEffect(() => {
     const savedGame = localStorage.getItem('current_dutch_game');
     if (savedGame) {
@@ -63,25 +60,48 @@ const GamePage: React.FC = () => {
       }
     }
   }, [handleRestart]);
-  
-  // Apply stats to players
+
   const playersWithStats = updateAllPlayersStats(players);
-  
+
   return (
-    <GameContent
-      players={playersWithStats}
-      roundHistory={roundHistory}
-      showGameOver={showGameOver}
-      showGameEndConfirmation={showGameEndConfirmation}
-      scoreLimit={scoreLimit}
-      onAddRound={handleAddRound}
-      onUndoLastRound={handleUndoLastRound}
-      onRequestEndGame={handleRequestEndGame}
-      onConfirmEndGame={handleConfirmEndGame}
-      onCancelEndGame={handleCancelEndGame}
-      onContinueGame={handleContinueGame}
-      onRestart={handleRestart}
-    />
+    <>
+      <div className="hidden lg:grid lg:grid-cols-[1fr_auto_1fr] lg:gap-6">
+        <div />
+        <main className="mx-auto max-w-screen-lg w-full">
+          <GameContent
+            players={playersWithStats}
+            roundHistory={roundHistory}
+            showGameOver={showGameOver}
+            showGameEndConfirmation={showGameEndConfirmation}
+            scoreLimit={scoreLimit}
+            onAddRound={handleAddRound}
+            onUndoLastRound={handleUndoLastRound}
+            onRequestEndGame={handleRequestEndGame}
+            onConfirmEndGame={handleConfirmEndGame}
+            onCancelEndGame={handleCancelEndGame}
+            onContinueGame={handleContinueGame}
+            onRestart={handleRestart}
+          />
+        </main>
+        <AdSenseSlot />
+      </div>
+      <div className="lg:hidden">
+        <GameContent
+          players={playersWithStats}
+          roundHistory={roundHistory}
+          showGameOver={showGameOver}
+          showGameEndConfirmation={showGameEndConfirmation}
+          scoreLimit={scoreLimit}
+          onAddRound={handleAddRound}
+          onUndoLastRound={handleUndoLastRound}
+          onRequestEndGame={handleRequestEndGame}
+          onConfirmEndGame={handleConfirmEndGame}
+          onCancelEndGame={handleCancelEndGame}
+          onContinueGame={handleContinueGame}
+          onRestart={handleRestart}
+        />
+      </div>
+    </>
   );
 };
 
