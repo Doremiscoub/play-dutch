@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -16,12 +15,10 @@ const Home: React.FC = () => {
   const [hasSavedGame, setHasSavedGame] = useState<boolean>(false);
 
   useEffect(() => {
-    // Vérifier s'il existe une partie sauvegardée
     const savedGame = localStorage.getItem('current_dutch_game');
     setHasSavedGame(!!savedGame);
   }, []);
 
-  // Variants pour les animations Framer Motion
   const buttonVariants = {
     hover: { 
       scale: 1.05,
@@ -33,7 +30,6 @@ const Home: React.FC = () => {
     }
   };
 
-  // SVG du sparkle pour le logo Dutch
   const SparkleIcon = () => (
     <svg 
       width="28" 
@@ -55,7 +51,6 @@ const Home: React.FC = () => {
     </svg>
   );
 
-  // Afficher un loader pendant que l'authentification charge
   if (!isLoaded) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -69,37 +64,34 @@ const Home: React.FC = () => {
 
   return (
     <div className="min-h-screen relative overflow-hidden">
-      {/* Fond animé avec vagues fluides */}
       <div className="absolute inset-0">
         <AnimatedBackground />
       </div>
       
-      {/* Contenu principal */}
       <div className="relative z-10 container mx-auto px-3 py-16 flex flex-col min-h-screen">
         <header className="mb-auto">
-          {/* Supprimer le sélecteur de thème en haut à droite */}
         </header>
         
         <main className="flex-1 flex flex-col items-center justify-center text-center">
-          {/* Logo et titre */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             className="mb-12"
           >
-            <h1 className="text-6xl sm:text-7xl font-bold bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent mb-2 relative">
-              Dutch
+            <h1 className="relative text-6xl sm:text-7xl font-bold mb-2">
+              <span className="absolute -inset-1 block rounded-lg bg-gradient-to-br from-dutch-blue/20 via-dutch-purple/20 to-dutch-orange/20 blur-xl" />
+              <span className="relative block bg-gradient-to-br from-dutch-blue via-dutch-purple to-dutch-orange bg-clip-text text-transparent drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.3)] animate-shimmer">
+                Dutch
+              </span>
               <SparkleIcon />
             </h1>
             <p className="text-gray-600">Votre compagnon de jeu</p>
           </motion.div>
           
-          {/* Boutons principaux */}
           <div className="w-full max-w-xs space-y-4">
             {isLoaded && (
               <>
-                {/* Utilisateur connecté */}
                 {isSignedIn ? (
                   <>
                     <motion.div
@@ -136,7 +128,6 @@ const Home: React.FC = () => {
                   </>
                 ) : (
                   <>
-                    {/* Utilisateur non connecté */}
                     <motion.div
                       variants={buttonVariants}
                       whileHover="hover"
@@ -179,7 +170,6 @@ const Home: React.FC = () => {
               </>
             )}
             
-            {/* Boutons secondaires */}
             <div className="pt-4 flex flex-wrap justify-center gap-2">
               <TooltipProvider>
                 <Tooltip>

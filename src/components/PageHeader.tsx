@@ -1,11 +1,11 @@
 
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { ArrowLeft, Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 
 interface PageHeaderProps {
-  title: string;
+  title: ReactNode;
   onBack?: () => void;
   showSettings?: boolean;
   onSettings?: () => void;

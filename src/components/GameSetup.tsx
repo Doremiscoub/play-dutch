@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
@@ -17,7 +16,6 @@ const GameSetup: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   useEffect(() => {
-    // Nettoyer l'état précédent au montage pour éviter des problèmes
     cleanupGameState();
     clearPlayerSetup();
     console.info("Configuration de jeu nettoyée au montage du composant GameSetup");
@@ -41,18 +39,14 @@ const GameSetup: React.FC = () => {
         return;
       }
       
-      // Enregistrer les noms dans localStorage
       localStorage.setItem('dutch_player_setup', JSON.stringify(playerNames));
       console.info('Configuration des joueurs sauvegardée dans localStorage');
       
-      // Option 1 : Utiliser l'URL pour transmettre les noms des joueurs
       const playersQueryParam = encodeURIComponent(JSON.stringify(playerNames));
       console.info('Redirection vers /game avec les paramètres des joueurs');
       
-      // Ajouter un petit délai pour s'assurer que le localStorage est bien mis à jour
       setTimeout(() => {
         navigate(`/game?players=${playersQueryParam}&new=true`);
-        // Réinitialiser l'état de soumission après la navigation
         setIsSubmitting(false);
       }, 300);
     } catch (error) {
@@ -75,7 +69,14 @@ const GameSetup: React.FC = () => {
         transition={{ duration: 0.5 }}
       >
         <PageHeader 
-          title="Nouvelle Partie"
+          title={
+            <span className="relative text-2xl sm:text-3xl font-black tracking-tight">
+              <span className="absolute -inset-1 block rounded-lg bg-gradient-to-br from-dutch-blue/20 via-dutch-purple/20 to-dutch-orange/20 blur-xl" />
+              <span className="relative block bg-gradient-to-br from-dutch-blue via-dutch-purple to-dutch-orange bg-clip-text text-transparent drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.3)] animate-shimmer">
+                Nouvelle Partie
+              </span>
+            </span>
+          }
           onBack={() => navigate('/')}
         />
         
