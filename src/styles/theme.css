@@ -5,8 +5,7 @@
 @layer components {
   /* VisionOS UI Classes */
   .vision-card {
-    @apply rounded-3xl bg-white/70 backdrop-blur-xl border border-white/50 shadow-sm;
-    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    @apply rounded-3xl border border-white/50 bg-white/80 backdrop-blur-xl shadow-sm hover:shadow-md transition-all duration-300;
   }
 
   .vision-card:hover {
@@ -14,8 +13,7 @@
   }
 
   .vision-button {
-    @apply rounded-2xl bg-white/80 backdrop-blur-xl border border-white/60 shadow-sm;
-    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    @apply rounded-xl bg-white/70 backdrop-blur-xl border border-white/50 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0.5;
   }
 
   .vision-button:hover {
@@ -27,8 +25,7 @@
   }
 
   .vision-input {
-    @apply rounded-2xl bg-white/70 backdrop-blur-xl border border-white/50 px-4 py-2;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    @apply rounded-xl bg-white/60 backdrop-blur-xl border border-white/40 shadow-sm hover:shadow-md transition-all duration-300;
   }
 
   .vision-input:focus {

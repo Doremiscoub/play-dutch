@@ -6,6 +6,7 @@ import PlayerCountSelector from './PlayerCountSelector';
 import { usePlayerNames } from '@/hooks/usePlayerNames';
 import { motion } from 'framer-motion';
 import { CardContent } from '@/components/ui/card';
+import { Play } from 'lucide-react';
 
 interface LocalGameSetupProps {
   onStartGame: (playerNames: string[]) => void;
@@ -42,10 +43,8 @@ const LocalGameSetup: React.FC<LocalGameSetupProps> = ({ onStartGame }) => {
       );
       
       localStorage.setItem('dutch_player_setup', JSON.stringify(validPlayerNames));
+      onStartGame(validPlayerNames);
       
-      setTimeout(() => {
-        onStartGame(validPlayerNames);
-      }, 100);
     } catch (error) {
       console.error("Erreur lors de la configuration des joueurs:", error);
       setIsSubmitting(false);
@@ -68,7 +67,7 @@ const LocalGameSetup: React.FC<LocalGameSetupProps> = ({ onStartGame }) => {
       
       <form onSubmit={handleSubmit} className="space-y-6">
         <motion.div 
-          className="space-y-2"
+          className="space-y-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
@@ -93,9 +92,10 @@ const LocalGameSetup: React.FC<LocalGameSetupProps> = ({ onStartGame }) => {
         >
           <Button 
             type="submit" 
-            className="w-full bg-gradient-to-r from-dutch-blue to-dutch-purple text-white rounded-full h-14 font-medium shadow-md hover:shadow-lg transition-all"
+            className="w-full h-14 bg-gradient-to-r from-dutch-blue to-dutch-purple text-white rounded-xl font-medium shadow-md hover:shadow-lg transition-all hover:-translate-y-0.5 active:translate-y-0.5 flex items-center justify-center gap-2"
             disabled={isSubmitting}
           >
+            <Play className="h-5 w-5" />
             {isSubmitting ? 'Création...' : 'Commencer la partie'}
           </Button>
         </motion.div>

@@ -18,12 +18,12 @@ const LocalGameSetupContainer: React.FC<LocalGameSetupContainerProps> = memo(({ 
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
     >
-      <Card className="rounded-3xl border border-white/50 bg-white/80 backdrop-blur-xl shadow-sm">
+      <Card className="vision-card">
         <SetupHeader />
         <SetupInfo />
       </Card>
 
-      <Card className="rounded-3xl border border-white/50 bg-white/90 backdrop-blur-xl shadow-md">
+      <Card className="vision-card">
         <LocalGameSetup onStartGame={onStartGame} />
       </Card>
     </motion.div>
