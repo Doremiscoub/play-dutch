@@ -72,11 +72,11 @@ export default function ProfessorAvatar({
         )}
         <AvatarFallback 
           className={cn(
-            "text-2xl bg-gradient-to-r from-dutch-blue to-dutch-purple text-white",
+            "text-4xl bg-gradient-to-r from-dutch-blue to-dutch-purple text-white",
             isHovered && 'bg-gradient-to-r from-dutch-purple to-dutch-blue'
           )}
         >
-          👨‍🏫
+          👴🏼
         </AvatarFallback>
       </Avatar>
 
@@ -92,3 +92,4 @@ export default function ProfessorAvatar({
     </motion.div>
   );
 }
+
