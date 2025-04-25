@@ -1,3 +1,4 @@
+
 /**
  * Page principale de jeu avec gestion des états et tentatives de récupération
  */
@@ -20,6 +21,7 @@ const GamePage: React.FC = () => {
   const { isSignedIn } = useAuth();
   const [adsEnabled] = useLocalStorage('dutch_ads_enabled', true);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [initializationAttempted, setInitializationAttempted] = useState<boolean>(false);
   
   const {
     players,
