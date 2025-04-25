@@ -81,6 +81,7 @@ export const useGameInitialization = () => {
             // Nettoyage après initialisation réussie
             clearPlayerSetup();
             
+            // Un seul toast de succès
             toast.success('Nouvelle partie créée !');
             return true;
           } else {
@@ -106,6 +107,9 @@ export const useGameInitialization = () => {
         initializationAttempted.current = false;
         initializationInProgress.current = false;
         
+        // Un seul toast d'erreur
+        toast.error('Configuration des joueurs invalide');
+        
         // Redirection uniquement si c'est la première tentative d'initialisation
         navigate('/game/setup');
         return false;
@@ -118,6 +122,9 @@ export const useGameInitialization = () => {
         // Nettoyer les flags et états
         initializationAttempted.current = false;
         initializationInProgress.current = false;
+        
+        // Un seul toast d'erreur
+        toast.error('Il faut au moins 2 joueurs pour démarrer une partie');
         
         // Redirection uniquement si c'est la première tentative d'initialisation
         navigate('/game/setup');
@@ -133,6 +140,7 @@ export const useGameInitialization = () => {
       initializationCompleted.current = true;
       initializationInProgress.current = false;
       
+      // Un seul toast de succès
       toast.success('Nouvelle partie créée !');
       return true;
     } catch (error) {

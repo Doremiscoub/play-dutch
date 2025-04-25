@@ -1,3 +1,4 @@
+
 /**
  * Page principale de jeu avec gestion des états et tentatives de récupération
  */
@@ -19,6 +20,7 @@ const GamePage: React.FC = () => {
   const { isSignedIn } = useAuth();
   const [adsEnabled] = useLocalStorage('dutch_ads_enabled', true);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [initializationAttempted, setInitializationAttempted] = useState(false);
   
   const {
     players,
@@ -39,9 +41,15 @@ const GamePage: React.FC = () => {
   // Initialiser le jeu au chargement du composant avec gestion d'erreur améliorée
   useEffect(() => {
     const initializeGame = async () => {
+      // Ne pas réinitialiser si déjà tenté
+      if (initializationAttempted) {
+        return;
+      }
+      
       // Afficher un indicateur de chargement
       setIsInitializing(true);
       setInitError(null);
+      setInitializationAttempted(true);
       
       try {
         // Si aucun joueur n'est présent, tenter de créer une nouvelle partie
@@ -52,13 +60,14 @@ const GamePage: React.FC = () => {
           if (!success) {
             console.error("Échec de l'initialisation du jeu");
             setInitError("Impossible de démarrer la partie. Veuillez configurer les joueurs.");
-            toast.error("Impossible de démarrer la partie");
+            // Ne pas afficher de toast ici, on laisse le createNewGame gérer ses propres notifications
           } else {
-            console.info("Jeu initialisé avec succès avec", players.length, "joueurs");
-            toast.success("Partie chargée avec succès");
+            console.info("Jeu initialisé avec succès avec", players?.length || 0, "joueurs");
+            // Ne pas afficher de toast ici non plus, évite les doublons
           }
         } else {
           console.info("Partie existante détectée avec", players.length, "joueurs");
+          // Pas besoin d'un toast ici, la partie est déjà chargée
         }
       } catch (error) {
         console.error("Erreur lors de l'initialisation du jeu:", error);
@@ -71,7 +80,7 @@ const GamePage: React.FC = () => {
     };
     
     initializeGame();
-  }, [createNewGame, players?.length]);
+  }, [createNewGame, players]);
   
   // Marquer comme chargé après un court délai pour assurer la stabilité
   useEffect(() => {
@@ -166,7 +175,10 @@ const GamePage: React.FC = () => {
               Configurer une partie
             </button>
             <button 
-              onClick={() => window.location.reload()}
+              onClick={() => {
+                setInitializationAttempted(false);
+                window.location.reload();
+              }}
               className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors"
             >
               Réessayer
