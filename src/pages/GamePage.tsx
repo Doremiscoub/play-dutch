@@ -9,11 +9,15 @@ import { updateAllPlayersStats } from '@/utils/playerStatsCalculator';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import AdSenseSlot from '@/components/AdSenseSlot';
+import { useLocalStorage } from '@/hooks/use-local-storage';
 
 const GamePage: React.FC = () => {
   const navigate = useNavigate();
   const [isInitializing, setIsInitializing] = useState<boolean>(true);
   const [initError, setInitError] = useState<string | null>(null);
+  const [adsEnabled] = useLocalStorage('dutch_ads_enabled', true);
+  const [isLoaded, setIsLoaded] = useState(false);
   
   const {
     players,
@@ -68,6 +72,17 @@ const GamePage: React.FC = () => {
     initializeGame();
   }, [createNewGame, players?.length]);
   
+  // Marquer comme chargé après un court délai pour assurer la stabilité
+  useEffect(() => {
+    if (!isInitializing && !initError) {
+      const timer = setTimeout(() => {
+        setIsLoaded(true);
+      }, 500);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [isInitializing, initError]);
+
   // Check for long inactivity with improved error handling
   useEffect(() => {
     try {
@@ -161,21 +176,45 @@ const GamePage: React.FC = () => {
     );
   }
 
+  // Layout avec support pour AdSense
   return (
-    <GameContent
-      players={playersWithStats}
-      roundHistory={roundHistory}
-      showGameOver={showGameOver}
-      showGameEndConfirmation={showGameEndConfirmation}
-      scoreLimit={scoreLimit}
-      onAddRound={handleAddRound}
-      onUndoLastRound={handleUndoLastRound}
-      onRequestEndGame={handleRequestEndGame}
-      onConfirmEndGame={handleConfirmEndGame}
-      onCancelEndGame={handleCancelEndGame}
-      onContinueGame={handleContinueGame}
-      onRestart={handleRestart}
-    />
+    <div className="w-full max-w-screen-2xl mx-auto px-2 flex flex-col lg:flex-row">
+      {/* Colonne de gauche (visible uniquement sur desktop) */}
+      <div className="hidden lg:block lg:w-1/6 relative">
+        {/* Espace réservé pour du contenu futur */}
+      </div>
+      
+      {/* Contenu principal (ScoreBoard) */}
+      <div className="flex-grow lg:w-4/6">
+        <GameContent
+          players={playersWithStats}
+          roundHistory={roundHistory}
+          showGameOver={showGameOver}
+          showGameEndConfirmation={showGameEndConfirmation}
+          scoreLimit={scoreLimit}
+          onAddRound={handleAddRound}
+          onUndoLastRound={handleUndoLastRound}
+          onRequestEndGame={handleRequestEndGame}
+          onConfirmEndGame={handleConfirmEndGame}
+          onCancelEndGame={handleCancelEndGame}
+          onContinueGame={handleContinueGame}
+          onRestart={handleRestart}
+        />
+      </div>
+      
+      {/* Colonne de droite avec AdSense (visible uniquement sur desktop) */}
+      <div className="hidden lg:block lg:w-1/6 relative">
+        {adsEnabled && isLoaded && (
+          <div className="sticky top-24 w-60 mx-auto">
+            <AdSenseSlot
+              adClient="ca-pub-XXXXXXXXXXXXXXXX" // Remplacer avec l'ID AdSense réel
+              adSlot="XXXXXXXXXX" // Remplacer avec l'ID de l'emplacement
+              className="mt-4"
+            />
+          </div>
+        )}
+      </div>
+    </div>
   );
 };
 
