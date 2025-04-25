@@ -8,9 +8,19 @@ interface PlayerProfileProps {
   position: number;
 }
 
-export const PlayerProfile: React.FC<PlayerProfileProps> = ({ player, position }) => {
+interface ProfileData {
+  profile: string;
+  icon: JSX.Element;
+  colorClass: string;
+}
+
+export const PlayerProfile = ({ player, position }: PlayerProfileProps): ProfileData => {
   const stats = player.stats;
-  if (!stats) return null;
+  if (!stats) return {
+    profile: 'Joueur',
+    icon: <Cpu className="h-4 w-4 mr-1 text-gray-500" />,
+    colorClass: 'text-gray-500'
+  };
   
   const consistencyScore = stats.consistencyScore || 0;
   const dutchCount = stats.dutchCount || 0;

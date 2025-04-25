@@ -8,6 +8,7 @@ import { getScoreColorClass } from '@/utils/gameUtils';
 import { PlayerComment } from './game/PlayerComment';
 import { PlayerProfile } from './game/PlayerProfile';
 import { getScoreCardContainerClass, getPositionBadgeClass } from './game/scoreCardStyles';
+import { cn } from '@/lib/utils';
 
 interface PlayerScoreCardProps {
   player: Player;
