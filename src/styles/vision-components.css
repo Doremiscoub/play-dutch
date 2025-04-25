@@ -1,0 +1,38 @@
+
+@layer components {
+  /* VisionOS UI Classes */
+  .vision-card {
+    @apply rounded-3xl bg-white/70 backdrop-blur-xl border border-white/50 shadow-sm;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .vision-card:hover {
+    @apply shadow-md bg-white/80 transform-gpu -translate-y-0.5;
+  }
+
+  .vision-button {
+    @apply rounded-2xl bg-white/80 backdrop-blur-xl border border-white/60 shadow-sm;
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .vision-button:hover {
+    @apply shadow-md bg-white/90 transform-gpu -translate-y-0.5;
+  }
+
+  .vision-button:active {
+    @apply transform-gpu translate-y-0.5 shadow-sm;
+  }
+
+  .vision-input {
+    @apply rounded-2xl bg-white/70 backdrop-blur-xl border border-white/50 px-4 py-2;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .vision-input:focus {
+    @apply outline-none ring-2 ring-dutch-blue/20 border-dutch-blue/40;
+  }
+
+  .vision-header {
+    @apply bg-white/60 backdrop-blur-xl border-b border-white/30 shadow-sm;
+  }
+}

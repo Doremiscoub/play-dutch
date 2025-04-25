@@ -1,15 +1,11 @@
 
-/**
- * Export centralisé des configurations de thème
- */
-export * from './colors';
-export * from './typography';
-export * from './layout';
-export * from './animations';
-export * from './components';
-export * from './themes';
+import { COLORS } from './colors';
+import { TYPOGRAPHY } from './typography';
+import { SPACING, BORDERS, SHADOWS } from './layout';
+import { ANIMATIONS } from './animations';
+import { GLASS, COMPONENT_STYLES } from './components';
+import { THEMES } from './themes';
 
-// Valeurs Z-index
 export const Z_INDEX = {
   behind: -1,
   base: 0,
@@ -42,7 +38,20 @@ export const BACKGROUND_CONFIG = {
   },
 };
 
-// Configuration par défaut
+// Export all theme configurations
+export {
+  COLORS,
+  TYPOGRAPHY,
+  SPACING,
+  BORDERS,
+  SHADOWS,
+  ANIMATIONS,
+  GLASS,
+  THEMES,
+  COMPONENT_STYLES,
+};
+
+// Export default configuration
 export default {
   COLORS,
   TYPOGRAPHY,
@@ -56,4 +65,3 @@ export default {
   THEMES,
   COMPONENT_STYLES,
 };
-

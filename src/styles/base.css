@@ -1,0 +1,33 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Variables de couleur Dutch - Style iOS 19 */
+    --dutch-primary: #0A84FF;
+    --dutch-secondary: #5856D6;
+    --dutch-accent: #FF9F0A;
+    --dutch-background: #F2F2F7;
+    
+    /* Bordures */
+    --radius: 1.5rem;
+    --border: 210 40% 96.1%;
+    --input: 214 32% 91%;
+    --ring: 222.2 84% 4.9%;
+    
+    /* Couleurs de base */
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04";
+  }
+}
