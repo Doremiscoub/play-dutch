@@ -1,6 +1,7 @@
 
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 interface ErrorDisplayProps {
   error: string;
@@ -20,18 +21,19 @@ const ErrorDisplay: React.FC<ErrorDisplayProps> = ({ error, onRetry }) => {
         <h2 className="text-xl font-semibold text-red-600 mb-3">Échec du chargement</h2>
         <p className="text-gray-700 mb-4">{error}</p>
         <div className="flex gap-3 justify-center">
-          <button 
+          <Button 
             onClick={() => navigate('/game/setup')}
             className="px-4 py-2 bg-dutch-blue text-white rounded-lg hover:bg-dutch-blue/90 transition-colors"
           >
             Configurer une partie
-          </button>
-          <button 
+          </Button>
+          <Button 
             onClick={onRetry}
-            className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors"
+            variant="outline"
+            className="px-4 py-2 rounded-lg transition-colors"
           >
             Réessayer
-          </button>
+          </Button>
         </div>
       </motion.div>
     </div>

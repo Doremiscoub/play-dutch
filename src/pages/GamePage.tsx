@@ -39,6 +39,22 @@ const GamePage: React.FC = () => {
     createNewGame,
   } = useGameState();
   
+  // Fonction de debug pour vérifier l'état du localStorage
+  const debugLocalStorage = () => {
+    try {
+      const playerSetup = localStorage.getItem('dutch_player_setup');
+      console.info("Debug - État dutch_player_setup:", playerSetup);
+      
+      const currentGame = localStorage.getItem('current_dutch_game');
+      console.info("Debug - État current_dutch_game:", currentGame ? "Présent" : "Absent");
+      
+      return !!playerSetup;
+    } catch (error) {
+      console.error("Erreur lors du debug localStorage:", error);
+      return false;
+    }
+  };
+  
   useEffect(() => {
     const initializeGame = async () => {
       if (initializationAttempted) {
@@ -50,6 +66,9 @@ const GamePage: React.FC = () => {
       setInitializationAttempted(true);
       
       try {
+        // Debug pour voir l'état du localStorage
+        const hasSetup = debugLocalStorage();
+        
         if (!players || players.length === 0) {
           console.info("Aucun joueur trouvé, tentative de création d'une nouvelle partie...");
           const success = createNewGame();
@@ -57,6 +76,9 @@ const GamePage: React.FC = () => {
           if (!success) {
             console.error("Échec de l'initialisation du jeu");
             setInitError("Impossible de démarrer la partie. Veuillez configurer les joueurs.");
+            toast.error("Impossible de démarrer la partie");
+          } else {
+            console.info("Nouvelle partie créée avec succès");
           }
         } else {
           console.info("Partie existante détectée avec", players.length, "joueurs");

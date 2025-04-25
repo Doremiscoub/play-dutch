@@ -51,11 +51,14 @@ export const useGameInitialization = () => {
       const playersParam = searchParams.get('players');
       const isNewGame = searchParams.get('new') === 'true';
       
+      console.info('Paramètres URL:', { playersParam, isNewGame });
+      
       // Si les données sont dans l'URL et c'est une nouvelle partie
       if (playersParam && isNewGame) {
         console.info('Initialisation depuis les paramètres URL');
         try {
           const playerNames = JSON.parse(decodeURIComponent(playersParam));
+          console.info('Noms des joueurs depuis URL:', playerNames);
           
           if (Array.isArray(playerNames) && playerNames.length >= 2) {
             // Créer les joueurs directement depuis les paramètres URL
@@ -96,6 +99,10 @@ export const useGameInitialization = () => {
       // 2. Méthode de secours: initialisation via localStorage
       console.info('Tentative d\'initialisation via localStorage');
       
+      // Debug: afficher le contenu de localStorage
+      const playerSetup = localStorage.getItem('dutch_player_setup');
+      console.info('État dutch_player_setup:', playerSetup);
+      
       // Verify setup exists before initializing
       const setupValid = verifyPlayerSetup();
       console.info('Vérification de la configuration localStorage:', setupValid ? 'VALIDE' : 'INVALIDE');
@@ -108,7 +115,7 @@ export const useGameInitialization = () => {
         initializationInProgress.current = false;
         
         // Redirection vers la page de configuration sans afficher de toast
-        // Le toast sera affiché par la page de configuration
+        toast.error('Configuration des joueurs manquante');
         navigate('/game/setup', { replace: true });
         return false;
       }
@@ -122,7 +129,7 @@ export const useGameInitialization = () => {
         initializationInProgress.current = false;
         
         // Redirection vers la page de configuration sans afficher de toast
-        // Le toast sera affiché par la page de configuration si nécessaire
+        toast.error('Au moins 2 joueurs sont nécessaires');
         navigate('/game/setup', { replace: true });
         return false;
       }
@@ -145,6 +152,7 @@ export const useGameInitialization = () => {
       // Nettoyer les flags et états
       initializationAttempted.current = false;
       initializationInProgress.current = false;
+      toast.error("Erreur lors de la création de la partie");
       
       // On évite de faire une redirection automatique en cas d'erreur
       // pour permettre à l'utilisateur de réessayer
