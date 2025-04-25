@@ -1,5 +1,4 @@
-
-import themeConfig, { 
+import { 
   COLORS, 
   SPACING, 
   TYPOGRAPHY, 
@@ -78,7 +77,7 @@ export const UI_CONFIG = {
 
 // Styles communs réutilisables - Style VisionOS
 export const COMMON_STYLES = {
-  mainButton: "rounded-2xl bg-white/70 backdrop-blur-xl border border-white/50 shadow-sm hover:bg-white/80 transition-all hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-none py-3 px-6 font-medium",
+  mainButton: "rounded-2xl bg-white/70 backdrop-blur-xl border border-white/50 shadow-sm hover:bg-white/80 transition-all hover:-translate-y-0.5 active:translate-y-0.5 py-3 px-6 font-medium",
   cardBase: "rounded-3xl bg-white/70 backdrop-blur-xl border border-white/50 shadow-sm p-5",
   cardWithHover: "rounded-3xl bg-white/70 backdrop-blur-xl border border-white/50 shadow-sm p-5 transition-all hover:shadow-md hover:-translate-y-0.5 hover:bg-white/80",
   iconButtonBase: 'rounded-full h-12 w-12 flex items-center justify-center bg-white/70 backdrop-blur-xl border border-white/50 shadow-sm hover:bg-white/80 transition-all hover:-translate-y-0.5 active:translate-y-0.5',
