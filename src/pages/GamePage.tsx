@@ -1,17 +1,16 @@
-
 /**
  * Page principale de jeu avec gestion des états et tentatives de récupération
  */
 import React, { useEffect, useState } from 'react';
 import { useGameState } from '@/hooks/useGameState';
 import GameContent from '@/components/GameContent';
-import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import AdSenseSlot from '@/components/AdSenseSlot';
 import { useLocalStorage } from '@/hooks/use-local-storage';
 import { useAuth } from '@/context/AuthContext';
 import { updateAllPlayersStats } from '@/utils/playerStatsCalculator';
+import LoadingSpinner from '@/components/game/LoadingSpinner';
+import ErrorDisplay from '@/components/game/ErrorDisplay';
+import AdSenseLayout from '@/components/game/AdSenseLayout';
 
 const GamePage: React.FC = () => {
   const navigate = useNavigate();
@@ -138,104 +137,44 @@ const GamePage: React.FC = () => {
   
   // État de chargement
   if (isInitializing) {
-    return (
-      <div className="flex items-center justify-center min-h-screen p-4">
-        <motion.div 
-          initial={{ opacity: 0 }} 
-          animate={{ opacity: 1 }}
-          className="text-center"
-        >
-          <div className="w-16 h-16 border-4 border-dutch-blue/20 border-t-dutch-blue rounded-full mx-auto mb-4 animate-spin"></div>
-          <p className="text-gray-600">Chargement de la partie...</p>
-        </motion.div>
-      </div>
-    );
+    return <LoadingSpinner />;
   }
   
   // Gestion d'erreur
   if (initError) {
     return (
-      <div className="flex items-center justify-center min-h-screen p-4">
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }} 
-          animate={{ opacity: 1, y: 0 }}
-          className="max-w-md w-full bg-white/80 backdrop-blur-md p-6 rounded-2xl shadow-lg border border-red-200"
-        >
-          <h2 className="text-xl font-semibold text-red-600 mb-3">Échec du chargement</h2>
-          <p className="text-gray-700 mb-4">{initError}</p>
-          <div className="flex gap-3 justify-center">
-            <button 
-              onClick={() => navigate('/game/setup')}
-              className="px-4 py-2 bg-dutch-blue text-white rounded-lg hover:bg-dutch-blue/90 transition-colors"
-            >
-              Configurer une partie
-            </button>
-            <button 
-              onClick={() => {
-                setInitializationAttempted(false);
-                window.location.reload();
-              }}
-              className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors"
-            >
-              Réessayer
-            </button>
-          </div>
-        </motion.div>
-      </div>
+      <ErrorDisplay 
+        error={initError}
+        onRetry={() => {
+          setInitializationAttempted(false);
+          window.location.reload();
+        }}
+      />
     );
   }
 
-  // Layout avec support pour AdSense - ajusté pour meilleur positionnement des publicités
+  // Layout principal avec support pour AdSense
   return (
-    <div className="w-full max-w-screen-2xl mx-auto px-2">
-      <div className="grid lg:grid-cols-[280px_1fr_280px] gap-4">
-        {/* Colonne de gauche (visible uniquement sur desktop pour utilisateurs non connectés) */}
-        {!isSignedIn && adsEnabled && isLoaded && (
-          <div className="hidden lg:block">
-            <div className="sticky top-24">
-              <AdSenseSlot
-                adClient="ca-pub-XXXXXXXXXXXXXXXX" // Remplacer avec l'ID AdSense réel
-                adSlot="XXXXXXXXXX" // Remplacer avec l'ID de l'emplacement
-                position="left"
-                className="w-[250px] min-h-[600px] mx-auto"
-              />
-            </div>
-          </div>
-        )}
-        
-        {/* Contenu principal (ScoreBoard) */}
-        <div className="w-full mx-auto">
-          <GameContent
-            players={playersWithStats}
-            roundHistory={roundHistory}
-            showGameOver={showGameOver}
-            showGameEndConfirmation={showGameEndConfirmation}
-            scoreLimit={scoreLimit}
-            onAddRound={handleAddRound}
-            onUndoLastRound={handleUndoLastRound}
-            onRequestEndGame={handleRequestEndGame}
-            onConfirmEndGame={handleConfirmEndGame}
-            onCancelEndGame={handleCancelEndGame}
-            onContinueGame={handleContinueGame}
-            onRestart={handleRestart}
-          />
-        </div>
-        
-        {/* Colonne de droite avec AdSense (visible uniquement sur desktop pour utilisateurs non connectés) */}
-        {!isSignedIn && adsEnabled && isLoaded && (
-          <div className="hidden lg:block">
-            <div className="sticky top-24">
-              <AdSenseSlot
-                adClient="ca-pub-XXXXXXXXXXXXXXXX" // Remplacer avec l'ID AdSense réel
-                adSlot="XXXXXXXXXX" // Remplacer avec l'ID de l'emplacement
-                position="right"
-                className="w-[250px] min-h-[600px] mx-auto"
-              />
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
+    <AdSenseLayout
+      isSignedIn={isSignedIn}
+      adsEnabled={adsEnabled}
+      isLoaded={isLoaded}
+    >
+      <GameContent
+        players={playersWithStats}
+        roundHistory={roundHistory}
+        showGameOver={showGameOver}
+        showGameEndConfirmation={showGameEndConfirmation}
+        scoreLimit={scoreLimit}
+        onAddRound={handleAddRound}
+        onUndoLastRound={handleUndoLastRound}
+        onRequestEndGame={handleRequestEndGame}
+        onConfirmEndGame={handleConfirmEndGame}
+        onCancelEndGame={handleCancelEndGame}
+        onContinueGame={handleContinueGame}
+        onRestart={handleRestart}
+      />
+    </AdSenseLayout>
   );
 };
 
