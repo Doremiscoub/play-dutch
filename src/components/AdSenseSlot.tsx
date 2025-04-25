@@ -37,7 +37,6 @@ const AdSenseSlot: React.FC<AdSenseSlotProps> = ({
       
       script.onerror = (error) => {
         console.error('Erreur lors du chargement du script AdSense:', error);
-        toast.error('Impossible de charger les annonces');
       };
       
       document.head.appendChild(script);
@@ -56,6 +55,8 @@ const AdSenseSlot: React.FC<AdSenseSlotProps> = ({
       const adElement = document.createElement('ins');
       adElement.className = 'adsbygoogle';
       adElement.style.display = 'block';
+      adElement.style.width = '100%';
+      adElement.style.height = '100%';
       adElement.dataset.adClient = adClient;
       adElement.dataset.adSlot = adSlot;
       adElement.dataset.adFormat = adFormat;
@@ -87,17 +88,18 @@ const AdSenseSlot: React.FC<AdSenseSlotProps> = ({
     }
   }, [isScriptLoaded, isAdInjected, adClient, adSlot, adFormat]);
 
-  const positionClass = position === 'left' ? 'lg:mr-auto' : position === 'right' ? 'lg:ml-auto' : '';
+  // Classes adaptées pour le positionnement des publicités
+  const baseClass = "glass-medium flex items-center justify-center overflow-hidden rounded-xl";
 
   return (
     <div 
       ref={adRef}
-      className={`glass-medium p-4 rounded-2xl min-h-[280px] flex items-center justify-center max-h-[600px] overflow-hidden ${positionClass} ${className}`}
+      className={`${baseClass} ${className}`}
       aria-label="Annonce"
     >
       {!isAdInjected && (
-        <div className="text-gray-400 text-sm text-center animate-pulse">
-          Chargement de l'annonce...
+        <div className="text-gray-400 text-sm text-center animate-pulse p-4">
+          Espace publicitaire
         </div>
       )}
     </div>

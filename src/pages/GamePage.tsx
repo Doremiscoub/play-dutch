@@ -60,7 +60,6 @@ const GamePage: React.FC = () => {
           if (!success) {
             console.error("Échec de l'initialisation du jeu");
             setInitError("Impossible de démarrer la partie. Veuillez configurer les joueurs.");
-            // Ne pas afficher de toast ici, on laisse createNewGame gérer ses propres notifications
           }
         } else {
           console.info("Partie existante détectée avec", players.length, "joueurs");
@@ -77,7 +76,7 @@ const GamePage: React.FC = () => {
     };
     
     initializeGame();
-  }, [createNewGame, players]);
+  }, [createNewGame, players, initializationAttempted]);
   
   // Marquer comme chargé après un court délai pour assurer la stabilité
   useEffect(() => {
@@ -186,10 +185,10 @@ const GamePage: React.FC = () => {
     );
   }
 
-  // Layout avec support pour AdSense
+  // Layout avec support pour AdSense - ajusté pour meilleur positionnement des publicités
   return (
     <div className="w-full max-w-screen-2xl mx-auto px-2">
-      <div className="grid lg:grid-cols-[1fr_auto_1fr] gap-4">
+      <div className="grid lg:grid-cols-[280px_1fr_280px] gap-4">
         {/* Colonne de gauche (visible uniquement sur desktop pour utilisateurs non connectés) */}
         {!isSignedIn && adsEnabled && isLoaded && (
           <div className="hidden lg:block">
@@ -198,13 +197,14 @@ const GamePage: React.FC = () => {
                 adClient="ca-pub-XXXXXXXXXXXXXXXX" // Remplacer avec l'ID AdSense réel
                 adSlot="XXXXXXXXXX" // Remplacer avec l'ID de l'emplacement
                 position="left"
+                className="w-[250px] min-h-[600px] mx-auto"
               />
             </div>
           </div>
         )}
         
         {/* Contenu principal (ScoreBoard) */}
-        <div className="w-full max-w-screen-lg mx-auto">
+        <div className="w-full mx-auto">
           <GameContent
             players={playersWithStats}
             roundHistory={roundHistory}
@@ -229,6 +229,7 @@ const GamePage: React.FC = () => {
                 adClient="ca-pub-XXXXXXXXXXXXXXXX" // Remplacer avec l'ID AdSense réel
                 adSlot="XXXXXXXXXX" // Remplacer avec l'ID de l'emplacement
                 position="right"
+                className="w-[250px] min-h-[600px] mx-auto"
               />
             </div>
           </div>
