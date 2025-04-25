@@ -1,21 +1,21 @@
-
 /**
  * Page principale de jeu avec gestion des états et tentatives de récupération
  */
 import React, { useEffect, useState } from 'react';
 import { useGameState } from '@/hooks/useGameState';
 import GameContent from '@/components/GameContent';
-import { updateAllPlayersStats } from '@/utils/playerStatsCalculator';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import AdSenseSlot from '@/components/AdSenseSlot';
 import { useLocalStorage } from '@/hooks/use-local-storage';
+import { useAuth } from '@/context/AuthContext';
 
 const GamePage: React.FC = () => {
   const navigate = useNavigate();
   const [isInitializing, setIsInitializing] = useState<boolean>(true);
   const [initError, setInitError] = useState<string | null>(null);
+  const { isSignedIn } = useAuth();
   const [adsEnabled] = useLocalStorage('dutch_ads_enabled', true);
   const [isLoaded, setIsLoaded] = useState(false);
   
@@ -178,39 +178,49 @@ const GamePage: React.FC = () => {
 
   // Layout avec support pour AdSense
   return (
-    <div className="w-full max-w-screen-2xl mx-auto px-2 flex flex-col lg:flex-row">
-      {/* Colonne de gauche (visible uniquement sur desktop) */}
-      <div className="hidden lg:block lg:w-1/6 relative">
-        {/* Espace réservé pour du contenu futur */}
-      </div>
-      
-      {/* Contenu principal (ScoreBoard) */}
-      <div className="flex-grow lg:w-4/6">
-        <GameContent
-          players={playersWithStats}
-          roundHistory={roundHistory}
-          showGameOver={showGameOver}
-          showGameEndConfirmation={showGameEndConfirmation}
-          scoreLimit={scoreLimit}
-          onAddRound={handleAddRound}
-          onUndoLastRound={handleUndoLastRound}
-          onRequestEndGame={handleRequestEndGame}
-          onConfirmEndGame={handleConfirmEndGame}
-          onCancelEndGame={handleCancelEndGame}
-          onContinueGame={handleContinueGame}
-          onRestart={handleRestart}
-        />
-      </div>
-      
-      {/* Colonne de droite avec AdSense (visible uniquement sur desktop) */}
-      <div className="hidden lg:block lg:w-1/6 relative">
-        {adsEnabled && isLoaded && (
-          <div className="sticky top-24 w-60 mx-auto">
-            <AdSenseSlot
-              adClient="ca-pub-XXXXXXXXXXXXXXXX" // Remplacer avec l'ID AdSense réel
-              adSlot="XXXXXXXXXX" // Remplacer avec l'ID de l'emplacement
-              className="mt-4"
-            />
+    <div className="w-full max-w-screen-2xl mx-auto px-2">
+      <div className="grid lg:grid-cols-[1fr_auto_1fr] gap-4">
+        {/* Colonne de gauche (visible uniquement sur desktop pour utilisateurs non connectés) */}
+        {!isSignedIn && adsEnabled && isLoaded && (
+          <div className="hidden lg:block">
+            <div className="sticky top-24">
+              <AdSenseSlot
+                adClient="ca-pub-XXXXXXXXXXXXXXXX" // Remplacer avec l'ID AdSense réel
+                adSlot="XXXXXXXXXX" // Remplacer avec l'ID de l'emplacement
+                position="left"
+              />
+            </div>
+          </div>
+        )}
+        
+        {/* Contenu principal (ScoreBoard) */}
+        <div className="w-full max-w-screen-lg mx-auto">
+          <GameContent
+            players={playersWithStats}
+            roundHistory={roundHistory}
+            showGameOver={showGameOver}
+            showGameEndConfirmation={showGameEndConfirmation}
+            scoreLimit={scoreLimit}
+            onAddRound={handleAddRound}
+            onUndoLastRound={handleUndoLastRound}
+            onRequestEndGame={handleRequestEndGame}
+            onConfirmEndGame={handleConfirmEndGame}
+            onCancelEndGame={handleCancelEndGame}
+            onContinueGame={handleContinueGame}
+            onRestart={handleRestart}
+          />
+        </div>
+        
+        {/* Colonne de droite avec AdSense (visible uniquement sur desktop pour utilisateurs non connectés) */}
+        {!isSignedIn && adsEnabled && isLoaded && (
+          <div className="hidden lg:block">
+            <div className="sticky top-24">
+              <AdSenseSlot
+                adClient="ca-pub-XXXXXXXXXXXXXXXX" // Remplacer avec l'ID AdSense réel
+                adSlot="XXXXXXXXXX" // Remplacer avec l'ID de l'emplacement
+                position="right"
+              />
+            </div>
           </div>
         )}
       </div>

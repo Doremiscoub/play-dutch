@@ -2,18 +2,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
-interface AdSenseSlotProps {
-  adClient: string;
-  adSlot: string;
-  adFormat?: 'auto' | 'rectangle' | 'vertical' | 'horizontal';
-  className?: string;
-}
-
 const AdSenseSlot: React.FC<AdSenseSlotProps> = ({
   adClient,
   adSlot,
   adFormat = 'auto',
   className = '',
+  position
 }) => {
   const adRef = useRef<HTMLDivElement>(null);
   const [isAdInjected, setIsAdInjected] = useState<boolean>(false);
@@ -93,10 +87,12 @@ const AdSenseSlot: React.FC<AdSenseSlotProps> = ({
     }
   }, [isScriptLoaded, isAdInjected, adClient, adSlot, adFormat]);
 
+  const positionClass = position === 'left' ? 'lg:mr-auto' : position === 'right' ? 'lg:ml-auto' : '';
+
   return (
     <div 
       ref={adRef}
-      className={`glass-medium p-4 rounded-2xl min-h-[280px] flex items-center justify-center ${className}`}
+      className={`glass-medium p-4 rounded-2xl min-h-[280px] flex items-center justify-center max-h-[600px] overflow-hidden ${positionClass} ${className}`}
       aria-label="Annonce"
     >
       {!isAdInjected && (
