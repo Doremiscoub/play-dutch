@@ -1,6 +1,13 @@
 
 import React, { useEffect, useRef, useState } from 'react';
-import { toast } from 'sonner';
+
+interface AdSenseSlotProps {
+  adClient: string;
+  adSlot: string;
+  adFormat?: string;
+  className?: string;
+  position?: 'left' | 'right';
+}
 
 const AdSenseSlot: React.FC<AdSenseSlotProps> = ({
   adClient,
@@ -22,13 +29,11 @@ const AdSenseSlot: React.FC<AdSenseSlotProps> = ({
       return;
     }
     
-    // Charger le script AdSense s'il n'est pas déjà présent
     try {
       const script = document.createElement('script');
-      script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';
+      script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adClient}`;
       script.async = true;
       script.crossOrigin = 'anonymous';
-      script.dataset.adClient = adClient;
       
       script.onload = () => {
         console.info('Script AdSense chargé avec succès');
@@ -55,8 +60,6 @@ const AdSenseSlot: React.FC<AdSenseSlotProps> = ({
       const adElement = document.createElement('ins');
       adElement.className = 'adsbygoogle';
       adElement.style.display = 'block';
-      adElement.style.width = '100%';
-      adElement.style.height = '100%';
       adElement.dataset.adClient = adClient;
       adElement.dataset.adSlot = adSlot;
       adElement.dataset.adFormat = adFormat;
@@ -66,18 +69,15 @@ const AdSenseSlot: React.FC<AdSenseSlotProps> = ({
       if (adRef.current.firstChild) {
         adRef.current.innerHTML = '';
       }
-
+      
       adRef.current.appendChild(adElement);
 
-      // Délai court pour s'assurer que le DOM est à jour
       setTimeout(() => {
         try {
-          if (window.adsbygoogle && Array.isArray(window.adsbygoogle)) {
-            window.adsbygoogle.push({});
+          if (window.adsbygoogle) {
+            (window.adsbygoogle = window.adsbygoogle || []).push({});
             setIsAdInjected(true);
             console.info('Annonce AdSense injectée avec succès');
-          } else {
-            console.warn('Objet adsbygoogle non disponible ou non initialisé');
           }
         } catch (error) {
           console.error('Erreur lors du push de l\'annonce:', error);
@@ -88,13 +88,10 @@ const AdSenseSlot: React.FC<AdSenseSlotProps> = ({
     }
   }, [isScriptLoaded, isAdInjected, adClient, adSlot, adFormat]);
 
-  // Classes adaptées pour le positionnement des publicités
-  const baseClass = "glass-medium flex items-center justify-center overflow-hidden rounded-xl";
-
   return (
     <div 
       ref={adRef}
-      className={`${baseClass} ${className}`}
+      className={`bg-white/80 backdrop-blur-sm rounded-lg overflow-hidden p-2 w-[250px] mx-auto ${className}`}
       aria-label="Annonce"
     >
       {!isAdInjected && (

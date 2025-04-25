@@ -1,4 +1,3 @@
-
 /**
  * Page principale de jeu avec gestion des états et tentatives de récupération
  */
@@ -21,7 +20,6 @@ const GamePage: React.FC = () => {
   const { isSignedIn } = useAuth();
   const [adsEnabled] = useLocalStorage('dutch_ads_enabled', true);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [initializationAttempted, setInitializationAttempted] = useState(false);
   
   const {
     players,
@@ -39,21 +37,17 @@ const GamePage: React.FC = () => {
     createNewGame,
   } = useGameState();
   
-  // Initialiser le jeu au chargement du composant avec gestion d'erreur améliorée
   useEffect(() => {
     const initializeGame = async () => {
-      // Ne pas réinitialiser si déjà tenté
       if (initializationAttempted) {
         return;
       }
       
-      // Afficher un indicateur de chargement
       setIsInitializing(true);
       setInitError(null);
       setInitializationAttempted(true);
       
       try {
-        // Si aucun joueur n'est présent, tenter de créer une nouvelle partie
         if (!players || players.length === 0) {
           console.info("Aucun joueur trouvé, tentative de création d'une nouvelle partie...");
           const success = createNewGame();
@@ -68,10 +62,8 @@ const GamePage: React.FC = () => {
       } catch (error) {
         console.error("Erreur lors de l'initialisation du jeu:", error);
         setInitError("Une erreur est survenue lors de l'initialisation. Veuillez réessayer.");
-        // Un seul toast d'erreur en cas d'exception non gérée
         toast.error("Erreur lors du chargement de la partie");
       } finally {
-        // Désactiver l'indicateur de chargement
         setIsInitializing(false);
       }
     };
@@ -79,7 +71,6 @@ const GamePage: React.FC = () => {
     initializeGame();
   }, [createNewGame, players, initializationAttempted]);
   
-  // Marquer comme chargé après un court délai pour assurer la stabilité
   useEffect(() => {
     if (!isInitializing && !initError) {
       const timer = setTimeout(() => {
@@ -90,7 +81,6 @@ const GamePage: React.FC = () => {
     }
   }, [isInitializing, initError]);
 
-  // Check for long inactivity with improved error handling
   useEffect(() => {
     try {
       const savedGame = localStorage.getItem('current_dutch_game');
@@ -101,7 +91,6 @@ const GamePage: React.FC = () => {
         const hoursSinceLastUpdate = (now.getTime() - lastUpdated.getTime()) / (1000 * 60 * 60);
         
         if (hoursSinceLastUpdate > 24) {
-          // Utiliser un toast de confirmation au lieu d'une alerte native
           toast.info(
             "Une partie non terminée a été trouvée. Voulez-vous la reprendre?",
             {
@@ -131,18 +120,15 @@ const GamePage: React.FC = () => {
     }
   }, [handleRestart]);
   
-  // Optimiser les calculs de statistiques avec mémoisation
   const playersWithStats = React.useMemo(() => 
     updateAllPlayersStats(players), 
     [players]
   );
   
-  // État de chargement
   if (isInitializing) {
     return <LoadingSpinner />;
   }
   
-  // Gestion d'erreur
   if (initError) {
     return (
       <ErrorDisplay 
@@ -155,7 +141,6 @@ const GamePage: React.FC = () => {
     );
   }
 
-  // Layout principal avec support pour AdSense
   return (
     <AdSenseLayout
       isSignedIn={isSignedIn}
