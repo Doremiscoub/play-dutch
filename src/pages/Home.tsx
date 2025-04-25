@@ -8,6 +8,7 @@ import { animationVariants } from '@/utils/animationUtils';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/context/AuthContext';
+import { SparkleIcon } from '@/components/ui/sparkle-icon';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -30,41 +31,9 @@ const Home: React.FC = () => {
     }
   };
 
-  const SparkleIcon = () => (
-    <svg 
-      width="28" 
-      height="28" 
-      viewBox="0 0 24 24" 
-      fill="none" 
-      xmlns="http://www.w3.org/2000/svg"
-      className="inline-block ml-1 translate-y-[-5px] rotate-12"
-      style={{ position: 'absolute', top: '-2px', right: '-18px' }}
-    >
-      <path 
-        d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" 
-        fill="#F97316" 
-        stroke="#F97316" 
-        strokeWidth="1.5" 
-        strokeLinecap="round" 
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-
-  if (!isLoaded) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="flex flex-col items-center">
-          <div className="h-12 w-12 text-dutch-blue animate-spin mb-4 border-4 border-dutch-blue/30 border-t-dutch-blue rounded-full" />
-          <div className="text-dutch-blue text-lg">Chargement...</div>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen relative overflow-hidden">
-      <div className="absolute inset-0">
+    <div className="min-h-screen relative">
+      <div className="fixed inset-0 -z-10">
         <AnimatedBackground />
       </div>
       
@@ -83,8 +52,8 @@ const Home: React.FC = () => {
               <span className="absolute -inset-1 block rounded-lg bg-gradient-to-br from-dutch-blue/20 via-dutch-purple/20 to-dutch-orange/20 blur-xl" />
               <span className="relative block bg-gradient-to-br from-dutch-blue via-dutch-purple to-dutch-orange bg-clip-text text-transparent drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.3)] animate-shimmer">
                 Dutch
+                <SparkleIcon />
               </span>
-              <SparkleIcon />
             </h1>
             <p className="text-gray-600">Votre compagnon de jeu</p>
           </motion.div>
