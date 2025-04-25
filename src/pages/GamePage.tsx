@@ -1,3 +1,4 @@
+
 /**
  * Page principale de jeu avec gestion des états et tentatives de récupération
  */
@@ -11,6 +12,7 @@ import { updateAllPlayersStats } from '@/utils/playerStatsCalculator';
 import LoadingSpinner from '@/components/game/LoadingSpinner';
 import ErrorDisplay from '@/components/game/ErrorDisplay';
 import AdSenseLayout from '@/components/game/AdSenseLayout';
+import { toast } from 'sonner';
 
 const GamePage: React.FC = () => {
   const navigate = useNavigate();
