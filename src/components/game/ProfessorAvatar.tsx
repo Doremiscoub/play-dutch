@@ -5,8 +5,9 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
 import { animationVariants } from '@/utils/animationUtils';
 
-const SOURCE = '/lovable-uploads/1dc0ac6d-dc08-4029-a06a-eec0c5a6ce7f.png';
-const FALLBACK = '/lovable-uploads/a2234ca1-7b29-4c32-8167-2ff6be271875.png';
+// URL corrigée de l'image du professeur
+const SOURCE = '/lovable-uploads/f78df6b3-591c-497c-b2d2-516b2fb7b5a4.png';
+const FALLBACK = '/professor.png';
 
 interface ProfessorAvatarProps {
   className?: string;
@@ -46,13 +47,23 @@ export default function ProfessorAvatar({
       <Avatar className={cn(
         sizeClasses[size],
         'shadow-lg transition-all duration-300',
-        isHovered && 'shadow-dutch-purple/20'
+        isHovered && 'shadow-dutch-purple/30'
       )}>
         {!errored && (
           <AvatarImage
             src={SOURCE}
             alt="Professeur Cartouche"
             onError={handleError}
+            className={cn(
+              'transition-transform duration-300',
+              isHovered && 'scale-110'
+            )}
+          />
+        )}
+        {errored && (
+          <AvatarImage
+            src={FALLBACK}
+            alt="Professeur Cartouche"
             className={cn(
               'transition-transform duration-300',
               isHovered && 'scale-110'

@@ -46,6 +46,12 @@ const LocalGameSetup: React.FC<LocalGameSetupProps> = ({ onStartGame }) => {
         name.trim() === '' ? `Joueur ${playerNames.indexOf(name) + 1}` : name.trim()
       );
       
+      if (validPlayerNames.length < 2) {
+        toast.error("Il faut au moins 2 joueurs pour démarrer une partie");
+        setIsSubmitting(false);
+        return;
+      }
+      
       // Sauvegarder les noms dans localStorage avant de démarrer la partie
       localStorage.setItem('dutch_player_setup', JSON.stringify(validPlayerNames));
       console.info('Configuration des joueurs sauvegardée:', validPlayerNames);
@@ -56,7 +62,7 @@ const LocalGameSetup: React.FC<LocalGameSetupProps> = ({ onStartGame }) => {
       // Attendre un peu pour s'assurer que localStorage est bien mis à jour
       setTimeout(() => {
         onStartGame(validPlayerNames);
-      }, 100);
+      }, 300);
     } catch (error) {
       console.error("Erreur lors de la configuration des joueurs:", error);
       toast.error("Une erreur est survenue lors de la configuration");

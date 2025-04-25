@@ -17,7 +17,9 @@ const GameSetup: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   useEffect(() => {
+    // Nettoyer l'état précédent au montage pour éviter des problèmes
     cleanupGameState();
+    clearPlayerSetup();
     console.info("Configuration de jeu nettoyée au montage du composant GameSetup");
   }, []);
 
@@ -32,17 +34,18 @@ const GameSetup: React.FC = () => {
     try {
       console.info('Démarrage de la partie avec les joueurs:', playerNames);
       
-      if (playerNames.length < 2) {
+      if (!playerNames || playerNames.length < 2) {
         console.error("Erreur: moins de 2 joueurs");
         toast.error('Il faut au moins 2 joueurs pour commencer une partie');
         setIsSubmitting(false);
         return;
       }
       
-      // IMPORTANT: NE PAS nettoyer ici pour garder les données dans localStorage
-      // jusqu'à ce que l'initialisation soit terminée
+      // Enregistrer les noms dans localStorage
+      localStorage.setItem('dutch_player_setup', JSON.stringify(playerNames));
+      console.info('Configuration des joueurs sauvegardée dans localStorage');
       
-      // Option 1 : Utiliser l'URL pour transmettre les noms des joueurs (plus fiable)
+      // Option 1 : Utiliser l'URL pour transmettre les noms des joueurs
       const playersQueryParam = encodeURIComponent(JSON.stringify(playerNames));
       console.info('Redirection vers /game avec les paramètres des joueurs');
       

@@ -2,6 +2,7 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import ProfessorAvatar from './ProfessorAvatar';
 
 interface ErrorDisplayProps {
   error: string;
@@ -16,10 +17,18 @@ const ErrorDisplay: React.FC<ErrorDisplayProps> = ({ error, onRetry }) => {
       <motion.div 
         initial={{ opacity: 0, y: 20 }} 
         animate={{ opacity: 1, y: 0 }}
-        className="max-w-md w-full bg-white/80 backdrop-blur-md p-6 rounded-2xl shadow-lg border border-red-200"
+        className="max-w-md w-full bg-white/90 backdrop-blur-md p-6 rounded-2xl shadow-lg border border-red-200"
       >
-        <h2 className="text-xl font-semibold text-red-600 mb-3">Échec du chargement</h2>
-        <p className="text-gray-700 mb-4">{error}</p>
+        <div className="flex items-center mb-4">
+          <ProfessorAvatar size="md" animate={true} />
+          <div className="ml-3">
+            <h2 className="text-xl font-semibold text-red-600">Échec du chargement</h2>
+            <p className="text-sm text-gray-500">Le Professeur Cartouche a rencontré un problème</p>
+          </div>
+        </div>
+        
+        <p className="text-gray-700 mb-5 p-3 bg-red-50 rounded-lg border border-red-100">{error}</p>
+        
         <div className="flex gap-3 justify-center">
           <Button 
             onClick={() => navigate('/game/setup')}

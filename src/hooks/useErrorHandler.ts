@@ -7,12 +7,14 @@ import { useState, useCallback } from 'react';
 import { toast } from 'sonner';
 import * as Sentry from '@sentry/react';
 import { addBreadcrumb } from '../utils/sentryConfig';
+import { useNavigate } from 'react-router-dom';
 
 export interface ErrorOptions {
   notify: boolean;       // Afficher un toast
   log: boolean;          // Logger dans la console
   report: boolean;       // Envoyer à Sentry
   critical: boolean;     // Erreur critique qui nécessite une action
+  redirect?: string;     // Rediriger vers une route en cas d'erreur
   context?: Record<string, any>; // Données contextuelles supplémentaires
 }
 
@@ -26,6 +28,7 @@ const defaultOptions: ErrorOptions = {
 export function useErrorHandler() {
   const [lastError, setLastError] = useState<Error | null>(null);
   const [isError, setIsError] = useState(false);
+  const navigate = useNavigate();
   
   /**
    * Gestionnaire d'erreurs centralisé
@@ -62,6 +65,11 @@ export function useErrorHandler() {
       });
     }
     
+    // Redirection en cas d'erreur critique
+    if (opts.redirect) {
+      navigate(opts.redirect);
+    }
+    
     // Reporting
     if (opts.report) {
       try {
@@ -83,7 +91,7 @@ export function useErrorHandler() {
     }
     
     return errorObj;
-  }, []);
+  }, [navigate]);
   
   /**
    * Réinitialise l'état d'erreur

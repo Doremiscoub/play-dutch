@@ -13,6 +13,7 @@ import LoadingSpinner from '@/components/game/LoadingSpinner';
 import ErrorDisplay from '@/components/game/ErrorDisplay';
 import AdSenseLayout from '@/components/game/AdSenseLayout';
 import { toast } from 'sonner';
+import { verifyPlayerSetup } from '@/utils/playerInitializer';
 
 const GamePage: React.FC = () => {
   const navigate = useNavigate();
@@ -45,10 +46,11 @@ const GamePage: React.FC = () => {
       const playerSetup = localStorage.getItem('dutch_player_setup');
       console.info("Debug - État dutch_player_setup:", playerSetup);
       
-      const currentGame = localStorage.getItem('current_dutch_game');
-      console.info("Debug - État current_dutch_game:", currentGame ? "Présent" : "Absent");
+      // Vérifier si la configuration est valide
+      const isValid = verifyPlayerSetup();
+      console.info("Debug - Configuration valide:", isValid);
       
-      return !!playerSetup;
+      return !!playerSetup && isValid;
     } catch (error) {
       console.error("Erreur lors du debug localStorage:", error);
       return false;
@@ -66,9 +68,15 @@ const GamePage: React.FC = () => {
       setInitializationAttempted(true);
       
       try {
-        // Debug pour voir l'état du localStorage
-        const hasSetup = debugLocalStorage();
-        console.info("Configuration des joueurs trouvée:", hasSetup);
+        // Vérifier d'abord si la configuration existe et est valide
+        const hasValidSetup = debugLocalStorage();
+        
+        if (!hasValidSetup) {
+          console.error("Aucune configuration valide trouvée");
+          setInitError("Impossible de démarrer la partie. Veuillez configurer les joueurs.");
+          setIsInitializing(false);
+          return;
+        }
         
         if (!players || players.length === 0) {
           console.info("Aucun joueur trouvé, tentative de création d'une nouvelle partie...");
@@ -142,8 +150,6 @@ const GamePage: React.FC = () => {
       }
     } catch (error) {
       console.error("Erreur lors de l'analyse de la partie sauvegardée:", error);
-      toast.error("Erreur lors de la vérification des parties sauvegardées");
-      localStorage.removeItem('current_dutch_game');
     }
   }, [handleRestart]);
   
@@ -165,7 +171,20 @@ const GamePage: React.FC = () => {
         error={initError}
         onRetry={() => {
           setInitializationAttempted(false);
-          window.location.reload();
+          navigate('/game/setup');
+        }}
+      />
+    );
+  }
+
+  // Afficher le contenu du jeu seulement si nous avons des joueurs
+  if (!players || players.length === 0) {
+    return (
+      <ErrorDisplay 
+        error="Aucun joueur trouvé pour cette partie. Veuillez configurer les joueurs."
+        onRetry={() => {
+          setInitializationAttempted(false);
+          navigate('/game/setup');
         }}
       />
     );

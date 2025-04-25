@@ -32,11 +32,6 @@ export const useGameInitialization = () => {
       resetNotificationFlags();
       
       // Prevent multiple initialization attempts
-      if (initializationAttempted.current) {
-        console.info('Une initialisation a déjà été tentée, annulation de cette tentative');
-        return false;
-      }
-      
       if (initializationInProgress.current) {
         console.info('Initialisation déjà en cours, annulation de cette tentative');
         return false;
@@ -92,7 +87,6 @@ export const useGameInitialization = () => {
           }
         } catch (error) {
           console.error("Erreur lors du parsing des paramètres URL:", error);
-          // Si erreur avec paramètres URL, on continue avec l'ancienne méthode
         }
       }
       
@@ -106,12 +100,10 @@ export const useGameInitialization = () => {
       if (!playerSetup) {
         console.error('Configuration des joueurs introuvable dans localStorage');
         
-        // Nettoyer les flags et états
         initializationAttempted.current = false;
         initializationInProgress.current = false;
         
         // Redirection vers la page de configuration
-        toast.error('Configuration des joueurs manquante');
         navigate('/game/setup', { replace: true });
         return false;
       }
@@ -121,54 +113,41 @@ export const useGameInitialization = () => {
       console.info('Vérification de la configuration localStorage:', setupValid ? 'VALIDE' : 'INVALIDE');
       
       if (!setupValid) {
-        console.error('Impossible de créer une partie: la configuration des joueurs est invalide ou inexistante');
+        console.error('Configuration des joueurs invalide ou inexistante');
         
-        // Nettoyer les flags et états
         initializationAttempted.current = false;
         initializationInProgress.current = false;
         
-        // Redirection vers la page de configuration sans afficher de toast
-        toast.error('Configuration des joueurs manquante');
         navigate('/game/setup', { replace: true });
         return false;
       }
       
       const newPlayers = initializePlayers();
       if (!newPlayers || newPlayers.length < 2) {
-        console.error('Impossible de créer une partie: moins de 2 joueurs configurés');
+        console.error('Moins de 2 joueurs configurés');
         
-        // Nettoyer les flags et états
         initializationAttempted.current = false;
         initializationInProgress.current = false;
         
-        // Redirection vers la page de configuration sans afficher de toast
-        toast.error('Au moins 2 joueurs sont nécessaires');
         navigate('/game/setup', { replace: true });
         return false;
       }
       
-      // Ensure we're starting with a clean state
       console.info('Joueurs initialisés avec succès:', newPlayers.map(p => p.name).join(', '));
       setPlayers(newPlayers);
       setGameStartTime(new Date());
       
-      // Mark initialization as completed
       initializationCompleted.current = true;
       initializationInProgress.current = false;
       
-      // Un seul toast de succès
       toast.success('Nouvelle partie créée !');
       return true;
     } catch (error) {
       console.error("Erreur lors de la création d'une nouvelle partie:", error);
       
-      // Nettoyer les flags et états
       initializationAttempted.current = false;
       initializationInProgress.current = false;
-      toast.error("Erreur lors de la création de la partie");
       
-      // On évite de faire une redirection automatique en cas d'erreur
-      // pour permettre à l'utilisateur de réessayer
       return false;
     } finally {
       // Reset attempt flag after a delay to allow for further attempts if needed
