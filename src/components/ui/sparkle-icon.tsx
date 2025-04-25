@@ -17,13 +17,13 @@ export const SparkleIcon = () => {
     .slice(0, 2);
 
   return (
-    <div className="relative flex">
+    <div className="relative inline-flex">
       {randomSuits.map((suit, index) => {
         const Icon = suit.icon;
         return (
           <motion.div
             key={index}
-            className={`absolute ${index === 0 ? '-top-2 -right-6' : '-top-1 -right-3'} ${suit.color}`}
+            className={`absolute ${index === 0 ? '-top-4 right-2' : '-top-6 right-0'} ${suit.color}`}
             initial={{ scale: 0, rotate: index === 0 ? -20 : 20 }}
             animate={{ 
               scale: [1, 1.2, 1],
