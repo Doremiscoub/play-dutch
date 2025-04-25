@@ -68,10 +68,11 @@ const GamePage: React.FC = () => {
       try {
         // Debug pour voir l'état du localStorage
         const hasSetup = debugLocalStorage();
+        console.info("Configuration des joueurs trouvée:", hasSetup);
         
         if (!players || players.length === 0) {
           console.info("Aucun joueur trouvé, tentative de création d'une nouvelle partie...");
-          const success = createNewGame();
+          const success = await createNewGame();
           
           if (!success) {
             console.error("Échec de l'initialisation du jeu");
@@ -95,6 +96,7 @@ const GamePage: React.FC = () => {
     initializeGame();
   }, [createNewGame, players, initializationAttempted]);
   
+  // Effet pour déclencher l'animation de chargement
   useEffect(() => {
     if (!isInitializing && !initError) {
       const timer = setTimeout(() => {
@@ -105,6 +107,7 @@ const GamePage: React.FC = () => {
     }
   }, [isInitializing, initError]);
 
+  // Effet pour vérifier les parties sauvegardées
   useEffect(() => {
     try {
       const savedGame = localStorage.getItem('current_dutch_game');
@@ -144,15 +147,18 @@ const GamePage: React.FC = () => {
     }
   }, [handleRestart]);
   
+  // Calculer les statistiques des joueurs
   const playersWithStats = React.useMemo(() => 
     updateAllPlayersStats(players), 
     [players]
   );
   
+  // Afficher un spinner pendant le chargement
   if (isInitializing) {
     return <LoadingSpinner />;
   }
   
+  // Afficher une erreur si l'initialisation a échoué
   if (initError) {
     return (
       <ErrorDisplay 
@@ -165,6 +171,7 @@ const GamePage: React.FC = () => {
     );
   }
 
+  // Afficher le contenu du jeu
   return (
     <AdSenseLayout
       isSignedIn={isSignedIn}

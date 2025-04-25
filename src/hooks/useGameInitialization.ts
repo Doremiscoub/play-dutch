@@ -24,7 +24,7 @@ export const useGameInitialization = () => {
   const avatarColors = ['#8B5CF6', '#F97316', '#1EAEDB', '#10B981', '#EC4899', '#6366F1'];
   
   // Create a new game with player names from URL parameters or configuration
-  const createNewGame = useCallback(() => {
+  const createNewGame = useCallback(async () => {
     try {
       console.info('Tentative de création d\'une nouvelle partie...');
       
@@ -74,15 +74,15 @@ export const useGameInitialization = () => {
             setPlayers(newPlayers);
             setGameStartTime(new Date());
             
+            // Sauvegarder la configuration dans localStorage également pour la persistance
+            localStorage.setItem('dutch_player_setup', JSON.stringify(playerNames));
+            
             // Effacer les paramètres URL après utilisation pour éviter la double initialisation
             navigate('/game', { replace: true });
             
             // Mark initialization as completed
             initializationCompleted.current = true;
             initializationInProgress.current = false;
-            
-            // Nettoyage après initialisation réussie
-            clearPlayerSetup();
             
             // Un seul toast de succès
             toast.success('Nouvelle partie créée !');
@@ -103,6 +103,19 @@ export const useGameInitialization = () => {
       const playerSetup = localStorage.getItem('dutch_player_setup');
       console.info('État dutch_player_setup:', playerSetup);
       
+      if (!playerSetup) {
+        console.error('Configuration des joueurs introuvable dans localStorage');
+        
+        // Nettoyer les flags et états
+        initializationAttempted.current = false;
+        initializationInProgress.current = false;
+        
+        // Redirection vers la page de configuration
+        toast.error('Configuration des joueurs manquante');
+        navigate('/game/setup', { replace: true });
+        return false;
+      }
+
       // Verify setup exists before initializing
       const setupValid = verifyPlayerSetup();
       console.info('Vérification de la configuration localStorage:', setupValid ? 'VALIDE' : 'INVALIDE');

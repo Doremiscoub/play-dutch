@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
@@ -44,11 +45,13 @@ const GameSetup: React.FC = () => {
       // Option 1 : Utiliser l'URL pour transmettre les noms des joueurs (plus fiable)
       const playersQueryParam = encodeURIComponent(JSON.stringify(playerNames));
       console.info('Redirection vers /game avec les paramètres des joueurs');
-      navigate(`/game?players=${playersQueryParam}&new=true`);
       
-      // Option 2 : Utiliser localStorage comme méthode de secours
-      // déjà fait dans le composant LocalGameSetup
-      
+      // Ajouter un petit délai pour s'assurer que le localStorage est bien mis à jour
+      setTimeout(() => {
+        navigate(`/game?players=${playersQueryParam}&new=true`);
+        // Réinitialiser l'état de soumission après la navigation
+        setIsSubmitting(false);
+      }, 300);
     } catch (error) {
       console.error("Erreur lors du démarrage de la partie:", error);
       toast.error("Une erreur est survenue lors de la création de la partie");
