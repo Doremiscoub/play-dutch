@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
@@ -12,14 +11,12 @@ interface ProfessorAvatarProps {
   className?: string;
   size?: 'sm' | 'md' | 'lg';
   animate?: boolean;
-  showBadge?: boolean;
 }
 
 export default function ProfessorAvatar({ 
   className = '', 
   size = 'md',
   animate = true,
-  showBadge = false
 }: ProfessorAvatarProps) {
   const [errored, setErrored] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -32,7 +29,7 @@ export default function ProfessorAvatar({
   const sizeClasses = {
     sm: 'w-12 h-12',
     md: 'w-16 h-16',
-    lg: 'w-20 h-20'
+    lg: 'w-24 h-24'
   };
 
   return (
@@ -65,16 +62,6 @@ export default function ProfessorAvatar({
             )}
           />
         )}
-        {errored && (
-          <AvatarImage
-            src={FALLBACK}
-            alt="Professeur Cartouche"
-            className={cn(
-              'transition-all duration-300',
-              isHovered && 'scale-110 rotate-3'
-            )}
-          />
-        )}
         <AvatarFallback 
           className={cn(
             "text-4xl bg-gradient-to-r from-dutch-blue to-dutch-purple text-white",
@@ -84,16 +71,6 @@ export default function ProfessorAvatar({
           👴🏼
         </AvatarFallback>
       </Avatar>
-
-      {showBadge && (
-        <motion.div
-          initial={{ scale: 0, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          className="absolute -top-2 -right-2 bg-dutch-orange text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg"
-        >
-          Prof
-        </motion.div>
-      )}
 
       {/* Effet de brillance sur hover */}
       {isHovered && (
