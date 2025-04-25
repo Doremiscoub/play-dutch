@@ -2,6 +2,8 @@
 import React from 'react';
 import { Input } from '@/components/ui/input';
 import { motion } from 'framer-motion';
+import { SETUP_UI } from '@/config/setup-ui';
+import { cn } from '@/lib/utils';
 
 interface PlayerNameInputProps {
   index: number;
@@ -13,17 +15,17 @@ const PlayerNameInput: React.FC<PlayerNameInputProps> = ({ index, name, onChange
   return (
     <motion.div 
       key={index} 
-      className="flex items-center gap-3"
+      className={SETUP_UI.player.container}
       initial={{ x: -20, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
       transition={{ duration: 0.3, delay: 0.1 + index * 0.05 }}
     >
-      <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-r from-dutch-blue to-dutch-purple flex items-center justify-center text-white font-bold shadow-md">
+      <div className={SETUP_UI.player.number}>
         {index + 1}
       </div>
-      <div className="relative flex-grow">
+      <div className={SETUP_UI.player.input.wrapper}>
         <motion.div 
-          className="absolute -inset-0.5 bg-gradient-to-r from-dutch-blue/10 to-dutch-purple/10 rounded-lg blur opacity-30"
+          className={SETUP_UI.player.input.glow}
           animate={{ opacity: [0.2, 0.4, 0.2] }}
           transition={{ duration: 2, repeat: Infinity }}
         />
@@ -31,7 +33,7 @@ const PlayerNameInput: React.FC<PlayerNameInputProps> = ({ index, name, onChange
           value={name}
           onChange={(e) => onChange(index, e.target.value)}
           placeholder={`Joueur ${index + 1}`}
-          className="dutch-input border border-white/40 shadow-sm relative z-10 backdrop-blur-sm"
+          className={cn(SETUP_UI.player.input.base)}
           maxLength={20}
         />
       </div>

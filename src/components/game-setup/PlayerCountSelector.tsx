@@ -3,6 +3,7 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Plus, Minus } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { SETUP_UI } from '@/config/setup-ui';
 
 interface PlayerCountSelectorProps {
   numPlayers: number;
@@ -14,20 +15,21 @@ const PlayerCountSelector: React.FC<PlayerCountSelectorProps> = ({
   onNumPlayersChange 
 }) => {
   return (
-    <div className="flex items-center justify-center gap-4">
+    <div className={SETUP_UI.counter.container}>
       <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
         <Button 
           variant="dutch-glass" 
           size="icon" 
           onClick={() => onNumPlayersChange(false)}
           disabled={numPlayers <= 2}
-          className="border border-white/40 shadow-md"
+          className={SETUP_UI.counter.button}
         >
           <Minus className="h-6 w-6" />
         </Button>
       </motion.div>
+      
       <motion.span 
-        className="text-3xl font-bold text-dutch-blue w-10 text-center"
+        className={SETUP_UI.counter.number}
         key={numPlayers}
         initial={{ scale: 1.5, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -35,13 +37,14 @@ const PlayerCountSelector: React.FC<PlayerCountSelectorProps> = ({
       >
         {numPlayers}
       </motion.span>
+      
       <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
         <Button 
           variant="dutch-glass" 
           size="icon"
           onClick={() => onNumPlayersChange(true)}
           disabled={numPlayers >= 10}
-          className="border border-white/40 shadow-md"
+          className={SETUP_UI.counter.button}
         >
           <Plus className="h-6 w-6" />
         </Button>

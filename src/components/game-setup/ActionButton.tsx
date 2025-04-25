@@ -3,6 +3,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Play } from 'lucide-react';
+import { SETUP_UI } from '@/config/setup-ui';
 
 interface ActionButtonProps {
   onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
@@ -20,7 +21,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({ onClick, label, disabled = 
       <Button
         onClick={onClick}
         disabled={disabled}
-        className="w-full h-14 rounded-full bg-gradient-to-r from-dutch-blue to-dutch-purple shadow-lg flex items-center justify-center gap-2 text-white font-medium"
+        className={SETUP_UI.action.button}
       >
         <Play className="h-5 w-5 text-white" />
         <span className="text-white">{label}</span>
