@@ -10,6 +10,7 @@ import { motion } from 'framer-motion';
 import AdSenseSlot from '@/components/AdSenseSlot';
 import { useLocalStorage } from '@/hooks/use-local-storage';
 import { useAuth } from '@/context/AuthContext';
+import { updateAllPlayersStats } from '@/utils/playerStatsCalculator';
 
 const GamePage: React.FC = () => {
   const navigate = useNavigate();
