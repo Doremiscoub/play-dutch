@@ -60,18 +60,15 @@ const GamePage: React.FC = () => {
           if (!success) {
             console.error("Échec de l'initialisation du jeu");
             setInitError("Impossible de démarrer la partie. Veuillez configurer les joueurs.");
-            // Ne pas afficher de toast ici, on laisse le createNewGame gérer ses propres notifications
-          } else {
-            console.info("Jeu initialisé avec succès avec", players?.length || 0, "joueurs");
-            // Ne pas afficher de toast ici non plus, évite les doublons
+            // Ne pas afficher de toast ici, on laisse createNewGame gérer ses propres notifications
           }
         } else {
           console.info("Partie existante détectée avec", players.length, "joueurs");
-          // Pas besoin d'un toast ici, la partie est déjà chargée
         }
       } catch (error) {
         console.error("Erreur lors de l'initialisation du jeu:", error);
         setInitError("Une erreur est survenue lors de l'initialisation. Veuillez réessayer.");
+        // Un seul toast d'erreur en cas d'exception non gérée
         toast.error("Erreur lors du chargement de la partie");
       } finally {
         // Désactiver l'indicateur de chargement

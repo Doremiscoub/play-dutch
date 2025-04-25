@@ -107,11 +107,9 @@ export const useGameInitialization = () => {
         initializationAttempted.current = false;
         initializationInProgress.current = false;
         
-        // Un seul toast d'erreur
-        toast.error('Configuration des joueurs invalide');
-        
-        // Redirection uniquement si c'est la première tentative d'initialisation
-        navigate('/game/setup');
+        // Redirection vers la page de configuration sans afficher de toast
+        // Le toast sera affiché par la page de configuration
+        navigate('/game/setup', { replace: true });
         return false;
       }
       
@@ -123,11 +121,9 @@ export const useGameInitialization = () => {
         initializationAttempted.current = false;
         initializationInProgress.current = false;
         
-        // Un seul toast d'erreur
-        toast.error('Il faut au moins 2 joueurs pour démarrer une partie');
-        
-        // Redirection uniquement si c'est la première tentative d'initialisation
-        navigate('/game/setup');
+        // Redirection vers la page de configuration sans afficher de toast
+        // Le toast sera affiché par la page de configuration si nécessaire
+        navigate('/game/setup', { replace: true });
         return false;
       }
       
@@ -145,13 +141,13 @@ export const useGameInitialization = () => {
       return true;
     } catch (error) {
       console.error("Erreur lors de la création d'une nouvelle partie:", error);
-      toast.error("Une erreur est survenue lors de la création de la partie");
       
       // Nettoyer les flags et états
       initializationAttempted.current = false;
       initializationInProgress.current = false;
       
-      navigate('/game/setup');
+      // On évite de faire une redirection automatique en cas d'erreur
+      // pour permettre à l'utilisateur de réessayer
       return false;
     } finally {
       // Reset attempt flag after a delay to allow for further attempts if needed
