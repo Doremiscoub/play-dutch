@@ -13,8 +13,12 @@ const SetupInfo: React.FC = () => {
         className="bg-dutch-blue/5 rounded-xl p-4 text-sm text-gray-600"
       >
         <p>
-          Parfait pour jouer ensemble autour d'une table. 
+          Parfait pour jouer entre amis autour d'une table. 
           Chaque joueur entre son score à son tour sur cet appareil.
+        </p>
+        <p className="mt-2">
+          Les scores sont enregistrés automatiquement et vous pouvez 
+          reprendre la partie à tout moment.
         </p>
       </motion.div>
     </CardContent>

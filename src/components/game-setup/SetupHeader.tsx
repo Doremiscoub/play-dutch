@@ -14,7 +14,7 @@ const SetupHeader: React.FC = () => {
       >
         <CardTitle className="text-xl font-semibold text-dutch-blue flex items-center gap-2">
           <Smartphone className="h-5 w-5" />
-          Un seul téléphone
+          Un seul appareil suffit
         </CardTitle>
         <CardDescription className="text-gray-600">
           Tous les joueurs partagent le même appareil pour suivre les scores

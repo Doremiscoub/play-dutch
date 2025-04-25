@@ -5,6 +5,7 @@ import PlayerNameInput from './PlayerNameInput';
 import PlayerCountSelector from './PlayerCountSelector';
 import { usePlayerNames } from '@/hooks/usePlayerNames';
 import { motion } from 'framer-motion';
+import { CardContent } from '@/components/ui/card';
 
 interface LocalGameSetupProps {
   onStartGame: (playerNames: string[]) => void;
@@ -52,7 +53,7 @@ const LocalGameSetup: React.FC<LocalGameSetupProps> = ({ onStartGame }) => {
   }, [isSubmitting, playerNames, validateNames, onStartGame]);
 
   return (
-    <div className="space-y-6 py-4">
+    <CardContent className="space-y-6 py-6">
       <motion.div 
         className="space-y-2"
         initial={{ opacity: 0, y: 10 }}
@@ -65,7 +66,7 @@ const LocalGameSetup: React.FC<LocalGameSetupProps> = ({ onStartGame }) => {
         />
       </motion.div>
       
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-6">
         <motion.div 
           className="space-y-2"
           initial={{ opacity: 0 }}
@@ -86,21 +87,20 @@ const LocalGameSetup: React.FC<LocalGameSetupProps> = ({ onStartGame }) => {
         </motion.div>
         
         <motion.div 
-          className="pt-4"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
         >
           <Button 
             type="submit" 
-            className="w-full bg-gradient-to-r from-dutch-blue to-dutch-purple text-white rounded-full h-14"
+            className="w-full bg-gradient-to-r from-dutch-blue to-dutch-purple text-white rounded-full h-14 font-medium shadow-md hover:shadow-lg transition-all"
             disabled={isSubmitting}
           >
             {isSubmitting ? 'Création...' : 'Commencer la partie'}
           </Button>
         </motion.div>
       </form>
-    </div>
+    </CardContent>
   );
 };
 

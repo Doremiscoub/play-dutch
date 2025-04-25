@@ -17,13 +17,13 @@ const PlayerCountSelector: React.FC<PlayerCountSelectorProps> = ({
     <div className="flex items-center justify-center gap-4">
       <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
         <Button 
-          variant="dutch-glass" 
+          variant="outline" 
           size="icon" 
           onClick={() => onNumPlayersChange(false)}
           disabled={numPlayers <= 2}
-          className="border border-white/40 shadow-md"
+          className="rounded-full h-10 w-10 border border-white/60 shadow-sm bg-white/80 backdrop-blur-md"
         >
-          <Minus className="h-6 w-6" />
+          <Minus className="h-5 w-5" />
         </Button>
       </motion.div>
       <motion.span 
@@ -37,13 +37,13 @@ const PlayerCountSelector: React.FC<PlayerCountSelectorProps> = ({
       </motion.span>
       <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
         <Button 
-          variant="dutch-glass" 
+          variant="outline" 
           size="icon"
           onClick={() => onNumPlayersChange(true)}
           disabled={numPlayers >= 10}
-          className="border border-white/40 shadow-md"
+          className="rounded-full h-10 w-10 border border-white/60 shadow-sm bg-white/80 backdrop-blur-md"
         >
-          <Plus className="h-6 w-6" />
+          <Plus className="h-5 w-5" />
         </Button>
       </motion.div>
     </div>
