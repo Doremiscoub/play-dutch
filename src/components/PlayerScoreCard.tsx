@@ -2,10 +2,12 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Player } from '@/types';
-import { ChevronUp, ChevronDown, Sparkles, ThumbsUp, ChevronRight, Cpu, Zap, Flame, Trophy, Target } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { getScoreColorClass } from '@/utils/gameUtils';
-import { cn } from '@/lib/utils';
+import { PlayerComment } from './game/PlayerComment';
+import { PlayerProfile } from './game/PlayerProfile';
+import { getScoreCardContainerClass, getPositionBadgeClass } from './game/scoreCardStyles';
 
 interface PlayerScoreCardProps {
   player: Player;
@@ -26,141 +28,13 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
   isExpanded = false,
   expandedContent
 }) => {
-  // Déterminer si le joueur est proche du seuil d'avertissement
   const isNearThreshold = warningThreshold && player.totalScore >= warningThreshold;
-  
-  // Nombre de manches
   const roundCount = player.rounds.length;
-
-  // Fonction pour générer un commentaire dynamique
-  const getDynamicComment = () => {
-    if (lastRoundScore === 0) {
-      return (
-        <motion.div
-          initial={{ opacity: 0, y: -5 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-sm text-dutch-purple font-medium flex items-center"
-        >
-          <Sparkles className="h-3 w-3 mr-1" /> Dutch parfait !
-        </motion.div>
-      );
-    }
-    
-    if (lastRoundScore && lastRoundScore <= 3) {
-      return (
-        <motion.div
-          initial={{ opacity: 0, y: -5 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-sm text-green-600 font-medium flex items-center"
-        >
-          <ThumbsUp className="h-3 w-3 mr-1" /> Belle manche !
-        </motion.div>
-      );
-    }
-    
-    if (lastRoundScore && lastRoundScore >= 10) {
-      return (
-        <motion.div
-          initial={{ opacity: 0, y: -5 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-sm text-dutch-orange font-medium flex items-center"
-        >
-          <ChevronUp className="h-3 w-3 mr-1" /> Aïe, ça fait mal...
-        </motion.div>
-      );
-    }
-    
-    // Dynamique de progression
-    if (player.stats && roundCount >= 3) {
-      const improvementRate = player.stats.improvementRate;
-      
-      if (improvementRate && improvementRate <= -2) {
-        return (
-          <motion.div
-            initial={{ opacity: 0, y: -5 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-sm text-dutch-blue font-medium flex items-center"
-          >
-            <ChevronDown className="h-3 w-3 mr-1" /> En progression !
-          </motion.div>
-        );
-      }
-      
-      if (improvementRate && improvementRate >= 2) {
-        return (
-          <motion.div
-            initial={{ opacity: 0, y: -5 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-sm text-dutch-orange font-medium flex items-center"
-          >
-            <ChevronUp className="h-3 w-3 mr-1" /> Attention à la pente...
-          </motion.div>
-        );
-      }
-    }
-    
-    return null;
-  };
-
-  // Déterminer un profil de jeu dynamique
-  const getPlayerProfile = () => {
-    const stats = player.stats;
-    if (!stats) return null;
-    
-    const consistencyScore = stats.consistencyScore || 0;
-    const dutchCount = stats.dutchCount || 0;
-    const improvementRate = stats.improvementRate || 0;
-    const averageScore = stats.averageScore || 0;
-    
-    let profile = '';
-    let icon = null;
-    let colorClass = '';
-    
-    if (consistencyScore < 5 && averageScore < 15) {
-      profile = 'Tacticien précis';
-      icon = <Target className="h-4 w-4 mr-1 text-dutch-blue" />;
-      colorClass = 'text-dutch-blue';
-    } else if (dutchCount > 2 || (dutchCount > 0 && roundCount < 5)) {
-      profile = 'Maître Dutch';
-      icon = <Sparkles className="h-4 w-4 mr-1 text-purple-500" />;
-      colorClass = 'text-purple-500';
-    } else if (improvementRate < -2) {
-      profile = 'En grande progression';
-      icon = <Flame className="h-4 w-4 mr-1 text-orange-500" />;
-      colorClass = 'text-orange-500';
-    } else if (consistencyScore > 15) {
-      profile = 'Joueur imprévisible';
-      icon = <Zap className="h-4 w-4 mr-1 text-amber-500" />;
-      colorClass = 'text-amber-500';
-    } else if (position <= 2) {
-      profile = 'Compétiteur redoutable';
-      icon = <Trophy className="h-4 w-4 mr-1 text-green-500" />;
-      colorClass = 'text-green-500';
-    } else {
-      profile = 'Joueur stratégique';
-      icon = <Cpu className="h-4 w-4 mr-1 text-gray-500" />;
-      colorClass = 'text-gray-500';
-    }
-    
-    return { profile, icon, colorClass };
-  };
-
-  const profileInfo = getPlayerProfile();
+  const profileInfo = PlayerProfile({ player, position });
 
   return (
     <motion.div
-      className={cn(
-        "group relative p-6 rounded-3xl transition-all duration-500",
-        "backdrop-blur-xl border shadow-lg",
-        isWinner ? 
-          "bg-gradient-to-br from-dutch-purple/20 via-dutch-blue/10 to-dutch-orange/5 border-dutch-purple/30" : 
-          "bg-gradient-to-br from-white/80 via-white/60 to-white/40 border-white/50",
-        isNearThreshold ? 
-          "bg-gradient-to-br from-dutch-orange/20 via-dutch-orange/10 to-white/60 border-dutch-orange/30" : "",
-        isExpanded ? 
-          "ring-2 ring-dutch-blue/20 shadow-xl scale-[1.02]" : 
-          "hover:scale-[1.01] hover:shadow-xl"
-      )}
+      className={getScoreCardContainerClass(isWinner, isNearThreshold, isExpanded)}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
@@ -175,13 +49,7 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
         <div className="flex items-center gap-4">
           {/* Position Badge */}
           <motion.div
-            className={cn(
-              "h-12 w-12 rounded-2xl flex items-center justify-center font-bold text-lg shadow-lg",
-              position === 1 ? "bg-dutch-purple text-white" :
-              position === 2 ? "bg-dutch-blue text-white" :
-              position === 3 ? "bg-dutch-orange text-white" :
-              "bg-gray-400/80 text-white"
-            )}
+            className={getPositionBadgeClass(position)}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -198,8 +66,11 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
               {player.name}
             </motion.h3>
             
-            {/* Commentaire dynamique */}
-            {getDynamicComment()}
+            <PlayerComment 
+              player={player}
+              lastRoundScore={lastRoundScore}
+              roundCount={roundCount}
+            />
           </div>
           
           {/* Score total */}
