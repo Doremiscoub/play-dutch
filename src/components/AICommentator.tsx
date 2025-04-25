@@ -1,10 +1,11 @@
-
+/**
+ * Composant de commentaires du Professeur Cartouche
+ */
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageCircle, Bot, Sparkles, BrainCircuit, Megaphone } from 'lucide-react';
 import { Player } from '@/types';
 import { getRandomComment } from '@/utils/commentGenerator';
-import ProfessorAvatar from './ProfessorAvatar';
+import ProfessorAvatar from './game/ProfessorAvatar';
 import { useElevenLabs } from '@/hooks/use-eleven-labs';
 import { useSound } from '@/hooks/use-sound';
 
@@ -14,7 +15,11 @@ interface AICommentatorProps {
   className?: string;
 }
 
-const AICommentator: React.FC<AICommentatorProps> = ({ players, roundHistory = [], className = '' }) => {
+const AICommentator: React.FC<AICommentatorProps> = ({ 
+  players, 
+  roundHistory = [], 
+  className = '' 
+}) => {
   const [comment, setComment] = useState('');
   const [commentType, setCommentType] = useState<'info' | 'joke' | 'sarcasm' | 'encouragement' | 'headline'>('info');
   const [isVisible, setIsVisible] = useState(true);
@@ -22,7 +27,6 @@ const AICommentator: React.FC<AICommentatorProps> = ({ players, roundHistory = [
   const { speakWithFallback } = useElevenLabs();
   const { isSoundEnabled, playCardSound } = useSound();
 
-  // Générer un nouveau commentaire selon certains événements
   useEffect(() => {
     if (players.length === 0) return;
 
@@ -32,10 +36,8 @@ const AICommentator: React.FC<AICommentatorProps> = ({ players, roundHistory = [
       setCommentType(type);
     };
 
-    // Générer un commentaire initial et sur chaque nouvelle manche
     generateComment();
 
-    // Générer un nouveau commentaire toutes les 20 secondes
     const interval = setInterval(() => {
       generateComment();
     }, 20000);
@@ -43,10 +45,8 @@ const AICommentator: React.FC<AICommentatorProps> = ({ players, roundHistory = [
     return () => clearInterval(interval);
   }, [players, roundHistory]);
 
-  // Si pas de commentaire, ne rien afficher
   if (!comment) return null;
 
-  // Styles selon le type de commentaire
   const commentStyles = {
     info: 'border-dutch-blue/30 bg-dutch-blue/5',
     joke: 'border-dutch-orange/30 bg-dutch-orange/5',
@@ -54,16 +54,13 @@ const AICommentator: React.FC<AICommentatorProps> = ({ players, roundHistory = [
     encouragement: 'border-dutch-green/30 bg-dutch-green/5',
     headline: 'border-dutch-orange/30 bg-gradient-to-r from-dutch-orange/10 to-dutch-purple/10'
   };
-  
-  // Fonction de lecture à voix haute avec Eleven Labs
+
   const speakMessage = async () => {
     if (!isSpeaking && isSoundEnabled) {
       setIsSpeaking(true);
       
-      // Jouer un effet sonore pour attirer l'attention
       playCardSound();
       
-      // Utiliser Eleven Labs ou le fallback
       await speakWithFallback(comment);
       
       setIsSpeaking(false);
@@ -85,14 +82,17 @@ const AICommentator: React.FC<AICommentatorProps> = ({ players, roundHistory = [
           className={`rounded-2xl border p-4 ${commentStyles[commentType]} ${className}`}
         >
           <div className="flex items-start gap-3">
-            <div className="mt-1 w-auto">
+            <div className="mt-1">
               <ProfessorAvatar 
-                message={comment} 
-                onSpeakMessage={speakMessage}
+                size="lg"
+                animate={true}
+                className="hover:scale-105 transition-transform duration-300"
               />
             </div>
             <div className="flex-1">
-              <h3 className="font-semibold text-gray-800 text-lg mb-1">Professeur Cartouche</h3>
+              <h3 className="font-semibold text-gray-800 text-lg mb-1">
+                Professeur Cartouche
+              </h3>
               {commentType === 'headline' ? (
                 <p className="text-gray-800 font-bold text-lg">{comment}</p>
               ) : (
