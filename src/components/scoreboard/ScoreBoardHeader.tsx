@@ -1,7 +1,4 @@
 
-/**
- * En-tête du tableau des scores
- */
 import React from 'react';
 import { Trophy, Settings, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -21,12 +18,17 @@ const ScoreBoardHeader: React.FC<ScoreBoardHeaderProps> = ({
   const navigate = useNavigate();
   
   return (
-    <div className="mb-6">
-      <div className="flex items-center justify-between mb-3">
+    <motion.div 
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="mb-6 rounded-3xl bg-white/70 backdrop-blur-xl border border-white/50 shadow-sm p-4"
+    >
+      <div className="flex items-center justify-between">
         <Button
           variant="ghost"
           size="icon"
-          className="text-gray-600 hover:text-dutch-purple"
+          className="text-gray-600 hover:text-dutch-purple transition-colors"
           onClick={() => navigate('/')}
         >
           <ArrowLeft className="h-5 w-5" />
@@ -36,7 +38,7 @@ const ScoreBoardHeader: React.FC<ScoreBoardHeaderProps> = ({
           className="text-2xl sm:text-3xl font-semibold bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
         >
           Tableau des scores
         </motion.h1>
@@ -44,7 +46,7 @@ const ScoreBoardHeader: React.FC<ScoreBoardHeaderProps> = ({
         <Button
           variant="ghost"
           size="icon"
-          className="text-gray-600 hover:text-dutch-purple"
+          className="text-gray-600 hover:text-dutch-purple transition-colors"
           onClick={() => navigate('/settings')}
         >
           <Settings className="h-5 w-5" />
@@ -52,27 +54,27 @@ const ScoreBoardHeader: React.FC<ScoreBoardHeaderProps> = ({
       </div>
       
       <motion.div 
-        className="flex items-center justify-center gap-4 text-gray-700 text-sm mt-4 bg-white/70 backdrop-blur-sm p-3 rounded-2xl border border-white/50 shadow-sm"
+        className="flex flex-wrap items-center justify-center gap-4 mt-4"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: 0.2 }}
+        transition={{ duration: 0.4, delay: 0.3 }}
       >
-        <div className="flex items-center">
-          <span className="font-medium mr-2">Manche actuelle:</span> 
-          <Badge variant="outline" className="bg-dutch-purple/10 text-dutch-purple font-medium px-3 py-1">
+        <div className="flex items-center bg-white/50 backdrop-blur-sm rounded-full px-4 py-2 shadow-sm">
+          <span className="text-gray-700 font-medium mr-2">Manche</span>
+          <Badge variant="secondary" className="bg-dutch-purple/10 text-dutch-purple font-medium">
             {roundCount}
           </Badge>
         </div>
         
-        <div className="flex items-center">
+        <div className="flex items-center bg-white/50 backdrop-blur-sm rounded-full px-4 py-2 shadow-sm">
           <Trophy className="h-4 w-4 mr-2 text-dutch-orange" />
-          <span className="font-medium mr-2">Jusqu'à:</span> 
-          <Badge variant="outline" className="bg-dutch-orange/10 text-dutch-orange font-medium px-3 py-1">
+          <span className="text-gray-700 font-medium mr-2">Limite</span>
+          <Badge variant="secondary" className="bg-dutch-orange/10 text-dutch-orange font-medium">
             {scoreLimit} pts
           </Badge>
         </div>
       </motion.div>
-    </div>
+    </motion.div>
   );
 };
 
