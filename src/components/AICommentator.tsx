@@ -8,6 +8,7 @@ import { getRandomComment } from '@/utils/commentGenerator';
 import ProfessorAvatar from './game/ProfessorAvatar';
 import { useElevenLabs } from '@/hooks/use-eleven-labs';
 import { useSound } from '@/hooks/use-sound';
+import { cn } from '@/utils/cn';
 
 interface AICommentatorProps {
   players: Player[];
@@ -79,24 +80,47 @@ const AICommentator: React.FC<AICommentatorProps> = ({
             stiffness: 300,
             damping: 15
           }}
-          className={`rounded-2xl border p-4 ${commentStyles[commentType]} ${className}`}
+          className={cn(
+            'rounded-2xl border p-4',
+            commentStyles[commentType],
+            'backdrop-blur-xl shadow-lg hover:shadow-xl transition-all duration-300',
+            'hover:-translate-y-1',
+            className
+          )}
         >
-          <div className="flex items-start gap-3">
+          <div className="flex items-start gap-4">
             <div className="mt-1">
               <ProfessorAvatar 
                 size="lg"
                 animate={true}
+                showBadge={true}
                 className="hover:scale-105 transition-transform duration-300"
               />
             </div>
-            <div className="flex-1">
-              <h3 className="font-semibold text-gray-800 text-lg mb-1">
+            <div className="flex-1 space-y-2">
+              <motion.h3 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="font-semibold text-gray-800 text-lg"
+              >
                 Professeur Cartouche
-              </h3>
+              </motion.h3>
               {commentType === 'headline' ? (
-                <p className="text-gray-800 font-bold text-lg">{comment}</p>
+                <motion.p 
+                  initial={{ opacity: 0, y: 5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-gray-800 font-bold text-lg bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent"
+                >
+                  {comment}
+                </motion.p>
               ) : (
-                <p className="text-gray-700">{comment}</p>
+                <motion.p 
+                  initial={{ opacity: 0, y: 5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-gray-700 leading-relaxed"
+                >
+                  {comment}
+                </motion.p>
               )}
             </div>
           </div>
