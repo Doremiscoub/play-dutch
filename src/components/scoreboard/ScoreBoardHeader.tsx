@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Trophy, Settings, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -35,12 +34,15 @@ const ScoreBoardHeader: React.FC<ScoreBoardHeaderProps> = ({
         </Button>
         
         <motion.h1 
-          className="text-2xl sm:text-3xl font-semibold bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent"
+          className="relative text-2xl sm:text-4xl font-black tracking-tight"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
-          Tableau des scores
+          <span className="absolute -inset-1 block rounded-lg bg-gradient-to-br from-dutch-blue/20 via-dutch-purple/20 to-dutch-orange/20 blur-xl" />
+          <span className="relative block bg-gradient-to-br from-dutch-blue via-dutch-purple to-dutch-orange bg-clip-text text-transparent drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.3)] animate-shimmer">
+            Tableau des scores
+          </span>
         </motion.h1>
         
         <Button
