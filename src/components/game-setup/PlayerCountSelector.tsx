@@ -14,21 +14,20 @@ const PlayerCountSelector: React.FC<PlayerCountSelectorProps> = ({
   onNumPlayersChange 
 }) => {
   return (
-    <div className="flex items-center justify-center gap-4 py-2">
-      <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+    <div className="flex items-center justify-center gap-4">
+      <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
         <Button 
-          variant="outline" 
+          variant="dutch-glass" 
           size="icon" 
           onClick={() => onNumPlayersChange(false)}
           disabled={numPlayers <= 2}
-          className="vision-button w-10 h-10 rounded-xl"
+          className="border border-white/40 shadow-md"
         >
-          <Minus className="h-5 w-5" />
+          <Minus className="h-6 w-6" />
         </Button>
       </motion.div>
-      
       <motion.span 
-        className="text-3xl font-medium bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent w-10 text-center"
+        className="text-3xl font-bold text-dutch-blue w-10 text-center"
         key={numPlayers}
         initial={{ scale: 1.5, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -36,16 +35,15 @@ const PlayerCountSelector: React.FC<PlayerCountSelectorProps> = ({
       >
         {numPlayers}
       </motion.span>
-      
-      <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+      <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
         <Button 
-          variant="outline" 
+          variant="dutch-glass" 
           size="icon"
           onClick={() => onNumPlayersChange(true)}
           disabled={numPlayers >= 10}
-          className="vision-button w-10 h-10 rounded-xl"
+          className="border border-white/40 shadow-md"
         >
-          <Plus className="h-5 w-5" />
+          <Plus className="h-6 w-6" />
         </Button>
       </motion.div>
     </div>

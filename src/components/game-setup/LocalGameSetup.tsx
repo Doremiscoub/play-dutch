@@ -1,12 +1,8 @@
 
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import PlayerNameInput from './PlayerNameInput';
 import PlayerCountSelector from './PlayerCountSelector';
-import { usePlayerNames } from '@/hooks/usePlayerNames';
-import { motion } from 'framer-motion';
-import { CardContent } from '@/components/ui/card';
-import { Play } from 'lucide-react';
 
 interface LocalGameSetupProps {
   onStartGame: (playerNames: string[]) => void;
@@ -14,64 +10,70 @@ interface LocalGameSetupProps {
 
 const LocalGameSetup: React.FC<LocalGameSetupProps> = ({ onStartGame }) => {
   const [numPlayers, setNumPlayers] = useState(4);
+  const [playerNames, setPlayerNames] = useState<string[]>(Array(4).fill('').map((_, i) => `Joueur ${i + 1}`));
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { playerNames, handleNameChange, updatePlayerCount, validateNames } = usePlayerNames(4);
 
-  const handleNumPlayersChange = useCallback((increment: boolean) => {
+  const handleNumPlayersChange = (increment: boolean) => {
     const newNum = increment 
       ? Math.min(numPlayers + 1, 10) 
       : Math.max(numPlayers - 1, 2);
     
     setNumPlayers(newNum);
-    updatePlayerCount(newNum);
-  }, [numPlayers, updatePlayerCount]);
+    
+    if (increment && numPlayers < 10) {
+      setPlayerNames([...playerNames, `Joueur ${numPlayers + 1}`]);
+    } else if (!increment && numPlayers > 2) {
+      setPlayerNames(playerNames.slice(0, -1));
+    }
+  };
 
-  const handleSubmit = useCallback((e: React.FormEvent) => {
+  const handleNameChange = (index: number, name: string) => {
+    const newNames = [...playerNames];
+    newNames[index] = name;
+    setPlayerNames(newNames);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (isSubmitting) return;
     
     setIsSubmitting(true);
     
     try {
-      if (!validateNames()) {
-        setIsSubmitting(false);
-        return;
-      }
-
+      // Ensure all player names are valid
       const validPlayerNames = playerNames.map(name => 
         name.trim() === '' ? `Joueur ${playerNames.indexOf(name) + 1}` : name.trim()
       );
       
+      // Sauvegarder les noms dans localStorage avant de démarrer la partie
       localStorage.setItem('dutch_player_setup', JSON.stringify(validPlayerNames));
-      onStartGame(validPlayerNames);
+      console.info('Configuration des joueurs sauvegardée:', validPlayerNames);
       
+      // Attendre un peu pour s'assurer que localStorage est bien mis à jour
+      setTimeout(() => {
+        onStartGame(validPlayerNames);
+      }, 100);
     } catch (error) {
       console.error("Erreur lors de la configuration des joueurs:", error);
-      setIsSubmitting(false);
+    } finally {
+      setTimeout(() => {
+        setIsSubmitting(false);
+      }, 500);
     }
-  }, [isSubmitting, playerNames, validateNames, onStartGame]);
+  };
 
   return (
-    <CardContent className="space-y-6 py-6">
-      <motion.div 
-        className="space-y-2"
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-      >
+    <div className="space-y-6 py-4">
+      <div className="space-y-2">
         <h3 className="text-lg font-medium">Nombre de joueurs</h3>
         <PlayerCountSelector 
           numPlayers={numPlayers} 
           onNumPlayersChange={handleNumPlayersChange} 
         />
-      </motion.div>
+      </div>
       
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <motion.div 
-          className="space-y-4"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
-        >
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="space-y-2">
           <h3 className="text-lg font-medium">Noms des joueurs</h3>
           <div className="space-y-3">
             {playerNames.map((name, index) => (
@@ -83,24 +85,19 @@ const LocalGameSetup: React.FC<LocalGameSetupProps> = ({ onStartGame }) => {
               />
             ))}
           </div>
-        </motion.div>
+        </div>
         
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-        >
+        <div className="pt-4 flex justify-end">
           <Button 
             type="submit" 
-            className="w-full h-14 bg-gradient-to-r from-dutch-blue to-dutch-purple text-white rounded-xl font-medium shadow-md hover:shadow-lg transition-all hover:-translate-y-0.5 active:translate-y-0.5 flex items-center justify-center gap-2"
+            className="w-full bg-gradient-to-r from-dutch-blue to-dutch-purple text-white rounded-full"
             disabled={isSubmitting}
           >
-            <Play className="h-5 w-5" />
             {isSubmitting ? 'Création...' : 'Commencer la partie'}
           </Button>
-        </motion.div>
+        </div>
       </form>
-    </CardContent>
+    </div>
   );
 };
 
