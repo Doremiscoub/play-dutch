@@ -11,25 +11,35 @@ const suits = [
 ];
 
 export const SparkleIcon = () => {
-  // Sélection aléatoire d'une suite de cartes
-  const randomSuit = suits[Math.floor(Math.random() * suits.length)];
-  const Icon = randomSuit.icon;
+  // Sélection aléatoire de deux suites de cartes différentes
+  const randomSuits = suits
+    .sort(() => 0.5 - Math.random())
+    .slice(0, 2);
 
   return (
-    <motion.div
-      className={`absolute -top-2 -right-6 ${randomSuit.color}`}
-      initial={{ scale: 0, rotate: -20 }}
-      animate={{ 
-        scale: [1, 1.2, 1],
-        rotate: [-20, 0, -20],
-      }}
-      transition={{ 
-        duration: 2,
-        repeat: Infinity,
-        ease: "easeInOut"
-      }}
-    >
-      <Icon size={24} className="drop-shadow-md" fill="currentColor" />
-    </motion.div>
+    <div className="relative flex">
+      {randomSuits.map((suit, index) => {
+        const Icon = suit.icon;
+        return (
+          <motion.div
+            key={index}
+            className={`absolute ${index === 0 ? '-top-2 -right-6' : '-top-1 -right-3'} ${suit.color}`}
+            initial={{ scale: 0, rotate: index === 0 ? -20 : 20 }}
+            animate={{ 
+              scale: [1, 1.2, 1],
+              rotate: index === 0 ? [-20, 0, -20] : [20, 0, 20],
+            }}
+            transition={{ 
+              duration: 2,
+              delay: index * 0.5,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          >
+            <Icon size={24} className="drop-shadow-md" fill="currentColor" />
+          </motion.div>
+        );
+      })}
+    </div>
   );
 };
