@@ -10,6 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import html2canvas from 'html2canvas';
+import { ReceiptCard } from '@/components/ui/receipt-card';
 
 export interface PodiumViewProps {
   players: Player[];
