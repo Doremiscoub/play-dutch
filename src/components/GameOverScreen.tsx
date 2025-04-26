@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import confetti from 'canvas-confetti';
 import { toast } from 'sonner';
@@ -9,6 +8,7 @@ import GameOverHeader from './game/GameOverHeader';
 import GamePodium from './game/GamePodium';
 import OtherPlayersRanking from './game/OtherPlayersRanking';
 import GameOverActionButtons from './game/GameOverActionButtons';
+import { ReceiptCard } from './ui/receipt-card';
 
 interface GameOverScreenProps {
   players: Player[];
@@ -122,55 +122,25 @@ const GameOverScreen: React.FC<GameOverScreenProps> = ({
         <div className="absolute inset-0 bg-gradient-to-br from-purple-500/15 via-transparent to-orange-500/15"></div>
       </div>
       
-      {/* Animation of luminous particles */}
-      <div className="absolute inset-0 overflow-hidden">
-        {Array.from({ length: 15 }).map((_, i) => (
-          <motion.div 
-            key={i}
-            className="absolute w-3 h-3 rounded-full bg-yellow-400/30 blur-sm"
-            animate={{
-              x: [Math.random() * 100, Math.random() * window.innerWidth],
-              y: [Math.random() * 100, Math.random() * window.innerHeight],
-              opacity: [0.2, 0.8, 0.2],
-              scale: [1, 1.2, 1],
-            }}
-            transition={{
-              duration: Math.random() * 10 + 10,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-          />
-        ))}
+      {/* Main content */}
+      <div className="w-full max-w-xl mx-auto z-10">
+        <ReceiptCard className="w-full mb-6 p-6">
+          {/* Header with congratulations message */}
+          <GameOverHeader winner={winner} />
+          
+          {/* Podium */}
+          <GamePodium players={players} />
+          
+          {/* Other players ranking */}
+          <OtherPlayersRanking players={players} />
+        </ReceiptCard>
+        
+        {/* Action buttons */}
+        <GameOverActionButtons 
+          onRestart={onRestart} 
+          onContinueGame={handleContinueGame} 
+        />
       </div>
-      
-      {/* Pulsing ring effect around victorious message */}
-      <motion.div
-        className="absolute left-1/2 top-1/4 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full bg-dutch-blue/5"
-        animate={{
-          scale: [1, 1.5, 1],
-          opacity: [0.3, 0.1, 0.3]
-        }}
-        transition={{
-          duration: 4,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
-      />
-      
-      {/* Header with congratulations message */}
-      <GameOverHeader winner={winner} />
-      
-      {/* Podium */}
-      <GamePodium players={players} />
-      
-      {/* Other players ranking */}
-      <OtherPlayersRanking players={players} />
-      
-      {/* Action buttons */}
-      <GameOverActionButtons 
-        onRestart={onRestart} 
-        onContinueGame={handleContinueGame} 
-      />
       
       {/* Fixed: Replace jsx prop with standard CSS */}
       <style>

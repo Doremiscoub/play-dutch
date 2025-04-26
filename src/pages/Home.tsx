@@ -60,8 +60,8 @@ const Home: React.FC = () => {
                       className="w-full"
                     >
                       <Button 
-                        className="w-full h-14 rounded-full shadow-md"
-                        variant="y2k-blue"
+                        className="w-full h-14 rounded-full shadow-md bg-dutch-blue text-white"
+                        variant="default"
                         onClick={() => navigate('/game/setup')}
                       >
                         <Plus className="mr-2 h-5 w-5" />
@@ -77,8 +77,8 @@ const Home: React.FC = () => {
                         className="w-full"
                       >
                         <Button 
-                          className="w-full h-14 rounded-full shadow-md"
-                          variant="y2k-purple"
+                          className="w-full h-14 rounded-full shadow-md bg-dutch-purple text-white"
+                          variant="default"
                           onClick={() => navigate('/game')}
                         >
                           <Trophy className="mr-2 h-5 w-5" />
@@ -96,14 +96,12 @@ const Home: React.FC = () => {
                       className="w-full"
                     >
                       <Button 
-                        className="w-full h-14 rounded-full shadow-md relative overflow-hidden"
-                        variant="y2k-blue"
+                        className="w-full h-14 rounded-full shadow-md bg-dutch-blue text-white"
+                        variant="default"
                         onClick={() => navigate('/sign-in')}
                       >
-                        <span className="relative z-10 flex items-center">
-                          <LogIn className="mr-2 h-5 w-5" />
-                          Connexion / Inscription
-                        </span>
+                        <LogIn className="mr-2 h-5 w-5" />
+                        Connexion / Inscription
                       </Button>
                     </motion.div>
                     
@@ -114,8 +112,8 @@ const Home: React.FC = () => {
                       className="w-full"
                     >
                       <Button 
-                        className="w-full h-14 rounded-full shadow-md"
-                        variant="y2k-purple"
+                        className="w-full h-14 rounded-full shadow-md bg-dutch-purple text-white"
+                        variant="default"
                         onClick={() => navigate('/game/setup')}
                       >
                         <ExternalLink className="mr-2 h-5 w-5" />
@@ -138,9 +136,9 @@ const Home: React.FC = () => {
                       whileTap="tap"
                     >
                       <Button 
-                        variant="y2k-glass" 
+                        variant="outline" 
                         size="icon"
-                        className="rounded-full"
+                        className="rounded-full bg-white"
                         onClick={() => navigate('/history')}
                       >
                         <History className="h-5 w-5 text-dutch-orange" />
@@ -162,9 +160,9 @@ const Home: React.FC = () => {
                       whileTap="tap"
                     >
                       <Button 
-                        variant="y2k-glass" 
+                        variant="outline" 
                         size="icon"
-                        className="rounded-full"
+                        className="rounded-full bg-white"
                         onClick={() => navigate('/rules')}
                       >
                         <BookOpen className="h-5 w-5 text-dutch-purple" />
@@ -186,9 +184,9 @@ const Home: React.FC = () => {
                       whileTap="tap"
                     >
                       <Button 
-                        variant="y2k-glass" 
+                        variant="outline" 
                         size="icon"
-                        className="rounded-full"
+                        className="rounded-full bg-white"
                         onClick={() => navigate('/settings')}
                       >
                         <Settings className="h-5 w-5 text-dutch-blue" />
