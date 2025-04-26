@@ -1,4 +1,3 @@
-
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
@@ -15,26 +14,40 @@ const buttonVariants = cva(
         secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        gradient: "bg-gradient-to-r from-dutch-blue to-dutch-purple text-white hover:opacity-90 transition-all",
+        
+        // Flat design principal variants
+        "flat": "bg-dutch-blue text-white rounded-full shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5",
+        "flat-secondary": "bg-dutch-purple text-white rounded-full shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5",
+        "flat-accent": "bg-dutch-orange text-white rounded-full shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5",
+        "flat-light": "bg-white text-dutch-blue border border-dutch-blue/20 rounded-full shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5",
+        
+        // Gradient variants
+        "gradient": "bg-gradient-to-r from-dutch-blue to-dutch-purple text-white hover:opacity-90 transition-all",
+        "gradient-animated": "gradient-button text-white rounded-full shadow-md hover:shadow-lg",
+        "gradient-orange": "gradient-button-orange text-white rounded-full shadow-md hover:shadow-lg",
+        
+        // Glass variants
         "vision-glass": "bg-white/70 backdrop-blur-xl border border-white/50 shadow-sm text-gray-800 hover:bg-white/80 transition-all hover:-translate-y-0.5",
         "dutch-glass": "bg-white/70 backdrop-blur-xl border border-white/50 shadow-sm hover:bg-white/80",
+        "glass": "btn-glass-y2k rounded-2xl bg-white/70 backdrop-blur-xl border-2 border-white/60 shadow-md text-gray-800 hover:bg-white/80",
+        
+        // Colored variants
         "vision-blue": "bg-dutch-blue text-white hover:bg-dutch-blue/90",
         "vision-purple": "bg-dutch-purple text-white hover:bg-dutch-purple/90",
         "vision-orange": "bg-dutch-orange text-white hover:bg-dutch-orange/90",
         "dutch-blue": "bg-dutch-blue text-white hover:bg-dutch-blue/90",
         "floating": "bg-white shadow-lg text-gray-800 hover:shadow-xl",
+        
+        // Pill variants
         "pill-glass": "rounded-full bg-white/70 backdrop-blur-xl border border-white/50 shadow-sm",
         "pill-orange": "rounded-full bg-dutch-orange text-white shadow-sm",
         "pill-blue": "rounded-full bg-dutch-blue text-white shadow-sm",
         "pill-sm": "text-xs px-2 py-1 rounded-full",
+        
+        // Control variants
         "game-control": "bg-white/70 backdrop-blur-xl text-dutch-blue border border-dutch-blue/20 shadow-sm hover:bg-white/90",
-        "glass": "btn-glass-y2k rounded-2xl bg-white/70 backdrop-blur-xl border-2 border-white/60 shadow-md text-gray-800 hover:bg-white/80",
-        "flat": "bg-dutch-blue text-white rounded-full shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5",
-        "flat-secondary": "bg-dutch-purple text-white rounded-full shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5",
-        "flat-accent": "bg-dutch-orange text-white rounded-full shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5",
-        "flat-light": "bg-white text-dutch-blue border border-dutch-blue/20 rounded-full shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5",
-        "gradient-animated": "gradient-button text-white rounded-full shadow-md hover:shadow-lg",
-        "gradient-orange": "gradient-button-orange text-white rounded-full shadow-md hover:shadow-lg",
+        
+        // Y2K variants
         "y2k-glass": "btn-glass-y2k rounded-2xl bg-white/70 backdrop-blur-xl border-2 border-white/60 shadow-md text-gray-800 hover:bg-white/80",
         "y2k-blue": "bg-gradient-to-r from-dutch-blue to-dutch-purple text-white hover:opacity-90 hover:-translate-y-0.5 transition-all shadow-md rounded-2xl",
       },

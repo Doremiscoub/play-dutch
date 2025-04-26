@@ -18,7 +18,7 @@ export const SparkleIcon = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSuits(suits.sort(() => 0.5 - Math.random()).slice(0, 2));
-    }, 4000); // Intervalle augmenté pour une sensation plus fluide
+    }, 4000);
 
     return () => clearInterval(interval);
   }, []);

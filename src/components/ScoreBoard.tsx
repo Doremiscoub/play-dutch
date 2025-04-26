@@ -10,14 +10,7 @@ import PageLayout from '@/components/PageLayout';
 import CustomScoreBoardButtons from './CustomScoreBoardButtons';
 import ScoreTableView from './ScoreTableView';
 import AICommentator from './AICommentator';
-
-// Import des composants modulaires
-import ScoreBoardHeader from './scoreboard/ScoreBoardHeader';
-import ScoreBoardTabs from './scoreboard/ScoreBoardTabs';
-import PlayerListView from './scoreboard/PlayerListView';
-import GameStatsPanel from './scoreboard/GameStatsPanel';
-import UndoConfirmationDialog from './scoreboard/UndoConfirmationDialog';
-import EndGameConfirmationDialog from './scoreboard/EndGameConfirmationDialog';
+import { ModernTitle } from './ui/modern-title';
 
 interface ScoreBoardProps {
   players: Player[];
@@ -30,7 +23,7 @@ interface ScoreBoardProps {
   onConfirmEndGame?: () => void;
   onCancelEndGame?: () => void;
   scoreLimit?: number;
-  openScoreForm?: () => void; // Nouvelle prop pour ouvrir le formulaire
+  openScoreForm?: () => void;
 }
 
 const ScoreBoard: React.FC<ScoreBoardProps> = ({
@@ -44,45 +37,39 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
   onConfirmEndGame,
   onCancelEndGame,
   scoreLimit = 100,
-  openScoreForm // Nouvelle prop pour ouvrir le formulaire
+  openScoreForm
 }) => {
-  // État local pour la gestion de l'interface
   const [view, setView] = useState<'list' | 'table'>('list');
   const [showAICommentator, setShowAICommentator] = useState<boolean>(true);
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
   const [showUndoConfirmation, setShowUndoConfirmation] = useState<boolean>(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
-  
-  // Tri des joueurs par score (du meilleur au moins bon)
+
   const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
-  
-  // Sélection automatique du premier joueur pour les stats détaillées
+
   useEffect(() => {
     if (sortedPlayers.length > 0 && !selectedPlayer) {
       setSelectedPlayer(sortedPlayers[0]);
     }
   }, [sortedPlayers, selectedPlayer]);
-  
-  // Gestion de l'annulation d'une manche
+
   const handleRequestUndo = () => {
-    // Vérification s'il y a des manches à annuler
     if (players.length === 0 || players[0].rounds.length === 0) {
       toast.error('Pas de manche à annuler !');
       return;
     }
     setShowUndoConfirmation(true);
   };
-  
+
   const handleConfirmUndo = () => {
     onUndoLastRound();
     setShowUndoConfirmation(false);
   };
-  
+
   const handleCancelUndo = () => {
     setShowUndoConfirmation(false);
   };
-  
-  // Sélection d'un joueur pour voir ses stats détaillées
+
   const handlePlayerSelect = (player: Player) => {
     setSelectedPlayer(player);
   };
@@ -90,13 +77,13 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
   return (
     <PageLayout className="pb-12 sm:pb-20">
       <div className="w-full max-w-6xl mx-auto px-1 sm:px-2">
-        {/* En-tête avec boutons de navigation et titre */}
-        <ScoreBoardHeader 
-          roundCount={players.length > 0 ? players[0]?.rounds.length || 0 : 0}
-          scoreLimit={scoreLimit}
-        />
-        
-        {/* Commentateur IA - sur mobile et desktop */}
+        <div className="mb-6">
+          <ModernTitle variant="h2" withSparkles className="mb-2">Tableau des scores</ModernTitle>
+          <p className="text-p2 text-center">
+            Manche {players.length > 0 ? players[0]?.rounds.length || 0 : 0} - Limite: {scoreLimit} points
+          </p>
+        </div>
+
         {showAICommentator && (
           <div className="mb-4">
             <AICommentator 
@@ -105,16 +92,13 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
             />
           </div>
         )}
-        
-        {/* Onglets pour changer de vue */}
+
         <ScoreBoardTabs 
           currentView={view}
           onViewChange={(newView) => setView(newView)}
         />
-        
-        {/* Contenu principal */}
+
         <div className={`mt-4 ${isDesktop ? 'md:flex md:gap-4' : ''}`}>
-          {/* Colonne de gauche (classement ou tableau) - responsive */}
           <div className={`${isDesktop ? 'md:w-3/4' : 'w-full'} z-20 relative`}>
             <AnimatePresence mode="wait">
               {view === 'list' && (
@@ -125,7 +109,6 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                   exit={{ opacity: 0 }}
                   className="w-full"
                 >
-                  {/* Vue liste des joueurs avec cartes dépliables */}
                   <PlayerListView 
                     players={players}
                     isDesktop={isDesktop}
@@ -134,7 +117,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                   />
                 </motion.div>
               )}
-              
+
               {view === 'table' && (
                 <motion.div
                   key="table-view"
@@ -151,10 +134,10 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
               )}
             </AnimatePresence>
           </div>
-          
-          {/* Panneau statistique de droite (desktop uniquement) */}
+
           {isDesktop && (
             <div className="md:w-1/4 md:max-h-screen md:sticky md:top-0">
+              <ModernTitle variant="h3" className="mb-3">Statistiques</ModernTitle>
               <GameStatsPanel
                 players={players}
                 roundHistory={roundHistory}
@@ -162,19 +145,17 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
             </div>
           )}
         </div>
-        
-        {/* Boutons d'action */}
+
         <div className="mt-4">
           <CustomScoreBoardButtons
             players={players}
-            onAddRound={openScoreForm} // Utilisation de la nouvelle prop
+            onAddRound={openScoreForm}
             onRequestUndoLastRound={handleRequestUndo}
             onEndGame={onEndGame}
           />
         </div>
       </div>
-      
-      {/* Dialogues de confirmation */}
+
       {showGameEndConfirmation && onConfirmEndGame && onCancelEndGame && (
         <EndGameConfirmationDialog 
           isOpen={showGameEndConfirmation}
@@ -182,7 +163,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
           onCancel={onCancelEndGame}
         />
       )}
-      
+
       <UndoConfirmationDialog 
         isOpen={showUndoConfirmation}
         onConfirm={handleConfirmUndo}

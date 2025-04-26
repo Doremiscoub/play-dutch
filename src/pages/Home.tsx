@@ -44,7 +44,7 @@ const Home: React.FC = () => {
         
         <main className="flex-1 flex flex-col items-center justify-center text-center">
           <div className="mb-12">
-            <ModernTitle withSparkles variant="h1" className="text-6xl mb-2">Dutch</ModernTitle>
+            <ModernTitle withSparkles variant="h1" className="text-6xl mb-2" withIcon>Dutch</ModernTitle>
             <p className="text-gray-600">Votre compagnon de jeu</p>
           </div>
           
@@ -113,7 +113,7 @@ const Home: React.FC = () => {
                     >
                       <Button 
                         className="w-full h-14 rounded-full shadow-md"
-                        variant="gradient-orange"
+                        variant="flat-light"
                         onClick={() => navigate('/game/setup')}
                       >
                         <ExternalLink className="mr-2 h-5 w-5" />
