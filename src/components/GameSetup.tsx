@@ -21,7 +21,7 @@ const GameSetup: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 px-4 py-8">
       <div className="container max-w-4xl mx-auto">
         <PageHeader
-          title={<ModernTitle withSparkles>Nouvelle Partie</ModernTitle>}
+          title={<ModernTitle withSparkles variant="h1">Nouvelle Partie</ModernTitle>}
           onBack={() => navigate('/')}
         />
         <Card className="p-6 rounded-3xl bg-white/80 backdrop-blur-xl border border-white/50 shadow-md">

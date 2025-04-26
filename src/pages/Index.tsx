@@ -46,7 +46,7 @@ const Index = () => {
               <p className="text-gray-600 mb-4 flex-grow">Commencez une nouvelle partie avec vos amis</p>
               <Button 
                 onClick={() => navigate('/game')} 
-                variant="gradient"
+                variant="y2k-blue"
                 elevated
                 animated
                 className="w-full mt-auto text-white rounded-xl"
@@ -72,10 +72,10 @@ const Index = () => {
               <p className="text-gray-600 mb-4 flex-grow">Apprenez à jouer avec les règles complètes</p>
               <Button 
                 onClick={() => navigate('/rules')} 
-                variant="glass"
+                variant="y2k-purple"
                 elevated
                 animated
-                className="w-full mt-auto text-dutch-purple border-dutch-purple/20 rounded-xl"
+                className="w-full mt-auto rounded-xl"
               >
                 Consulter
               </Button>
@@ -98,10 +98,10 @@ const Index = () => {
               <p className="text-gray-600 mb-4 flex-grow">Consultez l'historique de vos parties</p>
               <Button 
                 onClick={() => navigate('/history')} 
-                variant="glass"
+                variant="y2k-orange"
                 elevated
                 animated
-                className="w-full mt-auto text-dutch-orange border-dutch-orange/20 rounded-xl"
+                className="w-full mt-auto rounded-xl"
               >
                 Voir
               </Button>

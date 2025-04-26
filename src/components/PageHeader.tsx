@@ -20,14 +20,14 @@ const PageHeader: React.FC<PageHeaderProps> = ({
   className = ''
 }) => {
   return (
-    <div className={`mb-6 ${className}`}>
+    <div className={`mb-8 ${className}`}>
       <div className="flex items-center justify-between mb-3">
         {onBack && (
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
             <Button
-              variant="vision-glass"
+              variant="glass"
               size="icon"
-              className="text-dutch-blue border border-dutch-blue/30 shadow-sm hover:bg-white/90"
+              className="text-dutch-blue border-2 border-dutch-blue/40 shadow-sm hover:bg-white/90 btn-glass-y2k"
               onClick={onBack}
               aria-label="Retour"
             >
@@ -43,9 +43,9 @@ const PageHeader: React.FC<PageHeaderProps> = ({
         {showSettings ? (
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
             <Button
-              variant="vision-glass"
+              variant="glass"
               size="icon"
-              className="text-dutch-purple border border-dutch-purple/30 shadow-sm hover:bg-white/90"
+              className="text-dutch-purple border-2 border-dutch-purple/40 shadow-sm hover:bg-white/90 btn-glass-y2k"
               onClick={onSettings}
               aria-label="Réglages"
             >

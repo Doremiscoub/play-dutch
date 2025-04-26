@@ -4,10 +4,10 @@ import { Diamond, Heart, Club, Spade } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const suits = [
-  { icon: Diamond, color: "text-dutch-blue/70" },
-  { icon: Heart, color: "text-dutch-orange/70" },
-  { icon: Club, color: "text-dutch-purple/70" },
-  { icon: Spade, color: "text-dutch-purple/70" }
+  { icon: Diamond, color: "text-dutch-blue/80" },
+  { icon: Heart, color: "text-dutch-orange/80" },
+  { icon: Club, color: "text-dutch-purple/80" },
+  { icon: Spade, color: "text-dutch-purple/80" }
 ];
 
 export const SparkleIcon = () => {

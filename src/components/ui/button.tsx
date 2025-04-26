@@ -10,12 +10,9 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default: "bg-primary text-primary-foreground hover:bg-primary/90",
-        destructive:
-          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-        outline:
-          "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
-        secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+        destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+        outline: "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+        secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
         gradient: "bg-gradient-to-r from-dutch-blue to-dutch-purple text-white hover:opacity-90 transition-all",
@@ -31,8 +28,12 @@ const buttonVariants = cva(
         "pill-blue": "rounded-full bg-dutch-blue text-white shadow-sm",
         "pill-sm": "text-xs px-2 py-1 rounded-full",
         "game-control": "bg-white/70 backdrop-blur-xl text-dutch-blue border border-dutch-blue/20 shadow-sm hover:bg-white/90",
-        "glass": "btn-glass-y2k rounded-2xl bg-white/70 backdrop-blur-xl border border-white/50 shadow-md text-gray-800 hover:bg-white/80",
-        "y2k": "btn-y2k rounded-2xl border-2 shadow-lg",
+        "glass": "btn-glass-y2k rounded-2xl bg-white/70 backdrop-blur-xl border-2 border-white/60 shadow-md text-gray-800 hover:bg-white/80",
+        "y2k": "btn-y2k rounded-2xl border-2 shadow-lg relative overflow-hidden",
+        "y2k-blue": "btn-y2k rounded-2xl border-2 shadow-lg text-dutch-blue border-dutch-blue/40 relative overflow-hidden",
+        "y2k-purple": "btn-y2k rounded-2xl border-2 shadow-lg text-dutch-purple border-dutch-purple/40 relative overflow-hidden",
+        "y2k-orange": "btn-y2k rounded-2xl border-2 shadow-lg text-dutch-orange border-dutch-orange/40 relative overflow-hidden",
+        "y2k-glass": "btn-glass-y2k rounded-2xl bg-white/80 backdrop-blur-xl border-2 border-white/60 shadow-md text-gray-800 hover:bg-white/90 relative overflow-hidden",
       },
       size: {
         default: "h-10 px-4 py-2",

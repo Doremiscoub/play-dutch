@@ -22,11 +22,11 @@ export const ModernTitle = ({
     'h3': 'text-2xl sm:text-3xl'
   };
 
-  // Ajuster la marge inférieure en fonction de la variante
+  // Ajuster la marge et le padding pour éviter la troncature
   const marginClasses = {
-    'h1': 'mb-6 mt-2',
-    'h2': 'mb-4 mt-1',
-    'h3': 'mb-3 mt-1'
+    'h1': 'mb-6 mt-4 pt-2 pb-1',
+    'h2': 'mb-4 mt-3 pt-1 pb-1',
+    'h3': 'mb-3 mt-2 pt-1'
   };
 
   // Ajuster le flou et l'intensité du gradient en fonction de la variante

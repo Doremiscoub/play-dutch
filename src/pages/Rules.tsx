@@ -16,17 +16,19 @@ const Rules: React.FC = () => {
         <AnimatedBackground />
       </div>
       
-      <div className="container mx-auto px-2 py-8 relative z-10">
+      <div className="container mx-auto px-4 py-8 relative z-10">
         <PageHeader 
-          title={<ModernTitle withSparkles>Règles du Dutch</ModernTitle>}
+          title={<ModernTitle withSparkles variant="h1">Règles du Dutch</ModernTitle>}
           onBack={() => navigate('/')}
         />
         
-        <div className="mb-8">
-          <RulesTabs 
-            activeTab={activeTab}
-            onTabChange={setActiveTab}
-          />
+        <div className="mb-8 mt-2">
+          <div className="vision-card p-6">
+            <RulesTabs 
+              activeTab={activeTab}
+              onTabChange={setActiveTab}
+            />
+          </div>
         </div>
       </div>
     </div>

@@ -57,7 +57,7 @@ const SettingsPage = () => {
     <PageLayout backgroundVariant="subtle">
       <div className="w-full max-w-6xl mx-auto px-1 sm:px-2">
         <PageHeader 
-          title={<ModernTitle withSparkles>Réglages</ModernTitle>}
+          title={<ModernTitle withSparkles variant="h1">Réglages</ModernTitle>}
           onBack={() => navigate('/')}
           showSettings={false}
         />
@@ -77,7 +77,7 @@ const SettingsPage = () => {
               <div className="space-y-4">
                 <div className="flex flex-col space-y-2">
                   <Button 
-                    variant="outline" 
+                    variant="y2k-glass" 
                     className="w-full justify-start text-red-500 hover:text-red-600 hover:bg-red-50"
                     onClick={handleResetHistory}
                   >
@@ -99,7 +99,7 @@ const SettingsPage = () => {
                     </div>
                     {signOut && (
                       <Button 
-                        variant="gradient"
+                        variant="y2k-blue"
                         onClick={signOut}
                       >
                         Déconnexion
@@ -147,7 +147,7 @@ const SettingsPage = () => {
                   <p className="text-sm text-gray-600">Cache DB: {localStorage.getItem('dutch_games') ? 'Présent' : 'Vide'}</p>
                   
                   <Button 
-                    variant="gradient" 
+                    variant="y2k-blue" 
                     className="mt-4"
                     onClick={() => {
                       addBreadcrumb('diagnostic', 'Test error triggered');
@@ -174,7 +174,7 @@ const SettingsPage = () => {
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel onClick={cancelResetHistory} className="bg-gray-100 hover:bg-gray-200 text-gray-700 hover:-translate-y-0.5 transition-all">Annuler</AlertDialogCancel>
-              <AlertDialogAction onClick={confirmResetHistory} className="bg-gradient-to-r from-dutch-blue to-dutch-purple text-white hover:opacity-90 hover:-translate-y-0.5 transition-all shadow-md">Effacer</AlertDialogAction>
+              <AlertDialogAction onClick={confirmResetHistory} className="btn-y2k-blue bg-gradient-to-r from-dutch-blue to-dutch-purple text-white hover:opacity-90 hover:-translate-y-0.5 transition-all shadow-md">Effacer</AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>

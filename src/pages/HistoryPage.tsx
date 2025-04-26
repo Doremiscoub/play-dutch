@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Game } from '@/types';
 import { motion } from 'framer-motion';
@@ -141,7 +142,7 @@ const HistoryPage: React.FC = () => {
                     </div>
                   </div>
                 </motion.div>
-              ))}
+              ))
             )}
           </div>
         </div>

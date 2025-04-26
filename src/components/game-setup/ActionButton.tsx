@@ -20,7 +20,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({ onClick, label, disabled = 
       <Button
         onClick={onClick}
         disabled={disabled}
-        variant="gradient"
+        variant="y2k"
         size="2xl"
         elevated
         animated

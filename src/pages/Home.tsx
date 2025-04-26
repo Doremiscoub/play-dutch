@@ -9,7 +9,7 @@ import { animationVariants } from '@/utils/animationUtils';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/context/AuthContext';
-import { SparkleIcon } from '@/components/ui/sparkle-icon';
+import { ModernTitle } from '@/components/ui/modern-title';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -43,21 +43,10 @@ const Home: React.FC = () => {
         </header>
         
         <main className="flex-1 flex flex-col items-center justify-center text-center">
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="mb-12"
-          >
-            <h1 className="relative text-6xl sm:text-7xl font-bold mb-2">
-              <span className="absolute -inset-1 block rounded-lg bg-gradient-to-br from-dutch-blue/20 via-dutch-purple/20 to-dutch-orange/20 blur-xl" />
-              <span className="relative inline-flex bg-gradient-to-br from-dutch-blue via-dutch-purple to-dutch-orange bg-clip-text text-transparent drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.3)] animate-shimmer">
-                Dutch
-                <SparkleIcon />
-              </span>
-            </h1>
+          <div className="mb-12">
+            <ModernTitle withSparkles variant="h1" className="mb-2">Dutch</ModernTitle>
             <p className="text-gray-600">Votre compagnon de jeu</p>
-          </motion.div>
+          </div>
           
           <div className="w-full max-w-xs space-y-4">
             {isLoaded && (
@@ -71,7 +60,8 @@ const Home: React.FC = () => {
                       className="w-full"
                     >
                       <Button 
-                        className="w-full bg-white text-dutch-blue hover:bg-white/90 border border-dutch-blue/20 h-14 rounded-full shadow-md"
+                        className="w-full h-14 rounded-full shadow-md"
+                        variant="y2k-blue"
                         onClick={() => navigate('/game/setup')}
                       >
                         <Plus className="mr-2 h-5 w-5" />
@@ -87,7 +77,8 @@ const Home: React.FC = () => {
                         className="w-full"
                       >
                         <Button 
-                          className="w-full bg-white text-dutch-purple hover:bg-white/90 border border-dutch-purple/20 h-14 rounded-full shadow-md"
+                          className="w-full h-14 rounded-full shadow-md"
+                          variant="y2k-purple"
                           onClick={() => navigate('/game')}
                         >
                           <Trophy className="mr-2 h-5 w-5" />
@@ -106,12 +97,8 @@ const Home: React.FC = () => {
                     >
                       <Button 
                         className="w-full h-14 rounded-full shadow-md relative overflow-hidden"
+                        variant="y2k-blue"
                         onClick={() => navigate('/sign-in')}
-                        style={{
-                          background: "linear-gradient(to right, #3B82F6, #8B5CF6)",
-                          color: "white",
-                          border: "none"
-                        }}
                       >
                         <span className="relative z-10 flex items-center">
                           <LogIn className="mr-2 h-5 w-5" />
@@ -127,7 +114,8 @@ const Home: React.FC = () => {
                       className="w-full"
                     >
                       <Button 
-                        className="w-full bg-white text-dutch-purple hover:bg-white/90 border border-dutch-purple/20 h-14 rounded-full shadow-md"
+                        className="w-full h-14 rounded-full shadow-md"
+                        variant="y2k-purple"
                         onClick={() => navigate('/game/setup')}
                       >
                         <ExternalLink className="mr-2 h-5 w-5" />
@@ -150,9 +138,9 @@ const Home: React.FC = () => {
                       whileTap="tap"
                     >
                       <Button 
-                        variant="outline" 
+                        variant="y2k-glass" 
                         size="icon"
-                        className="rounded-full bg-white/80 backdrop-blur-sm border border-white/50 shadow-sm"
+                        className="rounded-full"
                         onClick={() => navigate('/history')}
                       >
                         <History className="h-5 w-5 text-dutch-orange" />
@@ -174,9 +162,9 @@ const Home: React.FC = () => {
                       whileTap="tap"
                     >
                       <Button 
-                        variant="outline" 
+                        variant="y2k-glass" 
                         size="icon"
-                        className="rounded-full bg-white/80 backdrop-blur-sm border border-white/50 shadow-sm"
+                        className="rounded-full"
                         onClick={() => navigate('/rules')}
                       >
                         <BookOpen className="h-5 w-5 text-dutch-purple" />
@@ -198,9 +186,9 @@ const Home: React.FC = () => {
                       whileTap="tap"
                     >
                       <Button 
-                        variant="outline" 
+                        variant="y2k-glass" 
                         size="icon"
-                        className="rounded-full bg-white/80 backdrop-blur-sm border border-white/50 shadow-sm"
+                        className="rounded-full"
                         onClick={() => navigate('/settings')}
                       >
                         <Settings className="h-5 w-5 text-dutch-blue" />
