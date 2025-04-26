@@ -5,6 +5,7 @@ import { Game, Player } from '@/types';
 // Types pour la base de données
 export interface OngoingGame {
   id: string;
+  userId?: string; // ID de l'utilisateur connecté si applicable
   players: Player[];
   roundHistory: { scores: number[], dutchPlayerId?: string }[];
   isGameOver: boolean;

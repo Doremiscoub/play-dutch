@@ -1,6 +1,7 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 
 interface ProtectedRouteProps {
@@ -8,7 +9,16 @@ interface ProtectedRouteProps {
 }
 
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  const { isLoaded, isOfflineMode } = useAuth();
+  const { isLoaded, isOfflineMode, isSignedIn } = useAuth();
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    // Rediriger vers la connexion si l'utilisateur n'est pas connecté
+    // et n'est pas en mode hors ligne
+    if (isLoaded && !isOfflineMode && !isSignedIn) {
+      navigate('/sign-in');
+    }
+  }, [isLoaded, isOfflineMode, isSignedIn, navigate]);
   
   // Si l'authentification n'est pas encore chargée et nous ne sommes pas en mode hors ligne,
   // afficher un loader
@@ -28,8 +38,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
     );
   }
   
-  // Permettre l'accès que l'utilisateur soit connecté ou non,
-  // ou si nous sommes en mode hors ligne
+  // Permettre l'accès si l'utilisateur est connecté ou en mode hors ligne
   return (
     <motion.div 
       initial={{ opacity: 0 }}

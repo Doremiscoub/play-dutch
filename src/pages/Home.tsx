@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -113,7 +112,7 @@ const Home: React.FC = () => {
                     >
                       <Button 
                         className="w-full h-14 rounded-full shadow-md"
-                        variant="flat-light"
+                        variant="dutch-blue"
                         onClick={() => navigate('/game/setup')}
                       >
                         <ExternalLink className="mr-2 h-5 w-5" />
@@ -125,80 +124,6 @@ const Home: React.FC = () => {
                 )}
               </>
             )}
-            
-            <div className="pt-4 flex flex-wrap justify-center gap-2">
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <motion.div
-                      variants={animationVariants.mainButton}
-                      whileHover="hover"
-                      whileTap="tap"
-                    >
-                      <Button 
-                        variant="outline" 
-                        size="icon"
-                        className="rounded-full bg-white"
-                        onClick={() => navigate('/history')}
-                      >
-                        <History className="h-5 w-5 text-dutch-orange" />
-                      </Button>
-                    </motion.div>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Historique des parties</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-              
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <motion.div
-                      variants={animationVariants.mainButton}
-                      whileHover="hover"
-                      whileTap="tap"
-                    >
-                      <Button 
-                        variant="outline" 
-                        size="icon"
-                        className="rounded-full bg-white"
-                        onClick={() => navigate('/rules')}
-                      >
-                        <BookOpen className="h-5 w-5 text-dutch-purple" />
-                      </Button>
-                    </motion.div>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Règles du jeu</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-              
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <motion.div
-                      variants={animationVariants.mainButton}
-                      whileHover="hover"
-                      whileTap="tap"
-                    >
-                      <Button 
-                        variant="outline" 
-                        size="icon"
-                        className="rounded-full bg-white"
-                        onClick={() => navigate('/settings')}
-                      >
-                        <Settings className="h-5 w-5 text-dutch-blue" />
-                      </Button>
-                    </motion.div>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Paramètres</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </div>
           </div>
         </main>
         

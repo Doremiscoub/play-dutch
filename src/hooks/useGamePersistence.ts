@@ -1,21 +1,27 @@
-
 import { useCallback } from 'react';
 import { Player, Game } from '@/types';
 import { toast } from 'sonner';
 import { v4 as uuidv4 } from 'uuid';
 import { calculateGameDuration } from '@/utils/gameUtils';
 import { db, isIndexedDBAvailable, OngoingGame } from '@/lib/database';
+import { useAuth } from '@/context/AuthContext';
 
 export const useGamePersistence = () => {
+  const { user, isSignedIn } = useAuth();
+
   const loadGameState = useCallback(async () => {
     try {
       const hasIndexedDB = await isIndexedDBAvailable();
       
       if (hasIndexedDB) {
-        // Charge depuis IndexedDB
-        const currentGame = await db.ongoingGames
-          .orderBy('lastUpdated')
-          .last();
+        let query = db.ongoingGames.orderBy('lastUpdated');
+        
+        // Si l'utilisateur est connecté, filtrer par user_id
+        if (isSignedIn && user?.id) {
+          query = query.filter(game => game.userId === user.id);
+        }
+        
+        const currentGame = await query.last();
         
         if (currentGame) {
           return {
@@ -40,7 +46,7 @@ export const useGamePersistence = () => {
       toast.error('Erreur lors du chargement de la partie');
       return null;
     }
-  }, []);
+  }, [isSignedIn, user?.id]);
 
   const saveGameState = useCallback(async (gameState: {
     players: Player[];
@@ -54,6 +60,7 @@ export const useGamePersistence = () => {
       
       const gameData: OngoingGame = {
         id: 'current_game',
+        userId: isSignedIn && user?.id ? user.id : undefined,
         ...gameState,
         gameStartTime: gameState.gameStartTime?.toISOString() ?? null,
         lastUpdated: new Date().toISOString()
@@ -63,7 +70,14 @@ export const useGamePersistence = () => {
         // Sauvegarde dans IndexedDB avec transaction
         await db.transaction('rw', db.ongoingGames, async () => {
           // Efface l'ancienne partie si elle existe
-          await db.ongoingGames.where('id').equals('current_game').delete();
+          if (isSignedIn && user?.id) {
+            await db.ongoingGames.where({
+              id: 'current_game',
+              userId: user.id
+            }).delete();
+          } else {
+            await db.ongoingGames.where('id').equals('current_game').delete();
+          }
           // Sauvegarde la nouvelle
           await db.ongoingGames.add(gameData);
         });
@@ -77,7 +91,7 @@ export const useGamePersistence = () => {
       console.error('Erreur lors de la sauvegarde de l\'état du jeu :', error);
       return false;
     }
-  }, []);
+  }, [isSignedIn, user?.id]);
 
   const saveGameToHistory = useCallback(async (players: Player[], gameStartTime: Date | null) => {
     try {
@@ -151,4 +165,3 @@ export const useGamePersistence = () => {
     deleteGameFromHistory
   };
 };
-
