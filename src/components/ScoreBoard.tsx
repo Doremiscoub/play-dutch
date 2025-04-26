@@ -11,6 +11,11 @@ import CustomScoreBoardButtons from './CustomScoreBoardButtons';
 import ScoreTableView from './ScoreTableView';
 import AICommentator from './AICommentator';
 import { ModernTitle } from './ui/modern-title';
+import ScoreBoardTabs from './scoreboard/ScoreBoardTabs';
+import PlayerListView from './scoreboard/PlayerListView';
+import GameStatsPanel from './scoreboard/GameStatsPanel';
+import EndGameConfirmationDialog from './scoreboard/EndGameConfirmationDialog';
+import UndoConfirmationDialog from './scoreboard/UndoConfirmationDialog';
 
 interface ScoreBoardProps {
   players: Player[];
