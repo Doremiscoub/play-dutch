@@ -20,14 +20,11 @@ const ActionButton: React.FC<ActionButtonProps> = ({ onClick, label, disabled = 
       <Button
         onClick={onClick}
         disabled={disabled}
-        variant="y2k"
+        variant="default"
         size="2xl"
-        elevated
-        animated
-        className="w-full relative overflow-hidden group bg-gradient-to-r from-dutch-blue to-dutch-purple text-white font-bold uppercase"
+        className="w-full relative overflow-hidden group bg-dutch-blue hover:bg-dutch-blue/90 text-white font-bold uppercase"
       >
-        <span className="absolute inset-0 bg-white/10 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300"></span>
-        <div className="flex items-center justify-center gap-2 z-10">
+        <div className="flex items-center justify-center gap-2">
           <Play className="h-6 w-6 text-white" />
           <span>{label}</span>
         </div>

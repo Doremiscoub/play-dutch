@@ -159,13 +159,7 @@ const PodiumView: React.FC<PodiumViewProps> = ({ players, onClose, isMultiplayer
 
   return (
     <div className="fixed inset-0 bg-background/80 backdrop-blur-md z-50 flex flex-col items-center justify-center p-4">
-      <motion.div 
-        className="w-full max-w-xl rounded-3xl bg-white/60 backdrop-blur-md border border-white/20 p-8 shadow-lg overflow-y-auto max-h-[90vh]"
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5 }}
-        id="game-results"
-      >
+      <ReceiptCard className="w-full max-w-xl bg-white p-8 mx-auto">
         <div className="text-center mb-8">
           <div className="flex justify-between items-center mb-4">
             <Badge variant="outline" className="bg-dutch-purple/10 text-dutch-purple">
@@ -527,8 +521,8 @@ const PodiumView: React.FC<PodiumViewProps> = ({ players, onClose, isMultiplayer
             </Button>
           </div>
         </motion.div>
-      </motion.div>
-      
+      </ReceiptCard>
+
       <div className="flex gap-3 mt-6 w-full max-w-xl">
         <motion.button
           className="flex-1 rounded-full px-4 py-3 bg-dutch-purple/10 hover:bg-dutch-purple/20 text-dutch-purple border border-dutch-purple/20"
