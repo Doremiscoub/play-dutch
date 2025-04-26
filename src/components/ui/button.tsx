@@ -35,6 +35,8 @@ const buttonVariants = cva(
         "flat-light": "bg-white text-dutch-blue border border-dutch-blue/20 rounded-full shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5",
         "gradient-animated": "gradient-button text-white rounded-full shadow-md hover:shadow-lg",
         "gradient-orange": "gradient-button-orange text-white rounded-full shadow-md hover:shadow-lg",
+        "y2k-glass": "btn-glass-y2k rounded-2xl bg-white/70 backdrop-blur-xl border-2 border-white/60 shadow-md text-gray-800 hover:bg-white/80",
+        "y2k-blue": "bg-gradient-to-r from-dutch-blue to-dutch-purple text-white hover:opacity-90 hover:-translate-y-0.5 transition-all shadow-md rounded-2xl",
       },
       size: {
         default: "h-10 px-4 py-2",
