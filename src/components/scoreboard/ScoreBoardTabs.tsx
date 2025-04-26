@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { ViewList, Table2 } from 'lucide-react';
+import { ListFilter, Table2 } from 'lucide-react';
 
 interface ScoreBoardTabsProps {
   currentView: 'list' | 'table';
@@ -20,7 +20,7 @@ const ScoreBoardTabs: React.FC<ScoreBoardTabsProps> = ({
         onClick={() => onViewChange('list')}
         className="flex-1 rounded-lg"
       >
-        <ViewList className="w-4 h-4 mr-2" />
+        <ListFilter className="w-4 h-4 mr-2" />
         Classement
       </Button>
       <Button
