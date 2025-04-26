@@ -48,9 +48,9 @@ const GameStatsPanel: React.FC<GameStatsPanelProps> = ({ players, roundHistory }
 };
 
 const StatItem: React.FC<{ label: string; value: number | string }> = ({ label, value }) => (
-  <div className="flex justify-between items-center">
-    <span className="text-gray-600">{label}</span>
-    <span className="text-lg font-semibold">{value}</span>
+  <div className="flex justify-between items-center p-2 rounded-xl hover:bg-white/40 transition-colors">
+    <span className="text-gray-600 font-medium">{label}</span>
+    <span className="text-xl font-semibold bg-gradient-to-br from-dutch-blue to-dutch-purple bg-clip-text text-transparent">{value}</span>
   </div>
 );
 

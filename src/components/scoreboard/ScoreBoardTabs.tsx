@@ -13,12 +13,12 @@ const ScoreBoardTabs: React.FC<ScoreBoardTabsProps> = ({
   onViewChange,
 }) => {
   return (
-    <div className="flex gap-2 rounded-xl bg-white/70 backdrop-blur-sm p-1 shadow-sm border border-white/50">
+    <div className="flex gap-2 rounded-xl bg-gray-100/80 backdrop-blur-sm p-1.5 shadow-sm border border-white/50 hover:shadow-md transition-all">
       <Button
         variant={currentView === 'list' ? 'dutch-blue' : 'ghost'}
         size="sm"
         onClick={() => onViewChange('list')}
-        className="flex-1 rounded-lg"
+        className="flex-1 rounded-lg text-gray-800 hover:text-dutch-blue hover:bg-white/80"
       >
         <ListFilter className="w-4 h-4 mr-2" />
         Classement
@@ -27,7 +27,7 @@ const ScoreBoardTabs: React.FC<ScoreBoardTabsProps> = ({
         variant={currentView === 'table' ? 'dutch-blue' : 'ghost'}
         size="sm"
         onClick={() => onViewChange('table')}
-        className="flex-1 rounded-lg"
+        className="flex-1 rounded-lg text-gray-800 hover:text-dutch-blue hover:bg-white/80"
       >
         <Table2 className="w-4 h-4 mr-2" />
         Tableau

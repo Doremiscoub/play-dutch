@@ -31,7 +31,7 @@ export const SparkleIcon = () => {
           return (
             <motion.div
               key={`${index}-${suit.icon.name}`}
-              className={`absolute ${index === 0 ? '-top-5 -right-4' : '-top-6 right-0'} ${suit.color}`}
+              className={`absolute ${index === 0 ? '-top-6 -right-4' : '-top-8 right-0'} ${suit.color}`}
               initial={{ scale: 0.8, rotate: index === 0 ? -20 : 20, opacity: 0 }}
               animate={{ 
                 scale: [0.8, 1.1, 1],
@@ -48,7 +48,7 @@ export const SparkleIcon = () => {
                 ease: "easeInOut"
               }}
             >
-              <Icon size={24} className="drop-shadow-md" fill="currentColor" />
+              <Icon size={28} className="drop-shadow-md" fill="currentColor" />
             </motion.div>
           );
         })}

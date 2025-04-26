@@ -1,4 +1,3 @@
-
 /**
  * Composant de commentaires du Professeur Cartouche
  */
@@ -102,7 +101,7 @@ const AICommentator: React.FC<AICommentatorProps> = ({
             </div>
             
             <div className="flex-1 space-y-3">
-              <ModernTitle variant="h2">
+              <ModernTitle variant="h3">
                 Professeur Cartouche
               </ModernTitle>
               
