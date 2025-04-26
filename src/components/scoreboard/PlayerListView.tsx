@@ -1,12 +1,9 @@
 
-/**
- * Vue de la liste des joueurs avec leurs scores
- */
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React from 'react';
 import { Player } from '@/types';
-import PlayerScoreCard from '../PlayerScoreCard';
-import PlayerDetailedStats from '../PlayerDetailedStats';
+import PlayerRankBadge from '../game/PlayerRankBadge';
+import { Card } from '../ui/card';
+import { motion } from 'framer-motion';
 
 interface PlayerListViewProps {
   players: Player[];
@@ -15,75 +12,40 @@ interface PlayerListViewProps {
   onPlayerSelect: (player: Player) => void;
 }
 
-const PlayerListView: React.FC<PlayerListViewProps> = ({ 
-  players, 
-  isDesktop, 
+const PlayerListView: React.FC<PlayerListViewProps> = ({
+  players,
+  isDesktop,
   scoreLimit,
-  onPlayerSelect
+  onPlayerSelect,
 }) => {
-  // État pour suivre le joueur dont la carte est développée
-  const [expandedPlayerId, setExpandedPlayerId] = useState<string | null>(null);
-  
-  // Trier les joueurs par score (croissant)
   const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
-  
-  // Calcul du seuil d'avertissement (80% de la limite)
-  const warningThreshold = scoreLimit * 0.8;
-  
-  // Gestion du clic sur une carte joueur
-  const handlePlayerClick = (player: Player) => {
-    onPlayerSelect(player);
-    
-    // Si le joueur est déjà développé, on replie sa carte
-    if (expandedPlayerId === player.id) {
-      setExpandedPlayerId(null);
-    } else {
-      // Sinon, on développe sa carte (et replie l'autre)
-      setExpandedPlayerId(player.id);
-    }
-  };
-  
+
   return (
-    <motion.div 
-      className="space-y-3 md:space-y-4 pb-4"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-    >
+    <div className="space-y-3">
       {sortedPlayers.map((player, index) => (
-        <motion.div 
+        <Card 
           key={player.id}
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.3, delay: index * 0.1 }}
-          className="cursor-pointer"
-          onClick={() => handlePlayerClick(player)}
+          className="p-4 bg-white/80 backdrop-blur-sm hover:bg-white/90 transition-all cursor-pointer"
+          onClick={() => onPlayerSelect(player)}
         >
-          <PlayerScoreCard
-            player={player}
-            position={index + 1}
-            isWinner={index === 0 && player.totalScore >= scoreLimit}
-            lastRoundScore={player.rounds.length > 0 ? player.rounds[player.rounds.length - 1].score : undefined}
-            warningThreshold={warningThreshold}
-            isExpanded={expandedPlayerId === player.id}
-            expandedContent={
-              expandedPlayerId === player.id ? (
-                <PlayerDetailedStats 
-                  player={player} 
-                  className="mt-3 px-2"
-                />
-              ) : null
-            }
-          />
-        </motion.div>
+          <div className="flex items-center gap-4">
+            <PlayerRankBadge position={index + 1} />
+            <div className="flex-1">
+              <h3 className="text-lg font-semibold text-gray-900">{player.name}</h3>
+              <div className="flex items-center gap-2 text-sm text-gray-500">
+                <span>{player.rounds.length} manches</span>
+                <span>•</span>
+                <span>Moyenne: {(player.totalScore / Math.max(1, player.rounds.length)).toFixed(1)}</span>
+              </div>
+            </div>
+            <div className="text-right">
+              <div className="text-2xl font-bold text-gray-900">{player.totalScore}</div>
+              <div className="text-sm text-gray-500">/{scoreLimit} pts</div>
+            </div>
+          </div>
+        </Card>
       ))}
-      
-      {players.length === 0 && (
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl p-6 text-center text-gray-500 border border-gray-100">
-          <p>Aucun joueur disponible</p>
-        </div>
-      )}
-    </motion.div>
+    </div>
   );
 };
 

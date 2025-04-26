@@ -11,6 +11,7 @@ import CustomScoreBoardButtons from './CustomScoreBoardButtons';
 import ScoreTableView from './ScoreTableView';
 import AICommentator from './AICommentator';
 import { ModernTitle } from './ui/modern-title';
+import ScoreBoardHeader from './scoreboard/ScoreBoardHeader';
 import ScoreBoardTabs from './scoreboard/ScoreBoardTabs';
 import PlayerListView from './scoreboard/PlayerListView';
 import GameStatsPanel from './scoreboard/GameStatsPanel';
@@ -82,12 +83,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
   return (
     <PageLayout className="pb-12 sm:pb-20">
       <div className="w-full max-w-6xl mx-auto px-1 sm:px-2">
-        <div className="mb-6">
-          <ModernTitle variant="h2" withSparkles className="mb-2">Tableau des scores</ModernTitle>
-          <p className="text-p2 text-center">
-            Manche {players.length > 0 ? players[0]?.rounds.length || 0 : 0} - Limite: {scoreLimit} points
-          </p>
-        </div>
+        <ScoreBoardHeader roundCount={players[0]?.rounds.length || 0} scoreLimit={scoreLimit} />
 
         {showAICommentator && (
           <div className="mb-4">
@@ -141,7 +137,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
           </div>
 
           {isDesktop && (
-            <div className="md:w-1/4 md:max-h-screen md:sticky md:top-0">
+            <div className="md:w-1/4">
               <ModernTitle variant="h3" className="mb-3">Statistiques</ModernTitle>
               <GameStatsPanel
                 players={players}

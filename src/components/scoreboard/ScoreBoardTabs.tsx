@@ -1,35 +1,37 @@
 
 import React from 'react';
-import { UnifiedTabs } from '@/components/ui/unified-tabs';
-import { LayoutGrid, LayoutList } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { ViewList, Table2 } from 'lucide-react';
 
 interface ScoreBoardTabsProps {
   currentView: 'list' | 'table';
   onViewChange: (view: 'list' | 'table') => void;
 }
 
-const ScoreBoardTabs: React.FC<ScoreBoardTabsProps> = ({ currentView, onViewChange }) => {
-  const tabOptions = [
-    { 
-      value: "list", 
-      label: "Classement", 
-      icon: <LayoutList className="h-4 w-4" />
-    },
-    { 
-      value: "table", 
-      label: "Tableau détaillé", 
-      icon: <LayoutGrid className="h-4 w-4" />
-    },
-  ];
-
+const ScoreBoardTabs: React.FC<ScoreBoardTabsProps> = ({
+  currentView,
+  onViewChange,
+}) => {
   return (
-    <div className="flex justify-center mb-6">
-      <UnifiedTabs
-        value={currentView}
-        onValueChange={onViewChange}
-        options={tabOptions}
-        variant="default"
-      />
+    <div className="flex gap-2 rounded-xl bg-white/70 backdrop-blur-sm p-1 shadow-sm border border-white/50">
+      <Button
+        variant={currentView === 'list' ? 'dutch-blue' : 'ghost'}
+        size="sm"
+        onClick={() => onViewChange('list')}
+        className="flex-1 rounded-lg"
+      >
+        <ViewList className="w-4 h-4 mr-2" />
+        Classement
+      </Button>
+      <Button
+        variant={currentView === 'table' ? 'dutch-blue' : 'ghost'}
+        size="sm"
+        onClick={() => onViewChange('table')}
+        className="flex-1 rounded-lg"
+      >
+        <Table2 className="w-4 h-4 mr-2" />
+        Tableau
+      </Button>
     </div>
   );
 };
