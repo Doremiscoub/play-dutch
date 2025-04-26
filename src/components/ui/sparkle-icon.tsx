@@ -1,45 +1,61 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Diamond, Heart, Club, Spade } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const suits = [
-  { icon: Diamond, color: "text-dutch-blue" },
-  { icon: Heart, color: "text-dutch-orange" },
-  { icon: Club, color: "text-dutch-purple" },
-  { icon: Spade, color: "text-dutch-purple" }
+  { icon: Diamond, color: "text-dutch-blue/70" },
+  { icon: Heart, color: "text-dutch-orange/70" },
+  { icon: Club, color: "text-dutch-purple/70" },
+  { icon: Spade, color: "text-dutch-purple/70" }
 ];
 
 export const SparkleIcon = () => {
-  // Sélection aléatoire de deux suites de cartes différentes
-  const randomSuits = suits
-    .sort(() => 0.5 - Math.random())
-    .slice(0, 2);
+  const [currentSuits, setCurrentSuits] = useState(() => 
+    suits.sort(() => 0.5 - Math.random()).slice(0, 2)
+  );
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSuits(suits.sort(() => 0.5 - Math.random()).slice(0, 2));
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="relative inline-flex ml-2">
-      {randomSuits.map((suit, index) => {
-        const Icon = suit.icon;
-        return (
-          <motion.div
-            key={index}
-            className={`absolute ${index === 0 ? '-top-5 -right-4' : '-top-6 right-0'} ${suit.color}`}
-            initial={{ scale: 0, rotate: index === 0 ? -20 : 20 }}
-            animate={{ 
-              scale: [1, 1.2, 1],
-              rotate: index === 0 ? [-20, 0, -20] : [20, 0, 20],
-            }}
-            transition={{ 
-              duration: 2,
-              delay: index * 0.5,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-          >
-            <Icon size={24} className="drop-shadow-md" fill="currentColor" />
-          </motion.div>
-        );
-      })}
+      <AnimatePresence mode="wait">
+        {currentSuits.map((suit, index) => {
+          const Icon = suit.icon;
+          return (
+            <motion.div
+              key={`${index}-${suit.icon.name}`}
+              className={`absolute ${index === 0 ? '-top-5 -right-4' : '-top-6 right-0'} ${suit.color}`}
+              initial={{ scale: 0, rotate: index === 0 ? -20 : 20, opacity: 0 }}
+              animate={{ 
+                scale: [1, 1.2, 1],
+                rotate: index === 0 ? [-20, 0, -20] : [20, 0, 20],
+                opacity: 1
+              }}
+              exit={{ 
+                scale: 0,
+                opacity: 0,
+                transition: { duration: 0.2 }
+              }}
+              transition={{ 
+                duration: 2,
+                delay: index * 0.5,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            >
+              <Icon size={24} className="drop-shadow-md" fill="currentColor" />
+            </motion.div>
+          );
+        })}
+      </AnimatePresence>
     </div>
   );
 };
+
