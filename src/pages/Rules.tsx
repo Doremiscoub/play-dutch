@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import AnimatedBackground from '../components/AnimatedBackground';
 import PageHeader from '@/components/PageHeader';
 import RulesTabs from '@/components/rules/RulesTabs';
+import { ModernTitle } from '@/components/ui/modern-title';
 
 const Rules: React.FC = () => {
   const [activeTab, setActiveTab] = useState('introduction');
@@ -17,7 +18,7 @@ const Rules: React.FC = () => {
       
       <div className="container mx-auto px-2 py-8 relative z-10">
         <PageHeader 
-          title="Règles du Dutch" 
+          title={<ModernTitle>Règles du Dutch</ModernTitle>}
           onBack={() => navigate('/')}
         />
         

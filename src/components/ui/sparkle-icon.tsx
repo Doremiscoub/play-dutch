@@ -18,7 +18,7 @@ export const SparkleIcon = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSuits(suits.sort(() => 0.5 - Math.random()).slice(0, 2));
-    }, 3000);
+    }, 4000); // Increased interval for smoother feeling
 
     return () => clearInterval(interval);
   }, []);
@@ -32,20 +32,20 @@ export const SparkleIcon = () => {
             <motion.div
               key={`${index}-${suit.icon.name}`}
               className={`absolute ${index === 0 ? '-top-5 -right-4' : '-top-6 right-0'} ${suit.color}`}
-              initial={{ scale: 0, rotate: index === 0 ? -20 : 20, opacity: 0 }}
+              initial={{ scale: 0.8, rotate: index === 0 ? -20 : 20, opacity: 0 }}
               animate={{ 
-                scale: [1, 1.2, 1],
+                scale: [0.8, 1.1, 1],
                 rotate: index === 0 ? [-20, 0, -20] : [20, 0, 20],
                 opacity: 1
               }}
               exit={{ 
-                scale: 0,
+                scale: 0.8,
                 opacity: 0,
-                transition: { duration: 0.2 }
+                transition: { duration: 0.4 }
               }}
               transition={{ 
-                duration: 2,
-                delay: index * 0.5,
+                duration: 3,
+                delay: index * 0.3,
                 repeat: Infinity,
                 ease: "easeInOut"
               }}
@@ -58,4 +58,3 @@ export const SparkleIcon = () => {
     </div>
   );
 };
-

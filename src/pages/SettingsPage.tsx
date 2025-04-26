@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useLocalStorage } from '@/hooks/use-local-storage';
@@ -15,6 +14,7 @@ import { useAuth } from '@/context/AuthContext';
 import * as Sentry from '@sentry/react';
 import { addBreadcrumb } from '@/utils/sentryConfig';
 import { isRunningAsPWA } from '@/utils/pwaUtils';
+import { ModernTitle } from '@/components/ui/modern-title';
 
 const SettingsPage = () => {
   const [soundEnabled, setSoundEnabled] = useLocalStorage('dutch_sound_enabled', true);
@@ -56,7 +56,7 @@ const SettingsPage = () => {
     <PageLayout backgroundVariant="subtle">
       <div className="w-full max-w-6xl mx-auto px-1 sm:px-2">
         <PageHeader 
-          title="Réglages" 
+          title={<ModernTitle>Réglages</ModernTitle>}
           onBack={() => navigate('/')}
           showSettings={false}
         />
