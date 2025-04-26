@@ -14,7 +14,10 @@ const GameStatsPanel: React.FC<GameStatsPanelProps> = ({ players, roundHistory }
 
     const totalRounds = players[0]?.rounds.length || 0;
     const totalPlayers = players.length;
-    const allScores = players.flatMap(p => p.rounds);
+    
+    // Extract just the score numbers from the rounds objects
+    const allScores = players.flatMap(p => p.rounds.map(round => round.score));
+    
     const averageScore = allScores.length 
       ? (allScores.reduce((a, b) => a + b, 0) / allScores.length).toFixed(1)
       : '0';
