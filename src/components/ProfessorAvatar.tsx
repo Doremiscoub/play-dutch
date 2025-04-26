@@ -39,7 +39,7 @@ const ProfessorAvatar: React.FC<ProfessorAvatarProps> = ({ message, onSpeakMessa
     <div className="flex items-center gap-3">
       <div className="relative">
         <motion.div 
-          className="w-16 h-16 sm:w-20 sm:h-20 bg-white rounded-full shadow-lg border-2 border-dutch-purple flex items-center justify-center overflow-hidden"
+          className="bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange p-[3px] rounded-full shadow-lg gradient-shift relative"
           animate={{ 
             scale: [1, 1.05, 1],
             rotate: [0, 1, -1, 0],
@@ -51,21 +51,23 @@ const ProfessorAvatar: React.FC<ProfessorAvatarProps> = ({ message, onSpeakMessa
           }}
           whileHover={{ scale: 1.1 }}
         >
-          <img 
-            src={imageError ? FALLBACK_IMAGE_URL : PROFESSOR_IMAGE_URL}
-            alt="Professeur Cartouche"
-            className="w-full h-full object-contain"
-            onError={() => {
-              console.warn("Image principale du Professeur non chargée, utilisation du fallback");
-              setImageError(true);
-            }}
-            loading="eager"
-          />
+          <div className="bg-white w-[calc(100%-6px)] h-[calc(100%-6px)] rounded-full flex items-center justify-center overflow-hidden absolute top-[3px] left-[3px]">
+            <motion.img 
+              src={imageError ? FALLBACK_IMAGE_URL : PROFESSOR_IMAGE_URL}
+              alt="Professeur Cartouche"
+              className="w-16 h-16 sm:w-20 sm:h-20 object-contain scale-110 wobble-animation"
+              onError={() => {
+                console.warn("Image principale du Professeur non chargée, utilisation du fallback");
+                setImageError(true);
+              }}
+              loading="eager"
+            />
+          </div>
         </motion.div>
         
         {/* Bulle d'animation pour donner vie à l'avatar */}
         <motion.div 
-          className="absolute -top-1 -right-1 bg-dutch-orange text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold"
+          className="absolute -top-1 -right-1 bg-gradient-to-r from-dutch-orange to-dutch-purple gradient-shift text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold"
           animate={{ 
             scale: [1, 1.2, 1],
             opacity: [0.7, 1, 0.7]

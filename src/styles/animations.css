@@ -1,3 +1,4 @@
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -31,10 +32,52 @@
 
 @keyframes shimmer {
   0% {
-    background-position: -400px 0;
+    background-position: -200% 0;
   }
   100% {
-    background-position: 400px 0;
+    background-position: 200% 0;
+  }
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes wobble {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-5deg);
+  }
+  75% {
+    transform: rotate(5deg);
   }
 }
 
@@ -56,6 +99,31 @@
   animation: shimmer 2s infinite linear;
 }
 
+.gradient-shift {
+  background-size: 200% 200%;
+  animation: gradientShift 6s ease infinite;
+}
+
+.pulse-animation {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.spin-animation {
+  animation: spin 8s linear infinite;
+}
+
+.wobble-animation {
+  animation: wobble 3s ease-in-out infinite;
+}
+
+.gradient-text {
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: shimmer 3s linear infinite;
+}
+
 .shimmer-gradient {
   background: linear-gradient(to right, 
     transparent,
@@ -75,10 +143,12 @@
     var(--dutch-purple),
     var(--dutch-orange)
   );
+  background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
   text-shadow: 0 1.2px 1.2px rgba(0,0,0,0.3);
+  animation: shimmer 3s linear infinite;
 }
 
 .modern-title::before {
@@ -93,4 +163,63 @@
   border-radius: 0.5rem;
   filter: blur(1rem);
   z-index: -1;
+}
+
+.gradient-button {
+  background-size: 200% auto;
+  transition: all 0.3s ease;
+  background-image: linear-gradient(to right, 
+    var(--dutch-blue),
+    var(--dutch-purple),
+    var(--dutch-blue)
+  );
+  animation: gradientShift 6s ease infinite;
+}
+
+.gradient-button:hover {
+  background-position: right center;
+  box-shadow: 0 0 15px rgba(var(--dutch-blue-rgb), 0.5);
+}
+
+.gradient-button-orange {
+  background-size: 200% auto;
+  transition: all 0.3s ease;
+  background-image: linear-gradient(to right, 
+    var(--dutch-orange),
+    var(--dutch-purple),
+    var(--dutch-orange)
+  );
+  animation: gradientShift 6s ease infinite;
+}
+
+.gradient-button-orange:hover {
+  background-position: right center;
+  box-shadow: 0 0 15px rgba(var(--dutch-orange-rgb), 0.5);
+}
+
+.badge-rank {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.badge-rank::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transform: rotate(30deg);
+  animation: shimmer 3s infinite linear;
+}
+
+.badge-rank:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
 }

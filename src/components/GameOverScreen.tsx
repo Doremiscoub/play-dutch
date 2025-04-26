@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import confetti from 'canvas-confetti';
 import { toast } from 'sonner';
@@ -9,6 +10,7 @@ import GamePodium from './game/GamePodium';
 import OtherPlayersRanking from './game/OtherPlayersRanking';
 import GameOverActionButtons from './game/GameOverActionButtons';
 import { ReceiptCard } from './ui/receipt-card';
+import { ModernTitle } from './ui/modern-title';
 
 interface GameOverScreenProps {
   players: Player[];
@@ -124,6 +126,16 @@ const GameOverScreen: React.FC<GameOverScreenProps> = ({
       
       {/* Main content */}
       <div className="w-full max-w-xl mx-auto z-10">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <ModernTitle variant="h1" withSparkles className="text-center mb-6">
+            Partie Terminée
+          </ModernTitle>
+        </motion.div>
+        
         <ReceiptCard className="w-full mb-6 p-6">
           {/* Header with congratulations message */}
           <GameOverHeader winner={winner} />

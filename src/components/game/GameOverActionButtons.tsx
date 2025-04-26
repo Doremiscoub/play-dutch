@@ -1,13 +1,8 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { 
-  ArrowRightCircle, 
-  RefreshCw, 
-  Plus, 
-  Home 
-} from 'lucide-react';
+import { RotateCcw, ArrowRight } from 'lucide-react';
 
 interface GameOverActionButtonsProps {
   onRestart: () => void;
@@ -16,105 +11,59 @@ interface GameOverActionButtonsProps {
 
 const GameOverActionButtons: React.FC<GameOverActionButtonsProps> = ({
   onRestart,
-  onContinueGame,
+  onContinueGame
 }) => {
-  const buttonVariants = {
-    hover: { scale: 1.05, y: -3 },
-    tap: { scale: 0.98 }
-  };
+  const [selectedLimit, setSelectedLimit] = useState<number>(100);
+  
+  const limits = [50, 100, 200];
   
   return (
-    <motion.div 
-      className="w-full max-w-md mt-8 space-y-4 relative z-10"
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.5, duration: 0.6 }}
-    >
-      {/* Pulse effect for primary button */}
-      <div className="relative">
-        <motion.div
-          className="absolute inset-0 bg-gradient-to-r from-dutch-blue/30 to-dutch-purple/30 rounded-2xl blur-md"
-          animate={{
-            scale: [1, 1.05, 1],
-            opacity: [0.6, 0.8, 0.6]
-          }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            repeatType: "reverse"
-          }}
-        />
-        <motion.div
-          variants={buttonVariants}
-          whileHover="hover"
-          whileTap="tap"
-          className="relative"
-        >
-          <Button
-            onClick={() => onContinueGame(50)}
-            className="w-full bg-gradient-to-r from-dutch-blue to-dutch-purple text-white h-14 rounded-2xl shadow-lg relative overflow-hidden border border-white/20 font-medium text-lg"
-          >
-            <motion.div
-              className="absolute inset-0 bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-blue bg-[length:200%_100%]"
-              animate={{ backgroundPosition: ['0% 0%', '100% 0%', '0% 0%'] }}
-              transition={{ duration: 10, repeat: Infinity }}
-            />
-            <span className="relative z-10 flex items-center">
-              <ArrowRightCircle className="mr-2 h-6 w-6" />
-              Continuer (+50 points)
-            </span>
-          </Button>
-        </motion.div>
-      </div>
-      
-      <div className="grid grid-cols-2 gap-3">
-        <motion.div
-          variants={buttonVariants}
-          whileHover="hover"
-          whileTap="tap"
-        >
-          <Button
-            onClick={() => onContinueGame(100)}
-            className="w-full bg-white text-dutch-orange border border-dutch-orange/20 h-12 rounded-xl shadow-md font-medium"
-            variant="outline"
-          >
-            <Plus className="mr-2 h-5 w-5" />
-            +100 points
-          </Button>
-        </motion.div>
+    <div className="mt-8 space-y-4">
+      <div>
+        <h3 className="text-sm text-gray-500 mb-2">Continuer la partie ?</h3>
+        <div className="flex gap-2 mb-4">
+          {limits.map(limit => (
+            <Button
+              key={limit}
+              variant={selectedLimit === limit ? "gradient-animated" : "outline"}
+              size="sm"
+              className={selectedLimit === limit ? "" : "bg-white"}
+              onClick={() => setSelectedLimit(limit)}
+            >
+              +{limit} pts
+            </Button>
+          ))}
+        </div>
         
         <motion.div
-          variants={buttonVariants}
-          whileHover="hover"
-          whileTap="tap"
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.97 }}
         >
           <Button
-            onClick={onRestart}
-            className="w-full bg-white text-dutch-purple border border-dutch-purple/20 h-12 rounded-xl shadow-md font-medium"
-            variant="outline"
+            variant="gradient-animated"
+            className="w-full"
+            onClick={() => onContinueGame(selectedLimit)}
           >
-            <RefreshCw className="mr-2 h-5 w-5" />
-            Nouvelle partie
+            <ArrowRight className="mr-2 h-5 w-5" />
+            Continuer à jouer
           </Button>
         </motion.div>
       </div>
       
       <motion.div
-        variants={buttonVariants}
-        whileHover="hover"
-        whileTap="tap"
-        className="pt-2"
+        whileHover={{ scale: 1.03 }}
+        whileTap={{ scale: 0.97 }}
       >
         <Button
-          onClick={() => window.location.href = '/'}
-          className="w-full bg-white/70 text-dutch-blue backdrop-blur-sm h-10 rounded-xl border border-dutch-blue/10 shadow-sm"
-          variant="ghost"
+          variant="flat-light"
+          className="w-full"
+          onClick={onRestart}
         >
-          <Home className="mr-2 h-4 w-4" />
-          Retourner à l'accueil
+          <RotateCcw className="mr-2 h-5 w-5" />
+          Nouvelle partie
         </Button>
       </motion.div>
-    </motion.div>
+    </div>
   );
 };
 

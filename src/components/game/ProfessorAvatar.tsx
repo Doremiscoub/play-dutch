@@ -10,7 +10,7 @@ const FALLBACK = '/professor.png';
 
 interface ProfessorAvatarProps {
   className?: string;
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'sm' | 'md' | 'lg' | 'xl';
   animate?: boolean;
 }
 
@@ -30,7 +30,8 @@ export default function ProfessorAvatar({
   const sizeClasses = {
     sm: 'w-12 h-12',
     md: 'w-16 h-16',
-    lg: 'w-24 h-24'
+    lg: 'w-24 h-24',
+    xl: 'w-32 h-32'
   };
 
   return (
@@ -46,42 +47,41 @@ export default function ProfessorAvatar({
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
     >
-      <Avatar className={cn(
-        sizeClasses[size],
-        'shadow-lg transition-all duration-300 backdrop-blur-sm',
-        isHovered && 'shadow-xl shadow-dutch-purple/30',
-        'ring-2 ring-offset-2 ring-offset-white ring-dutch-purple/20'
+      <div className={cn(
+        "rounded-full bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange p-[3px] gradient-shift shadow-xl",
+        isHovered && "scale-105",
+        "transition-all duration-300",
+        sizeClasses[size]
       )}>
-        {!errored && (
-          <AvatarImage
-            src={SOURCE}
-            alt="Professeur Cartouche"
-            onError={handleError}
-            className={cn(
-              'transition-all duration-300 scale-105',
-              isHovered && 'scale-110 rotate-3'
+        <div className="h-full w-full bg-white rounded-full p-1 flex items-center justify-center">
+          <motion.div 
+            className="h-full w-full relative"
+            animate={isHovered ? { rotate: [0, -5, 5, 0] } : {}}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
+          >
+            {!errored ? (
+              <img
+                src={SOURCE}
+                alt="Professeur Cartouche"
+                onError={handleError}
+                className={cn(
+                  "h-full w-full object-contain scale-110",
+                  isHovered && "wobble-animation"
+                )}
+              />
+            ) : (
+              <div 
+                className={cn(
+                  "h-full w-full flex items-center justify-center text-4xl",
+                  isHovered && "wobble-animation"
+                )}
+              >
+                👴🏼
+              </div>
             )}
-          />
-        )}
-        <AvatarFallback 
-          className={cn(
-            "text-4xl bg-gradient-to-r from-dutch-blue to-dutch-purple text-white",
-            isHovered && 'bg-gradient-to-r from-dutch-purple to-dutch-blue'
-          )}
-        >
-          👴🏼
-        </AvatarFallback>
-      </Avatar>
-
-      {/* Effet de brillance sur hover */}
-      {isHovered && (
-        <motion.div
-          className="absolute inset-0 rounded-full bg-gradient-to-r from-transparent via-white/20 to-transparent"
-          initial={{ x: -100, opacity: 0 }}
-          animate={{ x: 100, opacity: 1 }}
-          transition={{ duration: 0.8, repeat: Infinity }}
-        />
-      )}
+          </motion.div>
+        </div>
+      </div>
 
       {/* Cercles décoratifs en arrière-plan */}
       <div className="absolute -z-10 inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">

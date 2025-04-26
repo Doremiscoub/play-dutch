@@ -1,51 +1,54 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Card } from '@/components/ui/card';
 import { Player } from '@/types';
+import PlayerRankBadge from './PlayerRankBadge';
 
 interface OtherPlayersRankingProps {
   players: Player[];
 }
 
 const OtherPlayersRanking: React.FC<OtherPlayersRankingProps> = ({ players }) => {
-  // Sort players by score and take players beyond the podium (4th place and beyond)
-  const otherPlayers = [...players]
-    .sort((a, b) => a.totalScore - b.totalScore)
-    .slice(3);
+  // Sort players by score (lowest = best)
+  const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
   
+  // Skip the top 3 players (already shown in the podium)
+  const otherPlayers = sortedPlayers.slice(3);
+  
+  // If no other players, don't render this component
   if (otherPlayers.length === 0) {
     return null;
   }
   
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.5, delay: 0.4 }}
-      className="w-full max-w-md mb-8"
-    >
-      <p className="text-sm text-gray-500 mb-2 text-center">Autres participants</p>
-      <Card className="p-4 bg-white/80 backdrop-blur-sm border border-white shadow-xl">
+    <div className="mt-6">
+      <h3 className="text-lg font-medium text-gray-700 mb-4">Autres joueurs</h3>
+      
+      <div className="space-y-2">
         {otherPlayers.map((player, index) => (
           <motion.div
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.5 + (index * 0.1) }}
             key={player.id}
-            className="flex justify-between items-center mb-2 last:mb-0 p-2 hover:bg-gray-50/50 rounded-lg"
+            className="flex items-center gap-3 p-3 rounded-lg bg-gray-50/80 backdrop-blur-sm border border-gray-100 shadow-sm"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: index * 0.1 }}
+            whileHover={{ scale: 1.01, backgroundColor: "rgba(249, 250, 251, 0.9)" }}
           >
-            <div className="flex items-center">
-              <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center mr-2 shadow-sm">
-                <span>{index + 4}</span>
-              </div>
-              <span>{player.name}</span>
+            <PlayerRankBadge position={index + 4} size="sm" />
+            
+            <div className="flex-1">
+              <p className="font-medium">{player.name}</p>
             </div>
-            <span className="font-medium bg-gray-100 px-2 py-0.5 rounded-full">{player.totalScore} pts</span>
+            
+            <div className="text-right">
+              <span className="bg-gray-100 px-2 py-1 rounded-md text-sm font-semibold">
+                {player.totalScore} pts
+              </span>
+            </div>
           </motion.div>
         ))}
-      </Card>
-    </motion.div>
+      </div>
+    </div>
   );
 };
 

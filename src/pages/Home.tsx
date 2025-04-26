@@ -44,7 +44,7 @@ const Home: React.FC = () => {
         
         <main className="flex-1 flex flex-col items-center justify-center text-center">
           <div className="mb-12">
-            <ModernTitle withSparkles variant="h1" className="mb-2">Dutch</ModernTitle>
+            <ModernTitle withSparkles variant="h1" className="text-6xl mb-2">Dutch</ModernTitle>
             <p className="text-gray-600">Votre compagnon de jeu</p>
           </div>
           
@@ -60,8 +60,8 @@ const Home: React.FC = () => {
                       className="w-full"
                     >
                       <Button 
-                        className="w-full h-14 rounded-full shadow-md bg-dutch-blue text-white"
-                        variant="default"
+                        className="w-full h-14 rounded-full shadow-md"
+                        variant="gradient-animated"
                         onClick={() => navigate('/game/setup')}
                       >
                         <Plus className="mr-2 h-5 w-5" />
@@ -77,8 +77,8 @@ const Home: React.FC = () => {
                         className="w-full"
                       >
                         <Button 
-                          className="w-full h-14 rounded-full shadow-md bg-dutch-purple text-white"
-                          variant="default"
+                          className="w-full h-14 rounded-full shadow-md"
+                          variant="gradient-orange"
                           onClick={() => navigate('/game')}
                         >
                           <Trophy className="mr-2 h-5 w-5" />
@@ -96,8 +96,8 @@ const Home: React.FC = () => {
                       className="w-full"
                     >
                       <Button 
-                        className="w-full h-14 rounded-full shadow-md bg-dutch-blue text-white"
-                        variant="default"
+                        className="w-full h-14 rounded-full shadow-md"
+                        variant="gradient-animated"
                         onClick={() => navigate('/sign-in')}
                       >
                         <LogIn className="mr-2 h-5 w-5" />
@@ -112,8 +112,8 @@ const Home: React.FC = () => {
                       className="w-full"
                     >
                       <Button 
-                        className="w-full h-14 rounded-full shadow-md bg-dutch-purple text-white"
-                        variant="default"
+                        className="w-full h-14 rounded-full shadow-md"
+                        variant="gradient-orange"
                         onClick={() => navigate('/game/setup')}
                       >
                         <ExternalLink className="mr-2 h-5 w-5" />

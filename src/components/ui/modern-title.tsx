@@ -1,51 +1,53 @@
 
 import React from 'react';
-import { SparkleIcon } from './sparkle-icon';
+import { cn } from '@/lib/utils';
+import { VariantProps, cva } from 'class-variance-authority';
 
-interface ModernTitleProps {
-  children: React.ReactNode;
-  withSparkles?: boolean;
-  className?: string;
-  variant?: 'h1' | 'h2' | 'h3';
+const modernTitleVariants = cva(
+  "font-bold tracking-tight relative z-10 text-transparent bg-clip-text animate-shimmer",
+  {
+    variants: {
+      variant: {
+        h1: "text-4xl sm:text-5xl md:text-6xl bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange",
+        h2: "text-3xl sm:text-4xl bg-gradient-to-r from-dutch-blue to-dutch-purple",
+        h3: "text-2xl sm:text-3xl bg-gradient-to-r from-dutch-purple to-dutch-orange",
+        h4: "text-xl bg-gradient-to-br from-dutch-blue via-dutch-purple to-dutch-orange",
+      },
+      withSparkles: {
+        true: "after:content-[''] after:absolute after:-inset-1 after:-z-10 after:bg-gradient-to-r after:from-dutch-blue/20 after:via-dutch-purple/20 after:to-dutch-orange/20 after:blur-lg after:rounded-lg",
+      }
+    },
+    defaultVariants: {
+      variant: "h1",
+      withSparkles: false
+    }
+  }
+);
+
+export interface ModernTitleProps
+  extends React.HTMLAttributes<HTMLHeadingElement>,
+  VariantProps<typeof modernTitleVariants> {
+  as?: 'h1' | 'h2' | 'h3' | 'h4';
 }
 
-export const ModernTitle = ({
+export const ModernTitle: React.FC<ModernTitleProps> = ({
+  className,
+  variant,
+  withSparkles,
+  as: Component = 'h1',
   children,
-  withSparkles = false,
-  className = '',
-  variant = 'h1'
-}: ModernTitleProps) => {
-  // Ajuster les tailles de texte en fonction de la variante
-  const sizeClasses = {
-    'h1': 'text-4xl sm:text-5xl',
-    'h2': 'text-3xl sm:text-4xl',
-    'h3': 'text-2xl sm:text-3xl'
-  };
-
-  // Ajuster la marge et le padding pour éviter la troncature
-  const marginClasses = {
-    'h1': 'mb-6 mt-4 pt-2 pb-1',
-    'h2': 'mb-4 mt-3 pt-1 pb-1',
-    'h3': 'mb-3 mt-2 pt-1'
-  };
-
-  // Ajuster le flou et l'intensité du gradient en fonction de la variante
-  const glowClasses = {
-    'h1': 'blur-xl',
-    'h2': 'blur-lg',
-    'h3': 'blur-md'
-  };
-
-  // Déterminer l'élément HTML à utiliser
-  const Component = variant as keyof JSX.IntrinsicElements;
-
+  ...props
+}) => {
   return (
-    <Component className={`relative font-bold ${sizeClasses[variant]} ${marginClasses[variant]} ${className}`}>
-      <span className={`absolute -inset-1 block rounded-lg bg-gradient-to-br from-dutch-blue/20 via-dutch-purple/20 to-dutch-orange/20 ${glowClasses[variant]}`} />
-      <span className="relative inline-flex bg-gradient-to-br from-dutch-blue via-dutch-purple to-dutch-orange bg-clip-text text-transparent drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.3)] animate-shimmer">
-        {children}
-        {withSparkles && <SparkleIcon />}
-      </span>
+    <Component
+      className={cn(
+        modernTitleVariants({ variant, withSparkles, className }),
+        // Add shimmer effect background
+        "bg-[length:200%_auto]"
+      )}
+      {...props}
+    >
+      {children}
     </Component>
   );
 };
