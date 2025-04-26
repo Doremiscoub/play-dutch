@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
@@ -5,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { PlayCircle, ClipboardList, BookOpen } from 'lucide-react';
 import AnimatedBackground from '@/components/AnimatedBackground';
+import { ModernTitle } from '@/components/ui/modern-title';
 
 const Index = () => {
   const navigate = useNavigate();
@@ -20,9 +22,9 @@ const Index = () => {
         transition={{ duration: 0.5 }}
         className="text-center mb-8 relative z-10"
       >
-        <h1 className="text-4xl font-bold bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent mb-4">
+        <ModernTitle withSparkles className="mb-4">
           Dutch Card Game
-        </h1>
+        </ModernTitle>
         <p className="text-lg text-gray-600 max-w-md mx-auto">
           Le jeu de cartes convivial pour vos soirées entre amis
         </p>
@@ -44,7 +46,10 @@ const Index = () => {
               <p className="text-gray-600 mb-4 flex-grow">Commencez une nouvelle partie avec vos amis</p>
               <Button 
                 onClick={() => navigate('/game')} 
-                className="w-full mt-auto bg-dutch-blue text-white hover:bg-dutch-blue/90 rounded-xl shadow-md hover:shadow-lg"
+                variant="gradient"
+                elevated
+                animated
+                className="w-full mt-auto text-white rounded-xl"
               >
                 Démarrer
               </Button>
@@ -67,8 +72,10 @@ const Index = () => {
               <p className="text-gray-600 mb-4 flex-grow">Apprenez à jouer avec les règles complètes</p>
               <Button 
                 onClick={() => navigate('/rules')} 
-                variant="outline" 
-                className="w-full mt-auto glassmorphism bg-white/70 hover:bg-white/80 text-dutch-purple border-dutch-purple/20 rounded-xl"
+                variant="glass"
+                elevated
+                animated
+                className="w-full mt-auto text-dutch-purple border-dutch-purple/20 rounded-xl"
               >
                 Consulter
               </Button>
@@ -91,8 +98,10 @@ const Index = () => {
               <p className="text-gray-600 mb-4 flex-grow">Consultez l'historique de vos parties</p>
               <Button 
                 onClick={() => navigate('/history')} 
-                variant="outline" 
-                className="w-full mt-auto glassmorphism bg-white/70 hover:bg-white/80 text-dutch-orange border-dutch-orange/20 rounded-xl"
+                variant="glass"
+                elevated
+                animated
+                className="w-full mt-auto text-dutch-orange border-dutch-orange/20 rounded-xl"
               >
                 Voir
               </Button>

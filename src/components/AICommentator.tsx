@@ -10,6 +10,7 @@ import ProfessorAvatar from './game/ProfessorAvatar';
 import { useElevenLabs } from '@/hooks/use-eleven-labs';
 import { useSound } from '@/hooks/use-sound';
 import { cn } from '@/lib/utils';
+import { ModernTitle } from './ui/modern-title';
 
 interface AICommentatorProps {
   players: Player[];
@@ -101,13 +102,9 @@ const AICommentator: React.FC<AICommentatorProps> = ({
             </div>
             
             <div className="flex-1 space-y-3">
-              <motion.h3 
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="font-bold text-2xl bg-gradient-to-r from-dutch-purple to-dutch-blue bg-clip-text text-transparent"
-              >
+              <ModernTitle variant="h2">
                 Professeur Cartouche
-              </motion.h3>
+              </ModernTitle>
               
               {commentType === 'headline' ? (
                 <motion.p 

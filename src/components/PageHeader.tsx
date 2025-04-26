@@ -23,36 +23,35 @@ const PageHeader: React.FC<PageHeaderProps> = ({
     <div className={`mb-6 ${className}`}>
       <div className="flex items-center justify-between mb-3">
         {onBack && (
-          <Button
-            variant="ghost"
-            size="icon"
-            className="text-gray-600 hover:text-dutch-purple"
-            onClick={onBack}
-            aria-label="Retour"
-          >
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
+          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <Button
+              variant="vision-glass"
+              size="icon"
+              className="text-dutch-blue border border-dutch-blue/30 shadow-sm hover:bg-white/90"
+              onClick={onBack}
+              aria-label="Retour"
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </Button>
+          </motion.div>
         )}
         
-        <motion.h1 
-          className="text-2xl sm:text-3xl font-semibold bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent"
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
+        <div className="flex-grow text-center">
           {title}
-        </motion.h1>
+        </div>
         
         {showSettings ? (
-          <Button
-            variant="ghost"
-            size="icon"
-            className="text-gray-600 hover:text-dutch-purple"
-            onClick={onSettings}
-            aria-label="Réglages"
-          >
-            <Settings className="h-5 w-5" />
-          </Button>
+          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <Button
+              variant="vision-glass"
+              size="icon"
+              className="text-dutch-purple border border-dutch-purple/30 shadow-sm hover:bg-white/90"
+              onClick={onSettings}
+              aria-label="Réglages"
+            >
+              <Settings className="h-5 w-5" />
+            </Button>
+          </motion.div>
         ) : (
           <div className="w-10">{/* Spacer pour maintenir l'alignement */}</div>
         )}

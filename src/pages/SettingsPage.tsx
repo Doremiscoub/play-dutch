@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useLocalStorage } from '@/hooks/use-local-storage';
@@ -56,7 +57,7 @@ const SettingsPage = () => {
     <PageLayout backgroundVariant="subtle">
       <div className="w-full max-w-6xl mx-auto px-1 sm:px-2">
         <PageHeader 
-          title={<ModernTitle>Réglages</ModernTitle>}
+          title={<ModernTitle withSparkles>Réglages</ModernTitle>}
           onBack={() => navigate('/')}
           showSettings={false}
         />
@@ -164,16 +165,16 @@ const SettingsPage = () => {
 
         {/* Confirmation de réinitialisation */}
         <AlertDialog open={resetConfirmationOpen}>
-          <AlertDialogContent className="bg-white rounded-2xl border-white/50">
+          <AlertDialogContent className="bg-white/90 backdrop-blur-xl rounded-2xl border-white/50 shadow-xl">
             <AlertDialogHeader>
-              <AlertDialogTitle>Effacer l'historique ?</AlertDialogTitle>
-              <AlertDialogDescription>
+              <AlertDialogTitle className="text-2xl text-dutch-blue font-bold">Effacer l'historique ?</AlertDialogTitle>
+              <AlertDialogDescription className="text-gray-600">
                 Cette action supprimera définitivement l'historique de toutes vos parties. Cette action ne peut pas être annulée.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel onClick={cancelResetHistory} className="bg-gray-100 hover:bg-gray-200 text-gray-700">Annuler</AlertDialogCancel>
-              <AlertDialogAction onClick={confirmResetHistory} className="bg-gradient-to-r from-dutch-blue to-dutch-purple text-white hover:opacity-90">Effacer</AlertDialogAction>
+              <AlertDialogCancel onClick={cancelResetHistory} className="bg-gray-100 hover:bg-gray-200 text-gray-700 hover:-translate-y-0.5 transition-all">Annuler</AlertDialogCancel>
+              <AlertDialogAction onClick={confirmResetHistory} className="bg-gradient-to-r from-dutch-blue to-dutch-purple text-white hover:opacity-90 hover:-translate-y-0.5 transition-all shadow-md">Effacer</AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>

@@ -18,7 +18,7 @@ const Rules: React.FC = () => {
       
       <div className="container mx-auto px-2 py-8 relative z-10">
         <PageHeader 
-          title={<ModernTitle>Règles du Dutch</ModernTitle>}
+          title={<ModernTitle withSparkles>Règles du Dutch</ModernTitle>}
           onBack={() => navigate('/')}
         />
         

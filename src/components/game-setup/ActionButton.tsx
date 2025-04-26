@@ -3,7 +3,6 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Play } from 'lucide-react';
-import { SETUP_UI } from '@/config/setup-ui';
 
 interface ActionButtonProps {
   onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
@@ -21,10 +20,17 @@ const ActionButton: React.FC<ActionButtonProps> = ({ onClick, label, disabled = 
       <Button
         onClick={onClick}
         disabled={disabled}
-        className={SETUP_UI.action.button}
+        variant="gradient"
+        size="2xl"
+        elevated
+        animated
+        className="w-full relative overflow-hidden group bg-gradient-to-r from-dutch-blue to-dutch-purple text-white font-bold uppercase"
       >
-        <Play className="h-5 w-5 text-white" />
-        <span className="text-white">{label}</span>
+        <span className="absolute inset-0 bg-white/10 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300"></span>
+        <div className="flex items-center justify-center gap-2 z-10">
+          <Play className="h-6 w-6 text-white" />
+          <span>{label}</span>
+        </div>
       </Button>
     </motion.div>
   );
