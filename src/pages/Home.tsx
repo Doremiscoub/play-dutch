@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -16,9 +17,10 @@ const Home: React.FC = () => {
   const [hasSavedGame, setHasSavedGame] = useState<boolean>(false);
 
   useEffect(() => {
-    const savedGame = localStorage.getItem('current_dutch_game');
+    const userId = user?.id;
+    const savedGame = localStorage.getItem(userId ? `current_dutch_game_${userId}` : 'current_dutch_game');
     setHasSavedGame(!!savedGame);
-  }, []);
+  }, [user]);
 
   const buttonVariants = {
     hover: { 
@@ -37,15 +39,65 @@ const Home: React.FC = () => {
         <AnimatedBackground />
       </div>
       
-      <div className="relative z-10 container mx-auto px-3 py-16 flex flex-col min-h-screen">
+      <div className="relative z-10 container mx-auto px-3 py-8 flex flex-col min-h-screen">
         <header className="mb-auto">
+          <TooltipProvider>
+            <nav className="flex justify-end space-x-2">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="vision-glass"
+                    size="icon-lg"
+                    className="rounded-full"
+                    onClick={() => navigate('/history')}
+                  >
+                    <History className="h-5 w-5" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Historique</TooltipContent>
+              </Tooltip>
+
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="vision-glass"
+                    size="icon-lg"
+                    className="rounded-full"
+                    onClick={() => navigate('/rules')}
+                  >
+                    <BookOpen className="h-5 w-5" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Règles du jeu</TooltipContent>
+              </Tooltip>
+
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="vision-glass"
+                    size="icon-lg"
+                    className="rounded-full"
+                    onClick={() => navigate('/settings')}
+                  >
+                    <Settings className="h-5 w-5" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Paramètres</TooltipContent>
+              </Tooltip>
+            </nav>
+          </TooltipProvider>
         </header>
         
         <main className="flex-1 flex flex-col items-center justify-center text-center">
-          <div className="mb-12">
+          <motion.div 
+            className="mb-12"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6 }}
+          >
             <ModernTitle withSparkles variant="h1" className="text-6xl mb-2" withIcon>Dutch</ModernTitle>
             <p className="text-gray-600">Votre compagnon de jeu</p>
-          </div>
+          </motion.div>
           
           <div className="w-full max-w-xs space-y-4">
             {isLoaded && (
@@ -112,7 +164,7 @@ const Home: React.FC = () => {
                     >
                       <Button 
                         className="w-full h-14 rounded-full shadow-md"
-                        variant="dutch-blue"
+                        variant="vision-glass"
                         onClick={() => navigate('/game/setup')}
                       >
                         <ExternalLink className="mr-2 h-5 w-5" />

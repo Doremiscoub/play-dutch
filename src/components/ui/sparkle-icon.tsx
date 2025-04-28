@@ -18,20 +18,20 @@ export const SparkleIcon = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSuits(suits.sort(() => 0.5 - Math.random()).slice(0, 2));
-    }, 4000);
+    }, 2000);
 
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <div className="relative inline-flex ml-2">
+    <div className="relative inline-flex">
       <AnimatePresence mode="wait">
         {currentSuits.map((suit, index) => {
           const Icon = suit.icon;
           return (
             <motion.div
               key={`${index}-${suit.icon.name}`}
-              className={`absolute ${index === 0 ? '-top-6 -right-4' : '-top-8 right-0'} ${suit.color}`}
+              className={`absolute ${index === 0 ? '-top-4 -right-4' : '-top-6 right-0'} ${suit.color}`}
               initial={{ scale: 0.8, rotate: index === 0 ? -20 : 20, opacity: 0 }}
               animate={{ 
                 scale: [0.8, 1.1, 1],
@@ -41,14 +41,14 @@ export const SparkleIcon = () => {
               exit={{ 
                 scale: 0.8,
                 opacity: 0,
-                transition: { duration: 0.6 }
+                transition: { duration: 0.3 }
               }}
               transition={{ 
-                duration: 4,
-                ease: "easeInOut"
+                duration: 2,
+                ease: [0.34, 1.56, 0.64, 1]
               }}
             >
-              <Icon size={28} className="drop-shadow-md" fill="currentColor" />
+              <Icon size={24} className="drop-shadow-md" fill="currentColor" />
             </motion.div>
           );
         })}
