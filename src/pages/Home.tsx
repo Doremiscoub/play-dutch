@@ -42,7 +42,7 @@ const Home: React.FC = () => {
       <div className="relative z-10 container mx-auto px-3 py-8 flex flex-col min-h-screen">
         <header className="mb-auto">
           <TooltipProvider>
-            <nav className="flex justify-end space-x-2">
+            <nav className="flex justify-end space-x-2 z-50">
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button

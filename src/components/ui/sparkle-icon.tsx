@@ -44,8 +44,8 @@ export const SparkleIcon = () => {
                 transition: { duration: 0.3 }
               }}
               transition={{ 
-                duration: 2,
-                ease: [0.34, 1.56, 0.64, 1]
+                duration: 1.5, // Réduit de 2s à 1.5s
+                ease: "easeOut" // Utilisation d'une fonction d'easing plus fluide
               }}
             >
               <Icon size={24} className="drop-shadow-md" fill="currentColor" />

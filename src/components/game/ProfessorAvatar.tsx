@@ -1,7 +1,6 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
 import { animationVariants } from '@/utils/animationUtils';
 
@@ -72,7 +71,7 @@ export default function ProfessorAvatar({
             ) : (
               <div 
                 className={cn(
-                  "h-full w-full flex items-center justify-center text-4xl",
+                  "h-full w-full flex items-center justify-center text-base",
                   isHovered && "wobble-animation"
                 )}
               >

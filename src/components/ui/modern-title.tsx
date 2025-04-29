@@ -49,12 +49,17 @@ export const ModernTitle: React.FC<ModernTitleProps> = ({
   return (
     <Component
       className={cn(
-        modernTitleVariants({ variant, withSparkles, showIcon, className })
+        modernTitleVariants({ variant, withSparkles, showIcon, className }),
+        "relative"
       )}
       {...props}
     >
       {children}
-      {withIcon && <SparkleIcon />}
+      {withIcon && (
+        <div className="absolute -top-4 -right-4 z-10">
+          <SparkleIcon />
+        </div>
+      )}
     </Component>
   );
 };

@@ -1,3 +1,4 @@
+
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
@@ -23,7 +24,7 @@ const buttonVariants = cva(
         
         // Gradient variants
         "gradient": "bg-gradient-to-r from-dutch-blue to-dutch-purple text-white hover:opacity-90 transition-all",
-        "gradient-animated": "gradient-button text-white rounded-full shadow-md hover:shadow-lg",
+        "gradient-animated": "gradient-button text-white rounded-full shadow-md hover:shadow-lg bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-blue bg-size-200 animate-gradient",
         "gradient-orange": "gradient-button-orange text-white rounded-full shadow-md hover:shadow-lg",
         
         // Glass variants

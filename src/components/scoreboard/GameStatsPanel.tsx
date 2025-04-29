@@ -19,8 +19,8 @@ const GameStatsPanel: React.FC<GameStatsPanelProps> = ({ players, roundHistory }
     const allScores = players.flatMap(p => p.rounds.map(round => round.score));
     
     const averageScore = allScores.length 
-      ? (allScores.reduce((a, b) => a + b, 0) / allScores.length).toFixed(1)
-      : '0';
+      ? Math.round(allScores.reduce((a, b) => a + b, 0) / allScores.length * 10) / 10
+      : 0;
     const bestScore = Math.min(...players.map(p => p.totalScore));
     const dutchCount = roundHistory.filter(r => r.dutchPlayerId).length;
 
@@ -34,13 +34,13 @@ const GameStatsPanel: React.FC<GameStatsPanelProps> = ({ players, roundHistory }
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-gradient-to-br from-dutch-purple/10 to-dutch-blue/10 rounded-2xl p-6 backdrop-blur-sm border border-white/50"
+      className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-white/50"
     >
       <div className="space-y-4">
         <StatItem label="Joueurs" value={stats.totalPlayers} />
         <StatItem label="Manches" value={stats.totalRounds} />
-        <StatItem label="Score moyen" value={`${stats.averageScore} pts`} />
-        <StatItem label="Meilleur score" value={`${stats.bestScore} pts`} />
+        <StatItem label="Score moyen" value={stats.averageScore === 0 ? '0' : `${stats.averageScore}`} />
+        <StatItem label="Meilleur score" value={stats.bestScore} />
         <StatItem label="Total Dutch" value={stats.dutchCount} />
       </div>
     </motion.div>
