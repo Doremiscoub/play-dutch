@@ -50,14 +50,14 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     window.addEventListener('error', handleError);
     
-    // Timeout rapide pour détecter si Clerk est chargé correctement
+    // Timeout augmenté à 5000ms (5s) pour détecter si Clerk est chargé correctement
     const timeout = setTimeout(() => {
       if (!window.hasOwnProperty('Clerk') && !isOfflineMode) {
         console.warn("Clerk non disponible après le délai, activation du mode hors-ligne");
         localStorage.setItem('clerk_auth_failed', 'true');
         setIsOfflineMode(true);
       }
-    }, 2000);
+    }, 5000); // Augmenté de 2000ms à 5000ms
 
     return () => {
       window.removeEventListener('error', handleError);
