@@ -28,7 +28,7 @@ const buttonVariants = cva(
         "gradient-orange": "gradient-button-orange text-white rounded-full shadow-md hover:shadow-lg",
         
         // Glass variants
-        "vision-glass": "bg-white/70 backdrop-blur-xl border border-white/50 shadow-sm text-gray-800 hover:bg-white/80 transition-all hover:-translate-y-0.5",
+        "vision-glass": "bg-white/90 backdrop-blur-xl border border-white/50 shadow-sm text-gray-800 hover:bg-white/95 transition-all rounded-full",
         "dutch-glass": "bg-white/70 backdrop-blur-xl border border-white/50 shadow-sm hover:bg-white/80",
         "glass": "btn-glass-y2k rounded-2xl bg-white/70 backdrop-blur-xl border-2 border-white/60 shadow-md text-gray-800 hover:bg-white/80",
         

@@ -12,13 +12,13 @@ const ScoreBoardTabs: React.FC<ScoreBoardTabsProps> = ({
   onViewChange
 }) => {
   return (
-    <div className="flex justify-center items-center space-x-2">
+    <div className="flex justify-center items-center space-x-1">
       <Toggle
         pressed={currentView === 'list'}
         onPressedChange={() => onViewChange('list')}
         variant="default"
         size="lg"
-        className="rounded-l-md"
+        className="rounded-l-xl"
       >
         Classement
       </Toggle>
@@ -27,7 +27,7 @@ const ScoreBoardTabs: React.FC<ScoreBoardTabsProps> = ({
         onPressedChange={() => onViewChange('table')}
         variant="default"
         size="lg"
-        className="rounded-r-md"
+        className="rounded-r-xl"
       >
         Tableau détaillé
       </Toggle>

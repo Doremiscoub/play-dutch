@@ -3,9 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { Plus, History, BookOpen, Settings, LogIn, ExternalLink, Trophy } from 'lucide-react';
+import { Plus, History, BookOpen, Settings, LogIn, ExternalLink } from 'lucide-react';
 import AnimatedBackground from '../components/AnimatedBackground';
-import { animationVariants } from '@/utils/animationUtils';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/context/AuthContext';
@@ -48,7 +47,7 @@ const Home: React.FC = () => {
                   <Button
                     variant="vision-glass"
                     size="icon-lg"
-                    className="rounded-full"
+                    className="rounded-full shadow-sm"
                     onClick={() => navigate('/history')}
                   >
                     <History className="h-5 w-5" />
@@ -62,7 +61,7 @@ const Home: React.FC = () => {
                   <Button
                     variant="vision-glass"
                     size="icon-lg"
-                    className="rounded-full"
+                    className="rounded-full shadow-sm"
                     onClick={() => navigate('/rules')}
                   >
                     <BookOpen className="h-5 w-5" />
@@ -76,7 +75,7 @@ const Home: React.FC = () => {
                   <Button
                     variant="vision-glass"
                     size="icon-lg"
-                    className="rounded-full"
+                    className="rounded-full shadow-sm"
                     onClick={() => navigate('/settings')}
                   >
                     <Settings className="h-5 w-5" />
@@ -132,7 +131,7 @@ const Home: React.FC = () => {
                           variant="gradient-orange"
                           onClick={() => navigate('/game')}
                         >
-                          <Trophy className="mr-2 h-5 w-5" />
+                          <Plus className="mr-2 h-5 w-5" />
                           Reprendre la partie
                         </Button>
                       </motion.div>
@@ -163,7 +162,7 @@ const Home: React.FC = () => {
                       className="w-full"
                     >
                       <Button 
-                        className="w-full h-14 rounded-full shadow-md"
+                        className="w-full h-14 rounded-full shadow-sm bg-white/90"
                         variant="vision-glass"
                         onClick={() => navigate('/game/setup')}
                       >
@@ -179,13 +178,13 @@ const Home: React.FC = () => {
           </div>
         </main>
         
-        <footer className="mt-auto text-center">
+        <footer className="mt-auto text-center py-4">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.7 }}
             transition={{ delay: 1, duration: 1 }}
           >
-            <Badge variant="outline" className="bg-white/50 text-gray-500 text-xs">
+            <Badge variant="outline" className="bg-white/40 text-gray-500 text-xs">
               Version 1.0.0
             </Badge>
           </motion.div>
