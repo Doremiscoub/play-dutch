@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
+import { UnifiedButton } from '@/components/ui/unified-button';
 import PlayerNameInput from './PlayerNameInput';
 import PlayerCountSelector from './PlayerCountSelector';
 import { toast } from 'sonner';
@@ -73,7 +73,7 @@ const LocalGameSetup: React.FC<LocalGameSetupProps> = ({ onStartGame }) => {
   return (
     <div className="space-y-6 py-4">
       <div className="space-y-2">
-        <h3 className="text-lg font-medium">Nombre de joueurs</h3>
+        <h3 className="text-lg font-medium text-gray-800">Nombre de joueurs</h3>
         <PlayerCountSelector 
           numPlayers={numPlayers} 
           onNumPlayersChange={handleNumPlayersChange} 
@@ -82,7 +82,7 @@ const LocalGameSetup: React.FC<LocalGameSetupProps> = ({ onStartGame }) => {
       
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-2">
-          <h3 className="text-lg font-medium">Noms des joueurs</h3>
+          <h3 className="text-lg font-medium text-gray-800">Noms des joueurs</h3>
           <div className="space-y-3">
             {playerNames.map((name, index) => (
               <PlayerNameInput
@@ -96,13 +96,15 @@ const LocalGameSetup: React.FC<LocalGameSetupProps> = ({ onStartGame }) => {
         </div>
         
         <div className="pt-4 flex justify-end">
-          <Button 
+          <UnifiedButton 
             type="submit" 
-            className="w-full bg-gradient-to-r from-dutch-blue to-dutch-purple text-white rounded-full"
+            variant="primary"
+            size="lg"
+            className="w-full"
             disabled={isSubmitting}
           >
             {isSubmitting ? 'Création...' : 'Commencer la partie'}
-          </Button>
+          </UnifiedButton>
         </div>
       </form>
     </div>

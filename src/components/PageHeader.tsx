@@ -1,7 +1,7 @@
 
 import React, { ReactNode } from 'react';
 import { ArrowLeft, Settings } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { UnifiedButton } from '@/components/ui/unified-button';
 import { motion } from 'framer-motion';
 
 interface PageHeaderProps {
@@ -24,15 +24,14 @@ const PageHeader: React.FC<PageHeaderProps> = ({
       <div className="flex items-center justify-between mb-3">
         {onBack && (
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            <Button
+            <UnifiedButton
               variant="glass"
               size="icon"
-              className="text-dutch-blue border-2 border-dutch-blue/40 shadow-sm hover:bg-white/90 btn-glass-y2k"
               onClick={onBack}
               aria-label="Retour"
             >
-              <ArrowLeft className="h-5 w-5" />
-            </Button>
+              <ArrowLeft className="h-5 w-5 text-dutch-blue" />
+            </UnifiedButton>
           </motion.div>
         )}
         
@@ -42,15 +41,14 @@ const PageHeader: React.FC<PageHeaderProps> = ({
         
         {showSettings ? (
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            <Button
+            <UnifiedButton
               variant="glass"
               size="icon"
-              className="text-dutch-purple border-2 border-dutch-purple/40 shadow-sm hover:bg-white/90 btn-glass-y2k"
               onClick={onSettings}
               aria-label="Réglages"
             >
-              <Settings className="h-5 w-5" />
-            </Button>
+              <Settings className="h-5 w-5 text-dutch-purple" />
+            </UnifiedButton>
           </motion.div>
         ) : (
           <div className="w-10">{/* Spacer pour maintenir l'alignement */}</div>
