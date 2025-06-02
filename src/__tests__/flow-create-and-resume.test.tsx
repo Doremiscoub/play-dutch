@@ -1,7 +1,7 @@
 
 /// <reference types="vitest" />
 import { describe, it, expect, vi } from "vitest";
-import { cleanup, screen, within } from "@testing-library/react";
+import { cleanup, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { renderWithProviders } from "../test-utils";
 import App from "../App";
