@@ -101,10 +101,10 @@ export const useSimpleGameInitialization = () => {
         navigate('/game', { replace: true });
       }
       
-      // Délai pour éviter les conflits avec d'autres notifications
+      // Show success toast only once
       setTimeout(() => {
         toast.success('Partie créée avec succès !', {
-          duration: 3000
+          duration: 2000
         });
       }, 500);
       

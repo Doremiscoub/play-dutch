@@ -61,9 +61,9 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
-      whileHover={{ scale: 1.02, y: -2 }}
+      whileHover={{ scale: 1.01, y: -2 }}
       className={`
-        backdrop-blur-xl border rounded-3xl p-6 transition-all duration-300 cursor-pointer relative overflow-hidden
+        backdrop-blur-xl border rounded-3xl p-6 transition-all duration-300 cursor-pointer relative overflow-hidden w-full
         ${getCardStyle()}
         ${isSelected ? 'ring-2 ring-dutch-blue/50 shadow-xl' : 'shadow-lg hover:shadow-xl'}
       `}
@@ -79,12 +79,13 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
       )}
 
       <div className="relative z-10">
-        {/* Header avec rang et informations principales */}
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-4">
+        {/* Layout horizontal pour plus d'espace */}
+        <div className="flex items-center gap-6">
+          {/* Section gauche: Badge de rang et Avatar */}
+          <div className="flex items-center gap-4 flex-shrink-0">
             {/* Badge de rang */}
             <motion.div 
-              className={`w-10 h-10 rounded-full ${getRankBadgeColor()} flex items-center justify-center text-white font-bold text-sm shadow-lg`}
+              className={`w-12 h-12 rounded-full ${getRankBadgeColor()} flex items-center justify-center text-white font-bold text-lg shadow-lg`}
               whileHover={{ scale: 1.1 }}
             >
               {rank}
@@ -92,7 +93,7 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
             
             {/* Avatar emoji */}
             <motion.div 
-              className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl shadow-lg relative overflow-hidden"
+              className="w-20 h-20 rounded-2xl flex items-center justify-center text-4xl shadow-lg relative overflow-hidden"
               style={{ backgroundColor: player.avatarColor }}
               whileHover={{ rotate: [0, -5, 5, 0], scale: 1.05 }}
               transition={{ duration: 0.3 }}
@@ -110,69 +111,77 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
               )}
             </motion.div>
           </div>
-          
-          {/* Score principal */}
-          <div className="text-right">
-            <motion.div 
-              className="text-3xl font-black text-gray-800 leading-none"
-              animate={rank === 1 ? { scale: [1, 1.05, 1] } : {}}
-              transition={{ duration: 2, repeat: Infinity }}
-            >
-              {player.totalScore}
-            </motion.div>
-            <div className="text-sm text-gray-600 font-medium">points</div>
-          </div>
-        </div>
 
-        {/* Nom du joueur et icône de rang */}
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
-            <h3 className="font-bold text-lg text-gray-800 truncate max-w-32">
-              {player.name}
-            </h3>
-            {getRankIcon()}
-          </div>
-          
-          {/* Statistiques rapides */}
-          <div className="flex items-center gap-3 text-xs">
-            {dutchCount > 0 && (
-              <span className="flex items-center gap-1 bg-green-100/80 text-green-800 px-2 py-1 rounded-full font-medium shadow-sm">
-                <Zap className="h-3 w-3" />
-                {dutchCount}
-              </span>
-            )}
-            {player.rounds.length > 0 && (
-              <span className="text-gray-600 font-medium">
-                Moy: {averageScore}
-              </span>
-            )}
+          {/* Section centrale: Nom et informations */}
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-3">
+                <h3 className="font-bold text-xl text-gray-800 truncate">
+                  {player.name}
+                </h3>
+                {getRankIcon()}
+              </div>
+              
+              {/* Score principal */}
+              <motion.div 
+                className="text-right"
+                animate={rank === 1 ? { scale: [1, 1.05, 1] } : {}}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                <div className="text-4xl font-black text-gray-800 leading-none">
+                  {player.totalScore}
+                </div>
+                <div className="text-sm text-gray-600 font-medium">points</div>
+              </motion.div>
+            </div>
+
+            {/* Statistiques détaillées */}
+            <div className="grid grid-cols-3 gap-4 mb-4">
+              {player.rounds.length > 0 && (
+                <>
+                  <div className="text-center">
+                    <div className="text-lg font-bold text-blue-600">{averageScore}</div>
+                    <div className="text-xs text-gray-600">Moyenne</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-lg font-bold text-green-600">{bestRound}</div>
+                    <div className="text-xs text-gray-600">Meilleur</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-lg font-bold text-red-600">{worstRound}</div>
+                    <div className="text-xs text-gray-600">Pire</div>
+                  </div>
+                </>
+              )}
+            </div>
+
+            {/* Badges de performance */}
+            <div className="flex items-center gap-2 mb-4">
+              {dutchCount > 0 && (
+                <span className="flex items-center gap-1 bg-green-100/80 text-green-800 px-3 py-1 rounded-full font-medium shadow-sm">
+                  <Zap className="h-3 w-3" />
+                  {dutchCount} Dutch
+                </span>
+              )}
+              {player.rounds.length > 0 && (
+                <span className="bg-blue-100/80 text-blue-800 px-3 py-1 rounded-full font-medium text-sm">
+                  {player.rounds.length} manches
+                </span>
+              )}
+            </div>
           </div>
         </div>
         
-        {/* Badges de performance */}
+        {/* Indicateurs de manches - ligne complète */}
         {player.rounds.length > 0 && (
-          <div className="flex items-center justify-between text-xs mb-4">
-            <span className="bg-blue-100/80 text-blue-800 px-2 py-1 rounded-full font-medium">
-              Meilleur: {bestRound}
-            </span>
-            {worstRound !== bestRound && (
-              <span className="bg-red-100/80 text-red-800 px-2 py-1 rounded-full font-medium">
-                Pire: {worstRound}
-              </span>
-            )}
-          </div>
-        )}
-        
-        {/* Indicateurs de manches */}
-        {player.rounds.length > 0 && (
-          <div className="flex flex-wrap gap-1.5 justify-center">
-            {player.rounds.slice(-8).map((round, index) => (
+          <div className="flex flex-wrap gap-2 justify-center pt-4 border-t border-white/30">
+            {player.rounds.slice(-12).map((round, index) => (
               <motion.div
-                key={player.rounds.length - 8 + index}
+                key={player.rounds.length - 12 + index}
                 initial={{ scale: 0, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
-                transition={{ delay: index * 0.05, type: "spring", stiffness: 300 }}
-                className={`w-7 h-7 rounded-xl flex items-center justify-center text-xs font-bold shadow-md transition-all hover:scale-110 ${
+                transition={{ delay: index * 0.03, type: "spring", stiffness: 300 }}
+                className={`w-8 h-8 rounded-xl flex items-center justify-center text-xs font-bold shadow-md transition-all hover:scale-110 ${
                   round.isDutch 
                     ? 'bg-gradient-to-br from-green-400 to-emerald-500 text-white shadow-green-200' 
                     : round.score === 0 
@@ -183,14 +192,14 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
                           ? 'bg-gradient-to-br from-orange-300 to-orange-400 text-orange-800 shadow-orange-200'
                           : 'bg-gradient-to-br from-red-400 to-red-500 text-white shadow-red-200'
                 }`}
-                title={`Manche ${player.rounds.length - 8 + index + 1}: ${round.score} points${round.isDutch ? ' (Dutch!)' : ''}`}
+                title={`Manche ${player.rounds.length - 12 + index + 1}: ${round.score} points${round.isDutch ? ' (Dutch!)' : ''}`}
               >
                 {round.isDutch ? <Flame className="h-3 w-3" /> : round.score}
               </motion.div>
             ))}
-            {player.rounds.length > 8 && (
-              <div className="w-7 h-7 rounded-xl flex items-center justify-center text-xs font-medium bg-gray-100 text-gray-500">
-                +{player.rounds.length - 8}
+            {player.rounds.length > 12 && (
+              <div className="w-8 h-8 rounded-xl flex items-center justify-center text-xs font-medium bg-gray-100 text-gray-500">
+                +{player.rounds.length - 12}
               </div>
             )}
           </div>

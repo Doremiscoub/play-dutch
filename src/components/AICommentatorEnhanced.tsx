@@ -99,13 +99,13 @@ const AICommentatorEnhanced: React.FC<AICommentatorEnhancedProps> = ({
   const getCommentStyle = () => {
     switch (commentType) {
       case 'encouragement':
-        return 'bg-gradient-to-r from-green-50/90 to-emerald-50/90 border-green-200/60 text-green-800';
+        return 'bg-gradient-to-r from-green-50/95 to-emerald-50/95 border-green-200/80';
       case 'joke':
-        return 'bg-gradient-to-r from-amber-50/90 to-orange-50/90 border-amber-200/60 text-amber-800';
+        return 'bg-gradient-to-r from-amber-50/95 to-orange-50/95 border-amber-200/80';
       case 'observation':
-        return 'bg-gradient-to-r from-blue-50/90 to-cyan-50/90 border-blue-200/60 text-blue-800';
+        return 'bg-gradient-to-r from-blue-50/95 to-cyan-50/95 border-blue-200/80';
       default:
-        return 'bg-gradient-to-r from-purple-50/90 to-indigo-50/90 border-purple-200/60 text-purple-800';
+        return 'bg-gradient-to-r from-purple-50/95 to-indigo-50/95 border-purple-200/80';
     }
   };
 
@@ -120,31 +120,32 @@ const AICommentatorEnhanced: React.FC<AICommentatorEnhancedProps> = ({
         exit={{ opacity: 0, y: -20, scale: 0.95 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
         className={`
-          backdrop-blur-xl border rounded-3xl p-6 shadow-lg transition-all duration-300
+          backdrop-blur-xl border-2 rounded-3xl p-8 shadow-xl transition-all duration-300
           ${getCommentStyle()}
         `}
       >
-        <div className="flex items-start gap-4">
-          {/* Professor Avatar - Larger size */}
+        <div className="flex items-start gap-6">
+          {/* Professor Avatar - Redesigned */}
           <motion.div
             animate={{ 
-              rotate: [0, 5, -5, 0],
-              scale: [1, 1.05, 1]
+              rotate: [0, 2, -2, 0],
+              scale: [1, 1.02, 1]
             }}
             transition={{ 
               duration: 4, 
               repeat: Infinity, 
               ease: "easeInOut" 
             }}
+            className="flex-shrink-0"
           >
             <ProfessorAvatar 
               size="xl"
               animate={true}
-              className="flex-shrink-0"
+              className="shadow-2xl"
             />
           </motion.div>
           
-          {/* Comment Bubble */}
+          {/* Comment Bubble - Redesigned */}
           <motion.div 
             className="flex-1 relative"
             initial={{ opacity: 0 }}
@@ -152,11 +153,11 @@ const AICommentatorEnhanced: React.FC<AICommentatorEnhancedProps> = ({
             transition={{ delay: 0.2 }}
           >
             {/* Speech bubble pointer */}
-            <div className="absolute -left-2 top-3 w-0 h-0 border-t-8 border-t-transparent border-b-8 border-b-transparent border-r-8 border-r-current opacity-20" />
+            <div className="absolute -left-4 top-4 w-0 h-0 border-t-8 border-t-transparent border-b-8 border-b-transparent border-r-12 border-r-white/80" />
             
-            <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-4 shadow-sm">
+            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/50">
               <motion.p 
-                className="text-sm font-medium leading-relaxed"
+                className="text-base font-medium leading-relaxed text-gray-800 mb-3"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3, duration: 0.4 }}
@@ -164,29 +165,33 @@ const AICommentatorEnhanced: React.FC<AICommentatorEnhancedProps> = ({
                 {currentComment}
               </motion.p>
               
-              {/* Typing indicator effect */}
+              {/* Professor signature */}
               <motion.div
-                className="flex items-center mt-2 text-xs opacity-60"
+                className="flex items-center justify-between text-sm"
                 initial={{ opacity: 0 }}
-                animate={{ opacity: [0.6, 1, 0.6] }}
-                transition={{ duration: 2, repeat: Infinity }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
               >
-                <span className="mr-2">Professeur Cartouche</span>
-                <div className="flex gap-1">
+                <span className="font-semibold text-dutch-purple">
+                  — Professeur Cartouche
+                </span>
+                
+                {/* Typing indicator */}
+                <div className="flex items-center gap-1 text-gray-500">
                   <motion.div 
-                    className="w-1 h-1 bg-current rounded-full"
-                    animate={{ scale: [1, 1.5, 1] }}
-                    transition={{ duration: 0.8, repeat: Infinity, delay: 0 }}
+                    className="w-1.5 h-1.5 bg-dutch-blue rounded-full"
+                    animate={{ scale: [1, 1.5, 1], opacity: [0.5, 1, 0.5] }}
+                    transition={{ duration: 1.2, repeat: Infinity, delay: 0 }}
                   />
                   <motion.div 
-                    className="w-1 h-1 bg-current rounded-full"
-                    animate={{ scale: [1, 1.5, 1] }}
-                    transition={{ duration: 0.8, repeat: Infinity, delay: 0.2 }}
+                    className="w-1.5 h-1.5 bg-dutch-purple rounded-full"
+                    animate={{ scale: [1, 1.5, 1], opacity: [0.5, 1, 0.5] }}
+                    transition={{ duration: 1.2, repeat: Infinity, delay: 0.3 }}
                   />
                   <motion.div 
-                    className="w-1 h-1 bg-current rounded-full"
-                    animate={{ scale: [1, 1.5, 1] }}
-                    transition={{ duration: 0.8, repeat: Infinity, delay: 0.4 }}
+                    className="w-1.5 h-1.5 bg-dutch-orange rounded-full"
+                    animate={{ scale: [1, 1.5, 1], opacity: [0.5, 1, 0.5] }}
+                    transition={{ duration: 1.2, repeat: Infinity, delay: 0.6 }}
                   />
                 </div>
               </motion.div>

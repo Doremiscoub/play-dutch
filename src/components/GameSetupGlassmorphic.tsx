@@ -3,7 +3,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Smartphone, Info } from 'lucide-react';
-import LocalGameSetup from './game-setup/LocalGameSetup';
+import EnhancedLocalGameSetup from './game-setup/EnhancedLocalGameSetup';
 import { ModernTitle } from './ui/modern-title';
 
 interface GameSetupGlassmorphicProps {
@@ -102,7 +102,7 @@ const GameSetupGlassmorphic: React.FC<GameSetupGlassmorphicProps> = ({ onStartGa
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <LocalGameSetup onStartGame={onStartGame} />
+              <EnhancedLocalGameSetup onStartGame={onStartGame} />
             </CardContent>
           </Card>
         </motion.div>
