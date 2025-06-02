@@ -75,6 +75,10 @@ const GamePage: React.FC = () => {
           console.error("Aucune configuration valide trouvée");
           setInitError("Impossible de démarrer la partie. Veuillez configurer les joueurs.");
           setIsInitializing(false);
+          // Rediriger vers la page de configuration après un délai
+          setTimeout(() => {
+            navigate('/game/setup');
+          }, 2000);
           return;
         }
         
@@ -84,8 +88,11 @@ const GamePage: React.FC = () => {
           
           if (!success) {
             console.error("Échec de l'initialisation du jeu");
-            setInitError("Impossible de démarrer la partie. Veuillez configurer les joueurs.");
+            setInitError("Impossible de démarrer la partie. Redirection vers la configuration...");
             toast.error("Impossible de démarrer la partie");
+            setTimeout(() => {
+              navigate('/game/setup');
+            }, 2000);
           } else {
             console.info("Nouvelle partie créée avec succès");
           }
@@ -94,26 +101,29 @@ const GamePage: React.FC = () => {
         }
       } catch (error) {
         console.error("Erreur lors de l'initialisation du jeu:", error);
-        setInitError("Une erreur est survenue lors de l'initialisation. Veuillez réessayer.");
+        setInitError("Une erreur est survenue lors de l'initialisation. Redirection...");
         toast.error("Erreur lors du chargement de la partie");
+        setTimeout(() => {
+          navigate('/');
+        }, 2000);
       } finally {
         setIsInitializing(false);
       }
     };
     
     initializeGame();
-  }, [createNewGame, players, initializationAttempted]);
+  }, [createNewGame, players, initializationAttempted, navigate]);
   
   // Effet pour déclencher l'animation de chargement
   useEffect(() => {
-    if (!isInitializing && !initError) {
+    if (!isInitializing && !initError && players && players.length > 0) {
       const timer = setTimeout(() => {
         setIsLoaded(true);
       }, 500);
       
       return () => clearTimeout(timer);
     }
-  }, [isInitializing, initError]);
+  }, [isInitializing, initError, players]);
 
   // Effet pour vérifier les parties sauvegardées
   useEffect(() => {
@@ -153,11 +163,21 @@ const GamePage: React.FC = () => {
     }
   }, [handleRestart]);
   
-  // Calculer les statistiques des joueurs
-  const playersWithStats = React.useMemo(() => 
-    updateAllPlayersStats(players), 
-    [players]
-  );
+  // Calculer les statistiques des joueurs avec gestion d'erreur
+  const playersWithStats = React.useMemo(() => {
+    try {
+      if (!players || players.length === 0) {
+        console.warn("Aucun joueur disponible pour calculer les stats");
+        return [];
+      }
+      return updateAllPlayersStats(players);
+    } catch (error) {
+      console.error("Erreur lors du calcul des statistiques:", error);
+      toast.error("Erreur lors du calcul des statistiques");
+      // Retourner les joueurs sans stats au lieu de faire crash
+      return players;
+    }
+  }, [players]);
   
   // Afficher un spinner pendant le chargement
   if (isInitializing) {
@@ -181,9 +201,21 @@ const GamePage: React.FC = () => {
   if (!players || players.length === 0) {
     return (
       <ErrorDisplay 
-        error="Aucun joueur trouvé pour cette partie. Veuillez configurer les joueurs."
+        error="Aucun joueur trouvé pour cette partie. Redirection vers la configuration..."
         onRetry={() => {
           setInitializationAttempted(false);
+          navigate('/game/setup');
+        }}
+      />
+    );
+  }
+
+  // Validation supplémentaire avant le rendu
+  if (!playersWithStats || playersWithStats.length === 0) {
+    return (
+      <ErrorDisplay 
+        error="Erreur dans les données des joueurs. Redirection..."
+        onRetry={() => {
           navigate('/game/setup');
         }}
       />

@@ -21,15 +21,32 @@ const AdSenseLayout: React.FC<AdSenseLayoutProps> = ({
     return <>{children}</>;
   }
 
+  // Composant wrapper avec gestion d'erreur pour AdSense
+  const SafeAdSenseSlot = ({ position, ...props }: { position: 'left' | 'right' } & any) => {
+    try {
+      return (
+        <AdSenseSlot 
+          adClient="ca-pub-xxxxxxxxxxxxxxxx" 
+          adSlot="xxxxxxxxxx" 
+          position={position}
+          className="w-60 h-60"
+          {...props}
+        />
+      );
+    } catch (error) {
+      console.error(`Erreur AdSense ${position}:`, error);
+      return (
+        <div className="w-60 h-60 bg-gray-100 rounded-lg flex items-center justify-center text-gray-400 text-sm">
+          Espace publicitaire
+        </div>
+      );
+    }
+  };
+
   return (
     <div className="grid lg:grid-cols-[250px_1fr_250px] gap-4 w-full overflow-hidden">
       <aside className="hidden lg:flex lg:justify-end lg:items-start lg:pt-8">
-        {isLoaded && <AdSenseSlot 
-          adClient="ca-pub-xxxxxxxxxxxxxxxx" 
-          adSlot="xxxxxxxxxx" 
-          position="left"
-          className="w-60 h-60"
-        />}
+        {isLoaded && <SafeAdSenseSlot position="left" />}
       </aside>
       
       <main className="mx-auto max-w-screen-lg w-full min-h-screen">
@@ -37,12 +54,7 @@ const AdSenseLayout: React.FC<AdSenseLayoutProps> = ({
       </main>
       
       <aside className="hidden lg:flex lg:justify-start lg:items-start lg:pt-8">
-        {isLoaded && <AdSenseSlot 
-          adClient="ca-pub-xxxxxxxxxxxxxxxx" 
-          adSlot="xxxxxxxxxx" 
-          position="right"
-          className="w-60 h-60"
-        />}
+        {isLoaded && <SafeAdSenseSlot position="right" />}
       </aside>
     </div>
   );

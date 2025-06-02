@@ -57,13 +57,19 @@ export const useGameInitialization = () => {
           
           if (Array.isArray(playerNames) && playerNames.length >= 2) {
             // Créer les joueurs directement depuis les paramètres URL
-            const newPlayers: Player[] = playerNames.map((name, index) => ({
-              id: uuidv4(),
-              name: name && name.trim() ? name.trim() : `Joueur ${Math.floor(Math.random() * 1000)}`,
-              totalScore: 0,
-              rounds: [],
-              avatarColor: avatarColors[index % avatarColors.length]
-            }));
+            const newPlayers: Player[] = playerNames.map((name, index) => {
+              const playerName = name && typeof name === 'string' && name.trim() 
+                ? name.trim() 
+                : `Joueur ${index + 1}`;
+                
+              return {
+                id: uuidv4(),
+                name: playerName,
+                totalScore: 0,
+                rounds: [],
+                avatarColor: avatarColors[index % avatarColors.length]
+              };
+            });
             
             console.info('Joueurs initialisés avec succès depuis URL:', newPlayers.map(p => p.name).join(', '));
             setPlayers(newPlayers);
@@ -133,8 +139,26 @@ export const useGameInitialization = () => {
         return false;
       }
       
-      console.info('Joueurs initialisés avec succès:', newPlayers.map(p => p.name).join(', '));
-      setPlayers(newPlayers);
+      // Validation supplémentaire des données des joueurs
+      const validatedPlayers = newPlayers.map((player, index) => {
+        if (!player.id) player.id = uuidv4();
+        if (!player.name || typeof player.name !== 'string') {
+          player.name = `Joueur ${index + 1}`;
+        }
+        if (!player.avatarColor) {
+          player.avatarColor = avatarColors[index % avatarColors.length];
+        }
+        if (typeof player.totalScore !== 'number') {
+          player.totalScore = 0;
+        }
+        if (!Array.isArray(player.rounds)) {
+          player.rounds = [];
+        }
+        return player;
+      });
+      
+      console.info('Joueurs initialisés avec succès:', validatedPlayers.map(p => p.name).join(', '));
+      setPlayers(validatedPlayers);
       setGameStartTime(new Date());
       
       initializationCompleted.current = true;
