@@ -1,12 +1,8 @@
 
-/**
- * Main hook for complete game state management
- * Orchestrates specialized hooks for initialization, persistence, rounds and continuation
- */
 import { useState } from 'react';
 import { useLocalStorage } from './use-local-storage';
 import { useGamePersistence } from './useGamePersistence';
-import { useGameInitialization } from './useGameInitialization';
+import { useSimpleGameInitialization } from './useSimpleGameInitialization';
 import { useGameContinuation } from './useGameContinuation';
 import { useRoundManagement } from './useRoundManagement';
 
@@ -21,7 +17,7 @@ export const useGameState = () => {
     scoreLimit,
     setScoreLimit,
     createNewGame
-  } = useGameInitialization();
+  } = useSimpleGameInitialization();
   
   const { 
     loadGameState,
@@ -45,30 +41,40 @@ export const useGameState = () => {
   } = useGameContinuation(setShowGameOver, setScoreLimit, scoreLimit);
 
   const handleAddRound = (scores: number[], dutchPlayerId?: string) => {
-    const result = addRound(players, scores, dutchPlayerId);
-    
-    if (result) {
-      const { updatedPlayers, isGameOver } = result;
-      setPlayers(updatedPlayers);
+    try {
+      const result = addRound(players, scores, dutchPlayerId);
       
-      if (isGameOver) {
-        setTimeout(() => setShowGameOver(true), 500);
+      if (result) {
+        const { updatedPlayers, isGameOver } = result;
+        setPlayers(updatedPlayers);
+        
+        if (isGameOver) {
+          setTimeout(() => setShowGameOver(true), 500);
+        }
+        
+        return true;
       }
-      
-      return true;
+      return false;
+    } catch (error) {
+      console.error('Error in handleAddRound:', error);
+      return false;
     }
-    return false;
   };
 
   const handleUndoLastRound = () => {
-    const updatedPlayers = undoLastRound(players, soundEnabled);
-    setPlayers(updatedPlayers);
-    
-    if (showGameOver) {
-      setShowGameOver(false);
+    try {
+      const updatedPlayers = undoLastRound(players, soundEnabled);
+      setPlayers(updatedPlayers);
+      
+      if (showGameOver) {
+        setShowGameOver(false);
+      }
+      
+      return true;
+    } catch (error) {
+      console.error('Error in handleUndoLastRound:', error);
+      return false;
     }
-    
-    return true;
   };
 
   const handleConfirmEndGame = () => {
@@ -76,7 +82,8 @@ export const useGameState = () => {
       saveGameToHistory(players, gameStartTime);
       setShowGameOver(true);
       return true;
-    } catch {
+    } catch (error) {
+      console.error('Error in handleConfirmEndGame:', error);
       return false;
     }
   };
@@ -95,7 +102,7 @@ export const useGameState = () => {
     handleCancelEndGame,
     handleContinueGame,
     handleRestart,
-    createNewGame  // Exposer la fonction createNewGame
+    createNewGame
   };
 };
 

@@ -1,10 +1,11 @@
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Player } from '@/types';
 import ErrorBoundary from './ErrorBoundary';
 import ScoreBoard from './ScoreBoard';
 import NewRoundScoreForm from './NewRoundScoreForm';
 import GameResultOverlay from './game/GameResultOverlay';
+import { safeUpdateAllPlayersStats } from '@/utils/safePlayerStatsCalculator';
 
 interface GameContentProps {
   players: Player[];
@@ -37,6 +38,16 @@ const GameContent: React.FC<GameContentProps> = ({
 }) => {
   const [showScoreForm, setShowScoreForm] = useState(false);
 
+  // Safe calculation of player stats with error handling
+  const playersWithStats = useMemo(() => {
+    try {
+      return safeUpdateAllPlayersStats(players);
+    } catch (error) {
+      console.error('GameContent: Error calculating player stats:', error);
+      return players;
+    }
+  }, [players]);
+
   const handleOpenScoreForm = () => {
     setShowScoreForm(true);
   };
@@ -46,8 +57,12 @@ const GameContent: React.FC<GameContentProps> = ({
   };
 
   const handleAddRoundWrapper = (scores: number[], dutchPlayerId?: string) => {
-    onAddRound(scores, dutchPlayerId);
-    setShowScoreForm(false);
+    try {
+      onAddRound(scores, dutchPlayerId);
+      setShowScoreForm(false);
+    } catch (error) {
+      console.error('GameContent: Error adding round:', error);
+    }
   };
 
   const ErrorFallback = ({ error }: { error: Error }) => (
@@ -65,8 +80,8 @@ const GameContent: React.FC<GameContentProps> = ({
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
       <ScoreBoard
-        players={players}
-        onAddRound={onAddRound} // Correction : passer onAddRound directement
+        players={playersWithStats}
+        onAddRound={onAddRound}
         openScoreForm={handleOpenScoreForm}
         onUndoLastRound={onUndoLastRound}
         onEndGame={onRequestEndGame}
@@ -78,7 +93,7 @@ const GameContent: React.FC<GameContentProps> = ({
       />
 
       <NewRoundScoreForm
-        players={players}
+        players={playersWithStats}
         open={showScoreForm}
         onClose={handleCloseScoreForm}
         onSubmit={handleAddRoundWrapper}
@@ -86,7 +101,7 @@ const GameContent: React.FC<GameContentProps> = ({
 
       {showGameOver && (
         <GameResultOverlay
-          players={players}
+          players={playersWithStats}
           onContinue={onContinueGame}
           onRestart={onRestart}
           scoreLimit={scoreLimit}
