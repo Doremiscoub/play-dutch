@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'sonner';
@@ -39,7 +38,7 @@ const MultiplayerGameSetup: React.FC<MultiplayerGameSetupProps> = ({
       const gameSession = joinGameSession(
         joinCode.toUpperCase(), 
         user.id, 
-        user.fullName || user.username || 'Joueur'
+        user.fullName || user.firstName || 'Joueur'
       );
       
       if (gameSession) {
@@ -66,7 +65,7 @@ const MultiplayerGameSetup: React.FC<MultiplayerGameSetupProps> = ({
     }
   };
   
-  const userName = user?.fullName || user?.username || 'Joueur';
+  const userName = user?.fullName || user?.firstName || 'Joueur';
 
   return (
     <div className="w-full max-w-xl mx-auto">

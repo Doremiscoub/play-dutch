@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useLocalStorage } from '@/hooks/use-local-storage';
@@ -94,7 +93,7 @@ const SettingsPage = () => {
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="font-medium">{user.fullName || user.username}</p>
+                      <p className="font-medium">{user.fullName || user.firstName || 'Utilisateur'}</p>
                       <p className="text-sm text-gray-500">{user.firstName} {user.lastName}</p>
                     </div>
                     {signOut && (
