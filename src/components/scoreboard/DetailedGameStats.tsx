@@ -6,14 +6,21 @@ import { TrendingUp, TrendingDown, Target, Zap, BarChart3, Trophy } from 'lucide
 
 interface DetailedGameStatsProps {
   players: Player[];
-  roundHistory: { scores: number[], dutchPlayerId?: string }[];
+  roundCount: number;
+  scoreLimit: number;
+  roundHistory?: { scores: number[], dutchPlayerId?: string }[];
 }
 
-const DetailedGameStats: React.FC<DetailedGameStatsProps> = ({ players, roundHistory }) => {
+const DetailedGameStats: React.FC<DetailedGameStatsProps> = ({ 
+  players, 
+  roundCount, 
+  scoreLimit, 
+  roundHistory = [] 
+}) => {
   const calculateDetailedStats = () => {
     if (!players.length) return null;
 
-    const totalRounds = players[0]?.rounds.length || 0;
+    const totalRounds = roundCount;
     const totalPlayers = players.length;
     
     const allScores = players.flatMap(p => p.rounds.map(round => round.score));
@@ -23,7 +30,7 @@ const DetailedGameStats: React.FC<DetailedGameStatsProps> = ({ players, roundHis
     
     const bestScore = Math.min(...players.map(p => p.totalScore));
     const worstScore = Math.max(...players.map(p => p.totalScore));
-    const dutchCount = roundHistory.filter(r => r.dutchPlayerId).length;
+    const dutchCount = roundHistory ? roundHistory.filter(r => r.dutchPlayerId).length : 0;
     
     // Calculate best and worst individual rounds
     const bestRound = allScores.length ? Math.min(...allScores) : 0;

@@ -58,6 +58,7 @@ export interface ScoreBoardProps {
   onConfirmEndGame?: () => void;
   onCancelEndGame?: () => void;
   scoreLimit?: number;
+  openScoreForm?: () => void;
 }
 
 // Configuration d'interface utilisateur
