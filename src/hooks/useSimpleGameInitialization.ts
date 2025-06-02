@@ -80,7 +80,13 @@ export const useSimpleGameInitialization = () => {
         navigate('/game', { replace: true });
       }
       
-      toast.success('Partie créée avec succès !');
+      // Délai pour éviter les conflits avec d'autres notifications
+      setTimeout(() => {
+        toast.success('Partie créée avec succès !', {
+          duration: 3000
+        });
+      }, 500);
+      
       return true;
     } catch (error) {
       console.error('Game initialization failed:', error);

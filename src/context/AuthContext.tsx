@@ -5,6 +5,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useUser as useClerkUser, useAuth as useClerkAuth } from '@clerk/clerk-react';
 import { AuthUser, AuthContextType } from '@/types';
+import { toast } from 'sonner';
 
 // Valeurs par défaut pour le mode hors-ligne
 const defaultAuthContext: AuthContextType = {
@@ -33,8 +34,21 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   
   useEffect(() => {
     // Vérifier si nous sommes déjà en mode hors-ligne
-    if (localStorage.getItem('clerk_auth_failed') === 'true') {
+    const isAlreadyOffline = localStorage.getItem('clerk_auth_failed') === 'true';
+    const hasShownOfflineNotification = localStorage.getItem('offline_notification_shown') === 'true';
+    
+    if (isAlreadyOffline) {
       setIsOfflineMode(true);
+      
+      // Afficher la notification seulement si elle n'a pas été montrée
+      if (!hasShownOfflineNotification) {
+        setTimeout(() => {
+          toast.info("Mode hors ligne - vos parties seront sauvegardées localement", {
+            duration: 4000
+          });
+          localStorage.setItem('offline_notification_shown', 'true');
+        }, 1000);
+      }
     }
 
     // Surveiller les erreurs Clerk et basculer en mode hors-ligne si nécessaire
@@ -57,7 +71,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         localStorage.setItem('clerk_auth_failed', 'true');
         setIsOfflineMode(true);
       }
-    }, 5000); // Augmenté de 2000ms à 5000ms
+    }, 5000);
 
     return () => {
       window.removeEventListener('error', handleError);

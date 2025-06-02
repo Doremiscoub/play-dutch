@@ -56,9 +56,6 @@ const LocalGameSetup: React.FC<LocalGameSetupProps> = ({ onStartGame }) => {
       localStorage.setItem('dutch_player_setup', JSON.stringify(validPlayerNames));
       console.info('Configuration des joueurs sauvegardée:', validPlayerNames);
       
-      // Debug notification
-      toast.success(`${validPlayerNames.length} joueurs configurés`);
-      
       // Attendre un peu pour s'assurer que localStorage est bien mis à jour
       setTimeout(() => {
         onStartGame(validPlayerNames);
