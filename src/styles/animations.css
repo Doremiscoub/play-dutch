@@ -1,3 +1,4 @@
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -83,6 +84,7 @@
   }
 }
 
+/* Animation classes */
 .fade-in {
   animation: fadeIn 0.5s cubic-bezier(0.33, 1, 0.68, 1) forwards;
 }
@@ -91,7 +93,7 @@
   animation: scaleIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
-.float {
+.animate-float {
   animation: float 6s infinite ease-in-out;
 }
 
@@ -172,36 +174,42 @@
   animation: shimmer 3s ease-in-out infinite;
 }
 
+/* Gradient button animations - CRITICAL FIX */
+.animate-gradient {
+  background-size: 200% auto;
+  animation: gradientShift 3s ease infinite;
+}
+
 .gradient-button {
   background-size: 200% auto;
   transition: all 0.3s ease;
   background-image: linear-gradient(to right, 
-    var(--dutch-blue),
-    var(--dutch-purple),
-    var(--dutch-blue)
+    #1e40af,
+    #7c3aed,
+    #1e40af
   );
   animation: gradientShift 6s ease infinite;
 }
 
 .gradient-button:hover {
   background-position: right center;
-  box-shadow: 0 0 15px rgba(var(--dutch-blue-rgb), 0.5);
+  box-shadow: 0 0 15px rgba(30, 64, 175, 0.5);
 }
 
 .gradient-button-orange {
   background-size: 200% auto;
   transition: all 0.3s ease;
   background-image: linear-gradient(to right, 
-    var(--dutch-orange),
-    var(--dutch-purple),
-    var(--dutch-orange)
+    #ea580c,
+    #7c3aed,
+    #ea580c
   );
   animation: gradientShift 6s ease infinite;
 }
 
 .gradient-button-orange:hover {
   background-position: right center;
-  box-shadow: 0 0 15px rgba(var(--dutch-orange-rgb), 0.5);
+  box-shadow: 0 0 15px rgba(234, 88, 12, 0.5);
 }
 
 .badge-rank {
@@ -231,6 +239,21 @@
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
 }
 
+/* CSS Variables for Dutch colors */
+:root {
+  --dutch-blue: #1e40af;
+  --dutch-blue-rgb: 30, 64, 175;
+  --dutch-purple: #7c3aed;
+  --dutch-purple-rgb: 124, 58, 237;
+  --dutch-orange: #ea580c;
+  --dutch-orange-rgb: 234, 88, 12;
+}
+
+.bg-size-200 {
+  background-size: 200% auto;
+}
+
+/* Typography utilities */
 .text-p1 {
   @apply text-lg sm:text-xl font-medium text-gray-800;
 }

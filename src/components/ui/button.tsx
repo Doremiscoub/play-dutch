@@ -22,9 +22,9 @@ const buttonVariants = cva(
         "flat-accent": "bg-dutch-orange text-white rounded-full shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5",
         "flat-light": "bg-white text-dutch-blue border border-dutch-blue/20 rounded-full shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5",
         
-        // Gradient variants
+        // Gradient variants - CORRECTED
         "gradient": "bg-gradient-to-r from-dutch-blue to-dutch-purple text-white hover:opacity-90 transition-all",
-        "gradient-animated": "gradient-button text-white rounded-full shadow-md hover:shadow-lg bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-blue bg-size-200 animate-gradient",
+        "gradient-animated": "gradient-button text-white rounded-full shadow-md hover:shadow-lg animate-gradient",
         "gradient-orange": "gradient-button-orange text-white rounded-full shadow-md hover:shadow-lg",
         
         // Glass variants
