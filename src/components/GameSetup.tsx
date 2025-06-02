@@ -1,9 +1,7 @@
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { UnifiedPageLayout } from './ui/unified-page-layout';
-import { UnifiedCard } from './ui/unified-card';
-import LocalGameSetupContainer from './game-setup/LocalGameSetupContainer';
+import GameSetupGlassmorphic from './GameSetupGlassmorphic';
 
 const GameSetup: React.FC = () => {
   const navigate = useNavigate();
@@ -14,17 +12,7 @@ const GameSetup: React.FC = () => {
     navigate('/game');
   };
 
-  return (
-    <UnifiedPageLayout
-      title="Nouvelle Partie"
-      showBackButton
-      onBack={() => navigate('/')}
-    >
-      <UnifiedCard variant="light" padding="lg">
-        <LocalGameSetupContainer onStartGame={handleStartGame} />
-      </UnifiedCard>
-    </UnifiedPageLayout>
-  );
+  return <GameSetupGlassmorphic onStartGame={handleStartGame} />;
 };
 
 export default GameSetup;

@@ -10,12 +10,12 @@ import { toast } from 'sonner';
 import PageLayout from '@/components/PageLayout';
 import CustomScoreBoardButtons from './CustomScoreBoardButtons';
 import ScoreTableView from './ScoreTableView';
-import AICommentator from './AICommentator';
+import AICommentatorEnhanced from './AICommentatorEnhanced';
 import { ModernTitle } from './ui/modern-title';
-import ScoreBoardHeader from './scoreboard/ScoreBoardHeader';
+import EnhancedScoreBoardHeader from './scoreboard/EnhancedScoreBoardHeader';
 import ScoreBoardTabs from './scoreboard/ScoreBoardTabs';
-import PlayerListView from './scoreboard/PlayerListView';
-import GameStatsPanel from './scoreboard/GameStatsPanel';
+import FunPlayerCard from './scoreboard/FunPlayerCard';
+import DetailedGameStats from './scoreboard/DetailedGameStats';
 import EndGameConfirmationDialog from './scoreboard/EndGameConfirmationDialog';
 import UndoConfirmationDialog from './scoreboard/UndoConfirmationDialog';
 
@@ -84,11 +84,11 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
   return (
     <PageLayout className="pb-12 sm:pb-20">
       <div className="w-full max-w-6xl mx-auto px-1 sm:px-2">
-        <ScoreBoardHeader roundCount={players[0]?.rounds.length || 0} scoreLimit={scoreLimit} />
+        <EnhancedScoreBoardHeader roundCount={players[0]?.rounds.length || 0} scoreLimit={scoreLimit} />
 
         {showAICommentator && (
           <div className="mb-4">
-            <AICommentator 
+            <AICommentatorEnhanced 
               players={players}
               roundHistory={roundHistory}
             />
@@ -101,7 +101,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
         />
 
         <div className={`mt-4 ${isDesktop ? 'md:flex md:gap-4' : ''}`}>
-          <div className={`${isDesktop ? 'md:w-3/4' : 'w-full'} z-20 relative`}>
+          <div className={`${isDesktop ? 'md:w-full' : 'w-full'} z-20 relative`}>
             <AnimatePresence mode="wait">
               {view === 'list' && (
                 <motion.div
@@ -109,14 +109,18 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  className="w-full"
+                  className="w-full space-y-3"
                 >
-                  <PlayerListView 
-                    players={players}
-                    isDesktop={isDesktop}
-                    scoreLimit={scoreLimit}
-                    onPlayerSelect={handlePlayerSelect}
-                  />
+                  {sortedPlayers.map((player, index) => (
+                    <FunPlayerCard
+                      key={player.id}
+                      player={player}
+                      rank={index + 1}
+                      totalPlayers={players.length}
+                      onSelect={handlePlayerSelect}
+                      isSelected={selectedPlayer?.id === player.id}
+                    />
+                  ))}
                 </motion.div>
               )}
 
@@ -136,17 +140,12 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
               )}
             </AnimatePresence>
           </div>
-
-          {isDesktop && (
-            <div className="md:w-1/4">
-              <ModernTitle variant="h3" className="mb-3">Statistiques</ModernTitle>
-              <GameStatsPanel
-                players={players}
-                roundHistory={roundHistory}
-              />
-            </div>
-          )}
         </div>
+
+        <DetailedGameStats
+          players={players}
+          roundHistory={roundHistory}
+        />
 
         <div className="mt-4">
           <CustomScoreBoardButtons

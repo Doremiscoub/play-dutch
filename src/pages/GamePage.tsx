@@ -1,31 +1,25 @@
 
-import React, { useEffect, useState } from 'react';
-import { useGameState } from '@/hooks/useGameState';
-import GameContent from '@/components/GameContent';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useLocalStorage } from '@/hooks/use-local-storage';
-import { useAuth } from '@/context/AuthContext';
-import LoadingSpinner from '@/components/game/LoadingSpinner';
-import ErrorDisplay from '@/components/game/ErrorDisplay';
-import AdSenseLayout from '@/components/game/AdSenseLayout';
+import { motion, AnimatePresence } from 'framer-motion';
+import useGameState from '@/hooks/useGameState';
+import ScoreBoardWithAds from '@/components/scoreboard/ScoreBoardWithAds';
+import GameOverScreen from '@/components/GameOverScreen';
+import NewRoundScoreForm from '@/components/NewRoundScoreForm';
 import { toast } from 'sonner';
-import ErrorBoundary from '@/components/ErrorBoundary';
 
 const GamePage: React.FC = () => {
   const navigate = useNavigate();
-  const [isInitializing, setIsInitializing] = useState<boolean>(true);
-  const { isSignedIn } = useAuth();
-  const [adsEnabled] = useLocalStorage('dutch_ads_enabled', true);
-  const [isLoaded, setIsLoaded] = useState(false);
-  
-  console.info('🎮 GamePage: Démarrage du rendu');
-  
+  const [showScoreForm, setShowScoreForm] = useState<boolean>(false);
+  const [gameInitialized, setGameInitialized] = useState<boolean>(false);
+
   const {
     players,
     roundHistory,
     showGameOver,
     showGameEndConfirmation,
     scoreLimit,
+    gameStartTime,
     handleAddRound,
     handleUndoLastRound,
     handleRequestEndGame,
@@ -33,108 +27,115 @@ const GamePage: React.FC = () => {
     handleCancelEndGame,
     handleContinueGame,
     handleRestart,
-    createNewGame,
+    createNewGame
   } = useGameState();
-  
+
+  // Initialize game on component mount
   useEffect(() => {
-    console.info('🎮 GamePage: Effect d\'initialisation déclenché');
-    
     const initializeGame = async () => {
-      setIsInitializing(true);
-      
       try {
-        if (!players || players.length === 0) {
-          console.info('🎮 GamePage: Aucun joueur trouvé, tentative de création');
-          const success = await createNewGame();
-          
-          if (!success) {
-            console.error('🎮 GamePage: Échec de la création de la partie');
-            toast.error("Impossible de démarrer la partie");
-            navigate('/game/setup');
-            return;
-          }
-          
-          console.info('🎮 GamePage: Partie créée avec succès');
+        // Check if we're returning to the game
+        const shouldReturnToGame = localStorage.getItem('dutch_return_to_game');
+        if (shouldReturnToGame) {
+          localStorage.removeItem('dutch_return_to_game');
+        }
+
+        const success = await createNewGame();
+        if (success) {
+          setGameInitialized(true);
         } else {
-          console.info('🎮 GamePage: Joueurs existants trouvés:', players.length);
+          console.error('Failed to initialize game');
+          navigate('/game/setup');
         }
       } catch (error) {
-        console.error("🎮 GamePage: Erreur d'initialisation:", error);
-        toast.error("Erreur lors du chargement de la partie");
+        console.error('Game initialization error:', error);
         navigate('/game/setup');
-      } finally {
-        setIsInitializing(false);
       }
     };
-    
-    initializeGame();
-  }, [createNewGame, navigate]);
-  
-  useEffect(() => {
-    if (!isInitializing && players && players.length > 0) {
-      console.info('🎮 GamePage: Finalisation du chargement');
-      const timer = setTimeout(() => {
-        setIsLoaded(true);
-      }, 300);
-      
-      return () => clearTimeout(timer);
-    }
-  }, [isInitializing, players]);
 
-  const GameErrorFallback = ({ error }: { error: Error }) => {
-    console.error('🎮 GamePage: Erreur de rendu capturée:', error);
-    return (
-      <ErrorDisplay 
-        error={`Erreur de rendu: ${error.message}`}
-        onRetry={() => {
-          window.location.reload();
-        }}
-      />
-    );
+    if (!gameInitialized) {
+      initializeGame();
+    }
+  }, [createNewGame, navigate, gameInitialized]);
+
+  const openScoreForm = () => {
+    setShowScoreForm(true);
   };
 
-  if (isInitializing) {
-    console.info('🎮 GamePage: Affichage du spinner de chargement');
-    return <LoadingSpinner />;
-  }
+  const closeScoreForm = () => {
+    setShowScoreForm(false);
+  };
 
-  if (!players || players.length === 0) {
-    console.warn('🎮 GamePage: Aucun joueur trouvé après initialisation');
+  const handleAddNewRound = (scores: number[], dutchPlayerId?: string) => {
+    const success = handleAddRound(scores, dutchPlayerId);
+    if (success) {
+      closeScoreForm();
+    }
+  };
+
+  // Show loading if game isn't initialized yet
+  if (!gameInitialized || !players || players.length === 0) {
     return (
-      <ErrorDisplay 
-        error="Aucun joueur trouvé. Redirection vers la configuration..."
-        onRetry={() => {
-          navigate('/game/setup');
-        }}
-      />
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-white">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="text-center"
+        >
+          <div className="w-16 h-16 mx-auto mb-4 border-4 border-dutch-blue border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-gray-600">Initialisation de la partie...</p>
+        </motion.div>
+      </div>
     );
   }
 
-  console.info('🎮 GamePage: Rendu du contenu principal avec', players.length, 'joueurs');
-
   return (
-    <ErrorBoundary FallbackComponent={GameErrorFallback}>
-      <AdSenseLayout
-        isSignedIn={isSignedIn}
-        adsEnabled={adsEnabled}
-        isLoaded={isLoaded}
-      >
-        <GameContent
-          players={players}
-          roundHistory={roundHistory}
-          showGameOver={showGameOver}
-          showGameEndConfirmation={showGameEndConfirmation}
-          scoreLimit={scoreLimit}
-          onAddRound={handleAddRound}
-          onUndoLastRound={handleUndoLastRound}
-          onRequestEndGame={handleRequestEndGame}
-          onConfirmEndGame={handleConfirmEndGame}
-          onCancelEndGame={handleCancelEndGame}
-          onContinueGame={handleContinueGame}
-          onRestart={handleRestart}
-        />
-      </AdSenseLayout>
-    </ErrorBoundary>
+    <div className="min-h-screen">
+      <AnimatePresence mode="wait">
+        {showGameOver ? (
+          <motion.div
+            key="game-over"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <GameOverScreen
+              players={players}
+              onRestart={handleRestart}
+              onContinueGame={handleContinueGame}
+              currentScoreLimit={scoreLimit}
+            />
+          </motion.div>
+        ) : (
+          <motion.div
+            key="game-board"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <ScoreBoardWithAds
+              players={players}
+              roundHistory={roundHistory}
+              onAddRound={handleAddNewRound}
+              onUndoLastRound={handleUndoLastRound}
+              onEndGame={handleRequestEndGame}
+              showGameEndConfirmation={showGameEndConfirmation}
+              onConfirmEndGame={handleConfirmEndGame}
+              onCancelEndGame={handleCancelEndGame}
+              scoreLimit={scoreLimit}
+              openScoreForm={openScoreForm}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <NewRoundScoreForm
+        players={players}
+        open={showScoreForm}
+        onClose={closeScoreForm}
+        onSubmit={handleAddNewRound}
+      />
+    </div>
   );
 };
 

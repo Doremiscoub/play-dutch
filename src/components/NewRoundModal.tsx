@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Player } from '@/types';
 import { motion } from 'framer-motion';
 import { Button } from './ui/button';
-import { Minus, Plus, User, Globe } from 'lucide-react';
+import { Minus, Plus, User, Zap } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from './ui/dialog';
 
 interface NewRoundModalProps {
@@ -73,41 +73,41 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
 
   const adjustScore = (index: number, amount: number) => {
     const newScores = [...scores];
-    newScores[index] = (newScores[index] || 0) + amount;
+    newScores[index] = Math.max(0, (newScores[index] || 0) + amount);
     setScores(newScores);
   };
 
   return (
     <Dialog open={open} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="sm:max-w-lg">
+      <DialogContent className="sm:max-w-lg bg-white/90 backdrop-blur-xl rounded-3xl border border-white/50 shadow-xl">
         <DialogHeader>
-          <DialogTitle className="text-xl">Ajouter une manche</DialogTitle>
+          <DialogTitle className="text-xl font-semibold text-dutch-blue">Ajouter une manche</DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="mt-4 space-y-4">
           {players.map((player, index) => (
             <motion.div
               key={player.id}
-              className="p-4 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-lg shadow-sm"
+              className="p-4 bg-white/70 backdrop-blur-sm border border-white/50 rounded-2xl shadow-sm"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.05, duration: 0.3 }}
             >
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-full bg-dutch-blue/10 flex items-center justify-center text-dutch-blue font-medium">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-dutch-blue to-dutch-purple flex items-center justify-center text-white font-medium text-sm">
                     {index + 1}
                   </div>
-                  <span className="font-medium">{player.name}</span>
+                  <span className="font-medium text-gray-800">{player.name}</span>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3">
                   <Button
                     type="button"
-                    size="icon-sm"
+                    size="icon"
                     variant="outline"
                     onClick={() => adjustScore(index, -1)}
-                    className="rounded-full"
+                    className="w-8 h-8 rounded-full bg-white/70 backdrop-blur-sm border border-white/50"
                     disabled={isSubmitting}
                   >
                     <Minus className="h-3 w-3" />
@@ -122,17 +122,17 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
                         handleScoreChange(index, e.target.value);
                       }
                     }}
-                    className="w-14 h-10 px-2 text-center border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-dutch-blue"
+                    className="w-16 h-10 px-2 text-center border border-white/50 rounded-xl bg-white/70 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-dutch-blue/20 transition-all"
                     placeholder="0"
                     disabled={isSubmitting}
                   />
 
                   <Button
                     type="button"
-                    size="icon-sm"
+                    size="icon"
                     variant="outline"
                     onClick={() => adjustScore(index, 1)}
-                    className="rounded-full"
+                    className="w-8 h-8 rounded-full bg-white/70 backdrop-blur-sm border border-white/50"
                     disabled={isSubmitting}
                   >
                     <Plus className="h-3 w-3" />
@@ -140,16 +140,17 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
 
                   <Button
                     type="button"
-                    size="pill-sm"
-                    variant={dutchPlayerId === player.id ? "pill-orange" : "pill-glass"}
-                    className={`ml-2 ${
+                    size="sm"
+                    variant={dutchPlayerId === player.id ? "default" : "outline"}
+                    className={`ml-2 rounded-full px-4 transition-all ${
                       dutchPlayerId === player.id
-                        ? "text-white bg-dutch-orange"
-                        : "text-dutch-orange border-dutch-orange/30"
+                        ? "bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-md"
+                        : "bg-white/70 backdrop-blur-sm border border-green-300 text-green-700 hover:bg-green-50"
                     }`}
                     onClick={() => handleDutchToggle(player.id)}
                     disabled={isSubmitting}
                   >
+                    <Zap className="h-3 w-3 mr-1" />
                     Dutch
                   </Button>
                 </div>
@@ -157,21 +158,22 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
             </motion.div>
           ))}
 
-          <DialogFooter className="mt-6 gap-2">
+          <DialogFooter className="mt-6 gap-3">
             <Button 
               variant="outline" 
               type="button" 
               onClick={onClose}
               disabled={isSubmitting}
+              className="bg-white/70 backdrop-blur-sm border border-white/50"
             >
               Annuler
             </Button>
             <Button
-              variant="gradient"
               type="submit"
               disabled={isSubmitting}
+              className="bg-gradient-to-r from-dutch-blue to-dutch-purple text-white shadow-md hover:shadow-lg transition-all"
             >
-              {isSubmitting ? 'Validation...' : 'Valider'}
+              {isSubmitting ? 'Validation...' : 'Valider la manche'}
             </Button>
           </DialogFooter>
         </form>
