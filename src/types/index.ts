@@ -1,3 +1,4 @@
+
 /**
  * Types centralisés pour l'application Dutch
  */
@@ -7,6 +8,7 @@ export interface Player {
   id: string;
   name: string;
   avatarColor: string;
+  emoji?: string;
   totalScore: number;
   rounds: { score: number; isDutch: boolean }[];
   stats?: PlayerStatistics;

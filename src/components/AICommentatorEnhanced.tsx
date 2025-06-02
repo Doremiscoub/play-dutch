@@ -1,143 +1,197 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageSquare, Bot, Sparkles, TrendingUp } from 'lucide-react';
 import { Player } from '@/types';
+import ProfessorAvatar from './game/ProfessorAvatar';
 
 interface AICommentatorEnhancedProps {
   players: Player[];
-  roundHistory: { scores: number[], dutchPlayerId?: string }[];
+  roundCount: number;
+  scoreLimit: number;
 }
 
-const AICommentatorEnhanced: React.FC<AICommentatorEnhancedProps> = ({ players, roundHistory }) => {
-  const [currentComment, setCurrentComment] = useState<{
-    message: string;
-    type: 'info' | 'joke' | 'sarcasm' | 'encouragement';
-  } | null>(null);
+const AICommentatorEnhanced: React.FC<AICommentatorEnhancedProps> = ({
+  players,
+  roundCount,
+  scoreLimit
+}) => {
+  const [currentComment, setCurrentComment] = useState<string>('');
+  const [commentType, setCommentType] = useState<'info' | 'joke' | 'encouragement' | 'observation'>('info');
 
+  // Generate contextual comments based on game state
   const generateComment = () => {
-    if (!players.length) return null;
+    if (players.length === 0) return;
 
     const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
     const leader = sortedPlayers[0];
     const lastPlace = sortedPlayers[sortedPlayers.length - 1];
-    const totalRounds = players[0]?.rounds.length || 0;
-    const dutchCount = roundHistory.filter(r => r.dutchPlayerId).length;
-
+    const dutchCount = players.reduce((total, player) => total + player.rounds.filter(r => r.isDutch).length, 0);
+    
     const comments = {
-      info: [
-        `Nous en sommes à la manche ${totalRounds}. ${leader.name} mène avec ${leader.totalScore} points !`,
-        `${dutchCount} Dutch ont été réalisés jusqu'à présent. Impressionnant !`,
-        `La partie devient serrée ! Seulement ${lastPlace.totalScore - leader.totalScore} points d'écart.`
+      start: [
+        "Bienvenue dans cette nouvelle partie ! Que le meilleur gagne... ou plutôt, que le moins mauvais survive ! 🎲",
+        "Ah, des nouveaux adversaires ! J'ai hâte de voir qui sera le premier à craquer sous la pression... 😈",
+        "Une nouvelle bataille commence ! Préparez-vous à découvrir vos véritables talents... ou leur absence ! 🎭"
       ],
-      joke: [
-        `${lastPlace.name}, c'est le moment de consulter un manuel de règles peut-être ? 🎯`,
-        `${leader.name} semble avoir trouvé la formule secrète... ou a-t-il triché ? 🤔`,
-        `À ce rythme, on va finir avant que ${lastPlace.name} ne comprenne le jeu ! 😄`
+      
+      early: [
+        `${leader.name} ${leader.emoji} prend les devants ! Mais attention, c'est souvent les premiers qui chutent le plus dur ! 📉`,
+        `Seulement ${roundCount} manche${roundCount > 1 ? 's' : ''} et déjà des surprises ! Continuez comme ça, c'est divertissant ! 🍿`,
+        `${dutchCount} Dutch déjà ? Quelqu'un a visiblement besoin de réviser les règles ! 📚`
       ],
-      sarcasm: [
-        `Bravo ${lastPlace.name}, tu redéfinis les limites du possible ! 🙄`,
-        `${leader.name}, laisse un peu de place aux autres, voyons ! 😏`,
-        `Cette partie est... comment dire... palpitante ! 🎭`
+      
+      midGame: [
+        `${leader.name} ${leader.emoji} domine avec ${leader.totalScore} points ! Mais la roue tourne toujours... ⚡`,
+        `${lastPlace.name} ${lastPlace.emoji}, il serait peut-être temps de changer de stratégie ? Juste une suggestion... 🤔`,
+        `${roundCount} manches déjà ! Le temps passe vite quand on s'amuse... enfin, pour certains ! ⏰`
       ],
-      encouragement: [
-        `Allez ${lastPlace.name}, le comeback est possible ! 💪`,
-        `Excellent jeu ${leader.name}, continue comme ça ! ⭐`,
-        `Tout peut encore arriver, la partie n'est pas finie ! 🚀`
+      
+      endGame: [
+        `${leader.name} ${leader.emoji} frôle la victoire avec ${leader.totalScore} points ! Qui va craquer en premier ? 🎯`,
+        `La tension monte ! Plus que ${scoreLimit - leader.totalScore} points et c'est fini pour ${leader.name} ! 🔥`,
+        `Le suspense est à son comble ! ${leader.name} ${leader.emoji} va-t-il tenir le coup ? 🎬`
+      ],
+      
+      dutch: [
+        `Un Dutch ! Quelqu'un vient de sauver sa peau... temporairement ! 🦸‍♂️`,
+        `Magnifique Dutch ! Voilà ce qu'on appelle un comeback héroïque ! ⭐`,
+        `Dutch parfait ! Si seulement vous pouviez jouer comme ça tout le temps... 🎯`
       ]
     };
 
-    const types = Object.keys(comments) as Array<keyof typeof comments>;
-    const randomType = types[Math.floor(Math.random() * types.length)];
-    const typeComments = comments[randomType];
-    const randomComment = typeComments[Math.floor(Math.random() * typeComments.length)];
+    let commentSet: string[];
+    let type: 'info' | 'joke' | 'encouragement' | 'observation' = 'info';
 
-    return {
-      message: randomComment,
-      type: randomType
-    };
+    if (roundCount === 0) {
+      commentSet = comments.start;
+      type = 'encouragement';
+    } else if (roundCount <= 3) {
+      commentSet = comments.early;
+      type = 'observation';
+    } else if (leader.totalScore < scoreLimit * 0.7) {
+      commentSet = comments.midGame;
+      type = 'joke';
+    } else {
+      commentSet = comments.endGame;
+      type = 'info';
+    }
+
+    // Check for recent Dutch
+    const recentDutch = players.some(player => 
+      player.rounds.length > 0 && player.rounds[player.rounds.length - 1]?.isDutch
+    );
+    
+    if (recentDutch && roundCount > 0) {
+      commentSet = comments.dutch;
+      type = 'encouragement';
+    }
+
+    const randomComment = commentSet[Math.floor(Math.random() * commentSet.length)];
+    setCurrentComment(randomComment);
+    setCommentType(type);
   };
 
+  // Generate new comment when game state changes
   useEffect(() => {
-    if (players.length > 0 && roundHistory.length > 0) {
-      const timer = setTimeout(() => {
-        setCurrentComment(generateComment());
-      }, 2000);
+    generateComment();
+  }, [players, roundCount]);
 
-      return () => clearTimeout(timer);
-    }
-  }, [roundHistory.length]);
-
-  const getIcon = (type: string) => {
-    switch (type) {
-      case 'info': return <MessageSquare className="h-5 w-5" />;
-      case 'joke': return <Sparkles className="h-5 w-5" />;
-      case 'sarcasm': return <Bot className="h-5 w-5" />;
-      case 'encouragement': return <TrendingUp className="h-5 w-5" />;
-      default: return <MessageSquare className="h-5 w-5" />;
-    }
-  };
-
-  const getStyle = (type: string) => {
-    switch (type) {
-      case 'info': return 'border-dutch-blue/30 bg-dutch-blue/5 text-dutch-blue';
-      case 'joke': return 'border-dutch-orange/30 bg-dutch-orange/5 text-dutch-orange';
-      case 'sarcasm': return 'border-dutch-purple/30 bg-dutch-purple/5 text-dutch-purple';
-      case 'encouragement': return 'border-green-500/30 bg-green-50 text-green-700';
-      default: return 'border-gray-300 bg-gray-50 text-gray-700';
+  const getCommentStyle = () => {
+    switch (commentType) {
+      case 'encouragement':
+        return 'bg-gradient-to-r from-green-50/90 to-emerald-50/90 border-green-200/60 text-green-800';
+      case 'joke':
+        return 'bg-gradient-to-r from-amber-50/90 to-orange-50/90 border-amber-200/60 text-amber-800';
+      case 'observation':
+        return 'bg-gradient-to-r from-blue-50/90 to-cyan-50/90 border-blue-200/60 text-blue-800';
+      default:
+        return 'bg-gradient-to-r from-purple-50/90 to-indigo-50/90 border-purple-200/60 text-purple-800';
     }
   };
 
   if (!currentComment) return null;
 
   return (
-    <AnimatePresence>
+    <AnimatePresence mode="wait">
       <motion.div
-        initial={{ opacity: 0, scale: 0.9, y: 10 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.9, y: 10 }}
-        transition={{ type: 'spring', stiffness: 300, damping: 15 }}
+        key={currentComment}
+        initial={{ opacity: 0, y: 20, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: -20, scale: 0.95 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
         className={`
-          rounded-2xl border-2 backdrop-blur-sm p-4 mb-4 relative overflow-hidden
-          ${getStyle(currentComment.type)}
+          backdrop-blur-xl border rounded-3xl p-6 shadow-lg transition-all duration-300
+          ${getCommentStyle()}
         `}
       >
-        {/* 3D Professor Avatar - Much Larger */}
-        <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
+        <div className="flex items-start gap-4">
+          {/* Professor Avatar - Larger size */}
           <motion.div
-            className="w-16 h-16 rounded-full bg-gradient-to-br from-dutch-purple via-dutch-blue to-dutch-orange flex items-center justify-center text-white font-bold text-lg shadow-lg"
             animate={{ 
               rotate: [0, 5, -5, 0],
               scale: [1, 1.05, 1]
             }}
             transition={{ 
-              duration: 3, 
-              repeat: Infinity,
-              repeatType: "reverse"
+              duration: 4, 
+              repeat: Infinity, 
+              ease: "easeInOut" 
             }}
           >
-            🎩
+            <ProfessorAvatar 
+              size="xl"
+              animate={true}
+              className="flex-shrink-0"
+            />
           </motion.div>
-        </div>
-
-        <div className="flex items-start gap-3 pr-20">
-          <div className={`
-            w-10 h-10 rounded-full flex items-center justify-center shadow-md
-            ${currentComment.type === 'info' ? 'bg-dutch-blue/10' : 
-              currentComment.type === 'joke' ? 'bg-dutch-orange/10' :
-              currentComment.type === 'sarcasm' ? 'bg-dutch-purple/10' : 'bg-green-100'}
-          `}>
-            {getIcon(currentComment.type)}
-          </div>
           
-          <div className="flex-1">
-            <div className="flex items-center gap-2 mb-1">
-              <h4 className="font-semibold text-sm">Professeur Cartouche</h4>
-              <span className="text-xs opacity-70">•</span>
-              <span className="text-xs opacity-70 capitalize">{currentComment.type}</span>
+          {/* Comment Bubble */}
+          <motion.div 
+            className="flex-1 relative"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+          >
+            {/* Speech bubble pointer */}
+            <div className="absolute -left-2 top-3 w-0 h-0 border-t-8 border-t-transparent border-b-8 border-b-transparent border-r-8 border-r-current opacity-20" />
+            
+            <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-4 shadow-sm">
+              <motion.p 
+                className="text-sm font-medium leading-relaxed"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3, duration: 0.4 }}
+              >
+                {currentComment}
+              </motion.p>
+              
+              {/* Typing indicator effect */}
+              <motion.div
+                className="flex items-center mt-2 text-xs opacity-60"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: [0.6, 1, 0.6] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                <span className="mr-2">Professeur Cartouche</span>
+                <div className="flex gap-1">
+                  <motion.div 
+                    className="w-1 h-1 bg-current rounded-full"
+                    animate={{ scale: [1, 1.5, 1] }}
+                    transition={{ duration: 0.8, repeat: Infinity, delay: 0 }}
+                  />
+                  <motion.div 
+                    className="w-1 h-1 bg-current rounded-full"
+                    animate={{ scale: [1, 1.5, 1] }}
+                    transition={{ duration: 0.8, repeat: Infinity, delay: 0.2 }}
+                  />
+                  <motion.div 
+                    className="w-1 h-1 bg-current rounded-full"
+                    animate={{ scale: [1, 1.5, 1] }}
+                    transition={{ duration: 0.8, repeat: Infinity, delay: 0.4 }}
+                  />
+                </div>
+              </motion.div>
             </div>
-            <p className="text-sm leading-relaxed">{currentComment.message}</p>
-          </div>
+          </motion.div>
         </div>
       </motion.div>
     </AnimatePresence>

@@ -1,37 +1,16 @@
 
-/**
- * Tableau des scores principal - Composant refactorisé
- */
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Player } from '@/types';
-import { useMediaQuery } from '@/hooks/use-media-query';
+import { Player, ScoreBoardProps } from '@/types';
+import { UnifiedButton } from '@/components/ui/unified-button';
+import { Plus, Undo, Trophy, BarChart3 } from 'lucide-react';
+import { useSound } from '@/hooks/use-sound';
 import { toast } from 'sonner';
-import PageLayout from '@/components/PageLayout';
-import CustomScoreBoardButtons from './CustomScoreBoardButtons';
-import ScoreTableView from './ScoreTableView';
-import AICommentatorEnhanced from './AICommentatorEnhanced';
-import { ModernTitle } from './ui/modern-title';
 import EnhancedScoreBoardHeader from './scoreboard/EnhancedScoreBoardHeader';
-import ScoreBoardTabs from './scoreboard/ScoreBoardTabs';
 import FunPlayerCard from './scoreboard/FunPlayerCard';
-import DetailedGameStats from './scoreboard/DetailedGameStats';
 import EndGameConfirmationDialog from './scoreboard/EndGameConfirmationDialog';
-import UndoConfirmationDialog from './scoreboard/UndoConfirmationDialog';
-
-interface ScoreBoardProps {
-  players: Player[];
-  onAddRound: (scores: number[], dutchPlayerId?: string) => void;
-  onUndoLastRound: () => void;
-  onEndGame: () => void;
-  roundHistory?: { scores: number[], dutchPlayerId?: string }[];
-  isMultiplayer?: boolean;
-  showGameEndConfirmation?: boolean;
-  onConfirmEndGame?: () => void;
-  onCancelEndGame?: () => void;
-  scoreLimit?: number;
-  openScoreForm?: () => void;
-}
+import DetailedGameStats from './scoreboard/DetailedGameStats';
+import AICommentatorEnhanced from './AICommentatorEnhanced';
 
 const ScoreBoard: React.FC<ScoreBoardProps> = ({
   players,
@@ -39,138 +18,164 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
   onUndoLastRound,
   onEndGame,
   roundHistory = [],
-  isMultiplayer = false,
   showGameEndConfirmation = false,
   onConfirmEndGame,
   onCancelEndGame,
   scoreLimit = 100,
   openScoreForm
 }) => {
-  const [view, setView] = useState<'list' | 'table'>('list');
-  const [showAICommentator, setShowAICommentator] = useState<boolean>(true);
+  const { playSound } = useSound();
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
-  const [showUndoConfirmation, setShowUndoConfirmation] = useState<boolean>(false);
-  const isDesktop = useMediaQuery("(min-width: 768px)");
+  const [showStats, setShowStats] = useState(false);
 
+  // Sort players by score (ascending - lowest wins)
   const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
+  const roundCount = players[0]?.rounds.length || 0;
+  const hasWinner = sortedPlayers.some(player => player.totalScore >= scoreLimit);
 
-  useEffect(() => {
-    if (sortedPlayers.length > 0 && !selectedPlayer) {
-      setSelectedPlayer(sortedPlayers[0]);
+  const handleAddRound = () => {
+    if (openScoreForm) {
+      openScoreForm();
     }
-  }, [sortedPlayers, selectedPlayer]);
+    playSound('buttonClick');
+  };
 
-  const handleRequestUndo = () => {
-    if (players.length === 0 || players[0].rounds.length === 0) {
-      toast.error('Pas de manche à annuler !');
+  const handleUndo = () => {
+    if (roundHistory.length === 0) {
+      toast.error("Aucune manche à annuler");
       return;
     }
-    setShowUndoConfirmation(true);
-  };
-
-  const handleConfirmUndo = () => {
     onUndoLastRound();
-    setShowUndoConfirmation(false);
+    playSound('undo');
+    toast.success("Dernière manche annulée");
   };
 
-  const handleCancelUndo = () => {
-    setShowUndoConfirmation(false);
-  };
-
-  const handlePlayerSelect = (player: Player) => {
-    setSelectedPlayer(player);
+  const handleEndGame = () => {
+    onEndGame();
+    playSound('gameEnd');
   };
 
   return (
-    <PageLayout className="pb-12 sm:pb-20">
-      <div className="w-full max-w-6xl mx-auto px-1 sm:px-2">
-        <EnhancedScoreBoardHeader roundCount={players[0]?.rounds.length || 0} scoreLimit={scoreLimit} />
-
-        {showAICommentator && (
-          <div className="mb-4">
-            <AICommentatorEnhanced 
-              players={players}
-              roundHistory={roundHistory}
-            />
-          </div>
-        )}
-
-        <ScoreBoardTabs 
-          currentView={view}
-          onViewChange={(newView) => setView(newView)}
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white p-4">
+      <div className="max-w-6xl mx-auto space-y-6">
+        {/* Header */}
+        <EnhancedScoreBoardHeader 
+          roundCount={roundCount} 
+          scoreLimit={scoreLimit} 
         />
 
-        <div className={`mt-4 ${isDesktop ? 'md:flex md:gap-4' : ''}`}>
-          <div className={`${isDesktop ? 'md:w-full' : 'w-full'} z-20 relative`}>
-            <AnimatePresence mode="wait">
-              {view === 'list' && (
-                <motion.div
-                  key="list-view"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="w-full space-y-3"
-                >
-                  {sortedPlayers.map((player, index) => (
-                    <FunPlayerCard
-                      key={player.id}
-                      player={player}
-                      rank={index + 1}
-                      totalPlayers={players.length}
-                      onSelect={handlePlayerSelect}
-                      isSelected={selectedPlayer?.id === player.id}
-                    />
-                  ))}
-                </motion.div>
-              )}
-
-              {view === 'table' && (
-                <motion.div
-                  key="table-view"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="bg-white/90 backdrop-blur-sm p-4 rounded-2xl shadow-lg border border-white"
-                >
-                  <ScoreTableView 
-                    players={players}
-                    roundHistory={roundHistory || []}
-                  />
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        </div>
-
-        <DetailedGameStats
-          players={players}
-          roundHistory={roundHistory}
-        />
-
-        <div className="mt-4">
-          <CustomScoreBoardButtons
+        {/* Commentateur IA */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          <AICommentatorEnhanced 
             players={players}
-            onAddRound={openScoreForm}
-            onRequestUndoLastRound={handleRequestUndo}
-            onEndGame={onEndGame}
+            roundCount={roundCount}
+            scoreLimit={scoreLimit}
           />
-        </div>
-      </div>
+        </motion.div>
 
-      {showGameEndConfirmation && onConfirmEndGame && onCancelEndGame && (
-        <EndGameConfirmationDialog 
+        {/* Action Buttons */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="flex flex-wrap gap-3 justify-center"
+        >
+          <UnifiedButton
+            variant="primary"
+            size="lg"
+            onClick={handleAddRound}
+            className="flex-1 min-w-40"
+          >
+            <Plus className="mr-2 h-5 w-5" />
+            Nouvelle manche
+          </UnifiedButton>
+
+          <UnifiedButton
+            variant="secondary"
+            size="lg"
+            onClick={handleUndo}
+            disabled={roundHistory.length === 0}
+            className="min-w-32"
+          >
+            <Undo className="mr-2 h-5 w-5" />
+            Annuler
+          </UnifiedButton>
+
+          <UnifiedButton
+            variant="destructive"
+            size="lg"
+            onClick={handleEndGame}
+            disabled={roundCount === 0}
+            className="min-w-32"
+          >
+            <Trophy className="mr-2 h-5 w-5" />
+            Terminer
+          </UnifiedButton>
+        </motion.div>
+
+        {/* Players Grid */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+          className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+        >
+          <AnimatePresence>
+            {sortedPlayers.map((player, index) => (
+              <FunPlayerCard
+                key={player.id}
+                player={player}
+                rank={index + 1}
+                totalPlayers={players.length}
+                onSelect={setSelectedPlayer}
+                isSelected={selectedPlayer?.id === player.id}
+              />
+            ))}
+          </AnimatePresence>
+        </motion.div>
+
+        {/* Toggle Stats Button */}
+        <div className="flex justify-center">
+          <UnifiedButton
+            variant="ghost"
+            onClick={() => setShowStats(!showStats)}
+            className="bg-white/70 backdrop-blur-xl border border-white/50"
+          >
+            <BarChart3 className="mr-2 h-5 w-5" />
+            {showStats ? 'Masquer les stats' : 'Voir les statistiques'}
+          </UnifiedButton>
+        </div>
+
+        {/* Detailed Stats */}
+        <AnimatePresence>
+          {showStats && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <DetailedGameStats 
+                players={players} 
+                roundCount={roundCount}
+                scoreLimit={scoreLimit}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* End Game Confirmation */}
+        <EndGameConfirmationDialog
           isOpen={showGameEndConfirmation}
           onConfirm={onConfirmEndGame}
           onCancel={onCancelEndGame}
         />
-      )}
-
-      <UndoConfirmationDialog 
-        isOpen={showUndoConfirmation}
-        onConfirm={handleConfirmUndo}
-        onCancel={handleCancelUndo}
-      />
-    </PageLayout>
+      </div>
+    </div>
   );
 };
 

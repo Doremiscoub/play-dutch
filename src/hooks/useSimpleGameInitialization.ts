@@ -7,6 +7,11 @@ import { v4 as uuidv4 } from 'uuid';
 
 const avatarColors = ['#8B5CF6', '#F97316', '#1EAEDB', '#10B981', '#EC4899', '#6366F1'];
 
+const getRandomEmoji = () => {
+  const emojis = ['😀', '😎', '🤓', '😜', '🥳', '😇', '🤗', '🙃', '😊', '😋', '🤔', '😴', '🤯', '🥸', '🤠', '👻', '🤖', '👽', '🦄', '🐻'];
+  return emojis[Math.floor(Math.random() * emojis.length)];
+};
+
 export const useSimpleGameInitialization = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -26,24 +31,39 @@ export const useSimpleGameInitialization = () => {
       const playersParam = searchParams.get('players');
       const isNewGame = searchParams.get('new') === 'true';
       
-      let playerNames: string[] = [];
+      let playerData: any[] = [];
       
       if (playersParam && isNewGame) {
         try {
-          playerNames = JSON.parse(decodeURIComponent(playersParam));
-          console.info('Using players from URL:', playerNames);
+          playerData = JSON.parse(decodeURIComponent(playersParam));
+          console.info('Using players from URL:', playerData);
         } catch (error) {
           console.warn('Failed to parse URL players, trying localStorage');
         }
       }
       
       // Fallback to localStorage
-      if (playerNames.length === 0) {
+      if (playerData.length === 0) {
         const playerSetup = localStorage.getItem('dutch_player_setup');
         if (playerSetup) {
           try {
-            playerNames = JSON.parse(playerSetup);
-            console.info('Using players from localStorage:', playerNames);
+            const parsedData = JSON.parse(playerSetup);
+            
+            // Handle both old format (array of strings) and new format (array of objects)
+            if (Array.isArray(parsedData)) {
+              if (typeof parsedData[0] === 'string') {
+                // Old format: convert to new format
+                playerData = parsedData.map((name: string, index: number) => ({
+                  name,
+                  emoji: getRandomEmoji()
+                }));
+              } else {
+                // New format
+                playerData = parsedData;
+              }
+            }
+            
+            console.info('Using players from localStorage:', playerData);
           } catch (error) {
             console.error('Failed to parse localStorage players:', error);
             setInitError('Configuration des joueurs invalide');
@@ -52,8 +72,8 @@ export const useSimpleGameInitialization = () => {
         }
       }
       
-      // Validate player names
-      if (!playerNames || playerNames.length < 2) {
+      // Validate player data
+      if (!playerData || playerData.length < 2) {
         console.error('Not enough players configured');
         setInitError('Il faut au moins 2 joueurs pour démarrer');
         setTimeout(() => navigate('/game/setup'), 1000);
@@ -61,15 +81,16 @@ export const useSimpleGameInitialization = () => {
       }
       
       // Create player objects
-      const newPlayers: Player[] = playerNames.map((name, index) => ({
+      const newPlayers: Player[] = playerData.map((data: any, index: number) => ({
         id: uuidv4(),
-        name: name.trim() || `Joueur ${index + 1}`,
+        name: (data.name || data || `Joueur ${index + 1}`).trim(),
+        emoji: data.emoji || getRandomEmoji(),
         totalScore: 0,
         rounds: [],
         avatarColor: avatarColors[index % avatarColors.length]
       }));
       
-      console.info('Players created successfully:', newPlayers.map(p => p.name));
+      console.info('Players created successfully:', newPlayers.map(p => ({ name: p.name, emoji: p.emoji })));
       
       setPlayers(newPlayers);
       setGameStartTime(new Date());
