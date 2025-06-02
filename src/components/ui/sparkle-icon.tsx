@@ -31,7 +31,7 @@ export const SparkleIcon = () => {
           return (
             <motion.div
               key={`${index}-${suit.icon.name}`}
-              className={`absolute ${index === 0 ? '-top-3 -right-3' : '-top-5 right-1'} ${suit.color}`}
+              className={`absolute ${index === 0 ? '-top-4 -right-4' : '-top-6 right-0'} ${suit.color}`}
               initial={{ scale: 0.6, rotate: index === 0 ? -15 : 15, opacity: 0 }}
               animate={{ 
                 scale: [0.6, 1, 0.9],

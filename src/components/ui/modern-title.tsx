@@ -56,7 +56,7 @@ export const ModernTitle: React.FC<ModernTitleProps> = ({
     >
       {children}
       {withIcon && (
-        <div className="absolute -top-2 -right-2 z-20 animate-float">
+        <div className="absolute -top-8 -right-8 z-20 animate-float">
           <SparkleIcon />
         </div>
       )}
