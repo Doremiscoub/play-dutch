@@ -4,7 +4,8 @@
  * n'apparaît qu'une seule fois après rechargement de page
  */
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
+import { screen } from '@testing-library/dom';
 import App from '../App';
 import { toast } from 'sonner';
 
