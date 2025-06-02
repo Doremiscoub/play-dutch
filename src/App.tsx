@@ -24,7 +24,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
 
 // Contexte
-import { AuthProvider } from './context/AuthContext';
+import { SupabaseAuthProvider } from './context/SupabaseAuthContext';
 
 // Composant pour suivre les changements de route pour Sentry
 const RouteTracker = () => {
@@ -50,7 +50,7 @@ const RouteTracker = () => {
  */
 const App: React.FC = () => {
   return (
-    <AuthProvider>
+    <SupabaseAuthProvider>
       <Router>
         <AnimatedBackground />
         <RouteTracker />
@@ -100,7 +100,7 @@ const App: React.FC = () => {
       />
       
       <PWAInstallPrompt />
-    </AuthProvider>
+    </SupabaseAuthProvider>
   );
 };
 

@@ -1,14 +1,14 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useAuth } from '@/context/AuthContext';
+import { useSupabaseAuth } from '@/context/SupabaseAuthContext';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
 }
 
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  const { isLoaded, isOfflineMode, isSignedIn } = useAuth();
+  const { isLoaded, isOfflineMode, isSignedIn } = useSupabaseAuth();
   
   console.info('🔐 ProtectedRoute:', { isLoaded, isOfflineMode, isSignedIn });
   

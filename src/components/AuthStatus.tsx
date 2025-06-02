@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
@@ -14,7 +15,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
-import { useAuth } from '@/context/AuthContext';
+import { useSupabaseAuth } from '@/context/SupabaseAuthContext';
 
 interface AuthStatusProps {
   showLoginButtons?: boolean;
@@ -23,7 +24,7 @@ interface AuthStatusProps {
 }
 
 const AuthStatus = ({ showLoginButtons = true, buttonStyle = 'default', className = '' }: AuthStatusProps) => {
-  const { isSignedIn, user, isLoaded, signOut, isOfflineMode } = useAuth();
+  const { isSignedIn, user, isLoaded, signOut, isOfflineMode } = useSupabaseAuth();
   const navigate = useNavigate();
   const [isSigningOut, setIsSigningOut] = useState(false);
 
@@ -32,7 +33,6 @@ const AuthStatus = ({ showLoginButtons = true, buttonStyle = 'default', classNam
     try {
       setIsSigningOut(true);
       await signOut();
-      toast.success('Déconnexion réussie');
       navigate('/');
     } catch (error) {
       console.error('Erreur lors de la déconnexion', error);
@@ -44,7 +44,7 @@ const AuthStatus = ({ showLoginButtons = true, buttonStyle = 'default', classNam
 
   // Activer le mode hors ligne
   const enableOfflineMode = () => {
-    localStorage.setItem('clerk_auth_failed', 'true');
+    localStorage.setItem('auth_offline_mode', 'true');
     toast.success('Mode hors ligne activé');
     window.location.reload();
   };
@@ -64,7 +64,9 @@ const AuthStatus = ({ showLoginButtons = true, buttonStyle = 'default', classNam
       ? `${user.firstName[0]}${user.lastName[0]}`
       : user.firstName
         ? user.firstName[0]
-        : '?';
+        : user.email
+          ? user.email[0].toUpperCase()
+          : '?';
 
     return (
       <div className={className}>
@@ -75,7 +77,7 @@ const AuthStatus = ({ showLoginButtons = true, buttonStyle = 'default', classNam
               className="vision-button p-2 flex items-center gap-2"
             >
               <Avatar className="h-8 w-8 border border-white/40">
-                <AvatarImage src={user.imageUrl} />
+                <AvatarImage src={user.avatarUrl} />
                 <AvatarFallback className="bg-dutch-blue text-white">
                   {userInitials}
                 </AvatarFallback>
@@ -83,7 +85,7 @@ const AuthStatus = ({ showLoginButtons = true, buttonStyle = 'default', classNam
               
               <div className="flex items-center">
                 <span className="text-sm font-medium truncate max-w-[100px]">
-                  {user.firstName || user.username || 'Utilisateur'}
+                  {user.firstName || user.email?.split('@')[0] || 'Utilisateur'}
                 </span>
                 <ChevronDown className="ml-1 h-4 w-4 opacity-50" />
               </div>
@@ -160,21 +162,6 @@ const AuthStatus = ({ showLoginButtons = true, buttonStyle = 'default', classNam
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <Button
-              size="pill-sm"
-              variant="pill-blue"
-              className="text-white"
-              onClick={() => navigate('/sign-up')}
-            >
-              <UserCircle className="h-3.5 w-3.5 mr-1" />
-              Inscription
-            </Button>
-          </motion.div>
-          
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
             <Button 
               size="pill-sm"
               variant="ghost"
@@ -201,14 +188,6 @@ const AuthStatus = ({ showLoginButtons = true, buttonStyle = 'default', classNam
             Connexion
           </Button>
           
-          <Button
-            variant="dutch-blue"
-            size="sm"
-            onClick={() => navigate('/sign-up')}
-          >
-            Inscription
-          </Button>
-          
           <Button 
             variant="ghost"
             size="sm"
@@ -231,15 +210,6 @@ const AuthStatus = ({ showLoginButtons = true, buttonStyle = 'default', classNam
           >
             <UserCircle className="mr-2 h-5 w-5" />
             Se connecter
-          </Button>
-          
-          <Button
-            variant="outline"
-            className="vision-button"
-            onClick={() => navigate('/sign-up')}
-          >
-            <UserCircle className="mr-2 h-5 w-5" />
-            Créer un compte
           </Button>
         </div>
         

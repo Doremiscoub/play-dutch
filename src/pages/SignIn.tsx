@@ -1,22 +1,24 @@
 
-import React from 'react';
-import { SignIn as ClerkSignIn } from "@clerk/clerk-react";
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import PageHeader from '@/components/PageHeader';
 import AnimatedBackground from '../components/AnimatedBackground';
-import { useAuth } from '@/context/AuthContext';
+import { useSupabaseAuth } from '@/context/SupabaseAuthContext';
 import { toast } from 'sonner';
+import SignInForm from '@/components/auth/SignInForm';
+import SignUpForm from '@/components/auth/SignUpForm';
 
 const SignIn: React.FC = () => {
-  const { isOfflineMode } = useAuth();
+  const { isOfflineMode } = useSupabaseAuth();
+  const [isSignUp, setIsSignUp] = useState(false);
   const navigate = useNavigate();
   
   // En mode hors ligne, afficher une interface alternative
   if (isOfflineMode) {
     const enableOfflineMode = () => {
-      localStorage.setItem('clerk_auth_failed', 'true');
+      localStorage.setItem('auth_offline_mode', 'true');
       toast.success('Mode hors ligne activé');
       navigate('/');
     };
@@ -66,7 +68,7 @@ const SignIn: React.FC = () => {
     );
   }
 
-  // En mode normal, utiliser le composant Clerk
+  // Interface d'authentification normale
   return (
     <div className="relative min-h-screen flex items-center justify-center p-4">
       <div className="absolute inset-0 overflow-hidden">
@@ -80,38 +82,16 @@ const SignIn: React.FC = () => {
         className="w-full max-w-md z-10"
       >
         <PageHeader 
-          title="Connexion" 
+          title={isSignUp ? "Inscription" : "Connexion"} 
           onBack={() => navigate('/')} 
         />
         
         <div className="bg-white/70 backdrop-blur-md rounded-3xl shadow-lg border border-white/40 p-6">
-          <ClerkSignIn 
-            appearance={{
-              variables: {
-                colorPrimary: "#0A84FF",
-                colorTextOnPrimaryBackground: "white",
-                colorTextSecondary: "#4B5563",
-                colorBackground: "transparent",
-                fontFamily: "SF Pro Text, SF Pro Display, system-ui, sans-serif",
-                borderRadius: "1rem"
-              },
-              elements: {
-                rootBox: "w-full",
-                card: "bg-transparent shadow-none border-0 p-4",
-                headerTitle: "text-2xl font-bold text-dutch-blue",
-                headerSubtitle: "text-gray-600",
-                socialButtonsBlockButton: "bg-white hover:bg-gray-50 border border-gray-200",
-                dividerLine: "bg-gray-200",
-                formFieldLabel: "text-gray-700",
-                formFieldInput: "bg-white border-gray-300 focus:border-dutch-blue focus:ring-dutch-blue/20",
-                footerActionLink: "text-dutch-blue hover:text-dutch-blue-dark",
-                formButtonPrimary: "bg-gradient-to-r from-dutch-blue to-dutch-purple hover:opacity-90 focus:ring-dutch-blue/30",
-              }
-            }}
-            redirectUrl="/game"
-            routing="path"
-            path="/sign-in"
-          />
+          {isSignUp ? (
+            <SignUpForm onSwitchToSignIn={() => setIsSignUp(false)} />
+          ) : (
+            <SignInForm onSwitchToSignUp={() => setIsSignUp(true)} />
+          )}
         </div>
       </motion.div>
     </div>

@@ -7,12 +7,12 @@ import { Plus, History, BookOpen, Settings, LogIn, ExternalLink } from 'lucide-r
 import AnimatedBackground from '../components/AnimatedBackground';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Badge } from '@/components/ui/badge';
-import { useAuth } from '@/context/AuthContext';
+import { useSupabaseAuth } from '@/context/SupabaseAuthContext';
 import { ModernTitle } from '@/components/ui/modern-title';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
-  const { isSignedIn, user, isLoaded } = useAuth();
+  const { isSignedIn, user, isLoaded } = useSupabaseAuth();
   const [hasSavedGame, setHasSavedGame] = useState<boolean>(false);
 
   useEffect(() => {
