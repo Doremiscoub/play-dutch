@@ -14,10 +14,11 @@ import ErrorBoundary from '@/components/ErrorBoundary';
 const GamePage: React.FC = () => {
   const navigate = useNavigate();
   const [isInitializing, setIsInitializing] = useState<boolean>(true);
-  const [initializationAttempted, setInitializationAttempted] = useState<boolean>(false);
   const { isSignedIn } = useAuth();
   const [adsEnabled] = useLocalStorage('dutch_ads_enabled', true);
   const [isLoaded, setIsLoaded] = useState(false);
+  
+  console.info('🎮 GamePage: Démarrage du rendu');
   
   const {
     players,
@@ -36,48 +37,42 @@ const GamePage: React.FC = () => {
   } = useGameState();
   
   useEffect(() => {
+    console.info('🎮 GamePage: Effect d\'initialisation déclenché');
+    
     const initializeGame = async () => {
-      if (initializationAttempted) {
-        return;
-      }
-      
       setIsInitializing(true);
-      setInitializationAttempted(true);
       
       try {
-        console.info('GamePage: Starting initialization...');
-        
         if (!players || players.length === 0) {
-          console.info('GamePage: No players found, creating new game...');
+          console.info('🎮 GamePage: Aucun joueur trouvé, tentative de création');
           const success = await createNewGame();
           
           if (!success) {
-            console.error('GamePage: Failed to create new game');
+            console.error('🎮 GamePage: Échec de la création de la partie');
             toast.error("Impossible de démarrer la partie");
-            setTimeout(() => {
-              navigate('/game/setup');
-            }, 2000);
+            navigate('/game/setup');
             return;
           }
+          
+          console.info('🎮 GamePage: Partie créée avec succès');
         } else {
-          console.info('GamePage: Using existing players:', players.length);
+          console.info('🎮 GamePage: Joueurs existants trouvés:', players.length);
         }
       } catch (error) {
-        console.error("GamePage: Initialization error:", error);
+        console.error("🎮 GamePage: Erreur d'initialisation:", error);
         toast.error("Erreur lors du chargement de la partie");
-        setTimeout(() => {
-          navigate('/');
-        }, 2000);
+        navigate('/game/setup');
       } finally {
         setIsInitializing(false);
       }
     };
     
     initializeGame();
-  }, [createNewGame, players, initializationAttempted, navigate]);
+  }, [createNewGame, navigate]);
   
   useEffect(() => {
     if (!isInitializing && players && players.length > 0) {
+      console.info('🎮 GamePage: Finalisation du chargement');
       const timer = setTimeout(() => {
         setIsLoaded(true);
       }, 300);
@@ -86,20 +81,25 @@ const GamePage: React.FC = () => {
     }
   }, [isInitializing, players]);
 
-  const GameErrorFallback = ({ error }: { error: Error }) => (
-    <ErrorDisplay 
-      error={`Erreur de rendu: ${error.message}`}
-      onRetry={() => {
-        window.location.reload();
-      }}
-    />
-  );
+  const GameErrorFallback = ({ error }: { error: Error }) => {
+    console.error('🎮 GamePage: Erreur de rendu capturée:', error);
+    return (
+      <ErrorDisplay 
+        error={`Erreur de rendu: ${error.message}`}
+        onRetry={() => {
+          window.location.reload();
+        }}
+      />
+    );
+  };
 
   if (isInitializing) {
+    console.info('🎮 GamePage: Affichage du spinner de chargement');
     return <LoadingSpinner />;
   }
 
   if (!players || players.length === 0) {
+    console.warn('🎮 GamePage: Aucun joueur trouvé après initialisation');
     return (
       <ErrorDisplay 
         error="Aucun joueur trouvé. Redirection vers la configuration..."
@@ -109,6 +109,8 @@ const GamePage: React.FC = () => {
       />
     );
   }
+
+  console.info('🎮 GamePage: Rendu du contenu principal avec', players.length, 'joueurs');
 
   return (
     <ErrorBoundary FallbackComponent={GameErrorFallback}>

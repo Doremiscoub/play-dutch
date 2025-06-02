@@ -17,13 +17,17 @@ const SecureAdSenseWrapper: React.FC<SecureAdSenseWrapperProps> = ({
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
+  const [isInitialized, setIsInitialized] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    console.info('🚀 AdSense: Initialisation du composant');
+    
     const loadAdSense = async () => {
       try {
-        // Check if script is already loaded
+        // Vérifier si le script est déjà chargé
         if (!window.adsbygoogle) {
+          console.info('🚀 AdSense: Chargement du script');
           const script = document.createElement('script');
           script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adClient}`;
           script.async = true;
@@ -37,47 +41,72 @@ const SecureAdSenseWrapper: React.FC<SecureAdSenseWrapperProps> = ({
         }
 
         setIsLoaded(true);
+        console.info('🚀 AdSense: Script chargé avec succès');
       } catch (error) {
-        console.error('Failed to load AdSense:', error);
+        console.error('🚀 AdSense: Erreur de chargement:', error);
         setHasError(true);
       }
     };
 
-    loadAdSense();
-  }, [adClient]);
+    if (!isInitialized) {
+      setIsInitialized(true);
+      loadAdSense();
+    }
+  }, [adClient, isInitialized]);
 
   useEffect(() => {
     if (isLoaded && containerRef.current && !hasError) {
       try {
-        // Use dangerouslySetInnerHTML instead of direct DOM manipulation
-        const adHTML = `
-          <ins class="adsbygoogle"
-               style="display:block"
-               data-ad-client="${adClient}"
-               data-ad-slot="${adSlot}"
-               data-ad-format="auto"
-               data-full-width-responsive="true"></ins>
-        `;
+        console.info('🚀 AdSense: Injection de l\'annonce');
         
-        containerRef.current.innerHTML = adHTML;
-        
-        // Push ad after a safe delay
-        setTimeout(() => {
-          try {
-            if (window.adsbygoogle) {
-              (window.adsbygoogle = window.adsbygoogle || []).push({});
+        // Nettoyer le contenu existant de manière sûre
+        const container = containerRef.current;
+        if (container) {
+          container.innerHTML = '';
+          
+          // Créer l'élément d'annonce
+          const adElement = document.createElement('ins');
+          adElement.className = 'adsbygoogle';
+          adElement.style.display = 'block';
+          adElement.setAttribute('data-ad-client', adClient);
+          adElement.setAttribute('data-ad-slot', adSlot);
+          adElement.setAttribute('data-ad-format', 'auto');
+          adElement.setAttribute('data-full-width-responsive', 'true');
+          
+          container.appendChild(adElement);
+          
+          // Push l'annonce avec un délai de sécurité
+          setTimeout(() => {
+            try {
+              if (window.adsbygoogle && containerRef.current?.contains(adElement)) {
+                (window.adsbygoogle = window.adsbygoogle || []).push({});
+                console.info('🚀 AdSense: Annonce poussée avec succès');
+              }
+            } catch (pushError) {
+              console.error('🚀 AdSense: Erreur lors du push:', pushError);
+              setHasError(true);
             }
-          } catch (pushError) {
-            console.error('AdSense push error:', pushError);
-            setHasError(true);
-          }
-        }, 100);
+          }, 200);
+        }
       } catch (error) {
-        console.error('AdSense setup error:', error);
+        console.error('🚀 AdSense: Erreur d\'injection:', error);
         setHasError(true);
       }
     }
   }, [isLoaded, adClient, adSlot, hasError]);
+
+  // Cleanup lors du démontage
+  useEffect(() => {
+    return () => {
+      if (containerRef.current) {
+        try {
+          containerRef.current.innerHTML = '';
+        } catch (error) {
+          console.warn('🚀 AdSense: Erreur lors du nettoyage:', error);
+        }
+      }
+    };
+  }, []);
 
   if (hasError) {
     return (
