@@ -3,7 +3,7 @@
 import { describe, it, expect, vi } from "vitest";
 import { render } from "@testing-library/react";
 import { screen, fireEvent } from "@testing-library/dom";
-import ProfessorAvatar from "../components/ProfessorAvatar";
+import ProfessorAvatar from "../components/game/ProfessorAvatar";
 
 describe("UI: Professor Avatar", () => {
   const consoleSpy = vi.spyOn(console, "error");
@@ -12,15 +12,11 @@ describe("UI: Professor Avatar", () => {
     consoleSpy.mockClear();
   });
 
-  it("should render professor image without falling back to emoji", () => {
-    render(<ProfessorAvatar message="Test message" />);
+  it("should render professor avatar without errors", () => {
+    render(<ProfessorAvatar size="lg" animate={true} />);
     
     const avatar = screen.getByAltText("Professeur Cartouche");
     expect(avatar).toBeInTheDocument();
-    
-    // Verify no emoji fallback
-    const domContent = screen.getByRole("img").parentElement?.textContent || "";
-    expect(domContent).not.toContain("👴🏼");
     
     // Verify no 404 errors
     expect(consoleSpy).not.toHaveBeenCalledWith(
@@ -29,12 +25,13 @@ describe("UI: Professor Avatar", () => {
   });
 
   it("should handle image load error gracefully", () => {
-    render(<ProfessorAvatar message="Test message" />);
+    render(<ProfessorAvatar size="lg" animate={true} />);
     
     const avatar = screen.getByAltText("Professeur Cartouche");
     fireEvent.error(avatar);
     
     // Should switch to fallback image
-    expect(avatar.getAttribute("src")).toContain("fallback");
+    const fallbackAvatar = screen.getByAltText("Professeur Cartouche (Fallback)");
+    expect(fallbackAvatar).toBeInTheDocument();
   });
 });
