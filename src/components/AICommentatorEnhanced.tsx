@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Player } from '@/types';
 import ProfessorAvatar from './game/ProfessorAvatar';
+import { MessageCircle, Brain, Lightbulb, Trophy, Target, Smile } from 'lucide-react';
 
 interface AICommentatorEnhancedProps {
   players: Player[];
@@ -17,6 +18,31 @@ const AICommentatorEnhanced: React.FC<AICommentatorEnhancedProps> = ({
 }) => {
   const [currentComment, setCurrentComment] = useState<string>('');
   const [commentType, setCommentType] = useState<'info' | 'joke' | 'encouragement' | 'observation'>('info');
+  const [displayedText, setDisplayedText] = useState<string>('');
+  const [isTyping, setIsTyping] = useState(false);
+
+  // Typing animation effect
+  useEffect(() => {
+    if (currentComment) {
+      setIsTyping(true);
+      setDisplayedText('');
+      
+      const words = currentComment.split(' ');
+      let currentIndex = 0;
+      
+      const typeInterval = setInterval(() => {
+        if (currentIndex < words.length) {
+          setDisplayedText(prev => prev + (currentIndex === 0 ? '' : ' ') + words[currentIndex]);
+          currentIndex++;
+        } else {
+          setIsTyping(false);
+          clearInterval(typeInterval);
+        }
+      }, 100);
+
+      return () => clearInterval(typeInterval);
+    }
+  }, [currentComment]);
 
   // Generate contextual comments based on game state
   const generateComment = () => {
@@ -99,104 +125,166 @@ const AICommentatorEnhanced: React.FC<AICommentatorEnhancedProps> = ({
   const getCommentStyle = () => {
     switch (commentType) {
       case 'encouragement':
-        return 'bg-gradient-to-r from-green-50/95 to-emerald-50/95 border-green-200/80';
+        return {
+          gradient: 'from-emerald-500/20 via-green-500/10 to-emerald-600/20',
+          border: 'border-emerald-200/40',
+          icon: <Trophy className="w-5 h-5 text-emerald-600" />,
+          mood: 'happy' as const
+        };
       case 'joke':
-        return 'bg-gradient-to-r from-amber-50/95 to-orange-50/95 border-amber-200/80';
+        return {
+          gradient: 'from-amber-500/20 via-orange-500/10 to-yellow-600/20',
+          border: 'border-amber-200/40',
+          icon: <Smile className="w-5 h-5 text-amber-600" />,
+          mood: 'excited' as const
+        };
       case 'observation':
-        return 'bg-gradient-to-r from-blue-50/95 to-cyan-50/95 border-blue-200/80';
+        return {
+          gradient: 'from-blue-500/20 via-cyan-500/10 to-indigo-600/20',
+          border: 'border-blue-200/40',
+          icon: <Brain className="w-5 h-5 text-blue-600" />,
+          mood: 'thinking' as const
+        };
       default:
-        return 'bg-gradient-to-r from-purple-50/95 to-indigo-50/95 border-purple-200/80';
+        return {
+          gradient: 'from-purple-500/20 via-indigo-500/10 to-purple-600/20',
+          border: 'border-purple-200/40',
+          icon: <Lightbulb className="w-5 h-5 text-purple-600" />,
+          mood: 'neutral' as const
+        };
     }
   };
 
   if (!currentComment) return null;
 
+  const style = getCommentStyle();
+
   return (
     <AnimatePresence mode="wait">
       <motion.div
         key={currentComment}
-        initial={{ opacity: 0, y: 20, scale: 0.95 }}
+        initial={{ opacity: 0, y: 30, scale: 0.9 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
-        exit={{ opacity: 0, y: -20, scale: 0.95 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
-        className={`
-          backdrop-blur-xl border-2 rounded-3xl p-8 shadow-xl transition-all duration-300
-          ${getCommentStyle()}
-        `}
+        exit={{ opacity: 0, y: -30, scale: 0.9 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="relative"
       >
-        <div className="flex items-start gap-6">
-          {/* Professor Avatar - Redesigned */}
-          <motion.div
-            animate={{ 
-              rotate: [0, 2, -2, 0],
-              scale: [1, 1.02, 1]
-            }}
-            transition={{ 
-              duration: 4, 
-              repeat: Infinity, 
-              ease: "easeInOut" 
-            }}
-            className="flex-shrink-0"
-          >
-            <ProfessorAvatar 
-              size="xl"
-              animate={true}
-              className="shadow-2xl"
-            />
-          </motion.div>
+        {/* Main Container with Modern Glassmorphism */}
+        <div className={`
+          relative backdrop-blur-xl border-2 rounded-[2rem] p-8 shadow-2xl transition-all duration-500
+          bg-gradient-to-br ${style.gradient} ${style.border}
+          hover:shadow-3xl hover:scale-[1.02]
+        `}>
           
-          {/* Comment Bubble - Redesigned */}
-          <motion.div 
-            className="flex-1 relative"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2 }}
-          >
-            {/* Speech bubble pointer */}
-            <div className="absolute -left-4 top-4 w-0 h-0 border-t-8 border-t-transparent border-b-8 border-b-transparent border-r-12 border-r-white/80" />
+          {/* Ambient Background Glow */}
+          <div className={`absolute inset-0 bg-gradient-to-br ${style.gradient} rounded-[2rem] blur-xl opacity-50 -z-10`} />
+          
+          <div className="flex items-start gap-8">
+            {/* Professor Avatar - Enhanced */}
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.2, duration: 0.5, type: "spring", stiffness: 150 }}
+              className="flex-shrink-0"
+            >
+              <ProfessorAvatar 
+                size="xxl"
+                animate={true}
+                mood={style.mood}
+                showParticles={true}
+                className="shadow-2xl"
+              />
+            </motion.div>
             
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/50">
-              <motion.p 
-                className="text-base font-medium leading-relaxed text-gray-800 mb-3"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3, duration: 0.4 }}
-              >
-                {currentComment}
-              </motion.p>
+            {/* Enhanced Comment Bubble */}
+            <motion.div 
+              className="flex-1 relative"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.4, duration: 0.5 }}
+            >
+              {/* Organic Speech Bubble Pointer */}
+              <div className="absolute -left-6 top-8 w-0 h-0">
+                <div className="border-t-[20px] border-t-transparent border-b-[20px] border-b-transparent border-r-[24px] border-r-white/90" />
+                <div className="absolute -top-[18px] -right-[22px] border-t-[16px] border-t-transparent border-b-[16px] border-b-transparent border-r-[20px] border-r-white/60" />
+              </div>
               
-              {/* Professor signature */}
-              <motion.div
-                className="flex items-center justify-between text-sm"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.5 }}
-              >
-                <span className="font-semibold text-dutch-purple">
-                  — Professeur Cartouche
-                </span>
+              {/* Modern Glass Speech Bubble */}
+              <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/60 relative overflow-hidden">
                 
-                {/* Typing indicator */}
-                <div className="flex items-center gap-1 text-gray-500">
-                  <motion.div 
-                    className="w-1.5 h-1.5 bg-dutch-blue rounded-full"
-                    animate={{ scale: [1, 1.5, 1], opacity: [0.5, 1, 0.5] }}
-                    transition={{ duration: 1.2, repeat: Infinity, delay: 0 }}
-                  />
-                  <motion.div 
-                    className="w-1.5 h-1.5 bg-dutch-purple rounded-full"
-                    animate={{ scale: [1, 1.5, 1], opacity: [0.5, 1, 0.5] }}
-                    transition={{ duration: 1.2, repeat: Infinity, delay: 0.3 }}
-                  />
-                  <motion.div 
-                    className="w-1.5 h-1.5 bg-dutch-orange rounded-full"
-                    animate={{ scale: [1, 1.5, 1], opacity: [0.5, 1, 0.5] }}
-                    transition={{ duration: 1.2, repeat: Infinity, delay: 0.6 }}
-                  />
-                </div>
-              </motion.div>
-            </div>
-          </motion.div>
+                {/* Shimmer Effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] animate-[shimmer_3s_infinite] skew-x-12" />
+                
+                {/* Header with Icon */}
+                <motion.div
+                  className="flex items-center gap-3 mb-4"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.6 }}
+                >
+                  {style.icon}
+                  <span className="text-sm font-semibold text-gray-600 uppercase tracking-wider">
+                    Professeur Cartouche
+                  </span>
+                  <MessageCircle className="w-4 h-4 text-gray-400" />
+                </motion.div>
+                
+                {/* Animated Text Content */}
+                <motion.div
+                  className="min-h-[4rem]"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.8 }}
+                >
+                  <p className="text-lg font-medium leading-relaxed text-gray-800 mb-4">
+                    {displayedText}
+                    {isTyping && (
+                      <motion.span
+                        className="inline-block w-0.5 h-5 bg-dutch-purple ml-1"
+                        animate={{ opacity: [0, 1, 0] }}
+                        transition={{ duration: 1, repeat: Infinity }}
+                      />
+                    )}
+                  </p>
+                </motion.div>
+                
+                {/* Footer with Enhanced Signature */}
+                <motion.div
+                  className="flex items-center justify-between pt-4 border-t border-gray-200/50"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 1 }}
+                >
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-0.5 bg-gradient-to-r from-dutch-blue to-dutch-purple rounded-full" />
+                    <span className="font-bold text-dutch-purple tracking-wider">
+                      Prof. Cartouche
+                    </span>
+                  </div>
+                  
+                  {/* Enhanced Typing Indicator */}
+                  <div className="flex items-center gap-1.5">
+                    {[0, 1, 2].map((i) => (
+                      <motion.div 
+                        key={i}
+                        className="w-2 h-2 bg-gradient-to-r from-dutch-blue to-dutch-purple rounded-full"
+                        animate={{ 
+                          scale: [1, 1.3, 1], 
+                          opacity: [0.4, 1, 0.4] 
+                        }}
+                        transition={{ 
+                          duration: 1.5, 
+                          repeat: Infinity, 
+                          delay: i * 0.2,
+                          ease: "easeInOut"
+                        }}
+                      />
+                    ))}
+                  </div>
+                </motion.div>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </motion.div>
     </AnimatePresence>
