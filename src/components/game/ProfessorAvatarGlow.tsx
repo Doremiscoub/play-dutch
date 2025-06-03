@@ -10,22 +10,17 @@ interface ProfessorAvatarGlowProps {
   isHovered: boolean;
 }
 
-const moodColors: MoodColors = {
-  happy: 'from-green-400 via-emerald-500 to-green-600',
-  excited: 'from-orange-400 via-red-500 to-pink-600',
-  thinking: 'from-blue-400 via-indigo-500 to-purple-600',
-  surprised: 'from-yellow-400 via-orange-500 to-red-600',
-  neutral: 'from-dutch-blue via-dutch-purple to-dutch-orange'
-};
+// Utiliser le gradient de l'app pour tous les moods
+const appGradient = 'from-dutch-blue via-dutch-purple to-dutch-orange';
 
 export default function ProfessorAvatarGlow({ mood, animate, isHovered }: ProfessorAvatarGlowProps) {
   return (
     <>
-      {/* Outer Glow Ring */}
+      {/* Outer Glow Ring avec le gradient de l'app */}
       <motion.div
         className={cn(
           "absolute inset-0 rounded-full bg-gradient-to-r opacity-30 blur-lg",
-          moodColors[mood]
+          appGradient
         )}
         animate={animate ? {
           scale: [1, 1.1, 1],
@@ -34,11 +29,11 @@ export default function ProfessorAvatarGlow({ mood, animate, isHovered }: Profes
         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
       />
 
-      {/* Ambient Light Effect */}
+      {/* Ambient Light Effect avec le gradient de l'app */}
       <div className="absolute -inset-8 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
         <div className={cn(
           "absolute inset-0 bg-gradient-to-r rounded-full blur-2xl opacity-20",
-          moodColors[mood]
+          appGradient
         )} />
       </div>
     </>

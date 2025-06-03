@@ -2,55 +2,56 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { PROFESSOR_SOURCE, PROFESSOR_FALLBACK } from './ProfessorAvatarTypes';
 
 interface ProfessorAvatarImageProps {
   isHovered: boolean;
 }
 
+// URLs unifiées pour l'image du professeur
+const PROFESSOR_PRIMARY = '/lovable-uploads/f78df6b3-591c-497c-b2d2-516b2fb7b5a4.png';
+const PROFESSOR_FALLBACK = '/lovable-uploads/a2234ca1-7b29-4c32-8167-2ff6be271875.png';
+
 export default function ProfessorAvatarImage({ isHovered }: ProfessorAvatarImageProps) {
   const [errored, setErrored] = useState(false);
 
   const handleError = () => {
-    console.log("❌ Image principale non chargée, utilisation du fallback");
+    console.log("❌ Image principale du professeur non chargée, utilisation du fallback");
     setErrored(true);
   };
 
   return (
-    <motion.div 
-      className="h-full w-full relative flex items-center justify-center rounded-full overflow-hidden"
-      animate={isHovered ? { 
-        rotate: [0, -5, 5, 0],
-        scale: [1, 1.02, 1]
-      } : {}}
-      transition={{ duration: 0.8, ease: "easeInOut" }}
-    >
+    <div className="h-full w-full relative rounded-full overflow-hidden bg-white flex items-center justify-center">
       {!errored ? (
         <motion.img
-          src={PROFESSOR_SOURCE}
+          src={PROFESSOR_PRIMARY}
           alt="Professeur Cartouche"
           onError={handleError}
           className={cn(
-            "h-full w-full object-cover scale-110",
-            isHovered && "scale-125"
+            "h-full w-full object-cover transition-all duration-300",
+            isHovered && "scale-110 brightness-110"
           )}
-          style={{ 
-            filter: isHovered ? 'brightness(1.1) contrast(1.1)' : 'brightness(1) contrast(1)'
-          }}
-          transition={{ duration: 0.3 }}
+          animate={isHovered ? { 
+            rotate: [0, -2, 2, 0],
+            scale: [1, 1.05, 1]
+          } : {}}
+          transition={{ duration: 0.8, ease: "easeInOut" }}
         />
       ) : (
-        <motion.div 
+        <motion.img
+          src={PROFESSOR_FALLBACK}
+          alt="Professeur Cartouche (Fallback)"
           className={cn(
-            "text-6xl",
-            isHovered && "scale-110"
+            "h-full w-full object-cover transition-all duration-300",
+            isHovered && "scale-110 brightness-110"
           )}
-          animate={isHovered ? { rotate: [0, 10, -10, 0] } : {}}
-          transition={{ duration: 0.5 }}
-        >
-          👴🏼
-        </motion.div>
+          animate={isHovered ? { 
+            rotate: [0, -2, 2, 0],
+            scale: [1, 1.05, 1]
+          } : {}}
+          transition={{ duration: 0.8, ease: "easeInOut" }}
+          onError={() => console.log("❌ Fallback image aussi en erreur")}
+        />
       )}
-    </motion.div>
+    </div>
   );
 }

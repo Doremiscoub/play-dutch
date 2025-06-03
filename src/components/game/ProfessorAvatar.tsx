@@ -51,10 +51,10 @@ export default function ProfessorAvatar({
       {/* Glow Effects */}
       <ProfessorAvatarGlow mood={mood} animate={animate} isHovered={isHovered} />
 
-      {/* Avatar Container */}
+      {/* Cerclage avec gradient de l'app */}
       <motion.div 
         className={cn(
-          "relative rounded-full overflow-hidden shadow-2xl",
+          "relative bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange p-1 rounded-full shadow-2xl",
           sizeClasses[size]
         )}
         animate={animate ? moodAnimations[mood] : {}}
@@ -65,12 +65,18 @@ export default function ProfessorAvatar({
         }}
         whileHover={{ 
           scale: 1.1,
-          rotate: [0, -10, 10, 0],
+          rotate: [0, -5, 5, 0],
           transition: { duration: 0.6 }
         }}
       >
-        {/* Avatar Image */}
-        <ProfessorAvatarImage isHovered={isHovered} />
+        {/* Avatar Container - maintenant parfaitement circulaire */}
+        <div className={cn(
+          "relative rounded-full overflow-hidden bg-white",
+          "w-[calc(100%-8px)] h-[calc(100%-8px)]"
+        )}>
+          {/* Avatar Image */}
+          <ProfessorAvatarImage isHovered={isHovered} />
+        </div>
       </motion.div>
 
       {/* Hover Effects */}

@@ -44,9 +44,14 @@ const AICommentatorEnhanced: React.FC<AICommentatorEnhancedProps> = ({
     }
   }, [currentComment]);
 
-  // Helper function to safely get player display name
+  // Helper function to safely get player display name - CORRECTION DU BUG "undefined"
   const getPlayerDisplayName = (player: Player) => {
-    const emoji = player.emoji && player.emoji.trim() ? ` ${player.emoji}` : '';
+    if (!player || !player.name) return 'Joueur inconnu';
+    
+    // Vérifier si l'emoji existe et n'est pas vide
+    const hasValidEmoji = player.emoji && player.emoji.trim() && player.emoji.trim() !== '';
+    const emoji = hasValidEmoji ? ` ${player.emoji.trim()}` : '';
+    
     return `${player.name}${emoji}`;
   };
 
@@ -186,7 +191,7 @@ const AICommentatorEnhanced: React.FC<AICommentatorEnhancedProps> = ({
           <div className={`absolute inset-0 bg-gradient-to-br ${style.gradient} rounded-[2rem] blur-xl opacity-50 -z-10`} />
           
           <div className="flex items-start gap-8">
-            {/* Professor Avatar - Enhanced */}
+            {/* Professor Avatar - Enhanced avec le nouveau composant unifié */}
             <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
