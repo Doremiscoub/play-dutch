@@ -192,7 +192,7 @@ const AICommentatorEnhanced: React.FC<AICommentatorEnhancedProps> = ({
         transition={{ duration: 0.6, ease: "easeOut" }}
         className="relative"
       >
-        {/* Main Container with Modern Glassmorphism */}
+        {/* Main Container avec glassmorphism moderne */}
         <div className={`
           relative backdrop-blur-xl border-2 rounded-[2rem] p-8 shadow-2xl transition-all duration-500
           bg-gradient-to-br ${style.gradient} ${style.border}
@@ -203,7 +203,7 @@ const AICommentatorEnhanced: React.FC<AICommentatorEnhancedProps> = ({
           <div className={`absolute inset-0 bg-gradient-to-br ${style.gradient} rounded-[2rem] blur-xl opacity-50 -z-10`} />
           
           <div className="flex items-start gap-8">
-            {/* Professor Avatar - Avec la nouvelle image corrigée */}
+            {/* Professor Avatar - Avec la nouvelle version corrigée */}
             <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
@@ -263,7 +263,7 @@ const AICommentatorEnhanced: React.FC<AICommentatorEnhancedProps> = ({
                     {displayedText}
                     {isTyping && (
                       <motion.span
-                        className="inline-block w-0.5 h-5 bg-dutch-purple ml-1"
+                        className="inline-block w-0.5 h-5 bg-ios-purple ml-1"
                         animate={{ opacity: [0, 1, 0] }}
                         transition={{ duration: 1, repeat: Infinity }}
                       />
@@ -279,8 +279,8 @@ const AICommentatorEnhanced: React.FC<AICommentatorEnhancedProps> = ({
                   transition={{ delay: 1 }}
                 >
                   <div className="flex items-center gap-2">
-                    <div className="w-8 h-0.5 bg-gradient-to-r from-dutch-blue to-dutch-purple rounded-full" />
-                    <span className="font-bold text-dutch-purple tracking-wider">
+                    <div className="w-8 h-0.5 bg-gradient-to-r from-ios-blue to-ios-purple rounded-full" />
+                    <span className="font-bold text-ios-purple tracking-wider">
                       Prof. Cartouche
                     </span>
                   </div>
@@ -290,7 +290,7 @@ const AICommentatorEnhanced: React.FC<AICommentatorEnhancedProps> = ({
                     {[0, 1, 2].map((i) => (
                       <motion.div 
                         key={i}
-                        className="w-2 h-2 bg-gradient-to-r from-dutch-blue to-dutch-purple rounded-full"
+                        className="w-2 h-2 bg-gradient-to-r from-ios-blue to-ios-purple rounded-full"
                         animate={{ 
                           scale: [1, 1.3, 1], 
                           opacity: [0.4, 1, 0.4] 

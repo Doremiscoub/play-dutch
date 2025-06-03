@@ -4,9 +4,7 @@ import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { ProfessorAvatarProps, MoodAnimations, SizeClasses } from './ProfessorAvatarTypes';
 import ProfessorAvatarParticles from './ProfessorAvatarParticles';
-import ProfessorAvatarGlow from './ProfessorAvatarGlow';
 import ProfessorAvatarImage from './ProfessorAvatarImage';
-import ProfessorAvatarEffects from './ProfessorAvatarEffects';
 
 const sizeClasses: SizeClasses = {
   sm: 'w-16 h-16',
@@ -48,13 +46,20 @@ export default function ProfessorAvatar({
       {/* Floating Particles */}
       <ProfessorAvatarParticles showParticles={showParticles} />
 
-      {/* Glow Effects */}
-      <ProfessorAvatarGlow mood={mood} animate={animate} isHovered={isHovered} />
+      {/* Glow effects simplifiés */}
+      <motion.div
+        className="absolute -inset-4 bg-gradient-to-r from-ios-blue via-ios-purple to-ios-orange rounded-full opacity-20 blur-lg"
+        animate={animate ? {
+          scale: [1, 1.1, 1],
+          opacity: [0.2, 0.4, 0.2]
+        } : {}}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+      />
 
-      {/* Cerclage avec gradient de l'app */}
+      {/* Container principal avec gradient corrigé */}
       <motion.div 
         className={cn(
-          "relative bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange p-1 rounded-full shadow-2xl",
+          "relative bg-gradient-to-r from-ios-blue via-ios-purple to-ios-orange p-1 rounded-full shadow-2xl",
           sizeClasses[size]
         )}
         animate={animate ? moodAnimations[mood] : {}}
@@ -69,18 +74,21 @@ export default function ProfessorAvatar({
           transition: { duration: 0.6 }
         }}
       >
-        {/* Avatar Container - maintenant parfaitement circulaire */}
-        <div className={cn(
-          "relative rounded-full overflow-hidden bg-white",
-          "w-[calc(100%-8px)] h-[calc(100%-8px)]"
-        )}>
-          {/* Avatar Image */}
+        {/* Avatar Container - parfaitement circulaire */}
+        <div className="relative rounded-full overflow-hidden bg-white w-full h-full">
           <ProfessorAvatarImage isHovered={isHovered} />
         </div>
       </motion.div>
 
-      {/* Hover Effects */}
-      <ProfessorAvatarEffects isHovered={isHovered} />
+      {/* Effet hover simplifié */}
+      {isHovered && (
+        <motion.div
+          className="absolute inset-0 rounded-full border-2 border-white/50"
+          initial={{ scale: 1, opacity: 0.8 }}
+          animate={{ scale: 1.3, opacity: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+        />
+      )}
     </motion.div>
   );
 }
