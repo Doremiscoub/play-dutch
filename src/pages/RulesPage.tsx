@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -8,6 +8,7 @@ import { ModernTitle } from '@/components/ui/modern-title';
 
 const RulesPage: React.FC = () => {
   const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState('introduction');
 
   const handleBack = () => {
     // Check if we have an active game
@@ -43,7 +44,10 @@ const RulesPage: React.FC = () => {
         </div>
 
         {/* Rules Content */}
-        <RulesTabs />
+        <RulesTabs 
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+        />
       </div>
     </div>
   );
