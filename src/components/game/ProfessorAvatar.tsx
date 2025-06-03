@@ -28,9 +28,9 @@ export default function ProfessorAvatar({
 
   const sizeClasses = {
     sm: 'w-12 h-12',
-    md: 'w-16 h-16',
-    lg: 'w-24 h-24',
-    xl: 'w-32 h-32'
+    md: 'w-20 h-20',
+    lg: 'w-28 h-28',
+    xl: 'w-36 h-36'
   };
 
   return (
@@ -47,14 +47,14 @@ export default function ProfessorAvatar({
       onHoverEnd={() => setIsHovered(false)}
     >
       <div className={cn(
-        "rounded-full bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange p-[3px] gradient-shift shadow-xl",
+        "rounded-full bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange p-1 gradient-shift shadow-xl",
         isHovered && "scale-105",
         "transition-all duration-300",
         sizeClasses[size]
       )}>
-        <div className="h-full w-full bg-white rounded-full p-1 flex items-center justify-center">
+        <div className="h-full w-full bg-white rounded-full flex items-center justify-center overflow-hidden">
           <motion.div 
-            className="h-full w-full relative"
+            className="h-full w-full relative flex items-center justify-center"
             animate={isHovered ? { rotate: [0, -5, 5, 0] } : {}}
             transition={{ duration: 0.5, ease: "easeInOut" }}
           >
@@ -64,14 +64,14 @@ export default function ProfessorAvatar({
                 alt="Professeur Cartouche"
                 onError={handleError}
                 className={cn(
-                  "h-full w-full object-contain scale-110",
+                  "h-full w-full object-cover rounded-full",
                   isHovered && "wobble-animation"
                 )}
               />
             ) : (
               <div 
                 className={cn(
-                  "h-full w-full flex items-center justify-center text-base",
+                  "text-4xl",
                   isHovered && "wobble-animation"
                 )}
               >
