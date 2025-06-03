@@ -124,13 +124,10 @@ export default function ProfessorAvatar({
         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
       />
 
-      {/* Main Avatar Container - Simplifié */}
+      {/* Avatar Container - Structure ultra-simplifiée */}
       <motion.div 
         className={cn(
-          "relative rounded-full p-2 shadow-2xl",
-          `bg-gradient-to-r ${moodColors[mood]}`,
-          isHovered && "scale-110",
-          "transition-all duration-500",
+          "relative rounded-full overflow-hidden shadow-2xl",
           sizeClasses[size]
         )}
         animate={animate ? moodAnimations[mood] : {}}
@@ -145,45 +142,42 @@ export default function ProfessorAvatar({
           transition: { duration: 0.6 }
         }}
       >
-        {/* Inner Circle - Structure simplifiée */}
-        <div className="h-full w-full bg-white rounded-full p-1 shadow-inner relative overflow-hidden">
-          {/* Avatar Image */}
-          <motion.div 
-            className="h-full w-full relative flex items-center justify-center rounded-full overflow-hidden bg-gradient-to-br from-gray-50 to-white"
-            animate={isHovered ? { 
-              rotate: [0, -5, 5, 0],
-              scale: [1, 1.02, 1]
-            } : {}}
-            transition={{ duration: 0.8, ease: "easeInOut" }}
-          >
-            {!errored ? (
-              <motion.img
-                src={SOURCE}
-                alt="Professeur Cartouche"
-                onError={handleError}
-                className={cn(
-                  "h-full w-full object-cover scale-110",
-                  isHovered && "scale-125"
-                )}
-                style={{ 
-                  filter: isHovered ? 'brightness(1.1) contrast(1.1)' : 'brightness(1) contrast(1)'
-                }}
-                transition={{ duration: 0.3 }}
-              />
-            ) : (
-              <motion.div 
-                className={cn(
-                  "text-6xl",
-                  isHovered && "scale-110"
-                )}
-                animate={isHovered ? { rotate: [0, 10, -10, 0] } : {}}
-                transition={{ duration: 0.5 }}
-              >
-                👴🏼
-              </motion.div>
-            )}
-          </motion.div>
-        </div>
+        {/* Avatar Image - Directement dans le conteneur */}
+        <motion.div 
+          className="h-full w-full relative flex items-center justify-center rounded-full overflow-hidden"
+          animate={isHovered ? { 
+            rotate: [0, -5, 5, 0],
+            scale: [1, 1.02, 1]
+          } : {}}
+          transition={{ duration: 0.8, ease: "easeInOut" }}
+        >
+          {!errored ? (
+            <motion.img
+              src={SOURCE}
+              alt="Professeur Cartouche"
+              onError={handleError}
+              className={cn(
+                "h-full w-full object-cover scale-110",
+                isHovered && "scale-125"
+              )}
+              style={{ 
+                filter: isHovered ? 'brightness(1.1) contrast(1.1)' : 'brightness(1) contrast(1)'
+              }}
+              transition={{ duration: 0.3 }}
+            />
+          ) : (
+            <motion.div 
+              className={cn(
+                "text-6xl",
+                isHovered && "scale-110"
+              )}
+              animate={isHovered ? { rotate: [0, 10, -10, 0] } : {}}
+              transition={{ duration: 0.5 }}
+            >
+              👴🏼
+            </motion.div>
+          )}
+        </motion.div>
       </motion.div>
 
       {/* Ripple Effect on Hover */}
