@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Player } from '@/types';
@@ -44,25 +43,38 @@ const AICommentatorEnhanced: React.FC<AICommentatorEnhancedProps> = ({
     }
   }, [currentComment]);
 
-  // Helper function to safely get player display name - CORRECTION DU BUG "undefined"
+  // Helper function corrigée pour éviter "undefined"
   const getPlayerDisplayName = (player: Player) => {
-    if (!player || !player.name) return 'Joueur inconnu';
+    if (!player?.name) return 'Joueur mystère';
     
-    // Vérifier si l'emoji existe et n'est pas vide
-    const hasValidEmoji = player.emoji && player.emoji.trim() && player.emoji.trim() !== '';
+    const name = player.name.trim();
+    if (!name) return 'Joueur anonyme';
+    
+    // Vérifier si l'emoji existe et est valide
+    const hasValidEmoji = player.emoji && 
+                         typeof player.emoji === 'string' && 
+                         player.emoji.trim() && 
+                         player.emoji.trim() !== '';
+    
     const emoji = hasValidEmoji ? ` ${player.emoji.trim()}` : '';
     
-    return `${player.name}${emoji}`;
+    return `${name}${emoji}`;
   };
 
   // Generate contextual comments based on game state
   const generateComment = () => {
-    if (players.length === 0) return;
+    if (!players || players.length === 0) return;
 
-    const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
+    // Filtrer les joueurs valides
+    const validPlayers = players.filter(p => p && p.name && typeof p.totalScore === 'number');
+    if (validPlayers.length === 0) return;
+
+    const sortedPlayers = [...validPlayers].sort((a, b) => a.totalScore - b.totalScore);
     const leader = sortedPlayers[0];
     const lastPlace = sortedPlayers[sortedPlayers.length - 1];
-    const dutchCount = players.reduce((total, player) => total + player.rounds.filter(r => r.isDutch).length, 0);
+    const dutchCount = validPlayers.reduce((total, player) => 
+      total + (player.rounds?.filter(r => r?.isDutch).length || 0), 0
+    );
     
     const comments = {
       start: [
@@ -85,7 +97,7 @@ const AICommentatorEnhanced: React.FC<AICommentatorEnhancedProps> = ({
       
       endGame: [
         `${getPlayerDisplayName(leader)} frôle la victoire avec ${leader.totalScore} points ! Qui va craquer en premier ? 🎯`,
-        `La tension monte ! Plus que ${scoreLimit - leader.totalScore} points et c'est fini pour ${leader.name} ! 🔥`,
+        `La tension monte ! Plus que ${scoreLimit - leader.totalScore} points et c'est fini pour ${getPlayerDisplayName(leader)} ! 🔥`,
         `Le suspense est à son comble ! ${getPlayerDisplayName(leader)} va-t-il tenir le coup ? 🎬`
       ],
       
@@ -114,8 +126,8 @@ const AICommentatorEnhanced: React.FC<AICommentatorEnhancedProps> = ({
     }
 
     // Check for recent Dutch
-    const recentDutch = players.some(player => 
-      player.rounds.length > 0 && player.rounds[player.rounds.length - 1]?.isDutch
+    const recentDutch = validPlayers.some(player => 
+      player.rounds?.length > 0 && player.rounds[player.rounds.length - 1]?.isDutch
     );
     
     if (recentDutch && roundCount > 0) {
@@ -191,7 +203,7 @@ const AICommentatorEnhanced: React.FC<AICommentatorEnhancedProps> = ({
           <div className={`absolute inset-0 bg-gradient-to-br ${style.gradient} rounded-[2rem] blur-xl opacity-50 -z-10`} />
           
           <div className="flex items-start gap-8">
-            {/* Professor Avatar - Enhanced avec le nouveau composant unifié */}
+            {/* Professor Avatar - Avec la nouvelle image corrigée */}
             <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
