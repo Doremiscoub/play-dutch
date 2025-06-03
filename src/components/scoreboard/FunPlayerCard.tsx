@@ -91,20 +91,29 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
               {rank}
             </motion.div>
             
-            {/* Avatar emoji */}
+            {/* Avatar emoji avec containment correct */}
             <motion.div 
-              className="w-20 h-20 rounded-2xl flex items-center justify-center text-4xl shadow-lg relative overflow-hidden"
-              style={{ backgroundColor: player.avatarColor }}
+              className="w-20 h-20 rounded-2xl flex items-center justify-center text-4xl shadow-lg relative"
+              style={{ 
+                backgroundColor: player.avatarColor,
+                overflow: 'visible'
+              }}
               whileHover={{ rotate: [0, -5, 5, 0], scale: 1.05 }}
               transition={{ duration: 0.3 }}
             >
-              <div className="absolute inset-0 bg-white/20 backdrop-blur-sm" />
-              <span className="relative z-10 drop-shadow-lg">
+              {/* Gradient background avec overflow visible */}
+              <div 
+                className="absolute inset-0 rounded-2xl opacity-30"
+                style={{
+                  background: `radial-gradient(circle at center, ${player.avatarColor}80, transparent)`
+                }}
+              />
+              <span className="relative z-10 drop-shadow-lg filter">
                 {player.emoji || '🎮'}
               </span>
               {dutchCount > 0 && (
                 <motion.div
-                  className="absolute top-1 right-1 w-3 h-3 bg-green-400 rounded-full"
+                  className="absolute -top-1 -right-1 w-4 h-4 bg-green-400 rounded-full border-2 border-white"
                   animate={{ scale: [1, 1.2, 1], opacity: [0.7, 1, 0.7] }}
                   transition={{ duration: 1.5, repeat: Infinity }}
                 />
