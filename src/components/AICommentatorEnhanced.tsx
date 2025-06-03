@@ -44,6 +44,12 @@ const AICommentatorEnhanced: React.FC<AICommentatorEnhancedProps> = ({
     }
   }, [currentComment]);
 
+  // Helper function to safely get player display name
+  const getPlayerDisplayName = (player: Player) => {
+    const emoji = player.emoji && player.emoji.trim() ? ` ${player.emoji}` : '';
+    return `${player.name}${emoji}`;
+  };
+
   // Generate contextual comments based on game state
   const generateComment = () => {
     if (players.length === 0) return;
@@ -61,21 +67,21 @@ const AICommentatorEnhanced: React.FC<AICommentatorEnhancedProps> = ({
       ],
       
       early: [
-        `${leader.name} ${leader.emoji} prend les devants ! Mais attention, c'est souvent les premiers qui chutent le plus dur ! 📉`,
+        `${getPlayerDisplayName(leader)} prend les devants ! Mais attention, c'est souvent les premiers qui chutent le plus dur ! 📉`,
         `Seulement ${roundCount} manche${roundCount > 1 ? 's' : ''} et déjà des surprises ! Continuez comme ça, c'est divertissant ! 🍿`,
         `${dutchCount} Dutch déjà ? Quelqu'un a visiblement besoin de réviser les règles ! 📚`
       ],
       
       midGame: [
-        `${leader.name} ${leader.emoji} domine avec ${leader.totalScore} points ! Mais la roue tourne toujours... ⚡`,
-        `${lastPlace.name} ${lastPlace.emoji}, il serait peut-être temps de changer de stratégie ? Juste une suggestion... 🤔`,
+        `${getPlayerDisplayName(leader)} domine avec ${leader.totalScore} points ! Mais la roue tourne toujours... ⚡`,
+        `${getPlayerDisplayName(lastPlace)}, il serait peut-être temps de changer de stratégie ? Juste une suggestion... 🤔`,
         `${roundCount} manches déjà ! Le temps passe vite quand on s'amuse... enfin, pour certains ! ⏰`
       ],
       
       endGame: [
-        `${leader.name} ${leader.emoji} frôle la victoire avec ${leader.totalScore} points ! Qui va craquer en premier ? 🎯`,
+        `${getPlayerDisplayName(leader)} frôle la victoire avec ${leader.totalScore} points ! Qui va craquer en premier ? 🎯`,
         `La tension monte ! Plus que ${scoreLimit - leader.totalScore} points et c'est fini pour ${leader.name} ! 🔥`,
-        `Le suspense est à son comble ! ${leader.name} ${leader.emoji} va-t-il tenir le coup ? 🎬`
+        `Le suspense est à son comble ! ${getPlayerDisplayName(leader)} va-t-il tenir le coup ? 🎬`
       ],
       
       dutch: [

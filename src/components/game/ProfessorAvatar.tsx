@@ -124,7 +124,7 @@ export default function ProfessorAvatar({
         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
       />
 
-      {/* Main Avatar Container */}
+      {/* Main Avatar Container - Simplifié */}
       <motion.div 
         className={cn(
           "relative rounded-full p-2 shadow-2xl",
@@ -145,9 +145,9 @@ export default function ProfessorAvatar({
           transition: { duration: 0.6 }
         }}
       >
-        {/* Inner White Circle */}
-        <div className="h-full w-full bg-white rounded-full p-2 shadow-inner">
-          {/* Avatar Image Container */}
+        {/* Inner Circle - Structure simplifiée */}
+        <div className="h-full w-full bg-white rounded-full p-1 shadow-inner relative overflow-hidden">
+          {/* Avatar Image */}
           <motion.div 
             className="h-full w-full relative flex items-center justify-center rounded-full overflow-hidden bg-gradient-to-br from-gray-50 to-white"
             animate={isHovered ? { 
@@ -184,32 +184,6 @@ export default function ProfessorAvatar({
             )}
           </motion.div>
         </div>
-
-        {/* Mood Indicator */}
-        <motion.div 
-          className="absolute -top-2 -right-2 bg-white rounded-full p-2 shadow-lg"
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
-        >
-          <motion.div
-            animate={{ 
-              rotate: [0, 360],
-              scale: [1, 1.2, 1]
-            }}
-            transition={{
-              duration: 3,
-              repeat: Infinity,
-              ease: "linear"
-            }}
-          >
-            {mood === 'happy' && <Heart className="w-4 h-4 text-green-500" />}
-            {mood === 'excited' && <Zap className="w-4 h-4 text-orange-500" />}
-            {mood === 'thinking' && <Sparkles className="w-4 h-4 text-blue-500" />}
-            {mood === 'surprised' && <Sparkles className="w-4 h-4 text-yellow-500" />}
-            {mood === 'neutral' && <Sparkles className="w-4 h-4 text-purple-500" />}
-          </motion.div>
-        </motion.div>
       </motion.div>
 
       {/* Ripple Effect on Hover */}
