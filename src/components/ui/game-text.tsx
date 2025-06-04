@@ -19,12 +19,23 @@ const gameTextVariants = cva(
         caption: "text-xs leading-relaxed text-gray-600",
       },
       color: {
-        primary: "text-game-blue",
-        secondary: "text-game-purple", 
-        accent: "text-game-orange",
-        muted: "text-gray-600",
-        light: "text-gray-500",
-        gradient: "bg-gradient-to-r from-game-blue to-game-purple bg-clip-text text-transparent",
+        primary: "text-semantic-primary",
+        secondary: "text-semantic-secondary", 
+        accent: "text-semantic-accent",
+        success: "text-semantic-success",
+        warning: "text-semantic-warning",
+        error: "text-semantic-error",
+        info: "text-semantic-info",
+        muted: "text-semantic-on-surface-muted",
+        light: "text-semantic-on-surface-subtle",
+        gradient: "bg-gradient-to-r from-semantic-primary to-semantic-secondary bg-clip-text text-transparent",
+      },
+      state: {
+        default: "",
+        success: "text-semantic-success",
+        warning: "text-semantic-warning",
+        error: "text-semantic-error",
+        info: "text-semantic-info",
       },
       align: {
         left: "text-left",
@@ -42,6 +53,7 @@ const gameTextVariants = cva(
     defaultVariants: {
       variant: "body",
       color: "primary",
+      state: "default",
       align: "left",
       weight: "normal",
     },
@@ -58,6 +70,7 @@ export const GameText: React.FC<GameTextProps> = ({
   className,
   variant,
   color,
+  state,
   align,
   weight,
   as = 'p',
@@ -68,7 +81,7 @@ export const GameText: React.FC<GameTextProps> = ({
   
   return (
     <Component
-      className={cn(gameTextVariants({ variant, color, align, weight, className }))}
+      className={cn(gameTextVariants({ variant, color, state, align, weight, className }))}
       {...props}
     >
       {children}

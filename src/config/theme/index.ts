@@ -5,7 +5,7 @@ import { SPACING, BORDERS, SHADOWS } from './layout';
 import { ANIMATIONS } from './animations';
 import { GLASS, COMPONENT_STYLES } from './components';
 import { THEMES } from './themes';
-import { SEMANTIC_COLORS, GAME_COLORS } from './semantic-colors';
+import { SEMANTIC_COLORS, GAME_COLORS, STATE_COLORS, SURFACE_COLORS } from './semantic-colors';
 
 export const Z_INDEX = {
   behind: -1,
@@ -52,6 +52,8 @@ export {
   COMPONENT_STYLES,
   SEMANTIC_COLORS,
   GAME_COLORS,
+  STATE_COLORS,
+  SURFACE_COLORS,
 };
 
 // Export default configuration
@@ -69,4 +71,6 @@ export default {
   COMPONENT_STYLES,
   SEMANTIC_COLORS,
   GAME_COLORS,
+  STATE_COLORS,
+  SURFACE_COLORS,
 };
