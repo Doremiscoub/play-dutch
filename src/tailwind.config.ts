@@ -64,36 +64,19 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// Couleurs Dutch basées sur notre configuration de thème
-				dutch: {
-					blue: COLORS.blue.DEFAULT,
-					orange: COLORS.orange.DEFAULT,
-					purple: COLORS.purple.DEFAULT,
-					pink: COLORS.pink,
-					red: COLORS.red,
-					green: COLORS.green,
-					yellow: COLORS.yellow,
+				// Couleurs game unifiées basées sur notre configuration de thème
+				game: {
+					primary: COLORS.blue.DEFAULT,    // Main blue
+					secondary: COLORS.purple.DEFAULT, // Purple accent  
+					accent: COLORS.orange.DEFAULT,   // Orange highlights
+					red: '#E31C25',                  // UNO Red
+					blue: '#0066CC',                 // UNO Blue  
+					green: '#28AA3D',                // UNO Green
+					yellow: '#FEDF00',               // UNO Yellow
+					purple: '#9C27B0',               // Pokémon Psychic
+					orange: '#F57D31',               // Pokémon Fire
 					background: COLORS.gray[50],
 					card: COLORS.white,
-				},
-				ios: {
-					blue: '#007AFF',
-					green: '#34C759',
-					indigo: '#5856D6',
-					orange: '#FF9500',
-					pink: '#FF2D55',
-					purple: '#AF52DE',
-					red: '#FF3B30',
-					teal: '#5AC8FA',
-					yellow: '#FFCC00',
-					gray: '#8E8E93',
-					background: '#F2F2F7',
-					card: '#FFFFFF',
-					'dark-blue': '#0A84FF',
-					'light-blue': '#64D2FF',
-					'light-gray': '#E5E5EA',
-					'ultra-light-gray': '#F2F2F7',
-					'dark-gray': '#8E8E93',
 				}
 			},
 			borderRadius: {
@@ -155,7 +138,7 @@ export default {
 						transform: 'translateY(-10px)',
 					},
 				},
-				'ios-bounce': {
+				'game-bounce': {
 					'0%, 100%': {
 						transform: 'translateY(0)',
 					},
@@ -163,20 +146,17 @@ export default {
 						transform: 'translateY(-5px)',
 					},
 				},
-				'ios-pop': {
+				'card-flip': {
 					'0%': {
-						transform: 'scale(0.95)',
-						opacity: '0.7',
+						transform: 'rotateY(0deg)',
 					},
-					'70%': {
-						transform: 'scale(1.05)',
-						opacity: '1',
+					'50%': {
+						transform: 'rotateY(90deg)',
 					},
 					'100%': {
-						transform: 'scale(1)',
-						opacity: '1',
+						transform: 'rotateY(0deg)',
 					},
-				},
+				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
@@ -185,8 +165,8 @@ export default {
 				'pulse-soft': 'pulse-soft 2s infinite ease-in-out',
 				'scale': 'scale 0.2s ease-out',
 				'float': 'float 6s infinite ease-in-out',
-				'ios-bounce': 'ios-bounce 2s infinite ease-in-out',
-				'ios-pop': 'ios-pop 0.3s ease-out',
+				'game-bounce': 'game-bounce 2s infinite ease-in-out',
+				'card-flip': 'card-flip 0.3s ease-out',
 			},
 			backdropBlur: {
 				xs: '2px',

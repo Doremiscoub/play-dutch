@@ -1,8 +1,9 @@
 
 import React from 'react';
-import { Button } from '@/components/ui/button';
 import { Plus, Minus } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { GameButton } from '@/components/ui/game-button';
+import { GameText } from '@/components/ui/game-typography';
 
 interface PlayerCountSelectorProps {
   numPlayers: number;
@@ -16,41 +17,40 @@ const PlayerCountSelector: React.FC<PlayerCountSelectorProps> = ({
   return (
     <div className="flex items-center justify-center space-x-4">
       <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
-        <Button 
-          variant="glass"
-          size="icon" 
-          elevated
-          animated
+        <GameButton 
+          variant="ghost"
+          size="icon-lg" 
           onClick={() => onNumPlayersChange(false)}
           disabled={numPlayers <= 2}
-          className="bg-white/70 backdrop-blur-xl border border-dutch-blue/30 text-dutch-blue h-14 w-14 rounded-2xl shadow-blue/10"
         >
           <Minus className="h-6 w-6" />
-        </Button>
+        </GameButton>
       </motion.div>
       
-      <motion.span 
-        className="text-4xl font-bold w-16 text-center bg-gradient-to-br from-dutch-blue via-dutch-purple to-dutch-orange bg-clip-text text-transparent"
+      <motion.div
         key={numPlayers}
         initial={{ scale: 1.5, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.3 }}
       >
-        {numPlayers}
-      </motion.span>
+        <GameText 
+          variant="scoreDisplay" 
+          gameColor="gradient" 
+          className="text-4xl w-16 text-center"
+        >
+          {numPlayers}
+        </GameText>
+      </motion.div>
       
       <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
-        <Button 
-          variant="glass"
-          size="icon"
-          elevated
-          animated
+        <GameButton 
+          variant="ghost"
+          size="icon-lg"
           onClick={() => onNumPlayersChange(true)}
           disabled={numPlayers >= 10}
-          className="bg-white/70 backdrop-blur-xl border border-dutch-orange/30 text-dutch-orange h-14 w-14 rounded-2xl shadow-orange/10"
         >
           <Plus className="h-6 w-6" />
-        </Button>
+        </GameButton>
       </motion.div>
     </div>
   );

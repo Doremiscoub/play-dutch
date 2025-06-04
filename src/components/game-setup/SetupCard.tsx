@@ -1,6 +1,8 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
+import { GameCard } from '@/components/ui/game-card';
+import { GameText } from '@/components/ui/game-typography';
 
 interface SetupCardProps {
   title: string;
@@ -17,14 +19,17 @@ const SetupCard: React.FC<SetupCardProps> = ({ title, children, delay = 0 }) => 
   
   return (
     <motion.div 
-      className="dutch-card mb-8 backdrop-blur-md border border-white/40 bg-white/80 hover:shadow-lg transition-all duration-300 rounded-2xl overflow-hidden p-6"
       initial={{ scale: 0.95, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       transition={{ ...transitionProps, delay }}
       whileHover={{ y: -3, boxShadow: "0 15px 30px rgba(0,0,0,0.1)" }}
     >
-      <h2 className="text-xl font-semibold mb-4 text-dutch-blue">{title}</h2>
-      {children}
+      <GameCard variant="glass" className="mb-8 p-6">
+        <GameText variant="cardTitle" gameColor="primary" className="mb-4">
+          {title}
+        </GameText>
+        {children}
+      </GameCard>
     </motion.div>
   );
 };

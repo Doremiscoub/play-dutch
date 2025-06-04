@@ -83,7 +83,7 @@ const GamePage: React.FC = () => {
           animate={{ opacity: 1, scale: 1 }}
           className="text-center"
         >
-          <div className="w-16 h-16 mx-auto mb-4 border-4 border-dutch-blue border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-16 h-16 mx-auto mb-4 border-4 border-game-primary border-t-transparent rounded-full animate-spin"></div>
           <p className="text-gray-600">Initialisation de la partie...</p>
         </motion.div>
       </div>
