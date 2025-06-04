@@ -38,8 +38,10 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
       const observeFID = () => {
         const observer = new PerformanceObserver((list) => {
           list.getEntries().forEach((entry) => {
-            if (entry.name === 'first-input') {
-              const fid = entry.processingStart - entry.startTime;
+            // Cast to PerformanceEventTiming to access specific properties
+            const eventEntry = entry as PerformanceEventTiming;
+            if (entry.name === 'first-input' && eventEntry.processingStart) {
+              const fid = eventEntry.processingStart - entry.startTime;
               
               if (logPerformance) {
                 console.log('FID:', fid);
@@ -60,8 +62,10 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
         let clsValue = 0;
         const observer = new PerformanceObserver((list) => {
           list.getEntries().forEach((entry) => {
-            if (!entry.hadRecentInput) {
-              clsValue += entry.value;
+            // Cast to LayoutShift to access specific properties
+            const layoutShiftEntry = entry as LayoutShift;
+            if (!layoutShiftEntry.hadRecentInput) {
+              clsValue += layoutShiftEntry.value;
               
               if (logPerformance) {
                 console.log('CLS:', clsValue);
@@ -165,3 +169,13 @@ export const preloadCriticalResources = () => {
     document.head.appendChild(link);
   });
 };
+
+// Type definitions for Web APIs
+interface PerformanceEventTiming extends PerformanceEntry {
+  processingStart: number;
+}
+
+interface LayoutShift extends PerformanceEntry {
+  value: number;
+  hadRecentInput: boolean;
+}

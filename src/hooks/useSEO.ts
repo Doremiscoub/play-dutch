@@ -1,4 +1,3 @@
-
 import { useEffect } from 'react';
 
 interface SEOProps {
@@ -163,7 +162,7 @@ const addStructuredData = (data: any) => {
 };
 
 const generateStructuredData = ({ title, description, url, image, breadcrumbs, faqItems, gameInfo }: any) => {
-  const baseData = {
+  const baseData: any = {
     '@context': 'https://schema.org',
     '@graph': [
       {
@@ -239,7 +238,7 @@ const generateStructuredData = ({ title, description, url, image, breadcrumbs, f
   if (breadcrumbs && breadcrumbs.length > 0) {
     baseData['@graph'].push({
       '@type': 'BreadcrumbList',
-      itemListElement: breadcrumbs.map((breadcrumb, index) => ({
+      itemListElement: breadcrumbs.map((breadcrumb: any, index: number) => ({
         '@type': 'ListItem',
         position: index + 1,
         name: breadcrumb.name,
@@ -252,7 +251,7 @@ const generateStructuredData = ({ title, description, url, image, breadcrumbs, f
   if (faqItems && faqItems.length > 0) {
     baseData['@graph'].push({
       '@type': 'FAQPage',
-      mainEntity: faqItems.map(item => ({
+      mainEntity: faqItems.map((item: any) => ({
         '@type': 'Question',
         name: item.question,
         acceptedAnswer: {
