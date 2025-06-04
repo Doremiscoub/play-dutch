@@ -1,7 +1,6 @@
-
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Play, Users, Trophy, BookOpen, Star, Zap, Heart, Sparkles } from 'lucide-react';
+import { Users, Trophy, BookOpen, Star, Zap, Heart, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -57,48 +56,6 @@ const SEOContentSection: React.FC = () => {
     <div className="relative z-10 bg-white/80 backdrop-blur-sm">
       <div className="container mx-auto px-4 py-16">
         
-        {/* Quick Navigation */}
-        <motion.section 
-          className="mb-16 text-center"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-        >
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
-            <Button 
-              onClick={() => navigate('/game/setup')}
-              size="lg"
-              className="bg-gradient-to-r from-dutch-blue to-dutch-purple hover:scale-105 transition-transform text-lg px-8 py-4"
-            >
-              <Play className="mr-2 h-5 w-5" />
-              Créer une partie
-            </Button>
-            
-            <Button 
-              onClick={() => navigate('/rules')}
-              variant="outline"
-              size="lg"
-              className="text-lg px-8 py-4"
-            >
-              <BookOpen className="mr-2 h-5 w-5" />
-              Apprendre les règles
-            </Button>
-          </div>
-
-          <div className="flex flex-wrap justify-center gap-4 text-sm text-gray-600">
-            <Badge variant="secondary" className="bg-green-100 text-green-700">
-              ✅ 100% Gratuit
-            </Badge>
-            <Badge variant="secondary" className="bg-blue-100 text-blue-700">
-              📱 Fonctionne hors-ligne
-            </Badge>
-            <Badge variant="secondary" className="bg-purple-100 text-purple-700">
-              🤖 IA Commentateur
-            </Badge>
-          </div>
-        </motion.section>
-
         {/* Enhanced Features Grid with 3D Cards */}
         <motion.section 
           className="mb-16"
