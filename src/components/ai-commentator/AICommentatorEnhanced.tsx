@@ -5,6 +5,7 @@ import { AICommentatorEnhancedProps } from './types';
 import { generateComment, getCommentStyle } from './commentUtils';
 import ProfessorAvatar from '../game/ProfessorAvatar';
 import CommentBubble from './CommentBubble';
+import CommentPointer from './CommentPointer';
 
 const AICommentatorEnhanced: React.FC<AICommentatorEnhancedProps> = ({
   players,
@@ -60,18 +61,18 @@ const AICommentatorEnhanced: React.FC<AICommentatorEnhancedProps> = ({
         transition={{ duration: 0.6, ease: "easeOut" }}
         className="relative"
       >
-        {/* Main Container avec glassmorphism moderne */}
+        {/* Main Container avec glassmorphism moderne - sans ombre excessive */}
         <div className={`
-          relative backdrop-blur-xl border-2 rounded-[2rem] p-8 shadow-2xl transition-all duration-500
+          relative backdrop-blur-xl border-2 rounded-[2rem] p-8 transition-all duration-500
           bg-gradient-to-br ${style.gradient} ${style.border}
-          hover:shadow-3xl hover:scale-[1.02]
+          hover:scale-[1.02]
         `}>
           
-          {/* Ambient Background Glow */}
-          <div className={`absolute inset-0 bg-gradient-to-br ${style.gradient} rounded-[2rem] blur-xl opacity-50 -z-10`} />
+          {/* Ambient Background Glow - plus subtil */}
+          <div className={`absolute inset-0 bg-gradient-to-br ${style.gradient} rounded-[2rem] blur-xl opacity-30 -z-10`} />
           
-          <div className="flex items-start gap-8">
-            {/* Professor Avatar */}
+          <div className="flex items-start gap-4">
+            {/* Professor Avatar - sans ombre */}
             <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
@@ -83,9 +84,12 @@ const AICommentatorEnhanced: React.FC<AICommentatorEnhancedProps> = ({
                 animate={true}
                 mood={style.mood}
                 showParticles={true}
-                className="shadow-2xl"
+                className=""
               />
             </motion.div>
+            
+            {/* Comment Pointer - double flèche */}
+            <CommentPointer className="flex-shrink-0 mt-12" />
             
             {/* Comment Bubble */}
             <CommentBubble 

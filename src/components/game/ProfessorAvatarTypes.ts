@@ -22,6 +22,6 @@ export type SizeClasses = {
   [K in NonNullable<ProfessorAvatarProps['size']>]: string;
 };
 
-// URLs corrigées - utiliser l'image qui existe réellement dans public/
-export const PROFESSOR_SOURCE = '/professor.png';
-export const PROFESSOR_FALLBACK = '/professor.png'; // Même image comme fallback pour l'instant
+// Updated with the new professor image from uploads
+export const PROFESSOR_SOURCE = '/lovable-uploads/a2234ca1-7b29-4c32-8167-2ff6be271875.png';
+export const PROFESSOR_FALLBACK = '/lovable-uploads/a2234ca1-7b29-4c32-8167-2ff6be271875.png';

@@ -46,20 +46,20 @@ export default function ProfessorAvatar({
       {/* Floating Particles */}
       <ProfessorAvatarParticles showParticles={showParticles} />
 
-      {/* Glow effects simplifiés */}
-      <motion.div
-        className="absolute -inset-4 bg-gradient-to-r from-ios-blue via-ios-purple to-ios-orange rounded-full opacity-20 blur-lg"
-        animate={animate ? {
-          scale: [1, 1.1, 1],
-          opacity: [0.2, 0.4, 0.2]
-        } : {}}
-        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-      />
+      {/* Glow subtil uniquement au hover */}
+      {isHovered && (
+        <motion.div
+          className="absolute -inset-2 bg-gradient-to-r from-ios-blue/30 via-ios-purple/30 to-ios-orange/30 rounded-full blur-md"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3 }}
+        />
+      )}
 
-      {/* Container principal avec gradient corrigé */}
+      {/* Container principal - cercle parfait avec bordure gradient */}
       <motion.div 
         className={cn(
-          "relative bg-gradient-to-r from-ios-blue via-ios-purple to-ios-orange p-1 rounded-full shadow-2xl",
+          "relative bg-gradient-to-r from-ios-blue via-ios-purple to-ios-orange p-1 rounded-full",
           sizeClasses[size]
         )}
         animate={animate ? moodAnimations[mood] : {}}
@@ -74,19 +74,19 @@ export default function ProfessorAvatar({
           transition: { duration: 0.6 }
         }}
       >
-        {/* Avatar Container - parfaitement circulaire */}
+        {/* Avatar Container - parfaitement circulaire sans ombre */}
         <div className="relative rounded-full overflow-hidden bg-white w-full h-full">
           <ProfessorAvatarImage isHovered={isHovered} />
         </div>
       </motion.div>
 
-      {/* Effet hover simplifié */}
+      {/* Effet hover simplifié - juste un cercle qui s'étend */}
       {isHovered && (
         <motion.div
-          className="absolute inset-0 rounded-full border-2 border-white/50"
-          initial={{ scale: 1, opacity: 0.8 }}
-          animate={{ scale: 1.3, opacity: 0 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="absolute inset-0 rounded-full border border-white/30"
+          initial={{ scale: 1, opacity: 0.5 }}
+          animate={{ scale: 1.2, opacity: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
         />
       )}
     </motion.div>

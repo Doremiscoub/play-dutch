@@ -2,12 +2,11 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import { PROFESSOR_SOURCE } from './ProfessorAvatarTypes';
 
 interface ProfessorAvatarImageProps {
   isHovered: boolean;
 }
-
-const PROFESSOR_IMAGE = '/professor.png';
 
 export default function ProfessorAvatarImage({ isHovered }: ProfessorAvatarImageProps) {
   const [imageError, setImageError] = useState(false);
@@ -25,7 +24,7 @@ export default function ProfessorAvatarImage({ isHovered }: ProfessorAvatarImage
   };
 
   if (imageError) {
-    // Fallback élégant avec emoji professeur
+    // Fallback élégant avec le bon emoji professeur
     return (
       <motion.div
         className="h-full w-full flex items-center justify-center bg-gradient-to-br from-blue-100 to-purple-100"
@@ -35,7 +34,7 @@ export default function ProfessorAvatarImage({ isHovered }: ProfessorAvatarImage
         } : {}}
         transition={{ duration: 0.8, ease: "easeInOut" }}
       >
-        <span className="text-4xl">👨‍🏫</span>
+        <span className="text-4xl">👴🏼</span>
       </motion.div>
     );
   }
@@ -43,7 +42,7 @@ export default function ProfessorAvatarImage({ isHovered }: ProfessorAvatarImage
   return (
     <div className="h-full w-full relative">
       <motion.img
-        src={PROFESSOR_IMAGE}
+        src={PROFESSOR_SOURCE}
         alt="Professeur Cartouche"
         onError={handleError}
         onLoad={handleLoad}
