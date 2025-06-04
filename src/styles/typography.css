@@ -1,0 +1,102 @@
+
+/* Styles typographiques fun inspirés d'Uno et Pokémon */
+
+/* Effets de glow pour les textes spéciaux */
+.drop-shadow-glow {
+  filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.3));
+}
+
+/* Effet de glow coloré selon le contexte */
+.text-fire {
+  text-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+}
+
+.text-water {
+  text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+}
+
+.text-grass {
+  text-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
+}
+
+.text-electric {
+  text-shadow: 0 0 10px rgba(234, 179, 8, 0.5);
+}
+
+.text-psychic {
+  text-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+}
+
+/* Animation de scintillement pour les textes legendary */
+@keyframes sparkle {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; transform: scale(1.02); }
+}
+
+.animate-sparkle {
+  animation: sparkle 2s ease-in-out infinite;
+}
+
+/* Effet de rebond style Uno */
+@keyframes bounce-uno {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-5px) scale(1.05); }
+}
+
+.animate-bounce-uno {
+  animation: bounce-uno 0.6s ease-in-out;
+}
+
+/* Effet de pulsation douce */
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.9; }
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 2s ease-in-out infinite;
+}
+
+/* Typographie responsive optimisée */
+@media (max-width: 640px) {
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+  }
+  
+  /* Amélioration de la lisibilité sur petit écran */
+  .leading-relaxed {
+    line-height: 1.6;
+  }
+  
+  .tracking-wide {
+    letter-spacing: 0.025em;
+  }
+  
+  .tracking-wider {
+    letter-spacing: 0.05em;
+  }
+  
+  .tracking-widest {
+    letter-spacing: 0.1em;
+  }
+}
+
+/* Styles pour les badges et cartes de jeu */
+.game-card-text {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Effet de mise en surbrillance pour les scores */
+.score-highlight {
+  background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.2) 50%, transparent 70%);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}

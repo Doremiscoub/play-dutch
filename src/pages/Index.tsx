@@ -4,9 +4,9 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { UnifiedButton } from '@/components/ui/unified-button';
 import { GameCard } from '@/components/ui/game-card';
-import { GameText } from '@/components/ui/game-text';
+import { GameText, GameHero, GameTitle, GameBadge } from '@/components/ui/game-text';
 import { UnifiedBackground } from '@/components/ui/unified-background';
-import { PlayCircle, ClipboardList, BookOpen } from 'lucide-react';
+import { PlayCircle, ClipboardList, BookOpen, Zap, Trophy, Sparkles } from 'lucide-react';
 import { ModernTitle } from '@/components/ui/modern-title';
 import { useSEO } from '@/hooks/useSEO';
 import { StructuredData } from '@/components/seo/StructuredData';
@@ -24,32 +24,41 @@ const Index = () => {
     {
       icon: PlayCircle,
       title: "Jouer",
-      description: "Commencez une nouvelle partie avec vos amis",
-      color: "game-blue",
+      description: "Commencez une partie épique avec vos amis",
+      color: "fire",
+      bgColor: "bg-red-500/10",
+      borderColor: "border-red-200",
       action: () => navigate('/game'),
-      buttonText: "Démarrer",
+      buttonText: "C'est parti !",
       buttonVariant: "primary" as const,
-      delay: 0.1
+      delay: 0.1,
+      badge: "ACTION"
     },
     {
       icon: BookOpen,
-      title: "Règles du jeu", 
-      description: "Apprenez à jouer avec les règles complètes",
-      color: "game-purple",
+      title: "Règles", 
+      description: "Maîtrisez les techniques de champion",
+      color: "water",
+      bgColor: "bg-blue-500/10",
+      borderColor: "border-blue-200",
       action: () => navigate('/rules'),
-      buttonText: "Consulter",
+      buttonText: "Apprendre",
       buttonVariant: "secondary" as const,
-      delay: 0.2
+      delay: 0.2,
+      badge: "GUIDE"
     },
     {
       icon: ClipboardList,
       title: "Historique",
-      description: "Consultez l'historique de vos parties",
-      color: "game-orange", 
+      description: "Revivez vos victoires légendaires",
+      color: "electric",
+      bgColor: "bg-yellow-500/10", 
+      borderColor: "border-yellow-200",
       action: () => navigate('/history'),
-      buttonText: "Voir",
+      buttonText: "Explorer",
       buttonVariant: "accent" as const,
-      delay: 0.3
+      delay: 0.3,
+      badge: "STATS"
     }
   ];
 
@@ -72,105 +81,188 @@ const Index = () => {
       
       <UnifiedBackground>
         <div className="min-h-screen flex flex-col items-center justify-center px-4 pt-24 pb-10">
+          {/* En-tête héroïque style Pokémon */}
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="text-center mb-8"
+            initial={{ opacity: 0, y: -30, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.8, type: "spring", stiffness: 100 }}
+            className="text-center mb-12"
           >
-            <ModernTitle withSparkles className="mb-4">
-              Dutch Card Game
-            </ModernTitle>
+            <div className="relative">
+              <GameHero 
+                color="rainbow" 
+                align="center" 
+                transform="uppercase"
+                spacing="wider"
+                glow
+                className="mb-4 relative z-10"
+              >
+                Dutch
+              </GameHero>
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer -z-10"></div>
+            </div>
+            
+            <GameTitle 
+              color="magic"
+              align="center"
+              spacing="wide"
+              className="mb-6 animate-pulse-soft"
+            >
+              Card Battle Arena
+            </GameTitle>
+            
             <GameText 
-              variant="body"
+              variant="large"
               color="muted"
               align="center"
-              className="max-w-md mx-auto text-lg"
+              className="max-w-md mx-auto"
             >
-              Le jeu de cartes convivial pour vos soirées entre amis
+              Affrontez vos amis dans des duels de cartes épiques ! 
+              <Sparkles className="inline-block ml-2 text-yellow-500" size={16} />
             </GameText>
           </motion.div>
 
+          {/* Cartes de fonctionnalités style Uno */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl w-full mb-10">
             {gameFeatures.map((feature, index) => {
               const IconComponent = feature.icon;
               
               return (
-                <GameCard
+                <motion.div
                   key={index}
-                  variant="glass"
-                  interactive
-                  padding="lg"
-                  withAnimation
-                  animationDelay={feature.delay}
-                  className="flex flex-col h-full"
+                  initial={{ opacity: 0, y: 50, rotateY: -15 }}
+                  animate={{ opacity: 1, y: 0, rotateY: 0 }}
+                  transition={{ 
+                    duration: 0.6, 
+                    delay: feature.delay,
+                    type: "spring",
+                    stiffness: 120
+                  }}
+                  whileHover={{ 
+                    y: -8, 
+                    rotateY: 5,
+                    transition: { duration: 0.2 }
+                  }}
+                  className="perspective-1000"
                 >
-                  <div className="flex flex-col items-center text-center h-full">
-                    <div className={`h-12 w-12 rounded-full bg-${feature.color}/10 flex items-center justify-center mb-4`}>
-                      <IconComponent className={`h-6 w-6 text-${feature.color}`} />
+                  <GameCard
+                    variant="glass"
+                    interactive
+                    padding="lg"
+                    className={`
+                      flex flex-col h-full relative overflow-hidden
+                      ${feature.bgColor} ${feature.borderColor}
+                      hover:shadow-2xl hover:shadow-${feature.color}/20
+                      transform-gpu
+                    `}
+                  >
+                    {/* Badge en haut à droite */}
+                    <div className="absolute top-4 right-4">
+                      <GameBadge 
+                        color={feature.color}
+                        className="px-2 py-1 bg-white/80 rounded-full"
+                      >
+                        {feature.badge}
+                      </GameBadge>
                     </div>
                     
-                    <GameText
-                      as="h2"
-                      variant="h4"
-                      className="mb-2"
-                    >
-                      {feature.title}
-                    </GameText>
+                    <div className="flex flex-col items-center text-center h-full relative z-10">
+                      {/* Icône avec effet électrique */}
+                      <motion.div 
+                        className={`
+                          h-16 w-16 rounded-full ${feature.bgColor} 
+                          flex items-center justify-center mb-6
+                          border-2 ${feature.borderColor}
+                          shadow-lg
+                        `}
+                        whileHover={{ 
+                          scale: 1.1,
+                          rotate: [0, -5, 5, 0],
+                          transition: { duration: 0.3 }
+                        }}
+                      >
+                        <IconComponent 
+                          className={`h-8 w-8 text-${feature.color}`} 
+                        />
+                        {feature.color === 'electric' && (
+                          <Zap className="absolute h-4 w-4 text-yellow-300 animate-pulse" />
+                        )}
+                      </motion.div>
+                      
+                      <GameText
+                        as="h2"
+                        variant="power"
+                        color={feature.color}
+                        transform="uppercase"
+                        spacing="wider"
+                        className="mb-3"
+                      >
+                        {feature.title}
+                      </GameText>
+                      
+                      <GameText
+                        variant="body"
+                        color="muted"
+                        align="center"
+                        className="mb-6 flex-grow"
+                      >
+                        {feature.description}
+                      </GameText>
+                      
+                      <UnifiedButton 
+                        onClick={feature.action}
+                        variant={feature.buttonVariant}
+                        size="lg"
+                        className="w-full mt-auto font-bold tracking-wide transform hover:scale-105 transition-all"
+                      >
+                        {feature.buttonText}
+                        {feature.title === "Jouer" && <Trophy className="ml-2 h-4 w-4" />}
+                      </UnifiedButton>
+                    </div>
                     
-                    <GameText
-                      variant="body"
-                      color="muted"
-                      className="mb-4 flex-grow"
-                    >
-                      {feature.description}
-                    </GameText>
-                    
-                    <UnifiedButton 
-                      onClick={feature.action}
-                      variant={feature.buttonVariant}
-                      size="lg"
-                      className="w-full mt-auto"
-                    >
-                      {feature.buttonText}
-                    </UnifiedButton>
-                  </div>
-                </GameCard>
+                    {/* Effet de brillance */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -skew-x-12 animate-shimmer"></div>
+                  </GameCard>
+                </motion.div>
               );
             })}
           </div>
 
-          {/* Footer avec liens SEO */}
+          {/* Footer avec style de badge */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.5 }}
-            className="text-center space-y-3"
+            transition={{ duration: 0.5, delay: 0.8 }}
+            className="text-center space-y-4"
           >
             <div className="flex flex-wrap justify-center gap-4 mb-4">
               <button 
                 onClick={() => navigate('/about')}
-                className="text-gray-500 hover:text-game-blue transition-colors"
+                className="px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-semantic-on-surface-muted hover:text-semantic-primary hover:bg-white/20 transition-all font-medium tracking-wide"
               >
                 À propos
               </button>
-              <span className="text-gray-400">•</span>
               <button 
                 onClick={() => navigate('/privacy')}
-                className="text-gray-500 hover:text-game-blue transition-colors"
+                className="px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-semantic-on-surface-muted hover:text-semantic-primary hover:bg-white/20 transition-all font-medium tracking-wide"
               >
                 Confidentialité
               </button>
-              <span className="text-gray-400">•</span>
               <button 
                 onClick={() => navigate('/terms')}
-                className="text-gray-500 hover:text-game-blue transition-colors"
+                className="px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-semantic-on-surface-muted hover:text-semantic-primary hover:bg-white/20 transition-all font-medium tracking-wide"
               >
                 Conditions
               </button>
             </div>
-            <GameText variant="small" color="light">
-              © {new Date().getFullYear()} Dutch Card Game
+            
+            <GameText 
+              variant="caption" 
+              color="light"
+              align="center"
+              className="font-medium"
+            >
+              © {new Date().getFullYear()} Dutch Card Game - Prêt pour l'aventure !
             </GameText>
           </motion.div>
         </div>
