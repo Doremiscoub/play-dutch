@@ -210,7 +210,7 @@ const SEOContentSection: React.FC = () => {
                   size="lg"
                   className="bg-gradient-to-r from-dutch-blue to-dutch-purple hover:scale-105 transition-transform text-lg px-8 py-4"
                 >
-                  <Play className="mr-2 h-5 w-5" />
+                  <Users className="mr-2 h-5 w-5" />
                   Commencer maintenant
                 </Button>
                 
