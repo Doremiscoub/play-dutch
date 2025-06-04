@@ -55,11 +55,11 @@ const GameSetupGlassmorphic: React.FC<GameSetupGlassmorphicProps> = ({ onStartGa
           <GameCard variant="glass" className="p-8">
             {/* Header */}
             <div className="text-center mb-8">
-              <GameHeader color="gameGradient" effect="shadow" className="mb-4">
+              <GameHeader gameColor="gameGradient" effect="shadow" className="mb-4">
                 <Users className="inline mr-3 h-10 w-10" />
                 CRÉER UNE PARTIE
               </GameHeader>
-              <GameText variant="adventure" color="primary" className="text-lg">
+              <GameText variant="adventure" gameColor="primary" className="text-lg">
                 Configurez votre partie de Dutch
               </GameText>
             </div>
@@ -81,7 +81,7 @@ const GameSetupGlassmorphic: React.FC<GameSetupGlassmorphicProps> = ({ onStartGa
                   </GameButton>
                   
                   <GameCard variant="unoCard" className="px-6 py-3">
-                    <GameText variant="scoreDisplay" color="white" className="text-4xl">
+                    <GameText variant="scoreDisplay" gameColor="white" className="text-4xl">
                       {scoreLimit}
                     </GameText>
                   </GameCard>
@@ -131,7 +131,7 @@ const GameSetupGlassmorphic: React.FC<GameSetupGlassmorphicProps> = ({ onStartGa
                         <div className="flex items-center gap-3">
                           <div className="flex-shrink-0">
                             <GameCard variant="unoCard" className="w-12 h-12 flex items-center justify-center">
-                              <ActionText color="white">
+                              <ActionText gameColor="white">
                                 {index + 1}
                               </ActionText>
                             </GameCard>
@@ -180,7 +180,7 @@ const GameSetupGlassmorphic: React.FC<GameSetupGlassmorphicProps> = ({ onStartGa
               </GameButton>
               
               {!canStartGame && (
-                <GameText variant="caption" color="default" className="mt-3 opacity-70">
+                <GameText variant="caption" gameColor="default" className="mt-3 opacity-70">
                   Ajoutez au moins 2 joueurs pour commencer
                 </GameText>
               )}
