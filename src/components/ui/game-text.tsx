@@ -49,7 +49,7 @@ const gameTextVariants = cva(
 );
 
 export interface GameTextProps
-  extends React.HTMLAttributes<HTMLElement>,
+  extends Omit<React.HTMLAttributes<HTMLElement>, 'color'>,
   VariantProps<typeof gameTextVariants> {
   as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span' | 'div';
 }
