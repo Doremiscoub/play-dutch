@@ -64,33 +64,19 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// Couleurs Dutch basées sur notre configuration de thème
-				dutch: {
-					blue: COLORS.blue.DEFAULT,
-					'blue-light': COLORS.blue.light,
-					'blue-dark': COLORS.blue.dark, 
-					orange: COLORS.orange.DEFAULT,
-					'orange-light': COLORS.orange.light,
-					'orange-dark': COLORS.orange.dark,
-					purple: COLORS.purple.DEFAULT,
-					'purple-light': COLORS.purple.light,
-					'purple-dark': COLORS.purple.dark,
-					pink: COLORS.pink,
-					red: COLORS.red,
-					green: COLORS.green,
-					yellow: COLORS.yellow,
+				// Unified game-inspired color system
+				game: {
+					primary: COLORS.blue.DEFAULT,    // Main blue
+					secondary: COLORS.purple.DEFAULT, // Purple accent  
+					accent: COLORS.orange.DEFAULT,   // Orange highlights
+					red: '#E31C25',                  // UNO Red
+					blue: '#0066CC',                 // UNO Blue  
+					green: '#28AA3D',                // UNO Green
+					yellow: '#FEDF00',               // UNO Yellow
+					purple: '#9C27B0',               // Pokémon Psychic
+					orange: '#F57D31',               // Pokémon Fire
 					background: COLORS.gray[50],
 					card: COLORS.white,
-					primary: COLORS.blue.DEFAULT,
-				},
-				// Game-inspired colors
-				game: {
-					red: '#E31C25',      // UNO Red
-					blue: '#0066CC',     // UNO Blue  
-					green: '#28AA3D',    // UNO Green
-					yellow: '#FEDF00',   // UNO Yellow
-					purple: '#9C27B0',   // Pokémon Psychic
-					orange: '#F57D31',   // Pokémon Fire
 				}
 			},
 			borderRadius: {
@@ -111,11 +97,10 @@ export default {
 				'game-inset': 'inset 0 2px 0 rgba(255, 255, 255, 0.3)',
 			},
 			fontFamily: {
-				// Keep existing
+				// Keep system fonts
 				sans: ['SF Pro Text', 'SF Pro Display', 'system-ui', 'sans-serif'],
 				mono: TYPOGRAPHY.fontFamily.mono,
-				apple: ['-apple-system', 'BlinkMacSystemFont', 'SF Pro Text', 'SF Pro Display', 'system-ui', 'sans-serif'],
-				// Game-inspired fonts
+				// Game-inspired fonts from our typography system
 				game: GAME_TYPOGRAPHY.fontFamily.game,
 				action: GAME_TYPOGRAPHY.fontFamily.action,
 				score: GAME_TYPOGRAPHY.fontFamily.score,
@@ -141,66 +126,21 @@ export default {
 					to: { height: '0' }
 				},
 				'fade-in': {
-					'0%': {
-						opacity: '0',
-						transform: 'translateY(10px)'
-					},
-					'100%': {
-						opacity: '1',
-						transform: 'translateY(0)'
-					}
+					'0%': { opacity: '0', transform: 'translateY(10px)' },
+					'100%': { opacity: '1', transform: 'translateY(0)' }
 				},
 				'pulse-soft': {
-					'0%, 100%': {
-						opacity: '1',
-					},
-					'50%': {
-						opacity: '0.8',
-					},
+					'0%, 100%': { opacity: '1' },
+					'50%': { opacity: '0.8' },
 				},
 				'scale': {
-					'0%': {
-						transform: 'scale(0.95)',
-					},
-					'100%': {
-						transform: 'scale(1)',
-					},
+					'0%': { transform: 'scale(0.95)' },
+					'100%': { transform: 'scale(1)' },
 				},
 				'float': {
-					'0%, 100%': {
-						transform: 'translateY(0)',
-					},
-					'50%': {
-						transform: 'translateY(-10px)',
-					},
+					'0%, 100%': { transform: 'translateY(0)' },
+					'50%': { transform: 'translateY(-10px)' },
 				},
-				'ios-bounce': {
-					'0%, 100%': {
-						transform: 'translateY(0)',
-					},
-					'50%': {
-						transform: 'translateY(-5px)',
-					},
-				},
-				'ios-pop': {
-					'0%': {
-						transform: 'scale(0.95)',
-						opacity: '0.7',
-					},
-					'70%': {
-						transform: 'scale(1.05)',
-						opacity: '1',
-					},
-					'100%': {
-						transform: 'scale(1)',
-						opacity: '1',
-					},
-				},
-				'shimmer': {
-					'0%': { backgroundPosition: '-200% 0' },
-					'100%': { backgroundPosition: '200% 0' },
-				},
-				// Game-inspired animations
 				'game-bounce': {
 					'0%, 100%': { transform: 'translateY(0)' },
 					'50%': { transform: 'translateY(-8px)' }
@@ -209,6 +149,10 @@ export default {
 					'0%': { transform: 'rotateY(0deg)' },
 					'50%': { transform: 'rotateY(90deg)' },
 					'100%': { transform: 'rotateY(0deg)' }
+				},
+				'shimmer': {
+					'0%': { backgroundPosition: '-200% 0' },
+					'100%': { backgroundPosition: '200% 0' },
 				}
 			},
 			animation: {
@@ -218,11 +162,9 @@ export default {
 				'pulse-soft': 'pulse-soft 2s infinite ease-in-out',
 				'scale': 'scale 0.2s ease-out',
 				'float': 'float 6s infinite ease-in-out',
-				'ios-bounce': 'ios-bounce 2s infinite ease-in-out',
-				'ios-pop': 'ios-pop 0.3s ease-out',
-				'shimmer': 'shimmer 3s infinite linear',
 				'game-bounce': 'game-bounce 1s infinite ease-in-out',
 				'card-flip': 'card-flip 0.6s ease-in-out',
+				'shimmer': 'shimmer 3s infinite linear',
 			},
 			backdropBlur: {
 				xs: '2px',

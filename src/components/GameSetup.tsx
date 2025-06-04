@@ -2,9 +2,10 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import GameSetupGlassmorphic from './GameSetupGlassmorphic';
-import { motion } from 'framer-motion';
+import { GameButton } from '@/components/ui/game-button';
+import { GameHeader, GameText } from '@/components/ui/game-typography';
+import { UnifiedPageLayout } from '@/components/ui/unified-page-layout';
+import UnifiedGameSetup from './game-setup/UnifiedGameSetup';
 
 const GameSetup: React.FC = () => {
   const navigate = useNavigate();
@@ -15,37 +16,36 @@ const GameSetup: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen relative">
+    <UnifiedPageLayout
+      backgroundVariant="default"
+      withAnimation={true}
+      className="min-h-screen"
+    >
       {/* Header with Back button */}
       <div className="absolute top-4 left-4 z-50">
-        <Button
-          onClick={() => navigate('/')}
-          variant="glass"
+        <GameButton
+          variant="ghost"
           size="icon"
-          className="bg-white/70 backdrop-blur-xl border border-white/50 text-gray-800 hover:bg-white/80 rounded-full shadow-sm"
+          onClick={() => navigate('/')}
           aria-label="Retour à l'accueil"
         >
           <ArrowLeft className="h-5 w-5" />
-        </Button>
+        </GameButton>
       </div>
 
       {/* Main content */}
-      <div className="pt-20">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-8"
-        >
-          <h1 
-            className="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange mb-4"
-            style={{ fontFamily: "'Space Grotesk', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif" }}
-          >
-            Créer une partie
-          </h1>
+      <div className="container mx-auto px-4 py-8 pt-20 max-w-4xl">
+        <div className="text-center mb-8">
+          <GameHeader gameColor="gameGradient" effect="shadow" className="mb-4">
+            CRÉER UNE PARTIE
+          </GameHeader>
+          
+          <GameText variant="adventure" gameColor="primary" className="text-lg mb-6">
+            Configurez votre partie de Dutch
+          </GameText>
           
           {/* Feature badges */}
-          <div className="flex justify-center gap-3 flex-wrap mb-8">
+          <div className="flex justify-center gap-3 flex-wrap">
             <div className="px-3 py-1 rounded-full text-xs font-semibold bg-green-100/80 text-green-800 border border-green-200 backdrop-blur-xl">
               ✅ 100% Gratuit
             </div>
@@ -56,11 +56,11 @@ const GameSetup: React.FC = () => {
               🤖 IA Commentateur
             </div>
           </div>
-        </motion.div>
+        </div>
 
-        <GameSetupGlassmorphic onStartGame={handleStartGame} />
+        <UnifiedGameSetup onStartGame={handleStartGame} />
       </div>
-    </div>
+    </UnifiedPageLayout>
   );
 };
 
