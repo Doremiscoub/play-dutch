@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Settings, Plus } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { GameButton } from '@/components/ui/game-button';
 import useGameState from '@/hooks/useGameState';
 import ScoreBoardWithAds from '@/components/scoreboard/ScoreBoardWithAds';
 import GameOverScreen from '@/components/GameOverScreen';
@@ -91,27 +91,36 @@ const GamePage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen relative">
+    <div className="min-h-screen relative bg-gradient-to-br from-gray-50/80 via-white/90 to-gray-100/80">
+      {/* Game-inspired background pattern */}
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute top-10 left-10 w-4 h-4 bg-game-red rounded-full animate-float" />
+        <div className="absolute top-20 right-20 w-6 h-6 bg-game-blue rounded-full animate-float" style={{ animationDelay: '1s' }} />
+        <div className="absolute bottom-20 left-20 w-5 h-5 bg-game-green rounded-full animate-float" style={{ animationDelay: '2s' }} />
+        <div className="absolute bottom-10 right-10 w-4 h-4 bg-game-yellow rounded-full animate-float" style={{ animationDelay: '3s' }} />
+        <div className="absolute top-1/2 left-1/4 w-3 h-3 bg-game-purple rounded-full animate-float" style={{ animationDelay: '4s' }} />
+        <div className="absolute top-1/3 right-1/3 w-4 h-4 bg-game-orange rounded-full animate-float" style={{ animationDelay: '5s' }} />
+      </div>
+
       {/* Header with Back and Settings buttons */}
       <div className="absolute top-4 left-4 right-4 z-50 flex justify-between">
-        <Button
+        <GameButton
           onClick={() => navigate('/game/setup')}
-          variant="glass"
+          variant="ghost"
           size="icon"
-          className="bg-white/70 backdrop-blur-xl border border-white/50 text-gray-800 hover:bg-white/80 rounded-full shadow-sm"
           aria-label="Retour"
         >
           <ArrowLeft className="h-5 w-5" />
-        </Button>
+        </GameButton>
         
-        <Button
-          variant="glass"
+        <GameButton
+          variant="ghost"
           size="icon"
-          className="bg-white/70 backdrop-blur-xl border border-white/50 text-gray-800 hover:bg-white/80 rounded-full shadow-sm"
+          onClick={() => navigate('/settings')}
           aria-label="Paramètres"
         >
           <Settings className="h-5 w-5" />
-        </Button>
+        </GameButton>
       </div>
 
       {/* Floating "New Round" button */}
@@ -120,53 +129,56 @@ const GamePage: React.FC = () => {
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
       >
-        <Button
+        <GameButton
           onClick={openScoreForm}
-          className="w-14 h-14 bg-gradient-to-r from-dutch-purple to-dutch-blue text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
+          variant="uno"
+          size="icon-lg"
           aria-label="Nouvelle manche"
         >
           <Plus className="h-6 w-6" />
-        </Button>
+        </GameButton>
       </motion.div>
 
-      <AnimatePresence mode="wait">
-        {showGameOver ? (
-          <motion.div
-            key="game-over"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <GameOverScreen
-              players={players}
-              onRestart={handleRestart}
-              onContinueGame={handleContinueGame}
-              currentScoreLimit={scoreLimit}
-            />
-          </motion.div>
-        ) : (
-          <motion.div
-            key="game-board"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="pt-20"
-          >
-            <ScoreBoardWithAds
-              players={players}
-              roundHistory={roundHistory}
-              onAddRound={handleAddNewRound}
-              onUndoLastRound={handleUndoLastRound}
-              onEndGame={handleRequestEndGame}
-              showGameEndConfirmation={showGameEndConfirmation}
-              onConfirmEndGame={handleConfirmEndGame}
-              onCancelEndGame={handleCancelEndGame}
-              scoreLimit={scoreLimit}
-              openScoreForm={openScoreForm}
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <div className="relative z-10">
+        <AnimatePresence mode="wait">
+          {showGameOver ? (
+            <motion.div
+              key="game-over"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <GameOverScreen
+                players={players}
+                onRestart={handleRestart}
+                onContinueGame={handleContinueGame}
+                currentScoreLimit={scoreLimit}
+              />
+            </motion.div>
+          ) : (
+            <motion.div
+              key="game-board"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="pt-20"
+            >
+              <ScoreBoardWithAds
+                players={players}
+                roundHistory={roundHistory}
+                onAddRound={handleAddNewRound}
+                onUndoLastRound={handleUndoLastRound}
+                onEndGame={handleRequestEndGame}
+                showGameEndConfirmation={showGameEndConfirmation}
+                onConfirmEndGame={handleConfirmEndGame}
+                onCancelEndGame={handleCancelEndGame}
+                scoreLimit={scoreLimit}
+                openScoreForm={openScoreForm}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
 
       <NewRoundScoreForm
         players={players}

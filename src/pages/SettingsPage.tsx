@@ -1,9 +1,11 @@
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { ModernTitle } from '@/components/ui/modern-title';
+import { ArrowLeft, Settings } from 'lucide-react';
+import { GameButton } from '@/components/ui/game-button';
+import { GameCard } from '@/components/ui/game-card';
+import { GameHeader } from '@/components/ui/game-typography';
+import { UnifiedPageLayout } from '@/components/ui/unified-page-layout';
 import GameSettings from '@/components/GameSettings';
 
 const SettingsPage: React.FC = () => {
@@ -24,28 +26,34 @@ const SettingsPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
+    <UnifiedPageLayout
+      backgroundVariant="default"
+      withAnimation={true}
+      className="min-h-screen"
+    >
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         {/* Header */}
         <div className="flex items-center gap-4 mb-8">
-          <Button
-            variant="outline"
+          <GameButton
+            variant="ghost"
             size="icon"
             onClick={handleBack}
-            className="bg-white/70 backdrop-blur-xl border border-white/50"
           >
             <ArrowLeft className="h-4 w-4" />
-          </Button>
+          </GameButton>
           
-          <ModernTitle variant="h1" className="text-3xl md:text-4xl">
-            Paramètres
-          </ModernTitle>
+          <GameHeader gameColor="gameGradient" effect="shadow">
+            <Settings className="inline mr-3 h-8 w-8" />
+            PARAMÈTRES
+          </GameHeader>
         </div>
 
         {/* Settings Content */}
-        <GameSettings />
+        <GameCard variant="glass" className="p-8">
+          <GameSettings />
+        </GameCard>
       </div>
-    </div>
+    </UnifiedPageLayout>
   );
 };
 
