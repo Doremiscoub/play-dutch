@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Player, ScoreBoardProps } from '@/types';
@@ -8,7 +9,7 @@ import EnhancedScoreBoardHeader from './scoreboard/EnhancedScoreBoardHeader';
 import FunPlayerCard from './scoreboard/FunPlayerCard';
 import EndGameConfirmationDialog from './scoreboard/EndGameConfirmationDialog';
 import DetailedGameStats from './scoreboard/DetailedGameStats';
-import AICommentatorEnhanced from './AICommentatorEnhanced';
+import AICommentatorEnhanced from './ai-commentator/AICommentatorEnhanced';
 import FloatingActionButtons from './scoreboard/FloatingActionButtons';
 
 const ScoreBoard: React.FC<ScoreBoardProps> = ({

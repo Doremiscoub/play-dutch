@@ -1,4 +1,6 @@
 
+import { Player } from '@/types';
+
 export interface AICommentatorEnhancedProps {
   players: Player[];
   roundCount: number;
