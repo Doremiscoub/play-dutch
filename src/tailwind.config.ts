@@ -1,6 +1,7 @@
+
 import type { Config } from "tailwindcss";
-import { COLORS, TYPOGRAPHY, BORDERS, SHADOWS, ANIMATIONS } from "./src/config/theme";
-import { SEMANTIC_COLORS, GAME_COLORS } from "./src/config/theme/semantic-colors";
+import { COLORS, TYPOGRAPHY, BORDERS, SHADOWS, ANIMATIONS } from "./config/theme";
+import { SEMANTIC_COLORS, GAME_COLORS } from "./config/theme/semantic-colors";
 
 export default {
 	darkMode: ["class"],
