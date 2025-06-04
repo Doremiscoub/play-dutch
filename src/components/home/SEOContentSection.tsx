@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { motion } from 'framer-motion';
+import { Enhanced3DFeatureCard } from '@/components/home/Enhanced3DFeatureCard';
 import SEOFooter from '@/components/SEOFooter';
 
 const SEOContentSection: React.FC = () => {
@@ -13,22 +14,22 @@ const SEOContentSection: React.FC = () => {
 
   const features = [
     {
-      icon: <Zap className="h-6 w-6" />,
+      icon: <Zap className="h-8 w-8" />,
       title: "Facile à utiliser",
       description: "Interface intuitive pour ajouter les scores en quelques clics"
     },
     {
-      icon: <Users className="h-6 w-6" />,
+      icon: <Users className="h-8 w-8" />,
       title: "2 à 10 joueurs",
       description: "Parfait pour les petites et grandes tablées entre amis"
     },
     {
-      icon: <Heart className="h-6 w-6" />,
+      icon: <Heart className="h-8 w-8" />,
       title: "100% Gratuit",
       description: "Aucun abonnement, aucune publicité intrusive, juste du plaisir"
     },
     {
-      icon: <Sparkles className="h-6 w-6" />,
+      icon: <Sparkles className="h-8 w-8" />,
       title: "IA Commentateur",
       description: "Professeur Cartouche commente vos parties avec humour"
     }
@@ -98,7 +99,7 @@ const SEOContentSection: React.FC = () => {
           </div>
         </motion.section>
 
-        {/* Features Grid */}
+        {/* Enhanced Features Grid with 3D Cards */}
         <motion.section 
           className="mb-16"
           initial={{ opacity: 0, y: 30 }}
@@ -106,34 +107,24 @@ const SEOContentSection: React.FC = () => {
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-3xl font-bold text-center mb-12 text-gray-800">
+          <h2 className="text-4xl font-bold text-center mb-12 text-gray-800" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
             Pourquoi choisir Dutch Card Game ?
           </h2>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {features.map((feature, index) => (
-              <motion.div
+              <Enhanced3DFeatureCard
                 key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.1 * index }}
-                viewport={{ once: true }}
-              >
-                <Card className="h-full bg-white/70 backdrop-blur-xl border border-white/50 hover:shadow-lg transition-shadow">
-                  <CardContent className="p-6 text-center">
-                    <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-gradient-to-r from-dutch-blue to-dutch-purple flex items-center justify-center text-white">
-                      {feature.icon}
-                    </div>
-                    <h3 className="font-semibold mb-2 text-gray-800">{feature.title}</h3>
-                    <p className="text-gray-600 text-sm">{feature.description}</p>
-                  </CardContent>
-                </Card>
-              </motion.div>
+                icon={feature.icon}
+                title={feature.title}
+                description={feature.description}
+                delay={0.1 * index}
+              />
             ))}
           </div>
         </motion.section>
 
-        {/* Comment jouer section */}
+        {/* Comment jouer section - Enhanced */}
         <motion.section 
           className="mb-16"
           initial={{ opacity: 0 }}
@@ -141,36 +132,49 @@ const SEOContentSection: React.FC = () => {
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          <Card className="bg-white/70 backdrop-blur-xl border border-white/50">
+          <Card className="bg-white/70 backdrop-blur-xl border border-white/50 shadow-xl">
             <CardContent className="p-8">
-              <h2 className="text-3xl font-bold text-center mb-8 text-gray-800">
+              <h2 className="text-4xl font-bold text-center mb-8 text-gray-800" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                 Comment jouer au Dutch ?
               </h2>
               
               <div className="grid md:grid-cols-3 gap-8 text-center">
-                <div>
-                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-dutch-blue flex items-center justify-center text-white font-bold text-2xl">
-                    1
-                  </div>
-                  <h3 className="font-semibold mb-2">Distribution</h3>
-                  <p className="text-gray-600">Chaque joueur reçoit des cartes selon le nombre de participants</p>
-                </div>
-                
-                <div>
-                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-dutch-purple flex items-center justify-center text-white font-bold text-2xl">
-                    2
-                  </div>
-                  <h3 className="font-semibold mb-2">Objectif</h3>
-                  <p className="text-gray-600">Faire le moins de points possible en évitant les cartes de cœur</p>
-                </div>
-                
-                <div>
-                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-dutch-orange flex items-center justify-center text-white font-bold text-2xl">
-                    3
-                  </div>
-                  <h3 className="font-semibold mb-2">Victoire</h3>
-                  <p className="text-gray-600">Le joueur avec le moins de points gagne quand la limite est atteinte</p>
-                </div>
+                {[
+                  {
+                    step: "1",
+                    title: "Distribution",
+                    description: "Chaque joueur reçoit des cartes selon le nombre de participants",
+                    color: "bg-dutch-blue"
+                  },
+                  {
+                    step: "2", 
+                    title: "Objectif",
+                    description: "Faire le moins de points possible en évitant les cartes de cœur",
+                    color: "bg-dutch-purple"
+                  },
+                  {
+                    step: "3",
+                    title: "Victoire", 
+                    description: "Le joueur avec le moins de points gagne quand la limite est atteinte",
+                    color: "bg-dutch-orange"
+                  }
+                ].map((item, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, delay: 0.2 * index }}
+                    viewport={{ once: true }}
+                    whileHover={{ scale: 1.05, y: -5 }}
+                    className="group"
+                  >
+                    <div className={`w-20 h-20 mx-auto mb-4 rounded-2xl ${item.color} flex items-center justify-center text-white font-bold text-3xl shadow-lg group-hover:shadow-xl transition-all duration-300`}>
+                      {item.step}
+                    </div>
+                    <h3 className="font-semibold mb-2 text-xl">{item.title}</h3>
+                    <p className="text-gray-600">{item.description}</p>
+                  </motion.div>
+                ))}
               </div>
               
               <div className="text-center mt-8">
@@ -178,6 +182,7 @@ const SEOContentSection: React.FC = () => {
                   onClick={() => navigate('/rules')}
                   variant="outline"
                   size="lg"
+                  className="hover:scale-105 transition-transform"
                 >
                   <BookOpen className="mr-2 h-4 w-4" />
                   Règles complètes
@@ -187,7 +192,7 @@ const SEOContentSection: React.FC = () => {
           </Card>
         </motion.section>
 
-        {/* Testimonials */}
+        {/* Enhanced Testimonials */}
         <motion.section 
           className="mb-16"
           initial={{ opacity: 0 }}
@@ -195,28 +200,37 @@ const SEOContentSection: React.FC = () => {
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-3xl font-bold text-center mb-12 text-gray-800">
+          <h2 className="text-4xl font-bold text-center mb-12 text-gray-800" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
             Ce que disent nos joueurs
           </h2>
           
           <div className="grid md:grid-cols-3 gap-6">
             {testimonials.map((testimonial, index) => (
-              <Card key={index} className="bg-white/70 backdrop-blur-xl border border-white/50">
-                <CardContent className="p-6">
-                  <div className="flex mb-3">
-                    {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                    ))}
-                  </div>
-                  <p className="text-gray-700 mb-4 italic">"{testimonial.comment}"</p>
-                  <p className="font-semibold text-gray-800">— {testimonial.name}</p>
-                </CardContent>
-              </Card>
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.1 * index }}
+                viewport={{ once: true }}
+                whileHover={{ scale: 1.02, y: -5 }}
+              >
+                <Card className="bg-white/70 backdrop-blur-xl border border-white/50 h-full shadow-lg hover:shadow-xl transition-all duration-300">
+                  <CardContent className="p-6">
+                    <div className="flex mb-3">
+                      {[...Array(testimonial.rating)].map((_, i) => (
+                        <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                      ))}
+                    </div>
+                    <p className="text-gray-700 mb-4 italic">"{testimonial.comment}"</p>
+                    <p className="font-semibold text-gray-800">— {testimonial.name}</p>
+                  </CardContent>
+                </Card>
+              </motion.div>
             ))}
           </div>
         </motion.section>
 
-        {/* CTA Final */}
+        {/* Enhanced CTA Final */}
         <motion.section 
           className="text-center mb-16"
           initial={{ opacity: 0, y: 20 }}
@@ -224,9 +238,9 @@ const SEOContentSection: React.FC = () => {
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          <Card className="bg-gradient-to-r from-dutch-blue/10 to-dutch-purple/10 border border-white/50">
+          <Card className="bg-gradient-to-r from-dutch-blue/10 to-dutch-purple/10 border border-white/50 shadow-xl">
             <CardContent className="p-8">
-              <h2 className="text-3xl font-bold mb-4 text-gray-800">
+              <h2 className="text-4xl font-bold mb-4 text-gray-800" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                 Prêt pour votre première partie ?
               </h2>
               <p className="text-xl text-gray-600 mb-8">
@@ -247,7 +261,7 @@ const SEOContentSection: React.FC = () => {
                   onClick={() => navigate('/history')}
                   variant="outline"
                   size="lg"
-                  className="text-lg px-8 py-4"
+                  className="text-lg px-8 py-4 hover:scale-105 transition-transform"
                 >
                   <Trophy className="mr-2 h-5 w-5" />
                   Voir l'historique
