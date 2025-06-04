@@ -52,7 +52,7 @@ const HomePage: React.FC = () => {
         >
           <GameCard variant="glass" className="p-8 mb-8">
             <GameHero 
-              color="gameGradient" 
+              gameColor="gameGradient" 
               effect="shadow"
               className="mb-6 animate-game-bounce"
             >
@@ -61,7 +61,7 @@ const HomePage: React.FC = () => {
             
             <GameText 
               variant="adventure" 
-              color="primary"
+              gameColor="primary"
               className="mb-8"
             >
               Le compteur de score ultime pour vos parties entre amis !
@@ -115,17 +115,17 @@ const HomePage: React.FC = () => {
               transition={{ duration: 0.6, delay: 0.5 }}
             >
               <GameCard variant="score" className="px-4 py-2">
-                <GameText variant="caption" color="accent">
+                <GameText variant="caption" gameColor="accent">
                   ✅ 100% Gratuit
                 </GameText>
               </GameCard>
               <GameCard variant="score" className="px-4 py-2">
-                <GameText variant="caption" color="primary">
+                <GameText variant="caption" gameColor="primary">
                   📱 Fonctionne hors-ligne
                 </GameText>
               </GameCard>
               <GameCard variant="score" className="px-4 py-2">
-                <GameText variant="caption" color="secondary">
+                <GameText variant="caption" gameColor="secondary">
                   🤖 IA Commentateur
                 </GameText>
               </GameCard>
@@ -149,7 +149,7 @@ const HomePage: React.FC = () => {
               <GameText variant="cardTitle" className="mb-2">
                 Historique
               </GameText>
-              <GameText variant="body" color="default">
+              <GameText variant="body" gameColor="default">
                 Consultez vos parties précédentes et statistiques
               </GameText>
             </GameCard>
@@ -161,14 +161,14 @@ const HomePage: React.FC = () => {
               className="p-6 text-center"
             >
               <div className="h-12 w-12 mx-auto mb-4 bg-dutch-blue rounded-full flex items-center justify-center">
-                <GameText variant="scoreDisplay" color="white" className="text-2xl">
+                <GameText variant="scoreDisplay" gameColor="white" className="text-2xl">
                   ?
                 </GameText>
               </div>
               <GameText variant="cardTitle" className="mb-2">
                 Règles
               </GameText>
-              <GameText variant="body" color="default">
+              <GameText variant="body" gameColor="default">
                 Apprenez les règles du Dutch en quelques minutes
               </GameText>
             </GameCard>
@@ -183,7 +183,7 @@ const HomePage: React.FC = () => {
               <GameText variant="cardTitle" className="mb-2">
                 Paramètres
               </GameText>
-              <GameText variant="body" color="default">
+              <GameText variant="body" gameColor="default">
                 Personnalisez votre expérience de jeu
               </GameText>
             </GameCard>

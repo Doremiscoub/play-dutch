@@ -24,7 +24,7 @@ const gameTextVariants = cva(
         glow: "drop-shadow-[0_0_8px_currentColor]",
         emboss: "text-shadow-[1px_1px_0_rgba(255,255,255,0.5),-1px_-1px_0_rgba(0,0,0,0.3)]"
       },
-      color: {
+      gameColor: {
         default: "text-gray-800",
         white: "text-white",
         primary: "text-dutch-blue",
@@ -37,13 +37,13 @@ const gameTextVariants = cva(
     defaultVariants: {
       variant: "body",
       effect: "none",
-      color: "default"
+      gameColor: "default"
     }
   }
 );
 
 export interface GameTextProps
-  extends React.HTMLAttributes<HTMLElement>,
+  extends Omit<React.HTMLAttributes<HTMLElement>, 'color'>,
   VariantProps<typeof gameTextVariants> {
   as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span' | 'div';
   children: React.ReactNode;
@@ -53,14 +53,14 @@ export const GameText: React.FC<GameTextProps> = ({
   className,
   variant,
   effect,
-  color,
+  gameColor,
   as: Component = 'p',
   children,
   ...props
 }) => {
   return (
     <Component
-      className={cn(gameTextVariants({ variant, effect, color, className }))}
+      className={cn(gameTextVariants({ variant, effect, gameColor, className }))}
       {...props}
     >
       {children}
