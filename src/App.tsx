@@ -18,6 +18,9 @@ import Rules from './pages/Rules';
 import SettingsPage from './pages/SettingsPage';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
+import AboutPage from './pages/AboutPage';
+import PrivacyPage from './pages/PrivacyPage';
+import TermsPage from './pages/TermsPage';
 
 // Composants
 import ProtectedRoute from './components/ProtectedRoute';
@@ -78,6 +81,11 @@ const App: React.FC = () => {
               <SettingsPage />
             </ProtectedRoute>
           } />
+          
+          {/* Pages SEO / Légales */}
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/privacy" element={<PrivacyPage />} />
+          <Route path="/terms" element={<TermsPage />} />
           
           {/* Redirection pour les routes non définies */}
           <Route path="*" element={<Navigate to="/" replace />} />
