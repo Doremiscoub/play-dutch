@@ -18,13 +18,7 @@ export default function CommentBubble({ displayedText, isTyping, style }: Commen
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: 0.4, duration: 0.5 }}
     >
-      {/* Organic Speech Bubble Pointer */}
-      <div className="absolute -left-6 top-8 w-0 h-0">
-        <div className="border-t-[20px] border-t-transparent border-b-[20px] border-b-transparent border-r-[24px] border-r-white/90" />
-        <div className="absolute -top-[18px] -right-[22px] border-t-[16px] border-t-transparent border-b-[16px] border-b-transparent border-r-[20px] border-r-white/60" />
-      </div>
-      
-      {/* Modern Glass Speech Bubble */}
+      {/* Modern Glass Speech Bubble - sans le pointer triangulaire */}
       <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/60 relative overflow-hidden">
         
         {/* Shimmer Effect */}
