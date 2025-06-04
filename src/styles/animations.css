@@ -152,7 +152,7 @@
   background-clip: text;
   color: transparent;
   text-shadow: 0 1.2px 1.2px rgba(0,0,0,0.3);
-  animation: shimmer 3s linear infinite;
+  animation: shimmer 3s ease-in-out infinite;
 }
 
 .modern-title::before {
@@ -174,7 +174,7 @@
   animation: shimmer 3s ease-in-out infinite;
 }
 
-/* Gradient button animations - CRITICAL FIX */
+/* Gradient button animations - FIXED */
 .animate-gradient {
   background-size: 200% auto;
   animation: gradientShift 3s ease infinite;
@@ -210,33 +210,6 @@
 .gradient-button-orange:hover {
   background-position: right center;
   box-shadow: 0 0 15px rgba(234, 88, 12, 0.5);
-}
-
-.badge-rank {
-  position: relative;
-  overflow: hidden;
-  transition: all 0.3s ease;
-}
-
-.badge-rank::after {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(
-    transparent,
-    rgba(255, 255, 255, 0.3),
-    transparent
-  );
-  transform: rotate(30deg);
-  animation: shimmer 3s infinite linear;
-}
-
-.badge-rank:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
 }
 
 /* CSS Variables for Dutch colors */

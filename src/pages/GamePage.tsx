@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowLeft, Settings, Plus } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import useGameState from '@/hooks/useGameState';
 import ScoreBoardWithAds from '@/components/scoreboard/ScoreBoardWithAds';
 import GameOverScreen from '@/components/GameOverScreen';
@@ -34,7 +36,6 @@ const GamePage: React.FC = () => {
   useEffect(() => {
     const initializeGame = async () => {
       try {
-        // Check if we're returning to the game
         const shouldReturnToGame = localStorage.getItem('dutch_return_to_game');
         if (shouldReturnToGame) {
           localStorage.removeItem('dutch_return_to_game');
@@ -90,7 +91,44 @@ const GamePage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen relative">
+      {/* Header with Back and Settings buttons */}
+      <div className="absolute top-4 left-4 right-4 z-50 flex justify-between">
+        <Button
+          onClick={() => navigate('/game/setup')}
+          variant="glass"
+          size="icon"
+          className="bg-white/70 backdrop-blur-xl border border-white/50 text-gray-800 hover:bg-white/80 rounded-full shadow-sm"
+          aria-label="Retour"
+        >
+          <ArrowLeft className="h-5 w-5" />
+        </Button>
+        
+        <Button
+          variant="glass"
+          size="icon"
+          className="bg-white/70 backdrop-blur-xl border border-white/50 text-gray-800 hover:bg-white/80 rounded-full shadow-sm"
+          aria-label="Paramètres"
+        >
+          <Settings className="h-5 w-5" />
+        </Button>
+      </div>
+
+      {/* Floating "New Round" button */}
+      <motion.div
+        className="fixed bottom-8 right-8 z-50"
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.95 }}
+      >
+        <Button
+          onClick={openScoreForm}
+          className="w-14 h-14 bg-gradient-to-r from-dutch-purple to-dutch-blue text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
+          aria-label="Nouvelle manche"
+        >
+          <Plus className="h-6 w-6" />
+        </Button>
+      </motion.div>
+
       <AnimatePresence mode="wait">
         {showGameOver ? (
           <motion.div
@@ -112,6 +150,7 @@ const GamePage: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            className="pt-20"
           >
             <ScoreBoardWithAds
               players={players}

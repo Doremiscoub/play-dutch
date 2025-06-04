@@ -1,7 +1,7 @@
 
 import React, { Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, Gamepad2, ChevronDown, Users, Star } from 'lucide-react';
+import { ArrowRight, Gamepad2, ChevronDown, Users, Star, BookOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 import { ModernTitle } from '@/components/ui/modern-title';
@@ -9,7 +9,6 @@ import { LoadingSkeleton } from '@/components/ui/loading-skeleton';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 const FloatingElements = React.lazy(() => import('./FloatingElements'));
-const ParticleEffect = React.lazy(() => import('./ParticleEffect'));
 
 interface TrustIndicatorProps {
   icon: React.ReactNode;
@@ -22,13 +21,24 @@ const TrustIndicator: React.FC<TrustIndicatorProps> = ({ icon, value, label }) =
     initial={{ opacity: 0, scale: 0.8 }}
     animate={{ opacity: 1, scale: 1 }}
     transition={{ duration: 0.5, delay: 0.8 }}
-    className="flex items-center gap-2 bg-white/80 backdrop-blur-xl rounded-full px-4 py-2 shadow-sm"
+    className="flex items-center gap-2 bg-white/80 backdrop-blur-xl rounded-full px-4 py-2 shadow-sm border border-white/30"
   >
     <div className="text-dutch-blue">{icon}</div>
     <div className="text-sm">
       <span className="font-bold text-gray-800">{value}</span>
       <span className="text-gray-600 ml-1">{label}</span>
     </div>
+  </motion.div>
+);
+
+const FeatureBadge: React.FC<{ icon: string; text: string; color: string }> = ({ icon, text, color }) => (
+  <motion.div
+    initial={{ opacity: 0, scale: 0.8 }}
+    animate={{ opacity: 1, scale: 1 }}
+    transition={{ duration: 0.3 }}
+    className={`px-3 py-1 rounded-full text-xs font-semibold shadow-sm backdrop-blur-xl border border-white/20 ${color}`}
+  >
+    {icon} {text}
   </motion.div>
 );
 
@@ -46,36 +56,16 @@ const EnhancedHeroSection: React.FC = () => {
     <section className="relative z-10 h-screen flex flex-col items-center justify-center px-4 overflow-hidden">
       <Suspense fallback={<div />}>
         <FloatingElements />
-        <ParticleEffect />
       </Suspense>
 
       <motion.div 
-        className="text-center space-y-12 relative z-20 max-w-5xl"
+        className="text-center space-y-8 relative z-20 max-w-5xl"
         initial="initial"
         animate="animate"
         variants={animationVariants}
       >
-        {/* Trust Indicators */}
-        <div className="flex justify-center gap-4 flex-wrap mb-8">
-          <TrustIndicator 
-            icon={<Users className="h-4 w-4" />}
-            value="2,500+"
-            label="joueurs"
-          />
-          <TrustIndicator 
-            icon={<Star className="h-4 w-4" />}
-            value="4.8/5"
-            label="satisfaction"
-          />
-          <TrustIndicator 
-            icon={<Gamepad2 className="h-4 w-4" />}
-            value="15k+"
-            label="parties"
-          />
-        </div>
-
-        {/* Enhanced Title with Google Font */}
-        <div className="relative">
+        {/* Enhanced Title with Space Grotesk font */}
+        <div className="relative mb-8">
           <motion.div
             className="absolute -inset-4 bg-gradient-to-r from-dutch-blue/30 via-dutch-purple/30 to-dutch-orange/30 rounded-3xl blur-2xl"
             animate={prefersReducedMotion ? {} : {
@@ -92,7 +82,7 @@ const EnhancedHeroSection: React.FC = () => {
             variant="h1" 
             withSparkles 
             withIcon 
-            className="relative z-10 text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-none mb-8"
+            className="relative z-10 text-6xl sm:text-8xl md:text-9xl lg:text-[12rem] font-black tracking-tighter leading-none"
             style={{
               fontFamily: "'Space Grotesk', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
               textShadow: '0 0 30px rgba(30, 64, 175, 0.3), 0 0 60px rgba(124, 58, 237, 0.2)'
@@ -102,12 +92,12 @@ const EnhancedHeroSection: React.FC = () => {
           </ModernTitle>
         </div>
         
-        {/* Enhanced Subtitle */}
+        {/* Updated Tagline */}
         <motion.div
           initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: prefersReducedMotion ? 0.2 : 1, delay: 0.3 }}
-          className="space-y-4"
+          className="space-y-4 mb-8"
         >
           <motion.h2 
             className="text-2xl md:text-4xl lg:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-gray-800 via-dutch-blue to-dutch-purple leading-tight"
@@ -115,20 +105,33 @@ const EnhancedHeroSection: React.FC = () => {
               fontFamily: "'Space Grotesk', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
             }}
           >
-            L'expérience jeu de cartes
-            <br />
-            <span className="text-dutch-orange">révolutionnaire</span>
+            Votre compagnon de Dutch :<br />
+            <span className="text-dutch-orange">jouez, suivez, laissez l'IA vous guider</span>
           </motion.h2>
-          <motion.p 
-            className="text-xl md:text-2xl text-gray-700 font-medium max-w-3xl mx-auto"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: prefersReducedMotion ? 0.2 : 1, delay: 0.5 }}
-          >
-            <span className="text-dutch-orange font-bold">100% gratuite</span> · 
-            <span className="text-dutch-purple font-bold mx-2">IA Professeur Cartouche</span> · 
-            <span className="text-dutch-blue font-bold">Fonctionne hors-ligne</span>
-          </motion.p>
+        </motion.div>
+
+        {/* Trust Indicators moved below title */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: prefersReducedMotion ? 0.2 : 1, delay: 0.5 }}
+          className="flex justify-center gap-4 flex-wrap mb-8"
+        >
+          <TrustIndicator 
+            icon={<Users className="h-4 w-4" />}
+            value="2,500+"
+            label="joueurs"
+          />
+          <TrustIndicator 
+            icon={<Star className="h-4 w-4" />}
+            value="4.8/5"
+            label="satisfaction"
+          />
+          <TrustIndicator 
+            icon={<Gamepad2 className="h-4 w-4" />}
+            value="15k+"
+            label="parties"
+          />
         </motion.div>
         
         {/* Enhanced CTA Buttons */}
@@ -136,10 +139,10 @@ const EnhancedHeroSection: React.FC = () => {
           initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: prefersReducedMotion ? 0.2 : 1, delay: 0.7 }}
-          className="relative"
+          className="relative mb-8"
         >
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-            {/* Primary CTA with enhanced micro-interactions */}
+            {/* Primary CTA */}
             <motion.div
               whileHover={prefersReducedMotion ? {} : { scale: 1.05, y: -2 }}
               whileTap={prefersReducedMotion ? {} : { scale: 0.98 }}
@@ -163,52 +166,52 @@ const EnhancedHeroSection: React.FC = () => {
               </Button>
             </motion.div>
 
-            {/* Secondary Button with enhanced styling */}
+            {/* Secondary Button */}
             <motion.div
               whileHover={prefersReducedMotion ? {} : { scale: 1.05, y: -2 }}
               whileTap={prefersReducedMotion ? {} : { scale: 0.98 }}
             >
               <Button
                 onClick={() => navigate('/rules')}
-                variant="glass"
+                variant="outline"
                 size="xl"
-                className="bg-white/30 backdrop-blur-xl border border-white/40 text-gray-800 px-10 py-6 text-lg font-semibold rounded-full shadow-xl hover:bg-white/40 transition-all duration-300"
+                className="bg-white/30 backdrop-blur-xl border-2 border-dutch-blue/30 text-dutch-blue px-10 py-6 text-lg font-semibold rounded-full shadow-xl hover:bg-white/40 transition-all duration-300"
                 aria-label="Découvrir les règles du jeu Dutch"
               >
                 <motion.div
                   className="flex items-center gap-2"
                   whileHover={prefersReducedMotion ? {} : { x: 2 }}
                 >
+                  <BookOpen className="h-5 w-5" />
                   Découvrir les règles
                 </motion.div>
               </Button>
             </motion.div>
           </div>
+        </motion.div>
 
-          {/* Social Proof Pills */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: prefersReducedMotion ? 0.2 : 1, delay: 1 }}
-            className="flex justify-center mt-8 gap-4 flex-wrap"
-          >
-            {[
-              { icon: "⚡", text: "Instant", color: "from-yellow-400 to-orange-500" },
-              { icon: "🎯", text: "Précis", color: "from-blue-400 to-purple-500" },
-              { icon: "🚀", text: "Moderne", color: "from-purple-400 to-pink-500" }
-            ].map((pill, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 1.2 + index * 0.1 }}
-                whileHover={prefersReducedMotion ? {} : { scale: 1.05, y: -2 }}
-                className={`px-4 py-2 rounded-full bg-gradient-to-r ${pill.color} text-white text-sm font-semibold shadow-lg backdrop-blur-xl border border-white/20 cursor-default`}
-              >
-                {pill.icon} {pill.text}
-              </motion.div>
-            ))}
-          </motion.div>
+        {/* Feature badges moved below CTAs */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: prefersReducedMotion ? 0.2 : 1, delay: 1 }}
+          className="flex justify-center gap-3 flex-wrap"
+        >
+          <FeatureBadge 
+            icon="✅" 
+            text="100% Gratuit" 
+            color="bg-green-100/80 text-green-800 border-green-200" 
+          />
+          <FeatureBadge 
+            icon="🤖" 
+            text="IA Professeur Cartouche" 
+            color="bg-purple-100/80 text-purple-800 border-purple-200" 
+          />
+          <FeatureBadge 
+            icon="📱" 
+            text="Fonctionne hors-ligne" 
+            color="bg-blue-100/80 text-blue-800 border-blue-200" 
+          />
         </motion.div>
       </motion.div>
       
