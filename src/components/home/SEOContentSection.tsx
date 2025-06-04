@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Users, Trophy, BookOpen, Star, Zap, Heart, Sparkles } from 'lucide-react';
@@ -6,6 +7,9 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { motion } from 'framer-motion';
 import { Enhanced3DFeatureCard } from '@/components/home/Enhanced3DFeatureCard';
+import { InteractiveTimeline } from '@/components/home/InteractiveTimeline';
+import { TestimonialsCarousel } from '@/components/home/TestimonialsCarousel';
+import { AnimatedStats } from '@/components/home/AnimatedStats';
 import SEOFooter from '@/components/SEOFooter';
 
 const SEOContentSection: React.FC = () => {
@@ -31,24 +35,6 @@ const SEOContentSection: React.FC = () => {
       icon: <Sparkles className="h-8 w-8" />,
       title: "IA Commentateur",
       description: "Professeur Cartouche commente vos parties avec humour"
-    }
-  ];
-
-  const testimonials = [
-    {
-      name: "Marie L.",
-      comment: "Parfait pour nos soirées jeux ! Plus besoin de papier et crayon.",
-      rating: 5
-    },
-    {
-      name: "Thomas K.",
-      comment: "L'IA commentateur est hilarante, ça ajoute du fun à nos parties.",
-      rating: 5
-    },
-    {
-      name: "Sophie M.",
-      comment: "Interface très claire, même ma grand-mère arrive à s'en servir !",
-      rating: 5
     }
   ];
 
@@ -81,7 +67,7 @@ const SEOContentSection: React.FC = () => {
           </div>
         </motion.section>
 
-        {/* Comment jouer section - Enhanced */}
+        {/* Interactive Timeline - Enhanced */}
         <motion.section 
           className="mb-16"
           initial={{ opacity: 0 }}
@@ -89,67 +75,29 @@ const SEOContentSection: React.FC = () => {
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          <Card className="bg-white/70 backdrop-blur-xl border border-white/50 shadow-xl">
-            <CardContent className="p-8">
-              <h2 className="text-4xl font-bold text-center mb-8 text-gray-800" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                Comment jouer au Dutch ?
-              </h2>
-              
-              <div className="grid md:grid-cols-3 gap-8 text-center">
-                {[
-                  {
-                    step: "1",
-                    title: "Distribution",
-                    description: "Chaque joueur reçoit des cartes selon le nombre de participants",
-                    color: "bg-dutch-blue"
-                  },
-                  {
-                    step: "2", 
-                    title: "Objectif",
-                    description: "Faire le moins de points possible en évitant les cartes de cœur",
-                    color: "bg-dutch-purple"
-                  },
-                  {
-                    step: "3",
-                    title: "Victoire", 
-                    description: "Le joueur avec le moins de points gagne quand la limite est atteinte",
-                    color: "bg-dutch-orange"
-                  }
-                ].map((item, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4, delay: 0.2 * index }}
-                    viewport={{ once: true }}
-                    whileHover={{ scale: 1.05, y: -5 }}
-                    className="group"
-                  >
-                    <div className={`w-20 h-20 mx-auto mb-4 rounded-2xl ${item.color} flex items-center justify-center text-white font-bold text-3xl shadow-lg group-hover:shadow-xl transition-all duration-300`}>
-                      {item.step}
-                    </div>
-                    <h3 className="font-semibold mb-2 text-xl">{item.title}</h3>
-                    <p className="text-gray-600">{item.description}</p>
-                  </motion.div>
-                ))}
-              </div>
-              
-              <div className="text-center mt-8">
-                <Button 
-                  onClick={() => navigate('/rules')}
-                  variant="outline"
-                  size="lg"
-                  className="hover:scale-105 transition-transform"
-                >
-                  <BookOpen className="mr-2 h-4 w-4" />
-                  Règles complètes
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+          <h2 className="text-4xl font-bold text-center mb-12 text-gray-800" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+            Comment jouer au Dutch ?
+          </h2>
+          
+          <InteractiveTimeline />
+          
+          <div className="text-center mt-8">
+            <Button 
+              onClick={() => navigate('/rules')}
+              variant="outline"
+              size="lg"
+              className="hover:scale-105 transition-transform"
+            >
+              <BookOpen className="mr-2 h-4 w-4" />
+              Règles complètes
+            </Button>
+          </div>
         </motion.section>
 
-        {/* Enhanced Testimonials */}
+        {/* Animated Stats Section */}
+        <AnimatedStats />
+
+        {/* Enhanced Testimonials Carousel */}
         <motion.section 
           className="mb-16"
           initial={{ opacity: 0 }}
@@ -161,29 +109,8 @@ const SEOContentSection: React.FC = () => {
             Ce que disent nos joueurs
           </h2>
           
-          <div className="grid md:grid-cols-3 gap-6">
-            {testimonials.map((testimonial, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.1 * index }}
-                viewport={{ once: true }}
-                whileHover={{ scale: 1.02, y: -5 }}
-              >
-                <Card className="bg-white/70 backdrop-blur-xl border border-white/50 h-full shadow-lg hover:shadow-xl transition-all duration-300">
-                  <CardContent className="p-6">
-                    <div className="flex mb-3">
-                      {[...Array(testimonial.rating)].map((_, i) => (
-                        <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                      ))}
-                    </div>
-                    <p className="text-gray-700 mb-4 italic">"{testimonial.comment}"</p>
-                    <p className="font-semibold text-gray-800">— {testimonial.name}</p>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
+          <div className="max-w-2xl mx-auto">
+            <TestimonialsCarousel />
           </div>
         </motion.section>
 
