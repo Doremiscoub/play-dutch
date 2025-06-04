@@ -1,6 +1,6 @@
-
 import type { Config } from "tailwindcss";
-import { COLORS, TYPOGRAPHY, BORDERS, SHADOWS, ANIMATIONS } from "./config/theme";
+import { COLORS, TYPOGRAPHY, BORDERS, SHADOWS, ANIMATIONS } from "./src/config/theme";
+import { SEMANTIC_COLORS, GAME_COLORS } from "./src/config/theme/semantic-colors";
 
 export default {
 	darkMode: ["class"],
@@ -64,36 +64,40 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// Couleurs Dutch basées sur notre configuration de thème
-				dutch: {
-					blue: COLORS.blue.DEFAULT,
-					orange: COLORS.orange.DEFAULT,
-					purple: COLORS.purple.DEFAULT,
-					pink: COLORS.pink,
-					red: COLORS.red,
-					green: COLORS.green,
-					yellow: COLORS.yellow,
-					background: COLORS.gray[50],
-					card: COLORS.white,
+				
+				// Nouvelles couleurs game unifiées
+				game: {
+					blue: GAME_COLORS.blue,
+					'blue-light': GAME_COLORS.blueLight,
+					'blue-dark': GAME_COLORS.blueDark,
+					purple: GAME_COLORS.purple,
+					'purple-light': GAME_COLORS.purpleLight,
+					'purple-dark': GAME_COLORS.purpleDark,
+					orange: GAME_COLORS.orange,
+					'orange-light': GAME_COLORS.orangeLight,
+					'orange-dark': GAME_COLORS.orangeDark,
+					success: GAME_COLORS.success,
+					warning: GAME_COLORS.warning,
+					error: GAME_COLORS.error,
+					background: GAME_COLORS.background,
+					surface: GAME_COLORS.surface,
 				},
-				ios: {
-					blue: '#007AFF',
-					green: '#34C759',
-					indigo: '#5856D6',
-					orange: '#FF9500',
-					pink: '#FF2D55',
-					purple: '#AF52DE',
-					red: '#FF3B30',
-					teal: '#5AC8FA',
-					yellow: '#FFCC00',
-					gray: '#8E8E93',
-					background: '#F2F2F7',
-					card: '#FFFFFF',
-					'dark-blue': '#0A84FF',
-					'light-blue': '#64D2FF',
-					'light-gray': '#E5E5EA',
-					'ultra-light-gray': '#F2F2F7',
-					'dark-gray': '#8E8E93',
+				
+				// Couleurs sémantiques
+				semantic: {
+					primary: SEMANTIC_COLORS.primary,
+					'primary-light': SEMANTIC_COLORS.primaryLight,
+					'primary-dark': SEMANTIC_COLORS.primaryDark,
+					secondary: SEMANTIC_COLORS.secondary,
+					'secondary-light': SEMANTIC_COLORS.secondaryLight,
+					'secondary-dark': SEMANTIC_COLORS.secondaryDark,
+					accent: SEMANTIC_COLORS.accent,
+					'accent-light': SEMANTIC_COLORS.accentLight,
+					'accent-dark': SEMANTIC_COLORS.accentDark,
+					success: SEMANTIC_COLORS.success,
+					warning: SEMANTIC_COLORS.warning,
+					error: SEMANTIC_COLORS.error,
+					info: SEMANTIC_COLORS.info,
 				}
 			},
 			borderRadius: {
@@ -104,22 +108,24 @@ export default {
 				'3xl': BORDERS.radius['3xl'],
 				'4xl': '2.5rem',
 			},
+			boxShadow: {
+				card: SHADOWS.card,
+				glass: SHADOWS.glassCard,
+				button: SHADOWS.glassButton,
+			},
+			fontFamily: {
+				sans: ['SF Pro Text', 'SF Pro Display', 'system-ui', 'sans-serif'],
+				mono: TYPOGRAPHY.fontFamily.mono,
+				apple: ['-apple-system', 'BlinkMacSystemFont', 'SF Pro Text', 'SF Pro Display', 'system-ui', 'sans-serif'],
+			},
 			keyframes: {
 				'accordion-down': {
-					from: {
-						height: '0'
-					},
-					to: {
-						height: 'var(--radix-accordion-content-height)'
-					}
+					from: { height: '0' },
+					to: { height: 'var(--radix-accordion-content-height)' }
 				},
 				'accordion-up': {
-					from: {
-						height: 'var(--radix-accordion-content-height)'
-					},
-					to: {
-						height: '0'
-					}
+					from: { height: 'var(--radix-accordion-content-height)' },
+					to: { height: '0' }
 				},
 				'fade-in': {
 					'0%': {
@@ -177,6 +183,10 @@ export default {
 						opacity: '1',
 					},
 				},
+				'shimmer': {
+					'0%': { backgroundPosition: '-200% 0' },
+					'100%': { backgroundPosition: '200% 0' },
+				},
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
@@ -187,18 +197,10 @@ export default {
 				'float': 'float 6s infinite ease-in-out',
 				'ios-bounce': 'ios-bounce 2s infinite ease-in-out',
 				'ios-pop': 'ios-pop 0.3s ease-out',
+				'shimmer': 'shimmer 3s infinite linear',
 			},
 			backdropBlur: {
 				xs: '2px',
-			},
-			fontFamily: {
-				sans: TYPOGRAPHY.fontFamily.sans,
-				mono: TYPOGRAPHY.fontFamily.mono,
-			},
-			boxShadow: {
-				card: SHADOWS.card,
-				glass: SHADOWS.glassCard,
-				button: SHADOWS.glassButton,
 			},
 			transitionDuration: {
 				DEFAULT: ANIMATIONS.duration.normal,
@@ -208,6 +210,12 @@ export default {
 			transitionTimingFunction: {
 				DEFAULT: ANIMATIONS.easing.inOut,
 				bounce: ANIMATIONS.easing.bounce,
+				ios: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+			},
+			backgroundImage: {
+				'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+				'gradient-subtle': 'linear-gradient(to bottom right, var(--tw-gradient-stops))',
+				'shimmer': 'linear-gradient(to right, transparent, rgba(255, 255, 255, 0.2), transparent)',
 			},
 		}
 	},
