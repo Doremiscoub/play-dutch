@@ -11,6 +11,22 @@ import { ModernTitle } from '@/components/ui/modern-title';
 import { useSEO } from '@/hooks/useSEO';
 import { StructuredData } from '@/components/seo/StructuredData';
 
+type GameFeatureColor = "fire" | "water" | "electric" | "grass" | "psychic" | "ice";
+
+interface GameFeature {
+  icon: React.ComponentType<any>;
+  title: string;
+  description: string;
+  color: GameFeatureColor;
+  bgColor: string;
+  borderColor: string;
+  action: () => void;
+  buttonText: string;
+  buttonVariant: "primary" | "secondary" | "accent";
+  delay: number;
+  badge: string;
+}
+
 const Index = () => {
   const navigate = useNavigate();
 
@@ -20,7 +36,7 @@ const Index = () => {
     keywords: 'dutch, jeu de cartes, application gratuite, score, soirée amis, cartes, jeu société, hors ligne'
   });
 
-  const gameFeatures = [
+  const gameFeatures: GameFeature[] = [
     {
       icon: PlayCircle,
       title: "Jouer",
@@ -30,7 +46,7 @@ const Index = () => {
       borderColor: "border-red-200",
       action: () => navigate('/game'),
       buttonText: "C'est parti !",
-      buttonVariant: "primary" as const,
+      buttonVariant: "primary",
       delay: 0.1,
       badge: "ACTION"
     },
@@ -43,7 +59,7 @@ const Index = () => {
       borderColor: "border-blue-200",
       action: () => navigate('/rules'),
       buttonText: "Apprendre",
-      buttonVariant: "secondary" as const,
+      buttonVariant: "secondary",
       delay: 0.2,
       badge: "GUIDE"
     },
@@ -56,7 +72,7 @@ const Index = () => {
       borderColor: "border-yellow-200",
       action: () => navigate('/history'),
       buttonText: "Explorer",
-      buttonVariant: "accent" as const,
+      buttonVariant: "accent",
       delay: 0.3,
       badge: "STATS"
     }
