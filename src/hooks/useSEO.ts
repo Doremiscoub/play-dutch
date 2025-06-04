@@ -8,6 +8,9 @@ interface SEOProps {
   image?: string;
   url?: string;
   type?: string;
+  author?: string;
+  publishDate?: string;
+  modifiedDate?: string;
 }
 
 export const useSEO = ({
@@ -15,16 +18,28 @@ export const useSEO = ({
   description = 'Application web gratuite pour suivre les scores du jeu de cartes Dutch. Parfait pour vos soirées entre amis. Interface moderne, hors-ligne, avec IA commentateur.',
   keywords = 'dutch, jeu de cartes, score, application, soirée, amis, cartes, jeu de société, digital',
   image = '/opengraph-dutch.png',
-  url = window.location.href,
-  type = 'website'
+  url = typeof window !== 'undefined' ? window.location.href : '',
+  type = 'website',
+  author = 'Dutch Card Game Team',
+  publishDate,
+  modifiedDate
 }: SEOProps = {}) => {
   useEffect(() => {
     // Title
     document.title = title;
     
-    // Meta description
+    // Meta description et keywords
     updateMetaTag('description', description);
     updateMetaTag('keywords', keywords);
+    updateMetaTag('author', author);
+    
+    // Dates SEO
+    if (publishDate) {
+      updateMetaTag('article:published_time', publishDate, 'property');
+    }
+    if (modifiedDate) {
+      updateMetaTag('article:modified_time', modifiedDate, 'property');
+    }
     
     // Open Graph
     updateMetaTag('og:title', title, 'property');
@@ -44,16 +59,23 @@ export const useSEO = ({
     
     // Additional SEO
     updateMetaTag('robots', 'index, follow', 'name');
-    updateMetaTag('author', 'Dutch Card Game', 'name');
     updateMetaTag('viewport', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no', 'name');
+    updateMetaTag('theme-color', '#1EAEDB', 'name');
+    updateMetaTag('application-name', 'Dutch Card Game', 'name');
     
     // Canonical URL
     updateCanonicalLink(url);
     
-  }, [title, description, keywords, image, url, type]);
+    // Preconnect to important domains
+    addPreconnectLink('https://fonts.googleapis.com');
+    addPreconnectLink('https://fonts.gstatic.com');
+    
+  }, [title, description, keywords, image, url, type, author, publishDate, modifiedDate]);
 };
 
 const updateMetaTag = (name: string, content: string, attribute: string = 'name') => {
+  if (!content) return;
+  
   let meta = document.querySelector(`meta[${attribute}="${name}"]`);
   if (!meta) {
     meta = document.createElement('meta');
@@ -64,6 +86,8 @@ const updateMetaTag = (name: string, content: string, attribute: string = 'name'
 };
 
 const updateCanonicalLink = (url: string) => {
+  if (!url) return;
+  
   let canonical = document.querySelector('link[rel="canonical"]');
   if (!canonical) {
     canonical = document.createElement('link');
@@ -71,4 +95,13 @@ const updateCanonicalLink = (url: string) => {
     document.head.appendChild(canonical);
   }
   canonical.setAttribute('href', url);
+};
+
+const addPreconnectLink = (href: string) => {
+  if (document.querySelector(`link[href="${href}"]`)) return;
+  
+  const link = document.createElement('link');
+  link.rel = 'preconnect';
+  link.href = href;
+  document.head.appendChild(link);
 };
