@@ -26,28 +26,28 @@ export const getCommentStyle = (commentType: CommentType): CommentStyle => {
         gradient: 'from-emerald-500/20 via-green-500/10 to-emerald-600/20',
         border: 'border-emerald-200/40',
         icon: <Trophy className="w-5 h-5 text-emerald-600" />,
-        mood: 'happy' as const
+        mood: 'happy'
       };
     case 'joke':
       return {
         gradient: 'from-amber-500/20 via-orange-500/10 to-yellow-600/20',
         border: 'border-amber-200/40',
         icon: <Smile className="w-5 h-5 text-amber-600" />,
-        mood: 'excited' as const
+        mood: 'excited'
       };
     case 'observation':
       return {
         gradient: 'from-blue-500/20 via-cyan-500/10 to-indigo-600/20',
         border: 'border-blue-200/40',
         icon: <Brain className="w-5 h-5 text-blue-600" />,
-        mood: 'thinking' as const
+        mood: 'thinking'
       };
     default:
       return {
         gradient: 'from-purple-500/20 via-indigo-500/10 to-purple-600/20',
         border: 'border-purple-200/40',
         icon: <Lightbulb className="w-5 h-5 text-purple-600" />,
-        mood: 'neutral' as const
+        mood: 'neutral'
       };
   }
 };
