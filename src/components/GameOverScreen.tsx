@@ -1,14 +1,16 @@
+
 import React, { useState, useEffect } from 'react';
 import confetti from 'canvas-confetti';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 import { Player } from '@/types';
-import { UnifiedBackground } from '@/components/ui/unified-background';
-import GameOverHeader from '@/components/game/GameOverHeader';
-import GamePodium from '@/components/game/GamePodium';
-import OtherPlayersRanking from '@/components/game/OtherPlayersRanking';
-import GameOverActionButtons from '@/components/game/GameOverActionButtons';
-import { GameCard } from '@/components/ui/game-card';
+import AnimatedBackground from './AnimatedBackground';
+import GameOverHeader from './game/GameOverHeader';
+import GamePodium from './game/GamePodium';
+import OtherPlayersRanking from './game/OtherPlayersRanking';
+import GameOverActionButtons from './game/GameOverActionButtons';
+import { ReceiptCard } from './ui/receipt-card';
+import { ModernTitle } from './ui/modern-title';
 
 interface GameOverScreenProps {
   players: Player[];
@@ -29,11 +31,11 @@ const GameOverScreen: React.FC<GameOverScreenProps> = ({
   const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
   const winner = sortedPlayers[0];
   
-  // Trigger confetti for the winner - Enhanced celebration
+  // Trigger confetti for the winner - Further enhanced
   const triggerConfetti = () => {
     if (isConfettiTriggered) return;
     
-    // Multiple waves of confetti
+    // More abundant and colorful confetti
     confetti({
       particleCount: 200,
       spread: 100,
@@ -41,6 +43,7 @@ const GameOverScreen: React.FC<GameOverScreenProps> = ({
       colors: ['#1EAEDB', '#8B5CF6', '#F97316', '#10B981', '#FBBF24', '#FF6B6B', '#4CD4FF']
     });
     
+    // Second wave of confetti after a delay
     setTimeout(() => {
       confetti({
         particleCount: 150,
@@ -59,6 +62,7 @@ const GameOverScreen: React.FC<GameOverScreenProps> = ({
       });
     }, 700);
     
+    // Third wave for extra celebration
     setTimeout(() => {
       confetti({
         particleCount: 100,
@@ -111,41 +115,60 @@ const GameOverScreen: React.FC<GameOverScreenProps> = ({
   };
 
   return (
-    <UnifiedBackground variant="default" className="min-h-screen relative overflow-hidden">
-      {/* Main content */}
-      <div className="relative z-10 min-h-screen p-4 flex flex-col items-center justify-center">
-        <div className="w-full max-w-2xl mx-auto space-y-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <GameCard variant="glass" className="p-8">
-              {/* Header with congratulations message */}
-              <GameOverHeader winner={winner} />
-              
-              {/* Podium */}
-              <GamePodium players={players} />
-              
-              {/* Other players ranking */}
-              <OtherPlayersRanking players={players} />
-            </GameCard>
-          </motion.div>
-          
-          {/* Action buttons */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-          >
-            <GameOverActionButtons 
-              onRestart={onRestart} 
-              onContinueGame={handleContinueGame} 
-            />
-          </motion.div>
-        </div>
+    <div className="min-h-screen p-4 flex flex-col items-center justify-center relative overflow-hidden">
+      {/* Animated festive background */}
+      <div className="absolute inset-0 -z-10">
+        <AnimatedBackground />
+        
+        {/* Overlay with festive gradient */}
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-500/15 via-transparent to-orange-500/15"></div>
       </div>
-    </UnifiedBackground>
+      
+      {/* Main content */}
+      <div className="w-full max-w-xl mx-auto z-10">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <ModernTitle variant="h1" withSparkles className="text-center mb-6">
+            Partie Terminée
+          </ModernTitle>
+        </motion.div>
+        
+        <ReceiptCard className="w-full mb-6 p-6">
+          {/* Header with congratulations message */}
+          <GameOverHeader winner={winner} />
+          
+          {/* Podium */}
+          <GamePodium players={players} />
+          
+          {/* Other players ranking */}
+          <OtherPlayersRanking players={players} />
+        </ReceiptCard>
+        
+        {/* Action buttons */}
+        <GameOverActionButtons 
+          onRestart={onRestart} 
+          onContinueGame={handleContinueGame} 
+        />
+      </div>
+      
+      {/* Fixed: Replace jsx prop with standard CSS */}
+      <style>
+        {`
+        @keyframes gradientBg {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+        .gradient-animation {
+          animation: gradientBg 6s ease infinite;
+          background-size: 200% 200%;
+        }
+        `}
+      </style>
+    </div>
   );
 };
 

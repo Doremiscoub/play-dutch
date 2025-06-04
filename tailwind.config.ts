@@ -1,6 +1,6 @@
+
 import type { Config } from "tailwindcss";
 import { COLORS, TYPOGRAPHY, BORDERS, SHADOWS, ANIMATIONS } from "./src/config/theme";
-import { GAME_TYPOGRAPHY } from "./src/config/theme/gameTypography";
 
 export default {
 	darkMode: ["class"],
@@ -64,19 +64,43 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// Unified game-inspired color system
-				game: {
-					primary: COLORS.blue.DEFAULT,    // Main blue
-					secondary: COLORS.purple.DEFAULT, // Purple accent  
-					accent: COLORS.orange.DEFAULT,   // Orange highlights
-					red: '#E31C25',                  // UNO Red
-					blue: '#0066CC',                 // UNO Blue  
-					green: '#28AA3D',                // UNO Green
-					yellow: '#FEDF00',               // UNO Yellow
-					purple: '#9C27B0',               // Pokémon Psychic
-					orange: '#F57D31',               // Pokémon Fire
+				// Couleurs Dutch basées sur notre configuration de thème
+				dutch: {
+					blue: COLORS.blue.DEFAULT,
+					'blue-light': COLORS.blue.light,
+					'blue-dark': COLORS.blue.dark, 
+					orange: COLORS.orange.DEFAULT,
+					'orange-light': COLORS.orange.light,
+					'orange-dark': COLORS.orange.dark,
+					purple: COLORS.purple.DEFAULT,
+					'purple-light': COLORS.purple.light,
+					'purple-dark': COLORS.purple.dark,
+					pink: COLORS.pink,
+					red: COLORS.red,
+					green: COLORS.green,
+					yellow: COLORS.yellow,
 					background: COLORS.gray[50],
 					card: COLORS.white,
+					primary: COLORS.blue.DEFAULT,
+				},
+				ios: {
+					blue: '#0A84FF',
+					green: '#30D158', 
+					indigo: '#5856D6',
+					orange: '#FF9F0A',
+					pink: '#FF375F',
+					purple: '#BF5AF2',
+					red: '#FF453A',
+					teal: '#64D2FF',
+					yellow: '#FFD60A',
+					gray: '#8E8E93',
+					background: '#F2F2F7',
+					card: '#FFFFFF',
+					'dark-blue': '#0A84FF',
+					'light-blue': '#64D2FF',
+					'light-gray': '#E5E5EA',
+					'ultra-light-gray': '#F2F2F7',
+					'dark-gray': '#8E8E93',
 				}
 			},
 			borderRadius: {
@@ -91,30 +115,11 @@ export default {
 				card: SHADOWS.card,
 				glass: SHADOWS.glassCard,
 				button: SHADOWS.glassButton,
-				// Game-inspired shadows
-				'game-card': '8px 8px 0 rgba(0, 0, 0, 0.3)',
-				'game-button': '0 6px 0 rgba(0, 0, 0, 0.2)',
-				'game-inset': 'inset 0 2px 0 rgba(255, 255, 255, 0.3)',
 			},
 			fontFamily: {
-				// Keep system fonts
 				sans: ['SF Pro Text', 'SF Pro Display', 'system-ui', 'sans-serif'],
 				mono: TYPOGRAPHY.fontFamily.mono,
-				// Game-inspired fonts from our typography system
-				game: GAME_TYPOGRAPHY.fontFamily.game,
-				action: GAME_TYPOGRAPHY.fontFamily.action,
-				score: GAME_TYPOGRAPHY.fontFamily.score,
-				adventure: GAME_TYPOGRAPHY.fontFamily.adventure,
-				body: GAME_TYPOGRAPHY.fontFamily.body,
-				classic: GAME_TYPOGRAPHY.fontFamily.classic,
-			},
-			fontSize: {
-				// Add game typography sizes
-				...GAME_TYPOGRAPHY.fontSize,
-			},
-			fontWeight: {
-				// Add game typography weights
-				...GAME_TYPOGRAPHY.fontWeight,
+				apple: ['-apple-system', 'BlinkMacSystemFont', 'SF Pro Text', 'SF Pro Display', 'system-ui', 'sans-serif'],
 			},
 			keyframes: {
 				'accordion-down': {
@@ -126,34 +131,65 @@ export default {
 					to: { height: '0' }
 				},
 				'fade-in': {
-					'0%': { opacity: '0', transform: 'translateY(10px)' },
-					'100%': { opacity: '1', transform: 'translateY(0)' }
+					'0%': {
+						opacity: '0',
+						transform: 'translateY(10px)'
+					},
+					'100%': {
+						opacity: '1',
+						transform: 'translateY(0)'
+					}
 				},
 				'pulse-soft': {
-					'0%, 100%': { opacity: '1' },
-					'50%': { opacity: '0.8' },
+					'0%, 100%': {
+						opacity: '1',
+					},
+					'50%': {
+						opacity: '0.8',
+					},
 				},
 				'scale': {
-					'0%': { transform: 'scale(0.95)' },
-					'100%': { transform: 'scale(1)' },
+					'0%': {
+						transform: 'scale(0.95)',
+					},
+					'100%': {
+						transform: 'scale(1)',
+					},
 				},
 				'float': {
-					'0%, 100%': { transform: 'translateY(0)' },
-					'50%': { transform: 'translateY(-10px)' },
+					'0%, 100%': {
+						transform: 'translateY(0)',
+					},
+					'50%': {
+						transform: 'translateY(-10px)',
+					},
 				},
-				'game-bounce': {
-					'0%, 100%': { transform: 'translateY(0)' },
-					'50%': { transform: 'translateY(-8px)' }
+				'ios-bounce': {
+					'0%, 100%': {
+						transform: 'translateY(0)',
+					},
+					'50%': {
+						transform: 'translateY(-5px)',
+					},
 				},
-				'card-flip': {
-					'0%': { transform: 'rotateY(0deg)' },
-					'50%': { transform: 'rotateY(90deg)' },
-					'100%': { transform: 'rotateY(0deg)' }
+				'ios-pop': {
+					'0%': {
+						transform: 'scale(0.95)',
+						opacity: '0.7',
+					},
+					'70%': {
+						transform: 'scale(1.05)',
+						opacity: '1',
+					},
+					'100%': {
+						transform: 'scale(1)',
+						opacity: '1',
+					},
 				},
 				'shimmer': {
 					'0%': { backgroundPosition: '-200% 0' },
 					'100%': { backgroundPosition: '200% 0' },
-				}
+				},
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
@@ -162,8 +198,8 @@ export default {
 				'pulse-soft': 'pulse-soft 2s infinite ease-in-out',
 				'scale': 'scale 0.2s ease-out',
 				'float': 'float 6s infinite ease-in-out',
-				'game-bounce': 'game-bounce 1s infinite ease-in-out',
-				'card-flip': 'card-flip 0.6s ease-in-out',
+				'ios-bounce': 'ios-bounce 2s infinite ease-in-out',
+				'ios-pop': 'ios-pop 0.3s ease-out',
 				'shimmer': 'shimmer 3s infinite linear',
 			},
 			backdropBlur: {
@@ -184,19 +220,6 @@ export default {
 				'gradient-subtle': 'linear-gradient(to bottom right, var(--tw-gradient-stops))',
 				'shimmer': 'linear-gradient(to right, transparent, rgba(255, 255, 255, 0.2), transparent)',
 			},
-			// Game-inspired border widths
-			borderWidth: {
-				'3': '3px',
-				'5': '5px',
-				'6': '6px',
-			},
-			// Game-inspired spacing
-			spacing: {
-				'18': '4.5rem',
-				'72': '18rem',
-				'84': '21rem',
-				'96': '24rem',
-			}
 		}
 	},
 	plugins: [require("tailwindcss-animate")],
