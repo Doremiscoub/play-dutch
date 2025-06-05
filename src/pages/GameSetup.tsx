@@ -9,6 +9,7 @@ import { useGameState } from '@/hooks/useGameState';
 import { toast } from 'sonner';
 import { STORAGE_KEYS } from '@/utils/storageKeys';
 import PageShell from '@/components/layout/PageShell';
+import { DESIGN_COLORS, DESIGN_SPACING } from '@/design/tokens';
 
 const GameSetup: React.FC = () => {
   const navigate = useNavigate();
@@ -53,22 +54,29 @@ const GameSetup: React.FC = () => {
   return (
     <PageShell variant="default">
       {/* Header avec navigation */}
-      <header className="absolute top-4 left-4 right-4 z-50 flex justify-between items-center">
+      <header 
+        className="absolute z-50 flex justify-between items-center"
+        style={{ 
+          top: DESIGN_SPACING[4], 
+          left: DESIGN_SPACING[4], 
+          right: DESIGN_SPACING[4] 
+        }}
+      >
         <Button
-          variant="ghost"
+          variant="dutch-glass"
           size="icon"
           onClick={handleBack}
-          className="bg-white/70 backdrop-blur-xl border border-white/50 text-gray-800 hover:bg-white/80 rounded-full"
+          className="rounded-full"
           aria-label="Retour"
         >
           <ArrowLeft className="h-5 w-5" />
         </Button>
         
         <Button
-          variant="ghost"
+          variant="dutch-glass"
           size="icon"
           onClick={() => navigate('/settings')}
-          className="bg-white/70 backdrop-blur-xl border border-white/50 text-gray-800 hover:bg-white/80 rounded-full"
+          className="rounded-full"
           aria-label="Paramètres"
         >
           <Settings className="h-5 w-5" />
@@ -76,7 +84,12 @@ const GameSetup: React.FC = () => {
       </header>
 
       {/* Contenu principal centré */}
-      <div className="flex items-center justify-center min-h-screen px-4 py-20">
+      <div 
+        className="flex items-center justify-center min-h-screen"
+        style={{ 
+          padding: `${DESIGN_SPACING[20]} ${DESIGN_SPACING[4]}`
+        }}
+      >
         <div className="w-full max-w-2xl">
           <EnhancedLocalGameSetup onStartGame={handleStartGame} />
         </div>

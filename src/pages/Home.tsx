@@ -10,6 +10,7 @@ import { FeaturesSection } from '@/components/home/FeaturesSection';
 import { StatsSection } from '@/components/home/StatsSection';
 import { CTASection } from '@/components/home/CTASection';
 import PageShell from '@/components/layout/PageShell';
+import { DESIGN_COLORS, DESIGN_SPACING } from '@/design/tokens';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -23,11 +24,11 @@ const Home: React.FC = () => {
   return (
     <PageShell variant="default">
       {/* Header with settings */}
-      <header className="absolute top-4 right-4 z-50 flex gap-2">
+      <header className="absolute top-4 right-4 z-50 flex gap-2" style={{ gap: DESIGN_SPACING[2] }}>
         <Button
-          variant="ghost"
+          variant="dutch-glass"
           size="icon"
-          className="bg-white/70 backdrop-blur-xl border border-white/50 text-gray-800 hover:bg-white/80 rounded-full"
+          className="rounded-full"
           aria-label="Profil utilisateur"
         >
           <User className="h-5 w-5" />
@@ -38,7 +39,7 @@ const Home: React.FC = () => {
       {/* Enhanced Hero Section - titre 3D et particules */}
       <EnhancedHeroSection />
 
-      <div className="relative z-10 px-4 pb-16">
+      <div className="relative z-10 px-4 pb-16" style={{ padding: `0 ${DESIGN_SPACING[4]} ${DESIGN_SPACING[16]}` }}>
         {/* Features Section */}
         <FeaturesSection />
 
@@ -49,11 +50,16 @@ const Home: React.FC = () => {
         <CTASection />
 
         {/* Quick Navigation Links */}
-        <div className="flex flex-wrap justify-center gap-4 mt-12 text-sm text-gray-600">
+        <div className="flex flex-wrap justify-center gap-4 mt-12 text-sm" 
+             style={{ 
+               gap: DESIGN_SPACING[4], 
+               marginTop: DESIGN_SPACING[12],
+               color: DESIGN_COLORS.neutral[600] 
+             }}>
           <Button
             variant="ghost"
             onClick={() => navigate('/rules')}
-            className="hover:text-dutch-blue"
+            className="hover:text-dutch-primary"
           >
             <BookOpen className="h-4 w-4 mr-2" />
             Règles du jeu
@@ -61,7 +67,7 @@ const Home: React.FC = () => {
           <Button
             variant="ghost"
             onClick={() => navigate('/history')}
-            className="hover:text-dutch-blue"
+            className="hover:text-dutch-primary"
           >
             <Trophy className="h-4 w-4 mr-2" />
             Historique
@@ -69,7 +75,7 @@ const Home: React.FC = () => {
           <Button
             variant="ghost"
             onClick={() => navigate('/settings')}
-            className="hover:text-dutch-blue"
+            className="hover:text-dutch-primary"
           >
             <Settings className="h-4 w-4 mr-2" />
             Paramètres

@@ -5,6 +5,7 @@ import GameSettings from '@/components/GameSettings';
 import UnifiedTopBar from '@/components/scoreboard/UnifiedTopBar';
 import { STORAGE_KEYS } from '@/utils/storageKeys';
 import PageShell from '@/components/layout/PageShell';
+import { DESIGN_COLORS, DESIGN_SPACING } from '@/design/tokens';
 
 const SettingsPage: React.FC = () => {
   const navigate = useNavigate();
@@ -45,12 +46,18 @@ const SettingsPage: React.FC = () => {
         showRules={false}
       />
 
-      <div className="p-4 pb-20">
+      <div style={{ padding: `${DESIGN_SPACING[4]} ${DESIGN_SPACING[4]} ${DESIGN_SPACING[20]}` }}>
         <div className="max-w-4xl mx-auto">
           {/* Breadcrumb pour indiquer où on se trouve */}
-          <div className="mb-6 text-sm text-gray-600">
+          <div 
+            className="mb-6 text-sm"
+            style={{ 
+              marginBottom: DESIGN_SPACING[6],
+              color: DESIGN_COLORS.neutral[600] 
+            }}
+          >
             <span className="opacity-70">Dutch</span>
-            <span className="mx-2">›</span>
+            <span style={{ margin: `0 ${DESIGN_SPACING[2]}` }}>›</span>
             <span>Paramètres</span>
           </div>
           
