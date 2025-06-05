@@ -1,18 +1,10 @@
-import React, { Suspense } from 'react';
+
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import GameSettings from '@/components/GameSettings';
-import { LoadingSkeleton } from '@/components/ui/loading-skeleton';
-import { ScrollSnapContainer, ScrollSnapSection } from '@/components/ui/scroll-snap-container';
-import { MobileOptimizer } from '@/components/ui/mobile-optimizer';
-import { PerformanceMonitor } from '@/components/ui/performance-monitor';
-import { AccessibilityEnhancer } from '@/components/ui/accessibility-enhancer';
 import { useSEO } from '@/hooks/useSEO';
+import GameSettings from '@/components/GameSettings';
 import { User, Play } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-
-// Lazy load components for better performance
-const EnhancedHeroSection = React.lazy(() => import('@/components/home/EnhancedHeroSection'));
-const SEOContentSection = React.lazy(() => import('@/components/home/SEOContentSection'));
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -20,63 +12,43 @@ const Home: React.FC = () => {
   useSEO({
     title: 'Dutch Card Game - Application gratuite pour jeu de cartes entre amis',
     description: 'Application web gratuite pour suivre les scores du jeu de cartes Dutch. Interface moderne, hors-ligne, avec IA commentateur Professeur Cartouche. Parfait pour vos soirées entre amis.',
-    keywords: 'dutch, jeu de cartes, application gratuite, score, soirée amis, cartes, jeu société, hors ligne, professeur cartouche',
-    gameInfo: {
-      players: '2-10 joueurs',
-      duration: '30-60 minutes',
-      difficulty: 'Facile'
-    },
-    faqItems: [
-      {
-        question: 'Combien de joueurs peuvent jouer au Dutch ?',
-        answer: 'Le Dutch Card Game supporte de 2 à 10 joueurs simultanément.'
-      },
-      {
-        question: 'L\'application fonctionne-t-elle hors ligne ?',
-        answer: 'Oui, l\'application fonctionne entièrement hors ligne une fois chargée.'
-      },
-      {
-        question: 'Comment fonctionne le système de score ?',
-        answer: 'L\'application calcule automatiquement les scores et détermine le "Dutch" (perdant) de chaque manche.'
-      }
-    ],
-    breadcrumbs: [
-      { name: 'Accueil', url: '/' },
-      { name: 'Dutch Card Game', url: '/' }
-    ]
+    keywords: 'dutch, jeu de cartes, application gratuite, score, soirée amis, cartes, jeu société, hors ligne, professeur cartouche'
   });
 
   return (
-    <AccessibilityEnhancer
-      enableSkipLinks={true}
-      enableFocusManagement={true}
-      enableKeyboardNavigation={true}
-    >
-      <MobileOptimizer
-        enableTouchOptimization={true}
-        enableReducedMotion={true}
-      >
-        <PerformanceMonitor
-          logPerformance={process.env.NODE_ENV === 'development'}
-        />
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Header with settings */}
+      <header className="absolute top-4 right-4 z-50 flex gap-2">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="bg-white/70 backdrop-blur-xl border border-white/50 text-gray-800 hover:bg-white/80 rounded-full"
+          aria-label="Profil utilisateur"
+        >
+          <User className="h-5 w-5" />
+        </Button>
+        <GameSettings />
+      </header>
 
-        <ScrollSnapContainer className="min-h-screen relative overflow-hidden">
-          {/* Enhanced Header with better accessibility */}
-          <header className="absolute top-4 right-4 z-50 flex gap-2" id="navigation">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="bg-white/70 backdrop-blur-xl border border-white/50 text-gray-800 hover:bg-white/80 rounded-full"
-              aria-label="Profil utilisateur"
-            >
-              <User className="h-5 w-5" />
-              <span className="sr-only">Ouvrir le profil utilisateur</span>
-            </Button>
-            <GameSettings />
-          </header>
+      {/* Main content */}
+      <div className="flex flex-col items-center justify-center min-h-screen px-4 text-center">
+        {/* Hero Section */}
+        <div className="space-y-8 max-w-4xl mx-auto">
+          <div className="space-y-4">
+            <h1 className="text-6xl md:text-8xl font-bold bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange bg-clip-text text-transparent">
+              Dutch
+            </h1>
+            <p className="text-xl md:text-2xl text-gray-700 font-medium">
+              Le jeu de cartes qui révèle vos stratégies
+            </p>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Application gratuite pour suivre les scores de vos parties Dutch. 
+              Avec l'IA Professeur Cartouche pour des commentaires amusants !
+            </p>
+          </div>
 
-          {/* Bouton principal pour commencer une partie */}
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50">
+          {/* Main CTA */}
+          <div className="space-y-4">
             <Button
               onClick={() => navigate('/game/setup')}
               size="lg"
@@ -85,42 +57,55 @@ const Home: React.FC = () => {
               <Play className="h-6 w-6 mr-3" />
               Commencer une partie
             </Button>
+            
+            <div className="flex flex-wrap justify-center gap-4 text-sm text-gray-600">
+              <Button
+                variant="ghost"
+                onClick={() => navigate('/rules')}
+                className="hover:text-dutch-blue"
+              >
+                📖 Règles du jeu
+              </Button>
+              <Button
+                variant="ghost"
+                onClick={() => navigate('/history')}
+                className="hover:text-dutch-blue"
+              >
+                📊 Historique
+              </Button>
+              <Button
+                variant="ghost"
+                onClick={() => navigate('/settings')}
+                className="hover:text-dutch-blue"
+              >
+                ⚙️ Paramètres
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        {/* Features grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl w-full mt-16">
+          <div className="bg-white/80 backdrop-blur-sm border border-white/50 rounded-xl p-6 shadow-lg">
+            <div className="text-4xl mb-4">🎯</div>
+            <h3 className="text-lg font-semibold mb-2">Calcul automatique</h3>
+            <p className="text-gray-600">Scores et "Dutch" calculés automatiquement</p>
           </div>
           
-          <ScrollSnapSection align="center">
-            <main id="main-content" role="main" tabIndex={-1}>
-              <Suspense fallback={
-                <div className="h-screen flex items-center justify-center">
-                  <LoadingSkeleton variant="hero" />
-                  <span className="sr-only">Chargement de la section héros</span>
-                </div>
-              }>
-                <EnhancedHeroSection />
-              </Suspense>
-            </main>
-          </ScrollSnapSection>
+          <div className="bg-white/80 backdrop-blur-sm border border-white/50 rounded-xl p-6 shadow-lg">
+            <div className="text-4xl mb-4">🤖</div>
+            <h3 className="text-lg font-semibold mb-2">IA Commentateur</h3>
+            <p className="text-gray-600">Le Professeur Cartouche anime vos parties</p>
+          </div>
           
-          <ScrollSnapSection align="start">
-            <section aria-label="Contenu principal et fonctionnalités">
-              <Suspense fallback={
-                <div className="min-h-screen bg-white/80 backdrop-blur-sm">
-                  <div className="container mx-auto px-4 py-16">
-                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-                      {Array.from({ length: 4 }).map((_, i) => (
-                        <LoadingSkeleton key={i} variant="card" />
-                      ))}
-                    </div>
-                    <span className="sr-only">Chargement du contenu principal</span>
-                  </div>
-                </div>
-              }>
-                <SEOContentSection />
-              </Suspense>
-            </section>
-          </ScrollSnapSection>
-        </ScrollSnapContainer>
-      </MobileOptimizer>
-    </AccessibilityEnhancer>
+          <div className="bg-white/80 backdrop-blur-sm border border-white/50 rounded-xl p-6 shadow-lg">
+            <div className="text-4xl mb-4">📱</div>
+            <h3 className="text-lg font-semibold mb-2">Hors ligne</h3>
+            <p className="text-gray-600">Fonctionne sans connexion internet</p>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 
