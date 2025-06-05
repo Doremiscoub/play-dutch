@@ -3,16 +3,21 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Crown, Star } from 'lucide-react';
 
-interface PlayerCardWinnerCrownProps {
+interface FloatingWinnerBadgeProps {
   isWinner: boolean;
+  cardRef: React.RefObject<HTMLDivElement>;
 }
 
-const PlayerCardWinnerCrown: React.FC<PlayerCardWinnerCrownProps> = ({ isWinner }) => {
+const FloatingWinnerBadge: React.FC<FloatingWinnerBadgeProps> = ({ isWinner, cardRef }) => {
   if (!isWinner) return null;
 
   return (
     <motion.div
-      className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-50"
+      className="fixed z-[9999] pointer-events-none"
+      style={{
+        left: cardRef.current ? cardRef.current.offsetLeft + cardRef.current.offsetWidth / 2 - 24 : 0,
+        top: cardRef.current ? cardRef.current.offsetTop - 16 : 0,
+      }}
       initial={{ opacity: 0, scale: 0, rotate: -180, y: 10 }}
       animate={{ opacity: 1, scale: 1, rotate: 0, y: 0 }}
       transition={{ delay: 0.5, type: "spring", stiffness: 200, damping: 15 }}
@@ -22,7 +27,7 @@ const PlayerCardWinnerCrown: React.FC<PlayerCardWinnerCrownProps> = ({ isWinner 
           <Crown className="h-8 w-8 text-amber-500 drop-shadow-sm" />
         </div>
         <motion.div
-          className="absolute -inset-2 z-50"
+          className="absolute -inset-2"
           animate={{ 
             scale: [1, 1.15, 1],
             rotate: [0, 5, -5, 0]
@@ -40,4 +45,4 @@ const PlayerCardWinnerCrown: React.FC<PlayerCardWinnerCrownProps> = ({ isWinner 
   );
 };
 
-export default PlayerCardWinnerCrown;
+export default FloatingWinnerBadge;
