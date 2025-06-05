@@ -41,7 +41,15 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
 
   const handleScoreChange = (index: number, value: string) => {
     const newScores = [...scores];
-    newScores[index] = value === '' ? 0 : parseInt(value);
+    // Allow negative scores down to -6
+    if (value === '' || value === '-') {
+      newScores[index] = 0;
+    } else {
+      const parsedValue = parseInt(value);
+      if (!isNaN(parsedValue) && parsedValue >= -6) {
+        newScores[index] = parsedValue;
+      }
+    }
     setScores(newScores);
   };
 
@@ -73,7 +81,9 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
 
   const adjustScore = (index: number, amount: number) => {
     const newScores = [...scores];
-    newScores[index] = Math.max(0, (newScores[index] || 0) + amount);
+    const newValue = (newScores[index] || 0) + amount;
+    // Allow negative scores down to -6
+    newScores[index] = Math.max(-6, newValue);
     setScores(newScores);
   };
 

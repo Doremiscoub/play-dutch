@@ -18,7 +18,6 @@ const EnhancedScoreBoardHeader: React.FC<EnhancedScoreBoardHeaderProps> = ({
   const navigate = useNavigate();
   
   const handleNavigation = (path: string) => {
-    // Save the current route to return to the game later
     localStorage.setItem('dutch_return_to_game', 'true');
     navigate(path);
   };
@@ -37,7 +36,6 @@ const EnhancedScoreBoardHeader: React.FC<EnhancedScoreBoardHeaderProps> = ({
             size="icon"
             className="text-gray-600 hover:text-dutch-blue transition-colors"
             onClick={() => {
-              // Check if we should return to game or go home
               const shouldReturnToGame = localStorage.getItem('dutch_return_to_game');
               if (shouldReturnToGame) {
                 localStorage.removeItem('dutch_return_to_game');
@@ -50,7 +48,7 @@ const EnhancedScoreBoardHeader: React.FC<EnhancedScoreBoardHeaderProps> = ({
         </div>
         
         <motion.h1 
-          className="relative text-2xl sm:text-4xl font-black tracking-tight"
+          className="relative text-3xl sm:text-5xl md:text-6xl font-black tracking-tight"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}

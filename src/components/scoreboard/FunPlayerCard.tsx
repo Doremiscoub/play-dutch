@@ -2,218 +2,186 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Player } from '@/types';
-import { Crown, Zap, Star, Trophy, Target, Flame } from 'lucide-react';
+import { Crown, TrendingUp, TrendingDown, Minus, Trophy, Target } from 'lucide-react';
+import PlayerRankBadge from '../game/PlayerRankBadge';
+import { cn } from '@/lib/utils';
 
 interface FunPlayerCardProps {
   player: Player;
   rank: number;
   totalPlayers: number;
-  onSelect?: (player: Player) => void;
-  isSelected?: boolean;
+  onSelect: (player: Player) => void;
+  isSelected: boolean;
 }
 
-const FunPlayerCard: React.FC<FunPlayerCardProps> = ({ 
-  player, 
-  rank, 
+const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
+  player,
+  rank,
   totalPlayers,
   onSelect,
-  isSelected = false
+  isSelected
 }) => {
-  const dutchCount = player.rounds.filter(round => round.isDutch).length;
-  const bestRound = player.rounds.length > 0 ? Math.min(...player.rounds.map(r => r.score)) : 0;
-  const worstRound = player.rounds.length > 0 ? Math.max(...player.rounds.map(r => r.score)) : 0;
-  const averageScore = player.rounds.length > 0 ? Math.round(player.totalScore / player.rounds.length) : 0;
-  
-  const getRankIcon = () => {
-    switch (rank) {
-      case 1: return <Crown className="h-5 w-5 text-yellow-500" />;
-      case 2: return <Trophy className="h-5 w-5 text-gray-400" />;
-      case 3: return <Star className="h-5 w-5 text-amber-600" />;
-      default: return <Target className="h-4 w-4 text-gray-500" />;
-    }
+  const isWinner = rank === 1;
+  const isLastPlace = rank === totalPlayers;
+  const recentRounds = player.rounds.slice(-3);
+  const hasPositiveTrend = recentRounds.length >= 2 && 
+    recentRounds[recentRounds.length - 1].score < recentRounds[recentRounds.length - 2].score;
+  const hasNegativeTrend = recentRounds.length >= 2 && 
+    recentRounds[recentRounds.length - 1].score > recentRounds[recentRounds.length - 2].score;
+
+  const getScoreColor = (score: number) => {
+    if (score <= 0) return 'text-emerald-600 font-bold';
+    if (score <= 15) return 'text-green-600 font-semibold';
+    if (score <= 30) return 'text-yellow-600 font-semibold';
+    if (score <= 50) return 'text-orange-600 font-semibold';
+    return 'text-red-600 font-bold';
   };
-  
-  const getRankBadgeColor = () => {
-    switch (rank) {
-      case 1: return 'bg-gradient-to-r from-yellow-400 to-orange-500 shadow-yellow-200/50';
-      case 2: return 'bg-gradient-to-r from-gray-300 to-gray-500 shadow-gray-200/50';
-      case 3: return 'bg-gradient-to-r from-amber-400 to-orange-600 shadow-amber-200/50';
-      default: return 'bg-gradient-to-r from-dutch-blue to-dutch-purple shadow-dutch-blue/30';
-    }
-  };
-  
+
   const getCardStyle = () => {
-    if (rank === 1) {
-      return 'bg-gradient-to-br from-yellow-50/90 via-white/90 to-orange-50/90 border-yellow-300/60 shadow-yellow-200/30';
+    if (isWinner) {
+      return "bg-gradient-to-br from-amber-100/80 via-yellow-50/80 to-amber-100/80 border-amber-300/50 shadow-amber-200/20";
     }
-    if (rank === 2) {
-      return 'bg-gradient-to-br from-gray-50/90 via-white/90 to-slate-50/90 border-gray-300/60 shadow-gray-200/30';
+    if (isLastPlace && totalPlayers > 2) {
+      return "bg-gradient-to-br from-red-50/80 via-pink-50/80 to-red-50/80 border-red-200/50 shadow-red-100/20";
     }
-    if (rank === 3) {
-      return 'bg-gradient-to-br from-amber-50/90 via-white/90 to-orange-50/90 border-amber-300/60 shadow-amber-200/30';
-    }
-    return 'bg-white/70 border-white/50 shadow-lg';
+    return "bg-gradient-to-br from-white/80 via-gray-50/60 to-white/80 border-white/50";
   };
 
   return (
     <motion.div
+      className={cn(
+        "relative p-6 rounded-3xl backdrop-blur-xl border shadow-lg transition-all duration-300 cursor-pointer",
+        getCardStyle(),
+        isSelected ? "ring-2 ring-dutch-blue/30 shadow-xl scale-[1.02]" : "hover:scale-[1.01] hover:shadow-xl"
+      )}
+      onClick={() => onSelect(player)}
+      whileHover={{ y: -2 }}
+      whileTap={{ scale: 0.98 }}
       layout
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      whileHover={{ scale: 1.01, y: -2 }}
-      className={`
-        backdrop-blur-xl border rounded-3xl p-6 transition-all duration-300 cursor-pointer relative overflow-hidden w-full
-        ${getCardStyle()}
-        ${isSelected ? 'ring-2 ring-dutch-blue/50 shadow-xl' : 'shadow-lg hover:shadow-xl'}
-      `}
-      onClick={() => onSelect?.(player)}
     >
-      {/* Effet de brillance pour les Dutch */}
-      {dutchCount > 0 && (
+      {/* Winner Crown */}
+      {isWinner && (
         <motion.div
-          className="absolute inset-0 bg-gradient-to-r from-transparent via-green-400/10 to-transparent"
-          animate={{ x: ['-100%', '100%'] }}
-          transition={{ duration: 3, repeat: Infinity, repeatDelay: 2 }}
-        />
+          className="absolute -top-3 left-1/2 transform -translate-x-1/2"
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.3, type: "spring" }}
+        >
+          <Crown className="h-8 w-8 text-amber-500 drop-shadow-lg" />
+        </motion.div>
       )}
 
-      <div className="relative z-10">
-        {/* Layout horizontal pour plus d'espace */}
-        <div className="flex items-center gap-6">
-          {/* Section gauche: Badge de rang et Avatar */}
-          <div className="flex items-center gap-4 flex-shrink-0">
-            {/* Badge de rang */}
-            <motion.div 
-              className={`w-12 h-12 rounded-full ${getRankBadgeColor()} flex items-center justify-center text-white font-bold text-lg shadow-lg`}
-              whileHover={{ scale: 1.1 }}
-            >
-              {rank}
-            </motion.div>
-            
-            {/* Avatar emoji avec containment correct */}
-            <motion.div 
-              className="w-20 h-20 rounded-2xl flex items-center justify-center text-4xl shadow-lg relative"
-              style={{ 
-                backgroundColor: player.avatarColor,
-                overflow: 'visible'
-              }}
-              whileHover={{ rotate: [0, -5, 5, 0], scale: 1.05 }}
-              transition={{ duration: 0.3 }}
-            >
-              {/* Gradient background avec overflow visible */}
-              <div 
-                className="absolute inset-0 rounded-2xl opacity-30"
-                style={{
-                  background: `radial-gradient(circle at center, ${player.avatarColor}80, transparent)`
-                }}
-              />
-              <span className="relative z-10 drop-shadow-lg filter">
-                {player.emoji || '🎮'}
-              </span>
-              {dutchCount > 0 && (
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <PlayerRankBadge 
+            position={rank} 
+            size="lg" 
+            showAnimation={true}
+          />
+          
+          <div className="flex-1">
+            <div className="flex items-center gap-2 mb-1">
+              <h3 className="text-xl font-bold text-gray-800">
+                {player.name}
+              </h3>
+              {/* Trend Indicator */}
+              {hasPositiveTrend && (
                 <motion.div
-                  className="absolute -top-1 -right-1 w-4 h-4 bg-green-400 rounded-full border-2 border-white"
-                  animate={{ scale: [1, 1.2, 1], opacity: [0.7, 1, 0.7] }}
-                  transition={{ duration: 1.5, repeat: Infinity }}
-                />
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  className="p-1 bg-green-100 rounded-full"
+                >
+                  <TrendingUp className="h-4 w-4 text-green-600" />
+                </motion.div>
               )}
-            </motion.div>
-          </div>
-
-          {/* Section centrale: Nom et informations */}
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex items-center gap-3">
-                <h3 className="font-bold text-xl text-gray-800 truncate">
-                  {player.name}
-                </h3>
-                {getRankIcon()}
-              </div>
-              
-              {/* Score principal */}
-              <motion.div 
-                className="text-right"
-                animate={rank === 1 ? { scale: [1, 1.05, 1] } : {}}
-                transition={{ duration: 2, repeat: Infinity }}
-              >
-                <div className="text-4xl font-black text-gray-800 leading-none">
-                  {player.totalScore}
-                </div>
-                <div className="text-sm text-gray-600 font-medium">points</div>
-              </motion.div>
+              {hasNegativeTrend && (
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  className="p-1 bg-red-100 rounded-full"
+                >
+                  <TrendingDown className="h-4 w-4 text-red-600" />
+                </motion.div>
+              )}
+              {!hasPositiveTrend && !hasNegativeTrend && (
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  className="p-1 bg-gray-100 rounded-full"
+                >
+                  <Minus className="h-4 w-4 text-gray-500" />
+                </motion.div>
+              )}
             </div>
-
-            {/* Statistiques détaillées */}
-            <div className="grid grid-cols-3 gap-4 mb-4">
+            
+            {/* Performance Indicators */}
+            <div className="flex items-center gap-3 text-sm text-gray-600">
               {player.rounds.length > 0 && (
                 <>
-                  <div className="text-center">
-                    <div className="text-lg font-bold text-blue-600">{averageScore}</div>
-                    <div className="text-xs text-gray-600">Moyenne</div>
+                  <div className="flex items-center gap-1">
+                    <Target className="h-3 w-3" />
+                    <span>Moy: {(player.totalScore / player.rounds.length).toFixed(1)}</span>
                   </div>
-                  <div className="text-center">
-                    <div className="text-lg font-bold text-green-600">{bestRound}</div>
-                    <div className="text-xs text-gray-600">Meilleur</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-lg font-bold text-red-600">{worstRound}</div>
-                    <div className="text-xs text-gray-600">Pire</div>
+                  <div className="flex items-center gap-1">
+                    <Trophy className="h-3 w-3" />
+                    <span>Min: {Math.min(...player.rounds.map(r => r.score))}</span>
                   </div>
                 </>
               )}
             </div>
-
-            {/* Badges de performance */}
-            <div className="flex items-center gap-2 mb-4">
-              {dutchCount > 0 && (
-                <span className="flex items-center gap-1 bg-green-100/80 text-green-800 px-3 py-1 rounded-full font-medium shadow-sm">
-                  <Zap className="h-3 w-3" />
-                  {dutchCount} Dutch
-                </span>
-              )}
-              {player.rounds.length > 0 && (
-                <span className="bg-blue-100/80 text-blue-800 px-3 py-1 rounded-full font-medium text-sm">
-                  {player.rounds.length} manches
-                </span>
-              )}
-            </div>
           </div>
         </div>
-        
-        {/* Indicateurs de manches - ligne complète */}
-        {player.rounds.length > 0 && (
-          <div className="flex flex-wrap gap-2 justify-center pt-4 border-t border-white/30">
-            {player.rounds.slice(-12).map((round, index) => (
+
+        <div className="text-right">
+          <motion.div
+            className={cn(
+              "text-4xl font-black tracking-tight",
+              getScoreColor(player.totalScore)
+            )}
+            initial={{ scale: 0.8 }}
+            animate={{ scale: 1 }}
+            transition={{ type: "spring", stiffness: 200 }}
+          >
+            <span className="bg-gradient-to-br from-gray-800 via-gray-700 to-gray-900 bg-clip-text text-transparent drop-shadow-sm">
+              {player.totalScore}
+            </span>
+          </motion.div>
+          <div className="text-sm text-gray-500 font-medium">
+            {player.rounds.length} manche{player.rounds.length > 1 ? 's' : ''}
+          </div>
+        </div>
+      </div>
+
+      {/* Recent Performance Mini Chart */}
+      {recentRounds.length > 1 && (
+        <div className="mt-4 pt-4 border-t border-gray-200/50">
+          <div className="flex items-center justify-between text-xs text-gray-500 mb-2">
+            <span>Dernières manches</span>
+            <span>{recentRounds.length} scores</span>
+          </div>
+          <div className="flex gap-1">
+            {recentRounds.map((round, index) => (
               <motion.div
-                key={player.rounds.length - 12 + index}
-                initial={{ scale: 0, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ delay: index * 0.03, type: "spring", stiffness: 300 }}
-                className={`w-8 h-8 rounded-xl flex items-center justify-center text-xs font-bold shadow-md transition-all hover:scale-110 ${
-                  round.isDutch 
-                    ? 'bg-gradient-to-br from-green-400 to-emerald-500 text-white shadow-green-200' 
-                    : round.score === 0 
-                      ? 'bg-gradient-to-br from-blue-400 to-blue-500 text-white shadow-blue-200'
-                      : round.score <= 10
-                        ? 'bg-gradient-to-br from-gray-200 to-gray-300 text-gray-700 shadow-gray-200'
-                        : round.score <= 30
-                          ? 'bg-gradient-to-br from-orange-300 to-orange-400 text-orange-800 shadow-orange-200'
-                          : 'bg-gradient-to-br from-red-400 to-red-500 text-white shadow-red-200'
-                }`}
-                title={`Manche ${player.rounds.length - 12 + index + 1}: ${round.score} points${round.isDutch ? ' (Dutch!)' : ''}`}
+                key={index}
+                className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden"
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ delay: index * 0.1 }}
               >
-                {round.isDutch ? <Flame className="h-3 w-3" /> : round.score}
+                <div
+                  className={cn(
+                    "h-full rounded-full transition-all duration-300",
+                    round.score <= 5 ? "bg-green-400" :
+                    round.score <= 15 ? "bg-yellow-400" :
+                    round.score <= 25 ? "bg-orange-400" : "bg-red-400"
+                  )}
+                  style={{ width: `${Math.min(100, (round.score / 30) * 100)}%` }}
+                />
               </motion.div>
             ))}
-            {player.rounds.length > 12 && (
-              <div className="w-8 h-8 rounded-xl flex items-center justify-center text-xs font-medium bg-gray-100 text-gray-500">
-                +{player.rounds.length - 12}
-              </div>
-            )}
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </motion.div>
   );
 };
