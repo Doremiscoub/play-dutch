@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, HTMLMotionProps } from 'framer-motion';
 import { Sparkles, Zap } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { VariantProps, cva } from 'class-variance-authority';
@@ -62,8 +62,11 @@ const enhancedButtonVariants = cva(
   }
 );
 
+// Separate the motion-specific props from HTML button props
+type MotionButtonProps = Omit<HTMLMotionProps<"button">, 'onDrag' | 'onDragStart' | 'onDragEnd'>;
+
 export interface EnhancedButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, keyof MotionButtonProps>,
   VariantProps<typeof enhancedButtonVariants> {
   withSparkles?: boolean;
   withIcon?: boolean;
@@ -82,6 +85,9 @@ export const EnhancedButton: React.FC<EnhancedButtonProps> = ({
   icon,
   loading = false,
   children,
+  onClick,
+  disabled,
+  type,
   ...props
 }) => {
   const isSpecialVariant = ['legendary', 'shiny', 'power', 'rainbow', 'holographic'].includes(variant || '');
@@ -99,6 +105,9 @@ export const EnhancedButton: React.FC<EnhancedButtonProps> = ({
         y: 0,
         transition: { duration: 0.1 }
       }}
+      onClick={onClick}
+      disabled={disabled}
+      type={type}
       {...props}
     >
       {/* Shimmer effect for special variants */}

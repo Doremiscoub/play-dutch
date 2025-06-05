@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { EnhancedButton } from '@/components/ui/enhanced-button';
 import { EnhancedCard } from '@/components/ui/enhanced-card';
-import { GameText, GameBadge } from '@/components/ui/game-text';
+import { GameText } from '@/components/ui/game-text';
+import { GameBadge } from '@/components/ui/game-badge';
 import GameSetupGlassmorphic from './GameSetupGlassmorphic';
 import { motion } from 'framer-motion';
 
@@ -41,10 +42,10 @@ const GameSetup: React.FC = () => {
         >
           <GameText
             as="h1"
-            variant="display"
-            color="gradient"
+            variant="hero"
+            color="rainbow"
             transform="uppercase"
-            spacing="tighter"
+            spacing="tight"
             align="center"
             className="mb-4"
           >
@@ -54,27 +55,23 @@ const GameSetup: React.FC = () => {
           {/* Enhanced feature badges */}
           <div className="flex justify-center gap-3 flex-wrap mb-8">
             <GameBadge 
-              variant="status" 
-              type="winner"
-              text="100% Gratuit"
-              size="auto"
-              icon="✅"
-            />
+              variant="default"
+              className="bg-green-100 text-green-800 border-green-200"
+            >
+              ✅ 100% Gratuit
+            </GameBadge>
             <GameBadge 
-              variant="status" 
-              type="electric"
-              text="Fonctionne hors-ligne"
-              size="auto"
-              icon="📱"
-            />
+              variant="default"
+              className="bg-blue-100 text-blue-800 border-blue-200"
+            >
+              📱 Fonctionne hors-ligne
+            </GameBadge>
             <GameBadge 
-              variant="status" 
-              type="legendary"
-              text="IA Commentateur"
-              size="auto"
-              icon="🤖"
-              withSparkles
-            />
+              variant="default"
+              className="bg-purple-100 text-purple-800 border-purple-200"
+            >
+              🤖 IA Commentateur
+            </GameBadge>
           </div>
         </motion.div>
 
