@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useCallback } from 'react';
 import { Achievement, PlayerAchievements, ACHIEVEMENT_DEFINITIONS } from '@/types/achievements';
 import { Player } from '@/types';
@@ -12,8 +11,8 @@ export const useAchievements = () => {
     const savedAchievements = localStorage.getItem('dutch_achievements');
     if (savedAchievements) {
       try {
-        const parsed = JSON.parse(savedAchievements);
-        const achievementsMap = new Map(Object.entries(parsed));
+        const parsed = JSON.parse(savedAchievements) as Record<string, PlayerAchievements>;
+        const achievementsMap = new Map<string, PlayerAchievements>(Object.entries(parsed));
         setPlayerAchievements(achievementsMap);
       } catch (error) {
         console.error('Error loading achievements:', error);
