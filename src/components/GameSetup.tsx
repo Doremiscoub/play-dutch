@@ -18,14 +18,14 @@ const GameSetup: React.FC<GameSetupProps> = ({ onStartGame }) => {
         <TabsList className="grid w-full grid-cols-2 bg-white/80 backdrop-blur-sm border border-white/50">
           <TabsTrigger 
             value="local" 
-            className="flex items-center gap-2 data-[state=active]:bg-dutch.blue/10 data-[state=active]:text-dutch.blue"
+            className="flex items-center gap-2 data-[state=active]:bg-dutch-blue/10 data-[state=active]:text-dutch-blue"
           >
             <Users className="h-4 w-4" />
             Partie locale
           </TabsTrigger>
           <TabsTrigger 
             value="multiplayer" 
-            className="flex items-center gap-2 data-[state=active]:bg-dutch.purple/10 data-[state=active]:text-dutch.purple"
+            className="flex items-center gap-2 data-[state=active]:bg-dutch-purple/10 data-[state=active]:text-dutch-purple"
           >
             <Globe className="h-4 w-4" />
             Multijoueur

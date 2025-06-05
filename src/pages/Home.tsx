@@ -1,4 +1,3 @@
-
 import React, { Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
 import GameSettings from '@/components/GameSettings';
@@ -81,7 +80,7 @@ const Home: React.FC = () => {
             <Button
               onClick={() => navigate('/game/setup')}
               size="lg"
-              className="bg-gradient-to-r from-dutch.blue via-dutch.purple to-dutch.orange text-white font-bold text-xl px-12 py-6 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+              className="bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange text-white font-bold text-xl px-12 py-6 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
             >
               <Play className="h-6 w-6 mr-3" />
               Commencer une partie

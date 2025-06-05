@@ -6,9 +6,15 @@
 @layer base {
   :root {
     /* Variables de couleur Dutch - Style iOS 19 */
-    --dutch-primary: #0A84FF;
-    --dutch-secondary: #5856D6;
-    --dutch-accent: #FF9F0A;
+    --dutch-blue: #0A84FF;
+    --dutch-blue-light: #5AC8FA;
+    --dutch-blue-dark: #0062CC;
+    --dutch-purple: #8B5CF6;
+    --dutch-purple-light: #C4B5FD;
+    --dutch-purple-dark: #6D28D9;
+    --dutch-orange: #FF9F0A;
+    --dutch-orange-light: #FFD60A;
+    --dutch-orange-dark: #E67700;
     --dutch-background: #F2F2F7;
     
     /* Bordures */

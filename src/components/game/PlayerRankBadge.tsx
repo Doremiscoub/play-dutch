@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
@@ -26,7 +25,7 @@ export default function PlayerRankBadge({
         return "bg-gradient-to-r from-amber-700 to-amber-600 text-amber-100";
       default:
         return position <= 5 
-          ? "bg-gradient-to-r from-dutch.blue to-dutch.purple text-white" 
+          ? "bg-gradient-to-r from-dutch-blue to-dutch-purple text-white" 
           : "bg-gradient-to-r from-gray-500 to-gray-400 text-white";
     }
   };
