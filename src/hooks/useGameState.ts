@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { useLocalStorage } from './use-local-storage';
 import { useGamePersistence } from './useGamePersistence';
 import { useSimpleGameInitialization } from './useSimpleGameInitialization';
@@ -7,6 +7,8 @@ import { useGameContinuation } from './useGameContinuation';
 import { useRoundManagement } from './useRoundManagement';
 
 export const useGameState = () => {
+  console.log('useGameState: Hook called');
+  
   const [showGameOver, setShowGameOver] = useState<boolean>(false);
   const [soundEnabled] = useLocalStorage('dutch_sound_enabled', true);
   
@@ -16,7 +18,9 @@ export const useGameState = () => {
     gameStartTime,
     scoreLimit,
     setScoreLimit,
-    createNewGame
+    createNewGame,
+    isInitialized,
+    initError
   } = useSimpleGameInitialization();
   
   const { 
@@ -40,7 +44,10 @@ export const useGameState = () => {
     handleRestart
   } = useGameContinuation(setShowGameOver, setScoreLimit, scoreLimit);
 
-  const handleAddRound = (scores: number[], dutchPlayerId?: string) => {
+  // Memoïser les callbacks pour éviter les re-renders
+  const handleAddRound = useCallback((scores: number[], dutchPlayerId?: string) => {
+    console.log('useGameState: handleAddRound called', { scores, dutchPlayerId });
+    
     try {
       const result = addRound(players, scores, dutchPlayerId);
       
@@ -56,12 +63,14 @@ export const useGameState = () => {
       }
       return false;
     } catch (error) {
-      console.error('Error in handleAddRound:', error);
+      console.error('useGameState: Error in handleAddRound:', error);
       return false;
     }
-  };
+  }, [players, addRound, setPlayers]);
 
-  const handleUndoLastRound = () => {
+  const handleUndoLastRound = useCallback(() => {
+    console.log('useGameState: handleUndoLastRound called');
+    
     try {
       const updatedPlayers = undoLastRound(players, soundEnabled);
       setPlayers(updatedPlayers);
@@ -72,29 +81,34 @@ export const useGameState = () => {
       
       return true;
     } catch (error) {
-      console.error('Error in handleUndoLastRound:', error);
+      console.error('useGameState: Error in handleUndoLastRound:', error);
       return false;
     }
-  };
+  }, [players, undoLastRound, setPlayers, showGameOver, soundEnabled]);
 
-  const handleConfirmEndGame = () => {
+  const handleConfirmEndGame = useCallback(() => {
+    console.log('useGameState: handleConfirmEndGame called');
+    
     try {
       saveGameToHistory(players, gameStartTime);
       setShowGameOver(true);
       return true;
     } catch (error) {
-      console.error('Error in handleConfirmEndGame:', error);
+      console.error('useGameState: Error in handleConfirmEndGame:', error);
       return false;
     }
-  };
+  }, [players, gameStartTime, saveGameToHistory]);
 
-  return {
+  // Memoïser l'objet de retour pour éviter les re-renders
+  const gameState = useMemo(() => ({
     players,
     roundHistory,
     showGameOver,
     showGameEndConfirmation,
     scoreLimit,
     gameStartTime,
+    isInitialized,
+    initError,
     handleAddRound,
     handleUndoLastRound,
     handleRequestEndGame,
@@ -103,7 +117,33 @@ export const useGameState = () => {
     handleContinueGame,
     handleRestart,
     createNewGame
-  };
+  }), [
+    players,
+    roundHistory,
+    showGameOver,
+    showGameEndConfirmation,
+    scoreLimit,
+    gameStartTime,
+    isInitialized,
+    initError,
+    handleAddRound,
+    handleUndoLastRound,
+    handleRequestEndGame,
+    handleConfirmEndGame,
+    handleCancelEndGame,
+    handleContinueGame,
+    handleRestart,
+    createNewGame
+  ]);
+
+  console.log('useGameState: Returning state', { 
+    playersCount: players?.length || 0, 
+    isInitialized,
+    showGameOver,
+    roundCount: roundHistory?.length || 0
+  });
+
+  return gameState;
 };
 
 export default useGameState;

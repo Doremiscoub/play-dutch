@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Player, ScoreBoardProps } from '@/types';
 import { BarChart3, Table } from 'lucide-react';
@@ -25,22 +25,33 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
   scoreLimit = 100,
   openScoreForm
 }) => {
+  console.log('ScoreBoard: Component rendered', { playersCount: players?.length, roundHistoryLength: roundHistory.length });
+  
   const { playSound } = useSound();
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
   const [currentView, setCurrentView] = useState<'list' | 'table'>('list');
 
-  // Sort players by score (ascending - lowest wins)
-  const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
-  const roundCount = players[0]?.rounds.length || 0;
+  // Memoïser les données triées pour éviter les recalculs
+  const sortedPlayers = useMemo(() => {
+    console.log('ScoreBoard: Sorting players');
+    return [...players].sort((a, b) => a.totalScore - b.totalScore);
+  }, [players]);
 
-  const handleAddRound = () => {
+  const roundCount = useMemo(() => {
+    return players[0]?.rounds.length || 0;
+  }, [players]);
+
+  // Memoïser les callbacks
+  const handleAddRound = useCallback(() => {
+    console.log('ScoreBoard: handleAddRound called');
     if (openScoreForm) {
       openScoreForm();
     }
     playSound('buttonClick');
-  };
+  }, [openScoreForm, playSound]);
 
-  const handleUndo = () => {
+  const handleUndo = useCallback(() => {
+    console.log('ScoreBoard: handleUndo called');
     if (roundHistory.length === 0) {
       toast.error("Aucune manche à annuler");
       return;
@@ -48,12 +59,23 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
     onUndoLastRound();
     playSound('undo');
     toast.success("Dernière manche annulée");
-  };
+  }, [roundHistory.length, onUndoLastRound, playSound]);
 
-  const handleEndGame = () => {
+  const handleEndGame = useCallback(() => {
+    console.log('ScoreBoard: handleEndGame called');
     onEndGame();
     playSound('gameEnd');
-  };
+  }, [onEndGame, playSound]);
+
+  const handleViewChange = useCallback((view: 'list' | 'table') => {
+    console.log('ScoreBoard: View changed to', view);
+    setCurrentView(view);
+  }, []);
+
+  const handlePlayerSelect = useCallback((player: Player) => {
+    console.log('ScoreBoard: Player selected', player.name);
+    setSelectedPlayer(player);
+  }, []);
 
   return (
     <div className="min-h-screen p-4 pb-40">
@@ -85,7 +107,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
           transition={{ duration: 0.4, delay: 0.3 }}
         >
           <motion.button
-            onClick={() => setCurrentView('list')}
+            onClick={() => handleViewChange('list')}
             className={`px-8 py-4 rounded-2xl transition-all shadow-lg flex items-center gap-3 font-semibold text-lg ${
               currentView === 'list'
                 ? 'bg-gradient-to-r from-dutch-blue to-dutch-purple text-white shadow-xl scale-105'
@@ -99,7 +121,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
           </motion.button>
           
           <motion.button
-            onClick={() => setCurrentView('table')}
+            onClick={() => handleViewChange('table')}
             className={`px-8 py-4 rounded-2xl transition-all shadow-lg flex items-center gap-3 font-semibold text-lg ${
               currentView === 'table'
                 ? 'bg-gradient-to-r from-dutch-blue to-dutch-purple text-white shadow-xl scale-105'
@@ -132,7 +154,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                     player={player}
                     rank={index + 1}
                     totalPlayers={players.length}
-                    onSelect={setSelectedPlayer}
+                    onSelect={handlePlayerSelect}
                     isSelected={selectedPlayer?.id === player.id}
                   />
                 ))}
@@ -188,4 +210,4 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
   );
 };
 
-export default ScoreBoard;
+export default React.memo(ScoreBoard);
