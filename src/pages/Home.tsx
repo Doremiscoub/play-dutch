@@ -1,5 +1,6 @@
 
 import React, { Suspense } from 'react';
+import { useNavigate } from 'react-router-dom';
 import GameSettings from '@/components/GameSettings';
 import { LoadingSkeleton } from '@/components/ui/loading-skeleton';
 import { ScrollSnapContainer, ScrollSnapSection } from '@/components/ui/scroll-snap-container';
@@ -7,7 +8,7 @@ import { MobileOptimizer } from '@/components/ui/mobile-optimizer';
 import { PerformanceMonitor } from '@/components/ui/performance-monitor';
 import { AccessibilityEnhancer } from '@/components/ui/accessibility-enhancer';
 import { useSEO } from '@/hooks/useSEO';
-import { User } from 'lucide-react';
+import { User, Play } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 // Lazy load components for better performance
@@ -15,6 +16,8 @@ const EnhancedHeroSection = React.lazy(() => import('@/components/home/EnhancedH
 const SEOContentSection = React.lazy(() => import('@/components/home/SEOContentSection'));
 
 const Home: React.FC = () => {
+  const navigate = useNavigate();
+
   useSEO({
     title: 'Dutch Card Game - Application gratuite pour jeu de cartes entre amis',
     description: 'Application web gratuite pour suivre les scores du jeu de cartes Dutch. Interface moderne, hors-ligne, avec IA commentateur Professeur Cartouche. Parfait pour vos soirées entre amis.',
@@ -62,7 +65,7 @@ const Home: React.FC = () => {
           {/* Enhanced Header with better accessibility */}
           <header className="absolute top-4 right-4 z-50 flex gap-2" id="navigation">
             <Button
-              variant="glass"
+              variant="ghost"
               size="icon"
               className="bg-white/70 backdrop-blur-xl border border-white/50 text-gray-800 hover:bg-white/80 rounded-full"
               aria-label="Profil utilisateur"
@@ -72,6 +75,18 @@ const Home: React.FC = () => {
             </Button>
             <GameSettings />
           </header>
+
+          {/* Bouton principal pour commencer une partie */}
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50">
+            <Button
+              onClick={() => navigate('/game/setup')}
+              size="lg"
+              className="bg-gradient-to-r from-dutch.blue via-dutch.purple to-dutch.orange text-white font-bold text-xl px-12 py-6 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+            >
+              <Play className="h-6 w-6 mr-3" />
+              Commencer une partie
+            </Button>
+          </div>
           
           <ScrollSnapSection align="center">
             <main id="main-content" role="main" tabIndex={-1}>
