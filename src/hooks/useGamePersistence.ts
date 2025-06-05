@@ -1,4 +1,3 @@
-
 import { useCallback } from 'react';
 import { Player, Game } from '@/types';
 import { toast } from 'sonner';
@@ -129,7 +128,7 @@ export const useGamePersistence = () => {
       if (retryCount < 2) {
         console.log(`useGamePersistence: Retrying save (attempt ${retryCount + 1})`);
         await new Promise(resolve => setTimeout(resolve, 1000));
-        return this.saveGameState(gameState, retryCount + 1);
+        return saveGameState(gameState, retryCount + 1);
       }
       
       // Tentative de sauvegarde d'urgence en localStorage
