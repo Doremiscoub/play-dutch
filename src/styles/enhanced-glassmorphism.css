@@ -1,0 +1,164 @@
+
+/* Enhanced Glassmorphism Styles - Inspired by modern UI */
+
+.glass-modern {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 24px;
+  box-shadow: 
+    0 12px 40px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+  background: rgba(255, 255, 255, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  transform: translateY(-2px);
+  box-shadow: 
+    0 16px 50px rgba(0, 0, 0, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.glass-button {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  transition: all 0.2s ease-out;
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s;
+}
+
+.glass-button:hover::before {
+  left: 100%;
+}
+
+.glass-button:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transform: scale(1.02);
+}
+
+.glass-button:active {
+  transform: scale(0.98);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.glass-modal {
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 28px;
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.glass-input {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 12px;
+  transition: all 0.2s ease-out;
+}
+
+.glass-input:focus {
+  background: rgba(255, 255, 255, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  outline: none;
+  box-shadow: 
+    0 0 0 3px rgba(59, 130, 246, 0.1),
+    0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.glass-sidebar {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border-right: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 
+    4px 0 20px rgba(0, 0, 0, 0.08),
+    inset -1px 0 0 rgba(255, 255, 255, 0.1);
+}
+
+.glass-topbar {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 
+    0 4px 20px rgba(0, 0, 0, 0.05),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Toggle Switch Glassmorphism */
+.glass-toggle {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  transition: all 0.3s ease;
+}
+
+.glass-toggle.active {
+  background: rgba(59, 130, 246, 0.3);
+  border: 1px solid rgba(59, 130, 246, 0.4);
+}
+
+/* Enhanced Background for better glass effect */
+.glass-background {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0.05)
+  );
+  position: relative;
+}
+
+.glass-background::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(120, 200, 255, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
