@@ -71,10 +71,8 @@ const GamePageContainer: React.FC<GamePageContainerProps> = ({
 
   const handleAddNewRound = (scores: number[], dutchPlayerId?: string) => {
     console.log('GamePageContainer: Adding new round');
-    const success = onAddRound(scores, dutchPlayerId);
-    if (success) {
-      onCloseScoreForm();
-    }
+    onAddRound(scores, dutchPlayerId);
+    onCloseScoreForm();
   };
 
   return (
