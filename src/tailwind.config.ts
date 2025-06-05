@@ -294,8 +294,8 @@ export default {
 					},
 				},
 				'shimmer': {
-					'0%': { backgroundPosition: '-200% 0' },
-					'100%': { backgroundPosition: '200% 0' },
+					'0%': { transform: 'translateX(-100%)' },
+					'100%': { transform: 'translateX(100%)' },
 				},
 			},
 			animation: {
@@ -307,7 +307,7 @@ export default {
 				'float': 'float 6s infinite ease-in-out',
 				'ios-bounce': 'ios-bounce 2s infinite ease-in-out',
 				'ios-pop': 'ios-pop 0.3s ease-out',
-				'shimmer': 'shimmer 3s infinite linear',
+				'shimmer': 'shimmer 2s infinite linear',
 			},
 			backdropBlur: {
 				xs: '2px',

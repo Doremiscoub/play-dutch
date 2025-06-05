@@ -60,6 +60,12 @@
   100% { background-position: 300% 0; }
 }
 
+/* NEW: Missing shimmer animation */
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
 /* Particle effects */
 .particle-container {
   position: relative;
@@ -313,4 +319,21 @@
 @keyframes water-flow {
   0% { left: -100%; }
   100% { left: 100%; }
+}
+
+/* Accessibility support */
+@media (prefers-reduced-motion: reduce) {
+  .animate-shimmer,
+  .animate-sparkle,
+  .animate-bounce-uno,
+  .animate-pulse-soft,
+  .holographic-gradient,
+  .btn-legendary,
+  .gradient-text-animated,
+  .electric-glow::after,
+  .fire-glow::after,
+  .water-ripple::before,
+  .trading-card::before {
+    animation: none !important;
+  }
 }
