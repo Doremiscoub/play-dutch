@@ -11,7 +11,6 @@ import EndGameConfirmationDialog from './scoreboard/EndGameConfirmationDialog';
 import DetailedGameStats from './scoreboard/DetailedGameStats';
 import ScoreTableView from './ScoreTableView';
 import AICommentatorEnhanced from './ai-commentator/AICommentatorEnhanced';
-import FloatingActionButtons from './scoreboard/FloatingActionButtons';
 
 const ScoreBoard: React.FC<ScoreBoardProps> = ({
   players,
@@ -86,7 +85,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
         scoreLimit={scoreLimit}
       />
 
-      <div className="p-4 pb-40">
+      <div className="p-4 pb-24">
         <div className="max-w-4xl mx-auto space-y-6">
           {/* Commentateur IA */}
           <motion.div
@@ -200,15 +199,6 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
           />
         </div>
       </div>
-
-      {/* Floating Action Buttons - Position absolument fixe */}
-      <FloatingActionButtons
-        onAddRound={handleAddRound}
-        onUndo={handleUndo}
-        onEndGame={handleEndGame}
-        canUndo={roundHistory.length > 0}
-        canEndGame={roundCount > 0}
-      />
     </div>
   );
 };
