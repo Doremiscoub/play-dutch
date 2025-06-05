@@ -1,3 +1,4 @@
+
 import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { useLocalStorage } from './use-local-storage';
 import { useGamePersistence } from './useGamePersistence';
@@ -248,29 +249,6 @@ export const useGameState = () => {
       };
     }
   }, [isInitialized, players]);
-
-  // Fonction de sauvegarde sécurisée avec retry
-  const secureSaveGameState = useCallback(async (gameData: any, retryCount = 0): Promise<boolean> => {
-    try {
-      const success = await saveGameState(gameData);
-      if (success) {
-        lastSaveTimeRef.current = Date.now();
-        return true;
-      } else if (retryCount < 2) {
-        console.log('useGameState: Save failed, retrying...', retryCount + 1);
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        return secureSaveGameState(gameData, retryCount + 1);
-      }
-      return false;
-    } catch (error) {
-      console.error('useGameState: Error saving game state:', error);
-      if (retryCount < 2) {
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        return secureSaveGameState(gameData, retryCount + 1);
-      }
-      return false;
-    }
-  }, [saveGameState]);
 
   // Handlers optimisés
   const handleAddRound = useCallback(async (scores: number[], dutchPlayerId?: string) => {
