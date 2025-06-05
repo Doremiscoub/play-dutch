@@ -1,8 +1,8 @@
 
-import React, { useMemo, useCallback } from 'react';
-import { motion } from 'framer-motion';
+import React, { useMemo, useCallback, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Player } from '@/types';
-import { Crown, Star } from 'lucide-react';
+import { Crown, Star, ChevronDown } from 'lucide-react';
 import PlayerRankBadge from '../game/PlayerRankBadge';
 import PlayerCardStats from './player-card/PlayerCardStats';
 import PlayerCardTrends from './player-card/PlayerCardTrends';
@@ -26,6 +26,7 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
   isSelected
 }) => {
   console.log('FunPlayerCard: Rendering card for', player.name);
+  const [isExpanded, setIsExpanded] = useState(false);
   
   // Memoïser les calculs coûteux
   const cardData = useMemo(() => {
@@ -78,19 +79,20 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
     return "bg-gradient-to-br from-white/90 via-gray-50/70 to-white/90 border-white/60";
   }, [cardData.isWinner, cardData.isLastPlace, totalPlayers]);
 
-  const handleSelect = useCallback(() => {
-    console.log('FunPlayerCard: Player selected', player.name);
+  const handleCardClick = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsExpanded(!isExpanded);
     onSelect(player);
-  }, [onSelect, player]);
+  }, [isExpanded, onSelect, player]);
 
   return (
     <motion.div
       className={cn(
-        "relative p-6 rounded-3xl backdrop-blur-xl border shadow-xl transition-all duration-300 cursor-pointer overflow-hidden",
+        "relative rounded-3xl backdrop-blur-xl border shadow-xl transition-all duration-300 cursor-pointer overflow-hidden",
         getCardStyle(),
-        isSelected ? "ring-4 ring-dutch-blue/40 shadow-2xl scale-[1.02]" : "hover:scale-[1.01] hover:shadow-2xl"
+        isSelected || isExpanded ? "ring-4 ring-dutch-blue/40 shadow-2xl scale-[1.02]" : "hover:scale-[1.01] hover:shadow-2xl"
       )}
-      onClick={handleSelect}
+      onClick={handleCardClick}
       whileHover={{ y: -4 }}
       whileTap={{ scale: 0.98 }}
       layout
@@ -113,7 +115,7 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
         />
       )}
 
-      {/* Couronne pour le gagnant - Correctement positionnée */}
+      {/* Couronne pour le gagnant */}
       {cardData.isWinner && (
         <motion.div
           className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-20"
@@ -143,42 +145,65 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
         </motion.div>
       )}
 
-      <div className="flex items-start justify-between relative z-10">
-        <div className="flex items-center gap-4 flex-1">
+      <div className="relative z-10 p-4">
+        {/* Vue compacte par défaut */}
+        <div className="flex items-center gap-4">
           <PlayerRankBadge 
             position={rank} 
             size="lg" 
             showAnimation={true}
           />
           
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-3 mb-3">
-              <h3 className="text-xl font-bold text-gray-800 truncate">
-                {player.name}
-              </h3>
-              
-              <PlayerCardTrends
-                player={player}
-                hasPositiveTrend={cardData.hasPositiveTrend}
-                hasNegativeTrend={cardData.hasNegativeTrend}
-                dutchCount={cardData.dutchCount}
-                currentStreak={cardData.currentStreak}
-              />
-            </div>
-            
-            <PlayerCardStats player={player} rank={rank} />
+          <div className="flex items-center gap-3 flex-1 min-w-0">
+            <span className="text-2xl">{player.emoji || '😊'}</span>
+            <h3 className="text-xl font-bold text-gray-800 truncate">
+              {player.name}
+            </h3>
           </div>
+
+          <PlayerCardScore
+            score={player.totalScore}
+            rank={rank}
+            roundCount={player.rounds.length}
+            isWinner={cardData.isWinner}
+          />
+
+          <ChevronDown 
+            className={cn(
+              "h-6 w-6 text-gray-400 transition-transform duration-300 ml-2",
+              isExpanded ? "rotate-180" : ""
+            )}
+          />
         </div>
 
-        <PlayerCardScore
-          score={player.totalScore}
-          rank={rank}
-          roundCount={player.rounds.length}
-          isWinner={cardData.isWinner}
-        />
+        {/* Contenu étendu */}
+        <AnimatePresence>
+          {isExpanded && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3 }}
+              className="overflow-hidden mt-4"
+            >
+              <div className="space-y-4">
+                {/* Tendances et statistiques */}
+                <PlayerCardTrends
+                  player={player}
+                  hasPositiveTrend={cardData.hasPositiveTrend}
+                  hasNegativeTrend={cardData.hasNegativeTrend}
+                  dutchCount={cardData.dutchCount}
+                  currentStreak={cardData.currentStreak}
+                />
+                
+                <PlayerCardStats player={player} rank={rank} />
+                
+                <PlayerCardRecentRounds player={player} rank={rank} />
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
-
-      <PlayerCardRecentRounds player={player} rank={rank} />
     </motion.div>
   );
 };
