@@ -6,7 +6,7 @@ import { RotateCcw, ArrowRight, Plus } from 'lucide-react';
 
 interface GameOverActionButtonsProps {
   onRestart: () => void;
-  onContinueGame: (newLimit: number) => void;
+  onContinueGame: () => void; // Signature corrigée - pas de paramètre
 }
 
 const GameOverActionButtons: React.FC<GameOverActionButtonsProps> = ({
@@ -45,10 +45,10 @@ const GameOverActionButtons: React.FC<GameOverActionButtonsProps> = ({
         >
           <Button
             className="w-full bg-gradient-to-r from-dutch-blue to-dutch-purple text-white shadow-lg hover:shadow-xl transition-all rounded-2xl py-3"
-            onClick={() => onContinueGame(selectedLimit)}
+            onClick={onContinueGame}
           >
             <Plus className="mr-2 h-5 w-5" />
-            Continuer (+{selectedLimit} points)
+            Continuer (+50 points)
           </Button>
         </motion.div>
       </div>
