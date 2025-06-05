@@ -52,7 +52,6 @@ export const FeatureCard: React.FC<FeatureCardProps> = ({ feature, index }) => {
         {/* Badge en haut à droite */}
         <div className="absolute top-4 right-4">
           <GameBadge 
-            variant="achievement"
             className="px-2 py-1 bg-white/80 rounded-full"
           >
             {feature.badge}
