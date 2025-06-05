@@ -17,7 +17,7 @@ interface GlassmorphicPlayerSetupProps {
 }
 
 // Emojis simplifiés pour les joueurs
-const playerEmojis = ['😀', '😎', '🤓', '😜', '🥳', '😇', '🤗', '🙃'];
+const playerEmojis = ['😀', '😎', '🤓', '😜', '🥳', '😇', '🤗', '🙃', '🤖', '🌟'];
 
 const GlassmorphicPlayerSetup: React.FC<GlassmorphicPlayerSetupProps> = ({ onStartGame }) => {
   const [players, setPlayers] = useState<Player[]>([
@@ -56,9 +56,13 @@ const GlassmorphicPlayerSetup: React.FC<GlassmorphicPlayerSetupProps> = ({ onSta
     setPlayers(updatedPlayers);
   };
 
-  const updatePlayerEmoji = (index: number, emoji: string) => {
+  const randomizePlayerEmoji = (index: number) => {
+    const currentEmoji = players[index].emoji;
+    const availableEmojis = playerEmojis.filter(emoji => emoji !== currentEmoji);
+    const randomEmoji = availableEmojis[Math.floor(Math.random() * availableEmojis.length)];
+    
     const updatedPlayers = [...players];
-    updatedPlayers[index].emoji = emoji;
+    updatedPlayers[index].emoji = randomEmoji;
     setPlayers(updatedPlayers);
   };
 
@@ -148,27 +152,43 @@ const GlassmorphicPlayerSetup: React.FC<GlassmorphicPlayerSetupProps> = ({ onSta
             >
               <UnifiedCard variant="light" padding="md" interactive>
                 <div className="flex items-center gap-4">
-                  {/* Sélecteur d'emoji simplifié */}
-                  <div className="flex gap-1">
-                    {playerEmojis.slice(0, 4).map((emoji) => (
-                      <motion.button
-                        key={emoji}
-                        type="button"
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        onClick={() => updatePlayerEmoji(index, emoji)}
-                        className={`
-                          p-2 rounded-xl text-base transition-all duration-200
-                          ${player.emoji === emoji 
-                            ? 'bg-dutch-orange/25 ring-2 ring-dutch-orange' 
-                            : 'bg-white/60 hover:bg-white/80 border border-gray-200'
-                          }
-                        `}
-                      >
-                        {emoji}
-                      </motion.button>
-                    ))}
-                  </div>
+                  {/* Emoji cliquable avec animation */}
+                  <motion.button
+                    type="button"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    animate={{ 
+                      rotate: [0, -5, 5, 0]
+                    }}
+                    transition={{ 
+                      duration: 0.3,
+                      ease: "easeInOut"
+                    }}
+                    onClick={() => randomizePlayerEmoji(index)}
+                    className="
+                      p-3 rounded-xl text-xl transition-all duration-200 min-w-[3rem] h-12
+                      bg-gradient-to-br from-dutch-orange/20 to-dutch-orange/30 
+                      hover:from-dutch-orange/30 hover:to-dutch-orange/40
+                      border border-dutch-orange/40 hover:border-dutch-orange/60
+                      group relative
+                    "
+                  >
+                    <motion.span
+                      key={player.emoji}
+                      initial={{ scale: 0, rotate: -180 }}
+                      animate={{ scale: 1, rotate: 0 }}
+                      transition={{ 
+                        type: "spring",
+                        stiffness: 300,
+                        damping: 20
+                      }}
+                    >
+                      {player.emoji}
+                    </motion.span>
+                    
+                    {/* Indicateur de clic */}
+                    <div className="absolute inset-0 rounded-xl bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                  </motion.button>
 
                   {/* Nom du joueur */}
                   <div className="flex-1">
