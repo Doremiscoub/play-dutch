@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Player, ScoreBoardProps } from '@/types';
-import { BarChart3, Table } from 'lucide-react';
+import { BarChart3, Table, ChevronUp, ChevronDown } from 'lucide-react';
 import { useSound } from '@/hooks/use-sound';
 import { toast } from 'sonner';
 import EnhancedScoreBoardHeader from './scoreboard/EnhancedScoreBoardHeader';
@@ -27,7 +27,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
 }) => {
   const { playSound } = useSound();
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
-  const [showStats, setShowStats] = useState(true); // Changed to true by default
+  const [showStats, setShowStats] = useState(true); // Stats affichées par défaut
   const [currentView, setCurrentView] = useState<'list' | 'table'>('list');
 
   // Sort players by score (ascending - lowest wins)
@@ -78,13 +78,13 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
           />
         </motion.div>
 
-        {/* View Toggle Buttons */}
+        {/* View Toggle Buttons - Améliorés */}
         <div className="flex justify-center items-center space-x-2 mb-4">
           <motion.button
             onClick={() => setCurrentView('list')}
-            className={`px-6 py-3 rounded-2xl transition-all shadow-md flex items-center gap-2 ${
+            className={`px-6 py-3 rounded-2xl transition-all shadow-md flex items-center gap-2 font-medium ${
               currentView === 'list'
-                ? 'bg-gradient-to-r from-dutch-blue to-dutch-purple text-white'
+                ? 'bg-gradient-to-r from-dutch-blue to-dutch-purple text-white shadow-lg'
                 : 'bg-white/70 backdrop-blur-xl border border-white/50 text-gray-800 hover:bg-white/80'
             }`}
             whileHover={{ scale: 1.02 }}
@@ -95,9 +95,9 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
           </motion.button>
           <motion.button
             onClick={() => setCurrentView('table')}
-            className={`px-6 py-3 rounded-2xl transition-all shadow-md flex items-center gap-2 ${
+            className={`px-6 py-3 rounded-2xl transition-all shadow-md flex items-center gap-2 font-medium ${
               currentView === 'table'
-                ? 'bg-gradient-to-r from-dutch-blue to-dutch-purple text-white'
+                ? 'bg-gradient-to-r from-dutch-blue to-dutch-purple text-white shadow-lg'
                 : 'bg-white/70 backdrop-blur-xl border border-white/50 text-gray-800 hover:bg-white/80'
             }`}
             whileHover={{ scale: 1.02 }}
@@ -133,37 +133,35 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                 ))}
               </AnimatePresence>
 
-              {/* Toggle Stats Button */}
+              {/* Detailed Stats - Affichées par défaut */}
+              <AnimatePresence>
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <DetailedGameStats 
+                    players={players} 
+                    roundCount={roundCount}
+                    scoreLimit={scoreLimit}
+                    roundHistory={roundHistory}
+                  />
+                </motion.div>
+              </AnimatePresence>
+
+              {/* Toggle Stats Button - Amélioré */}
               <div className="flex justify-center">
                 <motion.button
                   onClick={() => setShowStats(!showStats)}
-                  className="bg-white/70 backdrop-blur-xl border border-white/50 rounded-2xl px-6 py-3 text-gray-800 hover:bg-white/80 transition-all shadow-lg flex items-center gap-2"
+                  className="bg-white/70 backdrop-blur-xl border border-white/50 rounded-2xl px-6 py-3 text-gray-800 hover:bg-white/80 transition-all shadow-lg flex items-center gap-2 font-medium"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  <BarChart3 className="mr-2 h-5 w-5" />
-                  {showStats ? 'Masquer les stats' : 'Voir les statistiques'}
+                  {showStats ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
+                  {showStats ? 'Masquer les statistiques' : 'Afficher les statistiques'}
                 </motion.button>
               </div>
-
-              {/* Detailed Stats */}
-              <AnimatePresence>
-                {showStats && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    exit={{ opacity: 0, height: 0 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <DetailedGameStats 
-                      players={players} 
-                      roundCount={roundCount}
-                      scoreLimit={scoreLimit}
-                      roundHistory={roundHistory}
-                    />
-                  </motion.div>
-                )}
-              </AnimatePresence>
             </motion.div>
           ) : (
             <motion.div
@@ -189,7 +187,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
         />
       </div>
 
-      {/* Floating Action Buttons */}
+      {/* Floating Action Buttons - Optimisés */}
       <FloatingActionButtons
         onAddRound={handleAddRound}
         onUndo={handleUndo}

@@ -34,7 +34,7 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
           size="icon-lg"
           onClick={onEndGame}
           disabled={!canEndGame}
-          className="shadow-2xl hover:shadow-red-500/25 transition-all duration-300"
+          className="shadow-2xl hover:shadow-red-500/25 transition-all duration-300 bg-gradient-to-br from-red-500 to-red-600 hover:from-red-600 hover:to-red-700"
           animated={true}
         >
           <Trophy className="h-5 w-5" />
@@ -54,7 +54,7 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
           size="icon-lg"
           onClick={onUndo}
           disabled={!canUndo}
-          className="shadow-2xl hover:shadow-purple-500/25 transition-all duration-300"
+          className="shadow-2xl hover:shadow-orange-500/25 transition-all duration-300 bg-gradient-to-br from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-600 text-white"
           animated={true}
         >
           <Undo className="h-5 w-5" />
@@ -73,7 +73,7 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
           variant="primary"
           size="xl"
           onClick={onAddRound}
-          className="shadow-2xl hover:shadow-blue-500/25 transition-all duration-300 px-6 font-bold"
+          className="shadow-2xl hover:shadow-dutch-blue/25 transition-all duration-300 px-6 font-bold bg-gradient-to-r from-dutch-blue to-dutch-purple hover:from-dutch-blue/90 hover:to-dutch-purple/90"
           animated={true}
         >
           <Plus className="mr-2 h-6 w-6" />
