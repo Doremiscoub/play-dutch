@@ -82,9 +82,9 @@ const App: React.FC = () => {
               <Route path="sign-in" element={<SignIn />} />
               <Route path="sign-up" element={<SignUp />} />
               
-              {/* Pages principales */}
-              <Route index element={<Index />} />
-              <Route path="home" element={<Home />} />
+              {/* Pages principales - RESTAURATION DE LA LANDING PAGE ORIGINALE */}
+              <Route index element={<Home />} />
+              <Route path="simple" element={<Index />} />
               <Route path="game/setup" element={<GameSetupWrapper />} />
               <Route path="game" element={
                 <ProtectedRoute>
