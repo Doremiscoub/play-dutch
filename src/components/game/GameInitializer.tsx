@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 
 interface GameInitializerProps {
@@ -15,23 +15,40 @@ const GameInitializer: React.FC<GameInitializerProps> = ({
 }) => {
   const [isInitialized, setIsInitialized] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const initializationAttempted = useRef(false);
+  const isInitializing = useRef(false);
 
   useEffect(() => {
     const initialize = async () => {
+      // Protection contre les appels multiples
+      if (initializationAttempted.current || isInitializing.current) {
+        console.log('GameInitializer: Initialization already attempted or in progress');
+        return;
+      }
+
+      console.log('GameInitializer: Starting initialization');
+      initializationAttempted.current = true;
+      isInitializing.current = true;
+
       try {
         const success = await onInitialize();
+        console.log('GameInitializer: Initialization result:', success);
+        
         if (success) {
           setIsInitialized(true);
         }
       } catch (error) {
-        console.error('Game initialization error:', error);
+        console.error('GameInitializer: Initialization error:', error);
+        // Reset en cas d'erreur pour permettre une nouvelle tentative
+        initializationAttempted.current = false;
       } finally {
         setIsLoading(false);
+        isInitializing.current = false;
       }
     };
 
     initialize();
-  }, [onInitialize]);
+  }, []); // Pas de dépendances pour éviter les re-renders
 
   if (isLoading || !isInitialized) {
     return (

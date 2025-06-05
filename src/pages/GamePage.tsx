@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus } from 'lucide-react';
@@ -43,8 +43,31 @@ const GamePage: React.FC = () => {
     getTournamentProgress
   } = useTournamentState();
 
+  // Memoïser la fonction d'initialisation pour éviter les re-renders
+  const handleGameInitialization = useCallback(async (): Promise<boolean> => {
+    console.log('GamePage: handleGameInitialization called');
+    
+    try {
+      const success = await createNewGame();
+      console.log('GamePage: createNewGame result:', success);
+      
+      if (!success) {
+        console.log('GamePage: Initialization failed, redirecting to setup');
+        navigate('/game/setup');
+        return false;
+      }
+      return true;
+    } catch (error) {
+      console.error('GamePage: Game initialization error:', error);
+      navigate('/game/setup');
+      return false;
+    }
+  }, [createNewGame, navigate]);
+
   // Initialize game configuration
   useEffect(() => {
+    console.log('GamePage: Configuration effect running');
+    
     const shouldReturnToGame = localStorage.getItem('dutch_return_to_game');
     if (shouldReturnToGame) {
       localStorage.removeItem('dutch_return_to_game');
@@ -64,38 +87,29 @@ const GamePage: React.FC = () => {
         startNextMatch();
       }
     }
-  }, [currentTournament, createTournament, startNextMatch, getCurrentMatch]);
+  }, []); // Pas de dépendances pour éviter les re-renders
 
-  const handleGameInitialization = async (): Promise<boolean> => {
-    try {
-      const success = await createNewGame();
-      if (!success) {
-        navigate('/game/setup');
-        return false;
-      }
-      return true;
-    } catch (error) {
-      console.error('Game initialization error:', error);
-      navigate('/game/setup');
-      return false;
-    }
-  };
+  // Memoïser les callbacks pour éviter les re-renders
+  const openScoreForm = useCallback(() => setShowScoreForm(true), []);
+  const closeScoreForm = useCallback(() => setShowScoreForm(false), []);
 
-  const openScoreForm = () => setShowScoreForm(true);
-  const closeScoreForm = () => setShowScoreForm(false);
-
-  const handleAddNewRound = (scores: number[], dutchPlayerId?: string) => {
+  const handleAddNewRound = useCallback((scores: number[], dutchPlayerId?: string) => {
     const success = handleAddRound(scores, dutchPlayerId);
     if (success) {
       closeScoreForm();
     }
-  };
+  }, [handleAddRound, closeScoreForm]);
 
-  const handleBackToSetup = () => {
+  const handleBackToSetup = useCallback(() => {
     localStorage.removeItem('dutch_game_mode');
     localStorage.removeItem('dutch_tournament_config');
     navigate('/game/setup');
-  };
+  }, [navigate]);
+
+  // Memoïser les données pour éviter les re-renders
+  const tournamentProgress = useMemo(() => {
+    return currentTournament ? getTournamentProgress() : null;
+  }, [currentTournament, getTournamentProgress]);
 
   // Show tournament results if completed
   if (gameMode === 'tournament' && currentTournament?.isCompleted) {
@@ -115,11 +129,11 @@ const GamePage: React.FC = () => {
   return (
     <GameInitializer onInitialize={handleGameInitialization} gameMode={gameMode}>
       <div className="min-h-screen relative">
-        {gameMode === 'tournament' && currentTournament && (
+        {gameMode === 'tournament' && currentTournament && tournamentProgress && (
           <div className="pt-4 px-4 pb-4">
             <TournamentProgress
               tournament={currentTournament}
-              currentProgress={getTournamentProgress()}
+              currentProgress={tournamentProgress}
             />
           </div>
         )}
@@ -152,7 +166,7 @@ const GamePage: React.FC = () => {
             >
               <GameOverScreen
                 players={players!}
-                onRestart={gameMode === 'tournament' ? handleRestart : handleRestart}
+                onRestart={handleRestart}
                 onContinueGame={handleContinueGame}
                 currentScoreLimit={scoreLimit}
               />

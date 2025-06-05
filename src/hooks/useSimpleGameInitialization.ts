@@ -1,5 +1,5 @@
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Player } from '@/types';
 import { toast } from 'sonner';
@@ -20,10 +20,19 @@ export const useSimpleGameInitialization = () => {
   const [scoreLimit, setScoreLimit] = useState<number>(100);
   const [isInitialized, setIsInitialized] = useState(false);
   const [initError, setInitError] = useState<string | null>(null);
+  const initializationStarted = useRef(false);
   
   const createNewGame = useCallback(async (): Promise<boolean> => {
+    // Protection contre les appels multiples
+    if (initializationStarted.current) {
+      console.log('useSimpleGameInitialization: Initialization already started');
+      return isInitialized;
+    }
+
+    console.log('useSimpleGameInitialization: Starting game initialization...');
+    initializationStarted.current = true;
+    
     try {
-      console.info('Starting simple game initialization...');
       setInitError(null);
       
       // Check URL parameters first
@@ -36,9 +45,9 @@ export const useSimpleGameInitialization = () => {
       if (playersParam && isNewGame) {
         try {
           playerData = JSON.parse(decodeURIComponent(playersParam));
-          console.info('Using players from URL:', playerData);
+          console.log('useSimpleGameInitialization: Using players from URL:', playerData);
         } catch (error) {
-          console.warn('Failed to parse URL players, trying localStorage');
+          console.warn('useSimpleGameInitialization: Failed to parse URL players, trying localStorage');
         }
       }
       
@@ -63,10 +72,11 @@ export const useSimpleGameInitialization = () => {
               }
             }
             
-            console.info('Using players from localStorage:', playerData);
+            console.log('useSimpleGameInitialization: Using players from localStorage:', playerData);
           } catch (error) {
-            console.error('Failed to parse localStorage players:', error);
+            console.error('useSimpleGameInitialization: Failed to parse localStorage players:', error);
             setInitError('Configuration des joueurs invalide');
+            initializationStarted.current = false;
             return false;
           }
         }
@@ -74,9 +84,10 @@ export const useSimpleGameInitialization = () => {
       
       // Validate player data
       if (!playerData || playerData.length < 2) {
-        console.error('Not enough players configured');
+        console.error('useSimpleGameInitialization: Not enough players configured');
         setInitError('Il faut au moins 2 joueurs pour démarrer');
         setTimeout(() => navigate('/game/setup'), 1000);
+        initializationStarted.current = false;
         return false;
       }
       
@@ -90,7 +101,7 @@ export const useSimpleGameInitialization = () => {
         avatarColor: avatarColors[index % avatarColors.length]
       }));
       
-      console.info('Players created successfully:', newPlayers.map(p => ({ name: p.name, emoji: p.emoji })));
+      console.log('useSimpleGameInitialization: Players created successfully:', newPlayers.map(p => ({ name: p.name, emoji: p.emoji })));
       
       setPlayers(newPlayers);
       setGameStartTime(new Date());
@@ -110,18 +121,20 @@ export const useSimpleGameInitialization = () => {
       
       return true;
     } catch (error) {
-      console.error('Game initialization failed:', error);
+      console.error('useSimpleGameInitialization: Game initialization failed:', error);
       setInitError('Erreur lors de l\'initialisation du jeu');
+      initializationStarted.current = false;
       return false;
     }
-  }, [navigate, location.search]);
+  }, [navigate, location.search, isInitialized]);
 
   const cleanup = useCallback(() => {
-    console.info('Cleaning up game initialization state');
+    console.log('useSimpleGameInitialization: Cleaning up game initialization state');
     setPlayers([]);
     setGameStartTime(null);
     setIsInitialized(false);
     setInitError(null);
+    initializationStarted.current = false;
     localStorage.removeItem('current_dutch_game');
     localStorage.removeItem('dutch_player_setup');
   }, []);
