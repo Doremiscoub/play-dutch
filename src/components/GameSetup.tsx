@@ -2,7 +2,9 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { EnhancedButton } from '@/components/ui/enhanced-button';
+import { EnhancedCard } from '@/components/ui/enhanced-card';
+import { GameText, GameBadge } from '@/components/ui/game-text';
 import GameSetupGlassmorphic from './GameSetupGlassmorphic';
 import { motion } from 'framer-motion';
 
@@ -16,17 +18,17 @@ const GameSetup: React.FC = () => {
 
   return (
     <div className="min-h-screen relative">
-      {/* Header with Back button */}
+      {/* Header with enhanced Back button */}
       <div className="absolute top-4 left-4 z-50">
-        <Button
+        <EnhancedButton
           onClick={() => navigate('/')}
           variant="glass"
           size="icon"
-          className="bg-white/70 backdrop-blur-xl border border-white/50 text-gray-800 hover:bg-white/80 rounded-full shadow-sm"
+          effect="glow"
           aria-label="Retour à l'accueil"
         >
           <ArrowLeft className="h-5 w-5" />
-        </Button>
+        </EnhancedButton>
       </div>
 
       {/* Main content */}
@@ -37,28 +39,55 @@ const GameSetup: React.FC = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-8"
         >
-          <h1 
-            className="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange mb-4"
-            style={{ fontFamily: "'Space Grotesk', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif" }}
+          <GameText
+            as="h1"
+            variant="display"
+            color="gradient"
+            transform="uppercase"
+            spacing="tighter"
+            align="center"
+            className="mb-4"
           >
             Créer une partie
-          </h1>
+          </GameText>
           
-          {/* Feature badges */}
+          {/* Enhanced feature badges */}
           <div className="flex justify-center gap-3 flex-wrap mb-8">
-            <div className="px-3 py-1 rounded-full text-xs font-semibold bg-green-100/80 text-green-800 border border-green-200 backdrop-blur-xl">
-              ✅ 100% Gratuit
-            </div>
-            <div className="px-3 py-1 rounded-full text-xs font-semibold bg-blue-100/80 text-blue-800 border border-blue-200 backdrop-blur-xl">
-              📱 Fonctionne hors-ligne
-            </div>
-            <div className="px-3 py-1 rounded-full text-xs font-semibold bg-purple-100/80 text-purple-800 border border-purple-200 backdrop-blur-xl">
-              🤖 IA Commentateur
-            </div>
+            <GameBadge 
+              variant="status" 
+              type="winner"
+              text="100% Gratuit"
+              size="auto"
+              icon="✅"
+            />
+            <GameBadge 
+              variant="status" 
+              type="electric"
+              text="Fonctionne hors-ligne"
+              size="auto"
+              icon="📱"
+            />
+            <GameBadge 
+              variant="status" 
+              type="legendary"
+              text="IA Commentateur"
+              size="auto"
+              icon="🤖"
+              withSparkles
+            />
           </div>
         </motion.div>
 
-        <GameSetupGlassmorphic onStartGame={handleStartGame} />
+        <EnhancedCard
+          variant="holographic"
+          padding="none"
+          rarity="epic"
+          glow="medium"
+          withHolographicEffect
+          className="max-w-4xl mx-auto"
+        >
+          <GameSetupGlassmorphic onStartGame={handleStartGame} />
+        </EnhancedCard>
       </div>
     </div>
   );

@@ -86,14 +86,6 @@ export const EnhancedButton: React.FC<EnhancedButtonProps> = ({
 }) => {
   const isSpecialVariant = ['legendary', 'shiny', 'power', 'rainbow', 'holographic'].includes(variant || '');
   
-  // Separate motion-specific props from HTML button props
-  const {
-    onDrag,
-    onDragStart,
-    onDragEnd,
-    ...buttonProps
-  } = props;
-  
   return (
     <motion.button
       className={cn(enhancedButtonVariants({ variant, size, effect, rarity, className }))}
@@ -107,7 +99,7 @@ export const EnhancedButton: React.FC<EnhancedButtonProps> = ({
         y: 0,
         transition: { duration: 0.1 }
       }}
-      {...buttonProps}
+      {...props}
     >
       {/* Shimmer effect for special variants */}
       {isSpecialVariant && (

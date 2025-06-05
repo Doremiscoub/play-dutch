@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Settings, Plus } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { EnhancedButton } from '@/components/ui/enhanced-button';
 import useGameState from '@/hooks/useGameState';
 import ScoreBoardWithAds from '@/components/scoreboard/ScoreBoardWithAds';
 import GameOverScreen from '@/components/GameOverScreen';
@@ -92,41 +92,45 @@ const GamePage: React.FC = () => {
 
   return (
     <div className="min-h-screen relative">
-      {/* Header with Back and Settings buttons */}
+      {/* Header with enhanced Back and Settings buttons */}
       <div className="absolute top-4 left-4 right-4 z-50 flex justify-between">
-        <Button
+        <EnhancedButton
           onClick={() => navigate('/game/setup')}
           variant="glass"
           size="icon"
-          className="bg-white/70 backdrop-blur-xl border border-white/50 text-gray-800 hover:bg-white/80 rounded-full shadow-sm"
+          effect="glow"
           aria-label="Retour"
         >
           <ArrowLeft className="h-5 w-5" />
-        </Button>
+        </EnhancedButton>
         
-        <Button
+        <EnhancedButton
           variant="glass"
           size="icon"
-          className="bg-white/70 backdrop-blur-xl border border-white/50 text-gray-800 hover:bg-white/80 rounded-full shadow-sm"
+          effect="glow"
           aria-label="Paramètres"
         >
           <Settings className="h-5 w-5" />
-        </Button>
+        </EnhancedButton>
       </div>
 
-      {/* Floating "New Round" button */}
+      {/* Enhanced floating "New Round" button */}
       <motion.div
         className="fixed bottom-8 right-8 z-50"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
       >
-        <Button
+        <EnhancedButton
           onClick={openScoreForm}
-          className="w-14 h-14 bg-gradient-to-r from-dutch-purple to-dutch-blue text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
+          variant="power"
+          size="icon-lg"
+          effect="glow"
+          rarity="epic"
+          withSparkles
           aria-label="Nouvelle manche"
         >
           <Plus className="h-6 w-6" />
-        </Button>
+        </EnhancedButton>
       </motion.div>
 
       <AnimatePresence mode="wait">

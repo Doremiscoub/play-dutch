@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
+import { EnhancedButton } from '@/components/ui/enhanced-button';
 import { Play } from 'lucide-react';
 
 interface ActionButtonProps {
@@ -17,18 +17,20 @@ const ActionButton: React.FC<ActionButtonProps> = ({ onClick, label, disabled = 
       whileTap={{ scale: 0.97 }}
       className="w-full max-w-md"
     >
-      <Button
+      <EnhancedButton
         onClick={onClick}
         disabled={disabled}
-        variant="default"
-        size="2xl"
-        className="w-full relative overflow-hidden group bg-dutch-blue hover:bg-dutch-blue/90 text-white font-bold uppercase"
+        variant="legendary"
+        size="xl"
+        effect="glow"
+        rarity="legendary"
+        withSparkles={!disabled}
+        withIcon
+        icon={<Play className="h-6 w-6" />}
+        className="w-full font-bold uppercase tracking-wide"
       >
-        <div className="flex items-center justify-center gap-2">
-          <Play className="h-6 w-6 text-white" />
-          <span>{label}</span>
-        </div>
-      </Button>
+        {label}
+      </EnhancedButton>
     </motion.div>
   );
 };
