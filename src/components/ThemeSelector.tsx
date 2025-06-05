@@ -3,7 +3,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { UnifiedThemeSelector } from '@/components/ui/unified-theme-selector';
 
-// Ce composant est maintenu pour compatibilité mais utilise maintenant le sélecteur unifié
+// Ce composant est maintenant une simple réexportation du sélecteur unifié
 const ThemeSelector: React.FC = () => {
   return (
     <motion.div
