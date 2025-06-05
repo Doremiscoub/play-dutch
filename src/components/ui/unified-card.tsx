@@ -14,7 +14,7 @@ interface UnifiedCardProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const cardVariants = {
   light: "bg-white/80 backdrop-blur-md border border-white/50 shadow-sm",
-  glass: "bg-white/60 backdrop-blur-xl border border-white/40 shadow-md",
+  glass: "glass-card",
   elevated: "bg-white shadow-lg border border-gray-200",
   subtle: "bg-gray-50/80 border border-gray-200/50"
 };

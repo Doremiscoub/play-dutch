@@ -28,7 +28,7 @@ const EndGameConfirmationDialog: React.FC<EndGameConfirmationDialogProps> = ({
 }) => {
   return (
     <AlertDialog open={isOpen} onOpenChange={onCancel}>
-      <AlertDialogContent className="bg-white/90 backdrop-blur-lg border border-white/70 rounded-2xl shadow-lg">
+      <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle className="text-dutch-orange flex items-center gap-2">
             <Flag className="h-5 w-5" /> Terminer la partie ?
@@ -41,13 +41,13 @@ const EndGameConfirmationDialog: React.FC<EndGameConfirmationDialogProps> = ({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel 
-            className="rounded-xl bg-gray-100 hover:bg-gray-200 border-gray-200 text-gray-700"
+            className="text-gray-700"
             onClick={onCancel}
           >
             Continuer de jouer
           </AlertDialogCancel>
           <AlertDialogAction 
-            className="rounded-xl bg-dutch-orange text-white hover:bg-dutch-orange/90"
+            className="bg-dutch-orange text-white hover:bg-dutch-orange/90"
             onClick={onConfirm}
           >
             Terminer la partie

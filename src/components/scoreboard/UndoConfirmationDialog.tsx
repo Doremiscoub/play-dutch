@@ -28,7 +28,7 @@ const UndoConfirmationDialog: React.FC<UndoConfirmationDialogProps> = ({
 }) => {
   return (
     <AlertDialog open={isOpen} onOpenChange={onCancel}>
-      <AlertDialogContent className="bg-white/90 backdrop-blur-lg border border-white/70 rounded-2xl shadow-lg">
+      <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle className="text-dutch-blue flex items-center gap-2">
             <RotateCcw className="h-5 w-5" /> Annuler la dernière manche ?
@@ -39,13 +39,13 @@ const UndoConfirmationDialog: React.FC<UndoConfirmationDialogProps> = ({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel 
-            className="rounded-xl bg-gray-100 hover:bg-gray-200 border-gray-200 text-gray-700"
+            className="text-gray-700"
             onClick={onCancel}
           >
             Annuler
           </AlertDialogCancel>
           <AlertDialogAction 
-            className="rounded-xl bg-dutch-purple text-white hover:bg-dutch-purple/90"
+            className="bg-dutch-purple text-white hover:bg-dutch-purple/90"
             onClick={onConfirm}
           >
             Confirmer

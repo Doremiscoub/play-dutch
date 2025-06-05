@@ -89,16 +89,16 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="sm:max-w-lg bg-white/90 backdrop-blur-xl rounded-3xl border border-white/50 shadow-xl">
+      <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle className="text-xl font-semibold text-dutch-blue">Ajouter une manche</DialogTitle>
+          <DialogTitle className="text-xl font-semibold text-gray-800">Ajouter une manche</DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="mt-4 space-y-4">
           {players.map((player, index) => (
             <motion.div
               key={player.id}
-              className="p-4 bg-white/70 backdrop-blur-sm border border-white/50 rounded-2xl shadow-sm"
+              className="p-4 glass-form"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.05, duration: 0.3 }}
@@ -117,7 +117,7 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
                     size="icon"
                     variant="outline"
                     onClick={() => adjustScore(index, -1)}
-                    className="w-8 h-8 rounded-full bg-white/70 backdrop-blur-sm border border-white/50"
+                    className="w-8 h-8 rounded-full glass-button"
                     disabled={isSubmitting}
                   >
                     <Minus className="h-3 w-3" />
@@ -132,7 +132,7 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
                         handleScoreChange(index, e.target.value);
                       }
                     }}
-                    className="w-16 h-10 px-2 text-center border border-white/50 rounded-xl bg-white/70 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-dutch-blue/20 transition-all"
+                    className="w-16 h-10 px-2 text-center glass-input text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-dutch-blue/20 transition-all"
                     placeholder="0"
                     disabled={isSubmitting}
                   />
@@ -142,7 +142,7 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
                     size="icon"
                     variant="outline"
                     onClick={() => adjustScore(index, 1)}
-                    className="w-8 h-8 rounded-full bg-white/70 backdrop-blur-sm border border-white/50"
+                    className="w-8 h-8 rounded-full glass-button"
                     disabled={isSubmitting}
                   >
                     <Plus className="h-3 w-3" />
@@ -152,10 +152,10 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
                     type="button"
                     size="sm"
                     variant={dutchPlayerId === player.id ? "default" : "outline"}
-                    className={`ml-2 rounded-full px-4 transition-all ${
+                    className={`ml-2 rounded-full px-4 transition-all glass-button ${
                       dutchPlayerId === player.id
                         ? "bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-md"
-                        : "bg-white/70 backdrop-blur-sm border border-green-300 text-green-700 hover:bg-green-50"
+                        : "text-green-700 hover:bg-green-50"
                     }`}
                     onClick={() => handleDutchToggle(player.id)}
                     disabled={isSubmitting}
@@ -174,7 +174,7 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
               type="button" 
               onClick={onClose}
               disabled={isSubmitting}
-              className="bg-white/70 backdrop-blur-sm border border-white/50"
+              className="glass-button"
             >
               Annuler
             </Button>

@@ -72,7 +72,7 @@ const GameResultOverlay: React.FC<GameResultOverlayProps> = ({
       transition={{ duration: 0.5 }}
     >
       <motion.div
-        className="bg-white/90 backdrop-blur-md rounded-3xl border border-white/60 shadow-xl max-w-md w-full p-6"
+        className="glass-overlay max-w-md w-full p-6"
         initial={{ scale: 0.9, y: 50 }}
         animate={{ scale: 1, y: 0 }}
         transition={{ 
@@ -111,7 +111,7 @@ const GameResultOverlay: React.FC<GameResultOverlayProps> = ({
         {/* Classement des joueurs */}
         <div className="mb-6">
           <h3 className="text-sm font-medium text-gray-500 mb-2">Classement final</h3>
-          <div className="bg-white/60 rounded-xl border border-white p-3 space-y-2">
+          <div className="glass-panel p-3 space-y-2">
             {sortedPlayers.map((player, index) => (
               <div 
                 key={player.id}
@@ -140,7 +140,7 @@ const GameResultOverlay: React.FC<GameResultOverlayProps> = ({
             <Button
               variant="outline"
               size="sm"
-              className="flex-1 bg-white"
+              className="flex-1 glass-button"
               onClick={() => onContinue(continueLimit)}
             >
               <Play className="h-4 w-4 mr-1" /> +{continueLimit} pts
@@ -151,7 +151,7 @@ const GameResultOverlay: React.FC<GameResultOverlayProps> = ({
                   key={value}
                   variant={continueLimit === value ? "default" : "outline"}
                   size="sm"
-                  className={continueLimit === value ? "bg-dutch-blue text-white" : "bg-white"}
+                  className={continueLimit === value ? "bg-dutch-blue text-white" : "glass-button"}
                   onClick={() => setContinueLimit(value)}
                 >
                   {value}
@@ -165,14 +165,14 @@ const GameResultOverlay: React.FC<GameResultOverlayProps> = ({
         <div className="flex gap-3">
           <Button
             variant="outline"
-            className="flex-1 bg-white"
+            className="flex-1 glass-button"
             onClick={() => navigate('/')}
           >
             <Home className="h-4 w-4 mr-1" /> Accueil
           </Button>
           <Button
             variant="outline"
-            className="flex-1 bg-white"
+            className="flex-1 glass-button"
             onClick={onRestart}
           >
             <RotateCcw className="h-4 w-4 mr-1" /> Nouvelle partie
