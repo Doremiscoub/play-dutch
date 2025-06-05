@@ -64,7 +64,26 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// Couleurs Dutch basées sur notre configuration de thème
+				
+				// Couleurs Dutch principales - Configuration propre et consistante
+				'dutch-blue': COLORS.blue.DEFAULT,
+				'dutch-blue-light': COLORS.blue.light,
+				'dutch-blue-dark': COLORS.blue.dark,
+				'dutch-purple': COLORS.purple.DEFAULT,
+				'dutch-purple-light': COLORS.purple.light,
+				'dutch-purple-dark': COLORS.purple.dark,
+				'dutch-orange': COLORS.orange.DEFAULT,
+				'dutch-orange-light': COLORS.orange.light,
+				'dutch-orange-dark': COLORS.orange.dark,
+				'dutch-pink': COLORS.pink,
+				'dutch-red': COLORS.red,
+				'dutch-green': COLORS.green,
+				'dutch-yellow': COLORS.yellow,
+				'dutch-background': COLORS.gray[50],
+				'dutch-card': COLORS.white,
+				'dutch-primary': COLORS.blue.DEFAULT,
+				
+				// Namespace "dutch" pour compatibilité
 				dutch: {
 					blue: COLORS.blue.DEFAULT,
 					'blue-light': COLORS.blue.light,
@@ -83,6 +102,8 @@ export default {
 					card: COLORS.white,
 					primary: COLORS.blue.DEFAULT,
 				},
+				
+				// Couleurs iOS pour cohérence
 				ios: {
 					blue: '#0A84FF',
 					green: '#30D158', 
@@ -187,8 +208,8 @@ export default {
 					},
 				},
 				'shimmer': {
-					'0%': { backgroundPosition: '-200% 0' },
-					'100%': { backgroundPosition: '200% 0' },
+					'0%': { transform: 'translateX(-100%)' },
+					'100%': { transform: 'translateX(100%)' },
 				},
 			},
 			animation: {
@@ -200,7 +221,7 @@ export default {
 				'float': 'float 6s infinite ease-in-out',
 				'ios-bounce': 'ios-bounce 2s infinite ease-in-out',
 				'ios-pop': 'ios-pop 0.3s ease-out',
-				'shimmer': 'shimmer 3s infinite linear',
+				'shimmer': 'shimmer 2s infinite linear',
 			},
 			backdropBlur: {
 				xs: '2px',
