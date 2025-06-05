@@ -20,9 +20,9 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
   canEndGame
 }) => {
   return (
-    <div className="fixed bottom-6 right-6 z-[100] pointer-events-none">
+    <div className="fixed bottom-6 right-6 z-[9999] pointer-events-none">
       <motion.div 
-        className="flex flex-col gap-3 items-end pointer-events-auto"
+        className="flex flex-col gap-4 items-end pointer-events-auto"
         initial={{ opacity: 0, x: 100 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
@@ -37,7 +37,7 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
             type: "spring",
             stiffness: 200
           }}
-          whileHover={{ scale: 1.05, y: -2 }}
+          whileHover={{ scale: 1.1, y: -3 }}
           whileTap={{ scale: 0.95 }}
         >
           <UnifiedButton
@@ -45,10 +45,10 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
             size="icon-lg"
             onClick={onEndGame}
             disabled={!canEndGame}
-            className="shadow-xl hover:shadow-red-500/30 transition-all duration-300 bg-gradient-to-br from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 border border-red-400/50 h-12 w-12 rounded-full"
+            className="shadow-2xl hover:shadow-red-500/50 transition-all duration-300 bg-gradient-to-br from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 border border-red-400/50 h-14 w-14 rounded-full"
             animated={true}
           >
-            <Trophy className="h-5 w-5" />
+            <Trophy className="h-6 w-6" />
           </UnifiedButton>
         </motion.div>
 
@@ -62,7 +62,7 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
             type: "spring",
             stiffness: 200
           }}
-          whileHover={{ scale: 1.05, y: -2 }}
+          whileHover={{ scale: 1.1, y: -3 }}
           whileTap={{ scale: 0.95 }}
         >
           <UnifiedButton
@@ -70,10 +70,10 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
             size="icon-lg"
             onClick={onUndo}
             disabled={!canUndo}
-            className="shadow-xl hover:shadow-orange-500/30 transition-all duration-300 bg-gradient-to-br from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-600 text-white border border-orange-300/50 h-12 w-12 rounded-full"
+            className="shadow-2xl hover:shadow-orange-500/50 transition-all duration-300 bg-gradient-to-br from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-600 text-white border border-orange-300/50 h-14 w-14 rounded-full"
             animated={true}
           >
-            <Undo className="h-5 w-5" />
+            <Undo className="h-6 w-6" />
           </UnifiedButton>
         </motion.div>
 
@@ -87,19 +87,19 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
             type: "spring",
             stiffness: 200
           }}
-          whileHover={{ scale: 1.05, y: -3 }}
+          whileHover={{ scale: 1.05, y: -4 }}
           whileTap={{ scale: 0.95 }}
           className="relative"
         >
-          {/* Effet de glow */}
+          {/* Effet de glow permanent */}
           <motion.div
-            className="absolute inset-0 bg-gradient-to-r from-dutch-blue to-dutch-purple rounded-full blur-xl opacity-50"
+            className="absolute inset-0 bg-gradient-to-r from-dutch-blue to-dutch-purple rounded-full blur-xl opacity-40"
             animate={{ 
-              scale: [1, 1.1, 1],
-              opacity: [0.3, 0.6, 0.3]
+              scale: [1, 1.2, 1],
+              opacity: [0.3, 0.7, 0.3]
             }}
             transition={{ 
-              duration: 2, 
+              duration: 3, 
               repeat: Infinity, 
               ease: "easeInOut" 
             }}
@@ -109,12 +109,12 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
             variant="primary"
             size="lg"
             onClick={onAddRound}
-            className="relative shadow-xl hover:shadow-dutch-blue/40 transition-all duration-300 px-6 py-3 font-bold bg-gradient-to-r from-dutch-blue to-dutch-purple hover:from-dutch-blue/90 hover:to-dutch-purple/90 border border-dutch-blue/30 text-base h-14 rounded-full"
+            className="relative shadow-2xl hover:shadow-dutch-blue/60 transition-all duration-300 px-8 py-4 font-bold bg-gradient-to-r from-dutch-blue to-dutch-purple hover:from-dutch-blue/90 hover:to-dutch-purple/90 border border-dutch-blue/30 text-lg h-16 rounded-full min-w-[200px]"
             animated={true}
           >
             <motion.div
-              className="flex items-center gap-2"
-              whileHover={{ x: 2 }}
+              className="flex items-center gap-3"
+              whileHover={{ x: 3 }}
               transition={{ duration: 0.2 }}
             >
               <motion.div
@@ -126,7 +126,7 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
                   repeatDelay: 3
                 }}
               >
-                <Plus className="h-5 w-5" />
+                <Plus className="h-6 w-6" />
               </motion.div>
               <span>Nouvelle manche</span>
             </motion.div>

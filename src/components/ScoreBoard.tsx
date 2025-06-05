@@ -78,7 +78,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
   }, []);
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen relative">
       {/* Top Bar Unifiée */}
       <UnifiedTopBar 
         title="Tableau des scores"
@@ -86,7 +86,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
         scoreLimit={scoreLimit}
       />
 
-      <div className="p-4 pb-32">
+      <div className="p-4 pb-40">
         <div className="max-w-4xl mx-auto space-y-6">
           {/* Commentateur IA */}
           <motion.div
@@ -201,7 +201,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
         </div>
       </div>
 
-      {/* Floating Action Buttons - Position vraiment fixe */}
+      {/* Floating Action Buttons - Position absolument fixe */}
       <FloatingActionButtons
         onAddRound={handleAddRound}
         onUndo={handleUndo}

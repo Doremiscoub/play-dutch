@@ -53,7 +53,7 @@ const UnifiedTopBar: React.FC<UnifiedTopBarProps> = ({
       transition={{ duration: 0.5 }}
       className={`sticky top-0 z-40 bg-white/95 backdrop-blur-xl border-b border-gray-200/50 shadow-sm ${className}`}
     >
-      <div className="max-w-4xl mx-auto px-4 py-6">
+      <div className="max-w-4xl mx-auto px-4 py-8">
         <div className="flex items-center justify-between">
           {/* Left side - Back button */}
           <div className="flex items-center w-16">
@@ -72,8 +72,8 @@ const UnifiedTopBar: React.FC<UnifiedTopBarProps> = ({
           {/* Center - Title and info */}
           <div className="flex-1 text-center">
             <motion.h1 
-              className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight mb-2"
-              initial={{ opacity: 0, y: -15, scale: 0.9 }}
+              className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight mb-3"
+              initial={{ opacity: 0, y: -20, scale: 0.8 }}
               animate={{ 
                 opacity: 1, 
                 y: 0, 
@@ -81,21 +81,21 @@ const UnifiedTopBar: React.FC<UnifiedTopBarProps> = ({
                 backgroundPosition: ['0% 50%', '100% 50%', '0% 50%']
               }}
               transition={{ 
-                duration: 0.6, 
+                duration: 0.8, 
                 delay: 0.1,
                 backgroundPosition: {
-                  duration: 3,
+                  duration: 4,
                   repeat: Infinity,
                   ease: "linear"
                 }
               }}
               style={{
                 background: 'linear-gradient(270deg, #0A84FF, #8B5CF6, #FF9F0A, #0A84FF)',
-                backgroundSize: '300% 100%',
+                backgroundSize: '400% 100%',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',
-                filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))'
+                filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.15))'
               }}
             >
               {title}
@@ -104,17 +104,17 @@ const UnifiedTopBar: React.FC<UnifiedTopBarProps> = ({
             {/* Game info badges */}
             {(roundCount !== undefined || scoreLimit !== undefined) && (
               <motion.div 
-                className="flex items-center justify-center gap-3"
-                initial={{ opacity: 0, y: 15 }}
+                className="flex items-center justify-center gap-4"
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.3 }}
+                transition={{ duration: 0.5, delay: 0.4 }}
               >
                 {roundCount !== undefined && (
                   <motion.div
-                    whileHover={{ scale: 1.05 }}
+                    whileHover={{ scale: 1.1, y: -2 }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    <Badge variant="secondary" className="bg-dutch-blue/10 text-dutch-blue border-dutch-blue/20 text-sm font-medium px-3 py-1">
+                    <Badge variant="secondary" className="bg-dutch-blue/15 text-dutch-blue border-dutch-blue/30 text-base font-semibold px-4 py-2 shadow-lg">
                       Manche {roundCount}
                     </Badge>
                   </motion.div>
@@ -122,10 +122,10 @@ const UnifiedTopBar: React.FC<UnifiedTopBarProps> = ({
                 
                 {scoreLimit !== undefined && (
                   <motion.div
-                    whileHover={{ scale: 1.05 }}
+                    whileHover={{ scale: 1.1, y: -2 }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    <Badge variant="secondary" className="bg-dutch-orange/10 text-dutch-orange border-dutch-orange/20 text-sm font-medium px-3 py-1">
+                    <Badge variant="secondary" className="bg-dutch-orange/15 text-dutch-orange border-dutch-orange/30 text-base font-semibold px-4 py-2 shadow-lg">
                       Limite {scoreLimit} pts
                     </Badge>
                   </motion.div>
