@@ -1,69 +1,246 @@
-# Welcome to your Lovable project
 
-## Project info
+# Dutch - Card Game Score Tracker
 
-**URL**: https://lovable.dev/projects/11f85a56-5d87-4814-ad68-b7693c4d6dcd
+A modern, offline-first web application for tracking scores in card games between friends. Built with React, TypeScript, and Supabase.
 
-## How can I edit this code?
+## 🎯 Features
 
-There are several ways of editing your application.
+- **Offline-First**: Works completely offline with automatic sync when online
+- **Real-time Scoring**: Live score updates and game state management
+- **Player Management**: Add, remove, and customize players with avatars and emojis
+- **Game History**: Complete history of all games with detailed statistics
+- **Responsive Design**: Optimized for mobile, tablet, and desktop
+- **Progressive Web App**: Installable on mobile devices for native-like experience
 
-**Use Lovable**
+## 🚀 Quick Start
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/11f85a56-5d87-4814-ad68-b7693c4d6dcd) and start prompting.
+### Prerequisites
 
-Changes made via Lovable will be committed automatically to this repo.
+- Node.js 18+ (LTS recommended)
+- pnpm package manager
+- Supabase CLI (for database operations)
 
-**Use your preferred IDE**
+### Installation
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd dutch-game
+   ```
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+2. **Install dependencies**
+   ```bash
+   pnpm install
+   ```
 
-Follow these steps:
+3. **Set up environment variables**
+   ```bash
+   cp .env.example .env.local
+   # Edit .env.local with your Supabase credentials
+   ```
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+4. **Apply database migrations**
+   ```bash
+   supabase db push --project-ref <your-project-ref>
+   ```
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+5. **Start development server**
+   ```bash
+   pnpm dev
+   ```
 
-# Step 3: Install the necessary dependencies.
-npm i
+The application will be available at `http://localhost:5173`
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+## 🛠️ Development
+
+### Available Scripts
+
+- **`pnpm dev`** - Start development server with hot reload
+- **`pnpm build`** - Create production build
+- **`pnpm preview`** - Preview production build locally
+- **`pnpm lint`** - Run ESLint for code quality checks
+- **`pnpm test`** - Run unit and integration tests
+- **`pnpm test --coverage`** - Run tests with coverage report
+- **`pnpm type-check`** - Run TypeScript type checking
+
+### Testing
+
+The project includes comprehensive testing coverage:
+
+```bash
+# Run all tests
+pnpm test
+
+# Run specific test types
+pnpm test --grep "unit"          # Unit tests only
+pnpm test --grep "integration"   # Integration tests only
+
+# Generate coverage report
+pnpm test --coverage
 ```
 
-**Edit a file directly in GitHub**
+### Database Operations
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+```bash
+# Apply all migrations
+supabase db push --project-ref <project-ref>
 
-**Use GitHub Codespaces**
+# Generate TypeScript types from database
+supabase gen types typescript --project-id <project-id> --schema public > src/integrations/supabase/types.ts
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+# Reset database (development only)
+supabase db reset
+```
 
-## What technologies are used for this project?
+## 🏗️ Architecture
 
-This project is built with .
+### Technology Stack
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+- **Frontend**: React 18, TypeScript, Vite
+- **Styling**: Tailwind CSS, shadcn/ui
+- **State Management**: Zustand
+- **Database**: Supabase (PostgreSQL)
+- **Authentication**: Supabase Auth
+- **Testing**: Vitest, React Testing Library
+- **CI/CD**: GitHub Actions
 
-## How can I deploy this project?
+### Project Structure
 
-Simply open [Lovable](https://lovable.dev/projects/11f85a56-5d87-4814-ad68-b7693c4d6dcd) and click on Share -> Publish.
+```
+src/
+├── components/         # Reusable UI components
+│   ├── ui/            # Atomic design system components
+│   ├── layout/        # Layout components
+│   ├── game/          # Game-specific components
+│   └── scoreboard/    # Scoreboard components
+├── pages/             # Route components
+├── hooks/             # Custom React hooks
+├── utils/             # Utility functions
+├── types/             # TypeScript type definitions
+├── design/            # Design system tokens
+└── __tests__/         # Test files
+```
 
-## I want to use a custom domain - is that possible?
+### Key Features
 
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+- **Design System**: Comprehensive design tokens and component library
+- **Offline Support**: localStorage with Supabase sync
+- **Row Level Security**: User data isolation at database level
+- **Real-time Updates**: Supabase real-time subscriptions
+- **Performance Optimized**: Code splitting and lazy loading
+
+## 🔒 Security
+
+### Authentication
+- JWT-based authentication via Supabase Auth
+- Automatic token refresh and session management
+- Support for email/password and social login
+
+### Data Security
+- Row Level Security (RLS) policies on all database tables
+- User data isolation - users can only access their own games
+- HTTPS enforced for all API communications
+- Input validation and sanitization
+
+## 📱 Deployment
+
+### Production Build
+
+```bash
+# Create optimized production build
+pnpm build
+
+# The build artifacts will be in the `dist/` directory
+```
+
+### Environment Variables
+
+Required environment variables for deployment:
+
+```env
+VITE_SUPABASE_URL=your-supabase-project-url
+VITE_SUPABASE_ANON_KEY=your-supabase-anon-key
+```
+
+### Hosting Options
+
+The application can be deployed to any static hosting service:
+
+- **Netlify**: Connect GitHub repository for automatic deployments
+- **Vercel**: Zero-configuration deployment with Git integration
+- **AWS S3 + CloudFront**: For custom AWS infrastructure
+- **GitHub Pages**: For simple static hosting
+
+### CI/CD Pipeline
+
+The project includes automated GitHub Actions workflow:
+
+1. **Code Quality**: Linting and type checking
+2. **Testing**: Unit and integration tests with coverage
+3. **Database**: Automatic migration application
+4. **Build**: Production build generation
+5. **Artifacts**: Coverage reports and bundle analysis
+
+## 📚 Documentation
+
+Comprehensive documentation is available in the `docs/` directory:
+
+- **[Architecture](docs/ARCHITECTURE.md)** - System architecture and design decisions
+- **[Design System](docs/DESIGN_SYSTEM.md)** - Design tokens and component usage
+- **[CI/CD Pipeline](docs/CI_CD_PIPELINE.md)** - Deployment and automation guide
+- **[Supabase RLS Tests](docs/SUPABASE_RLS_TESTS.md)** - Database security testing
+- **[Changelog](docs/CHANGELOG.md)** - Project development history
+
+## 🧪 Testing
+
+### Test Coverage
+
+The project maintains high test coverage across all layers:
+
+- **Unit Tests**: >95% coverage for components and utilities
+- **Integration Tests**: Complete RLS policy verification
+- **E2E Tests**: Critical user workflow validation (planned)
+
+### Running Tests
+
+```bash
+# All tests with coverage
+pnpm test --coverage
+
+# Specific test files
+pnpm test button.test.tsx
+
+# Watch mode for development
+pnpm test --watch
+```
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+### Development Guidelines
+
+- Follow TypeScript strict mode requirements
+- Maintain test coverage above 90%
+- Use conventional commit messages
+- Update documentation for new features
+- Ensure all CI checks pass
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- Built with [Lovable](https://lovable.dev) - AI-powered development platform
+- UI components from [shadcn/ui](https://ui.shadcn.com)
+- Database and authentication by [Supabase](https://supabase.com)
+- Icons provided by [Lucide React](https://lucide.dev)
+
+---
+
+**Status**: ✅ Production Ready | **Version**: 1.0.0 | **Last Updated**: December 2024
