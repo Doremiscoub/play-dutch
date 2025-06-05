@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import GlassmorphicPlayerSetup from './game-setup/GlassmorphicPlayerSetup';
 import TournamentMode from './TournamentMode';
 import { UnifiedTabs } from '@/components/ui/unified-tabs';
+import { UnifiedCard } from '@/components/ui/unified-card';
 import { Play, Trophy } from 'lucide-react';
 
 interface GameSetupGlassmorphicProps {
@@ -31,46 +32,50 @@ const GameSetupGlassmorphic: React.FC<GameSetupGlassmorphicProps> = ({
   ];
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
+    <UnifiedCard variant="light" padding="none" className="overflow-hidden">
       <div className="space-y-6">
-        {/* Mode Selector */}
-        <div className="flex justify-center">
-          <UnifiedTabs
-            value={activeTab}
-            onValueChange={setActiveTab}
-            options={tabOptions}
-            variant="orange"
-          />
+        {/* Sélecteur de mode avec style moderne */}
+        <div className="bg-gradient-to-r from-dutch-blue/10 to-dutch-purple/10 p-6 border-b border-white/30">
+          <div className="flex justify-center">
+            <UnifiedTabs
+              value={activeTab}
+              onValueChange={setActiveTab}
+              options={tabOptions}
+              variant="orange"
+            />
+          </div>
         </div>
 
-        {/* Content */}
-        <AnimatePresence mode="wait">
-          {activeTab === 'quick' && (
-            <motion.div
-              key="quick-game"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
-            >
-              <GlassmorphicPlayerSetup onStartGame={onStartGame} />
-            </motion.div>
-          )}
+        {/* Contenu des onglets */}
+        <div className="px-2 pb-6">
+          <AnimatePresence mode="wait">
+            {activeTab === 'quick' && (
+              <motion.div
+                key="quick-game"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+              >
+                <GlassmorphicPlayerSetup onStartGame={onStartGame} />
+              </motion.div>
+            )}
 
-          {activeTab === 'tournament' && onStartTournament && (
-            <motion.div
-              key="tournament"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
-            >
-              <TournamentMode onStartTournament={onStartTournament} />
-            </motion.div>
-          )}
-        </AnimatePresence>
+            {activeTab === 'tournament' && onStartTournament && (
+              <motion.div
+                key="tournament"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+              >
+                <TournamentMode onStartTournament={onStartTournament} />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
-    </div>
+    </UnifiedCard>
   );
 };
 

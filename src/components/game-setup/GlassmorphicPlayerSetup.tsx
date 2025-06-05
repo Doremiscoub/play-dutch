@@ -1,11 +1,12 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Minus, Play, Shuffle, Users } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Plus, Minus, Users, Shuffle } from 'lucide-react';
 import { toast } from 'sonner';
 import { UnifiedCard } from '@/components/ui/unified-card';
+import { UnifiedButton } from '@/components/ui/unified-button';
+import { Input } from '@/components/ui/input';
+import ActionButton from './ActionButton';
 
 interface Player {
   name: string;
@@ -78,81 +79,85 @@ const GlassmorphicPlayerSetup: React.FC<GlassmorphicPlayerSetupProps> = ({ onSta
   };
 
   return (
-    <div className="space-y-6">
-      {/* Contrôle du nombre de joueurs */}
-      <UnifiedCard variant="light" padding="lg" className="text-center">
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-3">
-            <Users className="h-5 w-5 text-dutch-blue" />
-            <span className="font-semibold text-gray-700">Joueurs</span>
+    <div className="space-y-8 p-6">
+      {/* En-tête avec compte des joueurs */}
+      <div className="text-center space-y-4">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="inline-flex items-center gap-3 bg-gradient-to-r from-dutch-blue/20 to-dutch-purple/20 backdrop-blur-md rounded-3xl px-6 py-3 border border-white/30"
+        >
+          <Users className="h-5 w-5 text-dutch-blue" />
+          <span className="font-semibold text-gray-700">
+            {players.length} joueur{players.length > 1 ? 's' : ''}
+          </span>
+        </motion.div>
+
+        <div className="flex items-center justify-center gap-4">
+          <UnifiedButton
+            variant="glass"
+            size="icon-lg"
+            onClick={removePlayer}
+            disabled={players.length <= 2}
+            animated
+          >
+            <Minus className="h-5 w-5" />
+          </UnifiedButton>
+          
+          <div className="bg-gradient-to-r from-dutch-blue to-dutch-purple rounded-3xl px-8 py-4 min-w-[5rem]">
+            <motion.span
+              key={players.length}
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              className="text-3xl font-bold text-white"
+            >
+              {players.length}
+            </motion.span>
           </div>
           
-          <div className="flex items-center gap-4">
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={removePlayer}
-                disabled={players.length <= 2}
-                className="bg-white/80 border-gray-200 hover:bg-white rounded-full h-12 w-12"
-              >
-                <Minus className="h-5 w-5" />
-              </Button>
-            </motion.div>
-            
-            <div className="bg-gradient-to-r from-dutch-blue to-dutch-purple rounded-2xl px-6 py-3 min-w-[4rem]">
-              <span className="text-2xl font-bold text-white text-center">
-                {players.length}
-              </span>
-            </div>
-            
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={addPlayer}
-                disabled={players.length >= 10}
-                className="bg-white/80 border-gray-200 hover:bg-white rounded-full h-12 w-12"
-              >
-                <Plus className="h-5 w-5" />
-              </Button>
-            </motion.div>
-          </div>
+          <UnifiedButton
+            variant="glass"
+            size="icon-lg"
+            onClick={addPlayer}
+            disabled={players.length >= 10}
+            animated
+          >
+            <Plus className="h-5 w-5" />
+          </UnifiedButton>
         </div>
 
         {players.length > 2 && (
           <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="flex justify-center"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
           >
-            <Button
-              variant="outline"
+            <UnifiedButton
+              variant="ghost"
               size="sm"
               onClick={shufflePlayers}
-              className="bg-white/60 hover:bg-white/80 rounded-2xl border-gray-200"
+              animated
             >
               <Shuffle className="h-4 w-4 mr-2" />
               Mélanger l'ordre
-            </Button>
+            </UnifiedButton>
           </motion.div>
         )}
-      </UnifiedCard>
+      </div>
 
       {/* Liste des joueurs */}
-      <div className="space-y-3">
+      <div className="space-y-4">
         <AnimatePresence>
           {players.map((player, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 20, scale: 0.9 }}
+              initial={{ opacity: 0, y: 20, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -20, scale: 0.9 }}
-              transition={{ duration: 0.3 }}
+              exit={{ opacity: 0, y: -20, scale: 0.95 }}
+              transition={{ duration: 0.3, delay: index * 0.05 }}
             >
               <UnifiedCard variant="light" padding="md" interactive>
                 <div className="flex items-center gap-4">
-                  {/* Emoji cliquable avec animation */}
+                  {/* Emoji du joueur */}
                   <motion.button
                     type="button"
                     whileHover={{ scale: 1.1 }}
@@ -166,11 +171,12 @@ const GlassmorphicPlayerSetup: React.FC<GlassmorphicPlayerSetupProps> = ({ onSta
                     }}
                     onClick={() => randomizePlayerEmoji(index)}
                     className="
-                      p-3 rounded-xl text-xl transition-all duration-200 min-w-[3rem] h-12
+                      relative p-3 rounded-2xl text-2xl transition-all duration-300 min-w-[3.5rem] h-14
                       bg-gradient-to-br from-dutch-orange/20 to-dutch-orange/30 
                       hover:from-dutch-orange/30 hover:to-dutch-orange/40
                       border border-dutch-orange/40 hover:border-dutch-orange/60
-                      group relative
+                      shadow-lg hover:shadow-xl
+                      group
                     "
                   >
                     <motion.span
@@ -179,15 +185,15 @@ const GlassmorphicPlayerSetup: React.FC<GlassmorphicPlayerSetupProps> = ({ onSta
                       animate={{ scale: 1, rotate: 0 }}
                       transition={{ 
                         type: "spring",
-                        stiffness: 300,
-                        damping: 20
+                        stiffness: 400,
+                        damping: 25
                       }}
+                      className="block"
                     >
                       {player.emoji}
                     </motion.span>
                     
-                    {/* Indicateur de clic */}
-                    <div className="absolute inset-0 rounded-xl bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                    <div className="absolute inset-0 rounded-2xl bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
                   </motion.button>
 
                   {/* Nom du joueur */}
@@ -195,10 +201,20 @@ const GlassmorphicPlayerSetup: React.FC<GlassmorphicPlayerSetupProps> = ({ onSta
                     <Input
                       value={player.name}
                       onChange={(e) => updatePlayerName(index, e.target.value)}
-                      className="bg-white/80 border-gray-200 focus:border-dutch-blue text-center font-medium rounded-2xl"
+                      className="
+                        bg-white/80 border-gray-200 focus:border-dutch-blue 
+                        text-center font-medium rounded-2xl text-lg
+                        transition-all duration-200
+                        focus:ring-2 focus:ring-dutch-blue/20
+                      "
                       placeholder={`Joueur ${index + 1}`}
                       maxLength={15}
                     />
+                  </div>
+
+                  {/* Indicateur de position */}
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center text-sm font-bold text-gray-600">
+                    {index + 1}
                   </div>
                 </div>
               </UnifiedCard>
@@ -207,20 +223,33 @@ const GlassmorphicPlayerSetup: React.FC<GlassmorphicPlayerSetupProps> = ({ onSta
         </AnimatePresence>
       </div>
 
+      {/* Estimation de durée */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3 }}
+      >
+        <UnifiedCard variant="medium" padding="md">
+          <div className="text-center space-y-2">
+            <div className="text-sm text-gray-600">Durée estimée</div>
+            <div className="text-2xl font-bold text-dutch-blue">
+              {Math.round(players.length * 8 + 15)} minutes
+            </div>
+          </div>
+        </UnifiedCard>
+      </motion.div>
+
       {/* Bouton de démarrage */}
       <motion.div 
-        className="pt-4"
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
+        className="flex justify-center pt-4"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4 }}
       >
-        <Button
+        <ActionButton
           onClick={handleStartGame}
-          className="w-full bg-gradient-to-r from-dutch-blue to-dutch-purple text-white rounded-2xl py-6 text-lg font-bold shadow-xl hover:shadow-2xl transition-all duration-300"
-          size="lg"
-        >
-          <Play className="h-6 w-6 mr-3" />
-          Commencer la partie
-        </Button>
+          label="Commencer la partie"
+        />
       </motion.div>
     </div>
   );
