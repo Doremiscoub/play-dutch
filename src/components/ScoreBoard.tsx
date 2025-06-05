@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Player, ScoreBoardProps } from '@/types';
@@ -11,6 +10,7 @@ import EndGameConfirmationDialog from './scoreboard/EndGameConfirmationDialog';
 import DetailedGameStats from './scoreboard/DetailedGameStats';
 import ScoreTableView from './ScoreTableView';
 import AICommentatorEnhanced from './ai-commentator/AICommentatorEnhanced';
+import StickyActionButtons from './scoreboard/StickyActionButtons';
 
 const ScoreBoard: React.FC<ScoreBoardProps> = ({
   players,
@@ -86,118 +86,125 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
       />
 
       <div className="p-4 pb-24">
-        <div className="max-w-4xl mx-auto space-y-6">
-          {/* Commentateur IA */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
+        {/* Commentateur IA */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          <AICommentatorEnhanced 
+            players={players}
+            roundCount={roundCount}
+            scoreLimit={scoreLimit}
+          />
+        </motion.div>
+
+        {/* View Toggle Buttons */}
+        <motion.div 
+          className="flex justify-center items-center space-x-3 mb-6"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.3 }}
+        >
+          <motion.button
+            onClick={() => handleViewChange('list')}
+            className={`px-6 py-3 rounded-xl transition-all shadow-md flex items-center gap-2 font-medium ${
+              currentView === 'list'
+                ? 'bg-gradient-to-r from-dutch-blue to-dutch-purple text-white shadow-lg scale-105'
+                : 'bg-white/80 backdrop-blur-xl border border-white/60 text-gray-800 hover:bg-white/90 hover:scale-102'
+            }`}
+            whileHover={{ scale: currentView === 'list' ? 1.05 : 1.02 }}
+            whileTap={{ scale: 0.98 }}
           >
-            <AICommentatorEnhanced 
-              players={players}
-              roundCount={roundCount}
-              scoreLimit={scoreLimit}
-            />
-          </motion.div>
-
-          {/* View Toggle Buttons */}
-          <motion.div 
-            className="flex justify-center items-center space-x-3 mb-6"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.3 }}
+            <BarChart3 className="h-4 w-4" />
+            Classement détaillé
+          </motion.button>
+          
+          <motion.button
+            onClick={() => handleViewChange('table')}
+            className={`px-6 py-3 rounded-xl transition-all shadow-md flex items-center gap-2 font-medium ${
+              currentView === 'table'
+                ? 'bg-gradient-to-r from-dutch-blue to-dutch-purple text-white shadow-lg scale-105'
+                : 'bg-white/80 backdrop-blur-xl border border-white/60 text-gray-800 hover:bg-white/90 hover:scale-102'
+            }`}
+            whileHover={{ scale: currentView === 'table' ? 1.05 : 1.02 }}
+            whileTap={{ scale: 0.98 }}
           >
-            <motion.button
-              onClick={() => handleViewChange('list')}
-              className={`px-6 py-3 rounded-xl transition-all shadow-md flex items-center gap-2 font-medium ${
-                currentView === 'list'
-                  ? 'bg-gradient-to-r from-dutch-blue to-dutch-purple text-white shadow-lg scale-105'
-                  : 'bg-white/80 backdrop-blur-xl border border-white/60 text-gray-800 hover:bg-white/90 hover:scale-102'
-              }`}
-              whileHover={{ scale: currentView === 'list' ? 1.05 : 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <BarChart3 className="h-4 w-4" />
-              Classement détaillé
-            </motion.button>
-            
-            <motion.button
-              onClick={() => handleViewChange('table')}
-              className={`px-6 py-3 rounded-xl transition-all shadow-md flex items-center gap-2 font-medium ${
-                currentView === 'table'
-                  ? 'bg-gradient-to-r from-dutch-blue to-dutch-purple text-white shadow-lg scale-105'
-                  : 'bg-white/80 backdrop-blur-xl border border-white/60 text-gray-800 hover:bg-white/90 hover:scale-102'
-              }`}
-              whileHover={{ scale: currentView === 'table' ? 1.05 : 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <Table className="h-4 w-4" />
-              Tableau des manches
-            </motion.button>
-          </motion.div>
+            <Table className="h-4 w-4" />
+            Tableau des manches
+          </motion.button>
+        </motion.div>
 
-          {/* Content based on current view */}
-          <AnimatePresence mode="wait">
-            {currentView === 'list' ? (
-              <motion.div
-                key="list-view"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.3 }}
-                className="space-y-5"
-              >
-                {/* Players Cards */}
-                <AnimatePresence>
-                  {sortedPlayers.map((player, index) => (
-                    <FunPlayerCard
-                      key={player.id}
-                      player={player}
-                      rank={index + 1}
-                      totalPlayers={players.length}
-                      onSelect={handlePlayerSelect}
-                      isSelected={selectedPlayer?.id === player.id}
-                    />
-                  ))}
-                </AnimatePresence>
-
-                {/* Detailed Stats */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: 0.4 }}
-                >
-                  <DetailedGameStats 
-                    players={players} 
-                    roundCount={roundCount}
-                    scoreLimit={scoreLimit}
-                    roundHistory={roundHistory}
+        {/* Content based on current view */}
+        <AnimatePresence mode="wait">
+          {currentView === 'list' ? (
+            <motion.div
+              key="list-view"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+              className="space-y-5"
+            >
+              {/* Players Cards */}
+              <AnimatePresence>
+                {sortedPlayers.map((player, index) => (
+                  <FunPlayerCard
+                    key={player.id}
+                    player={player}
+                    rank={index + 1}
+                    totalPlayers={players.length}
+                    onSelect={handlePlayerSelect}
+                    isSelected={selectedPlayer?.id === player.id}
                   />
-                </motion.div>
-              </motion.div>
-            ) : (
+                ))}
+              </AnimatePresence>
+
+              {/* Detailed Stats */}
               <motion.div
-                key="table-view"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.3 }}
+                transition={{ duration: 0.4, delay: 0.4 }}
               >
-                <ScoreTableView 
+                <DetailedGameStats 
                   players={players} 
+                  roundCount={roundCount}
+                  scoreLimit={scoreLimit}
                   roundHistory={roundHistory}
                 />
               </motion.div>
-            )}
-          </AnimatePresence>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="table-view"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+            >
+              <ScoreTableView 
+                players={players} 
+                roundHistory={roundHistory}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-          {/* End Game Confirmation */}
-          <EndGameConfirmationDialog
-            isOpen={showGameEndConfirmation}
-            onConfirm={onConfirmEndGame}
-            onCancel={onCancelEndGame}
-          />
-        </div>
+        {/* Sticky Action Buttons */}
+        <StickyActionButtons
+          onAddRound={handleAddRound}
+          onUndo={handleUndo}
+          onEndGame={handleEndGame}
+          canUndo={roundHistory.length > 0}
+          canEndGame={roundCount > 0}
+        />
+
+        {/* End Game Confirmation */}
+        <EndGameConfirmationDialog
+          isOpen={showGameEndConfirmation}
+          onConfirm={onConfirmEndGame}
+          onCancel={onCancelEndGame}
+        />
       </div>
     </div>
   );
