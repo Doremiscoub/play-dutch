@@ -35,9 +35,9 @@ const GameSetup: React.FC = () => {
       withSparkles={true}
       onBack={() => navigate('/')}
       backgroundVariant="default"
-      containerClassName="pt-4"
+      containerClassName="pt-4 max-w-4xl"
     >
-      {/* Header avec bouton retour positionné */}
+      {/* Bouton retour positionné */}
       <div className="absolute top-6 left-6 z-50">
         <UnifiedButton
           onClick={() => navigate('/')}
@@ -50,50 +50,52 @@ const GameSetup: React.FC = () => {
         </UnifiedButton>
       </div>
 
-      {/* Badges de fonctionnalités */}
+      {/* Badges de fonctionnalités améliorés */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-        className="flex justify-center gap-3 flex-wrap mb-8"
+        className="flex justify-center gap-2 flex-wrap mb-8 px-4"
       >
         <GameBadge 
           variant="achievement"
-          className="bg-green-100 text-green-800 border-green-200"
+          className="bg-green-50 text-green-700 border-green-200 shadow-sm hover:shadow-md transition-shadow"
         >
           ✅ 100% Gratuit
         </GameBadge>
         <GameBadge 
           variant="status"
-          className="bg-blue-100 text-blue-800 border-blue-200"
+          className="bg-blue-50 text-blue-700 border-blue-200 shadow-sm hover:shadow-md transition-shadow"
         >
           📱 Fonctionne hors-ligne
         </GameBadge>
         <GameBadge 
           variant="special"
-          className="bg-purple-100 text-purple-800 border-purple-200"
+          className="bg-purple-50 text-purple-700 border-purple-200 shadow-sm hover:shadow-md transition-shadow"
         >
           🤖 IA Commentateur
         </GameBadge>
         <GameBadge 
           variant="special"
-          className="bg-orange-100 text-orange-800 border-orange-200"
+          className="bg-orange-50 text-orange-700 border-orange-200 shadow-sm hover:shadow-md transition-shadow"
         >
           🏆 Mode Tournoi
         </GameBadge>
       </motion.div>
 
-      {/* Contenu principal */}
+      {/* Contenu principal centré */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
-        className="max-w-2xl mx-auto"
+        className="flex justify-center px-4"
       >
-        <GameSetupGlassmorphic 
-          onStartGame={handleStartGame} 
-          onStartTournament={handleStartTournament}
-        />
+        <div className="w-full max-w-2xl">
+          <GameSetupGlassmorphic 
+            onStartGame={handleStartGame} 
+            onStartTournament={handleStartTournament}
+          />
+        </div>
       </motion.div>
     </UnifiedPageLayout>
   );
