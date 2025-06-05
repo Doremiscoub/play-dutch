@@ -15,11 +15,9 @@ export default function PageShell({
 }: PageShellProps) {
   return (
     <div className={`min-h-screen relative ${className}`}>
-      <UnifiedBackground variant={variant === 'minimal' ? 'minimal' : 'default'} />
-      
-      <div className="relative z-10">
+      <UnifiedBackground variant={variant === 'minimal' ? 'minimal' : 'default'}>
         {children}
-      </div>
+      </UnifiedBackground>
     </div>
   );
 }
