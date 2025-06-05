@@ -5,6 +5,7 @@ import BreadcrumbNavigation from '@/components/ui/breadcrumb-navigation';
 import PageTransition from '@/components/ui/page-transition';
 import EnhancedErrorBoundary from '@/components/ui/error-boundary-enhanced';
 import EnhancedLoading from '@/components/ui/enhanced-loading';
+import EmergencyHomeButton from '@/components/ui/emergency-home-button';
 import { useAppState } from '@/hooks/useAppState';
 import { toast } from 'sonner';
 
@@ -29,6 +30,9 @@ const AppLayout: React.FC = () => {
             message={loadingMessage} 
           />
         )}
+        
+        {/* Emergency home button - always accessible */}
+        <EmergencyHomeButton />
         
         {/* Breadcrumb navigation - only show on pages other than home */}
         <div className="absolute top-4 left-4 z-40">

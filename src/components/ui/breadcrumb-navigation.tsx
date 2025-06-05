@@ -1,8 +1,10 @@
 
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ChevronRight, Home } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { motion } from 'framer-motion';
 
 interface BreadcrumbItem {
   label: string;
@@ -20,6 +22,12 @@ const BreadcrumbNavigation: React.FC<BreadcrumbNavigationProps> = ({
   className 
 }) => {
   const location = useLocation();
+  const navigate = useNavigate();
+
+  // Ne pas afficher sur la page d'accueil
+  if (location.pathname === '/') {
+    return null;
+  }
 
   // Generate breadcrumbs from current path if items not provided
   const generateBreadcrumbs = (): BreadcrumbItem[] => {
@@ -55,17 +63,21 @@ const BreadcrumbNavigation: React.FC<BreadcrumbNavigationProps> = ({
 
   const breadcrumbItems = items || generateBreadcrumbs();
 
-  if (breadcrumbItems.length <= 1) {
-    return null;
-  }
+  const handleNavigate = (href: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    navigate(href);
+  };
 
   return (
-    <nav 
+    <motion.nav 
       className={cn(
-        "flex items-center space-x-1 text-sm text-gray-600 bg-white/60 backdrop-blur-sm rounded-xl px-4 py-2 border border-white/30",
+        "flex items-center space-x-1 text-sm text-gray-600 bg-white/80 backdrop-blur-md rounded-xl px-4 py-2 border border-white/40 shadow-lg",
         className
       )}
       aria-label="Navigation"
+      initial={{ opacity: 0, x: -20 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.3 }}
     >
       {breadcrumbItems.map((item, index) => (
         <React.Fragment key={item.href}>
@@ -78,17 +90,19 @@ const BreadcrumbNavigation: React.FC<BreadcrumbNavigationProps> = ({
               {item.label}
             </span>
           ) : (
-            <Link
-              to={item.href}
-              className="flex items-center gap-1 hover:text-dutch-blue transition-colors"
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={(e) => handleNavigate(item.href, e)}
+              className="flex items-center gap-1 hover:text-dutch-blue transition-colors p-1 h-auto"
             >
               {item.icon}
               {item.label}
-            </Link>
+            </Button>
           )}
         </React.Fragment>
       ))}
-    </nav>
+    </motion.nav>
   );
 };
 
