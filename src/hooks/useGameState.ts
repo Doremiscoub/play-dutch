@@ -2,7 +2,7 @@
 import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { useLocalStorage } from './use-local-storage';
 import { useGamePersistence } from './useGamePersistence';
-import { useSimpleGameInitialization } from './useSimpleGameInitialization';
+import { useSimplifiedGameInitialization } from './useSimplifiedGameInitialization';
 import { useGameContinuation } from './useGameContinuation';
 import { useRoundManagement } from './useRoundManagement';
 
@@ -23,7 +23,7 @@ export const useGameState = () => {
     createNewGame,
     isInitialized,
     initError
-  } = useSimpleGameInitialization();
+  } = useSimplifiedGameInitialization();
   
   const { 
     loadGameState,
@@ -46,7 +46,7 @@ export const useGameState = () => {
     handleRestart
   } = useGameContinuation(setShowGameOver, setScoreLimit, scoreLimit);
 
-  // Sauvegarde automatique périodique pour éviter la perte de données
+  // Sauvegarde automatique périodique
   useEffect(() => {
     if (!isInitialized || !players || players.length === 0) {
       return;
@@ -54,7 +54,6 @@ export const useGameState = () => {
 
     const saveInterval = setInterval(() => {
       const now = Date.now();
-      // Sauvegarder seulement si 30 secondes se sont écoulées depuis la dernière sauvegarde
       if (now - lastSaveTimeRef.current > 30000) {
         console.log('useGameState: Auto-saving game state');
         
@@ -75,7 +74,7 @@ export const useGameState = () => {
           }
         });
       }
-    }, 10000); // Vérifier toutes les 10 secondes
+    }, 10000);
 
     saveIntervalRef.current = saveInterval;
 
@@ -86,16 +85,14 @@ export const useGameState = () => {
     };
   }, [isInitialized, players, roundHistory, showGameOver, scoreLimit, gameStartTime, saveGameState]);
 
-  // Protection contre la perte d'état au chargement
+  // Protection de l'état du jeu
   useEffect(() => {
     if (isInitialized && players && players.length > 0) {
       console.log('useGameState: Game is properly initialized with players:', players.length);
       
-      // Marquer que le jeu est actif pour éviter les redirections automatiques
       localStorage.setItem('dutch_game_active', 'true');
       
       return () => {
-        // Nettoyer le flag quand le composant se démonte
         localStorage.removeItem('dutch_game_active');
       };
     }
@@ -124,7 +121,7 @@ export const useGameState = () => {
     }
   }, [saveGameState]);
 
-  // Memoïser les callbacks pour éviter les re-renders
+  // Handlers optimisés
   const handleAddRound = useCallback(async (scores: number[], dutchPlayerId?: string) => {
     console.log('useGameState: handleAddRound called', { scores, dutchPlayerId });
     
@@ -133,14 +130,13 @@ export const useGameState = () => {
       
       if (result) {
         const { updatedPlayers, isGameOver } = result;
-        console.log('useGameState: Round added successfully, updating players', { 
+        console.log('useGameState: Round added successfully', { 
           playersCount: updatedPlayers.length, 
           isGameOver 
         });
         
         setPlayers(updatedPlayers);
         
-        // Sauvegarder immédiatement avec retry
         const gameStateToSave = {
           players: updatedPlayers,
           roundHistory: [...roundHistory, { scores, dutchPlayerId }],
@@ -152,18 +148,15 @@ export const useGameState = () => {
         const saveSuccess = await secureSaveGameState(gameStateToSave);
         if (saveSuccess) {
           console.log('useGameState: Game state saved successfully after round');
-        } else {
-          console.error('useGameState: Failed to save game state after round');
         }
         
         if (isGameOver) {
-          console.log('useGameState: Game over detected, showing game over screen');
+          console.log('useGameState: Game over detected');
           setTimeout(() => setShowGameOver(true), 500);
         }
         
         return true;
       }
-      console.warn('useGameState: addRound returned null/false');
       return false;
     } catch (error) {
       console.error('useGameState: Error in handleAddRound:', error);
@@ -176,15 +169,13 @@ export const useGameState = () => {
     
     try {
       const updatedPlayers = undoLastRound(players, soundEnabled);
-      console.log('useGameState: Undo completed, updating players');
+      console.log('useGameState: Undo completed');
       setPlayers(updatedPlayers);
       
       if (showGameOver) {
-        console.log('useGameState: Hiding game over screen after undo');
         setShowGameOver(false);
       }
       
-      // Sauvegarder l'état après l'annulation avec retry
       const gameStateToSave = {
         players: updatedPlayers,
         roundHistory: roundHistory.slice(0, -1),
@@ -208,7 +199,6 @@ export const useGameState = () => {
     try {
       saveGameToHistory(players, gameStartTime);
       setShowGameOver(true);
-      // Nettoyer le flag de jeu actif
       localStorage.removeItem('dutch_game_active');
       return true;
     } catch (error) {
@@ -217,7 +207,7 @@ export const useGameState = () => {
     }
   }, [players, gameStartTime, saveGameToHistory]);
 
-  // Memoïser l'objet de retour pour éviter les re-renders
+  // État memoïsé
   const gameState = useMemo(() => ({
     players,
     roundHistory,
@@ -258,9 +248,7 @@ export const useGameState = () => {
     playersCount: players?.length || 0, 
     isInitialized,
     showGameOver,
-    roundCount: roundHistory?.length || 0,
-    hasGameStartTime: !!gameStartTime,
-    gameActive: localStorage.getItem('dutch_game_active') === 'true'
+    roundCount: roundHistory?.length || 0
   });
 
   return gameState;
