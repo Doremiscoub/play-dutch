@@ -3,7 +3,6 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Target, Trophy, BarChart3, Award } from 'lucide-react';
 import { Player } from '@/types';
-import { cn } from '@/lib/utils';
 
 interface PlayerCardStatsProps {
   player: Player;
@@ -31,43 +30,41 @@ const PlayerCardStats: React.FC<PlayerCardStatsProps> = ({ player, rank }) => {
     return Math.sqrt(variance);
   })();
 
+  const stats = [
+    { icon: Target, label: 'Moy', value: averageScore, color: 'blue' },
+    { icon: Trophy, label: 'Best', value: bestRoundScore, color: 'green' },
+    { icon: BarChart3, label: 'Pire', value: worstRoundScore, color: 'orange' },
+    { icon: Award, label: 'Régu', value: consistency.toFixed(1), color: 'indigo' }
+  ];
+
+  const getColorClasses = (color: string) => {
+    const colorMap = {
+      blue: 'text-blue-600 bg-blue-50 border-blue-200',
+      green: 'text-green-600 bg-green-50 border-green-200',
+      orange: 'text-orange-600 bg-orange-50 border-orange-200',
+      indigo: 'text-indigo-600 bg-indigo-50 border-indigo-200'
+    };
+    return colorMap[color as keyof typeof colorMap] || colorMap.blue;
+  };
+
   return (
     <div className="grid grid-cols-2 gap-2 text-sm">
-      <motion.div 
-        className="flex items-center gap-1.5 bg-white/60 rounded-lg px-3 py-2 shadow-sm"
-        whileHover={{ scale: 1.02 }}
-      >
-        <Target className="h-3.5 w-3.5 text-blue-500" />
-        <span className="text-gray-600 text-xs">Moy:</span>
-        <span className="font-bold text-blue-600">{averageScore}</span>
-      </motion.div>
-      
-      <motion.div 
-        className="flex items-center gap-1.5 bg-white/60 rounded-lg px-3 py-2 shadow-sm"
-        whileHover={{ scale: 1.02 }}
-      >
-        <Trophy className="h-3.5 w-3.5 text-green-500" />
-        <span className="text-gray-600 text-xs">Best:</span>
-        <span className="font-bold text-green-600">{bestRoundScore}</span>
-      </motion.div>
-      
-      <motion.div 
-        className="flex items-center gap-1.5 bg-white/60 rounded-lg px-3 py-2 shadow-sm"
-        whileHover={{ scale: 1.02 }}
-      >
-        <BarChart3 className="h-3.5 w-3.5 text-orange-500" />
-        <span className="text-gray-600 text-xs">Pire:</span>
-        <span className="font-bold text-orange-600">{worstRoundScore}</span>
-      </motion.div>
-      
-      <motion.div 
-        className="flex items-center gap-1.5 bg-white/60 rounded-lg px-3 py-2 shadow-sm"
-        whileHover={{ scale: 1.02 }}
-      >
-        <Award className="h-3.5 w-3.5 text-indigo-500" />
-        <span className="text-gray-600 text-xs">Régu:</span>
-        <span className="font-bold text-indigo-600">{consistency.toFixed(1)}</span>
-      </motion.div>
+      {stats.map((stat, index) => (
+        <motion.div 
+          key={stat.label}
+          className={`flex items-center gap-2 rounded-xl px-3 py-2.5 border transition-all duration-200 hover:shadow-sm ${getColorClasses(stat.color)}`}
+          whileHover={{ scale: 1.02, y: -1 }}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: index * 0.05 }}
+        >
+          <stat.icon className="h-3.5 w-3.5 flex-shrink-0" />
+          <div className="flex items-center gap-1.5 min-w-0">
+            <span className="text-xs font-medium opacity-70 flex-shrink-0">{stat.label}:</span>
+            <span className="font-bold text-sm truncate">{stat.value}</span>
+          </div>
+        </motion.div>
+      ))}
     </div>
   );
 };

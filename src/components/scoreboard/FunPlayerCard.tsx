@@ -113,21 +113,21 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
         />
       )}
 
-      {/* Couronne pour le gagnant */}
+      {/* Couronne pour le gagnant - Repositionnée */}
       {cardData.isWinner && (
         <motion.div
-          className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10"
-          initial={{ opacity: 0, scale: 0, rotate: -180 }}
-          animate={{ opacity: 1, scale: 1, rotate: 0 }}
-          transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
+          className="absolute -top-6 left-1/2 transform -translate-x-1/2 z-10"
+          initial={{ opacity: 0, scale: 0, rotate: -180, y: 20 }}
+          animate={{ opacity: 1, scale: 1, rotate: 0, y: 0 }}
+          transition={{ delay: 0.5, type: "spring", stiffness: 200, damping: 15 }}
         >
           <div className="relative">
-            <Crown className="h-10 w-10 text-amber-500 drop-shadow-lg" />
+            <Crown className="h-12 w-12 text-amber-500 drop-shadow-lg filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.3)]" />
             <motion.div
-              className="absolute inset-0"
+              className="absolute -inset-1"
               animate={{ 
-                scale: [1, 1.1, 1],
-                rotate: [0, 5, -5, 0]
+                scale: [1, 1.2, 1],
+                rotate: [0, 10, -10, 0]
               }}
               transition={{ 
                 duration: 3, 
@@ -135,7 +135,7 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
                 ease: "easeInOut" 
               }}
             >
-              <Star className="h-10 w-10 text-amber-400 opacity-60" />
+              <Star className="h-14 w-14 text-amber-400 opacity-40" />
             </motion.div>
           </div>
         </motion.div>
