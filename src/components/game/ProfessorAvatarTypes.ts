@@ -23,5 +23,5 @@ export type SizeClasses = {
 };
 
 // Updated with the new professor image from uploads
-export const PROFESSOR_SOURCE = '/lovable-uploads/a2234ca1-7b29-4c32-8167-2ff6be271875.png';
-export const PROFESSOR_FALLBACK = '/lovable-uploads/a2234ca1-7b29-4c32-8167-2ff6be271875.png';
+export const PROFESSOR_SOURCE = '/lovable-uploads/4374ea3c-9e56-4f21-8c9c-cd399f89300d.png';
+export const PROFESSOR_FALLBACK = '/lovable-uploads/4374ea3c-9e56-4f21-8c9c-cd399f89300d.png';

@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { PROFESSOR_SOURCE } from './ProfessorAvatarTypes';
 
 interface ProfessorAvatarImageProps {
   isHovered: boolean;
@@ -42,7 +41,7 @@ export default function ProfessorAvatarImage({ isHovered }: ProfessorAvatarImage
   return (
     <div className="h-full w-full relative">
       <motion.img
-        src={PROFESSOR_SOURCE}
+        src="/lovable-uploads/4374ea3c-9e56-4f21-8c9c-cd399f89300d.png"
         alt="Professeur Cartouche"
         onError={handleError}
         onLoad={handleLoad}
