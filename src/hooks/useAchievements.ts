@@ -3,7 +3,6 @@ import { useState, useEffect, useCallback } from 'react';
 import { Achievement, PlayerAchievements, ACHIEVEMENT_DEFINITIONS } from '@/types/achievements';
 import { Player } from '@/types';
 import { toast } from 'sonner';
-import { Trophy, Star, Crown, Target } from 'lucide-react';
 
 export const useAchievements = () => {
   const [playerAchievements, setPlayerAchievements] = useState<Map<string, PlayerAchievements>>(new Map());
@@ -130,18 +129,17 @@ export const useAchievements = () => {
 
     // Show notifications for newly unlocked achievements
     newlyUnlocked.forEach(achievement => {
-      const getIcon = () => {
-        switch (achievement.rarity) {
-          case 'legendary': return <Crown className="h-5 w-5 text-yellow-500" />;
-          case 'epic': return <Star className="h-5 w-5 text-purple-500" />;
-          case 'rare': return <Trophy className="h-5 w-5 text-blue-500" />;
-          default: return <Target className="h-5 w-5 text-green-500" />;
+      const getIconEmoji = (rarity: string) => {
+        switch (rarity) {
+          case 'legendary': return '👑';
+          case 'epic': return '⭐';
+          case 'rare': return '🏆';
+          default: return '🎯';
         }
       };
 
       toast.success(`🎉 Succès débloqué !`, {
-        description: `${achievement.name}: ${achievement.description}`,
-        icon: getIcon(),
+        description: `${getIconEmoji(achievement.rarity)} ${achievement.name}: ${achievement.description}`,
         duration: 5000
       });
     });
