@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-import BreadcrumbNavigation from '@/components/ui/breadcrumb-navigation';
 import PageTransition from '@/components/ui/page-transition';
 import EnhancedErrorBoundary from '@/components/ui/error-boundary-enhanced';
 import EnhancedLoading from '@/components/ui/enhanced-loading';
@@ -29,11 +28,6 @@ const AppLayout: React.FC = () => {
             message={loadingMessage} 
           />
         )}
-        
-        {/* Breadcrumb navigation - only show on pages other than home */}
-        <div className="absolute top-4 left-4 z-40">
-          <BreadcrumbNavigation />
-        </div>
         
         {/* Main content with page transitions */}
         <PageTransition>
