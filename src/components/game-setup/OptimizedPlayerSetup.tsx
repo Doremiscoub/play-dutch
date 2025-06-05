@@ -1,11 +1,12 @@
 
 import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Play, Users, Clock, Target, Plus, Minus, Crown, Shuffle } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { Play, Users, Clock, Target, Plus, Minus, Shuffle } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { toast } from 'sonner';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
+import PlayerList from './PlayerList';
 
 interface Player {
   name: string;
@@ -221,65 +222,15 @@ const OptimizedPlayerSetup: React.FC<OptimizedPlayerSetupProps> = ({ onStartGame
         </motion.div>
       )}
 
-      {/* Liste des joueurs simplifiée */}
-      <motion.div 
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-        className="space-y-4"
-      >
+      {/* Liste des joueurs avec nouveau composant */}
+      <div className="space-y-4">
         <h3 className="text-xl font-semibold text-center text-gray-800">Joueurs de la partie</h3>
-        
-        <div className="space-y-3">
-          <AnimatePresence mode="popLayout">
-            {players.map((player, index) => (
-              <motion.div
-                key={`${player.name}-${index}`}
-                layout
-                variants={itemVariants}
-                initial="hidden"
-                animate="visible"
-                exit="hidden"
-                className="group"
-              >
-                <Card className="bg-white/70 hover:bg-white/85 border border-white/50 transition-all duration-300">
-                  <CardContent className="p-4">
-                    <div className="flex items-center gap-4">
-                      {/* Position avec couronne pour le premier */}
-                      <div className="relative flex-shrink-0">
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-dutch-blue/20 to-dutch-purple/20 flex items-center justify-center text-sm font-bold text-dutch-blue">
-                          {index + 1}
-                        </div>
-                        {index === 0 && (
-                          <Crown className="absolute -top-1 -right-1 h-4 w-4 text-yellow-500" />
-                        )}
-                      </div>
-
-                      {/* Emoji cliquable */}
-                      <button
-                        onClick={() => randomizePlayerEmoji(index)}
-                        className="text-2xl hover:scale-110 transition-transform duration-200"
-                        title="Cliquer pour changer l'emoji"
-                      >
-                        {player.emoji}
-                      </button>
-
-                      {/* Nom du joueur éditable */}
-                      <input
-                        type="text"
-                        value={player.name}
-                        onChange={(e) => updatePlayerName(index, e.target.value)}
-                        className="flex-1 bg-transparent border-none focus:outline-none focus:ring-2 focus:ring-dutch-blue/30 rounded-lg px-2 py-1 font-semibold text-gray-800"
-                        maxLength={15}
-                      />
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </div>
-      </motion.div>
+        <PlayerList
+          players={players}
+          onUpdatePlayerName={updatePlayerName}
+          onRandomizePlayerEmoji={randomizePlayerEmoji}
+        />
+      </div>
 
       {/* Bouton de démarrage simplifié */}
       <motion.div 
