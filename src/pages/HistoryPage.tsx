@@ -4,7 +4,7 @@ import { Game } from '@/types';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import PageLayout from '@/components/PageLayout';
-import PageHeader from '@/components/PageHeader';
+import UnifiedTopBar from '@/components/scoreboard/UnifiedTopBar';
 import GameHistory from '@/components/GameHistory';
 import { UnifiedTabs } from '@/components/ui/unified-tabs';
 import { Button } from '@/components/ui/button';
@@ -72,9 +72,12 @@ const HistoryPage: React.FC = () => {
   return (
     <PageLayout>
       <div className="w-full max-w-6xl mx-auto px-4">
-        <PageHeader 
-          title={<ModernTitle withSparkles>Historique des parties</ModernTitle>}
+        <UnifiedTopBar 
+          title="Historique des parties"
+          showBackButton
           onBack={() => navigate('/')}
+          showSettings={false}
+          showRules={false}
         />
 
         <div className="mb-6">

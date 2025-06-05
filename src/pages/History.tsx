@@ -1,8 +1,9 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import AnimatedBackground from '../components/AnimatedBackground';
-import PageHeader from '@/components/PageHeader';
+import UnifiedTopBar from '@/components/scoreboard/UnifiedTopBar';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Calendar, Trophy, Users } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -106,20 +107,15 @@ const History: React.FC = () => {
         <AnimatedBackground />
       </div>
       
+      <UnifiedTopBar 
+        title="Historique des parties"
+        showBackButton
+        onBack={() => navigate('/')}
+        showSettings={false}
+        showRules={false}
+      />
+      
       <div className="container mx-auto px-4 py-8 relative z-10">
-        <div className="flex justify-between items-center mb-6">
-          <Link to="/">
-            <Button variant="glass" size="sm" className="flex items-center gap-1 text-gray-600 hover:text-gray-900">
-              <ArrowLeft className="h-4 w-4" />
-              Retour à l'accueil
-            </Button>
-          </Link>
-        </div>
-        
-        <ModernTitle withSparkles className="mb-8">
-          Historique des parties
-        </ModernTitle>
-        
         <GameHistory games={games} />
       </div>
     </div>

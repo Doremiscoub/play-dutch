@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import PageLayout from '@/components/PageLayout';
-import PageHeader from '@/components/PageHeader';
+import UnifiedTopBar from '@/components/scoreboard/UnifiedTopBar';
 
 const NotFound: React.FC = () => {
   const navigate = useNavigate();
@@ -13,9 +13,12 @@ const NotFound: React.FC = () => {
   return (
     <PageLayout className="pb-12 sm:pb-20">
       <div className="w-full max-w-6xl mx-auto px-1 sm:px-2">
-        <PageHeader 
-          title="Page non trouvée" 
-          onBack={() => navigate('/')} 
+        <UnifiedTopBar 
+          title="Page non trouvée"
+          showBackButton
+          onBack={() => navigate('/')}
+          showSettings={false}
+          showRules={false}
         />
         
         <motion.div

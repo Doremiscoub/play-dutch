@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import PageHeader from '@/components/PageHeader';
+import UnifiedTopBar from '@/components/scoreboard/UnifiedTopBar';
 import AnimatedBackground from '../components/AnimatedBackground';
 import { useSupabaseAuth } from '@/context/SupabaseAuthContext';
 import { toast } from 'sonner';
@@ -35,9 +35,12 @@ const SignIn: React.FC = () => {
           transition={{ duration: 0.5 }}
           className="w-full max-w-md z-10"
         >
-          <PageHeader 
-            title="Connexion" 
-            onBack={() => navigate('/')} 
+          <UnifiedTopBar 
+            title="Connexion"
+            showBackButton
+            onBack={() => navigate('/')}
+            showSettings={false}
+            showRules={false}
           />
           
           <div className="bg-white/70 backdrop-blur-md rounded-3xl shadow-lg border border-white/40 p-8">
@@ -81,9 +84,12 @@ const SignIn: React.FC = () => {
         transition={{ duration: 0.5 }}
         className="w-full max-w-md z-10"
       >
-        <PageHeader 
-          title={isSignUp ? "Inscription" : "Connexion"} 
-          onBack={() => navigate('/')} 
+        <UnifiedTopBar 
+          title={isSignUp ? "Inscription" : "Connexion"}
+          showBackButton
+          onBack={() => navigate('/')}
+          showSettings={false}
+          showRules={false}
         />
         
         <div className="bg-white/70 backdrop-blur-md rounded-3xl shadow-lg border border-white/40 p-6">
@@ -93,7 +99,7 @@ const SignIn: React.FC = () => {
             <SignInForm onSwitchToSignUp={() => setIsSignUp(true)} />
           )}
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 };

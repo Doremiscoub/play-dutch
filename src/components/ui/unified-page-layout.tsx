@@ -2,7 +2,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { UnifiedBackground } from './unified-background';
-import PageHeader from '@/components/PageHeader';
+import UnifiedTopBar from '@/components/scoreboard/UnifiedTopBar';
 import { PageTitle } from './page-title';
 import { cn } from '@/lib/utils';
 
@@ -39,19 +39,12 @@ export const UnifiedPageLayout: React.FC<UnifiedPageLayoutProps> = ({
     <UnifiedBackground variant={backgroundVariant} className={className}>
       <div className={cn("container max-w-6xl mx-auto px-4 py-8", containerClassName)}>
         {title && (
-          <PageHeader
-            title={
-              <PageTitle 
-                variant={titleVariant} 
-                withSparkles={withSparkles}
-                centered={true}
-              >
-                {title}
-              </PageTitle>
-            }
+          <UnifiedTopBar
+            title={title}
+            showBackButton={showBackButton}
             onBack={onBack}
             showSettings={showSettings}
-            onSettings={onSettings}
+            showRules={false}
           />
         )}
         {children}
