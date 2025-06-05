@@ -1,234 +1,313 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { UnifiedButton } from '@/components/ui/unified-button';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Minus, Plus, User, Shuffle } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Play, Plus, Users, Zap, Clock, Trash2, Shuffle, UserPlus } from 'lucide-react';
 import { toast } from 'sonner';
+import { Badge } from '@/components/ui/badge';
 import EmojiSelector from './EmojiSelector';
+
+interface Player {
+  name: string;
+  emoji: string;
+}
 
 interface EnhancedLocalGameSetupProps {
   onStartGame: (playerNames: string[]) => void;
 }
 
-const getRandomEmoji = () => {
-  const emojis = ['😀', '😎', '🤓', '😜', '🥳', '😇', '🤗', '🙃', '😊', '😋', '🤔', '😴', '🤯', '🥸', '🤠', '👻', '🤖', '👽', '🦄', '🐻'];
-  return emojis[Math.floor(Math.random() * emojis.length)];
-};
-
 const EnhancedLocalGameSetup: React.FC<EnhancedLocalGameSetupProps> = ({ onStartGame }) => {
-  const [numPlayers, setNumPlayers] = useState(4);
-  const [playerNames, setPlayerNames] = useState<string[]>(Array(4).fill('').map((_, i) => `Joueur ${i + 1}`));
-  const [playerEmojis, setPlayerEmojis] = useState<string[]>(Array(4).fill('').map(() => getRandomEmoji()));
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showEmojiSelectors, setShowEmojiSelectors] = useState(false);
+  const [players, setPlayers] = useState<Player[]>([]);
+  const [newPlayerName, setNewPlayerName] = useState('');
+  const [selectedEmoji, setSelectedEmoji] = useState('😀');
+  const [isAddingPlayer, setIsAddingPlayer] = useState(false);
 
-  const handleNumPlayersChange = (increment: boolean) => {
-    const newNum = increment 
-      ? Math.min(numPlayers + 1, 10) 
-      : Math.max(numPlayers - 1, 2);
-    
-    setNumPlayers(newNum);
-    
-    if (increment && numPlayers < 10) {
-      setPlayerNames([...playerNames, `Joueur ${numPlayers + 1}`]);
-      setPlayerEmojis([...playerEmojis, getRandomEmoji()]);
-    } else if (!increment && numPlayers > 2) {
-      setPlayerNames(playerNames.slice(0, -1));
-      setPlayerEmojis(playerEmojis.slice(0, -1));
+  const suggestedNames = ['Alice', 'Bob', 'Charlie', 'Diana', 'Ethan', 'Fiona', 'Gabriel', 'Hannah'];
+
+  const addPlayer = () => {
+    if (!newPlayerName.trim()) {
+      toast.error('Entrez un nom de joueur');
+      return;
     }
+
+    if (newPlayerName.trim().length < 2) {
+      toast.error('Le nom doit contenir au moins 2 caractères');
+      return;
+    }
+
+    if (players.some(p => p.name.toLowerCase() === newPlayerName.trim().toLowerCase())) {
+      toast.error('Ce nom est déjà utilisé');
+      return;
+    }
+
+    if (players.length >= 10) {
+      toast.error('Maximum 10 joueurs');
+      return;
+    }
+
+    const newPlayer: Player = {
+      name: newPlayerName.trim(),
+      emoji: selectedEmoji
+    };
+
+    setPlayers([...players, newPlayer]);
+    setNewPlayerName('');
+    setSelectedEmoji('😀');
+    setIsAddingPlayer(false);
+    toast.success(`${newPlayer.name} ajouté à la partie !`);
   };
 
-  const handleNameChange = (index: number, name: string) => {
-    const newNames = [...playerNames];
-    newNames[index] = name;
-    setPlayerNames(newNames);
+  const removePlayer = (index: number) => {
+    const removedPlayer = players[index];
+    setPlayers(players.filter((_, i) => i !== index));
+    toast.info(`${removedPlayer.name} retiré de la partie`);
   };
 
-  const handleEmojiChange = (index: number, emoji: string) => {
-    const newEmojis = [...playerEmojis];
-    newEmojis[index] = emoji;
-    setPlayerEmojis(newEmojis);
-  };
+  const addQuickPlayer = (name: string) => {
+    if (players.some(p => p.name.toLowerCase() === name.toLowerCase())) {
+      toast.error('Ce nom est déjà utilisé');
+      return;
+    }
 
-  const randomizeAllEmojis = () => {
-    const newEmojis = playerEmojis.map(() => getRandomEmoji());
-    setPlayerEmojis(newEmojis);
-    toast.success('Emojis mélangés !');
-  };
-
-  const validateForm = () => {
-    const trimmedNames = playerNames.map(name => name.trim());
+    const emojis = ['😀', '😎', '🤓', '😜', '🥳', '😇', '🤗', '🙃'];
+    const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
     
-    const emptyIndex = trimmedNames.findIndex(name => name === '');
-    if (emptyIndex !== -1) {
-      toast.error(`Le nom du joueur ${emptyIndex + 1} est requis`);
-      return false;
+    const newPlayer: Player = { name, emoji: randomEmoji };
+    setPlayers([...players, newPlayer]);
+    toast.success(`${name} ajouté rapidement !`);
+  };
+
+  const shufflePlayers = () => {
+    const shuffled = [...players].sort(() => Math.random() - 0.5);
+    setPlayers(shuffled);
+    toast.info('Ordre des joueurs mélangé !');
+  };
+
+  const startGame = () => {
+    if (players.length < 2) {
+      toast.error('Il faut au moins 2 joueurs');
+      return;
     }
     
-    const duplicates = trimmedNames.filter((name, index) => trimmedNames.indexOf(name) !== index);
-    if (duplicates.length > 0) {
-      toast.error(`Le nom "${duplicates[0]}" est utilisé plusieurs fois`);
-      return false;
-    }
-    
-    return true;
+    onStartGame(players.map(p => p.name));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (isSubmitting) return;
-    
-    if (!validateForm()) return;
-    
-    setIsSubmitting(true);
-    
-    try {
-      const validPlayerNames = playerNames.map((name, index) => 
-        name.trim() === '' ? `Joueur ${index + 1}` : name.trim()
-      );
-      
-      // Sauvegarder les données avec les emojis
-      const playerData = validPlayerNames.map((name, index) => ({
-        name,
-        emoji: playerEmojis[index] || getRandomEmoji()
-      }));
-      
-      localStorage.setItem('dutch_player_setup', JSON.stringify(playerData));
-      
-      setTimeout(() => {
-        onStartGame(validPlayerNames);
-      }, 300);
-    } catch (error) {
-      console.error("Erreur lors de la configuration des joueurs:", error);
-      toast.error("Une erreur est survenue lors de la configuration");
-      setIsSubmitting(false);
-    }
-  };
+  const canStartGame = players.length >= 2;
+  const estimatedDuration = players.length * 5; // minutes
 
   return (
-    <div className="space-y-6">
-      {/* Player Count Selector */}
-      <div className="space-y-3">
-        <h3 className="text-lg font-medium text-gray-800">Nombre de joueurs</h3>
-        <div className="flex items-center justify-center gap-4">
-          <Button
-            type="button"
-            variant="outline"
-            size="icon"
-            className="w-12 h-12 rounded-full bg-white/70 backdrop-blur-sm border border-white/50 shadow-sm hover:bg-white/80 transition-all"
-            onClick={() => handleNumPlayersChange(false)}
-            disabled={numPlayers <= 2}
-          >
-            <Minus className="h-4 w-4" />
-          </Button>
-          
-          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-dutch-blue to-dutch-purple flex items-center justify-center text-white text-xl font-bold shadow-lg">
-            {numPlayers}
-          </div>
-          
-          <Button
-            type="button"
-            variant="outline"
-            size="icon"
-            className="w-12 h-12 rounded-full bg-white/70 backdrop-blur-sm border border-white/50 shadow-sm hover:bg-white/80 transition-all"
-            onClick={() => handleNumPlayersChange(true)}
-            disabled={numPlayers >= 10}
-          >
-            <Plus className="h-4 w-4" />
-          </Button>
-        </div>
-      </div>
+    <Card className="border border-white/50 bg-gradient-to-br from-white/90 to-white/70 backdrop-blur-md rounded-3xl shadow-lg overflow-hidden">
+      <CardHeader className="bg-gradient-to-r from-dutch-blue/10 to-dutch-purple/10">
+        <CardTitle className="flex items-center gap-2">
+          <Zap className="h-5 w-5 text-dutch-blue" />
+          Partie Rapide
+        </CardTitle>
+        <CardDescription>
+          Lancez une partie immédiatement avec vos amis
+        </CardDescription>
+      </CardHeader>
       
-      {/* Player Names */}
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <CardContent className="p-6 space-y-6">
+        {/* Quick Add Suggestions */}
+        {players.length < 6 && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="space-y-3"
+          >
+            <h3 className="text-sm font-medium text-gray-700 flex items-center gap-2">
+              <UserPlus className="h-4 w-4 text-dutch-purple" />
+              Ajout rapide
+            </h3>
+            <div className="flex flex-wrap gap-2">
+              {suggestedNames
+                .filter(name => !players.some(p => p.name === name))
+                .slice(0, 4)
+                .map((name) => (
+                  <motion.div
+                    key={name}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => addQuickPlayer(name)}
+                      className="bg-white/70 hover:bg-white/90 text-xs"
+                    >
+                      <Plus className="h-3 w-3 mr-1" />
+                      {name}
+                    </Button>
+                  </motion.div>
+                ))}
+            </div>
+          </motion.div>
+        )}
+
+        {/* Custom Player Add */}
+        <div className="space-y-3">
+          {!isAddingPlayer ? (
+            <Button
+              onClick={() => setIsAddingPlayer(true)}
+              variant="outline"
+              className="w-full bg-white/70 hover:bg-white/90 border-dashed border-2 border-gray-300 hover:border-dutch-blue transition-colors"
+              disabled={players.length >= 10}
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Ajouter un joueur personnalisé
+            </Button>
+          ) : (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="bg-white/80 rounded-xl p-4 border border-white/60 space-y-3"
+            >
+              <div className="flex gap-2">
+                <Input
+                  value={newPlayerName}
+                  onChange={(e) => setNewPlayerName(e.target.value)}
+                  placeholder="Nom du joueur"
+                  className="bg-white/70"
+                  onKeyDown={(e) => e.key === 'Enter' && addPlayer()}
+                  maxLength={15}
+                />
+                <EmojiSelector
+                  selectedEmoji={selectedEmoji}
+                  onEmojiSelect={setSelectedEmoji}
+                />
+              </div>
+              <div className="flex gap-2">
+                <Button onClick={addPlayer} size="sm" className="bg-dutch-blue text-white flex-1">
+                  <Plus className="h-3 w-3 mr-1" />
+                  Ajouter
+                </Button>
+                <Button 
+                  onClick={() => setIsAddingPlayer(false)} 
+                  variant="outline" 
+                  size="sm"
+                  className="bg-white/70"
+                >
+                  Annuler
+                </Button>
+              </div>
+            </motion.div>
+          )}
+        </div>
+
+        {/* Players List */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <h3 className="text-lg font-medium text-gray-800">Configuration des joueurs</h3>
-            <div className="flex gap-2">
+            <h3 className="text-sm font-medium text-gray-700 flex items-center gap-2">
+              <Users className="h-4 w-4 text-dutch-blue" />
+              Joueurs ({players.length})
+              {canStartGame && (
+                <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 text-xs">
+                  ✅ Prêt
+                </Badge>
+              )}
+            </h3>
+            {players.length > 2 && (
               <Button
-                type="button"
-                variant="outline"
+                onClick={shufflePlayers}
+                variant="ghost"
                 size="sm"
-                onClick={randomizeAllEmojis}
-                className="bg-white/70 backdrop-blur-sm border border-white/50 text-xs"
+                className="text-dutch-purple hover:bg-dutch-purple/10"
               >
                 <Shuffle className="h-3 w-3 mr-1" />
                 Mélanger
               </Button>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={() => setShowEmojiSelectors(!showEmojiSelectors)}
-                className="bg-white/70 backdrop-blur-sm border border-white/50 text-xs"
-              >
-                {showEmojiSelectors ? 'Masquer' : 'Personnaliser'} emojis
-              </Button>
-            </div>
+            )}
           </div>
           
-          <AnimatePresence>
-            {playerNames.map((name, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 20 }}
-                transition={{ duration: 0.3, delay: index * 0.05 }}
-                className="space-y-3"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-dutch-blue to-dutch-purple flex items-center justify-center text-white text-sm font-medium shadow-md">
-                    {index + 1}
+          <div className="space-y-2 max-h-64 overflow-y-auto">
+            <AnimatePresence>
+              {players.map((player, index) => (
+                <motion.div
+                  key={`${player.name}-${index}`}
+                  initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, x: -20, scale: 0.95 }}
+                  transition={{ duration: 0.2, delay: index * 0.05 }}
+                  className="group flex items-center justify-between bg-white/80 backdrop-blur-sm rounded-xl p-3 border border-white/60 hover:bg-white/90 transition-all duration-200"
+                >
+                  <div className="flex items-center gap-3">
+                    <Avatar className="h-8 w-8">
+                      <AvatarFallback className="bg-gradient-to-br from-dutch-blue/20 to-dutch-purple/20 text-lg">
+                        {player.emoji}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <span className="font-medium text-sm text-gray-800">{player.name}</span>
+                      <div className="text-xs text-gray-500">Joueur {index + 1}</div>
+                    </div>
                   </div>
                   
-                  <div className="w-10 h-10 rounded-xl bg-white/70 backdrop-blur-sm border border-white/50 flex items-center justify-center text-xl shadow-sm">
-                    {playerEmojis[index] || '🎮'}
-                  </div>
-                  
-                  <input
-                    type="text"
-                    value={name}
-                    onChange={(e) => handleNameChange(index, e.target.value)}
-                    className="flex-1 px-4 py-3 rounded-xl bg-white/70 backdrop-blur-sm border border-white/50 shadow-sm focus:outline-none focus:ring-2 focus:ring-dutch-blue/20 transition-all"
-                    placeholder={`Nom du joueur ${index + 1}`}
-                    disabled={isSubmitting}
-                  />
-                </div>
-                
-                {showEmojiSelectors && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    exit={{ opacity: 0, height: 0 }}
-                    className="ml-11 bg-white/50 backdrop-blur-sm rounded-xl p-3 border border-white/30"
+                  <Button 
+                    variant="ghost" 
+                    size="icon"
+                    onClick={() => removePlayer(index)}
+                    className="h-8 w-8 text-red-500 hover:text-red-700 hover:bg-red-50 opacity-0 group-hover:opacity-100 transition-opacity"
                   >
-                    <EmojiSelector
-                      selectedEmoji={playerEmojis[index]}
-                      onEmojiSelect={(emoji) => handleEmojiChange(index, emoji)}
-                      playerIndex={index}
-                    />
-                  </motion.div>
-                )}
+                    <Trash2 className="h-3 w-3" />
+                  </Button>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+            
+            {players.length === 0 && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="text-center py-8 text-gray-500"
+              >
+                <Users className="h-12 w-12 mx-auto mb-2 text-gray-300" />
+                <p className="text-sm">Ajoutez des joueurs pour commencer</p>
               </motion.div>
-            ))}
-          </AnimatePresence>
+            )}
+          </div>
         </div>
-        
-        <div className="pt-4">
-          <UnifiedButton 
-            type="submit" 
-            variant="primary"
-            size="lg"
-            className="w-full"
-            disabled={isSubmitting}
+
+        {/* Game Info */}
+        {players.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-gradient-to-r from-dutch-blue/10 to-dutch-purple/10 rounded-xl p-4 border border-white/40"
           >
-            {isSubmitting ? 'Création...' : 'Commencer la partie'}
-          </UnifiedButton>
-        </div>
-      </form>
-    </div>
+            <div className="flex items-center justify-between text-sm">
+              <div className="flex items-center gap-2">
+                <Clock className="h-4 w-4 text-dutch-blue" />
+                <span className="text-gray-600">Durée estimée :</span>
+                <span className="font-medium">{estimatedDuration} min</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Zap className="h-4 w-4 text-dutch-orange" />
+                <span className="text-gray-600">Mode :</span>
+                <span className="font-medium">Rapide</span>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </CardContent>
+      
+      <div className="px-6 pb-6">
+        <motion.div whileHover={{ scale: canStartGame ? 1.02 : 1 }}>
+          <Button 
+            onClick={startGame}
+            disabled={!canStartGame}
+            className="w-full bg-gradient-to-r from-dutch-blue to-dutch-purple text-white shadow-lg hover:shadow-xl transition-all duration-300"
+            size="lg"
+          >
+            <Play className="h-4 w-4 mr-2" />
+            {canStartGame ? 'Commencer la partie' : 'Ajoutez au moins 2 joueurs'}
+          </Button>
+        </motion.div>
+      </div>
+    </Card>
   );
 };
 
