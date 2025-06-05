@@ -9,6 +9,80 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      games: {
+        Row: {
+          created_at: string | null
+          id: string
+          name: string
+          players_count: number | null
+          score_limit: number | null
+          status: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          name: string
+          players_count?: number | null
+          score_limit?: number | null
+          status?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          name?: string
+          players_count?: number | null
+          score_limit?: number | null
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      players: {
+        Row: {
+          avatar_color: string | null
+          created_at: string | null
+          emoji: string | null
+          game_id: string
+          id: string
+          name: string
+          total_score: number | null
+          user_id: string
+        }
+        Insert: {
+          avatar_color?: string | null
+          created_at?: string | null
+          emoji?: string | null
+          game_id: string
+          id?: string
+          name: string
+          total_score?: number | null
+          user_id: string
+        }
+        Update: {
+          avatar_color?: string | null
+          created_at?: string | null
+          emoji?: string | null
+          game_id?: string
+          id?: string
+          name?: string
+          total_score?: number | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "players_game_id_fkey"
+            columns: ["game_id"]
+            isOneToOne: false
+            referencedRelation: "games"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
