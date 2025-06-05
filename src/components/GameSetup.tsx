@@ -55,19 +55,19 @@ const GameSetup: React.FC = () => {
           {/* Enhanced feature badges */}
           <div className="flex justify-center gap-3 flex-wrap mb-8">
             <GameBadge 
-              variant="default"
+              variant="achievement"
               className="bg-green-100 text-green-800 border-green-200"
             >
               ✅ 100% Gratuit
             </GameBadge>
             <GameBadge 
-              variant="default"
+              variant="status"
               className="bg-blue-100 text-blue-800 border-blue-200"
             >
               📱 Fonctionne hors-ligne
             </GameBadge>
             <GameBadge 
-              variant="default"
+              variant="special"
               className="bg-purple-100 text-purple-800 border-purple-200"
             >
               🤖 IA Commentateur

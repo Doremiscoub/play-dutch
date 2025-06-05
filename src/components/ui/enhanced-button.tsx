@@ -62,11 +62,11 @@ const enhancedButtonVariants = cva(
   }
 );
 
-// Separate the motion-specific props from HTML button props
-type MotionButtonProps = Omit<HTMLMotionProps<"button">, 'onDrag' | 'onDragStart' | 'onDragEnd'>;
+// Define proper Motion props without conflicting HTML events
+type MotionProps = Omit<HTMLMotionProps<"button">, 'onDragStart' | 'onDragEnd' | 'onDrag'>;
 
 export interface EnhancedButtonProps
-  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, keyof MotionButtonProps>,
+  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onDragStart' | 'onDragEnd' | 'onDrag'>,
   VariantProps<typeof enhancedButtonVariants> {
   withSparkles?: boolean;
   withIcon?: boolean;
