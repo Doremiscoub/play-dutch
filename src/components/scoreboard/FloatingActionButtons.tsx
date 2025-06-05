@@ -20,7 +20,7 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
   canEndGame
 }) => {
   return (
-    <div className="fixed bottom-6 right-6 z-[9999] pointer-events-none">
+    <div className="fixed bottom-6 right-6 z-[100] pointer-events-none">
       <motion.div 
         className="flex flex-col gap-3 items-end pointer-events-auto"
         initial={{ opacity: 0, x: 100 }}

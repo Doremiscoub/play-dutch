@@ -2,8 +2,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus } from 'lucide-react';
-import { EnhancedButton } from '@/components/ui/enhanced-button';
 import useGameState from '@/hooks/useGameState';
 import ScoreBoardWithAds from '@/components/scoreboard/ScoreBoardWithAds';
 import GameOverScreen from '@/components/GameOverScreen';
@@ -137,24 +135,6 @@ const GamePage: React.FC = () => {
             />
           </div>
         )}
-
-        <motion.div
-          className="fixed bottom-8 right-8 z-50"
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <EnhancedButton
-            onClick={openScoreForm}
-            variant="power"
-            size="icon-lg"
-            effect="glow"
-            rarity="epic"
-            withSparkles
-            aria-label="Nouvelle manche"
-          >
-            <Plus className="h-6 w-6" />
-          </EnhancedButton>
-        </motion.div>
 
         <AnimatePresence mode="wait">
           {showGameOver ? (

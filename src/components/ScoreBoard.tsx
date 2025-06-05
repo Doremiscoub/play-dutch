@@ -62,7 +62,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
   }, [roundHistory.length, onUndoLastRound, playSound]);
 
   const handleEndGame = useCallback(() => {
-    console.log('ScoreBoard: handleEndGame called');
+    console.log('ScoreBoard: handleEndGame called - Calling onEndGame prop');
     onEndGame();
     playSound('gameEnd');
   }, [onEndGame, playSound]);
@@ -201,7 +201,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
         </div>
       </div>
 
-      {/* Floating Action Buttons - Maintenant vraiment fixes */}
+      {/* Floating Action Buttons - Position vraiment fixe */}
       <FloatingActionButtons
         onAddRound={handleAddRound}
         onUndo={handleUndo}
