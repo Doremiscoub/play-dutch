@@ -50,7 +50,7 @@ const Home: React.FC = () => {
           {/* Main CTA */}
           <div className="space-y-4">
             <Button
-              onClick={() => navigate('/game/setup')}
+              onClick={() => navigate('/setup')}
               size="lg"
               className="bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange text-white font-bold text-xl px-12 py-6 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
             >

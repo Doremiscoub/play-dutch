@@ -4,7 +4,7 @@ import { render, waitFor } from '@testing-library/react';
 import { screen, fireEvent } from '@testing-library/dom';
 import { MemoryRouter } from 'react-router-dom';
 import { setupTestPlayers } from '../test-utils';
-import SimpleGamePage from '../pages/SimpleGamePage';
+import GamePage from '../pages/GamePage';
 
 describe('Flow: Add Round with Single Click', () => {
   beforeEach(() => {
@@ -17,7 +17,7 @@ describe('Flow: Add Round with Single Click', () => {
   it('should add a round with a single click on the validate button', async () => {
     render(
       <MemoryRouter initialEntries={['/game']}>
-        <SimpleGamePage />
+        <GamePage />
       </MemoryRouter>
     );
 
