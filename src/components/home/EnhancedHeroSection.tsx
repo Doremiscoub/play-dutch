@@ -142,7 +142,7 @@ const EnhancedHeroSection: React.FC = () => {
           className="relative mb-8"
         >
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-            {/* Primary CTA */}
+            {/* Primary CTA - corrigé pour naviguer vers /setup */}
             <motion.div
               whileHover={prefersReducedMotion ? {} : { scale: 1.05, y: -2 }}
               whileTap={prefersReducedMotion ? {} : { scale: 0.98 }}
@@ -150,7 +150,7 @@ const EnhancedHeroSection: React.FC = () => {
             >
               <div className="absolute -inset-1 bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange rounded-full blur opacity-60 group-hover:opacity-100 transition duration-500"></div>
               <Button
-                onClick={() => navigate('/game/setup')}
+                onClick={() => navigate('/setup')}
                 size="xl"
                 className="relative bg-gradient-to-r from-dutch-blue to-dutch-purple text-white px-12 py-6 text-xl font-bold rounded-full shadow-2xl hover:shadow-dutch-blue/25 transition-all duration-300 border-0 group"
                 aria-label="Commencer une nouvelle partie de Dutch"

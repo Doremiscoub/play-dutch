@@ -75,22 +75,10 @@ const App: React.FC = () => {
               {/* Pages principales */}
               <Route index element={<Home />} />
               <Route path="setup" element={<GameSetup />} />
-              <Route path="game" element={
-                <ProtectedRoute>
-                  <GamePage />
-                </ProtectedRoute>
-              } />
-              <Route path="history" element={
-                <ProtectedRoute>
-                  <History />
-                </ProtectedRoute>
-              } />
+              <Route path="game" element={<GamePage />} />
+              <Route path="history" element={<History />} />
               <Route path="rules" element={<Rules />} />
-              <Route path="settings" element={
-                <ProtectedRoute>
-                  <SettingsPage />
-                </ProtectedRoute>
-              } />
+              <Route path="settings" element={<SettingsPage />} />
               
               {/* Pages SEO / Contenu */}
               <Route path="about" element={<AboutPage />} />

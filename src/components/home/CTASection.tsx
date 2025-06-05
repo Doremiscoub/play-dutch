@@ -28,7 +28,7 @@ export const CTASection: React.FC = () => {
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
-              onClick={() => navigate('/game/setup')}
+              onClick={() => navigate('/setup')}
               size="lg"
               className="bg-gradient-to-r from-dutch-blue to-dutch-purple hover:scale-105 transition-transform text-lg px-8 py-4"
             >

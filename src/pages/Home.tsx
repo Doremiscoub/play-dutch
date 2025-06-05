@@ -2,9 +2,13 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSEO } from '@/hooks/useSEO';
-import GameSettings from '@/components/GameSettings';
-import { User, Play } from 'lucide-react';
+import { User, Play, BookOpen, Trophy, Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import GameSettings from '@/components/GameSettings';
+import EnhancedHeroSection from '@/components/home/EnhancedHeroSection';
+import { FeaturesSection } from '@/components/home/FeaturesSection';
+import { StatsSection } from '@/components/home/StatsSection';
+import { CTASection } from '@/components/home/CTASection';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -30,79 +34,45 @@ const Home: React.FC = () => {
         <GameSettings />
       </header>
 
-      {/* Main content */}
-      <div className="flex flex-col items-center justify-center min-h-screen px-4 text-center">
-        {/* Hero Section */}
-        <div className="space-y-8 max-w-4xl mx-auto">
-          <div className="space-y-4">
-            <h1 className="text-6xl md:text-8xl font-bold bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange bg-clip-text text-transparent">
-              Dutch
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-700 font-medium">
-              Le jeu de cartes qui révèle vos stratégies
-            </p>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Application gratuite pour suivre les scores de vos parties Dutch. 
-              Avec l'IA Professeur Cartouche pour des commentaires amusants !
-            </p>
-          </div>
+      {/* Enhanced Hero Section - titre 3D et particules */}
+      <EnhancedHeroSection />
 
-          {/* Main CTA */}
-          <div className="space-y-4">
-            <Button
-              onClick={() => navigate('/setup')}
-              size="lg"
-              className="bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange text-white font-bold text-xl px-12 py-6 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
-            >
-              <Play className="h-6 w-6 mr-3" />
-              Commencer une partie
-            </Button>
-            
-            <div className="flex flex-wrap justify-center gap-4 text-sm text-gray-600">
-              <Button
-                variant="ghost"
-                onClick={() => navigate('/rules')}
-                className="hover:text-dutch-blue"
-              >
-                📖 Règles du jeu
-              </Button>
-              <Button
-                variant="ghost"
-                onClick={() => navigate('/history')}
-                className="hover:text-dutch-blue"
-              >
-                📊 Historique
-              </Button>
-              <Button
-                variant="ghost"
-                onClick={() => navigate('/settings')}
-                className="hover:text-dutch-blue"
-              >
-                ⚙️ Paramètres
-              </Button>
-            </div>
-          </div>
-        </div>
+      <div className="relative z-10 px-4 pb-16">
+        {/* Features Section */}
+        <FeaturesSection />
 
-        {/* Features grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl w-full mt-16">
-          <div className="bg-white/80 backdrop-blur-sm border border-white/50 rounded-xl p-6 shadow-lg">
-            <div className="text-4xl mb-4">🎯</div>
-            <h3 className="text-lg font-semibold mb-2">Calcul automatique</h3>
-            <p className="text-gray-600">Scores et "Dutch" calculés automatiquement</p>
-          </div>
-          
-          <div className="bg-white/80 backdrop-blur-sm border border-white/50 rounded-xl p-6 shadow-lg">
-            <div className="text-4xl mb-4">🤖</div>
-            <h3 className="text-lg font-semibold mb-2">IA Commentateur</h3>
-            <p className="text-gray-600">Le Professeur Cartouche anime vos parties</p>
-          </div>
-          
-          <div className="bg-white/80 backdrop-blur-sm border border-white/50 rounded-xl p-6 shadow-lg">
-            <div className="text-4xl mb-4">📱</div>
-            <h3 className="text-lg font-semibold mb-2">Hors ligne</h3>
-            <p className="text-gray-600">Fonctionne sans connexion internet</p>
-          </div>
+        {/* Stats Section - statistiques sociales */}
+        <StatsSection />
+
+        {/* Final CTA Section */}
+        <CTASection />
+
+        {/* Quick Navigation Links */}
+        <div className="flex flex-wrap justify-center gap-4 mt-12 text-sm text-gray-600">
+          <Button
+            variant="ghost"
+            onClick={() => navigate('/rules')}
+            className="hover:text-dutch-blue"
+          >
+            <BookOpen className="h-4 w-4 mr-2" />
+            Règles du jeu
+          </Button>
+          <Button
+            variant="ghost"
+            onClick={() => navigate('/history')}
+            className="hover:text-dutch-blue"
+          >
+            <Trophy className="h-4 w-4 mr-2" />
+            Historique
+          </Button>
+          <Button
+            variant="ghost"
+            onClick={() => navigate('/settings')}
+            className="hover:text-dutch-blue"
+          >
+            <Settings className="h-4 w-4 mr-2" />
+            Paramètres
+          </Button>
         </div>
       </div>
     </div>
