@@ -1,82 +1,77 @@
-
 import React from 'react';
-import { motion } from 'framer-motion';
-import { Plus, RotateCcw, Flag } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface StickyActionButtonsProps {
   onAddRound: () => void;
-  onUndo: () => void;
+  onUndoLastRound: () => void;
   onEndGame: () => void;
   canUndo: boolean;
-  canEndGame: boolean;
+  disabled?: boolean;
 }
 
 const StickyActionButtons: React.FC<StickyActionButtonsProps> = ({
   onAddRound,
-  onUndo,
+  onUndoLastRound,
   onEndGame,
   canUndo,
-  canEndGame
+  disabled = false,
 }) => {
   return (
-    <div className="fixed bottom-6 right-6 z-[9999] flex flex-col gap-3">
-      {/* Nouvelle manche - Toujours visible */}
-      <motion.div
-        initial={{ scale: 0, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 0.3, delay: 0.1 }}
-      >
-        <Button
+    <div className="sticky bottom-0 left-0 w-full bg-white/80 backdrop-blur-md border-t border-gray-200 z-40">
+      <div className="container mx-auto px-4 py-3 flex items-center justify-between gap-2">
+        <Button 
+          variant="dutch-primary"
           onClick={onAddRound}
-          variant="y2k-blue"
-          size="icon-lg"
-          className="w-14 h-14 rounded-full shadow-lg hover:shadow-xl"
-          title="Nouvelle manche"
+          className="flex-1 h-14 text-base font-medium shadow-lg"
+          disabled={disabled}
         >
-          <Plus className="h-6 w-6" />
+          Ajouter une manche
         </Button>
-      </motion.div>
 
-      {/* Annuler - Visible si on peut annuler */}
-      {canUndo && (
-        <motion.div
-          initial={{ scale: 0, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0, opacity: 0 }}
-          transition={{ duration: 0.3, delay: 0.2 }}
+        <Button
+          variant="dutch-glass"
+          size="icon"
+          onClick={onUndoLastRound}
+          disabled={!canUndo || disabled}
+          className="h-12 w-12 backdrop-blur-xl"
         >
-          <Button
-            onClick={onUndo}
-            variant="vision-glass"
-            size="icon-lg"
-            className="w-12 h-12 rounded-full shadow-md hover:shadow-lg text-dutch-purple"
-            title="Annuler la dernière manche"
+          <span className="sr-only">Annuler</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            className="w-6 h-6"
           >
-            <RotateCcw className="h-5 w-5" />
-          </Button>
-        </motion.div>
-      )}
+            <path
+              fillRule="evenodd"
+              d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12H6.75a.75.75 0 0 0 0 1.5h4.19l-1.97 1.97a.75.75 0 1 0 1.06 1.06l3.22-3.22a.75.75 0 0 0 0-1.06l-3.22-3.22Z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </Button>
 
-      {/* Terminer la partie - Toujours visible si la partie peut se terminer */}
-      {canEndGame && (
-        <motion.div
-          initial={{ scale: 0, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0, opacity: 0 }}
-          transition={{ duration: 0.3, delay: 0.3 }}
+        <Button
+          variant="dutch-glass"
+          size="icon"
+          onClick={onEndGame}
+          disabled={disabled}
+          className="h-12 w-12 backdrop-blur-xl"
         >
-          <Button
-            onClick={onEndGame}
-            variant="vision-glass"
-            size="icon-lg"
-            className="w-12 h-12 rounded-full shadow-md hover:shadow-lg text-dutch-orange"
-            title="Terminer la partie"
+          <span className="sr-only">Terminer la partie</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            className="w-6 h-6"
           >
-            <Flag className="h-5 w-5" />
-          </Button>
-        </motion.div>
-      )}
+            <path
+              fillRule="evenodd"
+              d="M12 1.5a5.25 5.25 0 0 0-5.25 5.25v3a3 3 0 0 0-3 3v6.75a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V12a3 3 0 0 0-3-3v-3A5.25 5.25 0 0 0 12 1.5Zm-2.25 6a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75v3a.75.75 0 0 1-.75.75h-3a.75.75 0 0 1-.75-.75v-3Z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </Button>
+      </div>
     </div>
   );
 };

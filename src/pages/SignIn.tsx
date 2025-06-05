@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
@@ -51,7 +50,7 @@ const SignIn: React.FC = () => {
             </p>
             <div className="flex flex-col gap-4">
               <Button 
-                variant="gradient"
+                variant="dutch-primary"
                 className="w-full" 
                 onClick={enableOfflineMode}
               >

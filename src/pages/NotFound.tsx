@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
@@ -36,7 +35,7 @@ const NotFound: React.FC = () => {
             </p>
             <Link to="/">
               <Button 
-                variant="gradient" 
+                variant="dutch-primary"
                 size="lg" 
                 className="rounded-xl shadow-md hover:shadow-lg"
               >

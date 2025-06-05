@@ -1,5 +1,5 @@
-
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
+import { Button } from '@/components/ui/button';
 import { UnifiedButton } from '@/components/ui/unified-button';
 import PlayerNameInput from './PlayerNameInput';
 import PlayerCountSelector from './PlayerCountSelector';
@@ -14,7 +14,7 @@ const LocalGameSetup: React.FC<LocalGameSetupProps> = ({ onStartGame }) => {
   const [playerNames, setPlayerNames] = useState<string[]>(Array(4).fill('').map((_, i) => `Joueur ${i + 1}`));
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleNumPlayersChange = (increment: boolean) => {
+  const handleNumPlayersChange = useCallback((increment: boolean) => {
     const newNum = increment 
       ? Math.min(numPlayers + 1, 10) 
       : Math.max(numPlayers - 1, 2);
@@ -26,15 +26,15 @@ const LocalGameSetup: React.FC<LocalGameSetupProps> = ({ onStartGame }) => {
     } else if (!increment && numPlayers > 2) {
       setPlayerNames(playerNames.slice(0, -1));
     }
-  };
+  }, [numPlayers, setNumPlayers, setPlayerNames]);
 
-  const handleNameChange = (index: number, name: string) => {
+  const handleNameChange = useCallback((index: number, name: string) => {
     const newNames = [...playerNames];
     newNames[index] = name;
     setPlayerNames(newNames);
-  };
+  }, [playerNames, setPlayerNames]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
     if (isSubmitting) return;
     
@@ -68,7 +68,7 @@ const LocalGameSetup: React.FC<LocalGameSetupProps> = ({ onStartGame }) => {
         setIsSubmitting(false);
       }, 500);
     }
-  };
+  }, [playerNames, setPlayerNames, onStartGame, isSubmitting]);
 
   return (
     <div className="space-y-6 py-4">

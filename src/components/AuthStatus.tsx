@@ -1,235 +1,106 @@
-
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSupabaseClient, useSession } from '@supabase/auth-helpers-react';
 import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { LogOut, ChevronDown, UserCircle, Settings, History, Trophy } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, } from "@/components/ui/dropdown-menu"
 import { toast } from 'sonner';
-import { motion } from 'framer-motion';
-import { Badge } from '@/components/ui/badge';
-import { useSupabaseAuth } from '@/context/SupabaseAuthContext';
+import { Link, useNavigate } from 'react-router-dom';
+import { Settings, User } from 'lucide-react';
 
 interface AuthStatusProps {
-  showLoginButtons?: boolean;
-  buttonStyle?: 'default' | 'minimal' | 'pill';
-  className?: string;
+  isMenuOpen: boolean;
+  onCloseMenu: () => void;
 }
 
-const AuthStatus = ({ showLoginButtons = true, buttonStyle = 'default', className = '' }: AuthStatusProps) => {
-  const { isSignedIn, user, isLoaded, signOut, isOfflineMode } = useSupabaseAuth();
+const AuthStatus: React.FC<AuthStatusProps> = ({ isMenuOpen, onCloseMenu }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const session = useSession();
+  const supabase = useSupabaseClient();
   const navigate = useNavigate();
-  const [isSigningOut, setIsSigningOut] = useState(false);
 
-  // Gestionnaire de déconnexion
-  const handleSignOut = async () => {
-    try {
-      setIsSigningOut(true);
-      await signOut();
-      navigate('/');
-    } catch (error) {
-      console.error('Erreur lors de la déconnexion', error);
-      toast.error('Problème lors de la déconnexion');
-    } finally {
-      setIsSigningOut(false);
+  useEffect(() => {
+    if (session) {
+      setIsLoading(false);
     }
+  }, [session]);
+
+  const signOut = async () => {
+    setIsLoading(true);
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      toast.error(error.message);
+    } else {
+      toast.success('Déconnexion réussie');
+      navigate('/');
+    }
+    setIsLoading(false);
+    onCloseMenu();
   };
 
-  // Activer le mode hors ligne
-  const enableOfflineMode = () => {
-    localStorage.setItem('auth_offline_mode', 'true');
-    toast.success('Mode hors ligne activé');
-    window.location.reload();
-  };
-
-  // Si l'auth est en cours de chargement, afficher un loader
-  if (!isLoaded) {
-    return (
-      <div className="animate-pulse flex items-center">
-        <div className="h-8 w-8 rounded-full bg-gray-200"></div>
-      </div>
-    );
-  }
-
-  // Si l'utilisateur est connecté, afficher son profil
-  if (isSignedIn && user) {
-    const userInitials = user.firstName && user.lastName
-      ? `${user.firstName[0]}${user.lastName[0]}`
-      : user.firstName
-        ? user.firstName[0]
-        : user.email
-          ? user.email[0].toUpperCase()
-          : '?';
-
-    return (
-      <div className={className}>
-        <DropdownMenu>
+  return (
+    <>
+      {session ? (
+        <DropdownMenu open={isMenuOpen} onOpenChange={onCloseMenu}>
           <DropdownMenuTrigger asChild>
-            <Button 
-              variant="game-control"
-              className="vision-button p-2 flex items-center gap-2"
-            >
-              <Avatar className="h-8 w-8 border border-white/40">
-                <AvatarImage src={user.avatarUrl} />
-                <AvatarFallback className="bg-dutch-blue text-white">
-                  {userInitials}
-                </AvatarFallback>
+            <Button variant="ghost" className="h-8 w-8 p-0 rounded-full">
+              <Avatar className="h-8 w-8">
+                <AvatarImage src={session?.user?.user_metadata?.avatar_url} alt={session?.user?.user_metadata?.name} />
+                <AvatarFallback>{session?.user?.user_metadata?.name?.charAt(0).toUpperCase() || 'U'}</AvatarFallback>
               </Avatar>
-              
-              <div className="flex items-center">
-                <span className="text-sm font-medium truncate max-w-[100px]">
-                  {user.firstName || user.email?.split('@')[0] || 'Utilisateur'}
-                </span>
-                <ChevronDown className="ml-1 h-4 w-4 opacity-50" />
-              </div>
             </Button>
           </DropdownMenuTrigger>
-          
-          <DropdownMenuContent align="end" className="glass-light">
+          <DropdownMenuContent className="w-56" align="end" forceMount>
             <DropdownMenuLabel>Mon compte</DropdownMenuLabel>
-            
             <DropdownMenuSeparator />
-            
-            <DropdownMenuItem 
-              className="cursor-pointer flex items-center" 
-              onClick={() => navigate('/game')}
-            >
-              <Trophy className="mr-2 h-4 w-4 text-dutch-orange" />
-              Partie en cours
+            <DropdownMenuItem disabled>
+              <User className="mr-2 h-4 w-4" />
+              <span>{session?.user?.user_metadata?.name}</span>
             </DropdownMenuItem>
-            
-            <DropdownMenuItem 
-              className="cursor-pointer flex items-center"
-              onClick={() => navigate('/history')}
-            >
-              <History className="mr-2 h-4 w-4 text-dutch-purple" />
-              Historique
+            <DropdownMenuItem disabled>
+              <Settings className="mr-2 h-4 w-4" />
+              <span>{session?.user?.email}</span>
             </DropdownMenuItem>
-            
-            <DropdownMenuItem 
-              className="cursor-pointer flex items-center"
-              onClick={() => navigate('/settings')}
-            >
-              <Settings className="mr-2 h-4 w-4 text-dutch-blue" />
-              Paramètres
-            </DropdownMenuItem>
-            
             <DropdownMenuSeparator />
-            
-            <DropdownMenuItem 
-              className="cursor-pointer flex items-center text-red-500"
-              onClick={handleSignOut}
-              disabled={isSigningOut}
-            >
-              <LogOut className="mr-2 h-4 w-4" />
-              {isSigningOut ? 'Déconnexion...' : 'Se déconnecter'}
+            <DropdownMenuItem asChild>
+              <Link to="/settings" onClick={onCloseMenu}>
+                Paramètres
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={signOut} disabled={isLoading}>
+              {isLoading ? (
+                <span>Déconnexion...</span>
+              ) : (
+                <>
+                  Déconnexion
+                </>
+              )}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-      </div>
-    );
-  }
-
-  // Gérer le type d'affichage des boutons
-  if (showLoginButtons) {
-    // Style "pill" pour un affichage compact
-    if (buttonStyle === 'pill') {
-      return (
-        <div className={`flex items-center gap-2 ${className}`}>
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
+      ) : (
+        <div className="flex gap-2">
+          <Link to="/signin">
             <Button
-              size="pill-sm"
-              variant="pill-glass"
-              className="text-dutch-blue"
-              onClick={() => navigate('/sign-in')}
+              size="sm"
+              variant="dutch-glass"
+              className="px-3 py-1 text-xs rounded-full"
             >
-              <UserCircle className="h-3.5 w-3.5 mr-1" />
               Connexion
             </Button>
-          </motion.div>
-          
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <Button 
-              size="pill-sm"
-              variant="ghost"
-              className="text-xs text-gray-500"
-              onClick={enableOfflineMode}
+          </Link>
+          <Link to="/signup">
+            <Button
+              size="sm"
+              variant="dutch-glass"
+              className="px-3 py-1 text-xs rounded-full"
             >
-              Mode hors-ligne
+              Inscription
             </Button>
-          </motion.div>
+          </Link>
         </div>
-      );
-    }
-    
-    // Style minimal pour un affichage discret
-    if (buttonStyle === 'minimal') {
-      return (
-        <div className={`flex items-center gap-2 ${className}`}>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="text-dutch-blue"
-            onClick={() => navigate('/sign-in')}
-          >
-            Connexion
-          </Button>
-          
-          <Button 
-            variant="ghost"
-            size="sm"
-            className="text-xs text-gray-500"
-            onClick={enableOfflineMode}
-          >
-            Mode hors-ligne
-          </Button>
-        </div>
-      );
-    }
-    
-    // Style par défaut
-    return (
-      <div className={`space-y-2 ${className}`}>
-        <div className="flex flex-col sm:flex-row gap-2">
-          <Button
-            className="vision-button bg-dutch-blue/90 text-white border-dutch-blue/20"
-            onClick={() => navigate('/sign-in')}
-          >
-            <UserCircle className="mr-2 h-5 w-5" />
-            Se connecter
-          </Button>
-        </div>
-        
-        <div className="text-center">
-          <Button 
-            variant="ghost"
-            size="sm"
-            className="text-xs text-gray-500"
-            onClick={enableOfflineMode}
-          >
-            Continuer sans compte
-            <Badge variant="outline" className="ml-2 text-xs bg-gray-100">Mode hors-ligne</Badge>
-          </Button>
-        </div>
-      </div>
-    );
-  }
-
-  // Si aucun bouton ne doit être affiché
-  return null;
+      )}
+    </>
+  );
 };
 
 export default AuthStatus;

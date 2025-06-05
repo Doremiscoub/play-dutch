@@ -1,67 +1,55 @@
 
 import React from 'react';
-import { motion } from 'framer-motion';
-import { UnifiedBackground } from './unified-background';
-import UnifiedTopBar from '@/components/scoreboard/UnifiedTopBar';
-import { PageTitle } from './page-title';
 import { cn } from '@/lib/utils';
+import { Button } from './button';
+import { ArrowLeft } from 'lucide-react';
 
 interface UnifiedPageLayoutProps {
-  children: React.ReactNode;
-  title?: string;
-  titleVariant?: 'h1' | 'h2' | 'h3' | 'h4';
-  withSparkles?: boolean;
+  title: string;
   showBackButton?: boolean;
   onBack?: () => void;
-  showSettings?: boolean;
-  onSettings?: () => void;
-  backgroundVariant?: 'default' | 'subtle' | 'minimal';
-  withAnimation?: boolean;
-  containerClassName?: string;
+  backgroundVariant?: 'minimal' | 'subtle' | 'default';
+  children: React.ReactNode;
   className?: string;
 }
 
 export const UnifiedPageLayout: React.FC<UnifiedPageLayoutProps> = ({
-  children,
   title,
-  titleVariant = 'h1',
-  withSparkles = true,
   showBackButton,
   onBack,
-  showSettings,
-  onSettings,
   backgroundVariant = 'default',
-  withAnimation = true,
-  containerClassName,
+  children,
   className
 }) => {
-  const content = (
-    <UnifiedBackground variant={backgroundVariant} className={className}>
-      <div className={cn("container max-w-6xl mx-auto px-4 py-8", containerClassName)}>
-        {title && (
-          <UnifiedTopBar
-            title={title}
-            showBackButton={showBackButton}
-            onBack={onBack}
-            showSettings={showSettings}
-            showRules={false}
-          />
-        )}
-        {children}
-      </div>
-    </UnifiedBackground>
-  );
-
-  if (!withAnimation) return content;
+  const backgroundClasses = {
+    minimal: 'bg-gray-50',
+    subtle: 'bg-gradient-to-br from-gray-50 to-white',
+    default: 'bg-gradient-to-br from-blue-50 via-white to-purple-50'
+  };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -10 }}
-      transition={{ duration: 0.3, ease: "easeOut" }}
-    >
-      {content}
-    </motion.div>
+    <div className={cn('min-h-screen', backgroundClasses[backgroundVariant])}>
+      {/* Header */}
+      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-white/50">
+        <div className="container mx-auto px-4 py-4 flex items-center gap-4">
+          {showBackButton && (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={onBack}
+              className="rounded-full"
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </Button>
+          )}
+          <h1 className="text-xl font-semibold text-gray-800">{title}</h1>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className={cn('container mx-auto px-4 py-8', className)}>
+        {children}
+      </main>
+    </div>
   );
 };

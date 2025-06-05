@@ -21,6 +21,14 @@ const buttonVariants = cva(
         "dutch-secondary": "bg-dutch-secondary text-white hover:bg-dutch-secondary/90 shadow-sm",
         "dutch-accent": "bg-dutch-accent text-white hover:bg-dutch-accent/90 shadow-sm",
         "dutch-glass": "bg-white/70 backdrop-blur-xl border border-white/50 text-gray-800 hover:bg-white/80",
+        
+        // Legacy variants for compatibility
+        "gradient": "bg-gradient-to-r from-dutch-blue to-dutch-purple text-white hover:opacity-90",
+        "glass": "bg-white/70 backdrop-blur-xl border border-white/50 text-gray-800 hover:bg-white/80",
+        "vision-glass": "bg-white/60 backdrop-blur-xl border border-white/40 text-gray-800 hover:bg-white/70",
+        "pill-glass": "bg-white/60 backdrop-blur-xl border border-white/40 text-gray-800 hover:bg-white/70 rounded-full",
+        "game-control": "bg-dutch-blue text-white hover:bg-dutch-blue/90 shadow-sm",
+        "y2k-blue": "bg-dutch-blue text-white hover:bg-dutch-blue/90 shadow-sm"
       },
       size: {
         default: "h-10 px-4 py-2",
@@ -30,6 +38,9 @@ const buttonVariants = cva(
         icon: "h-10 w-10",
         "icon-sm": "h-8 w-8",
         "icon-lg": "h-12 w-12",
+        
+        // Legacy sizes for compatibility
+        "pill-sm": "h-8 rounded-full px-4 text-xs"
       },
     },
     defaultVariants: {
