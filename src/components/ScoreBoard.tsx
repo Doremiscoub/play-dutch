@@ -94,10 +94,9 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
       {/* Sticky Action Buttons - Outside main container for proper positioning */}
       <StickyActionButtons
         onAddRound={handleAddRound}
-        onUndo={handleUndo}
+        onUndoLastRound={handleUndo}
         onEndGame={handleEndGame}
         canUndo={roundHistory.length > 0}
-        canEndGame={true}
       />
     </div>
   );

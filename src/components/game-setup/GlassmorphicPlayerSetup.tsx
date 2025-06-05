@@ -115,10 +115,11 @@ const GlassmorphicPlayerSetup: React.FC<GlassmorphicPlayerSetupProps> = ({ onSta
       <PlayerSetupHeader playersCount={players.length} />
 
       <PlayerControls
-        playersCount={players.length}
+        onShuffle={shufflePlayers}
         onAddPlayer={addPlayer}
         onRemovePlayer={removePlayer}
-        onShufflePlayers={shufflePlayers}
+        disableAdd={players.length >= 10}
+        disableRemove={players.length <= 2}
       />
 
       <PlayerList

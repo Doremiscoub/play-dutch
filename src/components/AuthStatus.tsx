@@ -1,12 +1,12 @@
 
 import React, { useEffect, useState } from 'react';
-import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, } from "@/components/ui/dropdown-menu"
 import { toast } from 'sonner';
 import { Link, useNavigate } from 'react-router-dom';
 import { Settings, User } from 'lucide-react';
+import { useSupabaseAuth } from '@/context/SupabaseAuthContext';
 
 interface AuthStatusProps {
   isMenuOpen: boolean;
@@ -15,15 +15,14 @@ interface AuthStatusProps {
 
 const AuthStatus: React.FC<AuthStatusProps> = ({ isMenuOpen, onCloseMenu }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const session = useSession();
-  const supabase = useSupabaseClient();
+  const { user, supabase } = useSupabaseAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (session) {
+    if (user) {
       setIsLoading(false);
     }
-  }, [session]);
+  }, [user]);
 
   const signOut = async () => {
     setIsLoading(true);
@@ -40,13 +39,13 @@ const AuthStatus: React.FC<AuthStatusProps> = ({ isMenuOpen, onCloseMenu }) => {
 
   return (
     <>
-      {session ? (
+      {user ? (
         <DropdownMenu open={isMenuOpen} onOpenChange={onCloseMenu}>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0 rounded-full">
               <Avatar className="h-8 w-8">
-                <AvatarImage src={session?.user?.user_metadata?.avatar_url} alt={session?.user?.user_metadata?.name} />
-                <AvatarFallback>{session?.user?.user_metadata?.name?.charAt(0).toUpperCase() || 'U'}</AvatarFallback>
+                <AvatarImage src={user?.user_metadata?.avatar_url} alt={user?.user_metadata?.name} />
+                <AvatarFallback>{user?.user_metadata?.name?.charAt(0).toUpperCase() || 'U'}</AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
@@ -55,11 +54,11 @@ const AuthStatus: React.FC<AuthStatusProps> = ({ isMenuOpen, onCloseMenu }) => {
             <DropdownMenuSeparator />
             <DropdownMenuItem disabled>
               <User className="mr-2 h-4 w-4" />
-              <span>{session?.user?.user_metadata?.name}</span>
+              <span>{user?.user_metadata?.name}</span>
             </DropdownMenuItem>
             <DropdownMenuItem disabled>
               <Settings className="mr-2 h-4 w-4" />
-              <span>{session?.user?.email}</span>
+              <span>{user?.email}</span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
