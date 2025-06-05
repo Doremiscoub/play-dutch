@@ -46,7 +46,7 @@ const PageHeaderWithNav: React.FC<PageHeaderWithNavProps> = ({
                 variant="outline"
                 size="sm"
                 onClick={handleBack}
-                className="bg-white/70 backdrop-blur-md border-white/50 hover:bg-white/90"
+                className="bg-white/70 backdrop-blur-md border-white/50 hover:bg-white/90 text-gray-700"
               >
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 {backLabel}
@@ -60,7 +60,7 @@ const PageHeaderWithNav: React.FC<PageHeaderWithNavProps> = ({
                 variant="outline"
                 size="sm"
                 onClick={handleGoHome}
-                className="bg-white/70 backdrop-blur-md border-dutch-blue/30 hover:border-dutch-blue/50 text-dutch-blue hover:text-dutch-blue"
+                className="bg-white/70 backdrop-blur-md border-dutch-blue-500/30 hover:border-dutch-blue-500/50 text-dutch-blue-500 hover:text-dutch-blue-600"
               >
                 <Home className="h-4 w-4 mr-2" />
                 Accueil
@@ -71,7 +71,7 @@ const PageHeaderWithNav: React.FC<PageHeaderWithNavProps> = ({
       </div>
       
       <motion.h1 
-        className="text-3xl font-bold text-center bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange bg-clip-text text-transparent"
+        className="text-3xl font-bold text-center bg-gradient-to-r from-dutch-blue-500 via-dutch-purple-500 to-dutch-orange-500 bg-clip-text text-transparent"
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}

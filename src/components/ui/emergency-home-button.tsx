@@ -31,7 +31,7 @@ const EmergencyHomeButton: React.FC = () => {
         onClick={handleGoHome}
         variant="outline"
         size="sm"
-        className="bg-white/90 backdrop-blur-md border-dutch-blue/30 hover:border-dutch-blue/50 text-dutch-blue hover:text-dutch-blue shadow-lg hover:shadow-xl transition-all duration-300"
+        className="bg-white/90 backdrop-blur-md border-dutch-blue-500/30 hover:border-dutch-blue-500/50 text-dutch-blue-500 hover:text-dutch-blue-600 shadow-lg hover:shadow-xl transition-all duration-300"
         aria-label="Retour à l'accueil"
       >
         <Home className="h-4 w-4 mr-2" />

@@ -85,7 +85,7 @@ const BreadcrumbNavigation: React.FC<BreadcrumbNavigationProps> = ({
             <ChevronRight className="h-4 w-4 text-gray-400" aria-hidden="true" />
           )}
           {index === breadcrumbItems.length - 1 ? (
-            <span className="flex items-center gap-1 text-dutch-blue font-medium">
+            <span className="flex items-center gap-1 text-dutch-blue-500 font-medium">
               {item.icon}
               {item.label}
             </span>
@@ -94,7 +94,7 @@ const BreadcrumbNavigation: React.FC<BreadcrumbNavigationProps> = ({
               variant="ghost"
               size="sm"
               onClick={(e) => handleNavigate(item.href, e)}
-              className="flex items-center gap-1 hover:text-dutch-blue transition-colors p-1 h-auto"
+              className="flex items-center gap-1 hover:text-dutch-blue-500 transition-colors p-1 h-auto text-gray-600"
             >
               {item.icon}
               {item.label}

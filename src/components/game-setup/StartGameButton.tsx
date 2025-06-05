@@ -31,7 +31,7 @@ const StartGameButton: React.FC<StartGameButtonProps> = ({ onStartGame }) => {
       <Button
         onClick={onStartGame}
         size="lg"
-        className="bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange text-white font-bold text-xl px-12 py-6 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+        className="bg-gradient-to-r from-dutch-blue-500 via-dutch-purple-500 to-dutch-orange-500 text-white font-bold text-xl px-12 py-6 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
       >
         <Play className="h-6 w-6 mr-3" />
         Lancer la partie
