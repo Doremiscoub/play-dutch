@@ -3,7 +3,7 @@
  * Composant principal de l'application avec système de routes optimisé
  */
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { Toaster } from "sonner";
 import * as Sentry from '@sentry/react';
 import { addBreadcrumb } from './utils/sentryConfig';
@@ -49,6 +49,18 @@ const RouteTracker = () => {
   return null;
 };
 
+// Composant wrapper pour GameSetup avec navigation
+const GameSetupWrapper = () => {
+  const navigate = useNavigate();
+
+  const handleStartGame = (playerNames: string[], isMultiplayer?: boolean) => {
+    // Logique pour démarrer le jeu - rediriger vers la page de jeu
+    navigate('/game', { state: { playerNames, isMultiplayer } });
+  };
+
+  return <GameSetup onStartGame={handleStartGame} />;
+};
+
 /**
  * Composant principal de l'application
  * Gère le routage et l'initialisation globale
@@ -66,7 +78,7 @@ const App: React.FC = () => {
           
           {/* Pages principales */}
           <Route path="/" element={<Home />} />
-          <Route path="/game/setup" element={<GameSetup />} />
+          <Route path="/game/setup" element={<GameSetupWrapper />} />
           <Route path="/game" element={
             <ProtectedRoute>
               <GamePage />

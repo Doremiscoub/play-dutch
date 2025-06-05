@@ -2,7 +2,15 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-const ComingSoonBanner: React.FC = () => {
+interface ComingSoonBannerProps {
+  title?: string;
+  description?: string;
+}
+
+const ComingSoonBanner: React.FC<ComingSoonBannerProps> = ({ 
+  title = "À venir", 
+  description = "Mode multijoueur, connexion multi-appareils, et plus encore !" 
+}) => {
   return (
     <motion.div
       className="mb-8 relative z-10"
@@ -12,7 +20,7 @@ const ComingSoonBanner: React.FC = () => {
     >
       <div className="bg-white/80 backdrop-blur-md border border-dutch-purple/20 rounded-xl p-3 shadow-md">
         <p className="text-sm text-center text-dutch-purple/90">
-          <span className="font-semibold">À venir :</span> Mode multijoueur, connexion multi-appareils, et plus encore !
+          <span className="font-semibold">{title} :</span> {description}
         </p>
       </div>
     </motion.div>
