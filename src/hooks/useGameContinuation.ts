@@ -25,11 +25,12 @@ export const useGameContinuation = (
     setShowGameEndConfirmation(false);
   }, []);
   
-  // Continuer avec une nouvelle limite
-  const handleContinueGame = useCallback((newLimit: number) => {
-    setScoreLimit(prevLimit => prevLimit + newLimit);
+  // Continuer avec une nouvelle limite - SIGNATURE CORRIGÉE
+  const handleContinueGame = useCallback(() => {
+    const defaultNewLimit = 50; // Valeur par défaut
+    setScoreLimit(prevLimit => prevLimit + defaultNewLimit);
     setShowGameOver(false);
-    toast.success(`La partie continue ! Nouvelle limite: ${scoreLimit + newLimit} points`);
+    toast.success(`La partie continue ! Nouvelle limite: ${scoreLimit + defaultNewLimit} points`);
   }, [scoreLimit, setScoreLimit, setShowGameOver]);
   
   // Redémarrer avec une nouvelle partie
