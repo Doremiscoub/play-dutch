@@ -4,7 +4,6 @@
  */
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate, useLocation, useNavigate } from 'react-router-dom';
-import { Toaster } from "sonner";
 import * as Sentry from '@sentry/react';
 import { addBreadcrumb } from './utils/sentryConfig';
 import AnimatedBackground from './components/AnimatedBackground';
@@ -121,21 +120,6 @@ const App: React.FC = () => {
             <Route path="*" element={<Navigate to="/" replace />} />
           </Route>
         </Routes>
-        
-        {/* Configuration globale du système de toast */}
-        <Toaster 
-          position="top-center" 
-          richColors 
-          closeButton 
-          toastOptions={{
-            style: {
-              borderRadius: '16px',
-              background: 'rgba(255, 255, 255, 0.9)',
-              backdropFilter: 'blur(8px)',
-              border: '1px solid rgba(255, 255, 255, 0.5)',
-            }
-          }}
-        />
         
         <PWAInstallPrompt />
       </Router>

@@ -17,9 +17,6 @@ initializeSentry().catch(error => {
   console.error('Failed to initialize Sentry:', error);
 });
 
-// Vérifier si le mode hors-ligne est déjà activé
-const isOfflineMode = localStorage.getItem('auth_offline_mode') === 'true';
-
 // Créer la racine React
 const root = ReactDOM.createRoot(document.getElementById('root')!);
 
@@ -41,9 +38,21 @@ const FallbackComponent = () => (
 root.render(
   <React.StrictMode>
     <SentryErrorBoundary fallback={FallbackComponent}>
-      <UnifiedThemeProvider>
+      <UnifiedThemeProvider defaultTheme="default" storageKey="dutch-theme">
         <App />
-        <Toaster position="top-center" richColors />
+        <Toaster 
+          position="top-center" 
+          richColors 
+          closeButton 
+          toastOptions={{
+            style: {
+              borderRadius: '16px',
+              background: 'rgba(255, 255, 255, 0.9)',
+              backdropFilter: 'blur(8px)',
+              border: '1px solid rgba(255, 255, 255, 0.5)',
+            }
+          }}
+        />
       </UnifiedThemeProvider>
     </SentryErrorBoundary>
   </React.StrictMode>

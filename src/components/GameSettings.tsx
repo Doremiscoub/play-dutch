@@ -7,7 +7,9 @@ const GameSettings: React.FC = () => {
     <div className="space-y-6">
       <div>
         <h3 className="text-lg font-semibold mb-4">Apparence</h3>
-        <UnifiedThemeSelector />
+        <div className="flex justify-center">
+          <UnifiedThemeSelector />
+        </div>
       </div>
     </div>
   );
