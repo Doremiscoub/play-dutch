@@ -16,7 +16,8 @@ interface GlassmorphicPlayerSetupProps {
   onStartGame: (playerNames: string[]) => void;
 }
 
-const emojis = ['😀', '😎', '🤓', '😜', '🥳', '😇', '🤗', '🙃', '😊', '😋', '🤔', '🤯', '🥸', '🤠', '👻', '🤖', '👽', '🦄', '🐻', '🎮'];
+// Emojis simplifiés pour les joueurs
+const playerEmojis = ['😀', '😎', '🤓', '😜', '🥳', '😇', '🤗', '🙃'];
 
 const GlassmorphicPlayerSetup: React.FC<GlassmorphicPlayerSetupProps> = ({ onStartGame }) => {
   const [players, setPlayers] = useState<Player[]>([
@@ -32,7 +33,7 @@ const GlassmorphicPlayerSetup: React.FC<GlassmorphicPlayerSetupProps> = ({ onSta
 
     const newPlayer: Player = {
       name: `Joueur ${players.length + 1}`,
-      emoji: emojis[players.length % emojis.length]
+      emoji: playerEmojis[players.length % playerEmojis.length]
     };
 
     setPlayers([...players, newPlayer]);
@@ -51,7 +52,7 @@ const GlassmorphicPlayerSetup: React.FC<GlassmorphicPlayerSetupProps> = ({ onSta
 
   const updatePlayerName = (index: number, name: string) => {
     const updatedPlayers = [...players];
-    updatedPlayers[index].name = name.slice(0, 15); // Limit name length
+    updatedPlayers[index].name = name.slice(0, 15);
     setPlayers(updatedPlayers);
   };
 
@@ -74,30 +75,32 @@ const GlassmorphicPlayerSetup: React.FC<GlassmorphicPlayerSetupProps> = ({ onSta
 
   return (
     <div className="space-y-6">
-      {/* Player Count Control */}
-      <UnifiedCard variant="light" padding="md" className="text-center">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
+      {/* Contrôle du nombre de joueurs */}
+      <UnifiedCard variant="light" padding="lg" className="text-center">
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-3">
             <Users className="h-5 w-5 text-dutch-blue" />
-            <span className="font-medium text-gray-700">Joueurs ({players.length})</span>
+            <span className="font-semibold text-gray-700">Joueurs</span>
           </div>
           
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-4">
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Button
                 variant="outline"
                 size="icon"
                 onClick={removePlayer}
                 disabled={players.length <= 2}
-                className="bg-white/70 border-white/60 hover:bg-white/90 rounded-full h-10 w-10"
+                className="bg-white/80 border-gray-200 hover:bg-white rounded-full h-12 w-12"
               >
-                <Minus className="h-4 w-4" />
+                <Minus className="h-5 w-5" />
               </Button>
             </motion.div>
             
-            <span className="mx-4 text-2xl font-bold text-dutch-purple min-w-[3rem] text-center">
-              {players.length}
-            </span>
+            <div className="bg-gradient-to-r from-dutch-blue to-dutch-purple rounded-2xl px-6 py-3 min-w-[4rem]">
+              <span className="text-2xl font-bold text-white text-center">
+                {players.length}
+              </span>
+            </div>
             
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Button
@@ -105,9 +108,9 @@ const GlassmorphicPlayerSetup: React.FC<GlassmorphicPlayerSetupProps> = ({ onSta
                 size="icon"
                 onClick={addPlayer}
                 disabled={players.length >= 10}
-                className="bg-white/70 border-white/60 hover:bg-white/90 rounded-full h-10 w-10"
+                className="bg-white/80 border-gray-200 hover:bg-white rounded-full h-12 w-12"
               >
-                <Plus className="h-4 w-4" />
+                <Plus className="h-5 w-5" />
               </Button>
             </motion.div>
           </div>
@@ -123,16 +126,16 @@ const GlassmorphicPlayerSetup: React.FC<GlassmorphicPlayerSetupProps> = ({ onSta
               variant="outline"
               size="sm"
               onClick={shufflePlayers}
-              className="bg-white/50 hover:bg-white/80 rounded-full"
+              className="bg-white/60 hover:bg-white/80 rounded-2xl border-gray-200"
             >
-              <Shuffle className="h-3 w-3 mr-2" />
-              Mélanger
+              <Shuffle className="h-4 w-4 mr-2" />
+              Mélanger l'ordre
             </Button>
           </motion.div>
         )}
       </UnifiedCard>
 
-      {/* Players List */}
+      {/* Liste des joueurs */}
       <div className="space-y-3">
         <AnimatePresence>
           {players.map((player, index) => (
@@ -145,20 +148,20 @@ const GlassmorphicPlayerSetup: React.FC<GlassmorphicPlayerSetupProps> = ({ onSta
             >
               <UnifiedCard variant="light" padding="md" interactive>
                 <div className="flex items-center gap-4">
-                  {/* Emoji Selector */}
-                  <div className="flex flex-wrap gap-1">
-                    {emojis.slice(0, 6).map((emoji) => (
+                  {/* Sélecteur d'emoji simplifié */}
+                  <div className="flex gap-1">
+                    {playerEmojis.slice(0, 4).map((emoji) => (
                       <motion.button
                         key={emoji}
                         type="button"
-                        whileHover={{ scale: 1.2 }}
+                        whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
                         onClick={() => updatePlayerEmoji(index, emoji)}
                         className={`
-                          p-2 rounded-xl text-lg transition-all duration-200 min-w-[2.5rem]
+                          p-2 rounded-xl text-base transition-all duration-200
                           ${player.emoji === emoji 
-                            ? 'bg-dutch-orange/20 ring-2 ring-dutch-orange transform scale-110' 
-                            : 'bg-white/50 hover:bg-white/80'
+                            ? 'bg-dutch-orange/25 ring-2 ring-dutch-orange' 
+                            : 'bg-white/60 hover:bg-white/80 border border-gray-200'
                           }
                         `}
                       >
@@ -167,12 +170,12 @@ const GlassmorphicPlayerSetup: React.FC<GlassmorphicPlayerSetupProps> = ({ onSta
                     ))}
                   </div>
 
-                  {/* Name Input */}
+                  {/* Nom du joueur */}
                   <div className="flex-1">
                     <Input
                       value={player.name}
                       onChange={(e) => updatePlayerName(index, e.target.value)}
-                      className="bg-white/70 border-white/60 focus:border-dutch-blue text-center font-medium text-lg rounded-2xl"
+                      className="bg-white/80 border-gray-200 focus:border-dutch-blue text-center font-medium rounded-2xl"
                       placeholder={`Joueur ${index + 1}`}
                       maxLength={15}
                     />
@@ -184,7 +187,7 @@ const GlassmorphicPlayerSetup: React.FC<GlassmorphicPlayerSetupProps> = ({ onSta
         </AnimatePresence>
       </div>
 
-      {/* Start Game Button */}
+      {/* Bouton de démarrage */}
       <motion.div 
         className="pt-4"
         whileHover={{ scale: 1.02 }}
@@ -192,10 +195,10 @@ const GlassmorphicPlayerSetup: React.FC<GlassmorphicPlayerSetupProps> = ({ onSta
       >
         <Button
           onClick={handleStartGame}
-          className="w-full bg-gradient-to-r from-dutch-blue to-dutch-purple text-white rounded-2xl py-4 text-lg font-bold shadow-lg hover:shadow-xl transition-all duration-300"
+          className="w-full bg-gradient-to-r from-dutch-blue to-dutch-purple text-white rounded-2xl py-6 text-lg font-bold shadow-xl hover:shadow-2xl transition-all duration-300"
           size="lg"
         >
-          <Play className="h-5 w-5 mr-3" />
+          <Play className="h-6 w-6 mr-3" />
           Commencer la partie
         </Button>
       </motion.div>
