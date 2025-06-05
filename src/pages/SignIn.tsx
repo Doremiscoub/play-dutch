@@ -99,7 +99,7 @@ const SignIn: React.FC = () => {
             <SignInForm onSwitchToSignUp={() => setIsSignUp(true)} />
           )}
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };
