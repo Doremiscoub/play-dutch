@@ -2,8 +2,12 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Player } from '@/types';
-import { Crown, TrendingUp, TrendingDown, Minus, Trophy, Target, BarChart3, Award, Star, Zap } from 'lucide-react';
+import { Crown, Star } from 'lucide-react';
 import PlayerRankBadge from '../game/PlayerRankBadge';
+import PlayerCardStats from './player-card/PlayerCardStats';
+import PlayerCardTrends from './player-card/PlayerCardTrends';
+import PlayerCardRecentRounds from './player-card/PlayerCardRecentRounds';
+import PlayerCardScore from './player-card/PlayerCardScore';
 import { cn } from '@/lib/utils';
 
 interface FunPlayerCardProps {
@@ -25,35 +29,14 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
   const isLastPlace = rank === totalPlayers;
   const recentRounds = player.rounds.slice(-5);
   
-  // Calculs de tendance améliorés
+  // Calculs de tendance
   const hasPositiveTrend = recentRounds.length >= 2 && 
     recentRounds[recentRounds.length - 1].score < recentRounds[recentRounds.length - 2].score;
   const hasNegativeTrend = recentRounds.length >= 2 && 
     recentRounds[recentRounds.length - 1].score > recentRounds[recentRounds.length - 2].score;
 
-  // Calculs de stats enrichies
-  const averageScore = player.rounds.length > 0 
-    ? (player.totalScore / player.rounds.length).toFixed(1)
-    : '0.0';
-
-  const bestRoundScore = player.rounds.length > 0 
-    ? Math.min(...player.rounds.map(r => r.score))
-    : 0;
-  const worstRoundScore = player.rounds.length > 0 
-    ? Math.max(...player.rounds.map(r => r.score))
-    : 0;
-
   const dutchCount = player.rounds.filter(round => round.isDutch).length;
   
-  // Calcul de consistance (écart-type)
-  const consistency = (() => {
-    if (player.rounds.length <= 1) return 0;
-    const scores = player.rounds.map(r => r.score);
-    const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
-    const variance = scores.reduce((acc, score) => acc + Math.pow(score - avg, 2), 0) / scores.length;
-    return Math.sqrt(variance);
-  })();
-
   // Calcul de la série actuelle
   const currentStreak = (() => {
     if (player.rounds.length === 0) return 0;
@@ -78,26 +61,6 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
       return "bg-gradient-to-br from-red-50/90 via-pink-50/90 to-red-50/90 border-red-200/60 shadow-red-100/30";
     }
     return "bg-gradient-to-br from-white/90 via-gray-50/70 to-white/90 border-white/60";
-  };
-
-  // Style amélioré pour le score principal avec plus d'effets
-  const getScoreStyle = (score: number) => {
-    if (isWinner) {
-      return "bg-gradient-to-br from-amber-400 via-yellow-500 to-amber-600 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] font-black text-6xl";
-    }
-    if (score <= 0) {
-      return "bg-gradient-to-br from-emerald-400 via-green-500 to-emerald-600 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)] font-black text-5xl";
-    }
-    if (score <= 15) {
-      return "bg-gradient-to-br from-green-400 via-lime-500 to-green-600 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)] font-black text-5xl";
-    }
-    if (score <= 30) {
-      return "bg-gradient-to-br from-yellow-400 via-amber-500 to-yellow-600 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)] font-black text-5xl";
-    }
-    if (score <= 50) {
-      return "bg-gradient-to-br from-orange-400 via-red-400 to-orange-600 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)] font-black text-5xl";
-    }
-    return "bg-gradient-to-br from-red-400 via-pink-500 to-red-600 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)] font-black text-5xl";
   };
 
   return (
@@ -172,197 +135,28 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
                 {player.name}
               </h3>
               
-              {/* Indicateurs de tendance améliorés */}
-              <div className="flex items-center gap-1">
-                {hasPositiveTrend && (
-                  <motion.div
-                    initial={{ scale: 0, rotate: -180 }}
-                    animate={{ scale: 1, rotate: 0 }}
-                    className="p-1.5 bg-green-100 rounded-full shadow-sm"
-                    title="En amélioration !"
-                  >
-                    <TrendingUp className="h-4 w-4 text-green-600" />
-                  </motion.div>
-                )}
-                {hasNegativeTrend && (
-                  <motion.div
-                    initial={{ scale: 0, rotate: 180 }}
-                    animate={{ scale: 1, rotate: 0 }}
-                    className="p-1.5 bg-red-100 rounded-full shadow-sm"
-                    title="En difficulté..."
-                  >
-                    <TrendingDown className="h-4 w-4 text-red-600" />
-                  </motion.div>
-                )}
-                {!hasPositiveTrend && !hasNegativeTrend && player.rounds.length > 1 && (
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    className="p-1.5 bg-gray-100 rounded-full shadow-sm"
-                    title="Stable"
-                  >
-                    <Minus className="h-4 w-4 text-gray-500" />
-                  </motion.div>
-                )}
-                
-                {/* Badge Dutch si actif */}
-                {dutchCount > 0 && (
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    className="p-1.5 bg-purple-100 rounded-full shadow-sm"
-                    title={`${dutchCount} Dutch réussi${dutchCount > 1 ? 's' : ''}`}
-                  >
-                    <Zap className="h-4 w-4 text-purple-600" />
-                  </motion.div>
-                )}
-                
-                {/* Badge série si > 3 */}
-                {currentStreak >= 3 && (
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    className="px-2 py-1 bg-blue-100 rounded-full shadow-sm"
-                    title={`Série de ${currentStreak} manches régulières`}
-                  >
-                    <span className="text-xs font-bold text-blue-600">{currentStreak}x</span>
-                  </motion.div>
-                )}
-              </div>
+              <PlayerCardTrends
+                player={player}
+                hasPositiveTrend={hasPositiveTrend}
+                hasNegativeTrend={hasNegativeTrend}
+                dutchCount={dutchCount}
+                currentStreak={currentStreak}
+              />
             </div>
             
-            {/* Stats enrichies en grille */}
-            <div className="grid grid-cols-2 gap-2 text-sm">
-              <motion.div 
-                className="flex items-center gap-1.5 bg-white/60 rounded-lg px-3 py-2 shadow-sm"
-                whileHover={{ scale: 1.02 }}
-              >
-                <Target className="h-3.5 w-3.5 text-blue-500" />
-                <span className="text-gray-600 text-xs">Moy:</span>
-                <span className="font-bold text-blue-600">{averageScore}</span>
-              </motion.div>
-              
-              <motion.div 
-                className="flex items-center gap-1.5 bg-white/60 rounded-lg px-3 py-2 shadow-sm"
-                whileHover={{ scale: 1.02 }}
-              >
-                <Trophy className="h-3.5 w-3.5 text-green-500" />
-                <span className="text-gray-600 text-xs">Best:</span>
-                <span className="font-bold text-green-600">{bestRoundScore}</span>
-              </motion.div>
-              
-              <motion.div 
-                className="flex items-center gap-1.5 bg-white/60 rounded-lg px-3 py-2 shadow-sm"
-                whileHover={{ scale: 1.02 }}
-              >
-                <BarChart3 className="h-3.5 w-3.5 text-orange-500" />
-                <span className="text-gray-600 text-xs">Pire:</span>
-                <span className="font-bold text-orange-600">{worstRoundScore}</span>
-              </motion.div>
-              
-              <motion.div 
-                className="flex items-center gap-1.5 bg-white/60 rounded-lg px-3 py-2 shadow-sm"
-                whileHover={{ scale: 1.02 }}
-              >
-                <Award className="h-3.5 w-3.5 text-indigo-500" />
-                <span className="text-gray-600 text-xs">Régu:</span>
-                <span className="font-bold text-indigo-600">{consistency.toFixed(1)}</span>
-              </motion.div>
-            </div>
+            <PlayerCardStats player={player} rank={rank} />
           </div>
         </div>
 
-        {/* Score principal stylisé */}
-        <div className="text-right ml-4">
-          <motion.div
-            className={cn(getScoreStyle(player.totalScore), "tracking-tight mb-1 relative")}
-            initial={{ scale: 0.5, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ type: "spring", stiffness: 150, delay: rank * 0.1 + 0.2 }}
-            whileHover={{ scale: 1.05 }}
-          >
-            {player.totalScore}
-            {/* Effet de pulse pour le leader */}
-            {isWinner && (
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-br from-amber-400/30 to-yellow-500/30 rounded-lg blur-xl"
-                animate={{ 
-                  scale: [1, 1.2, 1],
-                  opacity: [0.3, 0.6, 0.3]
-                }}
-                transition={{ 
-                  duration: 2, 
-                  repeat: Infinity, 
-                  ease: "easeInOut" 
-                }}
-              />
-            )}
-          </motion.div>
-          <div className="text-sm text-gray-500 font-medium">
-            {player.rounds.length} manche{player.rounds.length > 1 ? 's' : ''}
-          </div>
-        </div>
+        <PlayerCardScore
+          score={player.totalScore}
+          rank={rank}
+          roundCount={player.rounds.length}
+          isWinner={isWinner}
+        />
       </div>
 
-      {/* Graphique des dernières manches amélioré */}
-      {recentRounds.length > 0 && (
-        <motion.div 
-          className="mt-5 pt-4 border-t border-gray-200/60"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: rank * 0.1 + 0.4 }}
-        >
-          <div className="flex items-center justify-between text-xs text-gray-500 mb-3">
-            <span className="font-semibold flex items-center gap-1">
-              <BarChart3 className="h-3 w-3" />
-              Dernières manches
-            </span>
-            <span className="text-gray-400">{recentRounds.length} scores</span>
-          </div>
-          <div className="flex gap-1.5">
-            {recentRounds.map((round, index) => (
-              <div key={index} className="flex-1 flex flex-col items-center gap-1.5">
-                <motion.div
-                  className={cn(
-                    "w-full h-10 rounded-xl flex items-center justify-center text-xs font-bold shadow-md border-2 transition-all duration-200",
-                    round.score <= 0 ? "bg-emerald-100 text-emerald-800 border-emerald-200" :
-                    round.score <= 5 ? "bg-green-100 text-green-800 border-green-200" :
-                    round.score <= 15 ? "bg-yellow-100 text-yellow-800 border-yellow-200" :
-                    round.score <= 25 ? "bg-orange-100 text-orange-800 border-orange-200" : 
-                    "bg-red-100 text-red-800 border-red-200",
-                    round.isDutch && "ring-2 ring-purple-400 ring-offset-1 shadow-purple-200"
-                  )}
-                  initial={{ opacity: 0, scale: 0.8, y: 10 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  transition={{ delay: index * 0.08 + rank * 0.1 + 0.5 }}
-                  whileHover={{ scale: 1.15, y: -2 }}
-                  title={round.isDutch ? `Dutch: ${round.score} pts` : `${round.score} pts`}
-                >
-                  {round.isDutch && <Zap className="h-3 w-3 mr-1 text-purple-600" />}
-                  {round.score}
-                </motion.div>
-                
-                {/* Barre de progression améliorée */}
-                <div className="w-full h-1.5 bg-gray-200 rounded-full overflow-hidden shadow-inner">
-                  <motion.div
-                    className={cn(
-                      "h-full rounded-full transition-all duration-300",
-                      round.score <= 0 ? "bg-gradient-to-r from-emerald-400 to-emerald-500" :
-                      round.score <= 5 ? "bg-gradient-to-r from-green-400 to-green-500" :
-                      round.score <= 15 ? "bg-gradient-to-r from-yellow-400 to-yellow-500" :
-                      round.score <= 25 ? "bg-gradient-to-r from-orange-400 to-orange-500" : 
-                      "bg-gradient-to-r from-red-400 to-red-500"
-                    )}
-                    initial={{ width: 0 }}
-                    animate={{ width: `${Math.min(100, Math.max(10, (round.score / 30) * 100))}%` }}
-                    transition={{ delay: index * 0.1 + rank * 0.1 + 0.6, duration: 0.6 }}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-      )}
+      <PlayerCardRecentRounds player={player} rank={rank} />
     </motion.div>
   );
 };
