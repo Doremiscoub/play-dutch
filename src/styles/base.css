@@ -5,27 +5,43 @@
 
 @layer base {
   :root {
-    /* Variables de couleur Dutch - Style iOS 19 */
-    --dutch-blue: #0A84FF;
-    --dutch-blue-light: #5AC8FA;
-    --dutch-blue-dark: #0062CC;
-    --dutch-purple: #8B5CF6;
-    --dutch-purple-light: #C4B5FD;
-    --dutch-purple-dark: #6D28D9;
-    --dutch-orange: #FF9F0A;
-    --dutch-orange-light: #FFD60A;
-    --dutch-orange-dark: #E67700;
-    --dutch-background: #F2F2F7;
+    /* Design System Variables */
+    --dutch-primary: #0A84FF;
+    --dutch-secondary: #8B5CF6;
+    --dutch-accent: #FF9F0A;
+    --dutch-success: #30D158;
+    --dutch-warning: #FFD60A;
+    --dutch-error: #FF453A;
     
-    /* Bordures */
+    /* ShadCN Variables */
     --radius: 1.5rem;
     --border: 210 40% 96.1%;
     --input: 214 32% 91%;
     --ring: 222.2 84% 4.9%;
-    
-    /* Couleurs de base */
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 84% 4.9%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 84% 4.9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
   * {
