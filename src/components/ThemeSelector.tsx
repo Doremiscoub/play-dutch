@@ -1,9 +1,10 @@
 
 import React from 'react';
+import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
-import { UnifiedThemeSelector } from '@/components/ui/unified-theme-selector';
+import GameSettings from './GameSettings';
 
-// Ce composant est maintenu pour compatibilité mais utilise maintenant le sélecteur unifié
+// Ce composant est maintenu pour compatibilité mais n'est plus utilisé sur la page d'accueil
 const ThemeSelector: React.FC = () => {
   return (
     <motion.div
@@ -12,7 +13,7 @@ const ThemeSelector: React.FC = () => {
       transition={{ duration: 0.2 }}
       className="absolute top-4 right-4 z-10"
     >
-      <UnifiedThemeSelector />
+      <GameSettings />
     </motion.div>
   );
 };
