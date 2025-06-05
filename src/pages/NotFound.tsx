@@ -1,16 +1,17 @@
+
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
-import PageLayout from '@/components/PageLayout';
 import UnifiedTopBar from '@/components/scoreboard/UnifiedTopBar';
+import PageShell from '@/components/layout/PageShell';
 
 const NotFound: React.FC = () => {
   const navigate = useNavigate();
   
   return (
-    <PageLayout className="pb-12 sm:pb-20">
+    <PageShell variant="minimal">
       <div className="w-full max-w-6xl mx-auto px-1 sm:px-2">
         <UnifiedTopBar 
           title="Page non trouvée"
@@ -46,7 +47,7 @@ const NotFound: React.FC = () => {
           </div>
         </motion.div>
       </div>
-    </PageLayout>
+    </PageShell>
   );
 };
 

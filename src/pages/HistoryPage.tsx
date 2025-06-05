@@ -3,16 +3,13 @@ import React, { useState, useEffect } from 'react';
 import { Game } from '@/types';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import PageLayout from '@/components/PageLayout';
 import UnifiedTopBar from '@/components/scoreboard/UnifiedTopBar';
-import GameHistory from '@/components/GameHistory';
 import { UnifiedTabs } from '@/components/ui/unified-tabs';
-import { Button } from '@/components/ui/button';
-import { Trophy, Calendar, Users, Clock } from 'lucide-react';
+import { Trophy, Calendar, Users } from 'lucide-react';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ModernTitle } from '@/components/ui/modern-title';
+import { Card, CardContent } from '@/components/ui/card';
+import PageShell from '@/components/layout/PageShell';
 
 const HistoryPage: React.FC = () => {
   const navigate = useNavigate();
@@ -70,7 +67,7 @@ const HistoryPage: React.FC = () => {
   ];
 
   return (
-    <PageLayout>
+    <PageShell variant="default">
       <div className="w-full max-w-6xl mx-auto px-4">
         <UnifiedTopBar 
           title="Historique des parties"
@@ -150,7 +147,7 @@ const HistoryPage: React.FC = () => {
           </div>
         </div>
       </div>
-    </PageLayout>
+    </PageShell>
   );
 };
 

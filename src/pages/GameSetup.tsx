@@ -8,6 +8,7 @@ import EnhancedLocalGameSetup from '@/components/game-setup/EnhancedLocalGameSet
 import { useGameState } from '@/hooks/useGameState';
 import { toast } from 'sonner';
 import { STORAGE_KEYS } from '@/utils/storageKeys';
+import PageShell from '@/components/layout/PageShell';
 
 const GameSetup: React.FC = () => {
   const navigate = useNavigate();
@@ -50,7 +51,7 @@ const GameSetup: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
+    <PageShell variant="default">
       {/* Header avec navigation */}
       <header className="absolute top-4 left-4 right-4 z-50 flex justify-between items-center">
         <Button
@@ -80,7 +81,7 @@ const GameSetup: React.FC = () => {
           <EnhancedLocalGameSetup onStartGame={handleStartGame} />
         </div>
       </div>
-    </div>
+    </PageShell>
   );
 };
 

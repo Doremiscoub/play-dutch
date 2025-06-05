@@ -9,6 +9,7 @@ import EnhancedHeroSection from '@/components/home/EnhancedHeroSection';
 import { FeaturesSection } from '@/components/home/FeaturesSection';
 import { StatsSection } from '@/components/home/StatsSection';
 import { CTASection } from '@/components/home/CTASection';
+import PageShell from '@/components/layout/PageShell';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ const Home: React.FC = () => {
   });
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
+    <PageShell variant="default">
       {/* Header with settings */}
       <header className="absolute top-4 right-4 z-50 flex gap-2">
         <Button
@@ -75,7 +76,7 @@ const Home: React.FC = () => {
           </Button>
         </div>
       </div>
-    </div>
+    </PageShell>
   );
 };
 

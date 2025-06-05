@@ -1,17 +1,14 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
-import AnimatedBackground from '../components/AnimatedBackground';
 import UnifiedTopBar from '@/components/scoreboard/UnifiedTopBar';
-import { Button } from '@/components/ui/button';
-import { ArrowLeft, Calendar, Trophy, Users } from 'lucide-react';
+import { Calendar, Trophy, Users } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { motion } from 'framer-motion';
 import { Game } from '@/types';
-import { ModernTitle } from '@/components/ui/modern-title';
+import PageShell from '@/components/layout/PageShell';
 
 interface GameHistoryProps {
   games: Game[];
@@ -102,11 +99,7 @@ const History: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen relative">
-      <div className="absolute inset-0">
-        <AnimatedBackground />
-      </div>
-      
+    <PageShell variant="default">
       <UnifiedTopBar 
         title="Historique des parties"
         showBackButton
@@ -118,7 +111,7 @@ const History: React.FC = () => {
       <div className="container mx-auto px-4 py-8 relative z-10">
         <GameHistory games={games} />
       </div>
-    </div>
+    </PageShell>
   );
 };
 

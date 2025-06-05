@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import GameSettings from '@/components/GameSettings';
 import UnifiedTopBar from '@/components/scoreboard/UnifiedTopBar';
 import { STORAGE_KEYS } from '@/utils/storageKeys';
+import PageShell from '@/components/layout/PageShell';
 
 const SettingsPage: React.FC = () => {
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ const SettingsPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen">
+    <PageShell variant="minimal">
       {/* Unified Top Bar */}
       <UnifiedTopBar 
         title="Paramètres"
@@ -57,7 +58,7 @@ const SettingsPage: React.FC = () => {
           <GameSettings />
         </div>
       </div>
-    </div>
+    </PageShell>
   );
 };
 

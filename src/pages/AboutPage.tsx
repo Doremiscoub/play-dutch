@@ -7,6 +7,7 @@ import { UnifiedButton } from '@/components/ui/unified-button';
 import { useSEO } from '@/hooks/useSEO';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { Heart, Users, Smartphone, Zap } from 'lucide-react';
+import PageShell from '@/components/layout/PageShell';
 
 const AboutPage: React.FC = () => {
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ const AboutPage: React.FC = () => {
   });
 
   return (
-    <>
+    <PageShell variant="minimal">
       <StructuredData 
         type="WebApplication" 
         data={{
@@ -130,7 +131,7 @@ const AboutPage: React.FC = () => {
           </div>
         </div>
       </UnifiedPageLayout>
-    </>
+    </PageShell>
   );
 };
 

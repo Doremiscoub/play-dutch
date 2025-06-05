@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import RulesTabs from '@/components/rules/RulesTabs';
 import UnifiedTopBar from '@/components/scoreboard/UnifiedTopBar';
+import PageShell from '@/components/layout/PageShell';
 
 const RulesPage: React.FC = () => {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ const RulesPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen">
+    <PageShell variant="minimal">
       {/* Unified Top Bar */}
       <UnifiedTopBar 
         title="Règles du Dutch"
@@ -42,7 +43,7 @@ const RulesPage: React.FC = () => {
           />
         </div>
       </div>
-    </div>
+    </PageShell>
   );
 };
 
