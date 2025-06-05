@@ -231,7 +231,7 @@ const GlassmorphicPlayerSetup: React.FC<GlassmorphicPlayerSetupProps> = ({ onSta
               <Plus className="h-6 w-6" />
             </UnifiedButton>
           </motion.div>
-        </div>
+        </motion.div>
 
         {/* Bouton mélanger amélioré */}
         {players.length > 2 && (
