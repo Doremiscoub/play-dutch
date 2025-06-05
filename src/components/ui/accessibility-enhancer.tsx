@@ -118,15 +118,18 @@ export const AccessibilityEnhancer: React.FC<AccessibilityEnhancerProps> = ({
 
 const SkipLinks: React.FC = () => {
   return (
-    <div className="skip-links">
-      <a href="#main-content" className="skip-link">
+    <div className="skip-links fixed -top-full left-0 z-[9999] transition-all focus-within:top-0">
+      <a 
+        href="#main-content" 
+        className="sr-only focus:not-sr-only absolute top-0 left-0 bg-dutch-blue text-white px-4 py-2 text-sm font-medium rounded-br-lg transition-all focus:translate-y-0"
+      >
         Aller au contenu principal
       </a>
-      <a href="#navigation" className="skip-link">
+      <a 
+        href="#navigation" 
+        className="sr-only focus:not-sr-only absolute top-0 left-40 bg-dutch-purple text-white px-4 py-2 text-sm font-medium rounded-br-lg transition-all focus:translate-y-0"
+      >
         Aller à la navigation
-      </a>
-      <a href="#footer" className="skip-link">
-        Aller au pied de page
       </a>
     </div>
   );
@@ -134,29 +137,10 @@ const SkipLinks: React.FC = () => {
 
 // Styles pour l'accessibilité (à ajouter au CSS global)
 export const accessibilityStyles = `
-  .skip-links {
-    position: fixed;
-    top: -100px;
-    left: 0;
+  .skip-links a:focus {
+    position: relative;
+    transform: translateY(0);
     z-index: 9999;
-  }
-
-  .skip-link {
-    position: absolute;
-    top: 0;
-    left: 0;
-    background: #000;
-    color: #fff;
-    padding: 8px 16px;
-    text-decoration: none;
-    border-radius: 0 0 4px 0;
-    font-weight: bold;
-    transform: translateY(-100%);
-    transition: transform 0.2s ease;
-  }
-
-  .skip-link:focus {
-    transform: translateY(100px);
   }
 
   .keyboard-nav *:focus,
@@ -193,5 +177,28 @@ export const accessibilityStyles = `
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border: 0;
+  }
+
+  .sr-only:focus,
+  .sr-only:active {
+    position: static;
+    width: auto;
+    height: auto;
+    padding: inherit;
+    margin: inherit;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+  }
+
+  .focus\\:not-sr-only:focus {
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+    padding: inherit !important;
+    margin: inherit !important;
+    overflow: visible !important;
+    clip: auto !important;
+    white-space: normal !important;
   }
 `;

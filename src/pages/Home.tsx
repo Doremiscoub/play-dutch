@@ -58,27 +58,12 @@ const Home: React.FC = () => {
         <PerformanceMonitor
           logPerformance={process.env.NODE_ENV === 'development'}
         />
-        
-        {/* Preload critical fonts for better performance */}
-        <link
-          rel="preconnect"
-          href="https://fonts.googleapis.com"
-        />
-        <link
-          rel="preconnect" 
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800;900&display=swap"
-          rel="stylesheet"
-        />
 
         <ScrollSnapContainer className="min-h-screen relative overflow-hidden">
           <AnimatedBackground />
           
           {/* Enhanced Header with better accessibility */}
-          <header className="absolute top-4 right-4 z-50 flex gap-2">
+          <header className="absolute top-4 right-4 z-50 flex gap-2" id="navigation">
             <Button
               variant="glass"
               size="icon"
@@ -92,7 +77,7 @@ const Home: React.FC = () => {
           </header>
           
           <ScrollSnapSection align="center">
-            <main id="main-content" role="main">
+            <main id="main-content" role="main" tabIndex={-1}>
               <Suspense fallback={
                 <div className="h-screen flex items-center justify-center">
                   <LoadingSkeleton variant="hero" />

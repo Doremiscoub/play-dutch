@@ -3,7 +3,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { UnifiedBackground } from './unified-background';
 import PageHeader from '@/components/PageHeader';
-import { ModernTitle } from './modern-title';
+import { PageTitle } from './page-title';
 import { cn } from '@/lib/utils';
 
 interface UnifiedPageLayoutProps {
@@ -41,12 +41,13 @@ export const UnifiedPageLayout: React.FC<UnifiedPageLayoutProps> = ({
         {title && (
           <PageHeader
             title={
-              <ModernTitle 
+              <PageTitle 
                 variant={titleVariant} 
                 withSparkles={withSparkles}
+                centered={true}
               >
                 {title}
-              </ModernTitle>
+              </PageTitle>
             }
             onBack={onBack}
             showSettings={showSettings}

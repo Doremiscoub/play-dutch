@@ -108,6 +108,96 @@ body {
   }
 }
 
+/* Skip links pour l'accessibilité */
+.skip-links {
+  position: fixed;
+  top: -100px;
+  left: 0;
+  z-index: 9999;
+  transition: all 0.3s ease;
+}
+
+.skip-links:focus-within {
+  top: 0;
+}
+
+.skip-links a {
+  position: absolute;
+  transform: translateY(-100%);
+  transition: transform 0.3s ease;
+  text-decoration: none;
+  border-radius: 0 0 8px 0;
+  font-weight: 500;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.skip-links a:focus {
+  transform: translateY(0);
+  outline: 2px solid white;
+  outline-offset: 2px;
+}
+
+/* Navigation au clavier */
+.keyboard-nav *:focus,
+.keyboard-focus {
+  outline: 2px solid #0066cc !important;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(0, 102, 204, 0.2);
+}
+
+/* Réduction de mouvement */
+.reduce-motion *,
+.reduce-motion *::before,
+.reduce-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* Améliorer le contraste pour les éléments interactifs */
+@media (prefers-contrast: high) {
+  button, .button, a {
+    border: 2px solid currentColor;
+  }
+}
+
+/* Styles pour les lecteurs d'écran */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.sr-only:focus,
+.sr-only:active {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: inherit;
+  margin: inherit;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+.focus\:not-sr-only:focus {
+  position: static !important;
+  width: auto !important;
+  height: auto !important;
+  padding: inherit !important;
+  margin: inherit !important;
+  overflow: visible !important;
+  clip: auto !important;
+  white-space: normal !important;
+}
+
 /* Gaming enhancements */
 .game-element {
   transform-style: preserve-3d;

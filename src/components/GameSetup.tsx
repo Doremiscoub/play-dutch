@@ -6,6 +6,7 @@ import { EnhancedButton } from '@/components/ui/enhanced-button';
 import { EnhancedCard } from '@/components/ui/enhanced-card';
 import { GameText } from '@/components/ui/game-text';
 import { GameBadge } from '@/components/ui/game-badge';
+import { PageTitle } from '@/components/ui/page-title';
 import GameSetupGlassmorphic from './GameSetupGlassmorphic';
 import { motion } from 'framer-motion';
 
@@ -31,7 +32,7 @@ const GameSetup: React.FC = () => {
 
   return (
     <div className="min-h-screen relative">
-      {/* Header with enhanced Back button */}
+      {/* Header with Back button */}
       <div className="absolute top-4 left-4 z-50">
         <EnhancedButton
           onClick={() => navigate('/')}
@@ -45,26 +46,17 @@ const GameSetup: React.FC = () => {
       </div>
 
       {/* Main content */}
-      <div className="pt-20">
+      <div className="container max-w-6xl mx-auto px-4 pt-20 pb-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-8"
         >
-          <GameText
-            as="h1"
-            variant="hero"
-            color="rainbow"
-            transform="uppercase"
-            spacing="tight"
-            align="center"
-            className="mb-4"
-          >
+          <PageTitle variant="h1" withSparkles={true} withIcon={true}>
             Créer une partie
-          </GameText>
+          </PageTitle>
           
-          {/* Enhanced feature badges */}
+          {/* Feature badges */}
           <div className="flex justify-center gap-3 flex-wrap mb-8">
             <GameBadge 
               variant="achievement"
@@ -91,21 +83,21 @@ const GameSetup: React.FC = () => {
               🏆 Mode Tournoi
             </GameBadge>
           </div>
-        </motion.div>
 
-        <EnhancedCard
-          variant="holographic"
-          padding="none"
-          rarity="epic"
-          glow="medium"
-          withHolographicEffect
-          className="max-w-4xl mx-auto"
-        >
-          <GameSetupGlassmorphic 
-            onStartGame={handleStartGame} 
-            onStartTournament={handleStartTournament}
-          />
-        </EnhancedCard>
+          <EnhancedCard
+            variant="holographic"
+            padding="none"
+            rarity="epic"
+            glow="medium"
+            withHolographicEffect
+            className="max-w-4xl mx-auto"
+          >
+            <GameSetupGlassmorphic 
+              onStartGame={handleStartGame} 
+              onStartTournament={handleStartTournament}
+            />
+          </EnhancedCard>
+        </motion.div>
       </div>
     </div>
   );

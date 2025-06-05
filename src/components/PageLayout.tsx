@@ -2,6 +2,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { animationVariants } from '@/utils/animationUtils';
+import { PageTitle } from './ui/page-title';
 import ThemeSelector from './ThemeSelector';
 import { Button } from './ui/button';
 import { ArrowLeft } from 'lucide-react';
@@ -62,14 +63,13 @@ const PageLayout: React.FC<PageLayoutProps> = ({
       <div className="relative z-10 py-4 sm:py-6 px-2 sm:px-4 lg:px-6 flex-grow w-full">
         {/* Titre et sous-titre optionnels */}
         {title && (
+          <PageTitle variant="h1" withSparkles={true}>
+            {title}
+          </PageTitle>
+        )}
+        {subtitle && (
           <div className="text-center mb-6 sm:mb-8">
-            <h1 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent mb-1">
-              {title}
-              <span className="ml-2 text-sm">✨</span>
-            </h1>
-            {subtitle && (
-              <p className="text-gray-600 text-sm sm:text-base">{subtitle}</p>
-            )}
+            <p className="text-gray-600 text-sm sm:text-base">{subtitle}</p>
           </div>
         )}
         
