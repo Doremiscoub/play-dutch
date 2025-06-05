@@ -5,12 +5,13 @@ import { useSEO } from '@/hooks/useSEO';
 import { ArrowLeft, Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import EnhancedLocalGameSetup from '@/components/game-setup/EnhancedLocalGameSetup';
-import { useGameInitialization } from '@/hooks/useGameInitialization';
+import { useGameState } from '@/hooks/useGameState';
 import { toast } from 'sonner';
+import { STORAGE_KEYS } from '@/utils/storageKeys';
 
 const GameSetup: React.FC = () => {
   const navigate = useNavigate();
-  const { createNewGame } = useGameInitialization();
+  const { createNewGame } = useGameState();
 
   useSEO({
     title: 'Configuration de partie - Dutch Card Game',
@@ -20,13 +21,31 @@ const GameSetup: React.FC = () => {
 
   const handleStartGame = async (playerNames: string[]) => {
     try {
+      console.log('GameSetup: Starting game with players:', playerNames);
       const success = await createNewGame(playerNames);
       if (success) {
+        console.log('GameSetup: Game created successfully, navigating to /game');
         navigate('/game');
+      } else {
+        toast.error('Erreur lors de la création de la partie');
       }
     } catch (error) {
-      console.error('Failed to start game:', error);
+      console.error('GameSetup: Failed to start game:', error);
       toast.error('Erreur lors de la création de la partie');
+    }
+  };
+
+  const handleBack = () => {
+    // Vérifier s'il y a une partie active
+    const activeGame = localStorage.getItem(STORAGE_KEYS.CURRENT_GAME);
+    const gameActive = localStorage.getItem(STORAGE_KEYS.GAME_ACTIVE);
+    
+    if (activeGame && gameActive === 'true') {
+      // Retourner à la partie active
+      navigate('/game');
+    } else {
+      // Retourner à l'accueil
+      navigate('/');
     }
   };
 
@@ -37,9 +56,9 @@ const GameSetup: React.FC = () => {
         <Button
           variant="ghost"
           size="icon"
-          onClick={() => navigate('/')}
+          onClick={handleBack}
           className="bg-white/70 backdrop-blur-xl border border-white/50 text-gray-800 hover:bg-white/80 rounded-full"
-          aria-label="Retour à l'accueil"
+          aria-label="Retour"
         >
           <ArrowLeft className="h-5 w-5" />
         </Button>

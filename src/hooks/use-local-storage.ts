@@ -33,6 +33,25 @@ export function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T 
       }
     } catch (error) {
       console.error(`Erreur lors de la sauvegarde de la clé localStorage "${key}":`, error);
+      
+      // En cas d'erreur (quota dépassé par exemple), essayer de nettoyer
+      try {
+        // Nettoyer les anciennes données pour faire de la place
+        const allKeys = Object.keys(localStorage);
+        const dutchKeys = allKeys.filter(k => k.startsWith('dutch_') && !k.includes('sound') && !k.includes('ads'));
+        
+        // Garder seulement les clés essentielles
+        dutchKeys.forEach(k => {
+          if (!k.includes('current_game') && !k.includes('game_active')) {
+            localStorage.removeItem(k);
+          }
+        });
+        
+        // Réessayer la sauvegarde
+        window.localStorage.setItem(key, JSON.stringify(storedValue));
+      } catch (cleanupError) {
+        console.error(`Erreur critique localStorage pour "${key}":`, cleanupError);
+      }
     }
   }, [key, storedValue]);
 

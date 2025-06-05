@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { calculateGameDuration } from '@/utils/gameUtils';
 import { db, isIndexedDBAvailable, OngoingGame } from '@/lib/database';
 import { useAuth } from '@/context/AuthContext';
+import { STORAGE_KEYS } from '@/utils/storageKeys';
 
 export const useGamePersistence = () => {
   const { user, isSignedIn } = useAuth();
@@ -38,9 +39,9 @@ export const useGamePersistence = () => {
           };
         }
       } else {
-        // Fallback vers localStorage
+        // Fallback vers localStorage avec clé harmonisée
         console.log('useGamePersistence: Using localStorage fallback');
-        const savedGame = localStorage.getItem('current_dutch_game');
+        const savedGame = localStorage.getItem(STORAGE_KEYS.CURRENT_GAME);
         if (savedGame) {
           const parsed = JSON.parse(savedGame);
           console.log('useGamePersistence: Loaded game from localStorage:', !!parsed);
@@ -63,11 +64,12 @@ export const useGamePersistence = () => {
     isGameOver: boolean;
     scoreLimit: number;
     gameStartTime: Date | null;
-  }) => {
+  }, retryCount = 0) => {
     console.log('useGamePersistence: saveGameState called with', {
       playersCount: gameState.players?.length,
       roundsCount: gameState.roundHistory?.length,
-      isGameOver: gameState.isGameOver
+      isGameOver: gameState.isGameOver,
+      retryCount
     });
     
     try {
@@ -89,7 +91,6 @@ export const useGamePersistence = () => {
 
       if (hasIndexedDB) {
         console.log('useGamePersistence: Saving to IndexedDB');
-        // Sauvegarde dans IndexedDB avec transaction et retry
         try {
           await db.transaction('rw', db.ongoingGames, async () => {
             // Efface l'ancienne partie si elle existe
@@ -105,20 +106,31 @@ export const useGamePersistence = () => {
             await db.ongoingGames.add(gameData);
           });
           console.log('useGamePersistence: IndexedDB save successful');
+          
+          // Sauvegarde de backup en localStorage
+          localStorage.setItem(STORAGE_KEYS.CURRENT_GAME, JSON.stringify(gameData));
+          
         } catch (dbError) {
           console.error('useGamePersistence: IndexedDB save failed, falling back to localStorage:', dbError);
           // Fallback vers localStorage en cas d'erreur IndexedDB
-          localStorage.setItem('current_dutch_game', JSON.stringify(gameData));
+          localStorage.setItem(STORAGE_KEYS.CURRENT_GAME, JSON.stringify(gameData));
         }
       } else {
         console.log('useGamePersistence: Saving to localStorage');
         // Fallback vers localStorage
-        localStorage.setItem('current_dutch_game', JSON.stringify(gameData));
+        localStorage.setItem(STORAGE_KEYS.CURRENT_GAME, JSON.stringify(gameData));
       }
       
       return true;
     } catch (error) {
       console.error('useGamePersistence: Erreur lors de la sauvegarde de l\'état du jeu :', error);
+      
+      // Retry logic
+      if (retryCount < 2) {
+        console.log(`useGamePersistence: Retrying save (attempt ${retryCount + 1})`);
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        return this.saveGameState(gameState, retryCount + 1);
+      }
       
       // Tentative de sauvegarde d'urgence en localStorage
       try {
@@ -130,11 +142,12 @@ export const useGamePersistence = () => {
           emergency: true,
           timestamp: new Date().toISOString()
         };
-        localStorage.setItem('dutch_emergency_save', JSON.stringify(emergencyData));
+        localStorage.setItem(STORAGE_KEYS.EMERGENCY_SAVE, JSON.stringify(emergencyData));
         console.log('useGamePersistence: Emergency save completed');
-        toast.error('Sauvegarde d\'urgence effectuée');
+        toast.warning('Sauvegarde d\'urgence effectuée');
       } catch (emergencyError) {
         console.error('useGamePersistence: Emergency save failed:', emergencyError);
+        toast.error('Erreur critique de sauvegarde');
       }
       
       return false;
@@ -172,10 +185,10 @@ export const useGamePersistence = () => {
         await db.gameHistory.add(game);
         console.log('useGamePersistence: Game saved to IndexedDB history');
       } else {
-        // Fallback vers localStorage
-        const games = JSON.parse(localStorage.getItem('dutch_games') || '[]');
+        // Fallback vers localStorage avec clé harmonisée
+        const games = JSON.parse(localStorage.getItem(STORAGE_KEYS.GAME_HISTORY) || '[]');
         games.push(game);
-        localStorage.setItem('dutch_games', JSON.stringify(games));
+        localStorage.setItem(STORAGE_KEYS.GAME_HISTORY, JSON.stringify(games));
         console.log('useGamePersistence: Game saved to localStorage history');
       }
 
@@ -184,9 +197,9 @@ export const useGamePersistence = () => {
       // Nettoyer la partie en cours après sauvegarde
       if (hasIndexedDB) {
         await db.ongoingGames.where('id').equals('current_game').delete();
-      } else {
-        localStorage.removeItem('current_dutch_game');
       }
+      localStorage.removeItem(STORAGE_KEYS.CURRENT_GAME);
+      localStorage.removeItem(STORAGE_KEYS.GAME_ACTIVE);
       
       return true;
     } catch (error) {
@@ -203,10 +216,10 @@ export const useGamePersistence = () => {
       if (hasIndexedDB) {
         await db.gameHistory.delete(gameId);
       } else {
-        // Fallback vers localStorage
-        const games = JSON.parse(localStorage.getItem('dutch_games') || '[]');
+        // Fallback vers localStorage avec clé harmonisée
+        const games = JSON.parse(localStorage.getItem(STORAGE_KEYS.GAME_HISTORY) || '[]');
         const filteredGames = games.filter((game: Game) => game.id !== gameId);
-        localStorage.setItem('dutch_games', JSON.stringify(filteredGames));
+        localStorage.setItem(STORAGE_KEYS.GAME_HISTORY, JSON.stringify(filteredGames));
       }
 
       toast.success('Partie supprimée de l\'historique');
@@ -221,11 +234,12 @@ export const useGamePersistence = () => {
   // Fonction de récupération d'urgence
   const recoverEmergencySave = useCallback(() => {
     try {
-      const emergencyData = localStorage.getItem('dutch_emergency_save');
+      const emergencyData = localStorage.getItem(STORAGE_KEYS.EMERGENCY_SAVE);
       if (emergencyData) {
         const parsed = JSON.parse(emergencyData);
         console.log('useGamePersistence: Emergency save recovered');
-        localStorage.removeItem('dutch_emergency_save');
+        localStorage.removeItem(STORAGE_KEYS.EMERGENCY_SAVE);
+        toast.success('Sauvegarde d\'urgence récupérée');
         return parsed;
       }
       return null;

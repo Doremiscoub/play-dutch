@@ -2,7 +2,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
-import { Settings, Volume, VolumeX } from 'lucide-react';
+import { Settings, Volume, VolumeX, Trash2 } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -14,17 +14,31 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Separator } from '@/components/ui/separator';
 import { useLocalStorage } from '@/hooks/use-local-storage';
+import { STORAGE_KEYS, cleanupLegacyStorage } from '@/utils/storageKeys';
+import { toast } from 'sonner';
 
 const GameSettings: React.FC = () => {
-  const [soundEnabled, setSoundEnabled] = useLocalStorage('dutch_sound_enabled', true);
-  const [adsEnabled, setAdsEnabled] = useLocalStorage('dutch_ads_enabled', true);
+  const [soundEnabled, setSoundEnabled] = useLocalStorage(STORAGE_KEYS.SOUND_ENABLED, true);
+  const [adsEnabled, setAdsEnabled] = useLocalStorage(STORAGE_KEYS.ADS_ENABLED, true);
 
   const toggleSound = () => {
     setSoundEnabled((prev: boolean) => !prev);
+    toast.success(soundEnabled ? 'Son désactivé' : 'Son activé');
   };
 
   const toggleAds = () => {
     setAdsEnabled((prev: boolean) => !prev);
+    toast.success(adsEnabled ? 'Publicités désactivées' : 'Publicités activées');
+  };
+
+  const handleCleanupStorage = () => {
+    try {
+      cleanupLegacyStorage();
+      toast.success('Cache nettoyé avec succès');
+    } catch (error) {
+      console.error('Erreur lors du nettoyage:', error);
+      toast.error('Erreur lors du nettoyage');
+    }
   };
 
   return (
@@ -80,6 +94,24 @@ const GameSettings: React.FC = () => {
               </p>
             </div>
           </motion.div>
+
+          <Separator />
+
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex flex-col gap-1">
+              <Label className="text-base">Maintenance</Label>
+              <span className="text-sm text-gray-500">Nettoyer le cache et les données temporaires</span>
+            </div>
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={handleCleanupStorage}
+              className="flex items-center gap-2"
+            >
+              <Trash2 className="h-4 w-4" />
+              Nettoyer
+            </Button>
+          </div>
         </div>
       </DialogContent>
     </Dialog>

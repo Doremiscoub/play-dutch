@@ -3,21 +3,33 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import GameSettings from '@/components/GameSettings';
 import UnifiedTopBar from '@/components/scoreboard/UnifiedTopBar';
+import { STORAGE_KEYS } from '@/utils/storageKeys';
 
 const SettingsPage: React.FC = () => {
   const navigate = useNavigate();
 
   const handleBack = () => {
-    // Check if we have an active game
-    const activeGame = localStorage.getItem('current_dutch_game');
-    const playerSetup = localStorage.getItem('dutch_player_setup');
+    // Vérifier d'abord s'il y a une partie active
+    const activeGame = localStorage.getItem(STORAGE_KEYS.CURRENT_GAME);
+    const gameActive = localStorage.getItem(STORAGE_KEYS.GAME_ACTIVE);
     
-    if (activeGame || playerSetup) {
-      // Return to active game
+    console.log('SettingsPage: Navigation check', { activeGame: !!activeGame, gameActive });
+    
+    if (activeGame && gameActive === 'true') {
+      // Retourner à la partie active
+      console.log('SettingsPage: Returning to active game');
       navigate('/game');
     } else {
-      // Return to home
-      navigate('/');
+      // Vérifier s'il y a une configuration de joueurs en cours
+      const playerSetup = localStorage.getItem(STORAGE_KEYS.PLAYER_SETUP);
+      if (playerSetup) {
+        console.log('SettingsPage: Returning to game setup');
+        navigate('/setup');
+      } else {
+        // Retourner à l'accueil
+        console.log('SettingsPage: Returning to home');
+        navigate('/');
+      }
     }
   };
 
@@ -34,6 +46,13 @@ const SettingsPage: React.FC = () => {
 
       <div className="p-4 pb-20">
         <div className="max-w-4xl mx-auto">
+          {/* Breadcrumb pour indiquer où on se trouve */}
+          <div className="mb-6 text-sm text-gray-600">
+            <span className="opacity-70">Dutch</span>
+            <span className="mx-2">›</span>
+            <span>Paramètres</span>
+          </div>
+          
           {/* Settings Content */}
           <GameSettings />
         </div>

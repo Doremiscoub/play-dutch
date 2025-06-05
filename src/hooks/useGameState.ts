@@ -1,4 +1,3 @@
-
 import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { useLocalStorage } from './use-local-storage';
 import { useGamePersistence } from './useGamePersistence';
@@ -7,6 +6,7 @@ import { useRoundManagement } from './useRoundManagement';
 import { Player } from '@/types';
 import { toast } from 'sonner';
 import { v4 as uuidv4 } from 'uuid';
+import { STORAGE_KEYS, cleanupLegacyStorage } from '@/utils/storageKeys';
 
 const avatarColors = ['#8B5CF6', '#F97316', '#1EAEDB', '#10B981', '#EC4899', '#6366F1'];
 
@@ -24,9 +24,10 @@ export const useGameState = () => {
   const [showGameOver, setShowGameOver] = useState<boolean>(false);
   const [isInitialized, setIsInitialized] = useState(false);
   const [initError, setInitError] = useState<string | null>(null);
-  const [soundEnabled] = useLocalStorage('dutch_sound_enabled', true);
+  const [soundEnabled] = useLocalStorage(STORAGE_KEYS.SOUND_ENABLED, true);
   const lastSaveTimeRef = useRef<number>(0);
   const saveIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const initializationLock = useRef(false);
   
   const { 
     loadGameState,
@@ -49,15 +50,26 @@ export const useGameState = () => {
     handleRestart
   } = useGameContinuation(setShowGameOver, setScoreLimit, scoreLimit);
 
+  // Nettoyage initial des anciennes clés
+  useEffect(() => {
+    cleanupLegacyStorage();
+  }, []);
+
   // Initialize game from localStorage or create new
   const createNewGame = useCallback(async (playerNames: string[]): Promise<boolean> => {
+    if (initializationLock.current) {
+      console.log('useGameState: Game initialization already in progress');
+      return false;
+    }
+
     if (!playerNames || playerNames.length < 2) {
       setInitError('Il faut au moins 2 joueurs pour démarrer');
       toast.error('Il faut au moins 2 joueurs pour démarrer une partie');
       return false;
     }
 
-    console.log('Creating new game with players:', playerNames);
+    console.log('useGameState: Creating new game with players:', playerNames);
+    initializationLock.current = true;
     
     try {
       setInitError(null);
@@ -72,7 +84,7 @@ export const useGameState = () => {
         avatarColor: avatarColors[index % avatarColors.length]
       }));
       
-      console.log('Players created successfully:', newPlayers);
+      console.log('useGameState: Players created successfully:', newPlayers);
       
       const startTime = new Date();
       
@@ -80,7 +92,7 @@ export const useGameState = () => {
       setGameStartTime(startTime);
       setIsInitialized(true);
       
-      // Save to localStorage
+      // Save to localStorage with harmonized key
       const gameData = {
         players: newPlayers,
         gameStartTime: startTime.toISOString(),
@@ -89,31 +101,51 @@ export const useGameState = () => {
         isGameOver: false
       };
       
-      localStorage.setItem('current_dutch_game', JSON.stringify(gameData));
-      localStorage.setItem('dutch_game_active', 'true');
+      localStorage.setItem(STORAGE_KEYS.CURRENT_GAME, JSON.stringify(gameData));
+      localStorage.setItem(STORAGE_KEYS.GAME_ACTIVE, 'true');
+      
+      // Clear any temporary setup data
+      localStorage.removeItem(STORAGE_KEYS.PLAYER_SETUP);
       
       toast.success(`Partie créée avec ${newPlayers.length} joueurs !`);
       
       return true;
     } catch (error) {
-      console.error('Game initialization failed:', error);
+      console.error('useGameState: Game initialization failed:', error);
       setInitError('Erreur lors de l\'initialisation du jeu');
       toast.error('Erreur lors de l\'initialisation du jeu');
       return false;
+    } finally {
+      initializationLock.current = false;
     }
   }, [scoreLimit]);
 
-  // Load existing game
+  // Load existing game with better error handling
   const loadExistingGame = useCallback((): boolean => {
     try {
-      const savedGame = localStorage.getItem('current_dutch_game');
+      const savedGame = localStorage.getItem(STORAGE_KEYS.CURRENT_GAME);
       if (!savedGame) {
+        console.log('useGameState: No saved game found');
         return false;
       }
 
       const gameData = JSON.parse(savedGame);
       
-      if (!gameData.players || gameData.players.length === 0) {
+      // Validation renforcée
+      if (!gameData.players || !Array.isArray(gameData.players) || gameData.players.length === 0) {
+        console.warn('useGameState: Invalid game data - no valid players');
+        localStorage.removeItem(STORAGE_KEYS.CURRENT_GAME);
+        return false;
+      }
+
+      // Vérifier que chaque joueur a les propriétés requises
+      const validPlayers = gameData.players.every((player: any) => 
+        player && typeof player.name === 'string' && typeof player.totalScore === 'number'
+      );
+
+      if (!validPlayers) {
+        console.warn('useGameState: Invalid player data structure');
+        localStorage.removeItem(STORAGE_KEYS.CURRENT_GAME);
         return false;
       }
 
@@ -123,22 +155,44 @@ export const useGameState = () => {
       setRoundHistory(gameData.roundHistory || []);
       setIsInitialized(true);
       
-      console.log('Existing game loaded successfully');
+      console.log('useGameState: Existing game loaded successfully');
       return true;
     } catch (error) {
-      console.error('Failed to load existing game:', error);
-      localStorage.removeItem('current_dutch_game');
+      console.error('useGameState: Failed to load existing game:', error);
+      localStorage.removeItem(STORAGE_KEYS.CURRENT_GAME);
+      
+      // Tentative de récupération depuis la sauvegarde d'urgence
+      try {
+        const emergencyData = localStorage.getItem(STORAGE_KEYS.EMERGENCY_SAVE);
+        if (emergencyData) {
+          const parsed = JSON.parse(emergencyData);
+          console.log('useGameState: Attempting emergency recovery');
+          toast.info('Récupération de la sauvegarde d\'urgence');
+          
+          setPlayers(parsed.players || []);
+          setGameStartTime(parsed.gameStartTime ? new Date(parsed.gameStartTime) : null);
+          setScoreLimit(parsed.scoreLimit || 100);
+          setRoundHistory(parsed.roundHistory || []);
+          setIsInitialized(true);
+          
+          localStorage.removeItem(STORAGE_KEYS.EMERGENCY_SAVE);
+          return true;
+        }
+      } catch (emergencyError) {
+        console.error('useGameState: Emergency recovery failed:', emergencyError);
+      }
+      
       return false;
     }
   }, [setRoundHistory]);
 
-  // Sauvegarde automatique périodique
+  // Sauvegarde automatique périodique améliorée
   useEffect(() => {
     if (!isInitialized || !players || players.length === 0) {
       return;
     }
 
-    const saveInterval = setInterval(() => {
+    const saveInterval = setInterval(async () => {
       const now = Date.now();
       if (now - lastSaveTimeRef.current > 30000) {
         console.log('useGameState: Auto-saving game state');
@@ -151,14 +205,25 @@ export const useGameState = () => {
           gameStartTime
         };
         
-        saveGameState(gameStateToSave).then((success) => {
+        try {
+          const success = await saveGameState(gameStateToSave);
           if (success) {
             lastSaveTimeRef.current = now;
             console.log('useGameState: Auto-save successful');
           } else {
             console.warn('useGameState: Auto-save failed');
+            
+            // Sauvegarde d'urgence en localStorage
+            localStorage.setItem(STORAGE_KEYS.EMERGENCY_SAVE, JSON.stringify({
+              ...gameStateToSave,
+              gameStartTime: gameStateToSave.gameStartTime?.toISOString(),
+              emergency: true,
+              timestamp: new Date().toISOString()
+            }));
           }
-        });
+        } catch (error) {
+          console.error('useGameState: Auto-save error:', error);
+        }
       }
     }, 10000);
 
@@ -176,10 +241,10 @@ export const useGameState = () => {
     if (isInitialized && players && players.length > 0) {
       console.log('useGameState: Game is properly initialized with players:', players.length);
       
-      localStorage.setItem('dutch_game_active', 'true');
+      localStorage.setItem(STORAGE_KEYS.GAME_ACTIVE, 'true');
       
       return () => {
-        localStorage.removeItem('dutch_game_active');
+        localStorage.removeItem(STORAGE_KEYS.GAME_ACTIVE);
       };
     }
   }, [isInitialized, players]);
@@ -231,9 +296,17 @@ export const useGameState = () => {
           gameStartTime
         };
         
-        const saveSuccess = await secureSaveGameState(gameStateToSave);
-        if (saveSuccess) {
-          console.log('useGameState: Game state saved successfully after round');
+        // Sauvegarde avec retry automatique
+        const saveSuccess = await saveGameState(gameStateToSave);
+        if (!saveSuccess) {
+          // Sauvegarde d'urgence
+          localStorage.setItem(STORAGE_KEYS.EMERGENCY_SAVE, JSON.stringify({
+            ...gameStateToSave,
+            gameStartTime: gameStateToSave.gameStartTime?.toISOString(),
+            emergency: true,
+            timestamp: new Date().toISOString()
+          }));
+          toast.warning('Sauvegarde d\'urgence effectuée');
         }
         
         if (isGameOver) {
@@ -246,9 +319,10 @@ export const useGameState = () => {
       return false;
     } catch (error) {
       console.error('useGameState: Error in handleAddRound:', error);
+      toast.error('Erreur lors de l\'ajout de la manche');
       return false;
     }
-  }, [players, addRound, setPlayers, roundHistory, scoreLimit, gameStartTime, secureSaveGameState]);
+  }, [players, addRound, setPlayers, roundHistory, scoreLimit, gameStartTime, saveGameState]);
 
   const handleUndoLastRound = useCallback(async () => {
     console.log('useGameState: handleUndoLastRound called');
@@ -270,14 +344,15 @@ export const useGameState = () => {
         gameStartTime
       };
       
-      await secureSaveGameState(gameStateToSave);
+      await saveGameState(gameStateToSave);
       
       return true;
     } catch (error) {
       console.error('useGameState: Error in handleUndoLastRound:', error);
+      toast.error('Erreur lors de l\'annulation');
       return false;
     }
-  }, [players, undoLastRound, setPlayers, showGameOver, soundEnabled, roundHistory, scoreLimit, gameStartTime, secureSaveGameState]);
+  }, [players, undoLastRound, setPlayers, showGameOver, soundEnabled, roundHistory, scoreLimit, gameStartTime, saveGameState]);
 
   const handleConfirmEndGame = useCallback(() => {
     console.log('useGameState: handleConfirmEndGame called');
@@ -285,13 +360,31 @@ export const useGameState = () => {
     try {
       saveGameToHistory(players, gameStartTime);
       setShowGameOver(true);
-      localStorage.removeItem('dutch_game_active');
+      localStorage.removeItem(STORAGE_KEYS.GAME_ACTIVE);
+      localStorage.removeItem(STORAGE_KEYS.CURRENT_GAME);
       return true;
     } catch (error) {
       console.error('useGameState: Error in handleConfirmEndGame:', error);
+      toast.error('Erreur lors de la fin de partie');
       return false;
     }
   }, [players, gameStartTime, saveGameToHistory]);
+
+  // Nettoyage complet
+  const cleanup = useCallback(() => {
+    console.log('useGameState: Cleaning up game state');
+    setPlayers([]);
+    setGameStartTime(null);
+    setIsInitialized(false);
+    setInitError(null);
+    initializationLock.current = false;
+    
+    localStorage.removeItem(STORAGE_KEYS.CURRENT_GAME);
+    localStorage.removeItem(STORAGE_KEYS.GAME_ACTIVE);
+    localStorage.removeItem(STORAGE_KEYS.PLAYER_SETUP);
+    
+    cleanupLegacyStorage();
+  }, []);
 
   // État memoïsé
   const gameState = useMemo(() => ({
@@ -311,7 +404,8 @@ export const useGameState = () => {
     handleContinueGame,
     handleRestart,
     createNewGame,
-    loadExistingGame
+    loadExistingGame,
+    cleanup
   }), [
     players,
     roundHistory,
@@ -329,7 +423,8 @@ export const useGameState = () => {
     handleContinueGame,
     handleRestart,
     createNewGame,
-    loadExistingGame
+    loadExistingGame,
+    cleanup
   ]);
 
   console.log('useGameState: Returning state', { 
