@@ -1,8 +1,10 @@
+
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import { componentTagger } from 'lovable-tagger';
 import { VitePWA } from 'vite-plugin-pwa';
+import { visualizer } from 'rollup-plugin-visualizer';
 
 export default defineConfig(({ mode }) => ({
   plugins: [
@@ -107,6 +109,12 @@ export default defineConfig(({ mode }) => ({
           }
         ]
       }
+    }),
+    mode === 'production' && visualizer({
+      filename: 'reports/bundle-stats.html',
+      open: false,
+      gzipSize: true,
+      brotliSize: true
     })
   ].filter(Boolean),
   resolve: {
@@ -124,6 +132,18 @@ export default defineConfig(({ mode }) => ({
     commonjsOptions: {
       include: [/node_modules/],
     },
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          router: ['react-router-dom'],
+          ui: ['@radix-ui/react-dialog', '@radix-ui/react-alert-dialog'],
+          animations: ['framer-motion'],
+          charts: ['recharts'],
+          utils: ['date-fns', 'clsx', 'tailwind-merge']
+        }
+      }
+    }
   },
   server: {
     host: "::",
