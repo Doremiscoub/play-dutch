@@ -16,6 +16,7 @@ const GamePage: React.FC = () => {
   const navigate = useNavigate();
   const [showScoreForm, setShowScoreForm] = useState<boolean>(false);
   const [gameMode, setGameMode] = useState<'quick' | 'tournament'>('quick');
+  const [navigationBlocked, setNavigationBlocked] = useState<boolean>(false);
 
   console.log('GamePage: Component rendered');
 
@@ -44,26 +45,52 @@ const GamePage: React.FC = () => {
     getTournamentProgress
   } = useTournamentState();
 
+  // Protection contre les navigations non désirées
+  useEffect(() => {
+    console.log('GamePage: Setting up navigation protection');
+    
+    // Marquer que nous sommes dans le jeu
+    sessionStorage.setItem('dutch_in_game', 'true');
+    
+    // Bloquer temporairement la navigation automatique
+    setNavigationBlocked(true);
+    
+    const timer = setTimeout(() => {
+      setNavigationBlocked(false);
+      console.log('GamePage: Navigation protection lifted');
+    }, 2000);
+
+    return () => {
+      clearTimeout(timer);
+      sessionStorage.removeItem('dutch_in_game');
+    };
+  }, []);
+
   // Memoïser la fonction d'initialisation pour éviter les re-renders
   const handleGameInitialization = useCallback(async (): Promise<boolean> => {
     console.log('GamePage: handleGameInitialization called');
+    
+    // Vérifier si on bloque encore les navigations
+    if (navigationBlocked) {
+      console.log('GamePage: Navigation blocked, preventing initialization redirect');
+      return false;
+    }
     
     try {
       const success = await createNewGame();
       console.log('GamePage: createNewGame result:', success);
       
       if (!success) {
-        console.log('GamePage: Initialization failed, redirecting to setup');
-        navigate('/game/setup');
+        console.log('GamePage: Initialization failed, but not redirecting automatically');
+        // Ne pas rediriger automatiquement, laisser l'utilisateur gérer
         return false;
       }
       return true;
     } catch (error) {
       console.error('GamePage: Game initialization error:', error);
-      navigate('/game/setup');
       return false;
     }
-  }, [createNewGame, navigate]);
+  }, [createNewGame, navigationBlocked]);
 
   // Initialize game configuration avec protection contre les redirections automatiques
   useEffect(() => {
@@ -92,14 +119,23 @@ const GamePage: React.FC = () => {
         startNextMatch();
       }
     }
-  }, []); // Pas de dépendances pour éviter les re-renders
+  }, []);
 
-  // Protection contre les redirections automatiques non désirées
+  // Surveillance de l'état du jeu pour prévenir les pertes
   useEffect(() => {
-    if (!isInitialized && players && players.length === 0) {
-      console.log('GamePage: No players and not initialized, but staying on page to avoid redirect loop');
-      // Ne pas rediriger automatiquement si on est déjà sur la page de jeu
-      // L'utilisateur peut manuellement retourner à la configuration si nécessaire
+    if (isInitialized && players && players.length > 0) {
+      console.log('GamePage: Game properly loaded with', players.length, 'players');
+      
+      // Heartbeat pour maintenir l'état du jeu
+      const heartbeat = setInterval(() => {
+        const gameActive = localStorage.getItem('dutch_game_active');
+        if (gameActive !== 'true') {
+          console.log('GamePage: Restoring game active flag');
+          localStorage.setItem('dutch_game_active', 'true');
+        }
+      }, 5000);
+
+      return () => clearInterval(heartbeat);
     }
   }, [isInitialized, players]);
 
@@ -126,6 +162,7 @@ const GamePage: React.FC = () => {
     console.log('GamePage: Manual back to setup');
     localStorage.removeItem('dutch_game_mode');
     localStorage.removeItem('dutch_tournament_config');
+    localStorage.removeItem('dutch_game_active');
     navigate('/game/setup');
   }, [navigate]);
 
@@ -154,7 +191,8 @@ const GamePage: React.FC = () => {
     playersCount: players?.length || 0,
     showGameOver,
     gameMode,
-    isInitialized
+    isInitialized,
+    navigationBlocked
   });
 
   return (

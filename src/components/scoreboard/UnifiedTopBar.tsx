@@ -30,21 +30,55 @@ const UnifiedTopBar: React.FC<UnifiedTopBarProps> = ({
   const navigate = useNavigate();
   
   const handleNavigation = (path: string) => {
+    console.log('UnifiedTopBar: handleNavigation called with path:', path);
+    
+    // Protection spéciale pour éviter de rediriger depuis le jeu vers l'accueil
+    const currentPath = window.location.pathname;
+    if (currentPath === '/game' && path === '/') {
+      console.log('UnifiedTopBar: Preventing redirect from game to home');
+      return;
+    }
+    
     localStorage.setItem('dutch_return_to_game', 'true');
     navigate(path);
   };
 
   const handleBack = () => {
+    console.log('UnifiedTopBar: handleBack called');
+    
     if (onBack) {
+      console.log('UnifiedTopBar: Using custom onBack handler');
       onBack();
-    } else {
+      return;
+    }
+    
+    const currentPath = window.location.pathname;
+    console.log('UnifiedTopBar: Current path:', currentPath);
+    
+    // Protection pour éviter de quitter le jeu involontairement
+    if (currentPath === '/game') {
+      console.log('UnifiedTopBar: In game, checking return flag');
       const shouldReturnToGame = localStorage.getItem('dutch_return_to_game');
+      
       if (shouldReturnToGame) {
+        console.log('UnifiedTopBar: Removing return flag and staying in game');
         localStorage.removeItem('dutch_return_to_game');
-        navigate('/game');
+        // Ne pas naviguer, rester dans le jeu
+        return;
       } else {
-        navigate('/');
+        console.log('UnifiedTopBar: Going to game setup instead of home');
+        navigate('/game/setup');
+        return;
       }
+    }
+    
+    // Pour les autres pages, comportement normal
+    const shouldReturnToGame = localStorage.getItem('dutch_return_to_game');
+    if (shouldReturnToGame) {
+      localStorage.removeItem('dutch_return_to_game');
+      navigate('/game');
+    } else {
+      navigate('/');
     }
   };
   
