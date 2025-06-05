@@ -51,17 +51,17 @@ const UnifiedTopBar: React.FC<UnifiedTopBarProps> = ({
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className={`bg-white/80 backdrop-blur-xl border-b border-white/20 shadow-sm ${className}`}
+      className={`sticky top-0 z-40 bg-white/95 backdrop-blur-xl border-b border-gray-200/50 shadow-sm ${className}`}
     >
-      <div className="max-w-4xl mx-auto px-4 py-3">
+      <div className="max-w-4xl mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           {/* Left side - Back button */}
-          <div className="w-10">
+          <div className="flex items-center w-16">
             {showBackButton && (
               <Button
                 variant="ghost"
                 size="icon"
-                className="text-gray-600 hover:text-dutch-blue transition-colors hover:bg-dutch-blue/10"
+                className="text-gray-600 hover:text-dutch-blue transition-colors hover:bg-dutch-blue/10 rounded-full"
                 onClick={handleBack}
               >
                 <ArrowLeft className="h-5 w-5" />
@@ -69,25 +69,47 @@ const UnifiedTopBar: React.FC<UnifiedTopBarProps> = ({
             )}
           </div>
           
-          {/* Center - Title */}
-          <motion.div 
-            className="flex-1 text-center"
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
-            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange bg-clip-text text-transparent">
+          {/* Center - Title and info */}
+          <div className="flex-1 text-center">
+            <motion.h1 
+              className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange bg-clip-text text-transparent mb-1"
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+            >
               {title}
-            </h1>
-          </motion.div>
+            </motion.h1>
+            
+            {/* Game info badges */}
+            {(roundCount !== undefined || scoreLimit !== undefined) && (
+              <motion.div 
+                className="flex items-center justify-center gap-3"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.2 }}
+              >
+                {roundCount !== undefined && (
+                  <Badge variant="secondary" className="bg-dutch-blue/10 text-dutch-blue border-dutch-blue/20 text-xs font-medium">
+                    Manche {roundCount}
+                  </Badge>
+                )}
+                
+                {scoreLimit !== undefined && (
+                  <Badge variant="secondary" className="bg-dutch-orange/10 text-dutch-orange border-dutch-orange/20 text-xs font-medium">
+                    Limite {scoreLimit} pts
+                  </Badge>
+                )}
+              </motion.div>
+            )}
+          </div>
           
           {/* Right side - Action buttons */}
-          <div className="flex items-center gap-2 w-10 justify-end">
+          <div className="flex items-center gap-2 w-16 justify-end">
             {showRules && (
               <Button
                 variant="ghost"
                 size="icon"
-                className="text-gray-600 hover:text-dutch-purple transition-colors hover:bg-dutch-purple/10"
+                className="text-gray-600 hover:text-dutch-purple transition-colors hover:bg-dutch-purple/10 rounded-full"
                 onClick={() => handleNavigation('/rules')}
               >
                 <BookOpen className="h-4 w-4" />
@@ -97,7 +119,7 @@ const UnifiedTopBar: React.FC<UnifiedTopBarProps> = ({
               <Button
                 variant="ghost"
                 size="icon"
-                className="text-gray-600 hover:text-dutch-purple transition-colors hover:bg-dutch-purple/10"
+                className="text-gray-600 hover:text-dutch-purple transition-colors hover:bg-dutch-purple/10 rounded-full"
                 onClick={() => handleNavigation('/settings')}
               >
                 <Settings className="h-4 w-4" />
@@ -105,34 +127,6 @@ const UnifiedTopBar: React.FC<UnifiedTopBarProps> = ({
             )}
           </div>
         </div>
-        
-        {/* Game info badges */}
-        {(roundCount !== undefined || scoreLimit !== undefined) && (
-          <motion.div 
-            className="flex items-center justify-center gap-4 mt-3"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.3 }}
-          >
-            {roundCount !== undefined && (
-              <div className="flex items-center bg-white/60 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-sm">
-                <span className="text-gray-700 font-medium text-sm mr-2">Manche</span>
-                <Badge variant="secondary" className="bg-dutch-purple/15 text-dutch-purple font-medium text-sm">
-                  {roundCount}
-                </Badge>
-              </div>
-            )}
-            
-            {scoreLimit !== undefined && (
-              <div className="flex items-center bg-white/60 backdrop-blur-sm rounded-full px-3 py-1.5 shadow-sm">
-                <span className="text-gray-700 font-medium text-sm mr-2">Limite</span>
-                <Badge variant="secondary" className="bg-dutch-orange/15 text-dutch-orange font-medium text-sm">
-                  {scoreLimit} pts
-                </Badge>
-              </div>
-            )}
-          </motion.div>
-        )}
       </div>
     </motion.div>
   );

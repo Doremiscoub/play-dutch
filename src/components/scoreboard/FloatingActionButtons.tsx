@@ -20,7 +20,7 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
   canEndGame
 }) => {
   return (
-    <div className="fixed bottom-6 right-6 z-[100] pointer-events-none">
+    <div className="fixed bottom-6 right-6 z-[9999] pointer-events-none">
       <motion.div 
         className="flex flex-col gap-3 items-end pointer-events-auto"
         initial={{ opacity: 0, x: 100 }}
@@ -45,7 +45,7 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
             size="icon-lg"
             onClick={onEndGame}
             disabled={!canEndGame}
-            className="shadow-2xl hover:shadow-red-500/30 transition-all duration-300 bg-gradient-to-br from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 border-2 border-red-400/50 h-12 w-12"
+            className="shadow-xl hover:shadow-red-500/30 transition-all duration-300 bg-gradient-to-br from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 border border-red-400/50 h-12 w-12 rounded-full"
             animated={true}
           >
             <Trophy className="h-5 w-5" />
@@ -70,7 +70,7 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
             size="icon-lg"
             onClick={onUndo}
             disabled={!canUndo}
-            className="shadow-2xl hover:shadow-orange-500/30 transition-all duration-300 bg-gradient-to-br from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-600 text-white border-2 border-orange-300/50 h-12 w-12"
+            className="shadow-xl hover:shadow-orange-500/30 transition-all duration-300 bg-gradient-to-br from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-600 text-white border border-orange-300/50 h-12 w-12 rounded-full"
             animated={true}
           >
             <Undo className="h-5 w-5" />
@@ -93,7 +93,7 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
         >
           {/* Effet de glow */}
           <motion.div
-            className="absolute inset-0 bg-gradient-to-r from-dutch-blue to-dutch-purple rounded-2xl blur-xl opacity-50"
+            className="absolute inset-0 bg-gradient-to-r from-dutch-blue to-dutch-purple rounded-full blur-xl opacity-50"
             animate={{ 
               scale: [1, 1.1, 1],
               opacity: [0.3, 0.6, 0.3]
@@ -109,7 +109,7 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
             variant="primary"
             size="lg"
             onClick={onAddRound}
-            className="relative shadow-2xl hover:shadow-dutch-blue/40 transition-all duration-300 px-6 py-3 font-bold bg-gradient-to-r from-dutch-blue to-dutch-purple hover:from-dutch-blue/90 hover:to-dutch-purple/90 border-2 border-dutch-blue/30 text-base h-14"
+            className="relative shadow-xl hover:shadow-dutch-blue/40 transition-all duration-300 px-6 py-3 font-bold bg-gradient-to-r from-dutch-blue to-dutch-purple hover:from-dutch-blue/90 hover:to-dutch-purple/90 border border-dutch-blue/30 text-base h-14 rounded-full"
             animated={true}
           >
             <motion.div

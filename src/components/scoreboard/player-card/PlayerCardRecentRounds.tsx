@@ -2,7 +2,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Player } from '@/types';
-import { Scissors } from 'lucide-react';
+import { Scissors, TrendingUp, TrendingDown } from 'lucide-react';
 
 interface PlayerCardRecentRoundsProps {
   player: Player;
@@ -28,33 +28,46 @@ const PlayerCardRecentRounds: React.FC<PlayerCardRecentRoundsProps> = ({ player,
 
   const lastRoundScore = recentRounds[recentRounds.length - 1]?.score;
   const isLastRoundDutch = recentRounds[recentRounds.length - 1]?.isDutch;
+  
+  // Calculer la tendance (si amélioration ou dégradation)
+  const trend = (() => {
+    if (recentRounds.length < 2) return null;
+    const lastTwo = recentRounds.slice(-2);
+    if (lastTwo[1].score < lastTwo[0].score) return 'up'; // Amélioration (score plus bas)
+    if (lastTwo[1].score > lastTwo[0].score) return 'down'; // Dégradation (score plus haut)
+    return 'stable';
+  })();
 
   return (
     <div className="mt-4 p-3 bg-gray-50/60 rounded-xl border border-gray-200/50">
       <div className="flex items-center justify-between mb-3">
         <span className="text-xs font-medium text-gray-600">Dernières manches</span>
-        <span className="text-xs text-gray-500">{recentRounds.length} score{recentRounds.length > 1 ? 's' : ''}</span>
+        <div className="flex items-center gap-2">
+          {trend === 'up' && <TrendingUp className="h-3 w-3 text-green-500" />}
+          {trend === 'down' && <TrendingDown className="h-3 w-3 text-red-500" />}
+          <span className="text-xs text-gray-500">{recentRounds.length} score{recentRounds.length > 1 ? 's' : ''}</span>
+        </div>
       </div>
       
-      {/* Last round highlight */}
+      {/* Last round highlight - Design subtil */}
       {lastRoundScore !== undefined && (
         <motion.div 
-          className={`mb-3 p-2.5 rounded-lg border transition-all duration-200 ${
+          className={`mb-3 p-2 rounded-lg border-l-3 transition-all duration-200 ${
             isLastRoundDutch 
-              ? 'bg-gradient-to-r from-red-50 to-pink-50 border-red-200 text-red-700' 
+              ? 'bg-red-50/60 border-l-red-400 text-red-700' 
               : lastRoundScore === 0 
-                ? 'bg-gradient-to-r from-green-50 to-emerald-50 border-green-200 text-green-700'
-                : 'bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200 text-blue-700'
+                ? 'bg-green-50/60 border-l-green-400 text-green-700'
+                : 'bg-blue-50/60 border-l-blue-400 text-blue-700'
           }`}
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.2 }}
         >
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium opacity-80">Dernière manche</span>
+            <span className="text-xs font-medium opacity-80">Dernière</span>
             <div className="flex items-center gap-1.5">
               {isLastRoundDutch && <Scissors className="h-3 w-3" />}
-              <span className="font-bold text-lg">{lastRoundScore}</span>
+              <span className="font-bold text-base">{lastRoundScore}</span>
             </div>
           </div>
         </motion.div>
@@ -67,10 +80,10 @@ const PlayerCardRecentRounds: React.FC<PlayerCardRecentRoundsProps> = ({ player,
             key={index}
             className={`flex-shrink-0 px-2 py-1 rounded-md text-xs font-medium border transition-all duration-200 ${
               round.isDutch
-                ? 'bg-red-100 text-red-700 border-red-300'
+                ? 'bg-red-100/80 text-red-700 border-red-300/60'
                 : round.score === 0
-                  ? 'bg-green-100 text-green-700 border-green-300'
-                  : 'bg-gray-100 text-gray-700 border-gray-300'
+                  ? 'bg-green-100/80 text-green-700 border-green-300/60'
+                  : 'bg-gray-100/80 text-gray-700 border-gray-300/60'
             }`}
             whileHover={{ scale: 1.05 }}
             initial={{ opacity: 0, x: 10 }}

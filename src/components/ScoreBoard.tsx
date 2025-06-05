@@ -110,29 +110,29 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
           >
             <motion.button
               onClick={() => handleViewChange('list')}
-              className={`px-8 py-4 rounded-2xl transition-all shadow-lg flex items-center gap-3 font-semibold text-lg ${
+              className={`px-6 py-3 rounded-xl transition-all shadow-md flex items-center gap-2 font-medium ${
                 currentView === 'list'
-                  ? 'bg-gradient-to-r from-dutch-blue to-dutch-purple text-white shadow-xl scale-105'
+                  ? 'bg-gradient-to-r from-dutch-blue to-dutch-purple text-white shadow-lg scale-105'
                   : 'bg-white/80 backdrop-blur-xl border border-white/60 text-gray-800 hover:bg-white/90 hover:scale-102'
               }`}
               whileHover={{ scale: currentView === 'list' ? 1.05 : 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
-              <BarChart3 className="h-5 w-5" />
+              <BarChart3 className="h-4 w-4" />
               Classement détaillé
             </motion.button>
             
             <motion.button
               onClick={() => handleViewChange('table')}
-              className={`px-8 py-4 rounded-2xl transition-all shadow-lg flex items-center gap-3 font-semibold text-lg ${
+              className={`px-6 py-3 rounded-xl transition-all shadow-md flex items-center gap-2 font-medium ${
                 currentView === 'table'
-                  ? 'bg-gradient-to-r from-dutch-blue to-dutch-purple text-white shadow-xl scale-105'
+                  ? 'bg-gradient-to-r from-dutch-blue to-dutch-purple text-white shadow-lg scale-105'
                   : 'bg-white/80 backdrop-blur-xl border border-white/60 text-gray-800 hover:bg-white/90 hover:scale-102'
               }`}
               whileHover={{ scale: currentView === 'table' ? 1.05 : 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
-              <Table className="h-5 w-5" />
+              <Table className="h-4 w-4" />
               Tableau des manches
             </motion.button>
           </motion.div>
