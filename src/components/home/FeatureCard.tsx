@@ -52,14 +52,14 @@ export const FeatureCard: React.FC<FeatureCardProps> = ({ feature, index }) => {
         {/* Badge en haut à droite */}
         <div className="absolute top-4 right-4">
           <GameBadge 
-            className="px-2 py-1 bg-white/80 rounded-full"
+            className="px-2 py-1 bg-white/80 rounded-full text-xs font-medium"
           >
             {feature.badge}
           </GameBadge>
         </div>
         
         <div className="flex flex-col items-center text-center h-full relative z-10">
-          {/* Icône avec effet électrique */}
+          {/* Icône avec effet électrique amélioré */}
           <motion.div 
             className={`
               h-16 w-16 rounded-full ${feature.bgColor} 
@@ -82,7 +82,7 @@ export const FeatureCard: React.FC<FeatureCardProps> = ({ feature, index }) => {
                 <div className="absolute inset-0 bg-gradient-to-r from-yellow-200/30 to-yellow-400/30 animate-pulse rounded-full"></div>
               </>
             )}
-            {/* Shimmer effect for icon container */}
+            {/* Effet shimmer pour le conteneur d'icône */}
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 animate-shimmer opacity-0 hover:opacity-100 transition-opacity"></div>
           </motion.div>
           

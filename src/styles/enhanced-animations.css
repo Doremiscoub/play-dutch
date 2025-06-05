@@ -60,10 +60,16 @@
   100% { background-position: 300% 0; }
 }
 
-/* NEW: Missing shimmer animation */
+/* Main shimmer animation for gaming components */
 @keyframes shimmer {
   0% { transform: translateX(-100%); }
   100% { transform: translateX(100%); }
+}
+
+/* Performance optimized animate-shimmer utility */
+.animate-shimmer {
+  animation: shimmer 2s infinite linear;
+  will-change: transform;
 }
 
 /* Particle effects */
@@ -321,7 +327,15 @@
   100% { left: 100%; }
 }
 
-/* Accessibility support */
+/* Performance optimizations */
+.animate-shimmer,
+.animate-sparkle,
+.animate-bounce-uno,
+.animate-pulse-soft {
+  will-change: transform, opacity;
+}
+
+/* Accessibility support - Respect user's motion preferences */
 @media (prefers-reduced-motion: reduce) {
   .animate-shimmer,
   .animate-sparkle,
@@ -335,5 +349,28 @@
   .water-ripple::before,
   .trading-card::before {
     animation: none !important;
+  }
+  
+  /* Provide alternative static effects for reduced motion */
+  .animate-shimmer {
+    opacity: 0.8;
+  }
+  
+  .animate-sparkle {
+    opacity: 0.9;
+  }
+  
+  .animate-pulse-soft {
+    opacity: 0.85;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .holographic-gradient,
+  .shimmer-rainbow,
+  .gradient-text-animated {
+    background: currentColor;
+    color: inherit;
   }
 }
