@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import RulesTabs from '@/components/rules/RulesTabs';
-import { ModernTitle } from '@/components/ui/modern-title';
+import { PageTitle } from '@/components/ui/page-title';
 
 const RulesPage: React.FC = () => {
   const navigate = useNavigate();
@@ -38,9 +38,9 @@ const RulesPage: React.FC = () => {
             <ArrowLeft className="h-4 w-4" />
           </Button>
           
-          <ModernTitle variant="h1" className="text-3xl md:text-4xl">
+          <PageTitle variant="h1" withSparkles={true}>
             Règles du Dutch
-          </ModernTitle>
+          </PageTitle>
         </div>
 
         {/* Rules Content */}

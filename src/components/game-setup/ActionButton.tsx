@@ -13,8 +13,8 @@ interface ActionButtonProps {
 const ActionButton: React.FC<ActionButtonProps> = ({ onClick, label, disabled = false }) => {
   return (
     <motion.div 
-      whileHover={{ scale: 1.03 }}
-      whileTap={{ scale: 0.97 }}
+      whileHover={{ scale: disabled ? 1 : 1.03 }}
+      whileTap={{ scale: disabled ? 1 : 0.97 }}
       className="w-full max-w-md"
     >
       <EnhancedButton

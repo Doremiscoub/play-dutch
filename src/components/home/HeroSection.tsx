@@ -23,14 +23,14 @@ export const HeroSection: React.FC = () => {
         >
           Dutch
         </GameHero>
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer -z-10"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -z-10"></div>
       </div>
       
       <GameTitle 
         color="magic"
         align="center"
         spacing="wide"
-        className="mb-6 animate-pulse-soft"
+        className="mb-6"
       >
         Card Battle Arena
       </GameTitle>

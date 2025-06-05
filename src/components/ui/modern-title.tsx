@@ -5,7 +5,7 @@ import { VariantProps, cva } from 'class-variance-authority';
 import { SparkleIcon } from './sparkle-icon';
 
 const modernTitleVariants = cva(
-  "font-bold tracking-tight relative z-10 text-transparent bg-clip-text bg-[length:300%_auto] animate-shimmer",
+  "font-bold tracking-tight relative z-10 text-transparent bg-clip-text bg-[length:300%_auto]",
   {
     variants: {
       variant: {

@@ -4,13 +4,13 @@ import { cn } from '@/lib/utils';
 import { VariantProps, cva } from 'class-variance-authority';
 
 const unifiedCardVariants = cva(
-  "rounded-3xl transition-all duration-300 border shadow-sm",
+  "rounded-3xl transition-all duration-300 border shadow-sm backdrop-blur-xl",
   {
     variants: {
       variant: {
-        light: "bg-white/70 backdrop-blur-xl border-white/50 hover:bg-white/80 hover:shadow-md",
-        medium: "bg-white/60 backdrop-blur-xl border-white/40 hover:bg-white/75 hover:shadow-md",
-        heavy: "bg-white/50 backdrop-blur-xl border-white/30 hover:bg-white/65 hover:shadow-lg",
+        light: "bg-white/70 border-white/50 hover:bg-white/80 hover:shadow-md",
+        medium: "bg-white/60 border-white/40 hover:bg-white/75 hover:shadow-md",
+        heavy: "bg-white/50 border-white/30 hover:bg-white/65 hover:shadow-lg",
         solid: "bg-white border-gray-200 hover:shadow-md",
       },
       interactive: {

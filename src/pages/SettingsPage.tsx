@@ -3,7 +3,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { ModernTitle } from '@/components/ui/modern-title';
+import { PageTitle } from '@/components/ui/page-title';
 import GameSettings from '@/components/GameSettings';
 
 const SettingsPage: React.FC = () => {
@@ -37,9 +37,9 @@ const SettingsPage: React.FC = () => {
             <ArrowLeft className="h-4 w-4" />
           </Button>
           
-          <ModernTitle variant="h1" className="text-3xl md:text-4xl">
+          <PageTitle variant="h1" withSparkles={true}>
             Paramètres
-          </ModernTitle>
+          </PageTitle>
         </div>
 
         {/* Settings Content */}

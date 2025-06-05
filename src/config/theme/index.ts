@@ -18,24 +18,24 @@ export const Z_INDEX = {
   max: 50,
 };
 
-// Configuration du fond animé
+// Configuration du fond animé optimisée
 export const BACKGROUND_CONFIG = {
   grid: {
     size: '24px',
     color: '#DADADA',
-    opacity: 0.1,
+    opacity: 0.08,
   },
   dots: {
     colors: ['#C4B5FD', '#FDBA74', '#6EE7B7', '#93C5FD'],
-    sizes: ['2px', '4px', '6px', '8px'],
-    count: { default: 40, subtle: 25, minimal: 15 },
-    speed: { default: 0.5, subtle: 0.3, minimal: 0.2 },
+    sizes: ['2px', '4px', '6px'],
+    count: { default: 30, subtle: 20, minimal: 10 },
+    speed: { default: 0.4, subtle: 0.25, minimal: 0.15 },
   },
   waves: {
     primaryColor: '#E9D5FF',
     secondaryColor: '#FDE68A',
-    heightPercentage: 20,
-    animationDuration: 15,
+    heightPercentage: 15,
+    animationDuration: 20,
   },
 };
 
