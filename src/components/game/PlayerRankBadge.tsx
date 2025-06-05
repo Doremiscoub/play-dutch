@@ -19,14 +19,14 @@ export default function PlayerRankBadge({
   const getPositionClass = () => {
     switch (position) {
       case 1:
-        return "bg-gradient-to-r from-yellow-400 to-yellow-300 text-yellow-900";
+        return "bg-gradient-to-r from-amber-400 to-yellow-300 text-amber-900";
       case 2:
         return "bg-gradient-to-r from-gray-300 to-gray-200 text-gray-700";
       case 3:
         return "bg-gradient-to-r from-amber-700 to-amber-600 text-amber-100";
       default:
         return position <= 5 
-          ? "bg-gradient-to-r from-dutch-blue-500 to-dutch-purple-500 text-white" 
+          ? "bg-gradient-to-r from-dutch-blue to-dutch-purple text-white" 
           : "bg-gradient-to-r from-gray-500 to-gray-400 text-white";
     }
   };
@@ -43,7 +43,7 @@ export default function PlayerRankBadge({
         "badge-rank flex items-center justify-center font-bold rounded-full shadow-md",
         getPositionClass(),
         sizeClasses[size],
-        showAnimation && "transition-all duration-300",
+        showAnimation && "gradient-shift",
         className
       )}
       whileHover={{ 

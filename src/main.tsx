@@ -8,14 +8,17 @@ import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
 import './styles/theme.css'
+import { ThemeProvider } from './hooks/use-theme'
 import { Toaster } from "sonner"
 import { initializeSentry, SentryErrorBoundary } from './utils/sentryConfig'
-import { UnifiedThemeProvider } from './components/ui/unified-theme-provider'
 
 // Initialize Sentry as early as possible
 initializeSentry().catch(error => {
   console.error('Failed to initialize Sentry:', error);
 });
+
+// Vérifier si le mode hors-ligne est déjà activé
+const isOfflineMode = localStorage.getItem('auth_offline_mode') === 'true';
 
 // Créer la racine React
 const root = ReactDOM.createRoot(document.getElementById('root')!);
@@ -34,26 +37,14 @@ const FallbackComponent = () => (
   </div>
 );
 
-// Rendre l'application avec UnifiedThemeProvider au plus haut niveau
+// Rendre l'application sans ClerkProvider
 root.render(
   <React.StrictMode>
     <SentryErrorBoundary fallback={FallbackComponent}>
-      <UnifiedThemeProvider defaultTheme="default" storageKey="dutch-theme">
+      <ThemeProvider>
         <App />
-        <Toaster 
-          position="top-center" 
-          richColors 
-          closeButton 
-          toastOptions={{
-            style: {
-              borderRadius: '16px',
-              background: 'rgba(255, 255, 255, 0.9)',
-              backdropFilter: 'blur(8px)',
-              border: '1px solid rgba(255, 255, 255, 0.5)',
-            }
-          }}
-        />
-      </UnifiedThemeProvider>
+        <Toaster position="top-center" richColors />
+      </ThemeProvider>
     </SentryErrorBoundary>
   </React.StrictMode>
 );

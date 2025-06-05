@@ -3,7 +3,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { animationVariants } from '@/utils/animationUtils';
 import { PageTitle } from './ui/page-title';
-import { UnifiedThemeSelector } from '@/components/ui/unified-theme-selector';
+import ThemeSelector from './ThemeSelector';
 import { Button } from './ui/button';
 import { ArrowLeft } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -52,10 +52,10 @@ const PageLayout: React.FC<PageLayoutProps> = ({
         </div>
       )}
       
-      {/* Sélecteur de thème unifié */}
+      {/* Sélecteur de thème */}
       {showThemeSelector && (
         <div className="absolute top-6 right-6 z-20">
-          <UnifiedThemeSelector />
+          <ThemeSelector />
         </div>
       )}
       

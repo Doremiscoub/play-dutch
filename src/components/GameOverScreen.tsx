@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import confetti from 'canvas-confetti';
 import { toast } from 'sonner';
@@ -14,7 +15,7 @@ import { ModernTitle } from './ui/modern-title';
 interface GameOverScreenProps {
   players: Player[];
   onRestart: () => void;
-  onContinueGame: () => void; // Signature corrigée - pas de paramètre
+  onContinueGame: (newLimit: number) => void;
   currentScoreLimit: number;
 }
 
@@ -107,9 +108,10 @@ const GameOverScreen: React.FC<GameOverScreenProps> = ({
     return () => clearInterval(confettiInterval);
   }, [winner.name]);
 
-  // Continue game - simplified without parameter
-  const handleContinueGame = () => {
-    onContinueGame();
+  // Continue game with a new limit
+  const handleContinueGame = (newLimit: number) => {
+    onContinueGame(newLimit);
+    toast.success(`La partie continue ! Nouvelle limite : ${currentScoreLimit + newLimit} points`);
   };
 
   return (

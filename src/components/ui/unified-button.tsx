@@ -8,14 +8,14 @@ const unifiedButtonVariants = cva(
   {
     variants: {
       variant: {
-        primary: "bg-gradient-to-r from-dutch-blue-500 to-dutch-purple-500 text-white hover:opacity-90 shadow-md hover:shadow-lg",
-        secondary: "bg-dutch-purple-500 text-white hover:bg-dutch-purple-600 shadow-md hover:shadow-lg",
-        accent: "bg-dutch-orange-500 text-white hover:bg-dutch-orange-600 shadow-md hover:shadow-lg",
+        primary: "bg-gradient-to-r from-dutch-blue to-dutch-purple text-white hover:opacity-90 shadow-md hover:shadow-lg",
+        secondary: "bg-dutch-purple text-white hover:bg-dutch-purple/90 shadow-md hover:shadow-lg",
+        accent: "bg-dutch-orange text-white hover:bg-dutch-orange/90 shadow-md hover:shadow-lg",
         ghost: "bg-white/70 backdrop-blur-xl border border-white/50 text-gray-800 hover:bg-white/80",
         glass: "bg-white/60 backdrop-blur-xl border border-white/40 text-gray-800 hover:bg-white/75 shadow-sm hover:shadow-md",
-        outline: "border-2 border-dutch-blue-500 text-dutch-blue-500 bg-transparent hover:bg-dutch-blue-50",
+        outline: "border-2 border-dutch-blue text-dutch-blue bg-transparent hover:bg-dutch-blue/10",
         destructive: "bg-red-500 text-white hover:bg-red-600 shadow-md hover:shadow-lg",
-        link: "text-dutch-blue-500 underline-offset-4 hover:underline",
+        link: "text-dutch-blue underline-offset-4 hover:underline",
       },
       size: {
         sm: "h-9 px-3 text-sm rounded-2xl",

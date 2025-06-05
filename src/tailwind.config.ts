@@ -1,6 +1,6 @@
-
 import type { Config } from "tailwindcss";
-import { COLORS, TYPOGRAPHY, BORDERS, SHADOWS, ANIMATIONS } from "./src/config/theme";
+import { COLORS, TYPOGRAPHY, BORDERS, SHADOWS, ANIMATIONS } from "./config/theme";
+import { SEMANTIC_COLORS, GAME_COLORS, STATE_COLORS, SURFACE_COLORS } from "./config/theme/semantic-colors";
 
 export default {
 	darkMode: ["class"],
@@ -64,7 +64,112 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// Couleurs Dutch basées sur notre configuration de thème
+				
+				// Système de couleurs Dutch sémantiques unifié
+				game: {
+					// Couleurs principales avec variants complets
+					blue: GAME_COLORS.blue,
+					'blue-light': GAME_COLORS.blueLight,
+					'blue-dark': GAME_COLORS.blueDark,
+					'blue-ultra-light': GAME_COLORS.blueUltraLight,
+					
+					purple: GAME_COLORS.purple,
+					'purple-light': GAME_COLORS.purpleLight,
+					'purple-dark': GAME_COLORS.purpleDark,
+					'purple-ultra-light': GAME_COLORS.purpleUltraLight,
+					
+					orange: GAME_COLORS.orange,
+					'orange-light': GAME_COLORS.orangeLight,
+					'orange-dark': GAME_COLORS.orangeDark,
+					'orange-ultra-light': GAME_COLORS.orangeUltraLight,
+					
+					// États avec variants
+					success: GAME_COLORS.success,
+					'success-light': GAME_COLORS.successLight,
+					'success-dark': GAME_COLORS.successDark,
+					'success-ultra-light': GAME_COLORS.successUltraLight,
+					
+					warning: GAME_COLORS.warning,
+					'warning-light': GAME_COLORS.warningLight,
+					'warning-dark': GAME_COLORS.warningDark,
+					'warning-ultra-light': GAME_COLORS.warningUltraLight,
+					
+					error: GAME_COLORS.error,
+					'error-light': GAME_COLORS.errorLight,
+					'error-dark': GAME_COLORS.errorDark,
+					'error-ultra-light': GAME_COLORS.errorUltraLight,
+					
+					info: GAME_COLORS.info,
+					'info-light': GAME_COLORS.infoLight,
+					'info-dark': GAME_COLORS.infoDark,
+					'info-ultra-light': GAME_COLORS.infoUltraLight,
+					
+					// Surfaces
+					background: GAME_COLORS.background,
+					surface: GAME_COLORS.surface,
+					'surface-container': GAME_COLORS.surfaceContainer,
+				},
+				
+				// Tokens sémantiques séparés pour plus de flexibilité
+				semantic: {
+					primary: SEMANTIC_COLORS.primary,
+					'primary-light': SEMANTIC_COLORS.primaryLight,
+					'primary-dark': SEMANTIC_COLORS.primaryDark,
+					'primary-ultra-light': SEMANTIC_COLORS.primaryUltraLight,
+					
+					secondary: SEMANTIC_COLORS.secondary,
+					'secondary-light': SEMANTIC_COLORS.secondaryLight,
+					'secondary-dark': SEMANTIC_COLORS.secondaryDark,
+					'secondary-ultra-light': SEMANTIC_COLORS.secondaryUltraLight,
+					
+					accent: SEMANTIC_COLORS.accent,
+					'accent-light': SEMANTIC_COLORS.accentLight,
+					'accent-dark': SEMANTIC_COLORS.accentDark,
+					'accent-ultra-light': SEMANTIC_COLORS.accentUltraLight,
+					
+					// États
+					success: SEMANTIC_COLORS.success,
+					'success-light': SEMANTIC_COLORS.successLight,
+					'success-dark': SEMANTIC_COLORS.successDark,
+					'success-ultra-light': SEMANTIC_COLORS.successUltraLight,
+					
+					warning: SEMANTIC_COLORS.warning,
+					'warning-light': SEMANTIC_COLORS.warningLight,
+					'warning-dark': SEMANTIC_COLORS.warningDark,
+					'warning-ultra-light': SEMANTIC_COLORS.warningUltraLight,
+					
+					error: SEMANTIC_COLORS.error,
+					'error-light': SEMANTIC_COLORS.errorLight,
+					'error-dark': SEMANTIC_COLORS.errorDark,
+					'error-ultra-light': SEMANTIC_COLORS.errorUltraLight,
+					
+					info: SEMANTIC_COLORS.info,
+					'info-light': SEMANTIC_COLORS.infoLight,
+					'info-dark': SEMANTIC_COLORS.infoDark,
+					'info-ultra-light': SEMANTIC_COLORS.infoUltraLight,
+					
+					// Surfaces
+					surface: SEMANTIC_COLORS.surface,
+					'surface-variant': SEMANTIC_COLORS.surfaceVariant,
+					'surface-container': SEMANTIC_COLORS.surfaceContainer,
+					'surface-container-high': SEMANTIC_COLORS.surfaceContainerHigh,
+					'surface-container-highest': SEMANTIC_COLORS.surfaceContainerHighest,
+					
+					// Bordures
+					border: SEMANTIC_COLORS.border,
+					'border-light': SEMANTIC_COLORS.borderLight,
+					'border-strong': SEMANTIC_COLORS.borderStrong,
+					'border-subtle': SEMANTIC_COLORS.borderSubtle,
+					
+					// Texte
+					'on-surface': SEMANTIC_COLORS.onSurface,
+					'on-surface-variant': SEMANTIC_COLORS.onSurfaceVariant,
+					'on-surface-muted': SEMANTIC_COLORS.onSurfaceMuted,
+					'on-surface-subtle': SEMANTIC_COLORS.onSurfaceSubtle,
+					'on-surface-disabled': SEMANTIC_COLORS.onSurfaceDisabled,
+				},
+				
+				// Couleurs legacy Dutch pour compatibilité
 				dutch: {
 					blue: COLORS.blue.DEFAULT,
 					'blue-light': COLORS.blue.light,
@@ -83,6 +188,8 @@ export default {
 					card: COLORS.white,
 					primary: COLORS.blue.DEFAULT,
 				},
+				
+				// Couleurs iOS pour cohérence
 				ios: {
 					blue: '#0A84FF',
 					green: '#30D158', 
@@ -187,8 +294,8 @@ export default {
 					},
 				},
 				'shimmer': {
-					'0%': { backgroundPosition: '-200% 0' },
-					'100%': { backgroundPosition: '200% 0' },
+					'0%': { transform: 'translateX(-100%)' },
+					'100%': { transform: 'translateX(100%)' },
 				},
 			},
 			animation: {
@@ -200,7 +307,7 @@ export default {
 				'float': 'float 6s infinite ease-in-out',
 				'ios-bounce': 'ios-bounce 2s infinite ease-in-out',
 				'ios-pop': 'ios-pop 0.3s ease-out',
-				'shimmer': 'shimmer 3s infinite linear',
+				'shimmer': 'shimmer 2s infinite linear',
 			},
 			backdropBlur: {
 				xs: '2px',

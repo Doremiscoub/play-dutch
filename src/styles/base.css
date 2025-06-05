@@ -5,69 +5,21 @@
 
 @layer base {
   :root {
-    /* Variables Dutch principales */
+    /* Variables de couleur Dutch - Style iOS 19 */
     --dutch-primary: #0A84FF;
-    --dutch-secondary: #8B5CF6;
+    --dutch-secondary: #5856D6;
     --dutch-accent: #FF9F0A;
     --dutch-background: #F2F2F7;
     
-    /* Variables Dutch bleues */
-    --dutch-blue: #0A84FF;
-    --dutch-blue-light: #5AC8FA;
-    --dutch-blue-dark: #0062CC;
-    --dutch-blue-50: #E6F3FF;
-    --dutch-blue-100: #CCE7FF;
-    --dutch-blue-500: #0A84FF;
-    --dutch-blue-600: #0062CC;
-    
-    /* Variables Dutch violettes */
-    --dutch-purple: #8B5CF6;
-    --dutch-purple-light: #C4B5FD;
-    --dutch-purple-dark: #6D28D9;
-    --dutch-purple-50: #F3EEFF;
-    --dutch-purple-100: #E7DDFF;
-    --dutch-purple-500: #8B5CF6;
-    --dutch-purple-600: #6D28D9;
-    
-    /* Variables Dutch oranges */
-    --dutch-orange: #FF9F0A;
-    --dutch-orange-light: #FFD60A;
-    --dutch-orange-dark: #E67700;
-    --dutch-orange-50: #FFF4E6;
-    --dutch-orange-100: #FFE9CC;
-    --dutch-orange-500: #FF9F0A;
-    --dutch-orange-600: #E67700;
-    
-    /* Autres couleurs Dutch */
-    --dutch-pink: #FF375F;
-    --dutch-red: #FF453A;
-    --dutch-green: #30D158;
-    --dutch-yellow: #FFD60A;
-    --dutch-card: #FFFFFF;
-    
-    /* Bordures et rayons */
+    /* Bordures */
     --radius: 1.5rem;
     --border: 210 40% 96.1%;
     --input: 214 32% 91%;
     --ring: 222.2 84% 4.9%;
     
-    /* Variables de thème par défaut */
+    /* Couleurs de base */
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
-    --primary: 221.2 83.2% 53.3%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 222.2 84% 4.9%;
-    --muted: 210 40% 96%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96%;
-    --accent-foreground: 222.2 84% 4.9%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
   }
 
   * {

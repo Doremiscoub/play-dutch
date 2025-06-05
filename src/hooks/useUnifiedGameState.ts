@@ -21,7 +21,7 @@ export interface UnifiedGameStateReturn {
   handleRequestEndGame: () => void;
   handleConfirmEndGame: () => boolean;
   handleCancelEndGame: () => void;
-  handleContinueGame: () => void; // Signature corrigée - pas de paramètre
+  handleContinueGame: () => void;
   handleRestart: () => void;
   createNewGame: (playerNames: string[], scoreLimit?: number) => void;
 }

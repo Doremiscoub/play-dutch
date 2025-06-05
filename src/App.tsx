@@ -4,6 +4,7 @@
  */
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { Toaster } from "sonner";
 import * as Sentry from '@sentry/react';
 import { addBreadcrumb } from './utils/sentryConfig';
 import AnimatedBackground from './components/AnimatedBackground';
@@ -31,6 +32,7 @@ import AppLayout from './components/layout/AppLayout';
 
 // Contexte
 import { SupabaseAuthProvider } from './context/SupabaseAuthContext';
+import { UnifiedThemeProvider } from './components/ui/unified-theme-provider';
 
 // Composant pour suivre les changements de route pour Sentry
 const RouteTracker = () => {
@@ -68,62 +70,79 @@ const GameSetupWrapper = () => {
  */
 const App: React.FC = () => {
   return (
-    <SupabaseAuthProvider>
-      <Router>
-        {/* Fond animé global avec vagues et pastilles - visible sur toute l'app */}
-        <div className="fixed inset-0 w-full h-full -z-10">
-          <AnimatedBackground />
-        </div>
-        
-        <RouteTracker />
-        <Routes>
-          <Route path="/" element={<AppLayout />}>
-            {/* Pages d'authentification */}
-            <Route path="sign-in" element={<SignIn />} />
-            <Route path="sign-up" element={<SignUp />} />
-            
-            {/* Pages principales - RESTAURATION DE LA LANDING PAGE ORIGINALE */}
-            <Route index element={<Home />} />
-            <Route path="simple" element={<Index />} />
-            <Route path="game/setup" element={<GameSetupWrapper />} />
-            <Route path="game" element={
-              <ProtectedRoute>
-                <GamePage />
-              </ProtectedRoute>
-            } />
-            <Route path="history" element={
-              <ProtectedRoute>
-                <History />
-              </ProtectedRoute>
-            } />
-            <Route path="rules" element={<Rules />} />
-            <Route path="settings" element={
-              <ProtectedRoute>
-                <SettingsPage />
-              </ProtectedRoute>
-            } />
-            
-            {/* Pages SEO / Contenu */}
-            <Route path="about" element={<AboutPage />} />
-            <Route path="privacy" element={<PrivacyPage />} />
-            <Route path="terms" element={<TermsPage />} />
-            <Route path="faq" element={<FAQPage />} />
-            <Route path="strategy" element={<GuideStrategy />} />
-            
-            {/* Redirections SEO friendly */}
-            <Route path="aide" element={<Navigate to="/faq" replace />} />
-            <Route path="questions" element={<Navigate to="/faq" replace />} />
-            <Route path="guide" element={<Navigate to="/strategy" replace />} />
-            <Route path="astuces" element={<Navigate to="/strategy" replace />} />
-            
-            {/* Redirection pour les routes non définies */}
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Route>
-        </Routes>
-        
-        <PWAInstallPrompt />
-      </Router>
-    </SupabaseAuthProvider>
+    <UnifiedThemeProvider>
+      <SupabaseAuthProvider>
+        <Router>
+          {/* Fond animé global avec vagues et pastilles - visible sur toute l'app */}
+          <div className="fixed inset-0 w-full h-full -z-10">
+            <AnimatedBackground />
+          </div>
+          
+          <RouteTracker />
+          <Routes>
+            <Route path="/" element={<AppLayout />}>
+              {/* Pages d'authentification */}
+              <Route path="sign-in" element={<SignIn />} />
+              <Route path="sign-up" element={<SignUp />} />
+              
+              {/* Pages principales - RESTAURATION DE LA LANDING PAGE ORIGINALE */}
+              <Route index element={<Home />} />
+              <Route path="simple" element={<Index />} />
+              <Route path="game/setup" element={<GameSetupWrapper />} />
+              <Route path="game" element={
+                <ProtectedRoute>
+                  <GamePage />
+                </ProtectedRoute>
+              } />
+              <Route path="history" element={
+                <ProtectedRoute>
+                  <History />
+                </ProtectedRoute>
+              } />
+              <Route path="rules" element={<Rules />} />
+              <Route path="settings" element={
+                <ProtectedRoute>
+                  <SettingsPage />
+                </ProtectedRoute>
+              } />
+              
+              {/* Pages SEO / Contenu */}
+              <Route path="about" element={<AboutPage />} />
+              <Route path="privacy" element={<PrivacyPage />} />
+              <Route path="terms" element={<TermsPage />} />
+              <Route path="faq" element={<FAQPage />} />
+              <Route path="strategy" element={<GuideStrategy />} />
+              
+              {/* Redirections SEO friendly */}
+              <Route path="aide" element={<Navigate to="/faq" replace />} />
+              <Route path="questions" element={<Navigate to="/faq" replace />} />
+              <Route path="guide" element={<Navigate to="/strategy" replace />} />
+              <Route path="astuces" element={<Navigate to="/strategy" replace />} />
+              
+              {/* Redirection pour les routes non définies */}
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Route>
+          </Routes>
+          
+          {/* Configuration globale du système de toast */}
+          <Toaster 
+            position="top-center" 
+            richColors 
+            closeButton 
+            toastOptions={{
+              style: {
+                borderRadius: '16px',
+                background: 'rgba(255, 255, 255, 0.9)',
+                backdropFilter: 'blur(8px)',
+                border: '1px solid rgba(255, 255, 255, 0.5)',
+              }
+            }}
+          />
+          
+          <PWAInstallPrompt />
+        </Router>
+      </SupabaseAuthProvider>
+    </UnifiedThemeProvider>
   );
 };
 
