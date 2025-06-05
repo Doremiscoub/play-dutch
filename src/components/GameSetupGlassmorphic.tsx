@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import EnhancedLocalGameSetup from './game-setup/EnhancedLocalGameSetup';
+import GlassmorphicPlayerSetup from './game-setup/GlassmorphicPlayerSetup';
 import TournamentMode from './TournamentMode';
 import { UnifiedTabs } from '@/components/ui/unified-tabs';
 import { Play, Trophy } from 'lucide-react';
@@ -53,7 +53,7 @@ const GameSetupGlassmorphic: React.FC<GameSetupGlassmorphicProps> = ({
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3 }}
             >
-              <EnhancedLocalGameSetup onStartGame={onStartGame} />
+              <GlassmorphicPlayerSetup onStartGame={onStartGame} />
             </motion.div>
           )}
 

@@ -1,7 +1,8 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Settings, Plus } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { EnhancedButton } from '@/components/ui/enhanced-button';
 import useGameState from '@/hooks/useGameState';
 import ScoreBoardWithAds from '@/components/scoreboard/ScoreBoardWithAds';
@@ -166,31 +167,9 @@ const GamePage: React.FC = () => {
 
   return (
     <div className="min-h-screen relative">
-      {/* Header with enhanced Back and Settings buttons */}
-      <div className="absolute top-4 left-4 right-4 z-50 flex justify-between">
-        <EnhancedButton
-          onClick={handleBackToSetup}
-          variant="glass"
-          size="icon"
-          effect="glow"
-          aria-label="Retour"
-        >
-          <ArrowLeft className="h-5 w-5" />
-        </EnhancedButton>
-        
-        <EnhancedButton
-          variant="glass"
-          size="icon"
-          effect="glow"
-          aria-label="Paramètres"
-        >
-          <Settings className="h-5 w-5" />
-        </EnhancedButton>
-      </div>
-
       {/* Tournament Progress (if in tournament mode) */}
       {gameMode === 'tournament' && currentTournament && (
-        <div className="pt-20 px-4 pb-4">
+        <div className="pt-4 px-4 pb-4">
           <TournamentProgress
             tournament={currentTournament}
             currentProgress={getTournamentProgress()}
@@ -238,7 +217,7 @@ const GamePage: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className={gameMode === 'tournament' ? "pt-4" : "pt-20"}
+            className={gameMode === 'tournament' ? "pt-4" : ""}
           >
             <ScoreBoardWithAds
               players={players}
