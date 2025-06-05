@@ -73,8 +73,11 @@ const App: React.FC = () => {
     <UnifiedThemeProvider>
       <SupabaseAuthProvider>
         <Router>
-          {/* Votre fond animé global adoré avec les vagues et pastilles ! */}
-          <AnimatedBackground />
+          {/* Fond animé global avec vagues et pastilles - visible sur toute l'app */}
+          <div className="fixed inset-0 w-full h-full -z-10">
+            <AnimatedBackground />
+          </div>
+          
           <RouteTracker />
           <Routes>
             <Route path="/" element={<AppLayout />}>
