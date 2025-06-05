@@ -14,17 +14,19 @@ const LocalGameSetup: React.FC<LocalGameSetupProps> = ({ onStartGame }) => {
   const [playerNames, setPlayerNames] = useState<string[]>(Array(4).fill('').map((_, i) => `Joueur ${i + 1}`));
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleNumPlayersChange = (increment: boolean) => {
-    const newNum = increment 
-      ? Math.min(numPlayers + 1, 10) 
-      : Math.max(numPlayers - 1, 2);
+  const handleNumPlayersChange = (newCount: number) => {
+    setNumPlayers(newCount);
     
-    setNumPlayers(newNum);
-    
-    if (increment && numPlayers < 10) {
-      setPlayerNames([...playerNames, `Joueur ${numPlayers + 1}`]);
-    } else if (!increment && numPlayers > 2) {
-      setPlayerNames(playerNames.slice(0, -1));
+    if (newCount > playerNames.length) {
+      // Add new players
+      const newNames = [...playerNames];
+      for (let i = playerNames.length; i < newCount; i++) {
+        newNames.push(`Joueur ${i + 1}`);
+      }
+      setPlayerNames(newNames);
+    } else if (newCount < playerNames.length) {
+      // Remove excess players
+      setPlayerNames(playerNames.slice(0, newCount));
     }
   };
 
@@ -61,8 +63,8 @@ const LocalGameSetup: React.FC<LocalGameSetupProps> = ({ onStartGame }) => {
       <div className="space-y-2">
         <h3 className="text-lg font-medium">Nombre de joueurs</h3>
         <PlayerCountSelector 
-          numPlayers={numPlayers} 
-          onNumPlayersChange={handleNumPlayersChange} 
+          count={numPlayers} 
+          onChange={handleNumPlayersChange} 
         />
       </div>
       

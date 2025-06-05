@@ -1,8 +1,8 @@
+
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Shuffle, Plus, Minus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { UnifiedButton } from '@/components/ui/unified-button';
 
 interface PlayerControlsProps {
   onShuffle: () => void;

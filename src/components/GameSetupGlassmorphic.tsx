@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Users, Settings, Play } from 'lucide-react';
@@ -89,7 +90,7 @@ const GameSetupGlassmorphic: React.FC<GameSetupProps> = ({ onStartGame }) => {
             </Button>
           )}
 
-          <Button variant="primary" onClick={handleStartGame} className="w-full">
+          <Button variant="dutch-primary" onClick={handleStartGame} className="w-full">
             <Play className="w-4 h-4 mr-2" />
             Commencer la partie
           </Button>
