@@ -2,7 +2,7 @@
 import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { useLocalStorage } from './use-local-storage';
 import { useGamePersistence } from './useGamePersistence';
-import { useSimplifiedGameInitialization } from './useSimplifiedGameInitialization';
+import { useGameInitialization } from './useGameInitialization';
 import { useGameContinuation } from './useGameContinuation';
 import { useRoundManagement } from './useRoundManagement';
 
@@ -23,7 +23,7 @@ export const useGameState = () => {
     createNewGame,
     isInitialized,
     initError
-  } = useSimplifiedGameInitialization();
+  } = useGameInitialization();
   
   const { 
     loadGameState,
