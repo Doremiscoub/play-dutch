@@ -10,6 +10,7 @@ import './index.css'
 import './styles/theme.css'
 import { Toaster } from "sonner"
 import { initializeSentry, SentryErrorBoundary } from './utils/sentryConfig'
+import { UnifiedThemeProvider } from './components/ui/unified-theme-provider'
 
 // Initialize Sentry as early as possible
 initializeSentry().catch(error => {
@@ -36,12 +37,14 @@ const FallbackComponent = () => (
   </div>
 );
 
-// Rendre l'application avec uniquement UnifiedThemeProvider (suppression de ThemeProvider)
+// Rendre l'application avec UnifiedThemeProvider au plus haut niveau
 root.render(
   <React.StrictMode>
     <SentryErrorBoundary fallback={FallbackComponent}>
-      <App />
-      <Toaster position="top-center" richColors />
+      <UnifiedThemeProvider>
+        <App />
+        <Toaster position="top-center" richColors />
+      </UnifiedThemeProvider>
     </SentryErrorBoundary>
   </React.StrictMode>
 );
