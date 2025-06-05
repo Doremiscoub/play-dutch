@@ -116,7 +116,7 @@ export const useAICommentator = () => {
       return getRandomFromArray(adviceTemplates.low_performance);
     } else if (playerStats.improvementRate < -2) {
       return getRandomFromArray(adviceTemplates.good_streak);
-    } else if (context.gap > 15 && context.strugglingPlayer === player.name) {
+    } else if (context.gap && context.gap > 15 && context.strugglingPlayer === player.name) {
       return getRandomFromArray(adviceTemplates.comeback_potential);
     }
 
@@ -148,13 +148,13 @@ export const useAICommentator = () => {
         `${context.gap} points d'écart... Tout peut basculer d'une seconde à l'autre ! 💥`
       ],
       poor_performance: [
-        `Aïe aïe aïe... Moyenne de ${context.averageScore.toFixed(1)} au dernier tour ! Ça pique ! 😬`,
-        `Les cartes ne sont pas tendres ce soir ! ${context.averageScore.toFixed(1)} de moyenne... Courage ! 💪`,
-        `${context.averageScore.toFixed(1)} points en moyenne... Il va falloir se ressaisir ! 🎯`
+        `Aïe aïe aïe... Moyenne de ${context.averageScore?.toFixed(1)} au dernier tour ! Ça pique ! 😬`,
+        `Les cartes ne sont pas tendres ce soir ! ${context.averageScore?.toFixed(1)} de moyenne... Courage ! 💪`,
+        `${context.averageScore?.toFixed(1)} points en moyenne... Il va falloir se ressaisir ! 🎯`
       ],
       endgame_pressure: [
         `La pression monte ! ${context.leadingPlayer} approche dangereusement des ${scoreLimit} points ! 🎯`,
-        `Plus que ${(scoreLimit - players.find(p => p.name === context.leadingPlayer)?.totalScore || 0)} points et c'est fini ! Qui va craquer ? 🔥`,
+        `Plus que ${(scoreLimit - (players.find(p => p.name === context.leadingPlayer)?.totalScore || 0))} points et c'est fini ! Qui va craquer ? 🔥`,
         `Final rush ! ${context.leadingPlayer} sent la victoire... mais rien n'est joué ! ⚡`
       ],
       early_game: [
@@ -170,11 +170,11 @@ export const useAICommentator = () => {
     };
 
     const templates = commentTemplates[context.type] || commentTemplates.general;
-    const comment = getRandomFromArray(templates);
+    const comment: string = getRandomFromArray(templates);
     
     // Éviter les répétitions
     const availableComments = templates.filter(t => !commentHistory.includes(t));
-    const finalComment = availableComments.length > 0 ? 
+    const finalComment: string = availableComments.length > 0 ? 
       getRandomFromArray(availableComments) : comment;
 
     // Générer un conseil stratégique si approprié
@@ -202,7 +202,7 @@ export const useAICommentator = () => {
   };
 };
 
-// Fonction utilitaire
+// Fonction utilitaire avec typage explicite
 const getRandomFromArray = <T>(array: T[]): T => {
   return array[Math.floor(Math.random() * array.length)];
 };
