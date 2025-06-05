@@ -83,15 +83,6 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
           onPlayerSelect={handlePlayerSelect}
         />
 
-        {/* Sticky Action Buttons */}
-        <StickyActionButtons
-          onAddRound={handleAddRound}
-          onUndo={handleUndo}
-          onEndGame={handleEndGame}
-          canUndo={roundHistory.length > 0}
-          canEndGame={roundCount > 0}
-        />
-
         {/* End Game Confirmation */}
         <EndGameConfirmationDialog
           isOpen={showGameEndConfirmation}
@@ -99,6 +90,15 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
           onCancel={onCancelEndGame}
         />
       </div>
+
+      {/* Sticky Action Buttons - Outside main container for proper positioning */}
+      <StickyActionButtons
+        onAddRound={handleAddRound}
+        onUndo={handleUndo}
+        onEndGame={handleEndGame}
+        canUndo={roundHistory.length > 0}
+        canEndGame={true}
+      />
     </div>
   );
 };

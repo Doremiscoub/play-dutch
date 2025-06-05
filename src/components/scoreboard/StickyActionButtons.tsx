@@ -20,8 +20,8 @@ const StickyActionButtons: React.FC<StickyActionButtonsProps> = ({
   canEndGame
 }) => {
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col gap-3">
-      {/* Nouvelle manche */}
+    <div className="fixed bottom-6 right-6 z-[9999] flex flex-col gap-3">
+      {/* Nouvelle manche - Toujours visible */}
       <motion.div
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -29,16 +29,16 @@ const StickyActionButtons: React.FC<StickyActionButtonsProps> = ({
       >
         <Button
           onClick={onAddRound}
-          variant="gradient"
+          variant="y2k-blue"
           size="icon-lg"
-          className="w-14 h-14 rounded-full shadow-lg hover:shadow-xl bg-gradient-to-r from-dutch-blue to-dutch-purple"
+          className="w-14 h-14 rounded-full shadow-lg hover:shadow-xl"
           title="Nouvelle manche"
         >
           <Plus className="h-6 w-6" />
         </Button>
       </motion.div>
 
-      {/* Annuler */}
+      {/* Annuler - Visible si on peut annuler */}
       {canUndo && (
         <motion.div
           initial={{ scale: 0, opacity: 0 }}
@@ -48,9 +48,9 @@ const StickyActionButtons: React.FC<StickyActionButtonsProps> = ({
         >
           <Button
             onClick={onUndo}
-            variant="ghost"
+            variant="vision-glass"
             size="icon-lg"
-            className="w-12 h-12 rounded-full bg-white/80 backdrop-blur-xl border border-white/60 shadow-md hover:shadow-lg text-dutch-purple hover:bg-white/90"
+            className="w-12 h-12 rounded-full shadow-md hover:shadow-lg text-dutch-purple"
             title="Annuler la dernière manche"
           >
             <RotateCcw className="h-5 w-5" />
@@ -58,7 +58,7 @@ const StickyActionButtons: React.FC<StickyActionButtonsProps> = ({
         </motion.div>
       )}
 
-      {/* Terminer la partie */}
+      {/* Terminer la partie - Toujours visible si la partie peut se terminer */}
       {canEndGame && (
         <motion.div
           initial={{ scale: 0, opacity: 0 }}
@@ -68,9 +68,9 @@ const StickyActionButtons: React.FC<StickyActionButtonsProps> = ({
         >
           <Button
             onClick={onEndGame}
-            variant="ghost"
+            variant="vision-glass"
             size="icon-lg"
-            className="w-12 h-12 rounded-full bg-white/80 backdrop-blur-xl border border-white/60 shadow-md hover:shadow-lg text-dutch-orange hover:bg-white/90"
+            className="w-12 h-12 rounded-full shadow-md hover:shadow-lg text-dutch-orange"
             title="Terminer la partie"
           >
             <Flag className="h-5 w-5" />
