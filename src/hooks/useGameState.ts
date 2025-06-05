@@ -19,6 +19,7 @@ const getRandomEmoji = () => {
 export const useGameState = () => {
   console.log('useGameState: Hook called');
   
+  // États principaux - tous les hooks doivent être appelés inconditionnellement
   const [players, setPlayers] = useState<Player[]>([]);
   const [gameStartTime, setGameStartTime] = useState<Date | null>(null);
   const [scoreLimit, setScoreLimit] = useState<number>(100);
@@ -26,10 +27,13 @@ export const useGameState = () => {
   const [isInitialized, setIsInitialized] = useState(false);
   const [initError, setInitError] = useState<string | null>(null);
   const [soundEnabled] = useLocalStorage(STORAGE_KEYS.SOUND_ENABLED, true);
+  
+  // Refs
   const lastSaveTimeRef = useRef<number>(0);
   const saveIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const initializationLock = useRef(false);
   
+  // Hooks personnalisés - doivent être appelés inconditionnellement
   const { 
     loadGameState,
     saveGameState,
@@ -51,12 +55,12 @@ export const useGameState = () => {
     handleRestart
   } = useGameContinuation(setShowGameOver, setScoreLimit, scoreLimit);
 
-  // Nettoyage initial des anciennes clés
+  // Effets - nettoyage initial
   useEffect(() => {
     cleanupLegacyStorage();
   }, []);
 
-  // Initialize game from localStorage or create new
+  // Création d'une nouvelle partie
   const createNewGame = useCallback(async (playerNames: string[]): Promise<boolean> => {
     if (initializationLock.current) {
       console.log('useGameState: Game initialization already in progress');
@@ -75,7 +79,6 @@ export const useGameState = () => {
     try {
       setInitError(null);
       
-      // Create player objects
       const newPlayers: Player[] = playerNames.map((name, index) => ({
         id: uuidv4(),
         name: name.trim() || `Joueur ${index + 1}`,
@@ -93,7 +96,6 @@ export const useGameState = () => {
       setGameStartTime(startTime);
       setIsInitialized(true);
       
-      // Save to localStorage with harmonized key
       const gameData = {
         players: newPlayers,
         gameStartTime: startTime.toISOString(),
@@ -104,8 +106,6 @@ export const useGameState = () => {
       
       localStorage.setItem(STORAGE_KEYS.CURRENT_GAME, JSON.stringify(gameData));
       localStorage.setItem(STORAGE_KEYS.GAME_ACTIVE, 'true');
-      
-      // Clear any temporary setup data
       localStorage.removeItem(STORAGE_KEYS.PLAYER_SETUP);
       
       toast.success(`Partie créée avec ${newPlayers.length} joueurs !`);
@@ -121,7 +121,7 @@ export const useGameState = () => {
     }
   }, [scoreLimit]);
 
-  // Load existing game with better error handling
+  // Chargement d'une partie existante
   const loadExistingGame = useCallback((): boolean => {
     try {
       const savedGame = localStorage.getItem(STORAGE_KEYS.CURRENT_GAME);
@@ -132,14 +132,12 @@ export const useGameState = () => {
 
       const gameData = JSON.parse(savedGame);
       
-      // Validation renforcée
       if (!gameData.players || !Array.isArray(gameData.players) || gameData.players.length === 0) {
         console.warn('useGameState: Invalid game data - no valid players');
         localStorage.removeItem(STORAGE_KEYS.CURRENT_GAME);
         return false;
       }
 
-      // Vérifier que chaque joueur a les propriétés requises
       const validPlayers = gameData.players.every((player: any) => 
         player && typeof player.name === 'string' && typeof player.totalScore === 'number'
       );
@@ -162,7 +160,6 @@ export const useGameState = () => {
       console.error('useGameState: Failed to load existing game:', error);
       localStorage.removeItem(STORAGE_KEYS.CURRENT_GAME);
       
-      // Tentative de récupération depuis la sauvegarde d'urgence
       try {
         const emergencyData = localStorage.getItem(STORAGE_KEYS.EMERGENCY_SAVE);
         if (emergencyData) {
@@ -187,7 +184,7 @@ export const useGameState = () => {
     }
   }, [setRoundHistory]);
 
-  // Sauvegarde automatique périodique améliorée
+  // Sauvegarde automatique
   useEffect(() => {
     if (!isInitialized || !players || players.length === 0) {
       return;
@@ -214,7 +211,6 @@ export const useGameState = () => {
           } else {
             console.warn('useGameState: Auto-save failed');
             
-            // Sauvegarde d'urgence en localStorage
             localStorage.setItem(STORAGE_KEYS.EMERGENCY_SAVE, JSON.stringify({
               ...gameStateToSave,
               gameStartTime: gameStateToSave.gameStartTime?.toISOString(),
@@ -241,7 +237,6 @@ export const useGameState = () => {
   useEffect(() => {
     if (isInitialized && players && players.length > 0) {
       console.log('useGameState: Game is properly initialized with players:', players.length);
-      
       localStorage.setItem(STORAGE_KEYS.GAME_ACTIVE, 'true');
       
       return () => {
@@ -250,7 +245,7 @@ export const useGameState = () => {
     }
   }, [isInitialized, players]);
 
-  // Handlers optimisés
+  // Gestion des rounds
   const handleAddRound = useCallback(async (scores: number[], dutchPlayerId?: string) => {
     console.log('useGameState: handleAddRound called', { scores, dutchPlayerId });
     
@@ -274,10 +269,8 @@ export const useGameState = () => {
           gameStartTime
         };
         
-        // Sauvegarde avec retry automatique
         const saveSuccess = await saveGameState(gameStateToSave);
         if (!saveSuccess) {
-          // Sauvegarde d'urgence
           localStorage.setItem(STORAGE_KEYS.EMERGENCY_SAVE, JSON.stringify({
             ...gameStateToSave,
             gameStartTime: gameStateToSave.gameStartTime?.toISOString(),
@@ -364,7 +357,7 @@ export const useGameState = () => {
     cleanupLegacyStorage();
   }, []);
 
-  // État memoïsé
+  // État memoïsé - toujours retourné à la fin
   const gameState = useMemo(() => ({
     players,
     roundHistory,
