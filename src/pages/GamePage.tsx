@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -9,11 +8,15 @@ import ScoreBoardWithAds from '@/components/scoreboard/ScoreBoardWithAds';
 import GameOverScreen from '@/components/GameOverScreen';
 import NewRoundScoreForm from '@/components/NewRoundScoreForm';
 import { toast } from 'sonner';
+import { useTournamentState } from '@/hooks/useTournamentState';
+import TournamentProgress from '@/components/tournament/TournamentProgress';
+import TournamentResults from '@/components/tournament/TournamentResults';
 
 const GamePage: React.FC = () => {
   const navigate = useNavigate();
   const [showScoreForm, setShowScoreForm] = useState<boolean>(false);
   const [gameInitialized, setGameInitialized] = useState<boolean>(false);
+  const [gameMode, setGameMode] = useState<'quick' | 'tournament'>('quick');
 
   const {
     players,
@@ -32,6 +35,16 @@ const GamePage: React.FC = () => {
     createNewGame
   } = useGameState();
 
+  const {
+    currentTournament,
+    createTournament,
+    startNextMatch,
+    completeMatch,
+    getCurrentMatch,
+    getTournamentProgress,
+    finalizeTournament
+  } = useTournamentState();
+
   // Initialize game on component mount
   useEffect(() => {
     const initializeGame = async () => {
@@ -39,6 +52,24 @@ const GamePage: React.FC = () => {
         const shouldReturnToGame = localStorage.getItem('dutch_return_to_game');
         if (shouldReturnToGame) {
           localStorage.removeItem('dutch_return_to_game');
+        }
+
+        // Check game mode
+        const storedGameMode = localStorage.getItem('dutch_game_mode') as 'quick' | 'tournament' || 'quick';
+        setGameMode(storedGameMode);
+
+        if (storedGameMode === 'tournament') {
+          // Initialize tournament mode
+          const tournamentConfig = JSON.parse(localStorage.getItem('dutch_tournament_config') || '{}');
+          
+          if (!currentTournament && tournamentConfig.name) {
+            createTournament(tournamentConfig.name, tournamentConfig.playerNames, tournamentConfig.rounds);
+          }
+          
+          // Start a new match if needed
+          if (currentTournament && !getCurrentMatch()) {
+            startNextMatch();
+          }
         }
 
         const success = await createNewGame();
@@ -57,7 +88,7 @@ const GamePage: React.FC = () => {
     if (!gameInitialized) {
       initializeGame();
     }
-  }, [createNewGame, navigate, gameInitialized]);
+  }, [createNewGame, navigate, gameInitialized, currentTournament, createTournament, startNextMatch, getCurrentMatch]);
 
   const openScoreForm = () => {
     setShowScoreForm(true);
@@ -74,6 +105,32 @@ const GamePage: React.FC = () => {
     }
   };
 
+  const handleTournamentGameEnd = () => {
+    if (gameMode === 'tournament' && currentTournament && players) {
+      const currentMatch = getCurrentMatch();
+      if (currentMatch) {
+        completeMatch(currentMatch.id, players);
+      }
+      
+      // Check if tournament is complete
+      const progress = getTournamentProgress();
+      if (progress.current >= progress.total) {
+        // Tournament is complete, show final results
+        finalizeTournament();
+      } else {
+        // Start next match
+        startNextMatch();
+        handleRestart();
+      }
+    }
+  };
+
+  const handleBackToSetup = () => {
+    localStorage.removeItem('dutch_game_mode');
+    localStorage.removeItem('dutch_tournament_config');
+    navigate('/game/setup');
+  };
+
   // Show loading if game isn't initialized yet
   if (!gameInitialized || !players || players.length === 0) {
     return (
@@ -84,8 +141,25 @@ const GamePage: React.FC = () => {
           className="text-center"
         >
           <div className="w-16 h-16 mx-auto mb-4 border-4 border-dutch-blue border-t-transparent rounded-full animate-spin"></div>
-          <p className="text-gray-600">Initialisation de la partie...</p>
+          <p className="text-gray-600">
+            {gameMode === 'tournament' ? 'Initialisation du tournoi...' : 'Initialisation de la partie...'}
+          </p>
         </motion.div>
+      </div>
+    );
+  }
+
+  // Show tournament results if tournament is completed
+  if (gameMode === 'tournament' && currentTournament?.isCompleted) {
+    return (
+      <div className="min-h-screen p-4 bg-gradient-to-br from-gray-50 to-white">
+        <div className="max-w-2xl mx-auto pt-8">
+          <TournamentResults
+            tournament={currentTournament}
+            onNewTournament={handleBackToSetup}
+            onBackToHome={() => navigate('/')}
+          />
+        </div>
       </div>
     );
   }
@@ -95,7 +169,7 @@ const GamePage: React.FC = () => {
       {/* Header with enhanced Back and Settings buttons */}
       <div className="absolute top-4 left-4 right-4 z-50 flex justify-between">
         <EnhancedButton
-          onClick={() => navigate('/game/setup')}
+          onClick={handleBackToSetup}
           variant="glass"
           size="icon"
           effect="glow"
@@ -113,6 +187,16 @@ const GamePage: React.FC = () => {
           <Settings className="h-5 w-5" />
         </EnhancedButton>
       </div>
+
+      {/* Tournament Progress (if in tournament mode) */}
+      {gameMode === 'tournament' && currentTournament && (
+        <div className="pt-20 px-4 pb-4">
+          <TournamentProgress
+            tournament={currentTournament}
+            currentProgress={getTournamentProgress()}
+          />
+        </div>
+      )}
 
       {/* Enhanced floating "New Round" button */}
       <motion.div
@@ -143,7 +227,7 @@ const GamePage: React.FC = () => {
           >
             <GameOverScreen
               players={players}
-              onRestart={handleRestart}
+              onRestart={gameMode === 'tournament' ? handleTournamentGameEnd : handleRestart}
               onContinueGame={handleContinueGame}
               currentScoreLimit={scoreLimit}
             />
@@ -154,16 +238,16 @@ const GamePage: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="pt-20"
+            className={gameMode === 'tournament' ? "pt-4" : "pt-20"}
           >
             <ScoreBoardWithAds
               players={players}
               roundHistory={roundHistory}
               onAddRound={handleAddNewRound}
               onUndoLastRound={handleUndoLastRound}
-              onEndGame={handleRequestEndGame}
+              onEndGame={gameMode === 'tournament' ? handleTournamentGameEnd : handleRequestEndGame}
               showGameEndConfirmation={showGameEndConfirmation}
-              onConfirmEndGame={handleConfirmEndGame}
+              onConfirmEndGame={gameMode === 'tournament' ? handleTournamentGameEnd : handleConfirmEndGame}
               onCancelEndGame={handleCancelEndGame}
               scoreLimit={scoreLimit}
               openScoreForm={openScoreForm}

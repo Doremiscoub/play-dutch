@@ -14,6 +14,18 @@ const GameSetup: React.FC = () => {
 
   const handleStartGame = (playerNames: string[]) => {
     localStorage.setItem('dutch_player_setup', JSON.stringify(playerNames));
+    localStorage.setItem('dutch_game_mode', 'quick');
+    navigate('/game');
+  };
+
+  const handleStartTournament = (tournamentName: string, playerNames: string[], rounds: number) => {
+    localStorage.setItem('dutch_player_setup', JSON.stringify(playerNames));
+    localStorage.setItem('dutch_game_mode', 'tournament');
+    localStorage.setItem('dutch_tournament_config', JSON.stringify({
+      name: tournamentName,
+      playerNames,
+      rounds
+    }));
     navigate('/game');
   };
 
@@ -72,6 +84,12 @@ const GameSetup: React.FC = () => {
             >
               🤖 IA Commentateur
             </GameBadge>
+            <GameBadge 
+              variant="special"
+              className="bg-orange-100 text-orange-800 border-orange-200"
+            >
+              🏆 Mode Tournoi
+            </GameBadge>
           </div>
         </motion.div>
 
@@ -83,7 +101,10 @@ const GameSetup: React.FC = () => {
           withHolographicEffect
           className="max-w-4xl mx-auto"
         >
-          <GameSetupGlassmorphic onStartGame={handleStartGame} />
+          <GameSetupGlassmorphic 
+            onStartGame={handleStartGame} 
+            onStartTournament={handleStartTournament}
+          />
         </EnhancedCard>
       </div>
     </div>
