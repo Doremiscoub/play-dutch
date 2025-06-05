@@ -1,9 +1,63 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useGameState } from '@/hooks/useGameState';
 import GamePageContainer from '@/components/game/GamePageContainer';
 
 const GamePage: React.FC = () => {
-  return <GamePageContainer />;
+  const navigate = useNavigate();
+  const gameState = useGameState();
+
+  // Load existing game on mount
+  useEffect(() => {
+    if (!gameState.isInitialized) {
+      const loaded = gameState.loadExistingGame();
+      if (!loaded) {
+        console.log('No existing game found, redirecting to setup');
+        navigate('/setup');
+      }
+    }
+  }, [gameState.isInitialized, gameState.loadExistingGame, navigate]);
+
+  // Show loading if not initialized
+  if (!gameState.isInitialized || !gameState.players || gameState.players.length === 0) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-dutch-blue mx-auto mb-4"></div>
+          <p>Chargement de la partie...</p>
+        </div>
+      </div>
+    );
+  }
+
+  const handleBackToSetup = () => {
+    navigate('/setup');
+  };
+
+  return (
+    <GamePageContainer
+      players={gameState.players}
+      roundHistory={gameState.roundHistory}
+      showGameOver={gameState.showGameOver}
+      showGameEndConfirmation={gameState.showGameEndConfirmation}
+      scoreLimit={gameState.scoreLimit}
+      gameMode="quick"
+      currentTournament={null}
+      tournamentProgress={null}
+      showScoreForm={false}
+      onAddRound={gameState.handleAddRound}
+      onUndoLastRound={gameState.handleUndoLastRound}
+      onRequestEndGame={gameState.handleRequestEndGame}
+      onConfirmEndGame={gameState.handleConfirmEndGame}
+      onCancelEndGame={gameState.handleCancelEndGame}
+      onContinueGame={gameState.handleContinueGame}
+      onRestart={gameState.handleRestart}
+      onOpenScoreForm={() => {}}
+      onCloseScoreForm={() => {}}
+      onBackToSetup={handleBackToSetup}
+    />
+  );
 };
 
 export default GamePage;
