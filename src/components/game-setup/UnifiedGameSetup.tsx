@@ -88,14 +88,22 @@ const UnifiedGameSetup: React.FC<UnifiedGameSetupProps> = ({ onStartGame }) => {
 
       console.log('UnifiedGameSetup: Valid player names:', validPlayerNames);
 
-      // Sauvegarder dans localStorage avec le nouveau format
-      const playerData = players.map(player => ({
-        name: player.name.trim() || `Joueur ${players.indexOf(player) + 1}`,
-        emoji: player.emoji
-      }));
+      // Nettoyer d'abord localStorage pour éviter les conflits
+      localStorage.removeItem('dutch_player_setup');
+      localStorage.removeItem('current_dutch_game');
+      localStorage.removeItem('dutch_game_active');
 
-      localStorage.setItem('dutch_player_setup', JSON.stringify(playerData));
-      console.log('UnifiedGameSetup: Saved player data to localStorage:', playerData);
+      // Sauvegarder avec le nouveau format (array de strings pour la compatibilité)
+      localStorage.setItem('dutch_player_setup', JSON.stringify(validPlayerNames));
+      console.log('UnifiedGameSetup: Saved player names to localStorage:', validPlayerNames);
+
+      // Vérifier que la sauvegarde a réussi
+      const saved = localStorage.getItem('dutch_player_setup');
+      if (!saved) {
+        throw new Error('Échec de la sauvegarde de la configuration');
+      }
+
+      console.log('UnifiedGameSetup: Verified saved data:', saved);
 
       // Attendre un peu pour s'assurer que localStorage est bien mis à jour
       await new Promise(resolve => setTimeout(resolve, 100));

@@ -41,6 +41,7 @@ export const useSimplifiedGameInitialization = () => {
       if (!playerSetup) {
         console.error('useSimplifiedGameInitialization: No player configuration found');
         setInitError('Aucune configuration de joueurs trouvée');
+        toast.error('Aucune configuration de joueurs trouvée. Veuillez configurer une partie.');
         setTimeout(() => navigate('/game/setup'), 1000);
         return false;
       }
@@ -53,31 +54,38 @@ export const useSimplifiedGameInitialization = () => {
       } catch (error) {
         console.error('useSimplifiedGameInitialization: Failed to parse player data:', error);
         setInitError('Configuration des joueurs invalide');
+        toast.error('Configuration des joueurs invalide');
+        localStorage.removeItem('dutch_player_setup'); // Nettoyer les données corrompues
         setTimeout(() => navigate('/game/setup'), 1000);
         return false;
       }
       
-      // Gérer l'ancien format (array de strings) et le nouveau format (array d'objets)
+      // Vérifier que les données sont valides
       if (!Array.isArray(playerData) || playerData.length < 2) {
         console.error('useSimplifiedGameInitialization: Invalid player data:', playerData);
         setInitError('Il faut au moins 2 joueurs pour démarrer');
+        toast.error('Il faut au moins 2 joueurs pour démarrer une partie');
         setTimeout(() => navigate('/game/setup'), 1000);
         return false;
       }
       
-      // Créer les objets Player
+      // Créer les objets Player - support pour ancien et nouveau format
       const newPlayers: Player[] = playerData.map((data: any, index: number) => {
         let name: string;
         let emoji: string;
         
         if (typeof data === 'string') {
-          // Ancien format
+          // Format simple (array de strings)
           name = data;
           emoji = getRandomEmoji();
-        } else {
-          // Nouveau format
+        } else if (data && typeof data === 'object') {
+          // Format objet
           name = data.name || `Joueur ${index + 1}`;
           emoji = data.emoji || getRandomEmoji();
+        } else {
+          // Fallback
+          name = `Joueur ${index + 1}`;
+          emoji = getRandomEmoji();
         }
         
         return {
@@ -99,8 +107,11 @@ export const useSimplifiedGameInitialization = () => {
       // Marquer le jeu comme actif
       localStorage.setItem('dutch_game_active', 'true');
       
+      // Nettoyer la configuration maintenant qu'elle a été utilisée
+      localStorage.removeItem('dutch_player_setup');
+      
       // Toast de succès
-      toast.success('Partie créée avec succès !', {
+      toast.success(`Partie créée avec ${newPlayers.length} joueurs !`, {
         duration: 2000
       });
       
@@ -108,6 +119,7 @@ export const useSimplifiedGameInitialization = () => {
     } catch (error) {
       console.error('useSimplifiedGameInitialization: Game initialization failed:', error);
       setInitError('Erreur lors de l\'initialisation du jeu');
+      toast.error('Erreur lors de l\'initialisation du jeu');
       return false;
     } finally {
       initializationInProgress.current = false;
@@ -123,6 +135,7 @@ export const useSimplifiedGameInitialization = () => {
     initializationInProgress.current = false;
     localStorage.removeItem('current_dutch_game');
     localStorage.removeItem('dutch_game_active');
+    localStorage.removeItem('dutch_player_setup');
   }, []);
 
   return {

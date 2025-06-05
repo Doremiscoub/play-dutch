@@ -36,9 +36,22 @@ const GameInitializer: React.FC<GameInitializerProps> = ({
       try {
         // Vérifier si un jeu est déjà actif
         const gameActive = localStorage.getItem('dutch_game_active');
+        console.log('GameInitializer: Game active flag:', gameActive);
+        
+        // Vérifier également si on a une configuration de joueurs
+        const playerSetup = localStorage.getItem('dutch_player_setup');
+        console.log('GameInitializer: Player setup available:', !!playerSetup);
+        
         if (gameActive === 'true') {
           console.log('GameInitializer: Game already active, skipping initialization');
           setIsInitialized(true);
+          setIsLoading(false);
+          return;
+        }
+
+        if (!playerSetup) {
+          console.log('GameInitializer: No player setup found, redirecting to setup');
+          setHasError(true);
           setIsLoading(false);
           return;
         }
@@ -52,11 +65,6 @@ const GameInitializer: React.FC<GameInitializerProps> = ({
         } else {
           console.warn('GameInitializer: Initialization failed');
           setHasError(true);
-          
-          // Ne pas rediriger automatiquement, laisser l'utilisateur choisir
-          setTimeout(() => {
-            console.log('GameInitializer: Offering manual navigation to setup');
-          }, 2000);
         }
       } catch (error) {
         console.error('GameInitializer: Initialization error:', error);
@@ -140,11 +148,11 @@ const GameInitializer: React.FC<GameInitializerProps> = ({
           </div>
           
           <h3 className="text-lg font-semibold text-gray-900 mb-2">
-            Erreur d'initialisation
+            Configuration manquante
           </h3>
           
           <p className="text-gray-600 mb-6">
-            Impossible de charger la partie. Vérifiez que vous avez configuré les joueurs correctement.
+            Aucune configuration de joueurs trouvée. Veuillez d'abord configurer une partie.
           </p>
           
           <div className="flex flex-col gap-3">
