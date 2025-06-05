@@ -1,4 +1,3 @@
-
 import React, { useMemo, useCallback, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Player } from '@/types';
@@ -118,7 +117,7 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
       {/* Couronne pour le gagnant */}
       {cardData.isWinner && (
         <motion.div
-          className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-20"
+          className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-50"
           initial={{ opacity: 0, scale: 0, rotate: -180, y: 10 }}
           animate={{ opacity: 1, scale: 1, rotate: 0, y: 0 }}
           transition={{ delay: 0.5, type: "spring", stiffness: 200, damping: 15 }}
@@ -128,7 +127,7 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
               <Crown className="h-8 w-8 text-amber-500 drop-shadow-sm" />
             </div>
             <motion.div
-              className="absolute -inset-2"
+              className="absolute -inset-2 z-50"
               animate={{ 
                 scale: [1, 1.15, 1],
                 rotate: [0, 5, -5, 0]
