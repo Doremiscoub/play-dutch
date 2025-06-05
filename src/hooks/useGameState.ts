@@ -53,38 +53,75 @@ export const useGameState = () => {
       
       if (result) {
         const { updatedPlayers, isGameOver } = result;
+        console.log('useGameState: Round added successfully, updating players', { 
+          playersCount: updatedPlayers.length, 
+          isGameOver 
+        });
+        
         setPlayers(updatedPlayers);
         
+        // Sauvegarder immédiatement l'état du jeu pour éviter la perte de données
+        const gameStateToSave = {
+          players: updatedPlayers,
+          roundHistory: [...roundHistory, { scores, dutchPlayerId }],
+          isGameOver: false,
+          scoreLimit,
+          gameStartTime
+        };
+        
+        saveGameState(gameStateToSave).then((success) => {
+          if (success) {
+            console.log('useGameState: Game state saved successfully');
+          } else {
+            console.error('useGameState: Failed to save game state');
+          }
+        });
+        
         if (isGameOver) {
+          console.log('useGameState: Game over detected, showing game over screen');
           setTimeout(() => setShowGameOver(true), 500);
         }
         
         return true;
       }
+      console.warn('useGameState: addRound returned null/false');
       return false;
     } catch (error) {
       console.error('useGameState: Error in handleAddRound:', error);
       return false;
     }
-  }, [players, addRound, setPlayers]);
+  }, [players, addRound, setPlayers, roundHistory, scoreLimit, gameStartTime, saveGameState]);
 
   const handleUndoLastRound = useCallback(() => {
     console.log('useGameState: handleUndoLastRound called');
     
     try {
       const updatedPlayers = undoLastRound(players, soundEnabled);
+      console.log('useGameState: Undo completed, updating players');
       setPlayers(updatedPlayers);
       
       if (showGameOver) {
+        console.log('useGameState: Hiding game over screen after undo');
         setShowGameOver(false);
       }
+      
+      // Sauvegarder l'état après l'annulation
+      const gameStateToSave = {
+        players: updatedPlayers,
+        roundHistory: roundHistory.slice(0, -1),
+        isGameOver: false,
+        scoreLimit,
+        gameStartTime
+      };
+      
+      saveGameState(gameStateToSave);
       
       return true;
     } catch (error) {
       console.error('useGameState: Error in handleUndoLastRound:', error);
       return false;
     }
-  }, [players, undoLastRound, setPlayers, showGameOver, soundEnabled]);
+  }, [players, undoLastRound, setPlayers, showGameOver, soundEnabled, roundHistory, scoreLimit, gameStartTime, saveGameState]);
 
   const handleConfirmEndGame = useCallback(() => {
     console.log('useGameState: handleConfirmEndGame called');
@@ -140,7 +177,8 @@ export const useGameState = () => {
     playersCount: players?.length || 0, 
     isInitialized,
     showGameOver,
-    roundCount: roundHistory?.length || 0
+    roundCount: roundHistory?.length || 0,
+    hasGameStartTime: !!gameStartTime
   });
 
   return gameState;

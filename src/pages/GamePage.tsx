@@ -17,6 +17,8 @@ const GamePage: React.FC = () => {
   const [showScoreForm, setShowScoreForm] = useState<boolean>(false);
   const [gameMode, setGameMode] = useState<'quick' | 'tournament'>('quick');
 
+  console.log('GamePage: Component rendered');
+
   const {
     players,
     roundHistory,
@@ -30,7 +32,8 @@ const GamePage: React.FC = () => {
     handleCancelEndGame,
     handleContinueGame,
     handleRestart,
-    createNewGame
+    createNewGame,
+    isInitialized
   } = useGameState();
 
   const {
@@ -62,36 +65,57 @@ const GamePage: React.FC = () => {
     }
   }, [createNewGame, navigate]);
 
-  // Initialize game configuration
+  // Initialize game configuration avec protection contre les redirections automatiques
   useEffect(() => {
     console.log('GamePage: Configuration effect running');
     
     const shouldReturnToGame = localStorage.getItem('dutch_return_to_game');
     if (shouldReturnToGame) {
+      console.log('GamePage: Removing return flag');
       localStorage.removeItem('dutch_return_to_game');
     }
 
     const storedGameMode = localStorage.getItem('dutch_game_mode') as 'quick' | 'tournament' || 'quick';
+    console.log('GamePage: Setting game mode:', storedGameMode);
     setGameMode(storedGameMode);
 
     if (storedGameMode === 'tournament') {
       const tournamentConfig = JSON.parse(localStorage.getItem('dutch_tournament_config') || '{}');
       
       if (!currentTournament && tournamentConfig.name) {
+        console.log('GamePage: Creating tournament from config');
         createTournament(tournamentConfig.name, tournamentConfig.playerNames, tournamentConfig.rounds);
       }
       
       if (currentTournament && !getCurrentMatch()) {
+        console.log('GamePage: Starting next tournament match');
         startNextMatch();
       }
     }
   }, []); // Pas de dépendances pour éviter les re-renders
 
+  // Protection contre les redirections automatiques non désirées
+  useEffect(() => {
+    if (!isInitialized && players && players.length === 0) {
+      console.log('GamePage: No players and not initialized, but staying on page to avoid redirect loop');
+      // Ne pas rediriger automatiquement si on est déjà sur la page de jeu
+      // L'utilisateur peut manuellement retourner à la configuration si nécessaire
+    }
+  }, [isInitialized, players]);
+
   // Memoïser les callbacks pour éviter les re-renders
-  const openScoreForm = useCallback(() => setShowScoreForm(true), []);
-  const closeScoreForm = useCallback(() => setShowScoreForm(false), []);
+  const openScoreForm = useCallback(() => {
+    console.log('GamePage: Opening score form');
+    setShowScoreForm(true);
+  }, []);
+  
+  const closeScoreForm = useCallback(() => {
+    console.log('GamePage: Closing score form');
+    setShowScoreForm(false);
+  }, []);
 
   const handleAddNewRound = useCallback((scores: number[], dutchPlayerId?: string) => {
+    console.log('GamePage: Adding new round with scores:', scores);
     const success = handleAddRound(scores, dutchPlayerId);
     if (success) {
       closeScoreForm();
@@ -99,6 +123,7 @@ const GamePage: React.FC = () => {
   }, [handleAddRound, closeScoreForm]);
 
   const handleBackToSetup = useCallback(() => {
+    console.log('GamePage: Manual back to setup');
     localStorage.removeItem('dutch_game_mode');
     localStorage.removeItem('dutch_tournament_config');
     navigate('/game/setup');
@@ -111,6 +136,7 @@ const GamePage: React.FC = () => {
 
   // Show tournament results if completed
   if (gameMode === 'tournament' && currentTournament?.isCompleted) {
+    console.log('GamePage: Showing tournament results');
     return (
       <div className="min-h-screen p-4 bg-gradient-to-br from-gray-50 to-white">
         <div className="max-w-2xl mx-auto pt-8">
@@ -123,6 +149,13 @@ const GamePage: React.FC = () => {
       </div>
     );
   }
+
+  console.log('GamePage: Rendering main game interface', {
+    playersCount: players?.length || 0,
+    showGameOver,
+    gameMode,
+    isInitialized
+  });
 
   return (
     <GameInitializer onInitialize={handleGameInitialization} gameMode={gameMode}>
