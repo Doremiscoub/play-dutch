@@ -11,6 +11,7 @@ import AnimatedBackground from './components/AnimatedBackground';
 
 // Pages
 import Home from './pages/Home';
+import Index from './pages/Index';
 import GamePage from './pages/GamePage';
 import GameSetup from './components/GameSetup';
 import History from './pages/History';
@@ -72,6 +73,7 @@ const App: React.FC = () => {
     <UnifiedThemeProvider>
       <SupabaseAuthProvider>
         <Router>
+          {/* Votre fond animé global adoré avec les vagues et pastilles ! */}
           <AnimatedBackground />
           <RouteTracker />
           <Routes>
@@ -81,7 +83,8 @@ const App: React.FC = () => {
               <Route path="sign-up" element={<SignUp />} />
               
               {/* Pages principales */}
-              <Route index element={<Home />} />
+              <Route index element={<Index />} />
+              <Route path="home" element={<Home />} />
               <Route path="game/setup" element={<GameSetupWrapper />} />
               <Route path="game" element={
                 <ProtectedRoute>

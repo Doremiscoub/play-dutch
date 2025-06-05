@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { UnifiedBackground } from '@/components/ui/unified-background';
 import { useSEO } from '@/hooks/useSEO';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { HeroSection } from '@/components/home/HeroSection';
@@ -37,20 +36,18 @@ const Index = () => {
         }} 
       />
       
-      <UnifiedBackground>
-        <div className="min-h-screen flex flex-col items-center justify-center px-4 pt-24 pb-10">
-          <HeroSection />
+      <div className="min-h-screen flex flex-col items-center justify-center px-4 pt-24 pb-10">
+        <HeroSection />
 
-          {/* Cartes de fonctionnalités style Uno */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl w-full mb-10">
-            {gameFeatures.map((feature, index) => (
-              <FeatureCard key={index} feature={feature} index={index} />
-            ))}
-          </div>
-
-          <FooterSection />
+        {/* Cartes de fonctionnalités style Uno */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl w-full mb-10">
+          {gameFeatures.map((feature, index) => (
+            <FeatureCard key={index} feature={feature} index={index} />
+          ))}
         </div>
-      </UnifiedBackground>
+
+        <FooterSection />
+      </div>
     </>
   );
 };
