@@ -1,6 +1,5 @@
 
 import React, { Suspense } from 'react';
-import AnimatedBackground from '@/components/AnimatedBackground';
 import GameSettings from '@/components/GameSettings';
 import { LoadingSkeleton } from '@/components/ui/loading-skeleton';
 import { ScrollSnapContainer, ScrollSnapSection } from '@/components/ui/scroll-snap-container';
@@ -60,8 +59,6 @@ const Home: React.FC = () => {
         />
 
         <ScrollSnapContainer className="min-h-screen relative overflow-hidden">
-          <AnimatedBackground />
-          
           {/* Enhanced Header with better accessibility */}
           <header className="absolute top-4 right-4 z-50 flex gap-2" id="navigation">
             <Button
