@@ -2,9 +2,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Zap, Trophy } from 'lucide-react';
-import { GameCard } from '@/components/ui/game-card';
+import { EnhancedCard } from '@/components/ui/enhanced-card';
+import { EnhancedButton } from '@/components/ui/enhanced-button';
 import { GameText, GameBadge } from '@/components/ui/game-text';
-import { UnifiedButton } from '@/components/ui/unified-button';
 import { GameFeature } from '@/types/game-features';
 
 interface FeatureCardProps {
@@ -33,10 +33,15 @@ export const FeatureCard: React.FC<FeatureCardProps> = ({ feature, index }) => {
       }}
       className="perspective-1000"
     >
-      <GameCard
-        variant="glass"
+      <EnhancedCard
+        variant="holographic"
         interactive
         padding="lg"
+        rarity="rare"
+        glow="medium"
+        withHolographicEffect
+        withSparkles={feature.color === 'electric'}
+        depth
         className={`
           flex flex-col h-full relative overflow-hidden
           ${feature.bgColor} ${feature.borderColor}
@@ -61,7 +66,7 @@ export const FeatureCard: React.FC<FeatureCardProps> = ({ feature, index }) => {
               h-16 w-16 rounded-full ${feature.bgColor} 
               flex items-center justify-center mb-6
               border-2 ${feature.borderColor}
-              shadow-lg
+              shadow-lg relative overflow-hidden
             `}
             whileHover={{ 
               scale: 1.1,
@@ -70,11 +75,16 @@ export const FeatureCard: React.FC<FeatureCardProps> = ({ feature, index }) => {
             }}
           >
             <IconComponent 
-              className={`h-8 w-8 text-${feature.color}`} 
+              className={`h-8 w-8 text-${feature.color} relative z-10`} 
             />
             {feature.color === 'electric' && (
-              <Zap className="absolute h-4 w-4 text-yellow-300 animate-pulse" />
+              <>
+                <Zap className="absolute h-4 w-4 text-yellow-300 animate-pulse top-1 right-1" />
+                <div className="absolute inset-0 bg-gradient-to-r from-yellow-200/30 to-yellow-400/30 animate-pulse rounded-full"></div>
+              </>
             )}
+            {/* Shimmer effect for icon container */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 animate-shimmer opacity-0 hover:opacity-100 transition-opacity"></div>
           </motion.div>
           
           <GameText
@@ -83,7 +93,7 @@ export const FeatureCard: React.FC<FeatureCardProps> = ({ feature, index }) => {
             color={feature.color}
             transform="uppercase"
             spacing="wider"
-            className="mb-3"
+            className="mb-3 drop-shadow-sm"
           >
             {feature.title}
           </GameText>
@@ -92,25 +102,27 @@ export const FeatureCard: React.FC<FeatureCardProps> = ({ feature, index }) => {
             variant="body"
             color="muted"
             align="center"
-            className="mb-6 flex-grow"
+            className="mb-6 flex-grow leading-relaxed"
           >
             {feature.description}
           </GameText>
           
-          <UnifiedButton 
+          <EnhancedButton 
             onClick={feature.action}
-            variant={feature.buttonVariant}
+            variant={feature.buttonVariant === 'primary' ? 'power' : 
+                    feature.buttonVariant === 'secondary' ? 'electric' : 'holographic'}
             size="lg"
-            className="w-full mt-auto font-bold tracking-wide transform hover:scale-105 transition-all"
+            effect="glow"
+            rarity={feature.title === "Jouer" ? "legendary" : "rare"}
+            withSparkles={feature.title === "Jouer"}
+            withIcon={feature.title === "Jouer"}
+            icon={feature.title === "Jouer" ? <Trophy className="w-4 h-4" /> : undefined}
+            className="w-full mt-auto font-bold tracking-wide"
           >
             {feature.buttonText}
-            {feature.title === "Jouer" && <Trophy className="ml-2 h-4 w-4" />}
-          </UnifiedButton>
+          </EnhancedButton>
         </div>
-        
-        {/* Effet de brillance */}
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -skew-x-12 animate-shimmer"></div>
-      </GameCard>
+      </EnhancedCard>
     </motion.div>
   );
 };

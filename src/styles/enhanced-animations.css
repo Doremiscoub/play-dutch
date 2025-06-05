@@ -1,0 +1,316 @@
+
+/* Enhanced gaming animations and effects */
+
+/* Perspective for 3D effects */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.perspective-500 {
+  perspective: 500px;
+}
+
+/* 3D Transform utilities */
+.transform-3d {
+  transform-style: preserve-3d;
+}
+
+/* Enhanced glow effects */
+.text-shadow-glow {
+  text-shadow: 0 0 20px currentColor, 0 0 30px currentColor, 0 0 40px currentColor;
+}
+
+.drop-shadow-glow {
+  filter: drop-shadow(0 0 15px rgba(59, 130, 246, 0.6)) drop-shadow(0 0 30px rgba(59, 130, 246, 0.3));
+}
+
+/* Holographic effects */
+.holographic-gradient {
+  background: linear-gradient(
+    45deg,
+    #ff0080, #ff8c00, #40e0d0, #ff0080, #ff8c00, #40e0d0
+  );
+  background-size: 600% 600%;
+  animation: holographic-shift 3s ease infinite;
+}
+
+@keyframes holographic-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Enhanced shimmer effects */
+.shimmer-rainbow {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    rgba(255, 0, 128, 0.1),
+    rgba(255, 140, 0, 0.1),
+    rgba(64, 224, 208, 0.1),
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  background-size: 300% 100%;
+  animation: shimmer-rainbow 2s infinite linear;
+}
+
+@keyframes shimmer-rainbow {
+  0% { background-position: -300% 0; }
+  100% { background-position: 300% 0; }
+}
+
+/* Particle effects */
+.particle-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: radial-gradient(circle, #fff 0%, transparent 70%);
+  border-radius: 50%;
+  animation: particle-float 3s infinite ease-in-out;
+}
+
+@keyframes particle-float {
+  0%, 100% {
+    transform: translateY(0) scale(0);
+    opacity: 0;
+  }
+  20% {
+    transform: translateY(-20px) scale(1);
+    opacity: 1;
+  }
+  80% {
+    transform: translateY(-40px) scale(0.8);
+    opacity: 0.8;
+  }
+}
+
+/* Enhanced button effects */
+.btn-legendary {
+  position: relative;
+  background: linear-gradient(45deg, #ffd700, #ffed4e, #ffd700);
+  background-size: 200% 200%;
+  animation: legendary-glow 2s ease infinite;
+  box-shadow: 
+    0 0 20px rgba(255, 215, 0, 0.4),
+    0 0 40px rgba(255, 215, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.btn-legendary::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(45deg, #ffd700, #ffed4e, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #ffd700);
+  background-size: 400% 400%;
+  border-radius: inherit;
+  z-index: -1;
+  animation: legendary-border 3s ease infinite;
+  filter: blur(1px);
+}
+
+@keyframes legendary-glow {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes legendary-border {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Trading card effects */
+.trading-card {
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.05) 50%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.trading-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    rgba(255, 255, 255, 0.1) 45deg,
+    transparent 90deg,
+    rgba(255, 255, 255, 0.1) 135deg,
+    transparent 180deg,
+    rgba(255, 255, 255, 0.1) 225deg,
+    transparent 270deg,
+    rgba(255, 255, 255, 0.1) 315deg,
+    transparent 360deg
+  );
+  animation: trading-card-shine 4s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes trading-card-shine {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Enhanced bounce animation */
+.animate-bounce-uno {
+  animation: bounce-uno 0.6s ease-in-out;
+}
+
+@keyframes bounce-uno {
+  0%, 100% { 
+    transform: translateY(0) scale(1);
+  }
+  25% { 
+    transform: translateY(-8px) scale(1.02);
+  }
+  50% { 
+    transform: translateY(-15px) scale(1.05);
+  }
+  75% { 
+    transform: translateY(-5px) scale(1.01);
+  }
+}
+
+/* Sparkle animation for legendary items */
+.animate-sparkle {
+  animation: sparkle 2s ease-in-out infinite;
+}
+
+@keyframes sparkle {
+  0%, 100% { 
+    opacity: 1; 
+    transform: scale(1) rotate(0deg);
+  }
+  25% { 
+    opacity: 0.8; 
+    transform: scale(1.02) rotate(90deg);
+  }
+  50% { 
+    opacity: 1; 
+    transform: scale(1.05) rotate(180deg);
+  }
+  75% { 
+    opacity: 0.9; 
+    transform: scale(1.01) rotate(270deg);
+  }
+}
+
+/* Pulsing glow for power elements */
+.animate-pulse-soft {
+  animation: pulse-soft 2s ease-in-out infinite;
+}
+
+@keyframes pulse-soft {
+  0%, 100% { 
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 0.9;
+    transform: scale(1.02);
+  }
+}
+
+/* Gradient text animations */
+.gradient-text-animated {
+  background: linear-gradient(-45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #ffeaa7, #fd79a8);
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gradient-text-flow 4s ease infinite;
+}
+
+@keyframes gradient-text-flow {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Electric/Lightning effects */
+.electric-glow {
+  position: relative;
+}
+
+.electric-glow::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(255, 235, 59, 0.2) 0%, transparent 70%);
+  animation: electric-pulse 1.5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes electric-pulse {
+  0%, 100% { 
+    opacity: 0.2;
+    transform: scale(0.95);
+  }
+  50% { 
+    opacity: 0.4;
+    transform: scale(1.05);
+  }
+}
+
+/* Fire effects */
+.fire-glow {
+  position: relative;
+}
+
+.fire-glow::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(45deg, #ff6b6b, #ff8e8e, #ff6b6b);
+  background-size: 200% 200%;
+  animation: fire-flicker 1s ease-in-out infinite alternate;
+  filter: blur(3px);
+  z-index: -1;
+  border-radius: inherit;
+}
+
+@keyframes fire-flicker {
+  0% { 
+    opacity: 0.6;
+    background-position: 0% 50%;
+  }
+  100% { 
+    opacity: 0.8;
+    background-position: 100% 50%;
+  }
+}
+
+/* Water ripple effect */
+.water-ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.water-ripple::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+  animation: water-flow 2s ease-in-out infinite;
+}
+
+@keyframes water-flow {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}

@@ -3,6 +3,7 @@
 @import url('./styles/theme.css');
 @import url('./styles/glass.css');
 @import url('./styles/animations.css');
+@import url('./styles/enhanced-animations.css');
 @import url('./styles/transitions.css');
 @import url('./styles/vision-components.css');
 @import url('./styles/typography.css');
@@ -104,5 +105,47 @@ body {
 @supports (font-variation-settings: normal) {
   body {
     font-family: 'SF Pro Text Variable', 'SF Pro Display Variable', system-ui, sans-serif;
+  }
+}
+
+/* Gaming enhancements */
+.game-element {
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+.hover-lift {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .animate-shimmer,
+  .animate-sparkle,
+  .animate-bounce-uno,
+  .animate-pulse-soft,
+  .holographic-gradient,
+  .legendary-glow,
+  .gradient-text-animated {
+    animation: none !important;
+  }
+  
+  .hover-lift:hover {
+    transform: none;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .game-badge,
+  .enhanced-button,
+  .enhanced-card {
+    border-width: 2px;
+    border-style: solid;
   }
 }
