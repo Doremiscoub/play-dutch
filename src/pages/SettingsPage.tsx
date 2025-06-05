@@ -1,10 +1,8 @@
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { PageTitle } from '@/components/ui/page-title';
 import GameSettings from '@/components/GameSettings';
+import UnifiedTopBar from '@/components/scoreboard/UnifiedTopBar';
 
 const SettingsPage: React.FC = () => {
   const navigate = useNavigate();
@@ -24,26 +22,21 @@ const SettingsPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
-        {/* Header */}
-        <div className="flex items-center gap-4 mb-8">
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={handleBack}
-            className="bg-white/70 backdrop-blur-xl border border-white/50"
-          >
-            <ArrowLeft className="h-4 w-4" />
-          </Button>
-          
-          <PageTitle variant="h1" withSparkles={true}>
-            Paramètres
-          </PageTitle>
-        </div>
+    <div className="min-h-screen">
+      {/* Unified Top Bar */}
+      <UnifiedTopBar 
+        title="Paramètres"
+        showBackButton
+        onBack={handleBack}
+        showSettings={false}
+        showRules={false}
+      />
 
-        {/* Settings Content */}
-        <GameSettings />
+      <div className="p-4 pb-20">
+        <div className="max-w-4xl mx-auto">
+          {/* Settings Content */}
+          <GameSettings />
+        </div>
       </div>
     </div>
   );

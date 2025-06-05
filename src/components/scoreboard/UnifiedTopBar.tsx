@@ -41,8 +41,10 @@ const UnifiedTopBar: React.FC<UnifiedTopBarProps> = ({
       const shouldReturnToGame = localStorage.getItem('dutch_return_to_game');
       if (shouldReturnToGame) {
         localStorage.removeItem('dutch_return_to_game');
+        navigate('/game');
+      } else {
+        navigate('/');
       }
-      navigate('/');
     }
   };
   
@@ -53,26 +55,31 @@ const UnifiedTopBar: React.FC<UnifiedTopBarProps> = ({
       transition={{ duration: 0.5 }}
       className={`sticky top-0 z-40 bg-white/95 backdrop-blur-xl border-b border-gray-200/50 shadow-sm ${className}`}
     >
-      <div className="max-w-4xl mx-auto px-4 py-8">
+      <div className="max-w-4xl mx-auto px-4 py-6">
         <div className="flex items-center justify-between">
           {/* Left side - Back button */}
           <div className="flex items-center w-16">
             {showBackButton && (
-              <Button
-                variant="ghost"
-                size="icon"
-                className="text-gray-600 hover:text-dutch-blue transition-colors hover:bg-dutch-blue/10 rounded-full"
-                onClick={handleBack}
+              <motion.div
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
               >
-                <ArrowLeft className="h-5 w-5" />
-              </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="text-gray-600 hover:text-dutch-blue transition-colors hover:bg-dutch-blue/10 rounded-full"
+                  onClick={handleBack}
+                >
+                  <ArrowLeft className="h-5 w-5" />
+                </Button>
+              </motion.div>
             )}
           </div>
           
           {/* Center - Title and info */}
           <div className="flex-1 text-center">
             <motion.h1 
-              className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight mb-3"
+              className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight mb-2"
               initial={{ opacity: 0, y: -20, scale: 0.8 }}
               animate={{ 
                 opacity: 1, 
@@ -104,7 +111,7 @@ const UnifiedTopBar: React.FC<UnifiedTopBarProps> = ({
             {/* Game info badges */}
             {(roundCount !== undefined || scoreLimit !== undefined) && (
               <motion.div 
-                className="flex items-center justify-center gap-4"
+                className="flex items-center justify-center gap-3"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.4 }}
@@ -114,7 +121,7 @@ const UnifiedTopBar: React.FC<UnifiedTopBarProps> = ({
                     whileHover={{ scale: 1.1, y: -2 }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    <Badge variant="secondary" className="bg-dutch-blue/15 text-dutch-blue border-dutch-blue/30 text-base font-semibold px-4 py-2 shadow-lg">
+                    <Badge variant="secondary" className="bg-dutch-blue/15 text-dutch-blue border-dutch-blue/30 text-sm font-semibold px-3 py-1 shadow-lg">
                       Manche {roundCount}
                     </Badge>
                   </motion.div>
@@ -125,7 +132,7 @@ const UnifiedTopBar: React.FC<UnifiedTopBarProps> = ({
                     whileHover={{ scale: 1.1, y: -2 }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    <Badge variant="secondary" className="bg-dutch-orange/15 text-dutch-orange border-dutch-orange/30 text-base font-semibold px-4 py-2 shadow-lg">
+                    <Badge variant="secondary" className="bg-dutch-orange/15 text-dutch-orange border-dutch-orange/30 text-sm font-semibold px-3 py-1 shadow-lg">
                       Limite {scoreLimit} pts
                     </Badge>
                   </motion.div>
