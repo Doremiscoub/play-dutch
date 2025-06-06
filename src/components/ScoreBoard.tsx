@@ -44,7 +44,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
 
   return (
     <div className="min-h-screen relative">
-      {/* Top Bar Unifiée */}
+      {/* Top Bar Unifiée avec style glassmorphique */}
       <UnifiedTopBar 
         title="Tableau des scores"
         roundCount={roundCount}
@@ -65,7 +65,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
           />
         </motion.div>
 
-        {/* View Toggle Buttons with Settings */}
+        {/* View Toggle Buttons - maintenant séparé du header */}
         <ScoreBoardHeader 
           currentView={currentView}
           onViewChange={handleViewChange}

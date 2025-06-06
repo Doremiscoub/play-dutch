@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { ArrowLeft, Settings } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 import GameSettings from '@/components/GameSettings';
@@ -26,7 +26,7 @@ const UnifiedTopBar: React.FC<UnifiedTopBarProps> = ({
 }) => {
   return (
     <motion.div 
-      className="sticky top-0 z-50 glass-modal border-b border-white/20 px-4 py-3"
+      className="sticky top-0 z-50 bg-white/70 backdrop-blur-xl border-b border-white/50 shadow-sm px-4 py-3"
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
@@ -39,7 +39,7 @@ const UnifiedTopBar: React.FC<UnifiedTopBarProps> = ({
               variant="ghost"
               size="icon"
               onClick={onBack}
-              className="glass-button rounded-full"
+              className="bg-white/80 backdrop-blur-xl border border-white/50 shadow-sm hover:bg-white/90 transition-all hover:-translate-y-0.5 rounded-full"
             >
               <ArrowLeft className="h-5 w-5" />
             </Button>
