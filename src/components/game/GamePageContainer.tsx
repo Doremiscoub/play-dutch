@@ -9,6 +9,7 @@ import TournamentProgress from '@/components/tournament/TournamentProgress';
 import GameModeHandler from '@/components/game/GameModeHandler';
 import NewRoundScoreForm from '@/components/NewRoundScoreForm';
 import UnifiedTopBar from '@/components/scoreboard/UnifiedTopBar';
+import AdSenseLayout from '@/components/game/AdSenseLayout';
 import { useNavigate } from 'react-router-dom';
 
 interface GamePageContainerProps {
@@ -128,51 +129,58 @@ const GamePageContainer: React.FC<GamePageContainerProps> = ({
         </div>
       )}
 
-      <AnimatePresence mode="wait">
-        {showGameOver ? (
-          <motion.div
-            key="game-over"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <GameOverScreen
-              players={players}
-              onRestart={onRestart}
-              onContinueGame={onContinueGame}
-              currentScoreLimit={scoreLimit}
-            />
-          </motion.div>
-        ) : (
-          <motion.div
-            key="game-board"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className={gameMode === 'tournament' ? "pt-4" : ""}
-          >
-            <GameModeHandler
-              gameMode={gameMode}
-              players={players}
-              onGameEnd={onRequestEndGame}
-              onRestart={onRestart}
+      {/* Layout AdSense avec 3 colonnes */}
+      <AdSenseLayout
+        isSignedIn={false}
+        adsEnabled={true}
+        isLoaded={true}
+      >
+        <AnimatePresence mode="wait">
+          {showGameOver ? (
+            <motion.div
+              key="game-over"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
             >
-              <ScoreBoardWithAds
+              <GameOverScreen
                 players={players}
-                roundHistory={roundHistory}
-                onAddRound={handleAddNewRound}
-                onUndoLastRound={onUndoLastRound}
-                onEndGame={onRequestEndGame}
-                showGameEndConfirmation={showGameEndConfirmation}
-                onConfirmEndGame={onConfirmEndGame}
-                onCancelEndGame={onCancelEndGame}
-                scoreLimit={scoreLimit}
-                openScoreForm={onOpenScoreForm}
+                onRestart={onRestart}
+                onContinueGame={onContinueGame}
+                currentScoreLimit={scoreLimit}
               />
-            </GameModeHandler>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="game-board"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className={gameMode === 'tournament' ? "pt-4" : ""}
+            >
+              <GameModeHandler
+                gameMode={gameMode}
+                players={players}
+                onGameEnd={onRequestEndGame}
+                onRestart={onRestart}
+              >
+                <ScoreBoardWithAds
+                  players={players}
+                  roundHistory={roundHistory}
+                  onAddRound={handleAddNewRound}
+                  onUndoLastRound={onUndoLastRound}
+                  onEndGame={onRequestEndGame}
+                  showGameEndConfirmation={showGameEndConfirmation}
+                  onConfirmEndGame={onConfirmEndGame}
+                  onCancelEndGame={onCancelEndGame}
+                  scoreLimit={scoreLimit}
+                  openScoreForm={onOpenScoreForm}
+                />
+              </GameModeHandler>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </AdSenseLayout>
 
       <NewRoundScoreForm
         players={players}
