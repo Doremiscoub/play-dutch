@@ -86,25 +86,46 @@ const GamePageContainer: React.FC<GamePageContainerProps> = ({
     onCloseScoreForm();
   };
 
+  // Déterminer le titre et les props de la topbar selon l'état
+  const getTopBarProps = () => {
+    if (showGameOver) {
+      return {
+        title: "Partie terminée",
+        showBackButton: true,
+        onBack: () => navigate('/'),
+        showSettings: true
+      };
+    }
+    
+    if (gameMode === 'tournament' && currentTournament && tournamentProgress) {
+      return null; // Pas de topbar, on utilise TournamentProgress
+    }
+    
+    return {
+      title: "Partie en cours",
+      roundCount: roundHistory.length,
+      scoreLimit: scoreLimit,
+      showBackButton: true,
+      onBack: () => navigate('/setup'),
+      showSettings: true
+    };
+  };
+
+  const topBarProps = getTopBarProps();
+
   return (
     <div className="min-h-screen relative">
-      {/* UnifiedTopBar pour les parties rapides, ou progress pour tournois */}
-      {gameMode === 'tournament' && currentTournament && tournamentProgress ? (
+      {/* UnifiedTopBar centralisée - une seule source de vérité */}
+      {topBarProps && <UnifiedTopBar {...topBarProps} />}
+
+      {/* TournamentProgress pour les tournois (remplace la topbar) */}
+      {gameMode === 'tournament' && currentTournament && tournamentProgress && !showGameOver && (
         <div className="pt-4 px-4 pb-4">
           <TournamentProgress
             tournament={currentTournament}
             currentProgress={tournamentProgress}
           />
         </div>
-      ) : !showGameOver && (
-        <UnifiedTopBar 
-          title="Partie en cours"
-          roundCount={roundHistory.length}
-          scoreLimit={scoreLimit}
-          showBackButton
-          onBack={() => navigate('/setup')}
-          showSettings={true}
-        />
       )}
 
       <AnimatePresence mode="wait">

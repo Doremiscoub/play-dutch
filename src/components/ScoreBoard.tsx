@@ -2,7 +2,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ScoreBoardProps } from '@/types';
-import UnifiedTopBar from './scoreboard/UnifiedTopBar';
 import EndGameConfirmationDialog from './scoreboard/EndGameConfirmationDialog';
 import AICommentatorEnhanced from './ai-commentator/AICommentatorEnhanced';
 import StickyActionButtons from './scoreboard/StickyActionButtons';
@@ -44,14 +43,8 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
 
   return (
     <div className="min-h-screen relative">
-      {/* Top Bar unifiée avec le nouveau style fun et coloré */}
-      <UnifiedTopBar 
-        title="Tableau des scores"
-        roundCount={roundCount}
-        scoreLimit={scoreLimit}
-        showSettings={true}
-      />
-
+      {/* Pas de topbar ici - elle est gérée par GamePageContainer */}
+      
       <div className="p-4 pb-24">
         {/* Commentateur IA */}
         <motion.div
@@ -66,7 +59,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
           />
         </motion.div>
 
-        {/* View Toggle Buttons - maintenant séparé du header */}
+        {/* View Toggle Buttons */}
         <ScoreBoardHeader 
           currentView={currentView}
           onViewChange={handleViewChange}
@@ -92,7 +85,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
         />
       </div>
 
-      {/* Sticky Action Buttons - Outside main container for proper positioning */}
+      {/* Sticky Action Buttons */}
       <StickyActionButtons
         onAddRound={handleAddRound}
         onUndoLastRound={handleUndo}

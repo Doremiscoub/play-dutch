@@ -1,8 +1,8 @@
+
 import React, { useState, useEffect } from 'react';
 import confetti from 'canvas-confetti';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
 import { Player } from '@/types';
 import AnimatedBackground from './AnimatedBackground';
 import GameOverHeader from './game/GameOverHeader';
@@ -11,7 +11,6 @@ import OtherPlayersRanking from './game/OtherPlayersRanking';
 import GameOverActionButtons from './game/GameOverActionButtons';
 import { ReceiptCard } from './ui/receipt-card';
 import { ModernTitle } from './ui/modern-title';
-import UnifiedTopBar from './scoreboard/UnifiedTopBar';
 
 interface GameOverScreenProps {
   players: Player[];
@@ -26,18 +25,16 @@ const GameOverScreen: React.FC<GameOverScreenProps> = ({
   onContinueGame,
   currentScoreLimit = 100
 }) => {
-  const navigate = useNavigate();
   const [isConfettiTriggered, setIsConfettiTriggered] = useState<boolean>(false);
 
   // Sort players by score (lowest = best)
   const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
   const winner = sortedPlayers[0];
   
-  // Trigger confetti for the winner - Further enhanced
+  // Trigger confetti for the winner
   const triggerConfetti = () => {
     if (isConfettiTriggered) return;
     
-    // More abundant and colorful confetti
     confetti({
       particleCount: 200,
       spread: 100,
@@ -45,7 +42,6 @@ const GameOverScreen: React.FC<GameOverScreenProps> = ({
       colors: ['#1EAEDB', '#8B5CF6', '#F97316', '#10B981', '#FBBF24', '#FF6B6B', '#4CD4FF']
     });
     
-    // Second wave of confetti after a delay
     setTimeout(() => {
       confetti({
         particleCount: 150,
@@ -64,7 +60,6 @@ const GameOverScreen: React.FC<GameOverScreenProps> = ({
       });
     }, 700);
     
-    // Third wave for extra celebration
     setTimeout(() => {
       confetti({
         particleCount: 100,
@@ -77,7 +72,6 @@ const GameOverScreen: React.FC<GameOverScreenProps> = ({
     
     setIsConfettiTriggered(true);
     
-    // Play celebration sound if available
     try {
       const audio = new Audio('/sounds/victory.mp3');
       audio.volume = 0.6;
@@ -87,11 +81,9 @@ const GameOverScreen: React.FC<GameOverScreenProps> = ({
     }
   };
 
-  // Trigger confetti on load
   useEffect(() => {
     triggerConfetti();
     
-    // Timer to relaunch confetti periodically for continuous celebration
     const confettiInterval = setInterval(() => {
       confetti({
         particleCount: 40,
@@ -101,7 +93,6 @@ const GameOverScreen: React.FC<GameOverScreenProps> = ({
       });
     }, 3000);
     
-    // Show celebration toast
     toast.success(`🎉 ${winner.name} remporte la partie !`, {
       duration: 5000,
       position: 'top-center',
@@ -110,32 +101,19 @@ const GameOverScreen: React.FC<GameOverScreenProps> = ({
     return () => clearInterval(confettiInterval);
   }, [winner.name]);
 
-  // Continue game with a new limit
   const handleContinueGame = (newLimit: number) => {
     onContinueGame(newLimit);
     toast.success(`La partie continue ! Nouvelle limite : ${currentScoreLimit + newLimit} points`);
   };
 
-  const handleBack = () => {
-    navigate('/');
-  };
-
   return (
     <div className="min-h-screen relative overflow-hidden">
-      {/* Header unifié */}
-      <UnifiedTopBar 
-        title="Partie terminée"
-        showBackButton
-        onBack={handleBack}
-        showSettings={true}
-      />
-
-      <div className="p-4 flex flex-col items-center justify-center relative">
+      {/* Pas de topbar ici - elle est gérée par GamePageContainer */}
+      
+      <div className="p-4 flex flex-col items-center justify-center relative pt-16">
         {/* Animated festive background */}
         <div className="absolute inset-0 -z-10">
           <AnimatedBackground />
-          
-          {/* Overlay with festive gradient */}
           <div className="absolute inset-0 bg-gradient-to-br from-purple-500/15 via-transparent to-orange-500/15"></div>
         </div>
         
@@ -152,37 +130,16 @@ const GameOverScreen: React.FC<GameOverScreenProps> = ({
           </motion.div>
           
           <ReceiptCard className="w-full mb-6 p-6">
-            {/* Header with congratulations message */}
             <GameOverHeader winner={winner} />
-            
-            {/* Podium */}
             <GamePodium players={players} />
-            
-            {/* Other players ranking */}
             <OtherPlayersRanking players={players} />
           </ReceiptCard>
           
-          {/* Action buttons */}
           <GameOverActionButtons 
             onRestart={onRestart} 
             onContinueGame={handleContinueGame} 
           />
         </div>
-        
-        {/* Fixed: Replace jsx prop with standard CSS */}
-        <style>
-          {`
-          @keyframes gradientBg {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-          }
-          .gradient-animation {
-            animation: gradientBg 6s ease infinite;
-            background-size: 200% 200%;
-          }
-          `}
-        </style>
       </div>
     </div>
   );
