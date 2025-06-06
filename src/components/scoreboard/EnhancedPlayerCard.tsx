@@ -27,7 +27,6 @@ const EnhancedPlayerCard: React.FC<EnhancedPlayerCardProps> = ({
   const [isExpanded, setIsExpanded] = useState(false);
   const isWinner = rank === 1;
   const isLastPlace = rank === totalPlayers;
-  const isNearThreshold = player.totalScore >= scoreLimit * 0.8;
   
   // Calculs des statistiques
   const average = player.rounds.length > 0 
@@ -81,17 +80,18 @@ const EnhancedPlayerCard: React.FC<EnhancedPlayerCardProps> = ({
       }}
       whileHover={{ y: -2 }}
     >
-      {/* Effets de fond subtils */}
+      {/* Effets de fond subtils - Animations simplifiées */}
       <div className="absolute inset-0 overflow-hidden rounded-2xl">
         <motion.div 
           className="absolute -right-10 -top-10 w-32 h-32 bg-gradient-to-br from-dutch-purple/10 to-transparent rounded-full blur-2xl"
           animate={{ 
-            scale: [1, 1.1, 1],
-            opacity: [0.3, 0.5, 0.3]
+            scale: [1, 1.1],
+            opacity: [0.3, 0.5]
           }}
           transition={{ 
-            duration: 6, 
+            duration: 3, 
             repeat: Infinity, 
+            repeatType: "reverse",
             ease: "easeInOut" 
           }}
         />
@@ -107,7 +107,7 @@ const EnhancedPlayerCard: React.FC<EnhancedPlayerCardProps> = ({
           type: "spring", 
           stiffness: 200
         }}
-        whileHover={{ scale: 1.1, rotate: 5 }}
+        whileHover={{ scale: 1.1 }}
       >
         {rank}
       </motion.div>
@@ -130,8 +130,8 @@ const EnhancedPlayerCard: React.FC<EnhancedPlayerCardProps> = ({
               {hasPositiveTrend && (
                 <motion.div
                   className="flex items-center text-green-600"
-                  animate={{ scale: [1, 1.1, 1] }}
-                  transition={{ duration: 2, repeat: Infinity }}
+                  animate={{ scale: [1, 1.1] }}
+                  transition={{ duration: 2, repeat: Infinity, repeatType: "reverse" }}
                 >
                   <TrendingDown className="h-4 w-4" />
                 </motion.div>
