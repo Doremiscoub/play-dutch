@@ -30,11 +30,10 @@ const HistoryPage: React.FC = () => {
   return (
     <PageShell variant="default">
       <UnifiedTopBar 
-        title="Historique des parties"
+        title="Historique"
         showBackButton
         onBack={() => navigate('/')}
         showSettings={true}
-        showRules={false}
       />
 
       <div className="w-full max-w-6xl mx-auto px-4 pt-4">

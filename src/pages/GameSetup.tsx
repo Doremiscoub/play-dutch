@@ -56,7 +56,6 @@ const GameSetup: React.FC = () => {
         showBackButton
         onBack={handleBack}
         showSettings={true}
-        showRules={false}
       />
 
       {/* Contenu principal */}

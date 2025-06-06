@@ -30,7 +30,6 @@ const RulesPage: React.FC = () => {
         showBackButton
         onBack={handleBack}
         showSettings={true}
-        showRules={false}
       />
 
       <div className="p-4 pt-8 pb-20">

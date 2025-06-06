@@ -25,7 +25,7 @@ const UnifiedTopBar: React.FC<UnifiedTopBarProps> = ({
   showRules = true
 }) => {
   return (
-    <motion.div 
+    <motion.header 
       data-testid="unified-topbar"
       className="sticky top-0 z-50 bg-gradient-to-r from-blue-500/30 via-purple-500/30 to-orange-500/30 backdrop-blur-xl border-b border-white/20 px-6 py-8 shadow-lg"
       initial={{ opacity: 0, y: -30, scale: 0.95 }}
@@ -50,6 +50,7 @@ const UnifiedTopBar: React.FC<UnifiedTopBarProps> = ({
                 size="icon"
                 onClick={onBack}
                 className="glass-button bg-white/20 hover:bg-white/30 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl rounded-2xl w-14 h-14 border border-white/30"
+                aria-label="Retour"
               >
                 <ArrowLeft className="h-7 w-7 text-white" />
               </Button>
@@ -101,7 +102,7 @@ const UnifiedTopBar: React.FC<UnifiedTopBarProps> = ({
           )}
         </div>
       </div>
-    </motion.div>
+    </motion.header>
   );
 };
 

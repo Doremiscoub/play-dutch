@@ -86,7 +86,7 @@ const GamePageContainer: React.FC<GamePageContainerProps> = ({
     onCloseScoreForm();
   };
 
-  // Déterminer le titre et les props de la topbar selon l'état
+  // Déterminer les props de la topbar selon l'état
   const getTopBarProps = () => {
     if (showGameOver) {
       return {
@@ -115,7 +115,7 @@ const GamePageContainer: React.FC<GamePageContainerProps> = ({
 
   return (
     <div className="min-h-screen relative">
-      {/* UnifiedTopBar centralisée - une seule source de vérité */}
+      {/* UnifiedTopBar centralisée */}
       {topBarProps && <UnifiedTopBar {...topBarProps} />}
 
       {/* TournamentProgress pour les tournois (remplace la topbar) */}

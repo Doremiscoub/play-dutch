@@ -5,7 +5,6 @@ import { ScoreBoardProps } from '@/types';
 import EndGameConfirmationDialog from './scoreboard/EndGameConfirmationDialog';
 import AICommentatorEnhanced from './ai-commentator/AICommentatorEnhanced';
 import StickyActionButtons from './scoreboard/StickyActionButtons';
-import ScoreBoardHeader from './scoreboard/ScoreBoardHeader';
 import ScoreBoardContent from './scoreboard/ScoreBoardContent';
 import { useScoreBoardLogic } from './scoreboard/ScoreBoardHooks';
 
@@ -58,12 +57,6 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
             scoreLimit={scoreLimit}
           />
         </motion.div>
-
-        {/* View Toggle Buttons */}
-        <ScoreBoardHeader 
-          currentView={currentView}
-          onViewChange={handleViewChange}
-        />
 
         {/* Content based on current view */}
         <ScoreBoardContent
