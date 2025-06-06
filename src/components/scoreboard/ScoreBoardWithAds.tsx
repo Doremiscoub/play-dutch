@@ -28,28 +28,21 @@ const ScoreBoardWithAds: React.FC<ScoreBoardWithAdsProps> = (props) => {
     );
   }
 
+  // Le ScoreBoard gère maintenant AdSenseLayout en interne
   return (
-    <div className="relative">
-      {/* Tableau de scores principal avec toutes les props */}
-      <ScoreBoard 
-        {...props}
-        players={props.players}
-        roundHistory={props.roundHistory || []}
-        scoreLimit={props.scoreLimit || 100}
-        onAddRound={props.onAddRound}
-        onUndoLastRound={props.onUndoLastRound}
-        onEndGame={props.onEndGame}
-        showGameEndConfirmation={props.showGameEndConfirmation}
-        onConfirmEndGame={props.onConfirmEndGame}
-        onCancelEndGame={props.onCancelEndGame}
-        openScoreForm={props.openScoreForm}
-      />
-      
-      {/* Zone pour les publicités - pour l'instant vide */}
-      <div className="hidden md:block">
-        {/* Espace réservé pour les publicités futures */}
-      </div>
-    </div>
+    <ScoreBoard 
+      {...props}
+      players={props.players}
+      roundHistory={props.roundHistory || []}
+      scoreLimit={props.scoreLimit || 100}
+      onAddRound={props.onAddRound}
+      onUndoLastRound={props.onUndoLastRound}
+      onEndGame={props.onEndGame}
+      showGameEndConfirmation={props.showGameEndConfirmation}
+      onConfirmEndGame={props.onConfirmEndGame}
+      onCancelEndGame={props.onCancelEndGame}
+      openScoreForm={props.openScoreForm}
+    />
   );
 };
 

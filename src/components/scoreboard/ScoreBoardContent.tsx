@@ -2,7 +2,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Player } from '@/types';
-import SimplePlayerCard from './SimplePlayerCard';
+import EnhancedPlayerCard from './EnhancedPlayerCard';
 import ScoreTableView from '../ScoreTableView';
 
 interface ScoreBoardContentProps {
@@ -41,7 +41,7 @@ const ScoreBoardContent: React.FC<ScoreBoardContentProps> = ({
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="text-center p-8 bg-white rounded-lg shadow-lg"
+        className="text-center p-8 bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg"
       >
         <div className="space-y-3">
           <div className="text-6xl">🎮</div>
@@ -73,13 +73,14 @@ const ScoreBoardContent: React.FC<ScoreBoardContentProps> = ({
           className="space-y-4"
         >
           {playersToDisplay.map((player, index) => (
-            <SimplePlayerCard
+            <EnhancedPlayerCard
               key={player.id}
               player={player}
               rank={index + 1}
               totalPlayers={players.length}
               onSelect={onPlayerSelect}
               isSelected={selectedPlayer?.id === player.id}
+              scoreLimit={scoreLimit}
             />
           ))}
         </motion.div>

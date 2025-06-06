@@ -9,7 +9,6 @@ import TournamentProgress from '@/components/tournament/TournamentProgress';
 import GameModeHandler from '@/components/game/GameModeHandler';
 import NewRoundScoreForm from '@/components/NewRoundScoreForm';
 import UnifiedTopBar from '@/components/scoreboard/UnifiedTopBar';
-import AdSenseLayout from '@/components/game/AdSenseLayout';
 import { useNavigate } from 'react-router-dom';
 
 interface GamePageContainerProps {
@@ -98,10 +97,6 @@ const GamePageContainer: React.FC<GamePageContainerProps> = ({
       };
     }
     
-    if (gameMode === 'tournament' && currentTournament && tournamentProgress) {
-      return null; // Pas de topbar, on utilise TournamentProgress
-    }
-    
     return {
       title: "Partie en cours",
       roundCount: roundHistory.length,
@@ -117,9 +112,9 @@ const GamePageContainer: React.FC<GamePageContainerProps> = ({
   return (
     <div className="min-h-screen relative">
       {/* UnifiedTopBar centralisée */}
-      {topBarProps && <UnifiedTopBar {...topBarProps} />}
+      <UnifiedTopBar {...topBarProps} />
 
-      {/* TournamentProgress pour les tournois (remplace la topbar) */}
+      {/* TournamentProgress pour les tournois */}
       {gameMode === 'tournament' && currentTournament && tournamentProgress && !showGameOver && (
         <div className="pt-4 px-4 pb-4">
           <TournamentProgress
@@ -129,58 +124,52 @@ const GamePageContainer: React.FC<GamePageContainerProps> = ({
         </div>
       )}
 
-      {/* Layout AdSense avec 3 colonnes */}
-      <AdSenseLayout
-        isSignedIn={false}
-        adsEnabled={true}
-        isLoaded={true}
-      >
-        <AnimatePresence mode="wait">
-          {showGameOver ? (
-            <motion.div
-              key="game-over"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+      <AnimatePresence mode="wait">
+        {showGameOver ? (
+          <motion.div
+            key="game-over"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="px-4"
+          >
+            <GameOverScreen
+              players={players}
+              onRestart={onRestart}
+              onContinueGame={onContinueGame}
+              currentScoreLimit={scoreLimit}
+            />
+          </motion.div>
+        ) : (
+          <motion.div
+            key="game-board"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className={gameMode === 'tournament' ? "pt-4" : ""}
+          >
+            <GameModeHandler
+              gameMode={gameMode}
+              players={players}
+              onGameEnd={onRequestEndGame}
+              onRestart={onRestart}
             >
-              <GameOverScreen
+              <ScoreBoardWithAds
                 players={players}
-                onRestart={onRestart}
-                onContinueGame={onContinueGame}
-                currentScoreLimit={scoreLimit}
+                roundHistory={roundHistory}
+                onAddRound={handleAddNewRound}
+                onUndoLastRound={onUndoLastRound}
+                onEndGame={onRequestEndGame}
+                showGameEndConfirmation={showGameEndConfirmation}
+                onConfirmEndGame={onConfirmEndGame}
+                onCancelEndGame={onCancelEndGame}
+                scoreLimit={scoreLimit}
+                openScoreForm={onOpenScoreForm}
               />
-            </motion.div>
-          ) : (
-            <motion.div
-              key="game-board"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className={gameMode === 'tournament' ? "pt-4" : ""}
-            >
-              <GameModeHandler
-                gameMode={gameMode}
-                players={players}
-                onGameEnd={onRequestEndGame}
-                onRestart={onRestart}
-              >
-                <ScoreBoardWithAds
-                  players={players}
-                  roundHistory={roundHistory}
-                  onAddRound={handleAddNewRound}
-                  onUndoLastRound={onUndoLastRound}
-                  onEndGame={onRequestEndGame}
-                  showGameEndConfirmation={showGameEndConfirmation}
-                  onConfirmEndGame={onConfirmEndGame}
-                  onCancelEndGame={onCancelEndGame}
-                  scoreLimit={scoreLimit}
-                  openScoreForm={onOpenScoreForm}
-                />
-              </GameModeHandler>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </AdSenseLayout>
+            </GameModeHandler>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <NewRoundScoreForm
         players={players}
