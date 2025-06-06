@@ -65,7 +65,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
           />
         </motion.div>
 
-        {/* View Toggle Buttons */}
+        {/* View Toggle Buttons with Settings */}
         <ScoreBoardHeader 
           currentView={currentView}
           onViewChange={handleViewChange}

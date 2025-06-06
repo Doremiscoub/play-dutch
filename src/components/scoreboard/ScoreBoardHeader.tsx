@@ -2,6 +2,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { BarChart3, Table } from 'lucide-react';
+import GameSettings from '@/components/GameSettings';
 
 interface ScoreBoardHeaderProps {
   currentView: 'list' | 'table';
@@ -46,6 +47,11 @@ const ScoreBoardHeader: React.FC<ScoreBoardHeaderProps> = ({
         <Table className="h-4 w-4" />
         Tableau des manches
       </motion.button>
+
+      {/* Settings button using GameSettings modal */}
+      <div className="ml-4">
+        <GameSettings />
+      </div>
     </motion.div>
   );
 };
