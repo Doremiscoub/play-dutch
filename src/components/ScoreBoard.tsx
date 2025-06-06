@@ -80,7 +80,6 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
             players={players}
             roundCount={roundCount}
             scoreLimit={scoreLimit}
-            roundHistory={roundHistory}
           />
         </motion.div>
 
