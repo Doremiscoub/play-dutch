@@ -50,7 +50,7 @@ const PlayerCardRecentRounds: React.FC<PlayerCardRecentRoundsProps> = ({ player,
       <div className="flex items-center gap-2 overflow-x-auto pb-2">
         {recentRounds.map((round, index) => (
           <motion.div
-            key={`round-${round.roundNumber || index}`}
+            key={`round-${index}`}
             initial={{ opacity: 0, scale: 0.8, x: 20 }}
             animate={{ opacity: 1, scale: 1, x: 0 }}
             transition={{ 

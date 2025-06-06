@@ -97,9 +97,21 @@ const PlayerCardScore: React.FC<PlayerCardScoreProps> = ({
           }}
           initial={{ opacity: 0, scale: 0 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.8, type: "spring", stiffness: 200 }}
+          whileHover={{ scale: 1.05 }}
         >
-          👑 Champion
+          <motion.div
+            animate={{ 
+              rotate: [0, 10, -10, 0] 
+            }}
+            transition={{ 
+              duration: 3, 
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          >
+            👑
+          </motion.div>
+          Champion
         </motion.div>
       )}
     </motion.div>
