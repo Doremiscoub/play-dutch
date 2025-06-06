@@ -41,8 +41,8 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
       <motion.div
         ref={cardRef}
         className={cn(
-          "relative rounded-2xl backdrop-blur-xl border shadow-lg transition-all duration-300 cursor-pointer overflow-hidden mb-4",
-          "flex items-center gap-4 p-4 bg-white/80",
+          "relative rounded-2xl backdrop-blur-xl border shadow-lg transition-all duration-300 cursor-pointer overflow-hidden mb-6",
+          "flex items-center gap-4 p-4 bg-white/80 border-white/50",
           getCardStyle(),
           isSelected || isExpanded ? "ring-2 ring-dutch-blue/40 shadow-xl scale-[1.01]" : "hover:scale-[1.005] hover:shadow-xl"
         )}
@@ -54,8 +54,8 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: rank * 0.05 }}
       >
-        {/* Badge de rang positionné en absolu */}
-        <div className="absolute -top-2 -right-2 z-50 bg-gradient-to-r from-dutch-blue to-dutch-purple text-white text-xs font-bold rounded-full w-8 h-8 flex items-center justify-center shadow-lg">
+        {/* Badge de rang positionné à l'extrême gauche */}
+        <div className="absolute -top-3 -left-3 z-50 bg-gradient-to-r from-dutch-blue to-dutch-purple text-white text-sm font-bold rounded-full w-10 h-10 flex items-center justify-center shadow-lg border-2 border-white">
           {rank}
         </div>
 

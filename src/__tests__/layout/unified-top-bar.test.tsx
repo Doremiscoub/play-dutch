@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { BrowserRouter } from 'react-router-dom';
 import UnifiedTopBar from '@/components/scoreboard/UnifiedTopBar';
 
@@ -35,9 +35,8 @@ describe('UnifiedTopBar Component', () => {
     expect(topbar).toBeInTheDocument();
     expect(screen.getByText('Test Title')).toBeInTheDocument();
     
-    // Check for transparent header (no gradient background)
-    expect(topbar).not.toHaveClass('bg-gradient-to-r');
-    expect(topbar).toHaveClass('relative');
+    // Check for transparent header
+    expect(topbar).toHaveClass('bg-transparent');
     
     // Check for gradient text
     const title = screen.getByText('Test Title');
@@ -47,6 +46,7 @@ describe('UnifiedTopBar Component', () => {
     expect(title).toHaveClass('to-dutch-orange');
     expect(title).toHaveClass('bg-clip-text');
     expect(title).toHaveClass('text-transparent');
+    expect(title).toHaveClass('animate-gradient-x');
   });
 
   it('shows back button when enabled with glass styling', () => {
@@ -64,6 +64,7 @@ describe('UnifiedTopBar Component', () => {
     const backButton = screen.getByLabelText('Retour');
     expect(backButton).toBeInTheDocument();
     expect(backButton).toHaveClass('bg-white/20');
+    expect(backButton).toHaveClass('backdrop-blur-sm');
     
     fireEvent.click(backButton);
     expect(mockOnBack).toHaveBeenCalledTimes(1);
@@ -107,5 +108,25 @@ describe('UnifiedTopBar Component', () => {
     expect(title).toHaveClass('text-3xl');
     expect(title).toHaveClass('md:text-4xl');
     expect(title).toHaveClass('font-extrabold');
+    expect(title).toHaveClass('tracking-tight');
+  });
+
+  it('applies glassmorphic styling to buttons', () => {
+    const mockOnBack = vi.fn();
+    render(
+      <TopBarWrapper>
+        <UnifiedTopBar 
+          title="Test" 
+          showBackButton={true}
+          onBack={mockOnBack}
+          showSettings={true}
+        />
+      </TopBarWrapper>
+    );
+
+    const backButton = screen.getByLabelText('Retour');
+    expect(backButton).toHaveClass('rounded-xl');
+    expect(backButton).toHaveClass('border');
+    expect(backButton).toHaveClass('border-white/30');
   });
 });

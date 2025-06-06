@@ -72,7 +72,7 @@ const GamePageContainer: React.FC<GamePageContainerProps> = ({
             <TournamentResults
               tournament={currentTournament}
               onNewTournament={onBackToSetup}
-              onBackToHome={onBackToSetup}
+              onBackToHome={() => navigate('/')}
             />
           </div>
         </div>
@@ -106,7 +106,7 @@ const GamePageContainer: React.FC<GamePageContainerProps> = ({
       roundCount: roundHistory.length,
       scoreLimit: scoreLimit,
       showBackButton: true,
-      onBack: () => navigate('/setup'),
+      onBack: () => navigate('/'),
       showSettings: true
     };
   };

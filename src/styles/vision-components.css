@@ -1,4 +1,3 @@
-
 /* Vision Components - Styles glassmorphiques uniformes pour Dutch */
 
 .vision-card {
@@ -170,5 +169,5 @@
 }
 
 .animate-gradient-x {
-  animation: gradient-x 8s ease infinite;
+  animation: gradient-x 3s ease infinite;
 }

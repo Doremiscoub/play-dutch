@@ -36,17 +36,7 @@ const GameSetup: React.FC = () => {
   };
 
   const handleBack = () => {
-    // Vérifier s'il y a une partie active
-    const activeGame = localStorage.getItem(STORAGE_KEYS.CURRENT_GAME);
-    const gameActive = localStorage.getItem(STORAGE_KEYS.GAME_ACTIVE);
-    
-    if (activeGame && gameActive === 'true') {
-      // Retourner à la partie active
-      navigate('/game');
-    } else {
-      // Retourner à l'accueil
-      navigate('/');
-    }
+    navigate('/');
   };
 
   return (

@@ -10,17 +10,8 @@ const RulesPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState('introduction');
 
   const handleBack = () => {
-    // Check if we have an active game
-    const activeGame = localStorage.getItem('current_dutch_game');
-    const playerSetup = localStorage.getItem('dutch_player_setup');
-    
-    if (activeGame || playerSetup) {
-      // Return to active game
-      navigate('/game');
-    } else {
-      // Return to home
-      navigate('/');
-    }
+    // Always return to home page
+    navigate('/');
   };
 
   return (

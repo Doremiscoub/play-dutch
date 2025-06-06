@@ -27,12 +27,16 @@ const HistoryPage: React.FC = () => {
     { value: "mine", label: "Mes parties" }
   ];
 
+  const handleBack = () => {
+    navigate('/');
+  };
+
   return (
     <PageShell variant="default">
       <UnifiedTopBar 
         title="Historique"
         showBackButton
-        onBack={() => navigate('/')}
+        onBack={handleBack}
         showSettings={true}
       />
 

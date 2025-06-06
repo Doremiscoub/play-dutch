@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 import GameSettings from '@/components/GameSettings';
@@ -27,7 +27,7 @@ const UnifiedTopBar: React.FC<UnifiedTopBarProps> = ({
   return (
     <motion.header 
       data-testid="unified-topbar"
-      className="relative z-10 px-6 py-6"
+      className="relative z-10 px-6 py-6 bg-transparent"
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ 
@@ -46,10 +46,10 @@ const UnifiedTopBar: React.FC<UnifiedTopBarProps> = ({
               transition={{ type: "spring", stiffness: 400, damping: 15 }}
             >
               <Button
-                variant="glass"
+                variant="ghost"
                 size="icon"
                 onClick={onBack}
-                className="bg-white/20 hover:bg-white/30 backdrop-blur-sm transition-all duration-200 rounded-xl border border-white/30"
+                className="bg-white/20 hover:bg-white/30 backdrop-blur-sm transition-all duration-200 rounded-xl border border-white/30 hover:shadow-lg hover:shadow-dutch-blue/20"
                 aria-label="Retour"
               >
                 <ArrowLeft className="h-5 w-5 text-gray-700" />
@@ -61,7 +61,7 @@ const UnifiedTopBar: React.FC<UnifiedTopBarProps> = ({
         {/* Center - Title and game info */}
         <div className="flex-1 text-center">
           <motion.h1 
-            className="text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange bg-clip-text text-transparent tracking-tight"
+            className="text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange bg-clip-text text-transparent tracking-tight animate-gradient-x"
             initial={{ opacity: 0, y: 20, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ 
