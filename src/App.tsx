@@ -14,7 +14,7 @@ import Home from './pages/Home';
 import GamePage from './pages/GamePage';
 import GameSetup from './pages/GameSetup';
 import History from './pages/History';
-import Rules from './pages/Rules';
+import RulesPage from './pages/RulesPage';
 import SettingsPage from './pages/SettingsPage';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
@@ -77,7 +77,7 @@ const App: React.FC = () => {
               <Route path="setup" element={<GameSetup />} />
               <Route path="game" element={<GamePage />} />
               <Route path="history" element={<History />} />
-              <Route path="rules" element={<Rules />} />
+              <Route path="rules" element={<RulesPage />} />
               <Route path="settings" element={<SettingsPage />} />
               
               {/* Pages SEO / Contenu */}
