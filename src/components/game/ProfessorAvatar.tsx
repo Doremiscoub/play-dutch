@@ -17,28 +17,23 @@ const sizeClasses: SizeClasses = {
 const moodAnimations: MoodAnimations = {
   happy: { 
     rotate: [0, 3, -3, 0], 
-    scale: [1, 1.05, 1],
-    y: [0, -5, 0]
+    scale: [1, 1.05, 1]
   },
   excited: { 
     rotate: [0, 8, -8, 0], 
-    scale: [1, 1.1, 1],
-    y: [0, -10, 0]
+    scale: [1, 1.1, 1]
   },
   thinking: { 
     rotate: [0, 2, -2, 0], 
-    scale: [1, 1.03, 1],
-    y: [0, -3, 0]
+    scale: [1, 1.03, 1]
   },
   surprised: { 
     rotate: [0, 5, -5, 0], 
-    scale: [1, 1.15, 1],
-    y: [0, -8, 0]
+    scale: [1, 1.15, 1]
   },
   neutral: { 
     rotate: [0, 1, -1, 0], 
-    scale: [1, 1.02, 1],
-    y: [0, -2, 0]
+    scale: [1, 1.02, 1]
   }
 };
 
@@ -113,7 +108,10 @@ export default function ProfessorAvatar({
           "relative bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange p-1.5 rounded-full",
           sizeClasses[size]
         )}
-        animate={animate ? moodAnimations[mood] : {}}
+        animate={animate ? {
+          ...moodAnimations[mood],
+          y: [0, -5, 0]
+        } : {}}
         transition={{
           duration: 3,
           repeat: Infinity,
@@ -125,6 +123,7 @@ export default function ProfessorAvatar({
         whileHover={{ 
           scale: 1.15,
           rotate: [0, -10, 10, 0],
+          y: [0, -8, 0],
           boxShadow: "0 0 30px rgba(139, 92, 246, 0.5)",
           transition: { 
             duration: 0.6,
