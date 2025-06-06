@@ -6,6 +6,7 @@ import EndGameConfirmationDialog from './scoreboard/EndGameConfirmationDialog';
 import AICommentatorEnhanced from './ai-commentator/AICommentatorEnhanced';
 import StickyActionButtons from './scoreboard/StickyActionButtons';
 import ScoreBoardContent from './scoreboard/ScoreBoardContent';
+import ScoreBoardTabs from './scoreboard/ScoreBoardTabs';
 import { useScoreBoardLogic } from './scoreboard/ScoreBoardHooks';
 
 const ScoreBoard: React.FC<ScoreBoardProps> = ({
@@ -45,11 +46,18 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
       {/* Header géré par GamePageContainer via UnifiedTopBar */}
       
       <div className="p-4 pb-24">
+        {/* Toggle Liste/Tableau */}
+        <ScoreBoardTabs
+          currentView={currentView}
+          onViewChange={handleViewChange}
+        />
+
         {/* Commentateur IA */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
+          className="mb-6"
         >
           <AICommentatorEnhanced 
             players={players}

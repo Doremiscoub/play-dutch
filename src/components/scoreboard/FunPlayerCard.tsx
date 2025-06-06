@@ -41,18 +41,24 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
       <motion.div
         ref={cardRef}
         className={cn(
-          "relative rounded-3xl backdrop-blur-xl border shadow-xl transition-all duration-300 cursor-pointer overflow-hidden",
+          "relative rounded-2xl backdrop-blur-xl border shadow-lg transition-all duration-300 cursor-pointer overflow-hidden mb-4",
+          "flex items-center gap-4 p-4 bg-white/80",
           getCardStyle(),
-          isSelected || isExpanded ? "ring-4 ring-dutch-blue/40 shadow-2xl scale-[1.02]" : "hover:scale-[1.01] hover:shadow-2xl"
+          isSelected || isExpanded ? "ring-2 ring-dutch-blue/40 shadow-xl scale-[1.01]" : "hover:scale-[1.005] hover:shadow-xl"
         )}
         onClick={handleCardClick}
-        whileHover={{ y: -4 }}
+        whileHover={{ y: -2 }}
         whileTap={{ scale: 0.98 }}
         layout
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3, delay: rank * 0.1 }}
+        transition={{ duration: 0.4, delay: rank * 0.05 }}
       >
+        {/* Badge de rang positionné en absolu */}
+        <div className="absolute -top-2 -right-2 z-50 bg-gradient-to-r from-dutch-blue to-dutch-purple text-white text-xs font-bold rounded-full w-8 h-8 flex items-center justify-center shadow-lg">
+          {rank}
+        </div>
+
         {/* Effet de brillance pour le gagnant */}
         <PlayerCardShineEffect isWinner={cardData.isWinner} />
 

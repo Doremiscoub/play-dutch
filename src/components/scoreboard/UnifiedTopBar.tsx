@@ -27,11 +27,11 @@ const UnifiedTopBar: React.FC<UnifiedTopBarProps> = ({
   return (
     <motion.header 
       data-testid="unified-topbar"
-      className="sticky top-0 z-50 bg-gradient-to-r from-blue-500/30 via-purple-500/30 to-orange-500/30 backdrop-blur-xl border-b border-white/20 px-6 py-8 shadow-lg"
-      initial={{ opacity: 0, y: -30, scale: 0.95 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
+      className="relative z-10 px-6 py-6"
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
       transition={{ 
-        duration: 0.8, 
+        duration: 0.6, 
         ease: [0.23, 1, 0.32, 1],
         delay: 0.1
       }}
@@ -41,18 +41,18 @@ const UnifiedTopBar: React.FC<UnifiedTopBarProps> = ({
         <div className="flex items-center gap-4">
           {showBackButton && onBack && (
             <motion.div
-              whileHover={{ scale: 1.08, rotate: -8 }}
-              whileTap={{ scale: 0.92 }}
-              transition={{ type: "spring", stiffness: 500, damping: 15 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ type: "spring", stiffness: 400, damping: 15 }}
             >
               <Button
-                variant="ghost"
+                variant="glass"
                 size="icon"
                 onClick={onBack}
-                className="glass-button bg-white/20 hover:bg-white/30 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl rounded-2xl w-14 h-14 border border-white/30"
+                className="bg-white/20 hover:bg-white/30 backdrop-blur-sm transition-all duration-200 rounded-xl border border-white/30"
                 aria-label="Retour"
               >
-                <ArrowLeft className="h-7 w-7 text-white" />
+                <ArrowLeft className="h-5 w-5 text-gray-700" />
               </Button>
             </motion.div>
           )}
@@ -61,11 +61,11 @@ const UnifiedTopBar: React.FC<UnifiedTopBarProps> = ({
         {/* Center - Title and game info */}
         <div className="flex-1 text-center">
           <motion.h1 
-            className="text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-blue-200 via-purple-200 to-orange-200 bg-clip-text text-transparent tracking-tight drop-shadow-lg animate-gradient-x"
-            initial={{ opacity: 0, y: 30, scale: 0.9 }}
+            className="text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange bg-clip-text text-transparent tracking-tight"
+            initial={{ opacity: 0, y: 20, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ 
-              duration: 0.9, 
+              duration: 0.8, 
               delay: 0.3,
               ease: [0.23, 1, 0.32, 1]
             }}
@@ -74,16 +74,16 @@ const UnifiedTopBar: React.FC<UnifiedTopBarProps> = ({
           </motion.h1>
           {roundCount > 0 && (
             <motion.div 
-              className="flex justify-center items-center gap-6 mt-4"
-              initial={{ opacity: 0, y: 20 }}
+              className="flex justify-center items-center gap-4 mt-3"
+              initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.6 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
             >
-              <div className="px-6 py-2 bg-white/20 backdrop-blur-sm rounded-2xl border border-white/30 shadow-lg">
-                <span className="text-base font-bold text-white">Manche {roundCount}</span>
+              <div className="px-4 py-1.5 bg-white/15 backdrop-blur-sm rounded-full border border-white/25">
+                <span className="text-sm font-semibold text-gray-700">Manche {roundCount}</span>
               </div>
-              <div className="px-6 py-2 bg-white/20 backdrop-blur-sm rounded-2xl border border-white/30 shadow-lg">
-                <span className="text-base font-bold text-white">Objectif : {scoreLimit} pts</span>
+              <div className="px-4 py-1.5 bg-white/15 backdrop-blur-sm rounded-full border border-white/25">
+                <span className="text-sm font-semibold text-gray-700">Objectif : {scoreLimit} pts</span>
               </div>
             </motion.div>
           )}
@@ -93,9 +93,9 @@ const UnifiedTopBar: React.FC<UnifiedTopBarProps> = ({
         <div className="flex items-center gap-4">
           {showSettings && (
             <motion.div
-              whileHover={{ scale: 1.08 }}
-              whileTap={{ scale: 0.92 }}
-              transition={{ type: "spring", stiffness: 500, damping: 15 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ type: "spring", stiffness: 400, damping: 15 }}
             >
               <GameSettings />
             </motion.div>

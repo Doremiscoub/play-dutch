@@ -36,10 +36,10 @@ const ScoreBoardContent: React.FC<ScoreBoardContentProps> = ({
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
           transition={{ duration: 0.3 }}
-          className="space-y-5"
+          className="space-y-0"
         >
           {/* Players Cards */}
-          <AnimatePresence>
+          <div className="space-y-0">
             {sortedPlayers.map((player, index) => (
               <FunPlayerCard
                 key={player.id}
@@ -50,13 +50,14 @@ const ScoreBoardContent: React.FC<ScoreBoardContentProps> = ({
                 isSelected={selectedPlayer?.id === player.id}
               />
             ))}
-          </AnimatePresence>
+          </div>
 
           {/* Detailed Stats */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.4 }}
+            className="mt-6"
           >
             <DetailedGameStats 
               players={players} 

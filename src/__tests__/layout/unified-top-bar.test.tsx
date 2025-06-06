@@ -24,7 +24,7 @@ describe('UnifiedTopBar Component', () => {
     localStorage.clear();
   });
 
-  it('renders with fun glassmorphic styling', () => {
+  it('renders with transparent background and gradient title', () => {
     render(
       <TopBarWrapper>
         <UnifiedTopBar title="Test Title" />
@@ -35,16 +35,21 @@ describe('UnifiedTopBar Component', () => {
     expect(topbar).toBeInTheDocument();
     expect(screen.getByText('Test Title')).toBeInTheDocument();
     
-    // Check for glassmorphic and gradient classes
-    expect(topbar).toHaveClass('backdrop-blur-xl');
-    expect(topbar).toHaveClass('bg-gradient-to-r');
-    expect(topbar).toHaveClass('from-blue-500/30');
-    expect(topbar).toHaveClass('via-purple-500/30');
-    expect(topbar).toHaveClass('to-orange-500/30');
-    expect(topbar).toHaveClass('shadow-lg');
+    // Check for transparent header (no gradient background)
+    expect(topbar).not.toHaveClass('bg-gradient-to-r');
+    expect(topbar).toHaveClass('relative');
+    
+    // Check for gradient text
+    const title = screen.getByText('Test Title');
+    expect(title).toHaveClass('bg-gradient-to-r');
+    expect(title).toHaveClass('from-dutch-blue');
+    expect(title).toHaveClass('via-dutch-purple');
+    expect(title).toHaveClass('to-dutch-orange');
+    expect(title).toHaveClass('bg-clip-text');
+    expect(title).toHaveClass('text-transparent');
   });
 
-  it('shows back button when enabled with correct styling', () => {
+  it('shows back button when enabled with glass styling', () => {
     const mockOnBack = vi.fn();
     render(
       <TopBarWrapper>
@@ -58,7 +63,7 @@ describe('UnifiedTopBar Component', () => {
 
     const backButton = screen.getByLabelText('Retour');
     expect(backButton).toBeInTheDocument();
-    expect(backButton).toHaveClass('glass-button');
+    expect(backButton).toHaveClass('bg-white/20');
     
     fireEvent.click(backButton);
     expect(mockOnBack).toHaveBeenCalledTimes(1);
@@ -79,7 +84,7 @@ describe('UnifiedTopBar Component', () => {
     expect(screen.getByText('Objectif : 100 pts')).toBeInTheDocument();
   });
 
-  it('shows settings button with glassmorphic styling', () => {
+  it('shows settings button', () => {
     render(
       <TopBarWrapper>
         <UnifiedTopBar title="Test" showSettings={true} />
@@ -91,24 +96,7 @@ describe('UnifiedTopBar Component', () => {
     expect(buttons.length).toBeGreaterThan(0);
   });
 
-  it('has animated gradient text styling', () => {
-    render(
-      <TopBarWrapper>
-        <UnifiedTopBar title="Test Title" />
-      </TopBarWrapper>
-    );
-
-    const title = screen.getByText('Test Title');
-    expect(title).toHaveClass('bg-gradient-to-r');
-    expect(title).toHaveClass('from-blue-200');
-    expect(title).toHaveClass('via-purple-200');
-    expect(title).toHaveClass('to-orange-200');
-    expect(title).toHaveClass('bg-clip-text');
-    expect(title).toHaveClass('text-transparent');
-    expect(title).toHaveClass('animate-gradient-x');
-  });
-
-  it('applies correct font and size styling', () => {
+  it('has correct font and size styling for title', () => {
     render(
       <TopBarWrapper>
         <UnifiedTopBar title="Test Title" />
