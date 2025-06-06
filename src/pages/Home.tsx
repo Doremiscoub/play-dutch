@@ -2,15 +2,14 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSEO } from '@/hooks/useSEO';
-import { User, Play, BookOpen, Trophy } from 'lucide-react';
+import { BookOpen, Trophy } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import GameSettings from '@/components/GameSettings';
+import UnifiedTopBar from '@/components/scoreboard/UnifiedTopBar';
 import EnhancedHeroSection from '@/components/home/EnhancedHeroSection';
 import { FeaturesSection } from '@/components/home/FeaturesSection';
 import { StatsSection } from '@/components/home/StatsSection';
 import { CTASection } from '@/components/home/CTASection';
 import PageShell from '@/components/layout/PageShell';
-import { DESIGN_COLORS, DESIGN_SPACING } from '@/design/tokens';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -23,23 +22,20 @@ const Home: React.FC = () => {
 
   return (
     <PageShell variant="default">
-      {/* Header with user profile and settings */}
-      <header className="absolute top-4 right-4 z-50 flex gap-2" style={{ gap: DESIGN_SPACING[2] }}>
-        <Button
-          variant="dutch-glass"
-          size="icon"
-          className="rounded-full"
-          aria-label="Profil utilisateur"
-        >
-          <User className="h-5 w-5" />
-        </Button>
-        <GameSettings />
-      </header>
+      {/* Header unifié avec style glassmorphique */}
+      <UnifiedTopBar 
+        title="Dutch Card Game"
+        showBackButton={false}
+        showSettings={true}
+        showRules={false}
+      />
 
       {/* Enhanced Hero Section - titre 3D et particules */}
-      <EnhancedHeroSection />
+      <div className="pt-4">
+        <EnhancedHeroSection />
+      </div>
 
-      <div className="relative z-10 px-4 pb-16" style={{ padding: `0 ${DESIGN_SPACING[4]} ${DESIGN_SPACING[16]}` }}>
+      <div className="relative z-10 px-4 pb-16">
         {/* Features Section */}
         <FeaturesSection />
 
@@ -50,16 +46,11 @@ const Home: React.FC = () => {
         <CTASection />
 
         {/* Quick Navigation Links */}
-        <div className="flex flex-wrap justify-center gap-4 mt-12 text-sm" 
-             style={{ 
-               gap: DESIGN_SPACING[4], 
-               marginTop: DESIGN_SPACING[12],
-               color: DESIGN_COLORS.neutral[600] 
-             }}>
+        <div className="flex flex-wrap justify-center gap-4 mt-12 text-sm">
           <Button
             variant="ghost"
             onClick={() => navigate('/rules')}
-            className="hover:text-dutch-primary"
+            className="hover:text-dutch-primary glass-button"
           >
             <BookOpen className="h-4 w-4 mr-2" />
             Règles du jeu
@@ -67,7 +58,7 @@ const Home: React.FC = () => {
           <Button
             variant="ghost"
             onClick={() => navigate('/history')}
-            className="hover:text-dutch-primary"
+            className="hover:text-dutch-primary glass-button"
           >
             <Trophy className="h-4 w-4 mr-2" />
             Historique

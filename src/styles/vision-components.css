@@ -1,38 +1,158 @@
 
-@layer components {
-  /* VisionOS UI Classes */
-  .vision-card {
-    @apply rounded-3xl bg-white/70 backdrop-blur-xl border border-white/50 shadow-sm;
-    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  }
+/* Vision Components - Styles glassmorphiques uniformes pour Dutch */
 
-  .vision-card:hover {
-    @apply shadow-md bg-white/80 transform-gpu -translate-y-0.5;
-  }
+.vision-card {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 16px;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
-  .vision-button {
-    @apply rounded-2xl bg-white/80 backdrop-blur-xl border border-white/60 shadow-sm;
-    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-  }
+.vision-card:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  transform: translateY(-2px);
+  box-shadow: 
+    0 12px 40px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
 
-  .vision-button:hover {
-    @apply shadow-md bg-white/90 transform-gpu -translate-y-0.5;
-  }
+.glass-button {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  transition: all 0.2s ease-out;
+  position: relative;
+  overflow: hidden;
+}
 
-  .vision-button:active {
-    @apply transform-gpu translate-y-0.5 shadow-sm;
-  }
+.glass-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s;
+}
 
-  .vision-input {
-    @apply rounded-2xl bg-white/70 backdrop-blur-xl border border-white/50 px-4 py-2;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  }
+.glass-button:hover::before {
+  left: 100%;
+}
 
-  .vision-input:focus {
-    @apply outline-none ring-2 ring-dutch-blue/20 border-dutch-blue/40;
-  }
+.glass-button:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transform: scale(1.02);
+}
 
-  .vision-header {
-    @apply bg-white/60 backdrop-blur-xl border-b border-white/30 shadow-sm;
-  }
+.glass-button:active {
+  transform: scale(0.98);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.glass-input {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 12px;
+  transition: all 0.2s ease-out;
+}
+
+.glass-input:focus {
+  background: rgba(255, 255, 255, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  outline: none;
+  box-shadow: 
+    0 0 0 3px rgba(59, 130, 246, 0.1),
+    0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.glass-modal {
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 20px;
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.glass-panel {
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 16px;
+  box-shadow: 
+    0 16px 45px rgba(0, 0, 0, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+/* Gradient backgrounds for consistency */
+.dutch-gradient-bg {
+  background: linear-gradient(135deg, 
+    rgba(30, 64, 175, 0.1) 0%,
+    rgba(124, 58, 237, 0.1) 50%,
+    rgba(234, 88, 12, 0.1) 100%);
+}
+
+.dutch-gradient-border {
+  border: 1px solid;
+  border-image: linear-gradient(135deg, 
+    rgba(30, 64, 175, 0.3),
+    rgba(124, 58, 237, 0.3),
+    rgba(234, 88, 12, 0.3)) 1;
+}
+
+/* Enhanced glassmorphism for important elements */
+.vision-topbar {
+  background: linear-gradient(135deg, 
+    rgba(30, 64, 175, 0.3) 0%,
+    rgba(124, 58, 237, 0.3) 50%,
+    rgba(234, 88, 12, 0.3) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.vision-hero {
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.05) 50%,
+    rgba(255, 255, 255, 0.1) 100%);
+  position: relative;
+}
+
+.vision-hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 25% 25%, rgba(30, 64, 175, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, rgba(124, 58, 237, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(234, 88, 12, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: -1;
 }
