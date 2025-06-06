@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Player } from '@/types';
 import { generateComment, getCommentStyle } from './commentUtils';
 import ProfessorAvatar from '../game/ProfessorAvatar';
@@ -22,6 +22,7 @@ const EnhancedAICommentator: React.FC<EnhancedAICommentatorProps> = ({
   const [commentType, setCommentType] = useState<'info' | 'joke' | 'encouragement' | 'observation'>('info');
   const [displayedText, setDisplayedText] = useState<string>('');
   const [isTyping, setIsTyping] = useState(false);
+  const [commentKey, setCommentKey] = useState(0);
 
   // Typing animation effect
   useEffect(() => {
@@ -51,6 +52,7 @@ const EnhancedAICommentator: React.FC<EnhancedAICommentatorProps> = ({
     const { comment, type } = generateComment(players, roundCount, scoreLimit);
     setCurrentComment(comment);
     setCommentType(type);
+    setCommentKey(prev => prev + 1); // Force re-render with new key
   }, [players, roundCount, scoreLimit]);
 
   if (!currentComment) return null;
@@ -58,101 +60,128 @@ const EnhancedAICommentator: React.FC<EnhancedAICommentatorProps> = ({
   const style = getCommentStyle(commentType);
 
   return (
-    <AnimatePresence mode="wait">
-      <motion.div
-        key={currentComment}
-        initial={{ opacity: 0, y: 40, scale: 0.9, rotateX: -15 }}
-        animate={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
-        exit={{ opacity: 0, y: -40, scale: 0.9, rotateX: 15 }}
-        transition={{ duration: 0.8, ease: "easeOut", type: "spring", stiffness: 100 }}
-        className="relative"
-      >
-        {/* Main Container avec glassmorphisme amélioré */}
-        <div className={`
-          relative backdrop-blur-2xl border-2 rounded-3xl p-8 transition-all duration-700 group overflow-hidden
-          bg-white/85 border-white/70 shadow-2xl hover:shadow-3xl
-          hover:scale-[1.02] hover:bg-white/90
-        `}>
+    <motion.div
+      key={commentKey}
+      initial={{ opacity: 0, y: 40, scale: 0.9, rotateX: -15 }}
+      animate={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
+      transition={{ 
+        duration: 0.8, 
+        ease: "easeOut", 
+        type: "spring", 
+        stiffness: 100 
+      }}
+      className="relative"
+    >
+      {/* Container principal avec glassmorphisme avancé */}
+      <div className="relative backdrop-blur-2xl border-2 rounded-3xl p-8 transition-all duration-700 group overflow-hidden bg-white/85 border-white/70 shadow-2xl hover:shadow-3xl hover:scale-[1.02] hover:bg-white/90">
+        
+        {/* Effets de fond animés - Multiples couches */}
+        <div className="absolute inset-0 overflow-hidden rounded-3xl">
+          {/* Première couche d'effet */}
+          <motion.div 
+            className="absolute -top-8 -right-8 w-32 h-32 bg-gradient-to-br from-dutch-blue/20 to-transparent rounded-full blur-2xl"
+            animate={{ 
+              scale: [1, 1.3, 1],
+              opacity: [0.3, 0.6, 0.3],
+              rotate: [0, 180, 360]
+            }}
+            transition={{ 
+              duration: 8, 
+              repeat: Infinity, 
+              ease: "easeInOut" 
+            }}
+          />
           
-          {/* Effets de fond animés */}
-          <div className="absolute inset-0 overflow-hidden">
-            <motion.div 
-              className="absolute -top-8 -right-8 w-32 h-32 bg-gradient-to-br from-dutch-blue/20 to-transparent rounded-full blur-2xl"
-              animate={{ 
-                scale: [1, 1.3, 1],
-                opacity: [0.3, 0.6, 0.3],
-                rotate: [0, 180, 360]
-              }}
-              transition={{ 
-                duration: 8, 
-                repeat: Infinity, 
-                ease: "easeInOut" 
-              }}
-            />
-            <motion.div 
-              className="absolute -bottom-8 -left-8 w-32 h-32 bg-gradient-to-br from-dutch-purple/20 to-transparent rounded-full blur-2xl"
-              animate={{ 
-                scale: [1, 1.2, 1],
-                opacity: [0.2, 0.5, 0.2],
-                rotate: [360, 180, 0]
-              }}
-              transition={{ 
-                duration: 10, 
-                repeat: Infinity, 
-                ease: "easeInOut",
-                delay: 3
-              }}
-            />
-          </div>
+          {/* Deuxième couche d'effet */}
+          <motion.div 
+            className="absolute -bottom-8 -left-8 w-32 h-32 bg-gradient-to-br from-dutch-purple/20 to-transparent rounded-full blur-2xl"
+            animate={{ 
+              scale: [1, 1.2, 1],
+              opacity: [0.2, 0.5, 0.2],
+              rotate: [360, 180, 0]
+            }}
+            transition={{ 
+              duration: 10, 
+              repeat: Infinity, 
+              ease: "easeInOut",
+              delay: 3
+            }}
+          />
           
-          <div className="flex items-start gap-6 relative z-10">
-            {/* Professor Avatar avec effets améliorés */}
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0, rotateY: -30 }}
-              animate={{ scale: 1, opacity: 1, rotateY: 0 }}
-              transition={{ delay: 0.3, duration: 0.6, type: "spring", stiffness: 150 }}
-              className="flex-shrink-0"
-            >
-              <div className="relative">
-                {/* Effet de lueur autour de l'avatar */}
-                <div className="absolute inset-0 bg-gradient-to-r from-dutch-blue/20 via-dutch-purple/20 to-dutch-orange/20 rounded-full blur-xl animate-pulse"></div>
-                <ProfessorAvatar 
-                  size="xxl"
-                  animate={true}
-                  mood={style.mood}
-                  showParticles={true}
-                  className="relative z-10"
-                />
-              </div>
-            </motion.div>
-            
-            {/* Comment Pointer - double flèche améliorée */}
-            <motion.div 
-              className="flex-shrink-0 mt-12"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.5 }}
-            >
-              <CommentPointer />
-            </motion.div>
-            
-            {/* Comment Bubble avec effets */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.4 }}
-              className="flex-1"
-            >
-              <CommentBubble 
-                displayedText={displayedText}
-                isTyping={isTyping}
-                style={style}
-              />
-            </motion.div>
-          </div>
+          {/* Troisième couche d'effet */}
+          <motion.div 
+            className="absolute top-1/2 left-1/2 w-24 h-24 bg-gradient-to-br from-dutch-orange/15 to-transparent rounded-full blur-xl transform -translate-x-1/2 -translate-y-1/2"
+            animate={{ 
+              scale: [0.8, 1.1, 0.8],
+              opacity: [0.1, 0.3, 0.1]
+            }}
+            transition={{ 
+              duration: 6, 
+              repeat: Infinity, 
+              ease: "easeInOut",
+              delay: 1.5
+            }}
+          />
         </div>
-      </motion.div>
-    </AnimatePresence>
+        
+        <div className="flex items-start gap-6 relative z-10">
+          {/* Professor Avatar avec effets améliorés */}
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0, rotateY: -30 }}
+            animate={{ scale: 1, opacity: 1, rotateY: 0 }}
+            transition={{ delay: 0.3, duration: 0.6, type: "spring", stiffness: 150 }}
+            className="flex-shrink-0"
+          >
+            <div className="relative">
+              {/* Effet de lueur autour de l'avatar */}
+              <motion.div 
+                className="absolute inset-0 bg-gradient-to-r from-dutch-blue/20 via-dutch-purple/20 to-dutch-orange/20 rounded-full blur-xl"
+                animate={{ 
+                  scale: [1, 1.1, 1],
+                  opacity: [0.3, 0.6, 0.3]
+                }}
+                transition={{ 
+                  duration: 3, 
+                  repeat: Infinity, 
+                  ease: "easeInOut" 
+                }}
+              />
+              <ProfessorAvatar 
+                size="xxl"
+                animate={true}
+                mood={style.mood}
+                showParticles={true}
+                className="relative z-10"
+              />
+            </div>
+          </motion.div>
+          
+          {/* Comment Pointer - double flèche améliorée */}
+          <motion.div 
+            className="flex-shrink-0 mt-12"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.5 }}
+          >
+            <CommentPointer />
+          </motion.div>
+          
+          {/* Comment Bubble avec effets */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.4 }}
+            className="flex-1"
+          >
+            <CommentBubble 
+              displayedText={displayedText}
+              isTyping={isTyping}
+              style={style}
+            />
+          </motion.div>
+        </div>
+      </div>
+    </motion.div>
   );
 };
 

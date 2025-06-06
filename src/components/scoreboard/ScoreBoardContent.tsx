@@ -39,10 +39,17 @@ const ScoreBoardContent: React.FC<ScoreBoardContentProps> = ({
   if (!players || players.length === 0) {
     console.error('ScoreBoardContent: No players found, cannot render content');
     return (
-      <div className="text-center p-8 bg-white/80 backdrop-blur-sm rounded-xl">
-        <p className="text-gray-500">Aucun joueur pour le moment</p>
-        <p className="text-sm text-gray-400 mt-2">Veuillez créer une partie avec des joueurs</p>
-      </div>
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="text-center p-8 bg-white/80 backdrop-blur-xl rounded-3xl border border-white/50 shadow-xl"
+      >
+        <div className="space-y-3">
+          <div className="text-6xl">🎮</div>
+          <h3 className="text-xl font-bold text-gray-700">Aucun joueur trouvé</h3>
+          <p className="text-gray-500">Veuillez créer une partie avec des joueurs</p>
+        </div>
+      </motion.div>
     );
   }
 
@@ -50,11 +57,13 @@ const ScoreBoardContent: React.FC<ScoreBoardContentProps> = ({
   const safeRoundHistory = roundHistory || [];
 
   if (safeSortedPlayers.length === 0) {
-    console.warn('ScoreBoardContent: No sorted players available');
+    console.warn('ScoreBoardContent: No sorted players available, using original players array');
   }
 
+  const playersToDisplay = safeSortedPlayers.length > 0 ? safeSortedPlayers : players;
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <AnimatePresence mode="wait">
         {currentView === 'list' ? (
           <motion.div
@@ -62,30 +71,64 @@ const ScoreBoardContent: React.FC<ScoreBoardContentProps> = ({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
-            className="space-y-6"
+            transition={{ duration: 0.4 }}
+            className="space-y-8"
           >
-            {/* Players Cards - Section principale */}
-            <div className="space-y-4">
-              <h2 className="text-2xl font-bold text-gray-800 mb-4">Classement des joueurs</h2>
-              {safeSortedPlayers.map((player, index) => (
-                <FunPlayerCard
-                  key={player.id}
-                  player={player}
-                  rank={index + 1}
-                  totalPlayers={players.length}
-                  onSelect={onPlayerSelect}
-                  isSelected={selectedPlayer?.id === player.id}
-                />
-              ))}
-            </div>
-
-            {/* Detailed Stats - Section importante restaurée */}
+            {/* Section principale : Cartes des joueurs */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+              className="space-y-6"
+            >
+              {/* En-tête de section */}
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.3 }}
+                className="flex items-center gap-3"
+              >
+                <div className="p-3 bg-gradient-to-r from-dutch-blue to-dutch-purple rounded-2xl shadow-lg">
+                  <div className="text-white text-lg font-bold">🏆</div>
+                </div>
+                <h2 className="text-2xl font-bold bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange bg-clip-text text-transparent">
+                  Classement des joueurs
+                </h2>
+                <div className="flex-1 h-px bg-gradient-to-r from-dutch-blue/30 to-transparent"></div>
+              </motion.div>
+
+              {/* Cartes des joueurs avec animations séquentielles */}
+              <div className="space-y-4">
+                {playersToDisplay.map((player, index) => (
+                  <motion.div
+                    key={player.id}
+                    initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    transition={{ 
+                      duration: 0.5, 
+                      delay: index * 0.1,
+                      type: "spring",
+                      stiffness: 120
+                    }}
+                  >
+                    <FunPlayerCard
+                      player={player}
+                      rank={index + 1}
+                      totalPlayers={players.length}
+                      onSelect={onPlayerSelect}
+                      isSelected={selectedPlayer?.id === player.id}
+                    />
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+
+            {/* Section statistiques détaillées - Restaurée complètement */}
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.4 }}
-              className="mt-8"
+              transition={{ duration: 0.6, delay: 0.8 }}
+              className="mt-12"
             >
               <DetailedGameStats 
                 players={players} 
@@ -101,7 +144,7 @@ const ScoreBoardContent: React.FC<ScoreBoardContentProps> = ({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: 0.4 }}
           >
             <ScoreTableView 
               players={players} 
