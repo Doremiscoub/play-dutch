@@ -21,8 +21,23 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
   scoreLimit = 100,
   openScoreForm
 }) => {
-  console.log('ScoreBoard: Component rendered', { playersCount: players?.length, roundHistoryLength: roundHistory.length });
+  console.log('ScoreBoard: Component rendered', { 
+    playersCount: players?.length, 
+    roundHistoryLength: roundHistory?.length 
+  });
   
+  // Vérification de sécurité des props
+  if (!players || players.length === 0) {
+    console.warn('ScoreBoard: No players provided');
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-gray-700">Aucun joueur trouvé</p>
+        </div>
+      </div>
+    );
+  }
+
   const {
     selectedPlayer,
     currentView,

@@ -27,6 +27,26 @@ const ScoreBoardContent: React.FC<ScoreBoardContentProps> = ({
   selectedPlayer,
   onPlayerSelect
 }) => {
+  console.log('ScoreBoardContent: Rendering with', { 
+    currentView, 
+    sortedPlayersCount: sortedPlayers?.length,
+    playersCount: players?.length,
+    roundCount 
+  });
+
+  // Vérification de sécurité
+  if (!players || players.length === 0) {
+    console.log('ScoreBoardContent: No players found');
+    return (
+      <div className="text-center p-8">
+        <p className="text-gray-500">Aucun joueur pour le moment</p>
+      </div>
+    );
+  }
+
+  const safeSortedPlayers = sortedPlayers || [];
+  const safeRoundHistory = roundHistory || [];
+
   return (
     <AnimatePresence mode="wait">
       {currentView === 'list' ? (
@@ -39,8 +59,8 @@ const ScoreBoardContent: React.FC<ScoreBoardContentProps> = ({
           className="space-y-0"
         >
           {/* Players Cards */}
-          <div className="space-y-0">
-            {sortedPlayers.map((player, index) => (
+          <div className="space-y-4">
+            {safeSortedPlayers.map((player, index) => (
               <FunPlayerCard
                 key={player.id}
                 player={player}
@@ -63,7 +83,7 @@ const ScoreBoardContent: React.FC<ScoreBoardContentProps> = ({
               players={players} 
               roundCount={roundCount}
               scoreLimit={scoreLimit}
-              roundHistory={roundHistory}
+              roundHistory={safeRoundHistory}
             />
           </motion.div>
         </motion.div>
@@ -77,7 +97,7 @@ const ScoreBoardContent: React.FC<ScoreBoardContentProps> = ({
         >
           <ScoreTableView 
             players={players} 
-            roundHistory={roundHistory}
+            roundHistory={safeRoundHistory}
           />
         </motion.div>
       )}

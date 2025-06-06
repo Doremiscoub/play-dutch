@@ -23,49 +23,66 @@ export const useScoreBoardLogic = ({
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
   const [currentView, setCurrentView] = useState<'list' | 'table'>('list');
 
+  console.log('useScoreBoardLogic: Initializing with', { 
+    playersCount: players?.length, 
+    roundHistoryLength: roundHistory?.length 
+  });
+
+  // Vérification de sécurité pour les données
+  const safeRoundHistory = roundHistory || [];
+  const safePlayers = players || [];
+
   // Memoïser les données triées pour éviter les recalculs
   const sortedPlayers = useMemo(() => {
-    console.log('ScoreBoard: Sorting players');
-    return [...players].sort((a, b) => a.totalScore - b.totalScore);
-  }, [players]);
+    if (!safePlayers.length) {
+      console.log('useScoreBoardLogic: No players to sort');
+      return [];
+    }
+    console.log('useScoreBoardLogic: Sorting players');
+    return [...safePlayers].sort((a, b) => a.totalScore - b.totalScore);
+  }, [safePlayers]);
 
   const roundCount = useMemo(() => {
-    return players[0]?.rounds.length || 0;
-  }, [players]);
+    const count = safePlayers[0]?.rounds?.length || 0;
+    console.log('useScoreBoardLogic: Round count:', count);
+    return count;
+  }, [safePlayers]);
 
   // Memoïser les callbacks
   const handleAddRound = useCallback(() => {
-    console.log('ScoreBoard: handleAddRound called');
+    console.log('useScoreBoardLogic: handleAddRound called');
     if (openScoreForm) {
       openScoreForm();
+    } else {
+      console.warn('useScoreBoardLogic: openScoreForm not provided');
     }
     playSound('buttonClick');
   }, [openScoreForm, playSound]);
 
   const handleUndo = useCallback(() => {
-    console.log('ScoreBoard: handleUndo called');
-    if (roundHistory.length === 0) {
+    console.log('useScoreBoardLogic: handleUndo called, history length:', safeRoundHistory.length);
+    if (safeRoundHistory.length === 0) {
       toast.error("Aucune manche à annuler");
       return;
     }
     onUndoLastRound();
     playSound('undo');
     toast.success("Dernière manche annulée");
-  }, [roundHistory.length, onUndoLastRound, playSound]);
+  }, [safeRoundHistory.length, onUndoLastRound, playSound]);
 
   const handleEndGame = useCallback(() => {
-    console.log('ScoreBoard: handleEndGame called - Calling onEndGame prop');
+    console.log('useScoreBoardLogic: handleEndGame called - Calling onEndGame prop');
     onEndGame();
     playSound('gameEnd');
   }, [onEndGame, playSound]);
 
   const handleViewChange = useCallback((view: 'list' | 'table') => {
-    console.log('ScoreBoard: View changed to', view);
+    console.log('useScoreBoardLogic: View changed to', view);
     setCurrentView(view);
   }, []);
 
   const handlePlayerSelect = useCallback((player: Player) => {
-    console.log('ScoreBoard: Player selected', player.name);
+    console.log('useScoreBoardLogic: Player selected', player.name);
     setSelectedPlayer(player);
   }, []);
 
