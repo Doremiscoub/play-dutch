@@ -2,14 +2,12 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSEO } from '@/hooks/useSEO';
-import { ArrowLeft, Settings } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import EnhancedLocalGameSetup from '@/components/game-setup/EnhancedLocalGameSetup';
 import { useGameState } from '@/hooks/useGameState';
 import { toast } from 'sonner';
 import { STORAGE_KEYS } from '@/utils/storageKeys';
 import PageShell from '@/components/layout/PageShell';
-import { DESIGN_COLORS, DESIGN_SPACING } from '@/design/tokens';
+import UnifiedTopBar from '@/components/scoreboard/UnifiedTopBar';
 
 const GameSetup: React.FC = () => {
   const navigate = useNavigate();
@@ -53,44 +51,17 @@ const GameSetup: React.FC = () => {
 
   return (
     <PageShell variant="default">
-      {/* Header avec navigation */}
-      <header 
-        className="absolute z-50 flex justify-between items-center"
-        style={{ 
-          top: DESIGN_SPACING[4], 
-          left: DESIGN_SPACING[4], 
-          right: DESIGN_SPACING[4] 
-        }}
-      >
-        <Button
-          variant="dutch-glass"
-          size="icon"
-          onClick={handleBack}
-          className="rounded-full"
-          aria-label="Retour"
-        >
-          <ArrowLeft className="h-5 w-5" />
-        </Button>
-        
-        <Button
-          variant="dutch-glass"
-          size="icon"
-          onClick={() => navigate('/settings')}
-          className="rounded-full"
-          aria-label="Paramètres"
-        >
-          <Settings className="h-5 w-5" />
-        </Button>
-      </header>
+      {/* Header unifié avec style glassmorphique */}
+      <UnifiedTopBar 
+        title="Créer une partie"
+        showBackButton
+        onBack={handleBack}
+        showSettings={true}
+      />
 
-      {/* Contenu principal centré */}
-      <div 
-        className="flex items-center justify-center min-h-screen"
-        style={{ 
-          padding: `${DESIGN_SPACING[20]} ${DESIGN_SPACING[4]}`
-        }}
-      >
-        <div className="w-full max-w-2xl">
+      {/* Contenu principal */}
+      <div className="p-6 pt-8">
+        <div className="w-full max-w-2xl mx-auto">
           <EnhancedLocalGameSetup onStartGame={handleStartGame} />
         </div>
       </div>

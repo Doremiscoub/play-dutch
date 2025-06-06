@@ -8,6 +8,8 @@ import ScoreBoardWithAds from '@/components/scoreboard/ScoreBoardWithAds';
 import TournamentProgress from '@/components/tournament/TournamentProgress';
 import GameModeHandler from '@/components/game/GameModeHandler';
 import NewRoundScoreForm from '@/components/NewRoundScoreForm';
+import UnifiedTopBar from '@/components/scoreboard/UnifiedTopBar';
+import { useNavigate } from 'react-router-dom';
 
 interface GamePageContainerProps {
   players: Player[];
@@ -52,18 +54,27 @@ const GamePageContainer: React.FC<GamePageContainerProps> = ({
   onCloseScoreForm,
   onBackToSetup
 }) => {
+  const navigate = useNavigate();
   console.log('GamePageContainer: Rendering with gameMode:', gameMode);
 
   // Show tournament results if completed
   if (gameMode === 'tournament' && currentTournament?.isCompleted) {
     return (
-      <div className="min-h-screen p-4 bg-gradient-to-br from-gray-50 to-white">
-        <div className="max-w-2xl mx-auto pt-8">
-          <TournamentResults
-            tournament={currentTournament}
-            onNewTournament={onBackToSetup}
-            onBackToHome={onBackToSetup}
-          />
+      <div className="min-h-screen">
+        <UnifiedTopBar 
+          title="Résultats du tournoi"
+          showBackButton
+          onBack={() => navigate('/')}
+          showSettings={true}
+        />
+        <div className="p-4">
+          <div className="max-w-2xl mx-auto pt-8">
+            <TournamentResults
+              tournament={currentTournament}
+              onNewTournament={onBackToSetup}
+              onBackToHome={onBackToSetup}
+            />
+          </div>
         </div>
       </div>
     );
@@ -77,13 +88,23 @@ const GamePageContainer: React.FC<GamePageContainerProps> = ({
 
   return (
     <div className="min-h-screen relative">
-      {gameMode === 'tournament' && currentTournament && tournamentProgress && (
+      {/* UnifiedTopBar pour les parties rapides, ou progress pour tournois */}
+      {gameMode === 'tournament' && currentTournament && tournamentProgress ? (
         <div className="pt-4 px-4 pb-4">
           <TournamentProgress
             tournament={currentTournament}
             currentProgress={tournamentProgress}
           />
         </div>
+      ) : !showGameOver && (
+        <UnifiedTopBar 
+          title="Partie en cours"
+          roundCount={roundHistory.length}
+          scoreLimit={scoreLimit}
+          showBackButton
+          onBack={() => navigate('/setup')}
+          showSettings={true}
+        />
       )}
 
       <AnimatePresence mode="wait">

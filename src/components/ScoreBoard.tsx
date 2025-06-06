@@ -44,11 +44,12 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
 
   return (
     <div className="min-h-screen relative">
-      {/* Top Bar Unifiée avec style glassmorphique */}
+      {/* Top Bar unifiée avec le nouveau style fun et coloré */}
       <UnifiedTopBar 
         title="Tableau des scores"
         roundCount={roundCount}
         scoreLimit={scoreLimit}
+        showSettings={true}
       />
 
       <div className="p-4 pb-24">
