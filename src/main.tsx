@@ -36,7 +36,7 @@ const FallbackComponent = () => (
   </div>
 );
 
-// Rendre l'application sans le provider de thème unifié (il est déjà dans App.tsx)
+// Rendre l'application sans provider de thème (il est déjà dans App.tsx)
 root.render(
   <React.StrictMode>
     <SentryErrorBoundary fallback={FallbackComponent}>
