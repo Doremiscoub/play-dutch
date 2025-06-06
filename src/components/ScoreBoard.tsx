@@ -43,7 +43,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
 
   return (
     <div className="min-h-screen relative">
-      {/* Pas de topbar ici - elle est gérée par GamePageContainer */}
+      {/* Header géré par GamePageContainer via UnifiedTopBar */}
       
       <div className="p-4 pb-24">
         {/* Commentateur IA */}

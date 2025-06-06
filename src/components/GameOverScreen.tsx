@@ -108,7 +108,7 @@ const GameOverScreen: React.FC<GameOverScreenProps> = ({
 
   return (
     <div className="min-h-screen relative overflow-hidden">
-      {/* Pas de topbar ici - elle est gérée par GamePageContainer */}
+      {/* Header géré par GamePageContainer via UnifiedTopBar */}
       
       <div className="p-4 flex flex-col items-center justify-center relative pt-16">
         {/* Animated festive background */}

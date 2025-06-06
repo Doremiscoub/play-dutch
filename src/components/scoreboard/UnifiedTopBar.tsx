@@ -26,7 +26,8 @@ const UnifiedTopBar: React.FC<UnifiedTopBarProps> = ({
 }) => {
   return (
     <motion.div 
-      className="sticky top-0 z-50 bg-gradient-to-r from-blue-500/30 via-purple-500/30 to-orange-500/30 backdrop-blur-xl border-b border-white/20 px-6 py-8"
+      data-testid="unified-topbar"
+      className="sticky top-0 z-50 bg-gradient-to-r from-blue-500/30 via-purple-500/30 to-orange-500/30 backdrop-blur-xl border-b border-white/20 px-6 py-8 shadow-lg"
       initial={{ opacity: 0, y: -30, scale: 0.95 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ 
@@ -48,7 +49,7 @@ const UnifiedTopBar: React.FC<UnifiedTopBarProps> = ({
                 variant="ghost"
                 size="icon"
                 onClick={onBack}
-                className="bg-white/20 hover:bg-white/30 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl rounded-2xl w-14 h-14 border border-white/30"
+                className="glass-button bg-white/20 hover:bg-white/30 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl rounded-2xl w-14 h-14 border border-white/30"
               >
                 <ArrowLeft className="h-7 w-7 text-white" />
               </Button>
@@ -59,7 +60,7 @@ const UnifiedTopBar: React.FC<UnifiedTopBarProps> = ({
         {/* Center - Title and game info */}
         <div className="flex-1 text-center">
           <motion.h1 
-            className="text-4xl md:text-5xl font-black bg-gradient-to-r from-blue-200 via-purple-200 to-orange-200 bg-clip-text text-transparent tracking-tight drop-shadow-lg"
+            className="text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-blue-200 via-purple-200 to-orange-200 bg-clip-text text-transparent tracking-tight drop-shadow-lg animate-gradient-x"
             initial={{ opacity: 0, y: 30, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ 

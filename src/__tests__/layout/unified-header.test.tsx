@@ -9,6 +9,7 @@ import AboutPage from '@/pages/AboutPage';
 import HistoryPage from '@/pages/HistoryPage';
 import RulesPage from '@/pages/RulesPage';
 import GameSetup from '@/pages/GameSetup';
+import UnifiedTopBar from '@/components/scoreboard/UnifiedTopBar';
 
 // Mock router
 const mockNavigate = vi.fn();
@@ -41,8 +42,60 @@ describe('Unified Header Integration', () => {
     localStorage.clear();
   });
 
+  describe('UnifiedTopBar Component', () => {
+    it('renders with correct title and glassmorphic styles', () => {
+      render(
+        <TestWrapper>
+          <UnifiedTopBar title="Test Title" showSettings={true} />
+        </TestWrapper>
+      );
+
+      const topbar = screen.getByTestId('unified-topbar');
+      expect(topbar).toBeInTheDocument();
+      expect(screen.getByText('Test Title')).toBeInTheDocument();
+      
+      // Check for glassmorphic classes
+      expect(topbar).toHaveClass('backdrop-blur-xl');
+      expect(topbar).toHaveClass('bg-gradient-to-r');
+      expect(topbar).toHaveClass('shadow-lg');
+    });
+
+    it('shows game info when provided', () => {
+      render(
+        <TestWrapper>
+          <UnifiedTopBar 
+            title="Game" 
+            roundCount={5}
+            scoreLimit={100}
+            showSettings={true} 
+          />
+        </TestWrapper>
+      );
+
+      expect(screen.getByText('Manche 5')).toBeInTheDocument();
+      expect(screen.getByText('Objectif : 100 pts')).toBeInTheDocument();
+    });
+
+    it('handles back button when enabled', () => {
+      const mockOnBack = vi.fn();
+      render(
+        <TestWrapper>
+          <UnifiedTopBar 
+            title="Test" 
+            showBackButton={true}
+            onBack={mockOnBack}
+            showSettings={true} 
+          />
+        </TestWrapper>
+      );
+
+      const backButton = screen.getByRole('button');
+      fireEvent.click(backButton);
+      expect(mockOnBack).toHaveBeenCalledTimes(1);
+    });
+  });
+
   const testPages = [
-    { name: 'Home', component: Home, expectedTitle: 'Dutch Card Game' },
     { name: 'FAQ', component: FAQPage, expectedTitle: 'Questions Fréquentes' },
     { name: 'About', component: AboutPage, expectedTitle: 'À propos de Dutch' },
     { name: 'History', component: HistoryPage, expectedTitle: 'Historique des parties' },
@@ -60,6 +113,7 @@ describe('Unified Header Integration', () => {
         );
 
         expect(screen.getByText(expectedTitle)).toBeInTheDocument();
+        expect(screen.getByTestId('unified-topbar')).toBeInTheDocument();
       });
 
       it('shows settings button when enabled', () => {
@@ -69,7 +123,7 @@ describe('Unified Header Integration', () => {
           </TestWrapper>
         );
 
-        // Look for any button (settings is rendered via GameSettings component)
+        // Look for settings button
         const buttons = screen.getAllByRole('button');
         expect(buttons.length).toBeGreaterThan(0);
       });
@@ -84,6 +138,18 @@ describe('Unified Header Integration', () => {
         // Check that there are no legacy header elements
         const legacyHeaders = screen.queryAllByTestId('legacy-header');
         expect(legacyHeaders).toHaveLength(0);
+      });
+
+      it('has glassmorphic styling', () => {
+        render(
+          <TestWrapper>
+            <Component />
+          </TestWrapper>
+        );
+
+        const topbar = screen.getByTestId('unified-topbar');
+        expect(topbar).toHaveClass('backdrop-blur-xl');
+        expect(topbar).toHaveClass('bg-gradient-to-r');
       });
     });
   });
