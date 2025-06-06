@@ -1,7 +1,6 @@
-
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, Star, TrendingUp } from 'lucide-react';
+import { ChevronDown, Star, TrendingUp, Trophy } from 'lucide-react';
 import { Player } from '@/types';
 import PlayerRankBadge from '../../game/PlayerRankBadge';
 import PlayerCardStats from './PlayerCardStats';
