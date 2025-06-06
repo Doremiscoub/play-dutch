@@ -31,7 +31,7 @@ const RulesPage: React.FC = () => {
         title="Règles du Dutch"
         showBackButton
         onBack={handleBack}
-        showSettings={false}
+        showSettings={true}
         showRules={false}
       />
 
