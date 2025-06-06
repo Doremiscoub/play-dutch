@@ -2,7 +2,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Player } from '@/types';
-import { Scissors, TrendingUp, TrendingDown } from 'lucide-react';
+import { ChevronRight, TrendingUp, TrendingDown } from 'lucide-react';
 
 interface PlayerCardRecentRoundsProps {
   player: Player;
@@ -10,93 +10,105 @@ interface PlayerCardRecentRoundsProps {
 }
 
 const PlayerCardRecentRounds: React.FC<PlayerCardRecentRoundsProps> = ({ player, rank }) => {
-  const recentRounds = player.rounds.slice(-5);
-  
+  const recentRounds = player.rounds.slice(-5).reverse(); // 5 dernières manches
+
   if (recentRounds.length === 0) {
     return (
-      <div className="mt-4 p-3 bg-gray-50/60 rounded-xl border border-gray-200/50">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-xs font-medium text-gray-500">Dernières manches</span>
-          <span className="text-xs text-gray-400">Aucun score</span>
-        </div>
-        <div className="text-center text-gray-400 text-sm py-2">
-          Aucune manche jouée
-        </div>
+      <div className="text-center text-gray-500 py-4">
+        <p className="text-sm">Aucune manche jouée</p>
       </div>
     );
   }
 
-  const lastRoundScore = recentRounds[recentRounds.length - 1]?.score;
-  const isLastRoundDutch = recentRounds[recentRounds.length - 1]?.isDutch;
-  
-  // Calculer la tendance (si amélioration ou dégradation)
-  const trend = (() => {
+  const getScoreColor = (score: number, index: number) => {
+    if (score <= 10) return 'bg-green-100 text-green-700 border-green-200';
+    if (score <= 20) return 'bg-yellow-100 text-yellow-700 border-yellow-200';
+    if (score <= 30) return 'bg-orange-100 text-orange-700 border-orange-200';
+    return 'bg-red-100 text-red-700 border-red-200';
+  };
+
+  const getTrend = () => {
     if (recentRounds.length < 2) return null;
-    const lastTwo = recentRounds.slice(-2);
-    if (lastTwo[1].score < lastTwo[0].score) return 'up'; // Amélioration (score plus bas)
-    if (lastTwo[1].score > lastTwo[0].score) return 'down'; // Dégradation (score plus haut)
-    return 'stable';
-  })();
+    const current = recentRounds[0].score;
+    const previous = recentRounds[1].score;
+    
+    if (current < previous) {
+      return <TrendingUp className="h-4 w-4 text-green-500" />;
+    } else if (current > previous) {
+      return <TrendingDown className="h-4 w-4 text-red-500" />;
+    }
+    return null;
+  };
 
   return (
-    <div className="mt-4 p-3 bg-gray-50/60 rounded-xl border border-gray-200/50">
-      <div className="flex items-center justify-between mb-3">
-        <span className="text-xs font-medium text-gray-600">Dernières manches</span>
-        <div className="flex items-center gap-2">
-          {trend === 'up' && <TrendingUp className="h-3 w-3 text-green-500" />}
-          {trend === 'down' && <TrendingDown className="h-3 w-3 text-red-500" />}
-          <span className="text-xs text-gray-500">{recentRounds.length} score{recentRounds.length > 1 ? 's' : ''}</span>
-        </div>
+    <div className="space-y-3">
+      <div className="flex items-center gap-2">
+        <h4 className="text-sm font-semibold text-gray-700">Manches récentes</h4>
+        {getTrend()}
       </div>
       
-      {/* Last round highlight - Design subtil */}
-      {lastRoundScore !== undefined && (
-        <motion.div 
-          className={`mb-3 p-2 rounded-lg border-l-3 transition-all duration-200 ${
-            isLastRoundDutch 
-              ? 'bg-red-50/60 border-l-red-400 text-red-700' 
-              : lastRoundScore === 0 
-                ? 'bg-green-50/60 border-l-green-400 text-green-700'
-                : 'bg-blue-50/60 border-l-blue-400 text-blue-700'
-          }`}
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.2 }}
-        >
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-medium opacity-80">Dernière</span>
-            <div className="flex items-center gap-1.5">
-              {isLastRoundDutch && <Scissors className="h-3 w-3" />}
-              <span className="font-bold text-base">{lastRoundScore}</span>
-            </div>
-          </div>
-        </motion.div>
-      )}
-      
-      {/* Rounds history */}
-      <div className="flex items-center gap-1 overflow-x-auto">
+      <div className="flex items-center gap-2 overflow-x-auto pb-2">
         {recentRounds.map((round, index) => (
           <motion.div
-            key={index}
-            className={`flex-shrink-0 px-2 py-1 rounded-md text-xs font-medium border transition-all duration-200 ${
-              round.isDutch
-                ? 'bg-red-100/80 text-red-700 border-red-300/60'
-                : round.score === 0
-                  ? 'bg-green-100/80 text-green-700 border-green-300/60'
-                  : 'bg-gray-100/80 text-gray-700 border-gray-300/60'
-            }`}
-            whileHover={{ scale: 1.05 }}
-            initial={{ opacity: 0, x: 10 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: index * 0.05 }}
+            key={`round-${round.roundNumber || index}`}
+            initial={{ opacity: 0, scale: 0.8, x: 20 }}
+            animate={{ opacity: 1, scale: 1, x: 0 }}
+            transition={{ 
+              delay: index * 0.1,
+              type: "spring",
+              stiffness: 200
+            }}
+            className={`flex-shrink-0 px-3 py-2 rounded-xl border text-sm font-bold min-w-[50px] text-center ${getScoreColor(round.score, index)}`}
+            whileHover={{ 
+              scale: 1.1,
+              y: -2,
+              boxShadow: "0 4px 12px rgba(0,0,0,0.15)"
+            }}
           >
-            <div className="flex items-center gap-1">
-              {round.isDutch && <Scissors className="h-2.5 w-2.5" />}
-              <span>{round.score}</span>
-            </div>
+            {round.score}
           </motion.div>
         ))}
+        
+        {recentRounds.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: recentRounds.length * 0.1 + 0.2 }}
+            className="flex-shrink-0 flex items-center"
+          >
+            <ChevronRight className="h-4 w-4 text-gray-400" />
+          </motion.div>
+        )}
       </div>
+      
+      {/* Résumé des performances */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5 }}
+        className="bg-gray-50 rounded-xl p-3 border border-gray-200"
+      >
+        <div className="grid grid-cols-3 gap-3 text-center">
+          <div>
+            <div className="text-xs text-gray-500">Moyenne</div>
+            <div className="text-sm font-bold text-gray-800">
+              {Math.round(recentRounds.reduce((sum, r) => sum + r.score, 0) / recentRounds.length * 10) / 10}
+            </div>
+          </div>
+          <div>
+            <div className="text-xs text-gray-500">Meilleure</div>
+            <div className="text-sm font-bold text-green-600">
+              {Math.min(...recentRounds.map(r => r.score))}
+            </div>
+          </div>
+          <div>
+            <div className="text-xs text-gray-500">Pire</div>
+            <div className="text-sm font-bold text-red-600">
+              {Math.max(...recentRounds.map(r => r.score))}
+            </div>
+          </div>
+        </div>
+      </motion.div>
     </div>
   );
 };

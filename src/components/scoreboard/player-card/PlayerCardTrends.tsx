@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { TrendingUp, TrendingDown, Minus, Zap } from 'lucide-react';
+import { TrendingUp, TrendingDown, Zap, Target } from 'lucide-react';
 import { Player } from '@/types';
 
 interface PlayerCardTrendsProps {
@@ -19,60 +19,81 @@ const PlayerCardTrends: React.FC<PlayerCardTrendsProps> = ({
   dutchCount,
   currentStreak
 }) => {
+  const trends = [];
+
+  // Tendance performance
+  if (hasPositiveTrend) {
+    trends.push({
+      icon: TrendingUp,
+      label: 'En forme',
+      color: 'text-green-500 bg-green-50',
+      animate: { y: [-2, 0, -2] }
+    });
+  } else if (hasNegativeTrend) {
+    trends.push({
+      icon: TrendingDown,
+      label: 'En difficulté',
+      color: 'text-red-500 bg-red-50',
+      animate: { y: [2, 0, 2] }
+    });
+  }
+
+  // Dutch count
+  if (dutchCount > 0) {
+    trends.push({
+      icon: Zap,
+      label: `${dutchCount} Dutch`,
+      color: 'text-dutch-orange bg-orange-50',
+      animate: { 
+        scale: [1, 1.2, 1],
+        rotate: [0, 10, 0]
+      }
+    });
+  }
+
+  // Streak
+  if (currentStreak >= 2) {
+    trends.push({
+      icon: Target,
+      label: `${currentStreak} de suite`,
+      color: 'text-dutch-purple bg-purple-50',
+      animate: { 
+        x: [0, 3, 0],
+        scale: [1, 1.05, 1]
+      }
+    });
+  }
+
+  if (trends.length === 0) return null;
+
   return (
-    <div className="flex items-center gap-1">
-      {hasPositiveTrend && (
+    <div className="flex items-center gap-2 flex-wrap">
+      {trends.map((trend, index) => (
         <motion.div
-          initial={{ scale: 0, rotate: -180 }}
-          animate={{ scale: 1, rotate: 0 }}
-          className="p-1.5 bg-green-100 rounded-full shadow-sm"
-          title="En amélioration !"
+          key={`${trend.label}-${index}`}
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ 
+            delay: index * 0.1,
+            type: "spring",
+            stiffness: 200
+          }}
+          className={`flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-medium border border-white/50 ${trend.color}`}
+          whileHover={{ scale: 1.05 }}
         >
-          <TrendingUp className="h-4 w-4 text-green-600" />
+          <motion.div
+            animate={trend.animate}
+            transition={{
+              duration: 1.5,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          >
+            <trend.icon className="h-3 w-3" />
+          </motion.div>
+          <span>{trend.label}</span>
         </motion.div>
-      )}
-      {hasNegativeTrend && (
-        <motion.div
-          initial={{ scale: 0, rotate: 180 }}
-          animate={{ scale: 1, rotate: 0 }}
-          className="p-1.5 bg-red-100 rounded-full shadow-sm"
-          title="En difficulté..."
-        >
-          <TrendingDown className="h-4 w-4 text-red-600" />
-        </motion.div>
-      )}
-      {!hasPositiveTrend && !hasNegativeTrend && player.rounds.length > 1 && (
-        <motion.div
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          className="p-1.5 bg-gray-100 rounded-full shadow-sm"
-          title="Stable"
-        >
-          <Minus className="h-4 w-4 text-gray-500" />
-        </motion.div>
-      )}
-      
-      {dutchCount > 0 && (
-        <motion.div
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          className="p-1.5 bg-purple-100 rounded-full shadow-sm"
-          title={`${dutchCount} Dutch réussi${dutchCount > 1 ? 's' : ''}`}
-        >
-          <Zap className="h-4 w-4 text-purple-600" />
-        </motion.div>
-      )}
-      
-      {currentStreak >= 3 && (
-        <motion.div
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          className="px-2 py-1 bg-blue-100 rounded-full shadow-sm"
-          title={`Série de ${currentStreak} manches régulières`}
-        >
-          <span className="text-xs font-bold text-blue-600">{currentStreak}x</span>
-        </motion.div>
-      )}
+      ))}
     </div>
   );
 };

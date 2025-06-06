@@ -23,7 +23,7 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
   onSelect,
   isSelected
 }) => {
-  console.log('FunPlayerCard: Rendering card for', player.name);
+  console.log('FunPlayerCard: Rendering enhanced card for', player.name);
   const [isExpanded, setIsExpanded] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
   
@@ -41,81 +41,154 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
       <motion.div
         ref={cardRef}
         className={cn(
-          "relative rounded-3xl backdrop-blur-xl border-2 shadow-xl transition-all duration-500 cursor-pointer overflow-hidden group",
-          "bg-white/80 border-white/60 hover:bg-white/90 hover:shadow-2xl",
+          "relative rounded-3xl backdrop-blur-2xl border-2 shadow-glass-lg transition-all duration-700 cursor-pointer overflow-hidden group perspective-1000",
+          "bg-white/85 border-white/60 hover:bg-white/95 hover:shadow-glass-xl hover:backdrop-blur-4xl",
           getCardStyle(),
-          isSelected || isExpanded ? "ring-4 ring-dutch-blue/40 shadow-2xl scale-[1.02] border-dutch-blue/30" : "hover:scale-[1.008] hover:shadow-xl hover:-translate-y-1"
+          isSelected || isExpanded ? "ring-4 ring-dutch-blue/50 shadow-dutch-lg scale-[1.02] border-dutch-blue/40 z-10" : "hover:scale-[1.015] hover:shadow-dutch hover:-translate-y-2"
         )}
         onClick={handleCardClick}
-        whileHover={{ y: -4, scale: 1.01 }}
-        whileTap={{ scale: 0.99 }}
+        whileHover={{ 
+          y: -8, 
+          scale: 1.02,
+          rotateX: 2,
+          rotateY: 1,
+          z: 50
+        }}
+        whileTap={{ scale: 0.99, rotateX: 0 }}
         layout
-        initial={{ opacity: 0, y: 20, rotateX: -10 }}
-        animate={{ opacity: 1, y: 0, rotateX: 0 }}
+        initial={{ opacity: 0, y: 30, rotateX: -15, scale: 0.9 }}
+        animate={{ opacity: 1, y: 0, rotateX: 0, scale: 1 }}
         transition={{ 
-          duration: 0.6, 
-          delay: rank * 0.08,
+          duration: 0.8, 
+          delay: rank * 0.1,
           type: "spring",
-          stiffness: 120
+          stiffness: 100,
+          damping: 15
         }}
         style={{
           transformStyle: 'preserve-3d',
         }}
       >
-        {/* Badge de rang - Position absolue à gauche avec glassmorphisme */}
+        {/* Enhanced Rank Badge - Floating 3D */}
         <motion.div
-          className="absolute -top-4 -left-4 z-50 bg-gradient-to-br from-dutch-blue via-dutch-purple to-dutch-orange text-white text-lg font-bold rounded-full w-12 h-12 flex items-center justify-center shadow-xl border-3 border-white/80 backdrop-blur-sm"
-          initial={{ scale: 0, rotate: -180 }}
-          animate={{ scale: 1, rotate: 0 }}
-          transition={{ delay: rank * 0.1 + 0.3, type: "spring", stiffness: 200 }}
-          whileHover={{ scale: 1.1, rotate: 5 }}
+          className="absolute -top-6 -left-6 z-60 bg-gradient-to-br from-dutch-blue via-dutch-purple to-dutch-orange text-white text-xl font-black rounded-full w-16 h-16 flex items-center justify-center shadow-glass-lg border-4 border-white/90 backdrop-blur-sm"
+          initial={{ scale: 0, rotate: -270, z: -100 }}
+          animate={{ scale: 1, rotate: 0, z: 0 }}
+          transition={{ 
+            delay: rank * 0.1 + 0.4, 
+            type: "spring", 
+            stiffness: 200,
+            damping: 12
+          }}
+          whileHover={{ 
+            scale: 1.2, 
+            rotate: 15,
+            z: 30,
+            boxShadow: "0 15px 35px rgba(10, 132, 255, 0.4)"
+          }}
         >
-          {rank}
+          <motion.span
+            animate={cardData.isWinner ? {
+              textShadow: [
+                '0 0 0px rgba(255, 215, 0, 0)',
+                '0 0 10px rgba(255, 215, 0, 1)',
+                '0 0 0px rgba(255, 215, 0, 0)'
+              ]
+            } : {}}
+            transition={{
+              duration: 2,
+              repeat: cardData.isWinner ? Infinity : 0,
+              ease: "easeInOut"
+            }}
+          >
+            {rank}
+          </motion.span>
         </motion.div>
 
-        {/* Cercles décoratifs en arrière-plan avec animations */}
-        <div className="absolute inset-0 overflow-hidden rounded-3xl">
+        {/* Enhanced Floating Background Particles */}
+        <div className="absolute inset-0 overflow-hidden rounded-3xl pointer-events-none">
+          {/* Primary Floating Orb */}
           <motion.div 
-            className="absolute -right-12 -top-12 w-48 h-48 bg-gradient-to-br from-dutch-purple/15 via-dutch-blue/10 to-transparent rounded-full blur-2xl"
+            className="absolute -right-16 -top-16 w-64 h-64 bg-gradient-to-br from-dutch-purple/20 via-dutch-blue/15 to-transparent rounded-full blur-3xl"
             animate={{ 
-              scale: [1, 1.1, 1],
+              scale: [1, 1.2, 1],
               rotate: [0, 180, 360],
-              opacity: [0.3, 0.5, 0.3]
+              opacity: [0.3, 0.6, 0.3],
+              x: [0, 10, 0],
+              y: [0, -5, 0]
             }}
             transition={{ 
-              duration: 8, 
+              duration: 12, 
               repeat: Infinity, 
               ease: "easeInOut" 
             }}
           />
+          
+          {/* Secondary Floating Orb */}
           <motion.div 
-            className="absolute -left-12 -bottom-12 w-48 h-48 bg-gradient-to-br from-dutch-orange/15 via-dutch-purple/10 to-transparent rounded-full blur-2xl"
+            className="absolute -left-16 -bottom-16 w-64 h-64 bg-gradient-to-br from-dutch-orange/20 via-dutch-purple/15 to-transparent rounded-full blur-3xl"
             animate={{ 
-              scale: [1, 1.2, 1],
+              scale: [1, 1.3, 1],
               rotate: [360, 180, 0],
-              opacity: [0.2, 0.4, 0.2]
+              opacity: [0.2, 0.5, 0.2],
+              x: [0, -8, 0],
+              y: [0, 8, 0]
             }}
             transition={{ 
-              duration: 10, 
+              duration: 15, 
               repeat: Infinity, 
               ease: "easeInOut",
-              delay: 2
+              delay: 3
+            }}
+          />
+          
+          {/* Tertiary Accent Orb */}
+          <motion.div 
+            className="absolute top-1/3 left-1/3 w-32 h-32 bg-gradient-to-br from-dutch-blue/25 via-dutch-orange/15 to-transparent rounded-full blur-2xl"
+            animate={{ 
+              scale: [0.8, 1.1, 0.8],
+              opacity: [0.1, 0.4, 0.1],
+              rotate: [0, 120, 240, 360]
+            }}
+            transition={{ 
+              duration: 8, 
+              repeat: Infinity, 
+              ease: "easeInOut",
+              delay: 1.5
             }}
           />
         </div>
 
-        {/* Effet de brillance pour le gagnant */}
+        {/* Enhanced Shine Effect for Winners */}
         <PlayerCardShineEffect isWinner={cardData.isWinner} />
 
-        {/* Effet holographique pour les cartes spéciales */}
+        {/* Advanced Holographic Effect for Special Cards */}
         {(cardData.isWinner || cardData.isLastPlace) && (
-          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -skew-x-12 animate-shimmer"></div>
+          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000">
+            <motion.div 
+              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-12"
+              animate={{ x: ['-100%', '100%'] }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: "linear"
+              }}
+            />
+            <motion.div 
+              className="absolute inset-0 bg-gradient-to-b from-transparent via-white/5 to-transparent"
+              animate={{ y: ['-100%', '100%'] }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "linear",
+                delay: 1
+              }}
+            />
           </div>
         )}
 
-        {/* Contenu de la carte avec padding optimisé */}
-        <div className="relative z-20 p-6">
+        {/* Main Card Content with Enhanced Padding */}
+        <div className="relative z-20 p-8">
           <PlayerCardContent
             player={player}
             rank={rank}
@@ -123,16 +196,25 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
             cardData={cardData}
           />
         </div>
+
+        {/* Ambient Glow Effect on Hover */}
+        <motion.div
+          className="absolute inset-0 rounded-3xl pointer-events-none"
+          initial={{ opacity: 0 }}
+          whileHover={{ opacity: 1 }}
+          transition={{ duration: 0.3 }}
+        >
+          <div className="absolute inset-0 bg-gradient-to-br from-dutch-blue/10 via-transparent to-dutch-purple/10 rounded-3xl" />
+        </motion.div>
       </motion.div>
 
-      {/* Pastille flottante indépendante pour le gagnant */}
+      {/* Enhanced Floating Winner Badge */}
       <FloatingWinnerBadge isWinner={cardData.isWinner} cardRef={cardRef} />
     </>
   );
 };
 
 export default React.memo(FunPlayerCard, (prevProps, nextProps) => {
-  // Comparaison personnalisée pour éviter les re-renders inutiles
   return (
     prevProps.player.id === nextProps.player.id &&
     prevProps.player.totalScore === nextProps.player.totalScore &&

@@ -24,7 +24,7 @@ const EnhancedAICommentator: React.FC<EnhancedAICommentatorProps> = ({
   const [isTyping, setIsTyping] = useState(false);
   const [commentKey, setCommentKey] = useState(0);
 
-  // Typing animation effect
+  // Enhanced typing animation effect
   useEffect(() => {
     if (currentComment) {
       setIsTyping(true);
@@ -41,7 +41,7 @@ const EnhancedAICommentator: React.FC<EnhancedAICommentatorProps> = ({
           setIsTyping(false);
           clearInterval(typeInterval);
         }
-      }, 80);
+      }, 60); // Faster typing
 
       return () => clearInterval(typeInterval);
     }
@@ -52,7 +52,7 @@ const EnhancedAICommentator: React.FC<EnhancedAICommentatorProps> = ({
     const { comment, type } = generateComment(players, roundCount, scoreLimit);
     setCurrentComment(comment);
     setCommentType(type);
-    setCommentKey(prev => prev + 1); // Force re-render with new key
+    setCommentKey(prev => prev + 1);
   }, [players, roundCount, scoreLimit]);
 
   if (!currentComment) return null;
@@ -62,27 +62,28 @@ const EnhancedAICommentator: React.FC<EnhancedAICommentatorProps> = ({
   return (
     <motion.div
       key={commentKey}
-      initial={{ opacity: 0, y: 40, scale: 0.9, rotateX: -15 }}
+      initial={{ opacity: 0, y: 50, scale: 0.9, rotateX: -20 }}
       animate={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
       transition={{ 
-        duration: 0.8, 
+        duration: 1, 
         ease: "easeOut", 
         type: "spring", 
-        stiffness: 100 
+        stiffness: 80,
+        damping: 15
       }}
-      className="relative"
+      className="relative perspective-1000"
     >
-      {/* Container principal avec glassmorphisme avancé */}
-      <div className="relative backdrop-blur-2xl border-2 rounded-3xl p-8 transition-all duration-700 group overflow-hidden bg-white/85 border-white/70 shadow-2xl hover:shadow-3xl hover:scale-[1.02] hover:bg-white/90">
+      {/* Enhanced Container with Advanced Glassmorphism */}
+      <div className="relative backdrop-blur-4xl border-2 rounded-[2.5rem] p-10 transition-all duration-700 group overflow-hidden bg-white/90 border-white/70 shadow-glass-xl hover:shadow-glass-xl hover:scale-[1.01] hover:bg-white/95 transform-3d">
         
-        {/* Effets de fond animés - Multiples couches */}
-        <div className="absolute inset-0 overflow-hidden rounded-3xl">
-          {/* Première couche d'effet */}
+        {/* Multi-Layer Background Effects */}
+        <div className="absolute inset-0 overflow-hidden rounded-[2.5rem]">
+          {/* Primary Ambient Glow */}
           <motion.div 
-            className="absolute -top-8 -right-8 w-32 h-32 bg-gradient-to-br from-dutch-blue/20 to-transparent rounded-full blur-2xl"
+            className="absolute -top-12 -right-12 w-48 h-48 bg-gradient-to-br from-dutch-blue/25 to-transparent rounded-full blur-4xl"
             animate={{ 
               scale: [1, 1.3, 1],
-              opacity: [0.3, 0.6, 0.3],
+              opacity: [0.3, 0.7, 0.3],
               rotate: [0, 180, 360]
             }}
             transition={{ 
@@ -92,85 +93,122 @@ const EnhancedAICommentator: React.FC<EnhancedAICommentatorProps> = ({
             }}
           />
           
-          {/* Deuxième couche d'effet */}
+          {/* Secondary Ambient Glow */}
           <motion.div 
-            className="absolute -bottom-8 -left-8 w-32 h-32 bg-gradient-to-br from-dutch-purple/20 to-transparent rounded-full blur-2xl"
+            className="absolute -bottom-12 -left-12 w-48 h-48 bg-gradient-to-br from-dutch-purple/25 to-transparent rounded-full blur-4xl"
             animate={{ 
               scale: [1, 1.2, 1],
-              opacity: [0.2, 0.5, 0.2],
+              opacity: [0.2, 0.6, 0.2],
               rotate: [360, 180, 0]
             }}
             transition={{ 
               duration: 10, 
               repeat: Infinity, 
               ease: "easeInOut",
-              delay: 3
+              delay: 2
             }}
           />
           
-          {/* Troisième couche d'effet */}
+          {/* Tertiary Accent Glow */}
           <motion.div 
-            className="absolute top-1/2 left-1/2 w-24 h-24 bg-gradient-to-br from-dutch-orange/15 to-transparent rounded-full blur-xl transform -translate-x-1/2 -translate-y-1/2"
+            className="absolute top-1/2 left-1/2 w-32 h-32 bg-gradient-to-br from-dutch-orange/20 to-transparent rounded-full blur-3xl transform -translate-x-1/2 -translate-y-1/2"
             animate={{ 
-              scale: [0.8, 1.1, 0.8],
-              opacity: [0.1, 0.3, 0.1]
+              scale: [0.8, 1.2, 0.8],
+              opacity: [0.1, 0.4, 0.1],
+              rotate: [0, 120, 240, 360]
             }}
             transition={{ 
               duration: 6, 
               repeat: Infinity, 
               ease: "easeInOut",
-              delay: 1.5
+              delay: 1
+            }}
+          />
+          
+          {/* Shimmer Overlay */}
+          <motion.div
+            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12"
+            animate={{ x: ['-100%', '100%'] }}
+            transition={{
+              duration: 4,
+              repeat: Infinity,
+              ease: "linear",
+              repeatDelay: 2
             }}
           />
         </div>
         
-        <div className="flex items-start gap-6 relative z-10">
-          {/* Professor Avatar avec effets améliorés */}
+        <div className="flex items-start gap-8 relative z-10">
+          {/* Enhanced Professor Avatar with Multiple Effects */}
           <motion.div
-            initial={{ scale: 0.8, opacity: 0, rotateY: -30 }}
-            animate={{ scale: 1, opacity: 1, rotateY: 0 }}
-            transition={{ delay: 0.3, duration: 0.6, type: "spring", stiffness: 150 }}
-            className="flex-shrink-0"
+            initial={{ scale: 0.7, opacity: 0, rotateY: -45, z: -50 }}
+            animate={{ scale: 1, opacity: 1, rotateY: 0, z: 0 }}
+            transition={{ 
+              delay: 0.3, 
+              duration: 0.8, 
+              type: "spring", 
+              stiffness: 120,
+              damping: 15
+            }}
+            className="flex-shrink-0 relative"
           >
             <div className="relative">
-              {/* Effet de lueur autour de l'avatar */}
+              {/* Enhanced Avatar Glow Ring */}
               <motion.div 
-                className="absolute inset-0 bg-gradient-to-r from-dutch-blue/20 via-dutch-purple/20 to-dutch-orange/20 rounded-full blur-xl"
+                className="absolute -inset-6 bg-gradient-to-r from-dutch-blue/30 via-dutch-purple/30 to-dutch-orange/30 rounded-full blur-2xl"
                 animate={{ 
-                  scale: [1, 1.1, 1],
-                  opacity: [0.3, 0.6, 0.3]
+                  scale: [1, 1.2, 1],
+                  opacity: [0.4, 0.8, 0.4],
+                  rotate: [0, 360]
                 }}
                 transition={{ 
-                  duration: 3, 
+                  duration: 6, 
                   repeat: Infinity, 
                   ease: "easeInOut" 
                 }}
               />
+              
+              {/* Pulsing Secondary Ring */}
+              <motion.div 
+                className="absolute -inset-8 bg-gradient-to-r from-dutch-orange/20 via-dutch-blue/20 to-dutch-purple/20 rounded-full blur-3xl"
+                animate={{ 
+                  scale: [0.8, 1.4, 0.8],
+                  opacity: [0.2, 0.5, 0.2],
+                  rotate: [360, 0]
+                }}
+                transition={{ 
+                  duration: 8, 
+                  repeat: Infinity, 
+                  ease: "easeInOut",
+                  delay: 1
+                }}
+              />
+              
               <ProfessorAvatar 
                 size="xxl"
                 animate={true}
                 mood={style.mood}
                 showParticles={true}
-                className="relative z-10"
+                className="relative z-10 transform-3d"
               />
             </div>
           </motion.div>
           
-          {/* Comment Pointer - double flèche améliorée */}
+          {/* Enhanced Comment Pointer */}
           <motion.div 
-            className="flex-shrink-0 mt-12"
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.5 }}
+            className="flex-shrink-0 mt-16"
+            initial={{ opacity: 0, x: -30, rotateZ: -45 }}
+            animate={{ opacity: 1, x: 0, rotateZ: 0 }}
+            transition={{ delay: 0.6, duration: 0.6, type: "spring" }}
           >
             <CommentPointer />
           </motion.div>
           
-          {/* Comment Bubble avec effets */}
+          {/* Enhanced Comment Bubble */}
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.4 }}
+            initial={{ opacity: 0, x: 30, scale: 0.9 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            transition={{ delay: 0.5, duration: 0.7, type: "spring", stiffness: 120 }}
             className="flex-1"
           >
             <CommentBubble 
@@ -179,6 +217,29 @@ const EnhancedAICommentator: React.FC<EnhancedAICommentatorProps> = ({
               style={style}
             />
           </motion.div>
+        </div>
+        
+        {/* Floating Action Indicators */}
+        <div className="absolute top-4 right-4 flex gap-2">
+          {['💭', '🎯', '✨'].map((emoji, index) => (
+            <motion.div
+              key={emoji}
+              className="w-8 h-8 bg-white/70 backdrop-blur-sm rounded-full flex items-center justify-center text-sm shadow-lg"
+              animate={{
+                y: [0, -3, 0],
+                opacity: [0.6, 1, 0.6],
+                scale: [1, 1.1, 1]
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                delay: index * 0.3,
+                ease: "easeInOut"
+              }}
+            >
+              {emoji}
+            </motion.div>
+          ))}
         </div>
       </div>
     </motion.div>
