@@ -1,45 +1,29 @@
+
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Player } from '@/types';
-import { useAICommentator } from '@/hooks/useAICommentator';
-import { AIPersonality } from '@/types/ai-commentator';
+import { generateComment, getCommentStyle } from './commentUtils';
 import ProfessorAvatar from '../game/ProfessorAvatar';
-import ProfessorInfoCard from '../game/ProfessorInfoCard';
-import { ModernTitle } from '../ui/modern-title';
-import { GameBadge } from '../ui/game-badge';
-import { Brain, Lightbulb, Settings, Volume2, VolumeX, Info } from 'lucide-react';
-import { Button } from '../ui/button';
-import { 
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '../ui/select';
+import CommentBubble from './CommentBubble';
+import CommentPointer from './CommentPointer';
 
 interface EnhancedAICommentatorProps {
   players: Player[];
   roundCount: number;
   scoreLimit: number;
-  className?: string;
 }
 
 const EnhancedAICommentator: React.FC<EnhancedAICommentatorProps> = ({
   players,
   roundCount,
-  scoreLimit,
-  className = ''
+  scoreLimit
 }) => {
-  const { generateIntelligentComment, personality, setPersonality } = useAICommentator();
   const [currentComment, setCurrentComment] = useState<string>('');
-  const [currentAdvice, setCurrentAdvice] = useState<string>('');
+  const [commentType, setCommentType] = useState<'info' | 'joke' | 'encouragement' | 'observation'>('info');
   const [displayedText, setDisplayedText] = useState<string>('');
-  const [showSettings, setShowSettings] = useState<boolean>(false);
-  const [showProfessorInfo, setShowProfessorInfo] = useState<boolean>(false);
-  const [isTyping, setIsTyping] = useState<boolean>(false);
-  const [isSpeaking, setIsSpeaking] = useState<boolean>(false);
+  const [isTyping, setIsTyping] = useState(false);
 
-  // Effet de frappe pour le texte
+  // Typing animation effect
   useEffect(() => {
     if (currentComment) {
       setIsTyping(true);
@@ -62,207 +46,113 @@ const EnhancedAICommentator: React.FC<EnhancedAICommentatorProps> = ({
     }
   }, [currentComment]);
 
-  // Génération de nouveaux commentaires basés sur les changements de jeu
+  // Generate new comment when game state changes
   useEffect(() => {
-    if (players.length === 0) return;
-
-    const { comment, advice } = generateIntelligentComment(players, roundCount, scoreLimit);
+    const { comment, type } = generateComment(players, roundCount, scoreLimit);
     setCurrentComment(comment);
-    setCurrentAdvice(advice || '');
-  }, [players, roundCount, scoreLimit, generateIntelligentComment]);
+    setCommentType(type);
+  }, [players, roundCount, scoreLimit]);
 
   if (!currentComment) return null;
 
-  const personalityConfig = {
-    humorous: {
-      gradient: 'from-orange-500/10 to-yellow-500/5',
-      border: 'border-orange-200/40',
-      badge: 'Humoristique',
-      mood: 'excited' as const
-    },
-    analytical: {
-      gradient: 'from-blue-500/10 to-indigo-500/5',
-      border: 'border-blue-200/40',
-      badge: 'Analytique',
-      mood: 'thinking' as const
-    },
-    encouraging: {
-      gradient: 'from-green-500/10 to-emerald-500/5',
-      border: 'border-green-200/40',
-      badge: 'Encourageant',
-      mood: 'happy' as const
-    },
-    sarcastic: {
-      gradient: 'from-purple-500/10 to-pink-500/5',
-      border: 'border-purple-200/40',
-      badge: 'Sarcastique',
-      mood: 'neutral' as const
-    }
-  };
-
-  const config = personalityConfig[personality];
+  const style = getCommentStyle(commentType);
 
   return (
-    <>
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={currentComment}
-          initial={{ opacity: 0, y: 20, scale: 0.95 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: -20, scale: 0.95 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-          className={`relative ${className}`}
-        >
-          {/* Container principal avec glassmorphism */}
-          <div className={`
-            relative backdrop-blur-xl border-2 rounded-3xl p-6 transition-all duration-500
-            bg-gradient-to-br ${config.gradient} ${config.border}
-            hover:scale-[1.01] group
-          `}>
-            
-            {/* Glow effect subtil */}
-            <div className={`absolute inset-0 bg-gradient-to-br ${config.gradient} rounded-3xl blur-xl opacity-20 -z-10`} />
-            
-            {/* Header avec contrôles */}
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-3">
-                <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => setShowProfessorInfo(true)}
-                  className="cursor-pointer"
-                >
-                  <ProfessorAvatar 
-                    size="lg"
-                    animate={true}
-                    mood={config.mood}
-                    showParticles={isTyping}
-                    className="hover:scale-105 transition-transform duration-300"
-                  />
-                </motion.div>
-                <div>
-                  <ModernTitle variant="h3" className="mb-1">
-                    Professeur Cartouche IA
-                  </ModernTitle>
-                  <GameBadge
-                    text={config.badge}
-                    type={personality === 'analytical' ? 'rare' : 
-                          personality === 'encouraging' ? 'epic' : 'common'}
-                    size="sm"
-                    effect="glow"
-                  />
-                </div>
-              </div>
-
-              {/* Contrôles */}
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => setShowProfessorInfo(true)}
-                  className="opacity-60 hover:opacity-100 bg-white/20 hover:bg-white/30"
-                  title="Informations sur le Professeur"
-                >
-                  <Info className="h-4 w-4" />
-                </Button>
-                
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => setIsSpeaking(!isSpeaking)}
-                  className="opacity-60 hover:opacity-100 bg-white/20 hover:bg-white/30"
-                >
-                  {isSpeaking ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
-                </Button>
-                
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => setShowSettings(!showSettings)}
-                  className="opacity-60 hover:opacity-100 bg-white/20 hover:bg-white/30"
-                >
-                  <Settings className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-
-            {/* Paramètres de personnalité */}
-            <AnimatePresence>
-              {showSettings && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  exit={{ opacity: 0, height: 0 }}
-                  className="mb-4 p-3 bg-white/50 rounded-xl border border-white/30"
-                >
-                  <div className="flex items-center gap-3">
-                    <Brain className="h-4 w-4 text-gray-600" />
-                    <span className="text-sm font-medium text-gray-700">Personnalité :</span>
-                    <Select value={personality} onValueChange={(value: AIPersonality) => setPersonality(value)}>
-                      <SelectTrigger className="w-40 h-8 text-xs">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="humorous">🎭 Humoristique</SelectItem>
-                        <SelectItem value="analytical">🧠 Analytique</SelectItem>
-                        <SelectItem value="encouraging">💪 Encourageant</SelectItem>
-                        <SelectItem value="sarcastic">😏 Sarcastique</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            {/* Commentaire principal */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="mb-4"
-            >
-              <p className="text-lg leading-relaxed text-gray-800 font-medium">
-                {displayedText}
-                {isTyping && (
-                  <motion.span
-                    animate={{ opacity: [0, 1, 0] }}
-                    transition={{ duration: 0.8, repeat: Infinity }}
-                    className="inline-block w-2 h-5 bg-gray-600 ml-1"
-                  />
-                )}
-              </p>
-            </motion.div>
-
-            {/* Conseil stratégique */}
-            <AnimatePresence>
-              {currentAdvice && !isTyping && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ delay: 0.5 }}
-                  className="bg-gradient-to-r from-dutch-blue/10 to-dutch-purple/10 rounded-xl p-4 border border-dutch-blue/20"
-                >
-                  <div className="flex items-start gap-3">
-                    <Lightbulb className="h-5 w-5 text-dutch-blue mt-0.5 flex-shrink-0" />
-                    <div>
-                      <h4 className="font-semibold text-dutch-blue mb-1">Conseil Stratégique</h4>
-                      <p className="text-sm text-gray-700 leading-relaxed">{currentAdvice}</p>
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={currentComment}
+        initial={{ opacity: 0, y: 40, scale: 0.9, rotateX: -15 }}
+        animate={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
+        exit={{ opacity: 0, y: -40, scale: 0.9, rotateX: 15 }}
+        transition={{ duration: 0.8, ease: "easeOut", type: "spring", stiffness: 100 }}
+        className="relative"
+      >
+        {/* Main Container avec glassmorphisme amélioré */}
+        <div className={`
+          relative backdrop-blur-2xl border-2 rounded-3xl p-8 transition-all duration-700 group overflow-hidden
+          bg-white/85 border-white/70 shadow-2xl hover:shadow-3xl
+          hover:scale-[1.02] hover:bg-white/90
+        `}>
+          
+          {/* Effets de fond animés */}
+          <div className="absolute inset-0 overflow-hidden">
+            <motion.div 
+              className="absolute -top-8 -right-8 w-32 h-32 bg-gradient-to-br from-dutch-blue/20 to-transparent rounded-full blur-2xl"
+              animate={{ 
+                scale: [1, 1.3, 1],
+                opacity: [0.3, 0.6, 0.3],
+                rotate: [0, 180, 360]
+              }}
+              transition={{ 
+                duration: 8, 
+                repeat: Infinity, 
+                ease: "easeInOut" 
+              }}
+            />
+            <motion.div 
+              className="absolute -bottom-8 -left-8 w-32 h-32 bg-gradient-to-br from-dutch-purple/20 to-transparent rounded-full blur-2xl"
+              animate={{ 
+                scale: [1, 1.2, 1],
+                opacity: [0.2, 0.5, 0.2],
+                rotate: [360, 180, 0]
+              }}
+              transition={{ 
+                duration: 10, 
+                repeat: Infinity, 
+                ease: "easeInOut",
+                delay: 3
+              }}
+            />
           </div>
-        </motion.div>
-      </AnimatePresence>
-
-      {/* Professor Info Card */}
-      <ProfessorInfoCard 
-        isOpen={showProfessorInfo}
-        onClose={() => setShowProfessorInfo(false)}
-      />
-    </>
+          
+          <div className="flex items-start gap-6 relative z-10">
+            {/* Professor Avatar avec effets améliorés */}
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0, rotateY: -30 }}
+              animate={{ scale: 1, opacity: 1, rotateY: 0 }}
+              transition={{ delay: 0.3, duration: 0.6, type: "spring", stiffness: 150 }}
+              className="flex-shrink-0"
+            >
+              <div className="relative">
+                {/* Effet de lueur autour de l'avatar */}
+                <div className="absolute inset-0 bg-gradient-to-r from-dutch-blue/20 via-dutch-purple/20 to-dutch-orange/20 rounded-full blur-xl animate-pulse"></div>
+                <ProfessorAvatar 
+                  size="xxl"
+                  animate={true}
+                  mood={style.mood}
+                  showParticles={true}
+                  className="relative z-10"
+                />
+              </div>
+            </motion.div>
+            
+            {/* Comment Pointer - double flèche améliorée */}
+            <motion.div 
+              className="flex-shrink-0 mt-12"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.5 }}
+            >
+              <CommentPointer />
+            </motion.div>
+            
+            {/* Comment Bubble avec effets */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.4 }}
+              className="flex-1"
+            >
+              <CommentBubble 
+                displayedText={displayedText}
+                isTyping={isTyping}
+                style={style}
+              />
+            </motion.div>
+          </div>
+        </div>
+      </motion.div>
+    </AnimatePresence>
   );
 };
 

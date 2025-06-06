@@ -41,37 +41,91 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
       <motion.div
         ref={cardRef}
         className={cn(
-          "relative rounded-2xl backdrop-blur-xl border shadow-lg transition-all duration-300 cursor-pointer overflow-hidden mb-6",
-          "flex items-center gap-4 p-4 bg-white/80 border-white/50",
+          "relative rounded-3xl backdrop-blur-xl border-2 shadow-xl transition-all duration-500 cursor-pointer overflow-hidden group",
+          "bg-white/80 border-white/60 hover:bg-white/90 hover:shadow-2xl",
           getCardStyle(),
-          isSelected || isExpanded ? "ring-2 ring-dutch-blue/40 shadow-xl scale-[1.01]" : "hover:scale-[1.005] hover:shadow-xl"
+          isSelected || isExpanded ? "ring-4 ring-dutch-blue/40 shadow-2xl scale-[1.02] border-dutch-blue/30" : "hover:scale-[1.008] hover:shadow-xl hover:-translate-y-1"
         )}
         onClick={handleCardClick}
-        whileHover={{ y: -2 }}
-        whileTap={{ scale: 0.98 }}
+        whileHover={{ y: -4, scale: 1.01 }}
+        whileTap={{ scale: 0.99 }}
         layout
-        initial={{ opacity: 0, y: 15 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: rank * 0.05 }}
+        initial={{ opacity: 0, y: 20, rotateX: -10 }}
+        animate={{ opacity: 1, y: 0, rotateX: 0 }}
+        transition={{ 
+          duration: 0.6, 
+          delay: rank * 0.08,
+          type: "spring",
+          stiffness: 120
+        }}
+        style={{
+          transformStyle: 'preserve-3d',
+        }}
       >
-        {/* Badge de rang positionné à l'extrême gauche */}
-        <div className="absolute -top-3 -left-3 z-50 bg-gradient-to-r from-dutch-blue to-dutch-purple text-white text-sm font-bold rounded-full w-10 h-10 flex items-center justify-center shadow-lg border-2 border-white">
+        {/* Badge de rang - Position absolue à gauche avec glassmorphisme */}
+        <motion.div
+          className="absolute -top-4 -left-4 z-50 bg-gradient-to-br from-dutch-blue via-dutch-purple to-dutch-orange text-white text-lg font-bold rounded-full w-12 h-12 flex items-center justify-center shadow-xl border-3 border-white/80 backdrop-blur-sm"
+          initial={{ scale: 0, rotate: -180 }}
+          animate={{ scale: 1, rotate: 0 }}
+          transition={{ delay: rank * 0.1 + 0.3, type: "spring", stiffness: 200 }}
+          whileHover={{ scale: 1.1, rotate: 5 }}
+        >
           {rank}
+        </motion.div>
+
+        {/* Cercles décoratifs en arrière-plan avec animations */}
+        <div className="absolute inset-0 overflow-hidden rounded-3xl">
+          <motion.div 
+            className="absolute -right-12 -top-12 w-48 h-48 bg-gradient-to-br from-dutch-purple/15 via-dutch-blue/10 to-transparent rounded-full blur-2xl"
+            animate={{ 
+              scale: [1, 1.1, 1],
+              rotate: [0, 180, 360],
+              opacity: [0.3, 0.5, 0.3]
+            }}
+            transition={{ 
+              duration: 8, 
+              repeat: Infinity, 
+              ease: "easeInOut" 
+            }}
+          />
+          <motion.div 
+            className="absolute -left-12 -bottom-12 w-48 h-48 bg-gradient-to-br from-dutch-orange/15 via-dutch-purple/10 to-transparent rounded-full blur-2xl"
+            animate={{ 
+              scale: [1, 1.2, 1],
+              rotate: [360, 180, 0],
+              opacity: [0.2, 0.4, 0.2]
+            }}
+            transition={{ 
+              duration: 10, 
+              repeat: Infinity, 
+              ease: "easeInOut",
+              delay: 2
+            }}
+          />
         </div>
 
         {/* Effet de brillance pour le gagnant */}
         <PlayerCardShineEffect isWinner={cardData.isWinner} />
 
-        {/* Contenu de la carte */}
-        <PlayerCardContent
-          player={player}
-          rank={rank}
-          isExpanded={isExpanded}
-          cardData={cardData}
-        />
+        {/* Effet holographique pour les cartes spéciales */}
+        {(cardData.isWinner || cardData.isLastPlace) && (
+          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -skew-x-12 animate-shimmer"></div>
+          </div>
+        )}
+
+        {/* Contenu de la carte avec padding optimisé */}
+        <div className="relative z-20 p-6">
+          <PlayerCardContent
+            player={player}
+            rank={rank}
+            isExpanded={isExpanded}
+            cardData={cardData}
+          />
+        </div>
       </motion.div>
 
-      {/* Pastille flottante indépendante */}
+      {/* Pastille flottante indépendante pour le gagnant */}
       <FloatingWinnerBadge isWinner={cardData.isWinner} cardRef={cardRef} />
     </>
   );
