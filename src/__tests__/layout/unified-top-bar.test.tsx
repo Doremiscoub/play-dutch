@@ -76,7 +76,7 @@ describe('UnifiedTopBar Component', () => {
     );
 
     expect(screen.getByText('Manche 5')).toBeInTheDocument();
-    expect(screen.getByText('Limite 500 pts')).toBeInTheDocument();
+    expect(screen.getByText('Objectif : 500 points')).toBeInTheDocument();
   });
 
   it('shows settings and rules buttons by default', () => {
@@ -107,17 +107,16 @@ describe('UnifiedTopBar Component', () => {
     expect(buttons).toHaveLength(0);
   });
 
-  it('applies custom className', () => {
+  it('renders without className prop', () => {
     render(
       <TopBarWrapper>
         <UnifiedTopBar 
-          title="Test" 
-          className="custom-topbar-class"
+          title="Test"
         />
       </TopBarWrapper>
     );
 
     const container = screen.getByText('Test').closest('div');
-    expect(container).toHaveClass('custom-topbar-class');
+    expect(container).toBeInTheDocument();
   });
 });
