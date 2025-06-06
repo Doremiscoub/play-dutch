@@ -8,6 +8,7 @@ import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
 import './styles/theme.css'
+import { UnifiedThemeProvider } from './components/ui/unified-theme-provider'
 import { Toaster } from "sonner"
 import { initializeSentry, SentryErrorBoundary } from './utils/sentryConfig'
 
@@ -36,12 +37,14 @@ const FallbackComponent = () => (
   </div>
 );
 
-// Rendre l'application sans provider de thème (il est déjà dans App.tsx)
+// Rendre l'application avec le provider de thème unifié
 root.render(
   <React.StrictMode>
     <SentryErrorBoundary fallback={FallbackComponent}>
-      <App />
-      <Toaster position="top-center" richColors />
+      <UnifiedThemeProvider>
+        <App />
+        <Toaster position="top-center" richColors />
+      </UnifiedThemeProvider>
     </SentryErrorBoundary>
   </React.StrictMode>
 );

@@ -26,8 +26,8 @@ const GamePage: React.FC = () => {
       <PageShell variant="game">
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-center">
-            <div className="animate-spin rounded-full border-b-2 mx-auto mb-4 h-8 w-8 border-blue-500"></div>
-            <p className="text-gray-700">Chargement de la partie...</p>
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-dutch-blue mx-auto mb-4"></div>
+            <p>Chargement de la partie...</p>
           </div>
         </div>
       </PageShell>

@@ -1,8 +1,6 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Plus, Undo2, Square } from 'lucide-react';
-import { motion } from 'framer-motion';
 
 interface StickyActionButtonsProps {
   onAddRound: () => void;
@@ -20,79 +18,60 @@ const StickyActionButtons: React.FC<StickyActionButtonsProps> = ({
   disabled = false,
 }) => {
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 bg-white/85 backdrop-blur-2xl border-t border-white/60 shadow-2xl">
-      {/* Effet de lueur en haut */}
-      <div className="absolute -top-1 left-0 right-0 h-1 bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange opacity-60"></div>
-      
-      <div className="max-w-4xl mx-auto px-6 py-5">
-        <div className="flex items-center gap-4">
-          {/* Main Add Round Button - Bouton principal avec gradient animé */}
-          <motion.div 
-            className="flex-1 max-w-md mx-auto"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+    <div className="sticky bottom-0 left-0 w-full bg-white/80 backdrop-blur-md border-t border-gray-200 z-40">
+      <div className="container mx-auto px-4 py-3 flex items-center justify-between gap-2">
+        <Button 
+          variant="dutch-primary"
+          onClick={onAddRound}
+          className="flex-1 h-14 text-base font-medium shadow-lg"
+          disabled={disabled}
+        >
+          Ajouter une manche
+        </Button>
+
+        <Button
+          variant="dutch-glass"
+          size="icon"
+          onClick={onUndoLastRound}
+          disabled={!canUndo || disabled}
+          className="h-12 w-12 backdrop-blur-xl"
+        >
+          <span className="sr-only">Annuler</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            className="w-6 h-6"
           >
-            <Button 
-              onClick={onAddRound}
-              disabled={disabled}
-              className="w-full h-16 bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange hover:from-dutch-purple hover:to-dutch-orange text-white font-bold rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 disabled:opacity-50 disabled:cursor-not-allowed text-lg relative overflow-hidden group"
-            >
-              {/* Effet shimmer sur le bouton principal */}
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 group-hover:animate-shimmer"></div>
-              
-              <motion.div 
-                className="flex items-center justify-center gap-3 relative z-10"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Plus className="h-7 w-7" />
-                Ajouter une manche
-              </motion.div>
-            </Button>
-          </motion.div>
+            <path
+              fillRule="evenodd"
+              d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12H6.75a.75.75 0 0 0 0 1.5h4.19l-1.97 1.97a.75.75 0 1 0 1.06 1.06l3.22-3.22a.75.75 0 0 0 0-1.06l-3.22-3.22Z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </Button>
 
-          {/* Secondary Action Buttons avec glassmorphisme */}
-          <div className="flex gap-3">
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              whileHover={{ scale: 1.08, y: -2 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={onUndoLastRound}
-                disabled={!canUndo || disabled}
-                className="h-16 w-16 bg-white/70 hover:bg-white/90 backdrop-blur-xl rounded-2xl border-2 border-white/60 hover:border-white/80 transition-all duration-300 hover:shadow-xl disabled:opacity-40 disabled:cursor-not-allowed group"
-                title="Annuler la dernière manche"
-              >
-                <Undo2 className="h-7 w-7 text-gray-600 group-hover:text-dutch-blue transition-colors duration-200" />
-              </Button>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              whileHover={{ scale: 1.08, y: -2 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={onEndGame}
-                disabled={disabled}
-                className="h-16 w-16 bg-white/70 hover:bg-white/90 backdrop-blur-xl rounded-2xl border-2 border-white/60 hover:border-white/80 transition-all duration-300 hover:shadow-xl group"
-                title="Terminer la partie"
-              >
-                <Square className="h-7 w-7 text-gray-600 group-hover:text-dutch-purple transition-colors duration-200" />
-              </Button>
-            </motion.div>
-          </div>
-        </div>
+        <Button
+          variant="dutch-glass"
+          size="icon"
+          onClick={onEndGame}
+          disabled={disabled}
+          className="h-12 w-12 backdrop-blur-xl"
+        >
+          <span className="sr-only">Terminer la partie</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            className="w-6 h-6"
+          >
+            <path
+              fillRule="evenodd"
+              d="M12 1.5a5.25 5.25 0 0 0-5.25 5.25v3a3 3 0 0 0-3 3v6.75a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V12a3 3 0 0 0-3-3v-3A5.25 5.25 0 0 0 12 1.5Zm-2.25 6a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75v3a.75.75 0 0 1-.75.75h-3a.75.75 0 0 1-.75-.75v-3Z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </Button>
       </div>
     </div>
   );

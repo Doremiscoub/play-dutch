@@ -1,30 +1,44 @@
 
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Player } from '@/types';
-import { generateComment, getCommentStyle } from './commentUtils';
+import { useAICommentator } from '@/hooks/useAICommentator';
+import { AIPersonality } from '@/types/ai-commentator';
 import ProfessorAvatar from '../game/ProfessorAvatar';
-import CommentBubble from './CommentBubble';
-import CommentPointer from './CommentPointer';
+import { ModernTitle } from '../ui/modern-title';
+import { GameBadge } from '../ui/game-badge';
+import { Brain, Lightbulb, Settings, Volume2, VolumeX } from 'lucide-react';
+import { Button } from '../ui/button';
+import { 
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '../ui/select';
 
 interface EnhancedAICommentatorProps {
   players: Player[];
   roundCount: number;
   scoreLimit: number;
+  className?: string;
 }
 
 const EnhancedAICommentator: React.FC<EnhancedAICommentatorProps> = ({
   players,
   roundCount,
-  scoreLimit
+  scoreLimit,
+  className = ''
 }) => {
+  const { generateIntelligentComment, personality, setPersonality } = useAICommentator();
   const [currentComment, setCurrentComment] = useState<string>('');
-  const [commentType, setCommentType] = useState<'info' | 'joke' | 'encouragement' | 'observation'>('info');
+  const [currentAdvice, setCurrentAdvice] = useState<string>('');
   const [displayedText, setDisplayedText] = useState<string>('');
-  const [isTyping, setIsTyping] = useState(false);
-  const [commentKey, setCommentKey] = useState(0);
+  const [showSettings, setShowSettings] = useState<boolean>(false);
+  const [isTyping, setIsTyping] = useState<boolean>(false);
+  const [isSpeaking, setIsSpeaking] = useState<boolean>(false);
 
-  // Enhanced typing animation effect
+  // Effet de frappe pour le texte
   useEffect(() => {
     if (currentComment) {
       setIsTyping(true);
@@ -41,208 +55,188 @@ const EnhancedAICommentator: React.FC<EnhancedAICommentatorProps> = ({
           setIsTyping(false);
           clearInterval(typeInterval);
         }
-      }, 60); // Faster typing
+      }, 80);
 
       return () => clearInterval(typeInterval);
     }
   }, [currentComment]);
 
-  // Generate new comment when game state changes
+  // Génération de nouveaux commentaires basés sur les changements de jeu
   useEffect(() => {
-    const { comment, type } = generateComment(players, roundCount, scoreLimit);
+    if (players.length === 0) return;
+
+    const { comment, advice } = generateIntelligentComment(players, roundCount, scoreLimit);
     setCurrentComment(comment);
-    setCommentType(type);
-    setCommentKey(prev => prev + 1);
-  }, [players, roundCount, scoreLimit]);
+    setCurrentAdvice(advice || '');
+  }, [players, roundCount, scoreLimit, generateIntelligentComment]);
 
   if (!currentComment) return null;
 
-  const style = getCommentStyle(commentType);
+  const personalityConfig = {
+    humorous: {
+      gradient: 'from-orange-500/10 to-yellow-500/5',
+      border: 'border-orange-200/40',
+      badge: 'Humoristique',
+      mood: 'excited' as const
+    },
+    analytical: {
+      gradient: 'from-blue-500/10 to-indigo-500/5',
+      border: 'border-blue-200/40',
+      badge: 'Analytique',
+      mood: 'thinking' as const
+    },
+    encouraging: {
+      gradient: 'from-green-500/10 to-emerald-500/5',
+      border: 'border-green-200/40',
+      badge: 'Encourageant',
+      mood: 'happy' as const
+    },
+    sarcastic: {
+      gradient: 'from-purple-500/10 to-pink-500/5',
+      border: 'border-purple-200/40',
+      badge: 'Sarcastique',
+      mood: 'neutral' as const
+    }
+  };
+
+  const config = personalityConfig[personality];
 
   return (
-    <motion.div
-      key={commentKey}
-      initial={{ opacity: 0, y: 50, scale: 0.9, rotateX: -20 }}
-      animate={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
-      transition={{ 
-        duration: 1, 
-        ease: "easeOut", 
-        type: "spring", 
-        stiffness: 80,
-        damping: 15
-      }}
-      className="relative perspective-1000"
-    >
-      {/* Enhanced Container with Advanced Glassmorphism */}
-      <div className="relative backdrop-blur-4xl border-2 rounded-[2.5rem] p-10 transition-all duration-700 group overflow-hidden bg-white/90 border-white/70 shadow-glass-xl hover:shadow-glass-xl hover:scale-[1.01] hover:bg-white/95 transform-3d">
-        
-        {/* Multi-Layer Background Effects */}
-        <div className="absolute inset-0 overflow-hidden rounded-[2.5rem]">
-          {/* Primary Ambient Glow */}
-          <motion.div 
-            className="absolute -top-12 -right-12 w-48 h-48 bg-gradient-to-br from-dutch-blue/25 to-transparent rounded-full blur-4xl"
-            animate={{ 
-              scale: [1, 1.3, 1],
-              opacity: [0.3, 0.7, 0.3],
-              rotate: [0, 180, 360]
-            }}
-            transition={{ 
-              duration: 8, 
-              repeat: Infinity, 
-              ease: "easeInOut" 
-            }}
-          />
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={currentComment}
+        initial={{ opacity: 0, y: 20, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: -20, scale: 0.95 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className={`relative ${className}`}
+      >
+        {/* Container principal avec glassmorphism */}
+        <div className={`
+          relative backdrop-blur-xl border-2 rounded-3xl p-6 transition-all duration-500
+          bg-gradient-to-br ${config.gradient} ${config.border}
+          hover:scale-[1.01] group
+        `}>
           
-          {/* Secondary Ambient Glow */}
-          <motion.div 
-            className="absolute -bottom-12 -left-12 w-48 h-48 bg-gradient-to-br from-dutch-purple/25 to-transparent rounded-full blur-4xl"
-            animate={{ 
-              scale: [1, 1.2, 1],
-              opacity: [0.2, 0.6, 0.2],
-              rotate: [360, 180, 0]
-            }}
-            transition={{ 
-              duration: 10, 
-              repeat: Infinity, 
-              ease: "easeInOut",
-              delay: 2
-            }}
-          />
+          {/* Glow effect subtil */}
+          <div className={`absolute inset-0 bg-gradient-to-br ${config.gradient} rounded-3xl blur-xl opacity-20 -z-10`} />
           
-          {/* Tertiary Accent Glow */}
-          <motion.div 
-            className="absolute top-1/2 left-1/2 w-32 h-32 bg-gradient-to-br from-dutch-orange/20 to-transparent rounded-full blur-3xl transform -translate-x-1/2 -translate-y-1/2"
-            animate={{ 
-              scale: [0.8, 1.2, 0.8],
-              opacity: [0.1, 0.4, 0.1],
-              rotate: [0, 120, 240, 360]
-            }}
-            transition={{ 
-              duration: 6, 
-              repeat: Infinity, 
-              ease: "easeInOut",
-              delay: 1
-            }}
-          />
-          
-          {/* Shimmer Overlay */}
-          <motion.div
-            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12"
-            animate={{ x: ['-100%', '100%'] }}
-            transition={{
-              duration: 4,
-              repeat: Infinity,
-              ease: "linear",
-              repeatDelay: 2
-            }}
-          />
-        </div>
-        
-        <div className="flex items-start gap-8 relative z-10">
-          {/* Enhanced Professor Avatar with Multiple Effects */}
-          <motion.div
-            initial={{ scale: 0.7, opacity: 0, rotateY: -45, z: -50 }}
-            animate={{ scale: 1, opacity: 1, rotateY: 0, z: 0 }}
-            transition={{ 
-              delay: 0.3, 
-              duration: 0.8, 
-              type: "spring", 
-              stiffness: 120,
-              damping: 15
-            }}
-            className="flex-shrink-0 relative"
-          >
-            <div className="relative">
-              {/* Enhanced Avatar Glow Ring */}
-              <motion.div 
-                className="absolute -inset-6 bg-gradient-to-r from-dutch-blue/30 via-dutch-purple/30 to-dutch-orange/30 rounded-full blur-2xl"
-                animate={{ 
-                  scale: [1, 1.2, 1],
-                  opacity: [0.4, 0.8, 0.4],
-                  rotate: [0, 360]
-                }}
-                transition={{ 
-                  duration: 6, 
-                  repeat: Infinity, 
-                  ease: "easeInOut" 
-                }}
-              />
-              
-              {/* Pulsing Secondary Ring */}
-              <motion.div 
-                className="absolute -inset-8 bg-gradient-to-r from-dutch-orange/20 via-dutch-blue/20 to-dutch-purple/20 rounded-full blur-3xl"
-                animate={{ 
-                  scale: [0.8, 1.4, 0.8],
-                  opacity: [0.2, 0.5, 0.2],
-                  rotate: [360, 0]
-                }}
-                transition={{ 
-                  duration: 8, 
-                  repeat: Infinity, 
-                  ease: "easeInOut",
-                  delay: 1
-                }}
-              />
-              
+          {/* Header avec contrôles */}
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
               <ProfessorAvatar 
-                size="xxl"
+                size="lg"
                 animate={true}
-                mood={style.mood}
-                showParticles={true}
-                className="relative z-10 transform-3d"
+                mood={config.mood}
+                showParticles={isTyping}
+                className="hover:scale-105 transition-transform duration-300"
               />
+              <div>
+                <ModernTitle variant="h3" className="mb-1">
+                  Professeur Cartouche IA
+                </ModernTitle>
+                <GameBadge
+                  text={config.badge}
+                  type={personality === 'analytical' ? 'rare' : 
+                        personality === 'encouraging' ? 'epic' : 'common'}
+                  size="sm"
+                  effect="glow"
+                />
+              </div>
             </div>
-          </motion.div>
-          
-          {/* Enhanced Comment Pointer */}
-          <motion.div 
-            className="flex-shrink-0 mt-16"
-            initial={{ opacity: 0, x: -30, rotateZ: -45 }}
-            animate={{ opacity: 1, x: 0, rotateZ: 0 }}
-            transition={{ delay: 0.6, duration: 0.6, type: "spring" }}
-          >
-            <CommentPointer />
-          </motion.div>
-          
-          {/* Enhanced Comment Bubble */}
+
+            {/* Contrôles */}
+            <div className="flex items-center gap-2">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setIsSpeaking(!isSpeaking)}
+                className="opacity-60 hover:opacity-100"
+              >
+                {isSpeaking ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+              </Button>
+              
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setShowSettings(!showSettings)}
+                className="opacity-60 hover:opacity-100"
+              >
+                <Settings className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+
+          {/* Paramètres de personnalité */}
+          <AnimatePresence>
+            {showSettings && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                className="mb-4 p-3 bg-white/50 rounded-xl border border-white/30"
+              >
+                <div className="flex items-center gap-3">
+                  <Brain className="h-4 w-4 text-gray-600" />
+                  <span className="text-sm font-medium text-gray-700">Personnalité :</span>
+                  <Select value={personality} onValueChange={(value: AIPersonality) => setPersonality(value)}>
+                    <SelectTrigger className="w-40 h-8 text-xs">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="humorous">🎭 Humoristique</SelectItem>
+                      <SelectItem value="analytical">🧠 Analytique</SelectItem>
+                      <SelectItem value="encouraging">💪 Encourageant</SelectItem>
+                      <SelectItem value="sarcastic">😏 Sarcastique</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Commentaire principal */}
           <motion.div
-            initial={{ opacity: 0, x: 30, scale: 0.9 }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
-            transition={{ delay: 0.5, duration: 0.7, type: "spring", stiffness: 120 }}
-            className="flex-1"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="mb-4"
           >
-            <CommentBubble 
-              displayedText={displayedText}
-              isTyping={isTyping}
-              style={style}
-            />
+            <p className="text-lg leading-relaxed text-gray-800 font-medium">
+              {displayedText}
+              {isTyping && (
+                <motion.span
+                  animate={{ opacity: [0, 1, 0] }}
+                  transition={{ duration: 0.8, repeat: Infinity }}
+                  className="inline-block w-2 h-5 bg-gray-600 ml-1"
+                />
+              )}
+            </p>
           </motion.div>
+
+          {/* Conseil stratégique */}
+          <AnimatePresence>
+            {currentAdvice && !isTyping && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ delay: 0.5 }}
+                className="bg-gradient-to-r from-dutch-blue/10 to-dutch-purple/10 rounded-xl p-4 border border-dutch-blue/20"
+              >
+                <div className="flex items-start gap-3">
+                  <Lightbulb className="h-5 w-5 text-dutch-blue mt-0.5 flex-shrink-0" />
+                  <div>
+                    <h4 className="font-semibold text-dutch-blue mb-1">Conseil Stratégique</h4>
+                    <p className="text-sm text-gray-700 leading-relaxed">{currentAdvice}</p>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
-        
-        {/* Floating Action Indicators */}
-        <div className="absolute top-4 right-4 flex gap-2">
-          {['💭', '🎯', '✨'].map((emoji, index) => (
-            <motion.div
-              key={emoji}
-              className="w-8 h-8 bg-white/70 backdrop-blur-sm rounded-full flex items-center justify-center text-sm shadow-lg"
-              animate={{
-                y: [0, -3, 0],
-                opacity: [0.6, 1, 0.6],
-                scale: [1, 1.1, 1]
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                delay: index * 0.3,
-                ease: "easeInOut"
-              }}
-            >
-              {emoji}
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </motion.div>
+      </motion.div>
+    </AnimatePresence>
   );
 };
 

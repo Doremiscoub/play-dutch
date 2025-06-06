@@ -8,8 +8,6 @@ import ScoreBoardWithAds from '@/components/scoreboard/ScoreBoardWithAds';
 import TournamentProgress from '@/components/tournament/TournamentProgress';
 import GameModeHandler from '@/components/game/GameModeHandler';
 import NewRoundScoreForm from '@/components/NewRoundScoreForm';
-import UnifiedTopBar from '@/components/scoreboard/UnifiedTopBar';
-import { useNavigate } from 'react-router-dom';
 
 interface GamePageContainerProps {
   players: Player[];
@@ -54,27 +52,18 @@ const GamePageContainer: React.FC<GamePageContainerProps> = ({
   onCloseScoreForm,
   onBackToSetup
 }) => {
-  const navigate = useNavigate();
   console.log('GamePageContainer: Rendering with gameMode:', gameMode);
 
   // Show tournament results if completed
   if (gameMode === 'tournament' && currentTournament?.isCompleted) {
     return (
-      <div className="min-h-screen">
-        <UnifiedTopBar 
-          title="Résultats du tournoi"
-          showBackButton
-          onBack={() => navigate('/')}
-          showSettings={true}
-        />
-        <div className="p-4">
-          <div className="max-w-2xl mx-auto pt-8">
-            <TournamentResults
-              tournament={currentTournament}
-              onNewTournament={onBackToSetup}
-              onBackToHome={() => navigate('/')}
-            />
-          </div>
+      <div className="min-h-screen p-4 bg-gradient-to-br from-gray-50 to-white">
+        <div className="max-w-2xl mx-auto pt-8">
+          <TournamentResults
+            tournament={currentTournament}
+            onNewTournament={onBackToSetup}
+            onBackToHome={onBackToSetup}
+          />
         </div>
       </div>
     );
@@ -86,36 +75,9 @@ const GamePageContainer: React.FC<GamePageContainerProps> = ({
     onCloseScoreForm();
   };
 
-  // Déterminer les props de la topbar selon l'état
-  const getTopBarProps = () => {
-    if (showGameOver) {
-      return {
-        title: "Partie terminée",
-        showBackButton: true,
-        onBack: () => navigate('/'),
-        showSettings: true
-      };
-    }
-    
-    return {
-      title: "Partie en cours",
-      roundCount: roundHistory.length,
-      scoreLimit: scoreLimit,
-      showBackButton: true,
-      onBack: () => navigate('/'),
-      showSettings: true
-    };
-  };
-
-  const topBarProps = getTopBarProps();
-
   return (
     <div className="min-h-screen relative">
-      {/* UnifiedTopBar centralisée */}
-      <UnifiedTopBar {...topBarProps} />
-
-      {/* TournamentProgress pour les tournois */}
-      {gameMode === 'tournament' && currentTournament && tournamentProgress && !showGameOver && (
+      {gameMode === 'tournament' && currentTournament && tournamentProgress && (
         <div className="pt-4 px-4 pb-4">
           <TournamentProgress
             tournament={currentTournament}
@@ -131,7 +93,6 @@ const GamePageContainer: React.FC<GamePageContainerProps> = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="px-4"
           >
             <GameOverScreen
               players={players}

@@ -23,34 +23,12 @@ export const UnifiedThemeProvider: React.FC<UnifiedThemeProviderProps> = ({
   defaultTheme = 'default',
   storageKey = 'dutch-theme'
 }) => {
-  const [theme, setTheme] = useState<ThemeType>(() => {
-    // Initialize theme from localStorage or use default
-    if (typeof window !== 'undefined') {
-      try {
-        const storedTheme = localStorage.getItem(storageKey) as ThemeType;
-        if (storedTheme && Object.keys(THEMES).includes(storedTheme)) {
-          return storedTheme;
-        }
-      } catch (error) {
-        console.warn('Erreur lors du chargement du thème:', error);
-      }
-    }
-    return defaultTheme;
-  });
-
-  const [systemPreference, setSystemPreference] = useState<'light' | 'dark'>(() => {
-    if (typeof window !== 'undefined') {
-      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    }
-    return 'light';
-  });
-
+  const [theme, setTheme] = useState<ThemeType>(defaultTheme);
+  const [systemPreference, setSystemPreference] = useState<'light' | 'dark'>('light');
   const [mounted, setMounted] = useState(false);
 
   // Détecter la préférence système
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     setSystemPreference(mediaQuery.matches ? 'dark' : 'light');
 
@@ -62,14 +40,22 @@ export const UnifiedThemeProvider: React.FC<UnifiedThemeProviderProps> = ({
     return () => mediaQuery.removeEventListener('change', handleChange);
   }, []);
 
-  // Mark as mounted
+  // Charger le thème depuis le localStorage
   useEffect(() => {
+    try {
+      const storedTheme = localStorage.getItem(storageKey) as ThemeType;
+      if (storedTheme && Object.keys(THEMES).includes(storedTheme)) {
+        setTheme(storedTheme);
+      }
+    } catch (error) {
+      console.warn('Erreur lors du chargement du thème:', error);
+    }
     setMounted(true);
-  }, []);
+  }, [storageKey]);
 
   // Appliquer le thème
   useEffect(() => {
-    if (!mounted || typeof window === 'undefined') return;
+    if (!mounted) return;
 
     const root = document.documentElement;
     const selectedTheme = THEMES[theme];

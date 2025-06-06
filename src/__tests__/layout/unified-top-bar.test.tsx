@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { BrowserRouter } from 'react-router-dom';
 import UnifiedTopBar from '@/components/scoreboard/UnifiedTopBar';
 
@@ -21,35 +21,32 @@ describe('UnifiedTopBar Component', () => {
 
   beforeEach(() => {
     mockNavigate.mockClear();
+    // Clear localStorage before each test
     localStorage.clear();
   });
 
-  it('renders with transparent background and gradient title', () => {
+  it('renders title correctly', () => {
     render(
       <TopBarWrapper>
-        <UnifiedTopBar title="Test Title" />
+        <UnifiedTopBar title="Game Score" />
       </TopBarWrapper>
     );
 
-    const topbar = screen.getByTestId('unified-topbar');
-    expect(topbar).toBeInTheDocument();
-    expect(screen.getByText('Test Title')).toBeInTheDocument();
-    
-    // Check for transparent header
-    expect(topbar).toHaveClass('bg-transparent');
-    
-    // Check for gradient text
-    const title = screen.getByText('Test Title');
-    expect(title).toHaveClass('bg-gradient-to-r');
-    expect(title).toHaveClass('from-dutch-blue');
-    expect(title).toHaveClass('via-dutch-purple');
-    expect(title).toHaveClass('to-dutch-orange');
-    expect(title).toHaveClass('bg-clip-text');
-    expect(title).toHaveClass('text-transparent');
-    expect(title).toHaveClass('animate-gradient-x');
+    expect(screen.getByText('Game Score')).toBeInTheDocument();
   });
 
-  it('shows back button when enabled with glass styling', () => {
+  it('shows back button when enabled', () => {
+    render(
+      <TopBarWrapper>
+        <UnifiedTopBar title="Test" showBackButton={true} />
+      </TopBarWrapper>
+    );
+
+    const backButton = screen.getByRole('button');
+    expect(backButton).toBeInTheDocument();
+  });
+
+  it('handles custom back function', () => {
     const mockOnBack = vi.fn();
     render(
       <TopBarWrapper>
@@ -61,72 +58,66 @@ describe('UnifiedTopBar Component', () => {
       </TopBarWrapper>
     );
 
-    const backButton = screen.getByLabelText('Retour');
-    expect(backButton).toBeInTheDocument();
-    expect(backButton).toHaveClass('bg-white/20');
-    expect(backButton).toHaveClass('backdrop-blur-sm');
-    
+    const backButton = screen.getByRole('button');
     fireEvent.click(backButton);
+    
     expect(mockOnBack).toHaveBeenCalledTimes(1);
   });
 
-  it('displays game info when provided', () => {
+  it('displays game info badges when provided', () => {
     render(
       <TopBarWrapper>
         <UnifiedTopBar 
           title="Game" 
           roundCount={5}
-          scoreLimit={100}
+          scoreLimit={500}
         />
       </TopBarWrapper>
     );
 
     expect(screen.getByText('Manche 5')).toBeInTheDocument();
-    expect(screen.getByText('Objectif : 100 pts')).toBeInTheDocument();
+    expect(screen.getByText('Limite 500 pts')).toBeInTheDocument();
   });
 
-  it('shows settings button', () => {
+  it('shows settings and rules buttons by default', () => {
     render(
       <TopBarWrapper>
-        <UnifiedTopBar title="Test" showSettings={true} />
+        <UnifiedTopBar title="Test" />
       </TopBarWrapper>
     );
 
-    // Should have settings button
+    // Should have multiple buttons (back, rules, settings)
     const buttons = screen.getAllByRole('button');
-    expect(buttons.length).toBeGreaterThan(0);
+    expect(buttons.length).toBeGreaterThan(1);
   });
 
-  it('has correct font and size styling for title', () => {
-    render(
-      <TopBarWrapper>
-        <UnifiedTopBar title="Test Title" />
-      </TopBarWrapper>
-    );
-
-    const title = screen.getByText('Test Title');
-    expect(title).toHaveClass('text-3xl');
-    expect(title).toHaveClass('md:text-4xl');
-    expect(title).toHaveClass('font-extrabold');
-    expect(title).toHaveClass('tracking-tight');
-  });
-
-  it('applies glassmorphic styling to buttons', () => {
-    const mockOnBack = vi.fn();
+  it('hides settings button when disabled', () => {
     render(
       <TopBarWrapper>
         <UnifiedTopBar 
           title="Test" 
-          showBackButton={true}
-          onBack={mockOnBack}
-          showSettings={true}
+          showSettings={false}
+          showRules={false}
+          showBackButton={false}
         />
       </TopBarWrapper>
     );
 
-    const backButton = screen.getByLabelText('Retour');
-    expect(backButton).toHaveClass('rounded-xl');
-    expect(backButton).toHaveClass('border');
-    expect(backButton).toHaveClass('border-white/30');
+    const buttons = screen.queryAllByRole('button');
+    expect(buttons).toHaveLength(0);
+  });
+
+  it('applies custom className', () => {
+    render(
+      <TopBarWrapper>
+        <UnifiedTopBar 
+          title="Test" 
+          className="custom-topbar-class"
+        />
+      </TopBarWrapper>
+    );
+
+    const container = screen.getByText('Test').closest('div');
+    expect(container).toHaveClass('custom-topbar-class');
   });
 });

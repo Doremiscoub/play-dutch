@@ -8,8 +8,6 @@ interface GameSounds {
   playUndoSound: () => void;
   playErrorSound: () => void;
   playScoreSound: () => void;
-  playAchievementSound: () => void;
-  playButtonSound: () => void;
   playSound: (soundType: string) => void;
   isSoundEnabled: boolean;
   toggleSound: () => void;
@@ -33,21 +31,6 @@ export function useSound(): GameSounds {
           case 'gameEnd':
             soundPath = '/sounds/game-end.mp3';
             break;
-          case 'achievement':
-            soundPath = '/sounds/achievement.mp3';
-            break;
-          case 'card':
-            soundPath = '/sounds/card-sound.mp3';
-            break;
-          case 'win':
-            soundPath = '/sounds/win-sound.mp3';
-            break;
-          case 'error':
-            soundPath = '/sounds/error-sound.mp3';
-            break;
-          case 'score':
-            soundPath = '/sounds/score-sound.mp3';
-            break;
           default:
             soundPath = `/sounds/${soundType}.mp3`;
         }
@@ -59,31 +42,23 @@ export function useSound(): GameSounds {
   }, [isSoundEnabled]);
   
   const playCardSound = useCallback(() => {
-    playSound('card');
+    playSound('card-sound');
   }, [playSound]);
   
   const playWinSound = useCallback(() => {
-    playSound('win');
+    playSound('win-sound');
   }, [playSound]);
   
   const playUndoSound = useCallback(() => {
-    playSound('undo');
+    playSound('undo-sound');
   }, [playSound]);
   
   const playErrorSound = useCallback(() => {
-    playSound('error');
+    playSound('error-sound');
   }, [playSound]);
   
   const playScoreSound = useCallback(() => {
-    playSound('score');
-  }, [playSound]);
-
-  const playAchievementSound = useCallback(() => {
-    playSound('achievement');
-  }, [playSound]);
-
-  const playButtonSound = useCallback(() => {
-    playSound('buttonClick');
+    playSound('score-sound');
   }, [playSound]);
   
   const toggleSound = useCallback(() => {
@@ -96,8 +71,6 @@ export function useSound(): GameSounds {
     playUndoSound,
     playErrorSound,
     playScoreSound,
-    playAchievementSound,
-    playButtonSound,
     playSound,
     isSoundEnabled,
     toggleSound,

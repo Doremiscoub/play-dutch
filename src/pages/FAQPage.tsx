@@ -12,7 +12,6 @@ import {
 import { Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import PageShell from '@/components/layout/PageShell';
-import UnifiedTopBar from '@/components/scoreboard/UnifiedTopBar';
 
 const FAQPage: React.FC = () => {
   const navigate = useNavigate();
@@ -121,81 +120,75 @@ const FAQPage: React.FC = () => {
 
   return (
     <PageShell variant="minimal">
-      {/* Header unifié avec style glassmorphique */}
-      <UnifiedTopBar 
+      <UnifiedPageLayout
         title="Questions Fréquentes"
         showBackButton
         onBack={() => navigate('/')}
-        showSettings={true}
-        showRules={false}
-      />
+        backgroundVariant="subtle"
+      >
+        <UnifiedCard variant="light" padding="lg">
+          {/* Search */}
+          <div className="mb-8">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <Input
+                placeholder="Rechercher dans les questions..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10"
+              />
+            </div>
+          </div>
 
-      <div className="p-6 pt-8">
-        <div className="max-w-4xl mx-auto">
-          <UnifiedCard variant="light" padding="lg">
-            {/* Search */}
-            <div className="mb-8">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                <Input
-                  placeholder="Rechercher dans les questions..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 glass-input"
-                />
+          {/* FAQ Content */}
+          <div className="space-y-8">
+            {filteredFAQs.map((category, categoryIndex) => (
+              <div key={categoryIndex}>
+                <h2 className="text-2xl font-bold mb-4 text-dutch-purple">
+                  {category.category}
+                </h2>
+                
+                <Accordion type="single" collapsible className="space-y-2">
+                  {category.questions.map((faq, index) => (
+                    <AccordionItem
+                      key={index}
+                      value={`${categoryIndex}-${index}`}
+                      className="border rounded-lg px-4"
+                    >
+                      <AccordionTrigger className="text-left hover:no-underline">
+                        <span className="font-medium">{faq.question}</span>
+                      </AccordionTrigger>
+                      <AccordionContent className="text-gray-600 leading-relaxed pb-4">
+                        {faq.answer}
+                      </AccordionContent>
+                    </AccordionItem>
+                  ))}
+                </Accordion>
               </div>
-            </div>
+            ))}
 
-            {/* FAQ Content */}
-            <div className="space-y-8">
-              {filteredFAQs.map((category, categoryIndex) => (
-                <div key={categoryIndex}>
-                  <h2 className="text-2xl font-bold mb-4 text-dutch-purple">
-                    {category.category}
-                  </h2>
-                  
-                  <Accordion type="single" collapsible className="space-y-2">
-                    {category.questions.map((faq, index) => (
-                      <AccordionItem
-                        key={index}
-                        value={`${categoryIndex}-${index}`}
-                        className="border rounded-lg px-4 vision-card"
-                      >
-                        <AccordionTrigger className="text-left hover:no-underline">
-                          <span className="font-medium">{faq.question}</span>
-                        </AccordionTrigger>
-                        <AccordionContent className="text-gray-600 leading-relaxed pb-4">
-                          {faq.answer}
-                        </AccordionContent>
-                      </AccordionItem>
-                    ))}
-                  </Accordion>
-                </div>
-              ))}
-
-              {filteredFAQs.length === 0 && searchTerm && (
-                <div className="text-center py-8">
-                  <p className="text-gray-500">
-                    Aucune question trouvée pour "{searchTerm}"
-                  </p>
-                </div>
-              )}
-            </div>
-
-            {/* Contact Section */}
-            <div className="mt-12 p-6 bg-gradient-to-r from-dutch-blue/5 to-dutch-purple/5 rounded-lg border vision-card">
-              <h3 className="text-xl font-bold mb-2">Une question non résolue ?</h3>
-              <p className="text-gray-600 mb-4">
-                Si vous ne trouvez pas la réponse à votre question, n'hésitez pas à nous contacter.
-                Nous sommes là pour vous aider !
-              </p>
-              <div className="text-sm text-gray-500">
-                Vous pouvez nous joindre via les paramètres de l'application.
+            {filteredFAQs.length === 0 && searchTerm && (
+              <div className="text-center py-8">
+                <p className="text-gray-500">
+                  Aucune question trouvée pour "{searchTerm}"
+                </p>
               </div>
+            )}
+          </div>
+
+          {/* Contact Section */}
+          <div className="mt-12 p-6 bg-gradient-to-r from-dutch-blue/5 to-dutch-purple/5 rounded-lg border">
+            <h3 className="text-xl font-bold mb-2">Une question non résolue ?</h3>
+            <p className="text-gray-600 mb-4">
+              Si vous ne trouvez pas la réponse à votre question, n'hésitez pas à nous contacter.
+              Nous sommes là pour vous aider !
+            </p>
+            <div className="text-sm text-gray-500">
+              Vous pouvez nous joindre via les paramètres de l'application.
             </div>
-          </UnifiedCard>
-        </div>
-      </div>
+          </div>
+        </UnifiedCard>
+      </UnifiedPageLayout>
     </PageShell>
   );
 };

@@ -1,48 +1,65 @@
 
 import React from 'react';
-import { ScoreBoardProps } from '@/types';
+import { useMediaQuery } from '@/hooks/use-media-query';
+import { useAuth } from '@/context/AuthContext';
 import ScoreBoard from '../ScoreBoard';
+import AdSenseSkyscraper from '../ads/AdSenseSkyscraper';
+import { Player } from '@/types';
 
-interface ScoreBoardWithAdsProps extends ScoreBoardProps {
-  // Props spécifiques pour les publicités si nécessaire
+interface ScoreBoardWithAdsProps {
+  players: Player[];
+  onAddRound: (scores: number[], dutchPlayerId?: string) => void;
+  onUndoLastRound: () => void;
+  onEndGame: () => void;
+  roundHistory?: { scores: number[], dutchPlayerId?: string }[];
+  isMultiplayer?: boolean;
+  showGameEndConfirmation?: boolean;
+  onConfirmEndGame?: () => void;
+  onCancelEndGame?: () => void;
+  scoreLimit?: number;
+  openScoreForm?: () => void;
 }
 
 const ScoreBoardWithAds: React.FC<ScoreBoardWithAdsProps> = (props) => {
-  console.log('ScoreBoardWithAds: Rendering with props', { 
-    playersCount: props.players?.length, 
-    roundHistoryLength: props.roundHistory?.length,
-    scoreLimit: props.scoreLimit,
-    showGameEndConfirmation: props.showGameEndConfirmation
-  });
-
-  // Vérification de sécurité des props avant transmission
-  if (!props.players || props.players.length === 0) {
-    console.warn('ScoreBoardWithAds: No players provided, rendering empty state');
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-dutch-blue/5 to-dutch-purple/5">
-        <div className="text-center p-8 bg-white/80 backdrop-blur-sm rounded-xl">
-          <h2 className="text-xl font-semibold text-gray-700 mb-2">Aucune partie en cours</h2>
-          <p className="text-gray-500">Créez une nouvelle partie pour commencer</p>
-        </div>
-      </div>
-    );
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
+  const { isSignedIn } = useAuth();
+  
+  // Show ads only on desktop for non-authenticated users
+  const showAds = isDesktop && !isSignedIn;
+  
+  if (!showAds) {
+    return <ScoreBoard {...props} />;
   }
 
-  // Le ScoreBoard gère maintenant AdSenseLayout en interne
   return (
-    <ScoreBoard 
-      {...props}
-      players={props.players}
-      roundHistory={props.roundHistory || []}
-      scoreLimit={props.scoreLimit || 100}
-      onAddRound={props.onAddRound}
-      onUndoLastRound={props.onUndoLastRound}
-      onEndGame={props.onEndGame}
-      showGameEndConfirmation={props.showGameEndConfirmation}
-      onConfirmEndGame={props.onConfirmEndGame}
-      onCancelEndGame={props.onCancelEndGame}
-      openScoreForm={props.openScoreForm}
-    />
+    <div className="min-h-screen w-full flex justify-center">
+      <div className="w-full max-w-[1400px] flex gap-6 px-4">
+        {/* Left AdSense Column */}
+        <div className="hidden lg:flex flex-col items-center pt-8">
+          <AdSenseSkyscraper
+            adClient="ca-pub-YOUR_PUBLISHER_ID"
+            adSlot="YOUR_LEFT_AD_SLOT"
+            position="left"
+            format="160x600"
+          />
+        </div>
+
+        {/* Main ScoreBoard */}
+        <div className="flex-1 max-w-4xl">
+          <ScoreBoard {...props} />
+        </div>
+
+        {/* Right AdSense Column */}
+        <div className="hidden lg:flex flex-col items-center pt-8">
+          <AdSenseSkyscraper
+            adClient="ca-pub-YOUR_PUBLISHER_ID"
+            adSlot="YOUR_RIGHT_AD_SLOT"
+            position="right"
+            format="120x600"
+          />
+        </div>
+      </div>
+    </div>
   );
 };
 
