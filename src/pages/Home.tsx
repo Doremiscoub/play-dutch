@@ -2,7 +2,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSEO } from '@/hooks/useSEO';
-import { User, Play, BookOpen, Trophy, Settings } from 'lucide-react';
+import { User, Play, BookOpen, Trophy } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import GameSettings from '@/components/GameSettings';
 import EnhancedHeroSection from '@/components/home/EnhancedHeroSection';
@@ -23,7 +23,7 @@ const Home: React.FC = () => {
 
   return (
     <PageShell variant="default">
-      {/* Header with settings */}
+      {/* Header with user profile and settings */}
       <header className="absolute top-4 right-4 z-50 flex gap-2" style={{ gap: DESIGN_SPACING[2] }}>
         <Button
           variant="dutch-glass"
@@ -71,14 +71,6 @@ const Home: React.FC = () => {
           >
             <Trophy className="h-4 w-4 mr-2" />
             Historique
-          </Button>
-          <Button
-            variant="ghost"
-            onClick={() => navigate('/settings')}
-            className="hover:text-dutch-primary"
-          >
-            <Settings className="h-4 w-4 mr-2" />
-            Paramètres
           </Button>
         </div>
       </div>
