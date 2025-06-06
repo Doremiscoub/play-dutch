@@ -89,15 +89,12 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
         >
           <motion.span
             animate={cardData.isWinner ? {
-              textShadow: [
-                '0 0 0px rgba(255, 215, 0, 0)',
-                '0 0 10px rgba(255, 215, 0, 1)',
-                '0 0 0px rgba(255, 215, 0, 0)'
-              ]
+              scale: [1, 1.1]
             } : {}}
             transition={{
               duration: 2,
               repeat: cardData.isWinner ? Infinity : 0,
+              repeatType: "reverse",
               ease: "easeInOut"
             }}
           >
@@ -111,15 +108,16 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
           <motion.div 
             className="absolute -right-16 -top-16 w-64 h-64 bg-gradient-to-br from-dutch-purple/20 via-dutch-blue/15 to-transparent rounded-full blur-3xl"
             animate={{ 
-              scale: [1, 1.2, 1],
-              rotate: [0, 180, 360],
-              opacity: [0.3, 0.6, 0.3],
-              x: [0, 10, 0],
-              y: [0, -5, 0]
+              scale: [1, 1.2],
+              rotate: [0, 180],
+              opacity: [0.3, 0.6],
+              x: [0, 10],
+              y: [0, -5]
             }}
             transition={{ 
               duration: 12, 
               repeat: Infinity, 
+              repeatType: "reverse",
               ease: "easeInOut" 
             }}
           />
@@ -128,15 +126,16 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
           <motion.div 
             className="absolute -left-16 -bottom-16 w-64 h-64 bg-gradient-to-br from-dutch-orange/20 via-dutch-purple/15 to-transparent rounded-full blur-3xl"
             animate={{ 
-              scale: [1, 1.3, 1],
-              rotate: [360, 180, 0],
-              opacity: [0.2, 0.5, 0.2],
-              x: [0, -8, 0],
-              y: [0, 8, 0]
+              scale: [1, 1.3],
+              rotate: [0, 180],
+              opacity: [0.2, 0.5],
+              x: [0, -8],
+              y: [0, 8]
             }}
             transition={{ 
               duration: 15, 
               repeat: Infinity, 
+              repeatType: "reverse",
               ease: "easeInOut",
               delay: 3
             }}
@@ -146,13 +145,14 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
           <motion.div 
             className="absolute top-1/3 left-1/3 w-32 h-32 bg-gradient-to-br from-dutch-blue/25 via-dutch-orange/15 to-transparent rounded-full blur-2xl"
             animate={{ 
-              scale: [0.8, 1.1, 0.8],
-              opacity: [0.1, 0.4, 0.1],
-              rotate: [0, 120, 240, 360]
+              scale: [0.8, 1.1],
+              opacity: [0.1, 0.4],
+              rotate: [0, 180]
             }}
             transition={{ 
               duration: 8, 
               repeat: Infinity, 
+              repeatType: "reverse",
               ease: "easeInOut",
               delay: 1.5
             }}

@@ -12,7 +12,7 @@ import DesktopSidePanel from './scoreboard/DesktopSidePanel';
 import ScoreTableView from './ScoreTableView';
 import AdSenseLayout from './game/AdSenseLayout';
 import { useScoreBoardLogic } from './scoreboard/ScoreBoardHooks';
-import EnhancedPlayerCard from './scoreboard/EnhancedPlayerCard';
+import FunPlayerCard from './scoreboard/FunPlayerCard';
 
 const ScoreBoard: React.FC<ScoreBoardProps> = ({
   players,
@@ -115,14 +115,13 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                 {currentView === 'list' ? (
                   <div className="space-y-4">
                     {sortedPlayers.map((player, index) => (
-                      <EnhancedPlayerCard
+                      <FunPlayerCard
                         key={player.id}
                         player={player}
                         rank={index + 1}
                         totalPlayers={players.length}
                         onSelect={handlePlayerSelect}
                         isSelected={selectedPlayer?.id === player.id}
-                        scoreLimit={scoreLimit}
                       />
                     ))}
                   </div>

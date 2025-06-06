@@ -27,14 +27,14 @@ const PlayerCardTrends: React.FC<PlayerCardTrendsProps> = ({
       icon: TrendingUp,
       label: 'En forme',
       color: 'text-green-500 bg-green-50',
-      animate: { y: [-2, 0, -2] }
+      animate: { y: [-2, 0] }
     });
   } else if (hasNegativeTrend) {
     trends.push({
       icon: TrendingDown,
       label: 'En difficulté',
       color: 'text-red-500 bg-red-50',
-      animate: { y: [2, 0, 2] }
+      animate: { y: [2, 0] }
     });
   }
 
@@ -45,8 +45,8 @@ const PlayerCardTrends: React.FC<PlayerCardTrendsProps> = ({
       label: `${dutchCount} Dutch`,
       color: 'text-dutch-orange bg-orange-50',
       animate: { 
-        scale: [1, 1.2, 1],
-        rotate: [0, 10, 0]
+        scale: [1, 1.2],
+        rotate: [0, 10]
       }
     });
   }
@@ -58,8 +58,8 @@ const PlayerCardTrends: React.FC<PlayerCardTrendsProps> = ({
       label: `${currentStreak} de suite`,
       color: 'text-dutch-purple bg-purple-50',
       animate: { 
-        x: [0, 3, 0],
-        scale: [1, 1.05, 1]
+        x: [0, 3],
+        scale: [1, 1.05]
       }
     });
   }
@@ -86,6 +86,7 @@ const PlayerCardTrends: React.FC<PlayerCardTrendsProps> = ({
             transition={{
               duration: 1.5,
               repeat: Infinity,
+              repeatType: "reverse",
               ease: "easeInOut"
             }}
           >

@@ -44,12 +44,13 @@ const PlayerCardShineEffect: React.FC<PlayerCardShineEffectProps> = ({ isWinner 
       <motion.div
         className="absolute inset-0 bg-gradient-to-br from-yellow-400/20 via-amber-300/10 to-orange-400/20 rounded-3xl"
         animate={{
-          opacity: [0.1, 0.3, 0.1],
-          scale: [1, 1.02, 1]
+          opacity: [0.1, 0.3],
+          scale: [1, 1.02]
         }}
         transition={{
           duration: 4,
           repeat: Infinity,
+          repeatType: "reverse",
           ease: "easeInOut"
         }}
       />
@@ -66,13 +67,14 @@ const PlayerCardShineEffect: React.FC<PlayerCardShineEffectProps> = ({ isWinner 
           className="absolute w-2 h-2 bg-yellow-400 rounded-full shadow-lg"
           style={pos}
           animate={{
-            scale: [0, 1, 0],
-            opacity: [0, 1, 0],
-            rotate: [0, 180, 360]
+            scale: [0, 1],
+            opacity: [0, 1],
+            rotate: [0, 180]
           }}
           transition={{
             duration: 2,
             repeat: Infinity,
+            repeatType: "reverse",
             delay: pos.delay,
             ease: "easeInOut"
           }}

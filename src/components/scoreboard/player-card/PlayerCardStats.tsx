@@ -83,12 +83,13 @@ const PlayerCardStats: React.FC<PlayerCardStatsProps> = ({ player, rank }) => {
           <motion.div 
             className="text-lg font-bold text-gray-800"
             animate={index === 1 && rank === 1 ? {
-              scale: [1, 1.1, 1],
-              color: ['#1f2937', '#059669', '#1f2937']
+              scale: [1, 1.1],
+              color: ['#1f2937', '#059669']
             } : {}}
             transition={{
               duration: 2,
               repeat: index === 1 && rank === 1 ? Infinity : 0,
+              repeatType: "reverse",
               ease: "easeInOut"
             }}
           >

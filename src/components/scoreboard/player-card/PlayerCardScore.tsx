@@ -37,16 +37,12 @@ const PlayerCardScore: React.FC<PlayerCardScoreProps> = ({
             : 'text-gray-800'
         }`}
         animate={isWinner ? {
-          scale: [1, 1.05, 1],
-          textShadow: [
-            '0 0 0px rgba(255, 215, 0, 0)',
-            '0 0 20px rgba(255, 215, 0, 0.8)',
-            '0 0 0px rgba(255, 215, 0, 0)'
-          ]
+          scale: [1, 1.05]
         } : {}}
         transition={{
           duration: 2,
           repeat: isWinner ? Infinity : 0,
+          repeatType: "reverse",
           ease: "easeInOut"
         }}
         whileHover={{ scale: 1.1 }}
@@ -57,20 +53,25 @@ const PlayerCardScore: React.FC<PlayerCardScoreProps> = ({
       {/* Indicateur de tendance avec animation */}
       <div className="flex items-center justify-end gap-1 text-sm text-gray-500">
         <motion.span
-          animate={{ opacity: [0.7, 1, 0.7] }}
-          transition={{ duration: 2, repeat: Infinity }}
+          animate={{ opacity: [0.7, 1] }}
+          transition={{ 
+            duration: 2, 
+            repeat: Infinity,
+            repeatType: "reverse"
+          }}
         >
           {roundCount} manches
         </motion.span>
         {getTrendIcon() && (
           <motion.div
             animate={{ 
-              y: rank <= 2 ? [-2, 0, -2] : [2, 0, 2],
-              scale: [1, 1.2, 1]
+              y: rank <= 2 ? [-2, 0] : [2, 0],
+              scale: [1, 1.2]
             }}
             transition={{ 
               duration: 1.5, 
               repeat: Infinity,
+              repeatType: "reverse",
               ease: "easeInOut"
             }}
           >
@@ -84,15 +85,12 @@ const PlayerCardScore: React.FC<PlayerCardScoreProps> = ({
         <motion.div
           className="mt-2 inline-flex items-center gap-1 bg-gradient-to-r from-yellow-400 to-amber-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg"
           animate={{
-            boxShadow: [
-              '0 0 0px rgba(255, 215, 0, 0)',
-              '0 0 15px rgba(255, 215, 0, 0.8)',
-              '0 0 0px rgba(255, 215, 0, 0)'
-            ]
+            opacity: [0.8, 1]
           }}
           transition={{
             duration: 2,
             repeat: Infinity,
+            repeatType: "reverse",
             ease: "easeInOut"
           }}
           initial={{ opacity: 0, scale: 0 }}
@@ -100,11 +98,12 @@ const PlayerCardScore: React.FC<PlayerCardScoreProps> = ({
         >
           <motion.div
             animate={{ 
-              rotate: [0, 10, -10, 0] 
+              rotate: [0, 10] 
             }}
             transition={{ 
               duration: 3, 
               repeat: Infinity,
+              repeatType: "reverse",
               ease: "easeInOut"
             }}
           >
