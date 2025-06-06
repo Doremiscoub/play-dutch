@@ -23,7 +23,9 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
 }) => {
   console.log('ScoreBoard: Component rendered', { 
     playersCount: players?.length, 
-    roundHistoryLength: roundHistory?.length 
+    roundHistoryLength: roundHistory?.length,
+    scoreLimit,
+    showGameEndConfirmation
   });
   
   // Vérification de sécurité des props
@@ -57,10 +59,10 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
   });
 
   return (
-    <div className="min-h-screen relative">
+    <div className="min-h-screen relative bg-gradient-to-br from-dutch-blue/5 to-dutch-purple/5">
       {/* Header géré par GamePageContainer via UnifiedTopBar */}
       
-      <div className="p-4 pb-24">
+      <div className="p-4 pb-24 space-y-6">
         {/* Toggle Liste/Tableau */}
         <ScoreBoardTabs
           currentView={currentView}
@@ -78,6 +80,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
             players={players}
             roundCount={roundCount}
             scoreLimit={scoreLimit}
+            roundHistory={roundHistory}
           />
         </motion.div>
 
@@ -101,7 +104,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
         />
       </div>
 
-      {/* Sticky Action Buttons */}
+      {/* Sticky Action Buttons - ESSENTIEL pour ajouter des manches */}
       <StickyActionButtons
         onAddRound={handleAddRound}
         onUndoLastRound={handleUndo}
