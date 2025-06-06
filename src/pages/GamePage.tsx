@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { useGameState } from '@/hooks/useGameState';
 import GamePageContainer from '@/components/game/GamePageContainer';
 import PageShell from '@/components/layout/PageShell';
-import { DESIGN_COLORS, DESIGN_SPACING } from '@/design/tokens';
 
 const GamePage: React.FC = () => {
   const navigate = useNavigate();
@@ -27,16 +26,8 @@ const GamePage: React.FC = () => {
       <PageShell variant="game">
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-center">
-            <div 
-              className="animate-spin rounded-full border-b-2 mx-auto mb-4"
-              style={{ 
-                height: DESIGN_SPACING[8], 
-                width: DESIGN_SPACING[8],
-                borderColor: DESIGN_COLORS.primary[500],
-                marginBottom: DESIGN_SPACING[4]
-              }}
-            ></div>
-            <p style={{ color: DESIGN_COLORS.neutral[700] }}>Chargement de la partie...</p>
+            <div className="animate-spin rounded-full border-b-2 mx-auto mb-4 h-8 w-8 border-blue-500"></div>
+            <p className="text-gray-700">Chargement de la partie...</p>
           </div>
         </div>
       </PageShell>

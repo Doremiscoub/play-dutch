@@ -51,12 +51,12 @@ const GameSetup: React.FC = () => {
 
   return (
     <PageShell variant="default">
-      {/* Header unifié avec style glassmorphique */}
       <UnifiedTopBar 
         title="Créer une partie"
         showBackButton
         onBack={handleBack}
         showSettings={true}
+        showRules={false}
       />
 
       {/* Contenu principal */}

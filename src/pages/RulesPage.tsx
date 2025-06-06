@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import RulesTabs from '@/components/rules/RulesTabs';
 import UnifiedTopBar from '@/components/scoreboard/UnifiedTopBar';
 import PageShell from '@/components/layout/PageShell';
-import { DESIGN_COLORS, DESIGN_SPACING } from '@/design/tokens';
 
 const RulesPage: React.FC = () => {
   const navigate = useNavigate();
@@ -26,7 +25,6 @@ const RulesPage: React.FC = () => {
 
   return (
     <PageShell variant="minimal">
-      {/* Unified Top Bar */}
       <UnifiedTopBar 
         title="Règles du Dutch"
         showBackButton
@@ -35,11 +33,8 @@ const RulesPage: React.FC = () => {
         showRules={false}
       />
 
-      <div style={{ 
-        padding: `${DESIGN_SPACING[4]} ${DESIGN_SPACING[4]} ${DESIGN_SPACING[20]}` 
-      }}>
+      <div className="p-4 pt-8 pb-20">
         <div className="max-w-4xl mx-auto">
-          {/* Rules Content */}
           <RulesTabs 
             activeTab={activeTab}
             onTabChange={setActiveTab}
