@@ -5,6 +5,9 @@ interface HapticFeedback {
   impact: (style?: 'light' | 'medium' | 'heavy') => void;
   notification: (type?: 'success' | 'warning' | 'error') => void;
   selection: () => void;
+  selectionChanged: () => void;
+  impactOccurred: () => void;
+  triggerHaptic: (options?: { pattern?: 'light' | 'medium' | 'heavy' }) => void;
   isSupported: boolean;
 }
 
@@ -40,10 +43,26 @@ export function useHapticFeedback(): HapticFeedback {
     navigator.vibrate([5]);
   }, [isSupported]);
 
+  // Alias methods to match existing component expectations
+  const selectionChanged = useCallback(() => {
+    selection();
+  }, [selection]);
+
+  const impactOccurred = useCallback(() => {
+    impact('medium');
+  }, [impact]);
+
+  const triggerHaptic = useCallback((options?: { pattern?: 'light' | 'medium' | 'heavy' }) => {
+    impact(options?.pattern || 'medium');
+  }, [impact]);
+
   return {
     impact,
     notification,
     selection,
+    selectionChanged,
+    impactOccurred,
+    triggerHaptic,
     isSupported
   };
 }
