@@ -3,7 +3,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ScoreBoardProps } from '@/types';
 import EndGameConfirmationDialog from './scoreboard/EndGameConfirmationDialog';
-import AICommentatorEnhanced from './ai-commentator/AICommentatorEnhanced';
+import EnhancedAICommentator from './ai-commentator/EnhancedAICommentator';
 import StickyActionButtons from './scoreboard/StickyActionButtons';
 import ScoreBoardContent from './scoreboard/ScoreBoardContent';
 import ScoreBoardTabs from './scoreboard/ScoreBoardTabs';
@@ -52,14 +52,14 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
           onViewChange={handleViewChange}
         />
 
-        {/* Commentateur IA */}
+        {/* Commentateur IA Complet avec toutes les fonctionnalités */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
           className="mb-6"
         >
-          <AICommentatorEnhanced 
+          <EnhancedAICommentator 
             players={players}
             roundCount={roundCount}
             scoreLimit={scoreLimit}
