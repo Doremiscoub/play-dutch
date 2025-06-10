@@ -15,50 +15,11 @@ const HistoryPage: React.FC = () => {
   const navigate = useNavigate();
   const [games, setGames] = useState<Game[]>([]);
   const [activeTab, setActiveTab] = useState("all");
-  const [stats, setStats] = useState<{
-    totalGames: number;
-    totalRounds: number;
-    totalPlayers: number;
-    mostFrequentWinner: { name: string; wins: number } | null;
-  }>({
-    totalGames: 0,
-    totalRounds: 0,
-    totalPlayers: 0,
-    mostFrequentWinner: null,
-  });
 
   useEffect(() => {
     const savedGames = localStorage.getItem('dutch_games');
     const parsedGames: Game[] = savedGames ? JSON.parse(savedGames) : [];
-    
     setGames(parsedGames);
-    
-    if (parsedGames.length > 0) {
-      const totalRounds = parsedGames.reduce((sum, game) => sum + game.rounds, 0);
-      
-      const playerSet = new Set<string>();
-      parsedGames.forEach(game => {
-        game.players.forEach(player => {
-          playerSet.add(player.name);
-        });
-      });
-      
-      const winnerCount: Record<string, number> = {};
-      parsedGames.forEach(game => {
-        winnerCount[game.winner] = (winnerCount[game.winner] || 0) + 1;
-      });
-      
-      const mostFrequentWinner = Object.entries(winnerCount).sort((a, b) => b[1] - a[1])[0];
-      
-      setStats({
-        totalGames: parsedGames.length,
-        totalRounds,
-        totalPlayers: playerSet.size,
-        mostFrequentWinner: mostFrequentWinner 
-          ? { name: mostFrequentWinner[0], wins: mostFrequentWinner[1] }
-          : null,
-      });
-    }
   }, []);
 
   const tabOptions = [
@@ -66,17 +27,20 @@ const HistoryPage: React.FC = () => {
     { value: "mine", label: "Mes parties" }
   ];
 
+  const handleBack = () => {
+    navigate('/');
+  };
+
   return (
     <PageShell variant="default">
-      <div className="w-full max-w-6xl mx-auto px-4">
-        <UnifiedTopBar 
-          title="Historique des parties"
-          showBackButton
-          onBack={() => navigate('/')}
-          showSettings={false}
-          showRules={false}
-        />
+      <UnifiedTopBar 
+        title="Historique"
+        showBackButton
+        onBack={handleBack}
+        showSettings={true}
+      />
 
+      <div className="w-full max-w-6xl mx-auto px-4 pt-4">
         <div className="mb-6">
           <UnifiedTabs
             value={activeTab}
@@ -99,7 +63,7 @@ const HistoryPage: React.FC = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.05 }}
-                  className="bg-white/80 backdrop-blur-md rounded-xl border border-white/50 shadow-sm p-4"
+                  className="bg-white/80 backdrop-blur-md rounded-xl border border-white/50 shadow-sm p-4 vision-card"
                 >
                   <div className="flex flex-col sm:flex-row sm:items-center gap-4">
                     <div className="flex-1">

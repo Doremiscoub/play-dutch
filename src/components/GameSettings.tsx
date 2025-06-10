@@ -1,155 +1,120 @@
-import React, { useState } from 'react';
+
+import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Switch } from '@/components/ui/switch';
+import { motion } from 'framer-motion';
+import { Settings, Volume, VolumeX, Trash2 } from 'lucide-react';
+import {
+  EnhancedDialog,
+  EnhancedDialogContent,
+  EnhancedDialogHeader,
+  EnhancedDialogTitle,
+  EnhancedDialogTrigger,
+} from '@/components/ui/enhanced-dialog';
 import { Label } from '@/components/ui/label';
+import { EnhancedSwitch } from '@/components/ui/enhanced-switch';
 import { Separator } from '@/components/ui/separator';
-import { useNavigate } from 'react-router-dom';
-import { 
-  Palette, 
-  Volume2, 
-  Smartphone, 
-  Download, 
-  Trash2, 
-  RefreshCcw,
-  Globe,
-  Settings
-} from 'lucide-react';
+import { useLocalStorage } from '@/hooks/use-local-storage';
+import { STORAGE_KEYS, cleanupLegacyStorage } from '@/utils/storageKeys';
 import { toast } from 'sonner';
-import { Badge } from '@/components/ui/badge';
-import { useTheme } from 'next-themes';
-import { useAppState } from '@/hooks/useAppState';
-import { STORAGE_KEYS } from '@/utils/storageKeys';
 
 const GameSettings: React.FC = () => {
-  const navigate = useNavigate();
-  const { theme, setTheme } = useTheme();
-  const { clearGameHistory } = useAppState();
-  const [soundEnabled, setSoundEnabled] = useState(localStorage.getItem(STORAGE_KEYS.SOUND_ENABLED) === 'true' || false);
-
-  const handleClearHistory = () => {
-    clearGameHistory();
-    toast.success('Historique effacé avec succès !');
-  };
-
-  const handleResetSettings = () => {
-    localStorage.removeItem(STORAGE_KEYS.THEME);
-    localStorage.removeItem(STORAGE_KEYS.SOUND_ENABLED);
-    setTheme('system');
-    setSoundEnabled(false);
-    localStorage.setItem(STORAGE_KEYS.SOUND_ENABLED, 'false');
-    toast.success('Paramètres réinitialisés !');
-  };
+  const [soundEnabled, setSoundEnabled] = useLocalStorage(STORAGE_KEYS.SOUND_ENABLED, true);
+  const [adsEnabled, setAdsEnabled] = useLocalStorage(STORAGE_KEYS.ADS_ENABLED, true);
 
   const toggleSound = () => {
-    const newValue = !soundEnabled;
-    setSoundEnabled(newValue);
-    localStorage.setItem(STORAGE_KEYS.SOUND_ENABLED, newValue.toString());
-    toast.success(`Son ${newValue ? 'activé' : 'désactivé'} !`);
+    setSoundEnabled((prev: boolean) => !prev);
+    toast.success(soundEnabled ? 'Son désactivé' : 'Son activé');
+  };
+
+  const toggleAds = () => {
+    setAdsEnabled((prev: boolean) => !prev);
+    toast.success(adsEnabled ? 'Publicités désactivées' : 'Publicités activées');
+  };
+
+  const handleCleanupStorage = () => {
+    try {
+      cleanupLegacyStorage();
+      toast.success('Cache nettoyé avec succès');
+    } catch (error) {
+      console.error('Erreur lors du nettoyage:', error);
+      toast.error('Erreur lors du nettoyage');
+    }
   };
 
   return (
-    <div className="space-y-6">
-      {/* Apparence */}
-      <Card className="vision-card">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Palette className="h-5 w-5 text-dutch-blue" />
-            Apparence
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex items-center justify-between">
-            <Label htmlFor="theme-switcher">Mode sombre</Label>
-            <Switch
-              id="theme-switcher"
-              checked={theme === 'dark'}
-              onCheckedChange={(checked) => setTheme(checked ? 'dark' : 'light')}
+    <EnhancedDialog>
+      <EnhancedDialogTrigger asChild>
+        <Button variant="ghost" size="icon" className="glass-button rounded-full">
+          <Settings className="h-5 w-5" />
+        </Button>
+      </EnhancedDialogTrigger>
+      <EnhancedDialogContent className="sm:max-w-md">
+        <EnhancedDialogHeader>
+          <EnhancedDialogTitle>Paramètres du Jeu</EnhancedDialogTitle>
+        </EnhancedDialogHeader>
+        <div className="space-y-6 py-4">
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex flex-col gap-1">
+              <Label htmlFor="sound" className="text-base font-medium">Son</Label>
+              <span className="text-sm text-gray-600">Activer/désactiver les sons du jeu</span>
+            </div>
+            <div className="flex items-center gap-2">
+              {soundEnabled ? <Volume className="h-4 w-4 text-gray-600" /> : <VolumeX className="h-4 w-4 text-gray-600" />}
+              <EnhancedSwitch 
+                id="sound" 
+                checked={soundEnabled} 
+                onCheckedChange={toggleSound}
+              />
+            </div>
+          </div>
+
+          <Separator className="bg-white/20" />
+
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex flex-col gap-1">
+              <Label htmlFor="ads" className="text-base font-medium">Publicités</Label>
+              <span className="text-sm text-gray-600">Activer/désactiver l'affichage des annonces</span>
+            </div>
+            <EnhancedSwitch 
+              id="ads" 
+              checked={adsEnabled} 
+              onCheckedChange={toggleAds}
             />
           </div>
-        </CardContent>
-      </Card>
 
-      {/* Audio */}
-      <Card className="vision-card">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Volume2 className="h-5 w-5 text-dutch-blue" />
-            Audio
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex items-center justify-between">
-            <Label htmlFor="sound-toggle">Effets sonores</Label>
-            <Switch
-              id="sound-toggle"
-              checked={soundEnabled}
-              onCheckedChange={toggleSound}
-            />
+          <motion.div 
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: adsEnabled ? 1 : 0, height: adsEnabled ? 'auto' : 0 }}
+            className="overflow-hidden"
+          >
+            <div className="glass-card p-4 mt-3">
+              <p className="text-xs text-blue-700">
+                Les annonces nous aident à maintenir l'application gratuite et à financer son développement.
+                Merci de votre soutien !
+              </p>
+            </div>
+          </motion.div>
+
+          <Separator className="bg-white/20" />
+
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex flex-col gap-1">
+              <Label className="text-base font-medium">Maintenance</Label>
+              <span className="text-sm text-gray-600">Nettoyer le cache et les données temporaires</span>
+            </div>
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={handleCleanupStorage}
+              className="glass-button flex items-center gap-2 border-white/30"
+            >
+              <Trash2 className="h-4 w-4" />
+              Nettoyer
+            </Button>
           </div>
-        </CardContent>
-      </Card>
-
-      {/* Données */}
-      <Card className="vision-card">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Smartphone className="h-5 w-5 text-dutch-blue" />
-            Données
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <Button
-            onClick={handleClearHistory}
-            variant="destructive"
-            className="w-full justify-start"
-          >
-            <Trash2 className="h-4 w-4 mr-2" />
-            Effacer l'historique
-          </Button>
-        </CardContent>
-      </Card>
-
-      {/* Utilitaires */}
-      <Card className="vision-card">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Settings className="h-5 w-5 text-dutch-blue" />
-            Utilitaires
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <Button
-            onClick={handleResetSettings}
-            variant="secondary"
-            className="w-full justify-start"
-          >
-            <RefreshCcw className="h-4 w-4 mr-2" />
-            Réinitialiser les paramètres
-          </Button>
-        </CardContent>
-      </Card>
-
-      {/* SEO & Outils */}
-      <Card className="vision-card">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Globe className="h-5 w-5 text-dutch-blue" />
-            SEO & Outils
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <Button
-            onClick={() => navigate('/sitemap')}
-            variant="outline"
-            className="w-full justify-start"
-          >
-            <Globe className="h-4 w-4 mr-2" />
-            Générer sitemap & robots.txt
-          </Button>
-        </CardContent>
-      </Card>
-    </div>
+        </div>
+      </EnhancedDialogContent>
+    </EnhancedDialog>
   );
 };
 

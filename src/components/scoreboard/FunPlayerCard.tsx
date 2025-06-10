@@ -7,6 +7,10 @@ import { useFunPlayerCard } from './player-card/useFunPlayerCard';
 import PlayerCardContent from './player-card/PlayerCardContent';
 import PlayerCardShineEffect from './player-card/PlayerCardShineEffect';
 import FloatingWinnerBadge from './FloatingWinnerBadge';
+import FunPlayerCardRankBadge from './player-card/FunPlayerCardRankBadge';
+import FunPlayerCardParticles from './player-card/FunPlayerCardParticles';
+import FunPlayerCardHolographicEffect from './player-card/FunPlayerCardHolographicEffect';
+import FunPlayerCardAmbientGlow from './player-card/FunPlayerCardAmbientGlow';
 
 interface FunPlayerCardProps {
   player: Player;
@@ -23,7 +27,7 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
   onSelect,
   isSelected
 }) => {
-  console.log('FunPlayerCard: Rendering card for', player.name);
+  console.log('FunPlayerCard: Rendering enhanced card for', player.name);
   const [isExpanded, setIsExpanded] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
   
@@ -41,38 +45,70 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
       <motion.div
         ref={cardRef}
         className={cn(
-          "relative rounded-3xl backdrop-blur-xl border shadow-xl transition-all duration-300 cursor-pointer overflow-hidden",
+          "relative rounded-3xl backdrop-blur-2xl border-2 shadow-glass-lg transition-all duration-700 cursor-pointer overflow-hidden group perspective-1000",
+          "bg-white/85 border-white/60 hover:bg-white/95 hover:shadow-glass-xl hover:backdrop-blur-4xl",
           getCardStyle(),
-          isSelected || isExpanded ? "ring-4 ring-dutch-blue/40 shadow-2xl scale-[1.02]" : "hover:scale-[1.01] hover:shadow-2xl"
+          isSelected || isExpanded ? "ring-4 ring-dutch-blue/50 shadow-dutch-lg scale-[1.02] border-dutch-blue/40 z-10" : "hover:scale-[1.015] hover:shadow-dutch hover:-translate-y-2"
         )}
         onClick={handleCardClick}
-        whileHover={{ y: -4 }}
-        whileTap={{ scale: 0.98 }}
+        whileHover={{ 
+          y: -8, 
+          scale: 1.02,
+          rotateX: 2,
+          rotateY: 1,
+          z: 50
+        }}
+        whileTap={{ scale: 0.99, rotateX: 0 }}
         layout
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3, delay: rank * 0.1 }}
+        initial={{ opacity: 0, y: 30, rotateX: -15, scale: 0.9 }}
+        animate={{ opacity: 1, y: 0, rotateX: 0, scale: 1 }}
+        transition={{ 
+          duration: 0.8, 
+          delay: rank * 0.1,
+          type: "spring",
+          stiffness: 100,
+          damping: 15
+        }}
+        style={{
+          transformStyle: 'preserve-3d',
+        }}
       >
-        {/* Effet de brillance pour le gagnant */}
+        {/* Enhanced Rank Badge - Floating 3D */}
+        <FunPlayerCardRankBadge rank={rank} isWinner={cardData.isWinner} />
+
+        {/* Enhanced Floating Background Particles */}
+        <FunPlayerCardParticles />
+
+        {/* Enhanced Shine Effect for Winners */}
         <PlayerCardShineEffect isWinner={cardData.isWinner} />
 
-        {/* Contenu de la carte */}
-        <PlayerCardContent
-          player={player}
-          rank={rank}
-          isExpanded={isExpanded}
-          cardData={cardData}
+        {/* Advanced Holographic Effect for Special Cards */}
+        <FunPlayerCardHolographicEffect 
+          isWinner={cardData.isWinner} 
+          isLastPlace={cardData.isLastPlace} 
         />
+
+        {/* Main Card Content with Enhanced Padding */}
+        <div className="relative z-20 p-8">
+          <PlayerCardContent
+            player={player}
+            rank={rank}
+            isExpanded={isExpanded}
+            cardData={cardData}
+          />
+        </div>
+
+        {/* Ambient Glow Effect on Hover */}
+        <FunPlayerCardAmbientGlow />
       </motion.div>
 
-      {/* Pastille flottante indépendante */}
+      {/* Enhanced Floating Winner Badge */}
       <FloatingWinnerBadge isWinner={cardData.isWinner} cardRef={cardRef} />
     </>
   );
 };
 
 export default React.memo(FunPlayerCard, (prevProps, nextProps) => {
-  // Comparaison personnalisée pour éviter les re-renders inutiles
   return (
     prevProps.player.id === nextProps.player.id &&
     prevProps.player.totalScore === nextProps.player.totalScore &&

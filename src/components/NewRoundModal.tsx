@@ -89,7 +89,7 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="sm:max-w-lg">
+      <DialogContent className="sm:max-w-lg glass-modal">
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold text-gray-800">Ajouter une manche</DialogTitle>
         </DialogHeader>
@@ -98,7 +98,7 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
           {players.map((player, index) => (
             <motion.div
               key={player.id}
-              className="p-4 glass-form"
+              className="p-4 vision-card"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.05, duration: 0.3 }}

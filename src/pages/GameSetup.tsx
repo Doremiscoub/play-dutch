@@ -2,13 +2,12 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSEO } from '@/hooks/useSEO';
-import { ArrowLeft, Settings } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import EnhancedLocalGameSetup from '@/components/game-setup/EnhancedLocalGameSetup';
 import { useGameState } from '@/hooks/useGameState';
 import { toast } from 'sonner';
 import { STORAGE_KEYS } from '@/utils/storageKeys';
 import PageShell from '@/components/layout/PageShell';
+import UnifiedTopBar from '@/components/scoreboard/UnifiedTopBar';
 
 const GameSetup: React.FC = () => {
   const navigate = useNavigate();
@@ -37,47 +36,21 @@ const GameSetup: React.FC = () => {
   };
 
   const handleBack = () => {
-    // Vérifier s'il y a une partie active
-    const activeGame = localStorage.getItem(STORAGE_KEYS.CURRENT_GAME);
-    const gameActive = localStorage.getItem(STORAGE_KEYS.GAME_ACTIVE);
-    
-    if (activeGame && gameActive === 'true') {
-      // Retourner à la partie active
-      navigate('/game');
-    } else {
-      // Retourner à l'accueil
-      navigate('/');
-    }
+    navigate('/');
   };
 
   return (
     <PageShell variant="default">
-      {/* Header avec navigation */}
-      <header className="absolute top-4 left-4 right-4 z-50 flex justify-between items-center">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={handleBack}
-          className="bg-white/70 backdrop-blur-xl border border-white/50 text-gray-800 hover:bg-white/80 rounded-full"
-          aria-label="Retour"
-        >
-          <ArrowLeft className="h-5 w-5" />
-        </Button>
-        
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => navigate('/settings')}
-          className="bg-white/70 backdrop-blur-xl border border-white/50 text-gray-800 hover:bg-white/80 rounded-full"
-          aria-label="Paramètres"
-        >
-          <Settings className="h-5 w-5" />
-        </Button>
-      </header>
+      <UnifiedTopBar 
+        title="Créer une partie"
+        showBackButton
+        onBack={handleBack}
+        showSettings={true}
+      />
 
-      {/* Contenu principal centré */}
-      <div className="flex items-center justify-center min-h-screen px-4 py-20">
-        <div className="w-full max-w-2xl">
+      {/* Contenu principal */}
+      <div className="p-6 pt-8">
+        <div className="w-full max-w-2xl mx-auto">
           <EnhancedLocalGameSetup onStartGame={handleStartGame} />
         </div>
       </div>

@@ -1,6 +1,7 @@
 
 import React from 'react';
-import { Toggle } from '@/components/ui/toggle';
+import { List, Table } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface ScoreBoardTabsProps {
   currentView: 'list' | 'table';
@@ -12,25 +13,36 @@ const ScoreBoardTabs: React.FC<ScoreBoardTabsProps> = ({
   onViewChange
 }) => {
   return (
-    <div className="flex justify-center items-center space-x-1 mb-4">
-      <Toggle
-        pressed={currentView === 'list'}
-        onPressedChange={() => onViewChange('list')}
-        variant="default"
-        size="lg"
-        className="rounded-l-xl border-r-0"
-      >
-        Classement
-      </Toggle>
-      <Toggle
-        pressed={currentView === 'table'}
-        onPressedChange={() => onViewChange('table')}
-        variant="default"
-        size="lg"
-        className="rounded-r-xl border-l-0"
-      >
-        Tableau détaillé
-      </Toggle>
+    <div className="flex justify-center mb-6">
+      <div className="bg-white border border-gray-200 rounded-lg p-1 shadow-sm">
+        <div className="flex gap-1">
+          <button
+            className={cn(
+              "flex items-center gap-2 px-4 py-2 rounded-md font-medium transition-all duration-200",
+              currentView === 'list' 
+                ? "bg-blue-500 text-white shadow-sm" 
+                : "text-gray-600 hover:text-blue-600 hover:bg-gray-50"
+            )}
+            onClick={() => onViewChange('list')}
+          >
+            <List className="h-4 w-4" />
+            <span>Liste des joueurs</span>
+          </button>
+          
+          <button
+            className={cn(
+              "flex items-center gap-2 px-4 py-2 rounded-md font-medium transition-all duration-200",
+              currentView === 'table' 
+                ? "bg-blue-500 text-white shadow-sm" 
+                : "text-gray-600 hover:text-blue-600 hover:bg-gray-50"
+            )}
+            onClick={() => onViewChange('table')}
+          >
+            <Table className="h-4 w-4" />
+            <span>Tableau des manches</span>
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

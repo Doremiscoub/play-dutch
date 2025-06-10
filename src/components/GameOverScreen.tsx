@@ -31,11 +31,10 @@ const GameOverScreen: React.FC<GameOverScreenProps> = ({
   const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
   const winner = sortedPlayers[0];
   
-  // Trigger confetti for the winner - Further enhanced
+  // Trigger confetti for the winner
   const triggerConfetti = () => {
     if (isConfettiTriggered) return;
     
-    // More abundant and colorful confetti
     confetti({
       particleCount: 200,
       spread: 100,
@@ -43,7 +42,6 @@ const GameOverScreen: React.FC<GameOverScreenProps> = ({
       colors: ['#1EAEDB', '#8B5CF6', '#F97316', '#10B981', '#FBBF24', '#FF6B6B', '#4CD4FF']
     });
     
-    // Second wave of confetti after a delay
     setTimeout(() => {
       confetti({
         particleCount: 150,
@@ -62,7 +60,6 @@ const GameOverScreen: React.FC<GameOverScreenProps> = ({
       });
     }, 700);
     
-    // Third wave for extra celebration
     setTimeout(() => {
       confetti({
         particleCount: 100,
@@ -75,7 +72,6 @@ const GameOverScreen: React.FC<GameOverScreenProps> = ({
     
     setIsConfettiTriggered(true);
     
-    // Play celebration sound if available
     try {
       const audio = new Audio('/sounds/victory.mp3');
       audio.volume = 0.6;
@@ -85,11 +81,9 @@ const GameOverScreen: React.FC<GameOverScreenProps> = ({
     }
   };
 
-  // Trigger confetti on load
   useEffect(() => {
     triggerConfetti();
     
-    // Timer to relaunch confetti periodically for continuous celebration
     const confettiInterval = setInterval(() => {
       confetti({
         particleCount: 40,
@@ -99,7 +93,6 @@ const GameOverScreen: React.FC<GameOverScreenProps> = ({
       });
     }, 3000);
     
-    // Show celebration toast
     toast.success(`🎉 ${winner.name} remporte la partie !`, {
       duration: 5000,
       position: 'top-center',
@@ -108,66 +101,46 @@ const GameOverScreen: React.FC<GameOverScreenProps> = ({
     return () => clearInterval(confettiInterval);
   }, [winner.name]);
 
-  // Continue game with a new limit
   const handleContinueGame = (newLimit: number) => {
     onContinueGame(newLimit);
     toast.success(`La partie continue ! Nouvelle limite : ${currentScoreLimit + newLimit} points`);
   };
 
   return (
-    <div className="min-h-screen p-4 flex flex-col items-center justify-center relative overflow-hidden">
-      {/* Animated festive background */}
-      <div className="absolute inset-0 -z-10">
-        <AnimatedBackground />
-        
-        {/* Overlay with festive gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-500/15 via-transparent to-orange-500/15"></div>
-      </div>
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Header géré par GamePageContainer via UnifiedTopBar */}
       
-      {/* Main content */}
-      <div className="w-full max-w-xl mx-auto z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <ModernTitle variant="h1" withSparkles className="text-center mb-6">
-            Partie Terminée
-          </ModernTitle>
-        </motion.div>
+      <div className="p-4 flex flex-col items-center justify-center relative pt-16">
+        {/* Animated festive background */}
+        <div className="absolute inset-0 -z-10">
+          <AnimatedBackground />
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-500/15 via-transparent to-orange-500/15"></div>
+        </div>
         
-        <ReceiptCard className="w-full mb-6 p-6">
-          {/* Header with congratulations message */}
-          <GameOverHeader winner={winner} />
+        {/* Main content */}
+        <div className="w-full max-w-xl mx-auto z-10 mt-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <ModernTitle variant="h1" withSparkles className="text-center mb-6">
+              🎉 Victoire ! 🎉
+            </ModernTitle>
+          </motion.div>
           
-          {/* Podium */}
-          <GamePodium players={players} />
+          <ReceiptCard className="w-full mb-6 p-6">
+            <GameOverHeader winner={winner} />
+            <GamePodium players={players} />
+            <OtherPlayersRanking players={players} />
+          </ReceiptCard>
           
-          {/* Other players ranking */}
-          <OtherPlayersRanking players={players} />
-        </ReceiptCard>
-        
-        {/* Action buttons */}
-        <GameOverActionButtons 
-          onRestart={onRestart} 
-          onContinueGame={handleContinueGame} 
-        />
+          <GameOverActionButtons 
+            onRestart={onRestart} 
+            onContinueGame={handleContinueGame} 
+          />
+        </div>
       </div>
-      
-      {/* Fixed: Replace jsx prop with standard CSS */}
-      <style>
-        {`
-        @keyframes gradientBg {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
-        }
-        .gradient-animation {
-          animation: gradientBg 6s ease infinite;
-          background-size: 200% 200%;
-        }
-        `}
-      </style>
     </div>
   );
 };
