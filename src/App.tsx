@@ -23,6 +23,7 @@ import PrivacyPage from './pages/PrivacyPage';
 import TermsPage from './pages/TermsPage';
 import FAQPage from './pages/FAQPage';
 import GuideStrategy from './pages/GuideStrategy';
+import SitemapPage from './pages/SitemapPage';
 
 // Composants
 import ProtectedRoute from './components/ProtectedRoute';
@@ -79,6 +80,7 @@ const App: React.FC = () => {
               <Route path="history" element={<History />} />
               <Route path="rules" element={<Rules />} />
               <Route path="settings" element={<SettingsPage />} />
+              <Route path="sitemap" element={<SitemapPage />} />
               
               {/* Pages SEO / Contenu */}
               <Route path="about" element={<AboutPage />} />
