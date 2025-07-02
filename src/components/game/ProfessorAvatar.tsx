@@ -115,15 +115,12 @@ export default function ProfessorAvatar({
         transition={{
           duration: 3,
           repeat: Infinity,
-          ease: "easeInOut",
-          type: "spring",
-          stiffness: 50,
-          damping: 20
+          ease: "easeInOut"
         }}
         whileHover={{ 
           scale: 1.15,
-          rotate: [0, -10, 10, 0],
-          y: [0, -8, 0],
+          rotate: 5,
+          y: -8,
           boxShadow: "0 0 30px rgba(139, 92, 246, 0.5)",
           transition: { 
             duration: 0.6,
