@@ -9,7 +9,7 @@ import AboutPage from '@/pages/AboutPage';
 import HistoryPage from '@/pages/HistoryPage';
 import RulesPage from '@/pages/RulesPage';
 import GameSetup from '@/pages/GameSetup';
-import UnifiedTopBar from '@/components/scoreboard/UnifiedTopBar';
+import UnifiedHeader from '@/components/layout/UnifiedHeader';
 
 // Mock router
 const mockNavigate = vi.fn();
@@ -46,7 +46,7 @@ describe('Unified Header Integration', () => {
     it('renders with correct title and glassmorphic styles', () => {
       render(
         <TestWrapper>
-          <UnifiedTopBar title="Test Title" showSettings={true} />
+          <UnifiedHeader title="Test Title" showSettings={true} />
         </TestWrapper>
       );
 
@@ -63,11 +63,12 @@ describe('Unified Header Integration', () => {
     it('shows game info when provided', () => {
       render(
         <TestWrapper>
-          <UnifiedTopBar 
+          <UnifiedHeader 
             title="Game" 
             roundCount={5}
             scoreLimit={100}
             showSettings={true} 
+            variant="game"
           />
         </TestWrapper>
       );
@@ -80,7 +81,7 @@ describe('Unified Header Integration', () => {
       const mockOnBack = vi.fn();
       render(
         <TestWrapper>
-          <UnifiedTopBar 
+          <UnifiedHeader 
             title="Test" 
             showBackButton={true}
             onBack={mockOnBack}

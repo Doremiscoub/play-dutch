@@ -7,7 +7,7 @@ import { useSEO } from '@/hooks/useSEO';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { Heart, Users, Smartphone, Zap } from 'lucide-react';
 import PageShell from '@/components/layout/PageShell';
-import UnifiedTopBar from '@/components/scoreboard/UnifiedTopBar';
+import UnifiedHeader from '@/components/layout/UnifiedHeader';
 
 const AboutPage: React.FC = () => {
   const navigate = useNavigate();
@@ -30,12 +30,11 @@ const AboutPage: React.FC = () => {
         }} 
       />
       
-      <UnifiedTopBar 
+      <UnifiedHeader 
         title="À propos de Dutch"
         showBackButton
         onBack={() => navigate('/')}
         showSettings={true}
-        showRules={false}
       />
 
       <div className="p-8 pt-4">

@@ -5,7 +5,7 @@ import { ScoreBoardProps } from '@/types';
 import EndGameConfirmationDialog from './scoreboard/EndGameConfirmationDialog';
 import EnhancedAICommentator from './ai-commentator/EnhancedAICommentator';
 import StickyActionButtons from './scoreboard/StickyActionButtons';
-import ScoreBoardHeader from './scoreboard/ScoreBoardHeader';
+import UnifiedHeader from '@/components/layout/UnifiedHeader';
 import DetailedGameStats from './scoreboard/DetailedGameStats';
 import GameStatsPanel from './scoreboard/GameStatsPanel';
 import DesktopSidePanel from './scoreboard/DesktopSidePanel';
@@ -99,11 +99,35 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: 0.2 }}
+                className="flex justify-center items-center space-x-4 mb-8 mt-4 px-4"
               >
-                <ScoreBoardHeader
-                  currentView={currentView}
-                  onViewChange={handleViewChange}
-                />
+                <motion.button
+                  onClick={() => handleViewChange('list')}
+                  className={`px-8 py-3 rounded-xl transition-all shadow-md flex items-center gap-2 font-medium min-w-[180px] glass-button ${
+                    currentView === 'list'
+                      ? 'bg-gradient-to-r from-dutch-blue to-dutch-purple text-white shadow-lg scale-105'
+                      : 'hover:bg-white/30'
+                  }`}
+                  whileHover={{ scale: currentView === 'list' ? 1.05 : 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <span className="h-4 w-4">📊</span>
+                  Classement détaillé
+                </motion.button>
+                
+                <motion.button
+                  onClick={() => handleViewChange('table')}
+                  className={`px-8 py-3 rounded-xl transition-all shadow-md flex items-center gap-2 font-medium min-w-[180px] glass-button ${
+                    currentView === 'table'
+                      ? 'bg-gradient-to-r from-dutch-blue to-dutch-purple text-white shadow-lg scale-105'
+                      : 'hover:bg-white/30'
+                  }`}
+                  whileHover={{ scale: currentView === 'table' ? 1.05 : 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <span className="h-4 w-4">📋</span>
+                  Tableau des manches
+                </motion.button>
               </motion.div>
 
               {/* Contenu principal */}

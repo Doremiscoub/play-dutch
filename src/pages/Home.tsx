@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSEO } from '@/hooks/useSEO';
 import { BookOpen, Trophy } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import UnifiedTopBar from '@/components/scoreboard/UnifiedTopBar';
+import UnifiedHeader from '@/components/layout/UnifiedHeader';
 import EnhancedHeroSection from '@/components/home/EnhancedHeroSection';
 import { FeaturesSection } from '@/components/home/FeaturesSection';
 import { StatsSection } from '@/components/home/StatsSection';
@@ -23,11 +23,10 @@ const Home: React.FC = () => {
   return (
     <PageShell variant="default">
       {/* Header unifié avec style glassmorphique */}
-      <UnifiedTopBar 
+      <UnifiedHeader 
         title="Dutch Card Game"
         showBackButton={false}
         showSettings={true}
-        showRules={false}
       />
 
       {/* Enhanced Hero Section - titre 3D et particules */}

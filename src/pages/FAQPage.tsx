@@ -12,7 +12,7 @@ import {
 import { Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import PageShell from '@/components/layout/PageShell';
-import UnifiedTopBar from '@/components/scoreboard/UnifiedTopBar';
+import UnifiedHeader from '@/components/layout/UnifiedHeader';
 
 const FAQPage: React.FC = () => {
   const navigate = useNavigate();
@@ -122,12 +122,11 @@ const FAQPage: React.FC = () => {
   return (
     <PageShell variant="minimal">
       {/* Header unifié avec style glassmorphique */}
-      <UnifiedTopBar 
+      <UnifiedHeader 
         title="Questions Fréquentes"
         showBackButton
         onBack={() => navigate('/')}
         showSettings={true}
-        showRules={false}
       />
 
       <div className="p-6 pt-8">

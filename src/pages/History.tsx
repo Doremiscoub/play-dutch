@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import UnifiedTopBar from '@/components/scoreboard/UnifiedTopBar';
+import UnifiedHeader from '@/components/layout/UnifiedHeader';
 import { Calendar, Trophy, Users } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { format } from 'date-fns';
@@ -100,12 +100,11 @@ const History: React.FC = () => {
 
   return (
     <PageShell variant="default">
-      <UnifiedTopBar 
+      <UnifiedHeader 
         title="Historique des parties"
         showBackButton
         onBack={() => navigate('/')}
         showSettings={false}
-        showRules={false}
       />
       
       <div className="container mx-auto px-4 py-8 relative z-10">

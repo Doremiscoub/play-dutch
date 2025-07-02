@@ -8,7 +8,7 @@ import ScoreBoardWithAds from '@/components/scoreboard/ScoreBoardWithAds';
 import TournamentProgress from '@/components/tournament/TournamentProgress';
 import GameModeHandler from '@/components/game/GameModeHandler';
 import NewRoundScoreForm from '@/components/NewRoundScoreForm';
-import UnifiedTopBar from '@/components/scoreboard/UnifiedTopBar';
+import UnifiedHeader from '@/components/layout/UnifiedHeader';
 import { useNavigate } from 'react-router-dom';
 
 interface GamePageContainerProps {
@@ -61,7 +61,7 @@ const GamePageContainer: React.FC<GamePageContainerProps> = ({
   if (gameMode === 'tournament' && currentTournament?.isCompleted) {
     return (
       <div className="min-h-screen">
-        <UnifiedTopBar 
+        <UnifiedHeader 
           title="Résultats du tournoi"
           showBackButton
           onBack={() => navigate('/')}
@@ -111,8 +111,8 @@ const GamePageContainer: React.FC<GamePageContainerProps> = ({
 
   return (
     <div className="min-h-screen relative">
-      {/* UnifiedTopBar centralisée */}
-      <UnifiedTopBar {...topBarProps} />
+      {/* UnifiedHeader centralisée */}
+      <UnifiedHeader {...topBarProps} variant="game" />
 
       {/* TournamentProgress pour les tournois */}
       {gameMode === 'tournament' && currentTournament && tournamentProgress && !showGameOver && (

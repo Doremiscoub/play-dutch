@@ -3,7 +3,7 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { BrowserRouter } from 'react-router-dom';
-import UnifiedTopBar from '@/components/scoreboard/UnifiedTopBar';
+import UnifiedHeader from '@/components/layout/UnifiedHeader';
 
 const mockNavigate = vi.fn();
 vi.mock('react-router-dom', async () => {
@@ -27,7 +27,7 @@ describe('UnifiedTopBar Component', () => {
   it('renders with transparent background and gradient title', () => {
     render(
       <TopBarWrapper>
-        <UnifiedTopBar title="Test Title" />
+        <UnifiedHeader title="Test Title" />
       </TopBarWrapper>
     );
 
@@ -53,7 +53,7 @@ describe('UnifiedTopBar Component', () => {
     const mockOnBack = vi.fn();
     render(
       <TopBarWrapper>
-        <UnifiedTopBar 
+        <UnifiedHeader 
           title="Test" 
           showBackButton={true}
           onBack={mockOnBack}
@@ -73,10 +73,11 @@ describe('UnifiedTopBar Component', () => {
   it('displays game info when provided', () => {
     render(
       <TopBarWrapper>
-        <UnifiedTopBar 
+        <UnifiedHeader 
           title="Game" 
           roundCount={5}
           scoreLimit={100}
+          variant="game"
         />
       </TopBarWrapper>
     );
@@ -88,7 +89,7 @@ describe('UnifiedTopBar Component', () => {
   it('shows settings button', () => {
     render(
       <TopBarWrapper>
-        <UnifiedTopBar title="Test" showSettings={true} />
+        <UnifiedHeader title="Test" showSettings={true} />
       </TopBarWrapper>
     );
 
@@ -100,7 +101,7 @@ describe('UnifiedTopBar Component', () => {
   it('has correct font and size styling for title', () => {
     render(
       <TopBarWrapper>
-        <UnifiedTopBar title="Test Title" />
+        <UnifiedHeader title="Test Title" />
       </TopBarWrapper>
     );
 
@@ -115,7 +116,7 @@ describe('UnifiedTopBar Component', () => {
     const mockOnBack = vi.fn();
     render(
       <TopBarWrapper>
-        <UnifiedTopBar 
+        <UnifiedHeader 
           title="Test" 
           showBackButton={true}
           onBack={mockOnBack}

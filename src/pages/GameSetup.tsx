@@ -7,7 +7,7 @@ import { useGameState } from '@/hooks/useGameState';
 import { toast } from 'sonner';
 import { STORAGE_KEYS } from '@/utils/storageKeys';
 import PageShell from '@/components/layout/PageShell';
-import UnifiedTopBar from '@/components/scoreboard/UnifiedTopBar';
+import UnifiedHeader from '@/components/layout/UnifiedHeader';
 
 const GameSetup: React.FC = () => {
   const navigate = useNavigate();
@@ -41,7 +41,7 @@ const GameSetup: React.FC = () => {
 
   return (
     <PageShell variant="default">
-      <UnifiedTopBar 
+      <UnifiedHeader 
         title="Créer une partie"
         showBackButton
         onBack={handleBack}

@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import UnifiedTopBar from '@/components/scoreboard/UnifiedTopBar';
+import UnifiedHeader from '@/components/layout/UnifiedHeader';
 import { useSupabaseAuth } from '@/context/SupabaseAuthContext';
 import { toast } from 'sonner';
 import SignInForm from '@/components/auth/SignInForm';
@@ -32,12 +32,11 @@ const SignIn: React.FC = () => {
             transition={{ duration: 0.5 }}
             className="w-full max-w-md z-10"
           >
-            <UnifiedTopBar 
+            <UnifiedHeader 
               title="Connexion"
               showBackButton
               onBack={() => navigate('/')}
               showSettings={false}
-              showRules={false}
             />
             
             <div className="bg-white/70 backdrop-blur-md rounded-3xl shadow-lg border border-white/40 p-8">
@@ -79,12 +78,11 @@ const SignIn: React.FC = () => {
           transition={{ duration: 0.5 }}
           className="w-full max-w-md z-10"
         >
-          <UnifiedTopBar 
+          <UnifiedHeader 
             title={isSignUp ? "Inscription" : "Connexion"}
             showBackButton
             onBack={() => navigate('/')}
             showSettings={false}
-            showRules={false}
           />
           
           <div className="bg-white/70 backdrop-blur-md rounded-3xl shadow-lg border border-white/40 p-6">

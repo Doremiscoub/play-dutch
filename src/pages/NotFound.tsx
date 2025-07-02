@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
-import UnifiedTopBar from '@/components/scoreboard/UnifiedTopBar';
+import UnifiedHeader from '@/components/layout/UnifiedHeader';
 import PageShell from '@/components/layout/PageShell';
 
 const NotFound: React.FC = () => {
@@ -13,12 +13,11 @@ const NotFound: React.FC = () => {
   return (
     <PageShell variant="minimal">
       <div className="w-full max-w-6xl mx-auto px-1 sm:px-2">
-        <UnifiedTopBar 
+        <UnifiedHeader 
           title="Page non trouvée"
           showBackButton
           onBack={() => navigate('/')}
           showSettings={false}
-          showRules={false}
         />
         
         <motion.div

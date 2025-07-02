@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Game } from '@/types';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import UnifiedTopBar from '@/components/scoreboard/UnifiedTopBar';
+import UnifiedHeader from '@/components/layout/UnifiedHeader';
 import { UnifiedTabs } from '@/components/ui/unified-tabs';
 import { Trophy, Calendar, Users } from 'lucide-react';
 import { format } from 'date-fns';
@@ -33,7 +33,7 @@ const HistoryPage: React.FC = () => {
 
   return (
     <PageShell variant="default">
-      <UnifiedTopBar 
+      <UnifiedHeader 
         title="Historique"
         showBackButton
         onBack={handleBack}

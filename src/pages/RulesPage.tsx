@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import RulesTabs from '@/components/rules/RulesTabs';
-import UnifiedTopBar from '@/components/scoreboard/UnifiedTopBar';
+import UnifiedHeader from '@/components/layout/UnifiedHeader';
 import PageShell from '@/components/layout/PageShell';
 
 const RulesPage: React.FC = () => {
@@ -16,7 +16,7 @@ const RulesPage: React.FC = () => {
 
   return (
     <PageShell variant="minimal">
-      <UnifiedTopBar 
+      <UnifiedHeader 
         title="Règles du Dutch"
         showBackButton
         onBack={handleBack}
