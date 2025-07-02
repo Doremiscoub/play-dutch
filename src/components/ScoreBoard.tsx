@@ -3,14 +3,14 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ScoreBoardProps } from '@/types';
 import EndGameConfirmationDialog from './scoreboard/EndGameConfirmationDialog';
-import EnhancedAICommentator from './ai-commentator/EnhancedAICommentator';
+
 import StickyActionButtons from './scoreboard/StickyActionButtons';
 import UnifiedHeader from '@/components/layout/UnifiedHeader';
 import DetailedGameStats from './scoreboard/DetailedGameStats';
 import GameStatsPanel from './scoreboard/GameStatsPanel';
 import DesktopSidePanel from './scoreboard/DesktopSidePanel';
 import ScoreTableView from './ScoreTableView';
-import AdSenseLayout from './game/AdSenseLayout';
+
 import { useScoreBoardLogic } from './scoreboard/ScoreBoardHooks';
 import FunPlayerCard from './scoreboard/FunPlayerCard';
 
@@ -69,138 +69,116 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
   };
 
   return (
-    <AdSenseLayout
-      isSignedIn={false}
-      adsEnabled={true}
-      isLoaded={true}
-    >
-      <div className="min-h-screen bg-gradient-to-br from-dutch-blue/5 via-white to-dutch-purple/5 pb-32">
-        <div className="max-w-6xl mx-auto">
-          {/* Professeur Cartouche - En haut et centré */}
+    <div className="max-w-6xl mx-auto">
+      {/* Layout Desktop avec panneau latéral */}
+      <div className="flex gap-6">
+        {/* Contenu principal */}
+        <div className="flex-1 space-y-6">
+          {/* Toggle Liste/Tableau avec style glassmorphisme */}
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="mb-8 px-4 pt-4"
+            transition={{ duration: 0.4, delay: 0.2 }}
+            className="flex justify-center items-center space-x-4 mb-8 mt-4 px-4"
           >
-            <EnhancedAICommentator 
-              players={players}
-              roundCount={roundCount}
-              scoreLimit={scoreLimit}
-            />
+            <motion.button
+              onClick={() => handleViewChange('list')}
+              className={`px-8 py-3 rounded-xl transition-all shadow-md flex items-center gap-2 font-medium min-w-[180px] glass-button ${
+                currentView === 'list'
+                  ? 'bg-gradient-to-r from-dutch-blue to-dutch-purple text-white shadow-lg scale-105'
+                  : 'hover:bg-white/30'
+              }`}
+              whileHover={{ scale: currentView === 'list' ? 1.05 : 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <span className="h-4 w-4">📊</span>
+              Classement détaillé
+            </motion.button>
+            
+            <motion.button
+              onClick={() => handleViewChange('table')}
+              className={`px-8 py-3 rounded-xl transition-all shadow-md flex items-center gap-2 font-medium min-w-[180px] glass-button ${
+                currentView === 'table'
+                  ? 'bg-gradient-to-r from-dutch-blue to-dutch-purple text-white shadow-lg scale-105'
+                  : 'hover:bg-white/30'
+              }`}
+              whileHover={{ scale: currentView === 'table' ? 1.05 : 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <span className="h-4 w-4">📋</span>
+              Tableau des manches
+            </motion.button>
           </motion.div>
 
-          {/* Layout Desktop avec panneau latéral */}
-          <div className="flex gap-6 px-4">
-            {/* Contenu principal */}
-            <div className="flex-1 space-y-6">
-              {/* Toggle Liste/Tableau avec style glassmorphisme */}
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.2 }}
-                className="flex justify-center items-center space-x-4 mb-8 mt-4 px-4"
-              >
-                <motion.button
-                  onClick={() => handleViewChange('list')}
-                  className={`px-8 py-3 rounded-xl transition-all shadow-md flex items-center gap-2 font-medium min-w-[180px] glass-button ${
-                    currentView === 'list'
-                      ? 'bg-gradient-to-r from-dutch-blue to-dutch-purple text-white shadow-lg scale-105'
-                      : 'hover:bg-white/30'
-                  }`}
-                  whileHover={{ scale: currentView === 'list' ? 1.05 : 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <span className="h-4 w-4">📊</span>
-                  Classement détaillé
-                </motion.button>
-                
-                <motion.button
-                  onClick={() => handleViewChange('table')}
-                  className={`px-8 py-3 rounded-xl transition-all shadow-md flex items-center gap-2 font-medium min-w-[180px] glass-button ${
-                    currentView === 'table'
-                      ? 'bg-gradient-to-r from-dutch-blue to-dutch-purple text-white shadow-lg scale-105'
-                      : 'hover:bg-white/30'
-                  }`}
-                  whileHover={{ scale: currentView === 'table' ? 1.05 : 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <span className="h-4 w-4">📋</span>
-                  Tableau des manches
-                </motion.button>
-              </motion.div>
-
-              {/* Contenu principal */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.4 }}
-              >
-                {currentView === 'list' ? (
-                  <div className="space-y-4">
-                    {sortedPlayers.map((player, index) => (
-                      <FunPlayerCard
-                        key={player.id}
-                        player={player}
-                        rank={index + 1}
-                        totalPlayers={players.length}
-                        onSelect={handlePlayerSelect}
-                        isSelected={selectedPlayer?.id === player.id}
-                      />
-                    ))}
-                  </div>
-                ) : (
-                  <ScoreTableView 
-                    players={players} 
-                    roundHistory={roundHistory}
+          {/* Contenu principal */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+          >
+            {currentView === 'list' ? (
+              <div className="space-y-4">
+                {sortedPlayers.map((player, index) => (
+                  <FunPlayerCard
+                    key={player.id}
+                    player={player}
+                    rank={index + 1}
+                    totalPlayers={players.length}
+                    onSelect={handlePlayerSelect}
+                    isSelected={selectedPlayer?.id === player.id}
                   />
-                )}
-              </motion.div>
-
-              {/* Statistiques détaillées de la partie */}
-              <DetailedGameStats
-                players={players}
-                roundCount={roundCount}
-                scoreLimit={scoreLimit}
-                roundHistory={roundHistory}
-              />
-            </div>
-
-            {/* Panneau latéral desktop */}
-            <div className="hidden lg:block w-80">
-              <DesktopSidePanel
-                showAICommentator={false}
-                players={players}
-                roundHistory={roundHistory}
-                selectedPlayer={selectedPlayer}
-              />
-              
-              <div className="mt-6">
-                <GameStatsPanel
-                  players={players}
-                  roundHistory={roundHistory}
-                />
+                ))}
               </div>
-            </div>
-          </div>
+            ) : (
+              <ScoreTableView 
+                players={players} 
+                roundHistory={roundHistory}
+              />
+            )}
+          </motion.div>
 
-          {/* End Game Confirmation */}
-          <EndGameConfirmationDialog
-            isOpen={showGameEndConfirmation}
-            onConfirm={onConfirmEndGame}
-            onCancel={onCancelEndGame}
+          {/* Statistiques détaillées de la partie */}
+          <DetailedGameStats
+            players={players}
+            roundCount={roundCount}
+            scoreLimit={scoreLimit}
+            roundHistory={roundHistory}
           />
         </div>
 
-        {/* Sticky Action Buttons */}
-        <StickyActionButtons
-          onAddRound={handleAddRound}
-          onUndoLastRound={handleUndo}
-          onEndGame={handleEndGame}
-          canUndo={roundHistory.length > 0}
-        />
+        {/* Panneau latéral desktop */}
+        <div className="hidden lg:block w-80">
+          <DesktopSidePanel
+            showAICommentator={false}
+            players={players}
+            roundHistory={roundHistory}
+            selectedPlayer={selectedPlayer}
+          />
+          
+          <div className="mt-6">
+            <GameStatsPanel
+              players={players}
+              roundHistory={roundHistory}
+            />
+          </div>
+        </div>
       </div>
-    </AdSenseLayout>
+
+      {/* End Game Confirmation */}
+      <EndGameConfirmationDialog
+        isOpen={showGameEndConfirmation}
+        onConfirm={onConfirmEndGame}
+        onCancel={onCancelEndGame}
+      />
+
+      {/* Sticky Action Buttons */}
+      <StickyActionButtons
+        onAddRound={handleAddRound}
+        onUndoLastRound={handleUndo}
+        onEndGame={handleEndGame}
+        canUndo={roundHistory.length > 0}
+      />
+    </div>
   );
 };
 

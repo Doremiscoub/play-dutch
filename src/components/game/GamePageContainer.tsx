@@ -9,6 +9,7 @@ import TournamentProgress from '@/components/tournament/TournamentProgress';
 import GameModeHandler from '@/components/game/GameModeHandler';
 import NewRoundScoreForm from '@/components/NewRoundScoreForm';
 import UnifiedHeader from '@/components/layout/UnifiedHeader';
+import EnhancedAICommentator from '@/components/ai-commentator/EnhancedAICommentator';
 import { useNavigate } from 'react-router-dom';
 
 interface GamePageContainerProps {
@@ -93,7 +94,8 @@ const GamePageContainer: React.FC<GamePageContainerProps> = ({
         title: "Partie terminée",
         showBackButton: true,
         onBack: () => navigate('/'),
-        showSettings: true
+        showSettings: true,
+        variant: "default" as const
       };
     }
     
@@ -103,7 +105,8 @@ const GamePageContainer: React.FC<GamePageContainerProps> = ({
       scoreLimit: scoreLimit,
       showBackButton: true,
       onBack: () => navigate('/'),
-      showSettings: true
+      showSettings: true,
+      variant: "game" as const
     };
   };
 
@@ -112,7 +115,7 @@ const GamePageContainer: React.FC<GamePageContainerProps> = ({
   return (
     <div className="min-h-screen relative">
       {/* UnifiedHeader centralisée */}
-      <UnifiedHeader {...topBarProps} variant="game" />
+      <UnifiedHeader {...topBarProps} />
 
       {/* TournamentProgress pour les tournois */}
       {gameMode === 'tournament' && currentTournament && tournamentProgress && !showGameOver && (
@@ -154,18 +157,36 @@ const GamePageContainer: React.FC<GamePageContainerProps> = ({
               onGameEnd={onRequestEndGame}
               onRestart={onRestart}
             >
-              <ScoreBoardWithAds
-                players={players}
-                roundHistory={roundHistory}
-                onAddRound={handleAddNewRound}
-                onUndoLastRound={onUndoLastRound}
-                onEndGame={onRequestEndGame}
-                showGameEndConfirmation={showGameEndConfirmation}
-                onConfirmEndGame={onConfirmEndGame}
-                onCancelEndGame={onCancelEndGame}
-                scoreLimit={scoreLimit}
-                openScoreForm={onOpenScoreForm}
-              />
+              <div className="min-h-screen bg-gradient-to-br from-dutch-blue/5 via-white to-dutch-purple/5 pb-32">
+                <div className="max-w-6xl mx-auto">
+                  {/* Professeur Cartouche - En haut et centré */}
+                  <motion.div
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                    className="mb-8 px-4 pt-4"
+                  >
+                    <EnhancedAICommentator 
+                      players={players}
+                      roundCount={roundHistory.length}
+                      scoreLimit={scoreLimit}
+                    />
+                  </motion.div>
+
+                  <ScoreBoardWithAds
+                    players={players}
+                    roundHistory={roundHistory}
+                    onAddRound={handleAddNewRound}
+                    onUndoLastRound={onUndoLastRound}
+                    onEndGame={onRequestEndGame}
+                    showGameEndConfirmation={showGameEndConfirmation}
+                    onConfirmEndGame={onConfirmEndGame}
+                    onCancelEndGame={onCancelEndGame}
+                    scoreLimit={scoreLimit}
+                    openScoreForm={onOpenScoreForm}
+                  />
+                </div>
+              </div>
             </GameModeHandler>
           </motion.div>
         )}
