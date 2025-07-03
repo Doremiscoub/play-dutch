@@ -25,7 +25,7 @@ const PlayerListView: React.FC<PlayerListViewProps> = ({
       {sortedPlayers.map((player, index) => (
         <Card 
           key={player.id}
-          className="p-4 bg-white/80 backdrop-blur-sm hover:bg-white/90 transition-all cursor-pointer"
+          className="p-4 card-kids-blue hover:card-kids-purple transition-all cursor-pointer"
           onClick={() => onPlayerSelect(player)}
         >
           <div className="flex items-center gap-4">

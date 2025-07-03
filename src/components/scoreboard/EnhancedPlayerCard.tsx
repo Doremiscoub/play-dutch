@@ -48,15 +48,15 @@ const EnhancedPlayerCard: React.FC<EnhancedPlayerCardProps> = ({
 
   const getCardStyle = () => {
     if (isWinner) {
-      return "card-game bg-gradient-to-br from-trinity-orange-50 via-trinity-orange-100 to-trinity-orange-200/60 border-trinity-orange-300 shadow-trinity";
+      return "card-kids-orange shadow-glow-orange";
     }
     if (isLastPlace) {
-      return "card-glass bg-gradient-to-br from-error-light/20 via-error/10 to-error-dark/5 border-error-light/40 shadow-glass-lg";
+      return "card-kids-pink shadow-glow-pink";
     }
     if (rank <= 3) {
-      return "card-game bg-gradient-to-br from-success-light/20 via-success/10 to-success-dark/5 border-success-light/40 shadow-trinity";
+      return "card-kids-lime shadow-glow-lime";
     }
-    return "card-glass shadow-glass";
+    return "card-kids-blue shadow-glow-blue";
   };
 
   const handleCardClick = () => {

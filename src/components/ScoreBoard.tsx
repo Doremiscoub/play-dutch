@@ -35,10 +35,10 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
   if (!players || players.length === 0) {
     console.warn('ScoreBoard: No players provided');
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center bg-white rounded-xl p-8 shadow-lg">
-          <p className="text-gray-700 text-lg">Aucun joueur trouvé</p>
-          <p className="text-gray-500 text-sm mt-2">Créez une nouvelle partie pour commencer</p>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center card-kids-orange rounded-xl p-8 shadow-glow-orange">
+          <p className="text-white text-lg font-bold">Aucun joueur trouvé</p>
+          <p className="text-white/80 text-sm mt-2">Créez une nouvelle partie pour commencer</p>
         </div>
       </div>
     );
