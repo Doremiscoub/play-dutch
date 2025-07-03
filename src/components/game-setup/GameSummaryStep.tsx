@@ -180,7 +180,7 @@ const GameSummaryStep: React.FC<GameSummaryStepProps> = ({
           <Button
             onClick={onStartGame}
             size="lg"
-            className="w-full py-6 text-xl font-black rounded-2xl shadow-xl bg-gradient-to-r from-trinity-blue-500 via-trinity-purple-500 to-trinity-orange-500 text-white hover:from-trinity-blue-600 hover:via-trinity-purple-600 hover:to-trinity-orange-600 transform transition-all duration-300"
+            className="w-full py-6 text-xl font-black rounded-2xl shadow-xl bg-gradient-to-r from-trinity-blue-600 via-trinity-purple-600 to-trinity-orange-600 text-white hover:from-trinity-blue-700 hover:via-trinity-purple-700 hover:to-trinity-orange-700 transform transition-all duration-300 border-2 border-trinity-blue-500"
           >
             <Gamepad2 className="h-6 w-6 mr-3" />
             Commencer la partie !
