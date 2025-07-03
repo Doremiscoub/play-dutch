@@ -53,7 +53,7 @@ const EnhancedHeroSection: React.FC = () => {
   };
 
   return (
-    <section className="relative z-10 h-screen flex flex-col items-center justify-center px-4 overflow-hidden">
+    <section className="relative z-10 min-h-screen flex flex-col items-center justify-start pt-8 px-4 overflow-hidden">
       <Suspense fallback={<div />}>
         <FloatingElements />
       </Suspense>
@@ -96,7 +96,7 @@ const EnhancedHeroSection: React.FC = () => {
             <img 
               src="/lovable-uploads/0532ef39-c77c-4480-8d74-7af7665596ee.png"
               alt="Dutch - Logo du jeu avec Professeur Cartouche"
-              className="w-auto h-80 sm:h-96 md:h-[28rem] lg:h-[32rem] xl:h-[36rem] 2xl:h-[40rem] max-w-full object-contain drop-shadow-2xl"
+              className="w-auto h-52 sm:h-64 md:h-72 lg:h-80 xl:h-96 max-w-full object-contain drop-shadow-2xl"
               style={{
                 filter: 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3))'
               }}
@@ -186,7 +186,7 @@ const EnhancedHeroSection: React.FC = () => {
           initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: prefersReducedMotion ? 0.2 : 1, delay: 0.3 }}
-          className="space-y-4 mb-4"
+          className="space-y-2 mb-3"
         >
           <motion.h2 
             className="text-2xl md:text-4xl lg:text-5xl font-bold text-white leading-tight"
@@ -205,7 +205,7 @@ const EnhancedHeroSection: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: prefersReducedMotion ? 0.2 : 1, delay: 0.5 }}
-          className="flex justify-center gap-4 flex-wrap mb-4"
+          className="flex justify-center gap-4 flex-wrap mb-3"
         >
           <TrustIndicator 
             icon={<Users className="h-4 w-4" />}
@@ -229,7 +229,7 @@ const EnhancedHeroSection: React.FC = () => {
           initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: prefersReducedMotion ? 0.2 : 1, delay: 0.7 }}
-          className="relative mb-4"
+          className="relative mb-6"
         >
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
             {/* Primary CTA - corrigé pour naviguer vers /setup */}
