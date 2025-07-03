@@ -3,7 +3,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useSEO } from '@/hooks/useSEO';
-import EnhancedLocalGameSetup from '@/components/game-setup/EnhancedLocalGameSetup';
+import ModernGameSetup from '@/components/game-setup/ModernGameSetup';
 import { useGameState } from '@/hooks/useGameState';
 import { toast } from 'sonner';
 import { STORAGE_KEYS } from '@/utils/storageKeys';
@@ -82,7 +82,7 @@ const GameSetup: React.FC = () => {
       {/* Contenu principal */}
       <div className="relative z-10 p-6 pt-8">
         <div className="w-full max-w-2xl mx-auto">
-          <EnhancedLocalGameSetup onStartGame={handleStartGame} />
+          <ModernGameSetup onStartGame={handleStartGame} />
         </div>
       </div>
     </PageShell>
