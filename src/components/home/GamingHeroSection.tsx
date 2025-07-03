@@ -3,17 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowRight, Gamepad2, Zap, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import AnimatedBackground from '@/components/AnimatedBackground';
+
 
 const GamingHeroSection: React.FC = () => {
   const navigate = useNavigate();
 
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center px-4 py-8 overflow-hidden">
-      {/* Vrai AnimatedBackground */}
-      <div className="absolute inset-0">
-        <AnimatedBackground variant="default" />
-      </div>
       
       {/* Overlay Trinity coloré */}
       <div className="absolute inset-0 bg-gradient-to-br from-trinity-blue-500/60 via-trinity-purple-500/60 to-trinity-orange-500/60" />

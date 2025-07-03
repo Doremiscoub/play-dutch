@@ -113,8 +113,6 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
 
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = '#ffffff';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       if (variant !== 'minimal') {
         ctx.strokeStyle = 'rgba(218, 218, 218, 0.1)';
