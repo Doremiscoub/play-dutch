@@ -4,7 +4,7 @@ import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Plus, Users, Shuffle, X, Gamepad2, Crown, Trophy } from 'lucide-react';
+import { Plus, Users, Shuffle, X, Gamepad2, Trophy } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 interface Player {
@@ -18,12 +18,6 @@ interface ModernGameSetupProps {
 
 // Emojis modernes pour les joueurs
 const modernEmojis = ['🎮', '🎯', '🚀', '⭐', '🔥', '⚡', '🎲', '🎪', '🌟', '💎', '🎨', '🦄'];
-const gameThemes = [
-  { emoji: '🎮', name: 'Gaming', color: 'from-trinity-blue-400 to-trinity-blue-600' },
-  { emoji: '🎯', name: 'Compétition', color: 'from-trinity-orange-400 to-trinity-orange-600' },
-  { emoji: '🎪', name: 'Festif', color: 'from-trinity-purple-400 to-trinity-purple-600' },
-  { emoji: '⚡', name: 'Rapide', color: 'from-trinity-blue-500 to-trinity-purple-500' },
-];
 
 const quickNames = ['Alex', 'Charlie', 'Dana', 'Eve', 'Frank', 'Grace', 'Hugo', 'Iris'];
 
@@ -33,7 +27,7 @@ const ModernGameSetup: React.FC<ModernGameSetupProps> = ({ onStartGame }) => {
     { name: 'Bob', emoji: '🎯' }
   ]);
   const [newPlayer, setNewPlayer] = useState('');
-  const [selectedTheme, setSelectedTheme] = useState(gameThemes[0]);
+  const [selectedEmoji] = useState('🎮');
 
   const handleAddPlayer = () => {
     if (!newPlayer.trim()) {
@@ -64,7 +58,7 @@ const ModernGameSetup: React.FC<ModernGameSetupProps> = ({ onStartGame }) => {
     setPlayers([...players, newPlayerObj]);
     setNewPlayer('');
     toast.success(`${newPlayer.trim()} rejoint la partie !`, {
-      icon: selectedTheme.emoji
+      icon: '🎮'
     });
   };
 
@@ -79,7 +73,7 @@ const ModernGameSetup: React.FC<ModernGameSetupProps> = ({ onStartGame }) => {
     
     setPlayers([...players, newPlayerObj]);
     toast.success(`${name} rejoint la partie !`, {
-      icon: selectedTheme.emoji
+      icon: '🎮'
     });
   };
 
@@ -117,7 +111,7 @@ const ModernGameSetup: React.FC<ModernGameSetupProps> = ({ onStartGame }) => {
 
   return (
     <div className="space-y-8">
-      {/* Header avec thème sélectionné */}
+      {/* Header simplifié */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -125,51 +119,19 @@ const ModernGameSetup: React.FC<ModernGameSetupProps> = ({ onStartGame }) => {
         className="text-center space-y-4"
       >
         <motion.div 
-          className={`mx-auto w-20 h-20 rounded-3xl bg-gradient-to-br ${selectedTheme.color} flex items-center justify-center text-3xl shadow-lg border border-white/30`}
+          className="mx-auto w-20 h-20 rounded-3xl bg-gradient-to-br from-trinity-blue-500 to-trinity-purple-500 flex items-center justify-center text-3xl shadow-lg border border-white/30"
           animate={{ scale: [1, 1.05, 1] }}
           transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
         >
-          {selectedTheme.emoji}
+          🎮
         </motion.div>
         <h1 className="text-3xl font-black bg-gradient-to-r from-trinity-blue-600 via-trinity-purple-600 to-trinity-orange-600 bg-clip-text text-transparent">
-          Configuration de partie
+          Créer une partie
         </h1>
         <p className="text-neutral-600 font-medium">
-          Choisissez votre thème et ajoutez les joueurs
+          Ajoutez les joueurs et lancez votre partie de Dutch
         </p>
       </motion.div>
-
-      {/* Sélection du thème */}
-      <Card className="card-glass">
-        <CardHeader className="pb-4">
-          <CardTitle className="text-lg font-bold text-trinity-blue-700 flex items-center gap-2">
-            <Crown className="h-5 w-5" />
-            Thème de la partie
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 gap-3">
-            {gameThemes.map((theme) => (
-              <motion.button
-                key={theme.name}
-                onClick={() => setSelectedTheme(theme)}
-                className={`p-4 rounded-2xl border-2 transition-all duration-300 ${
-                  selectedTheme.name === theme.name
-                    ? 'border-trinity-blue-400 bg-trinity-blue-50 shadow-lg'
-                    : 'border-white/40 bg-white/50 hover:border-trinity-blue-300 hover:bg-trinity-blue-25'
-                }`}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <div className="text-center space-y-2">
-                  <div className="text-2xl">{theme.emoji}</div>
-                  <div className="font-semibold text-sm text-gray-700">{theme.name}</div>
-                </div>
-              </motion.button>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
 
       {/* Ajout de joueurs */}
       <Card className="card-glass">
