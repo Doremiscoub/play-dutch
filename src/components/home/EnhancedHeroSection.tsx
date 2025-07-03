@@ -59,13 +59,13 @@ const EnhancedHeroSection: React.FC = () => {
       </Suspense>
 
       <motion.div 
-        className="text-center space-y-8 relative z-20 max-w-5xl"
+        className="text-center space-y-4 relative z-20 max-w-5xl"
         initial="initial"
         animate="animate"
         variants={animationVariants}
       >
         {/* Enhanced Main Title - Simplified for readability */}
-        <div className="relative flex items-center justify-center mb-8">
+        <div className="relative flex items-center justify-center mb-4">
           {/* Single glowing background layer */}
           <motion.div
             className="absolute -inset-6 bg-gradient-to-r from-dutch-blue/20 via-dutch-purple/20 to-dutch-orange/20 rounded-3xl blur-xl"
@@ -96,7 +96,7 @@ const EnhancedHeroSection: React.FC = () => {
             <img 
               src="/lovable-uploads/0532ef39-c77c-4480-8d74-7af7665596ee.png"
               alt="Dutch - Logo du jeu avec Professeur Cartouche"
-              className="w-auto h-48 sm:h-56 md:h-64 lg:h-72 xl:h-80 2xl:h-96 max-w-full object-contain drop-shadow-2xl"
+              className="w-auto h-64 sm:h-72 md:h-80 lg:h-96 xl:h-[28rem] 2xl:h-[32rem] max-w-full object-contain drop-shadow-2xl"
               style={{
                 filter: 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3))'
               }}
@@ -186,7 +186,7 @@ const EnhancedHeroSection: React.FC = () => {
           initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: prefersReducedMotion ? 0.2 : 1, delay: 0.3 }}
-          className="space-y-4 mb-8"
+          className="space-y-4 mb-4"
         >
           <motion.h2 
             className="text-2xl md:text-4xl lg:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-gray-800 via-dutch-blue to-dutch-purple leading-tight"
@@ -204,7 +204,7 @@ const EnhancedHeroSection: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: prefersReducedMotion ? 0.2 : 1, delay: 0.5 }}
-          className="flex justify-center gap-4 flex-wrap mb-8"
+          className="flex justify-center gap-4 flex-wrap mb-4"
         >
           <TrustIndicator 
             icon={<Users className="h-4 w-4" />}
@@ -228,7 +228,7 @@ const EnhancedHeroSection: React.FC = () => {
           initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: prefersReducedMotion ? 0.2 : 1, delay: 0.7 }}
-          className="relative mb-8"
+          className="relative mb-4"
         >
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
             {/* Primary CTA - corrigé pour naviguer vers /setup */}
