@@ -96,10 +96,13 @@ const GameCompanionSection: React.FC = () => {
           viewport={{ once: true }}
           className="relative"
         >
-          <Card className="bg-gradient-to-br from-trinity-purple-500/95 via-trinity-blue-500/95 to-trinity-orange-500/95 backdrop-blur-xl border-0 shadow-3xl text-white overflow-hidden">
+          <Card className="bg-gradient-to-br from-trinity-purple-600 via-trinity-blue-600 to-trinity-orange-600 backdrop-blur-xl border-0 shadow-3xl overflow-hidden">
+            {/* Overlay pour améliorer le contraste */}
+            <div className="absolute inset-0 bg-black/20" />
+            
             {/* Guillemets décoratifs */}
-            <div className="absolute top-6 left-8 text-8xl font-black opacity-20">"</div>
-            <div className="absolute bottom-6 right-8 text-8xl font-black opacity-20 rotate-180">"</div>
+            <div className="absolute top-6 left-8 text-8xl font-black opacity-30 text-white">"</div>
+            <div className="absolute bottom-6 right-8 text-8xl font-black opacity-30 rotate-180 text-white">"</div>
             
             <CardContent className="relative z-10 p-12 text-center">
               <motion.div
@@ -108,10 +111,10 @@ const GameCompanionSection: React.FC = () => {
                 transition={{ duration: 0.6 }}
                 viewport={{ once: true }}
               >
-                <p className="text-2xl md:text-3xl font-black mb-6 leading-relaxed">
+                <p className="text-2xl md:text-3xl font-black mb-6 leading-relaxed text-white">
                   Depuis qu'on utilise Dutch Card Game, nos soirées cartes sont encore plus fun ! Le Professeur Cartouche nous fait mourir de rire avec ses commentaires ! 😂
                 </p>
-                <p className="text-xl font-bold opacity-90">
+                <p className="text-xl font-bold text-white/90">
                   - Marie & ses amis, utilisateurs conquis
                 </p>
               </motion.div>
