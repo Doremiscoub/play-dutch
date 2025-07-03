@@ -23,72 +23,58 @@ const Home: React.FC = () => {
       icon: <Zap className="h-6 w-6" />,
       title: "Interface simple",
       description: "Ajoutez les scores en un clic",
-      gradient: "from-yellow-400 to-orange-500"
+      gradient: "from-trinity-orange-400 to-trinity-orange-600"
     },
     {
       icon: <Users className="h-6 w-6" />,
       title: "2 à 10 joueurs",
       description: "Pour toutes les tablées",
-      gradient: "from-blue-400 to-purple-500"
+      gradient: "from-trinity-blue-400 to-trinity-blue-600"
     },
     {
       icon: <Heart className="h-6 w-6" />,
       title: "100% gratuit",
       description: "Aucun abonnement requis",
-      gradient: "from-pink-400 to-red-500"
+      gradient: "from-trinity-purple-400 to-trinity-purple-600"
     },
     {
       icon: <Sparkles className="h-6 w-6" />,
       title: "IA Professeur Cartouche",
       description: "Commentaires humoristiques",
-      gradient: "from-purple-400 to-indigo-500"
+      gradient: "from-trinity-blue-500 to-trinity-purple-500"
     }
   ];
 
   return (
     <PageShell variant="default">
-      {/* Fond coloré optimisé */}
-      <div className="fixed inset-0 bg-gradient-to-br from-dutch-blue/15 via-dutch-purple/10 to-dutch-orange/15">
-        {/* Particules réduites et optimisées */}
-        {[...Array(6)].map((_, i) => (
+      {/* Fond simplifié et optimisé */}
+      <div className="fixed inset-0 bg-gradient-to-br from-trinity-blue-50 via-trinity-purple-50 to-trinity-orange-50">
+        {/* Particules gaming colorées */}
+        {[...Array(4)].map((_, i) => (
           <motion.div
             key={i}
-            className={`absolute w-3 h-3 rounded-full ${
-              i % 3 === 0 ? 'bg-dutch-blue/40' :
-              i % 3 === 1 ? 'bg-dutch-purple/40' : 'bg-dutch-orange/40'
+            className={`absolute w-4 h-4 rounded-full ${
+              i % 3 === 0 ? 'bg-trinity-blue-300/50' :
+              i % 3 === 1 ? 'bg-trinity-purple-300/50' : 'bg-trinity-orange-300/50'
             }`}
             style={{
-              left: `${15 + Math.random() * 70}%`,
-              top: `${10 + Math.random() * 80}%`,
+              left: `${20 + Math.random() * 60}%`,
+              top: `${20 + Math.random() * 60}%`,
             }}
             animate={{
-              y: [-15, 15, -15],
-              x: [-8, 8, -8],
-              scale: [1, 1.3, 1],
-              opacity: [0.4, 0.8, 0.4]
+              y: [-20, 20, -20],
+              x: [-10, 10, -10],
+              scale: [1, 1.2, 1],
+              opacity: [0.5, 0.8, 0.5]
             }}
             transition={{
-              duration: 6 + i * 0.8,
+              duration: 8 + i,
               repeat: Infinity,
               ease: "easeInOut",
-              delay: i * 0.5
+              delay: i * 0.8
             }}
           />
         ))}
-        
-        {/* Formes géométriques réduites */}
-        <motion.div
-          className="absolute top-32 left-8 w-24 h-24 bg-gradient-to-br from-dutch-blue/15 to-dutch-purple/15 rounded-full blur-xl"
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.3, 0.6, 0.3]
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        />
       </div>
 
       <UnifiedHeader 
@@ -111,10 +97,10 @@ const Home: React.FC = () => {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-black bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange bg-clip-text text-transparent mb-6">
+            <h2 className="text-4xl md:text-5xl font-black bg-gradient-to-r from-trinity-blue-600 via-trinity-purple-600 to-trinity-orange-600 bg-clip-text text-transparent mb-6">
               🌟 Pourquoi Dutch Card Game ? 🌟
             </h2>
-            <p className="text-xl text-gray-700 font-bold max-w-3xl mx-auto">
+            <p className="text-xl text-neutral-700 font-bold max-w-3xl mx-auto">
               Une application pensée pour transformer vos soirées jeux en moments inoubliables ! 🎉
             </p>
           </motion.div>
@@ -176,7 +162,7 @@ const Home: React.FC = () => {
           viewport={{ once: true }}
           className="max-w-4xl mx-auto"
         >
-          <Card className="bg-gradient-to-br from-dutch-blue/90 via-dutch-purple/90 to-dutch-orange/90 backdrop-blur-xl border-0 shadow-3xl text-white overflow-hidden relative">
+          <Card className="bg-gradient-to-br from-trinity-blue-500/95 via-trinity-purple-500/95 to-trinity-orange-500/95 backdrop-blur-xl border-0 shadow-3xl text-white overflow-hidden relative">
             {/* Effets de particules dans le fond */}
             <div className="absolute inset-0 overflow-hidden">
               {[...Array(8)].map((_, i) => (
@@ -225,7 +211,7 @@ const Home: React.FC = () => {
                     <Button
                       onClick={() => navigate('/setup')}
                       size="xl"
-                      className="bg-white text-dutch-purple hover:bg-yellow-400 hover:text-dutch-blue font-black text-xl px-12 py-6 shadow-2xl border-4 border-white/50 transition-all duration-300"
+                      className="bg-white text-trinity-purple-700 hover:bg-trinity-orange-100 hover:text-trinity-blue-700 font-black text-xl px-12 py-6 shadow-2xl border-4 border-white/80 transition-all duration-300 hover:scale-105"
                     >
                       <Gamepad2 className="h-6 w-6 mr-3" />
                       🎮 C'EST PARTI ! 🎯
@@ -239,7 +225,7 @@ const Home: React.FC = () => {
                       onClick={() => navigate('/history')}
                       variant="outline"
                       size="xl"
-                      className="border-4 border-white text-white bg-transparent hover:bg-white hover:text-dutch-purple font-bold text-lg px-10 py-6 transition-all duration-300"
+                      className="border-4 border-white text-white bg-transparent hover:bg-white hover:text-trinity-purple-700 font-bold text-lg px-10 py-6 transition-all duration-300 hover:scale-105"
                     >
                       <Trophy className="h-5 w-5 mr-2" />
                       📊 Historique
