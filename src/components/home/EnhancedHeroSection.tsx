@@ -189,13 +189,14 @@ const EnhancedHeroSection: React.FC = () => {
           className="space-y-4 mb-4"
         >
           <motion.h2 
-            className="text-2xl md:text-4xl lg:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-gray-800 via-dutch-blue to-dutch-purple leading-tight"
+            className="text-2xl md:text-4xl lg:text-5xl font-bold text-white leading-tight"
             style={{
               fontFamily: "'Space Grotesk', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+              textShadow: '0 2px 8px rgba(0, 0, 0, 0.3), 0 0 20px rgba(59, 130, 246, 0.2)'
             }}
           >
-            Votre compagnon de Dutch :<br />
-            <span className="text-dutch-orange">jouez, suivez, laissez l'IA vous guider</span>
+            🎓 Rejoignez <span className="text-dutch-orange font-black">Professeur Cartouche</span> !<br />
+            <span className="text-dutch-blue font-semibold">L'IA qui transforme vos parties en aventures épiques</span> ⚡
           </motion.h2>
         </motion.div>
 
