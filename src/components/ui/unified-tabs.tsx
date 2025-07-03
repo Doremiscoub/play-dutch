@@ -27,20 +27,19 @@ export function UnifiedTabs({
   variant = "default",
   className
 }: UnifiedTabsProps) {
-  console.log("🔄 UnifiedTabs rendu avec options:", options);
   
   const variantStyles = {
-    default: "from-dutch-blue to-dutch-purple",
-    orange: "from-dutch-orange to-dutch-orange/80",
-    purple: "from-dutch-purple to-dutch-purple/80"
+    default: "from-trinity-blue-500 to-trinity-purple-500",
+    orange: "from-trinity-orange-500 to-trinity-purple-500",
+    purple: "from-trinity-purple-500 to-trinity-blue-500"
   }
 
   return (
     <Tabs value={value} onValueChange={onValueChange} className="w-full">
       <TabsList 
         className={cn(
-          "w-full p-1 h-auto bg-white/40 backdrop-blur-md border border-white/40",
-          `grid grid-cols-${columns}`,
+          "w-full p-2 h-auto bg-white/70 backdrop-blur-xl border-0 shadow-xl rounded-2xl",
+          `grid grid-cols-${columns} gap-2`,
           className
         )}
       >
@@ -50,14 +49,29 @@ export function UnifiedTabs({
             value={option.value}
             disabled={option.disabled}
             className={cn(
-              "flex items-center gap-1.5 data-[state=active]:bg-gradient-to-r",
+              "flex items-center justify-center gap-2 transition-all duration-300 ease-out",
+              "rounded-xl py-3 px-4 font-bold text-sm relative overflow-hidden",
+              "data-[state=inactive]:bg-transparent data-[state=inactive]:text-gray-600 data-[state=inactive]:hover:bg-white/50",
+              "data-[state=active]:bg-gradient-to-r data-[state=active]:text-white data-[state=active]:shadow-lg",
+              "data-[state=active]:scale-105 data-[state=active]:z-10",
               `data-[state=active]:${variantStyles[variant]}`,
-              "data-[state=active]:text-dutch-purple font-medium transition-all duration-200",
-              "rounded-md py-1.5 px-3"
+              "disabled:opacity-50 disabled:cursor-not-allowed",
+              "hover:scale-[1.02] active:scale-95"
             )}
           >
-            {option.icon}
-            <span className="truncate">{option.label}</span>
+            {/* Effet de brillance pour l'onglet actif */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 data-[state=active]:opacity-100 transition-opacity duration-300" />
+            
+            <div className="relative z-10 flex items-center gap-2">
+              {option.icon && (
+                <span className="text-current">
+                  {option.icon}
+                </span>
+              )}
+              <span className="truncate font-black">
+                {option.label}
+              </span>
+            </div>
           </TabsTrigger>
         ))}
       </TabsList>
