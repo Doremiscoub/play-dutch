@@ -1,4 +1,148 @@
 
+/* ========== LIQUID GLASS APPLE SYSTEM ========== */
+
+/* Échelles de matériau Apple (Blur 4px, 8px, 12px, 16px) */
+.lg-ultrathin {
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 0.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: 1rem;
+}
+
+.lg-thin {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 0.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: 1rem;
+}
+
+.lg-regular {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 0.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: 1.5rem;
+}
+
+.lg-thick {
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 0.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: 1.5rem;
+}
+
+.lg-popover {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 0.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: 1rem;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.15), 0 0 8px rgba(255, 255, 255, 0.1);
+}
+
+/* Rôles contextuels Apple */
+.lg-header {
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.lg-toolbar {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.lg-sidebar {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.lg-card {
+  background-color: rgba(255, 255, 255, 0.7);
+}
+
+.lg-sheet {
+  background-color: rgba(255, 255, 255, 0.6);
+}
+
+.lg-overlay {
+  background-color: rgba(255, 255, 255, 0.7);
+}
+
+/* Teintes colorées avec variants Apple (50%, 75%, 100%) */
+.lg-tint-primary-50 {
+  background-color: rgba(10, 132, 255, 0.25);
+}
+
+.lg-tint-primary-75 {
+  background-color: rgba(10, 132, 255, 0.375);
+}
+
+.lg-tint-primary-100 {
+  background-color: rgba(10, 132, 255, 0.5);
+}
+
+.lg-tint-secondary-50 {
+  background-color: rgba(139, 92, 246, 0.25);
+}
+
+.lg-tint-secondary-75 {
+  background-color: rgba(139, 92, 246, 0.375);
+}
+
+.lg-tint-secondary-100 {
+  background-color: rgba(139, 92, 246, 0.5);
+}
+
+.lg-tint-accent-50 {
+  background-color: rgba(255, 159, 10, 0.25);
+}
+
+.lg-tint-accent-75 {
+  background-color: rgba(255, 159, 10, 0.375);
+}
+
+.lg-tint-accent-100 {
+  background-color: rgba(255, 159, 10, 0.5);
+}
+
+/* Élévations Apple (LG-Elevation-01 à 04) */
+.lg-elevation-01 {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.lg-elevation-02 {
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.10);
+}
+
+.lg-elevation-03 {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.14);
+}
+
+.lg-elevation-04 {
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+}
+
+/* Opacité dynamique pour interactions */
+.lg-opacity-30 {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.lg-opacity-40 {
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+.lg-opacity-50 {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.lg-opacity-60 {
+  background-color: rgba(255, 255, 255, 0.6);
+}
+
+.lg-opacity-70 {
+  background-color: rgba(255, 255, 255, 0.7);
+}
+
+.lg-opacity-80 {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+/* ========== LEGACY GLASS SYSTEM (Préservé) ========== */
 .glass-light {
   background-color: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(10px);
@@ -21,6 +165,19 @@
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 1.5rem;
+}
+
+/* Dark mode pour tous les systèmes */
+.dark .lg-header {
+  background-color: rgba(30, 30, 30, 0.9);
+}
+
+.dark .lg-card {
+  background-color: rgba(30, 30, 30, 0.7);
+}
+
+.dark .lg-sheet {
+  background-color: rgba(30, 30, 30, 0.6);
 }
 
 .dark .glass-light {

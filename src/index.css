@@ -474,6 +474,90 @@ body {
   letter-spacing: 0.05em;
 }
 
+/* ========== LIQUID GLASS APPLE ANIMATIONS ========== */
+
+/* Motion Tokens Apple */
+@keyframes lg-reveal {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes lg-dismiss {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+}
+
+.animate-lg-reveal {
+  animation: lg-reveal 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-lg-dismiss {
+  animation: lg-dismiss 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* États d'interaction Apple */
+.lg-hover-state {
+  transition: all 120ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.lg-hover-state:hover {
+  transform: translateY(-2px);
+}
+
+.lg-pressed-state:active {
+  transform: scale(0.98);
+  transition: all 80ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Fallbacks accessibilité Apple */
+@media (prefers-reduced-transparency: reduce) {
+  .lg-header,
+  .lg-card,
+  .lg-sheet,
+  .lg-popover {
+    background-color: rgb(255, 255, 255) !important;
+    backdrop-filter: none !important;
+  }
+  
+  .dark .lg-header,
+  .dark .lg-card,
+  .dark .lg-sheet,
+  .dark .lg-popover {
+    background-color: rgb(30, 30, 30) !important;
+  }
+}
+
+@media (prefers-contrast: high) {
+  .lg-header,
+  .lg-card,
+  .lg-sheet,
+  .lg-popover {
+    border-color: rgba(255, 255, 255, 0.5) !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-lg-reveal,
+  .animate-lg-dismiss,
+  .lg-hover-state {
+    animation: none !important;
+    transition: opacity 150ms ease !important;
+  }
+}
+
+/* ========== LEGACY ANIMATIONS (Preserved) ========== */
 @keyframes gradient-shift {
   0%, 100% { 
     background-position: 0% 50%; 

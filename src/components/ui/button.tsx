@@ -9,34 +9,38 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        // Kids System - Boutons colorés et visibles
-        default: "btn-kids-primary text-white font-bold hover:scale-105 hover:-translate-y-1 active:scale-95 rounded-xl shadow-lg",
-        kidsPrimary: "btn-kids-blue text-white font-bold hover:scale-105 hover:-translate-y-1 hover:shadow-glow-blue active:scale-95 rounded-xl",
-        kidsSecondary: "btn-kids-purple text-white font-bold hover:scale-105 hover:-translate-y-1 hover:shadow-glow-purple active:scale-95 rounded-xl",
-        kidsTertiary: "btn-kids-orange text-white font-bold hover:scale-105 hover:-translate-y-1 hover:shadow-glow-orange active:scale-95 rounded-xl",
-        fun: "btn-kids-fun text-white font-bold hover:scale-105 hover:-translate-y-1 hover:shadow-glow-rainbow active:scale-95 rounded-xl",
+        // ===== LIQUID GLASS APPLE VARIANTS =====
+        liquidHeader: "lg-header lg-ultrathin lg-tint-primary-50 text-white font-semibold backdrop-blur-[4px] hover:lg-opacity-60 hover:lg-elevation-02 hover:-translate-y-0.5 active:lg-opacity-40 active:backdrop-blur-[2px] lg-hover-state rounded-xl",
+        liquidCard: "lg-card lg-regular lg-tint-secondary-70 text-white font-medium backdrop-blur-[12px] hover:lg-opacity-80 hover:lg-elevation-03 hover:-translate-y-0.5 active:lg-opacity-60 active:backdrop-blur-[10px] lg-hover-state rounded-xl",
+        liquidSheet: "lg-sheet lg-thick lg-tint-accent-60 text-white font-semibold backdrop-blur-[16px] hover:lg-opacity-70 hover:lg-elevation-04 hover:-translate-y-0.5 active:lg-opacity-50 active:backdrop-blur-[14px] lg-hover-state rounded-xl",
+        liquidPopover: "lg-popover lg-tint-primary-70 text-white font-medium backdrop-blur-[12px] shadow-[0_0_0_1px_rgba(255,255,255,0.15),0_0_8px_rgba(255,255,255,0.1)] hover:lg-opacity-80 hover:lg-elevation-03 hover:-translate-y-0.5 hover:shadow-[0_0_0_1px_rgba(255,255,255,0.25),0_0_12px_rgba(255,255,255,0.15)] lg-hover-state rounded-xl",
         
-        // Glass coloré - Remplace l'ancien glass transparent
-        glass: "btn-glass-colored text-white font-semibold backdrop-blur-lg hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] rounded-xl",
-        glassColored: "btn-glass-colored text-white font-semibold backdrop-blur-lg hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] rounded-xl",
+        // ===== ENHANCED TRINITY + KIDS VARIANTS =====
+        trinity: "btn-kids-primary text-white font-bold backdrop-blur-[12px] hover:scale-105 hover:-translate-y-0.5 hover:shadow-glow-blue hover:backdrop-blur-[14px] active:scale-95 active:backdrop-blur-[10px] lg-hover-state rounded-xl",
+        default: "btn-kids-primary text-white font-bold backdrop-blur-[12px] hover:scale-105 hover:-translate-y-0.5 active:scale-95 lg-hover-state rounded-xl shadow-lg",
+        kidsPrimary: "btn-kids-blue text-white font-bold backdrop-blur-[12px] hover:scale-105 hover:-translate-y-0.5 hover:shadow-glow-blue hover:backdrop-blur-[14px] active:scale-95 active:backdrop-blur-[10px] lg-hover-state rounded-xl",
+        kidsSecondary: "btn-kids-purple text-white font-bold backdrop-blur-[12px] hover:scale-105 hover:-translate-y-0.5 hover:shadow-glow-purple hover:backdrop-blur-[14px] active:scale-95 active:backdrop-blur-[10px] lg-hover-state rounded-xl",
+        kidsTertiary: "btn-kids-orange text-white font-bold backdrop-blur-[12px] hover:scale-105 hover:-translate-y-0.5 hover:shadow-glow-orange hover:backdrop-blur-[14px] active:scale-95 active:backdrop-blur-[10px] lg-hover-state rounded-xl",
+        fun: "btn-kids-fun text-white font-bold backdrop-blur-[12px] hover:scale-105 hover:-translate-y-0.5 hover:shadow-glow-rainbow hover:backdrop-blur-[14px] active:scale-95 active:backdrop-blur-[10px] lg-hover-state rounded-xl",
         
-        // Trinity amélioré
-        trinity: "btn-kids-primary text-white font-bold shadow-glow-blue hover:scale-105 hover:shadow-glow-rainbow rounded-xl",
+        // ===== ENHANCED GLASS VARIANTS =====
+        glass: "btn-glass-colored text-white font-semibold backdrop-blur-[15px] hover:scale-[1.02] hover:-translate-y-0.5 hover:shadow-glass-lg hover:backdrop-blur-[17px] active:scale-[0.98] active:backdrop-blur-[13px] lg-hover-state rounded-xl",
+        glassColored: "btn-glass-colored text-white font-semibold backdrop-blur-[15px] hover:scale-[1.02] hover:-translate-y-0.5 hover:shadow-glass-lg hover:backdrop-blur-[17px] active:scale-[0.98] active:backdrop-blur-[13px] lg-hover-state rounded-xl",
         
-        // Enhanced variants colorés
-        destructive: "bg-gradient-to-r from-red-400 to-red-600 text-white font-bold hover:from-red-500 hover:to-red-700 hover:scale-105 shadow-lg hover:shadow-red-500/30 rounded-xl",
-        outline: "border-2 border-kids-blue bg-kids-blue/20 backdrop-blur-lg text-white hover:bg-kids-blue/40 hover:border-kids-blue hover:-translate-y-1 rounded-xl",
-        secondary: "btn-kids-purple text-white hover:scale-105 hover:-translate-y-0.5 rounded-xl",
-        ghost: "hover:bg-kids-blue/20 hover:text-white hover:backdrop-blur-lg rounded-xl",
+        // ===== ENHANCED SYSTEM VARIANTS =====
+        destructive: "bg-gradient-to-r from-red-400 to-red-600 text-white font-bold backdrop-blur-[12px] hover:from-red-500 hover:to-red-700 hover:scale-105 hover:shadow-lg hover:shadow-red-500/30 hover:-translate-y-0.5 hover:backdrop-blur-[14px] active:scale-95 active:backdrop-blur-[10px] lg-hover-state rounded-xl",
+        outline: "border-2 border-kids-blue bg-kids-blue/20 backdrop-blur-lg text-white hover:bg-kids-blue/40 hover:border-kids-blue hover:-translate-y-0.5 lg-hover-state rounded-xl",
+        secondary: "btn-kids-purple text-white backdrop-blur-[12px] hover:scale-105 hover:-translate-y-0.5 hover:backdrop-blur-[14px] lg-hover-state rounded-xl",
+        ghost: "hover:bg-kids-blue/20 hover:text-white hover:backdrop-blur-lg lg-hover-state rounded-xl",
         link: "text-kids-blue underline-offset-4 hover:underline hover:text-kids-purple",
         
-        // Gaming variants
-        gaming: "btn-kids-gaming text-white font-gaming text-xs tracking-wider uppercase hover:scale-110 hover:shadow-glow-rainbow rounded-xl",
-        success: "btn-kids-lime text-white font-bold hover:scale-105 hover:shadow-glow-lime rounded-xl",
+        // ===== ENHANCED GAMING/SPECIAL VARIANTS =====
+        gaming: "btn-kids-gaming text-white font-gaming text-xs tracking-wider uppercase backdrop-blur-[12px] hover:scale-110 hover:shadow-glow-rainbow hover:backdrop-blur-[14px] active:scale-90 active:backdrop-blur-[10px] lg-hover-state rounded-xl",
+        success: "btn-kids-lime text-white font-bold backdrop-blur-[12px] hover:scale-105 hover:shadow-glow-lime hover:-translate-y-0.5 hover:backdrop-blur-[14px] active:scale-95 active:backdrop-blur-[10px] lg-hover-state rounded-xl",
         
-        // Legacy compatibility (maintenant colorés)
-        "dutch-primary": "btn-kids-primary text-white hover:scale-[1.02] rounded-xl",
-        "dutch-glass": "btn-glass-colored text-white rounded-xl",
+        // ===== LEGACY COMPATIBILITY =====
+        "dutch-primary": "btn-kids-primary text-white backdrop-blur-[12px] hover:scale-[1.02] lg-hover-state rounded-xl",
+        "dutch-glass": "btn-glass-colored text-white backdrop-blur-[15px] lg-hover-state rounded-xl",
         "gradient": "trinity",
         "vision-glass": "glassColored",
       },

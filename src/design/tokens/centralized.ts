@@ -112,25 +112,52 @@ export const PRIMITIVE_COLORS = {
     },
   },
 
-  // Glassmorphisme avec Teintes Colorées
+  // Glassmorphisme avec Teintes Colorées - Enrichi avec Liquid Glass Apple
   glass: {
     ultraLight: 'rgba(255, 255, 255, 0.9)',
     light: 'rgba(255, 255, 255, 0.8)',
     medium: 'rgba(255, 255, 255, 0.7)',
     heavy: 'rgba(255, 255, 255, 0.6)',
     dark: 'rgba(255, 255, 255, 0.5)',
-    // Glassmorphisme coloré Trinity
+    
+    // Échelles Liquid Glass Apple (4px, 8px, 12px, 16px blur)
+    ultraThin: 'rgba(255, 255, 255, 0.9)',    // 4px blur, headers
+    thin: 'rgba(255, 255, 255, 0.8)',         // 8px blur, toolbars
+    regular: 'rgba(255, 255, 255, 0.7)',      // 12px blur, cartes
+    thick: 'rgba(255, 255, 255, 0.6)',        // 16px blur, modales
+    popover: 'rgba(255, 255, 255, 0.7)',      // 12px blur + bord lumineux
+    
+    // Glassmorphisme coloré Trinity avec variants Apple (100%, 75%, 50%)
     blueLight: 'rgba(59, 130, 246, 0.2)',
     blueMedium: 'rgba(59, 130, 246, 0.3)',
+    blueHeavy: 'rgba(59, 130, 246, 0.5)',     // 100% saturation
+    blue75: 'rgba(59, 130, 246, 0.375)',      // 75% saturation  
+    blue50: 'rgba(59, 130, 246, 0.25)',       // 50% saturation
+    
     purpleLight: 'rgba(147, 51, 234, 0.2)',
     purpleMedium: 'rgba(147, 51, 234, 0.3)',
+    purpleHeavy: 'rgba(147, 51, 234, 0.5)',   // 100% saturation
+    purple75: 'rgba(147, 51, 234, 0.375)',    // 75% saturation
+    purple50: 'rgba(147, 51, 234, 0.25)',     // 50% saturation
+    
     orangeLight: 'rgba(249, 115, 22, 0.2)',
     orangeMedium: 'rgba(249, 115, 22, 0.3)',
-    // Kids variants
+    orangeHeavy: 'rgba(249, 115, 22, 0.5)',   // 100% saturation
+    orange75: 'rgba(249, 115, 22, 0.375)',    // 75% saturation
+    orange50: 'rgba(249, 115, 22, 0.25)',     // 50% saturation
+    
+    // Kids variants enrichis
     pinkLight: 'rgba(236, 72, 153, 0.2)',
+    pinkMedium: 'rgba(236, 72, 153, 0.3)',
+    pinkHeavy: 'rgba(236, 72, 153, 0.5)',
     limeLight: 'rgba(132, 204, 22, 0.2)',
+    limeMedium: 'rgba(132, 204, 22, 0.3)',
+    limeHeavy: 'rgba(132, 204, 22, 0.5)',
     turquoiseLight: 'rgba(20, 184, 166, 0.2)',
-    // Dark mode variants
+    turquoiseMedium: 'rgba(20, 184, 166, 0.3)',
+    turquoiseHeavy: 'rgba(20, 184, 166, 0.5)',
+    
+    // Dark mode variants enrichis
     darkUltraLight: 'rgba(30, 30, 30, 0.9)',
     darkLight: 'rgba(30, 30, 30, 0.8)',
     darkMedium: 'rgba(30, 30, 30, 0.7)',
@@ -193,15 +220,25 @@ export const SEMANTIC_TOKENS = {
     trinity: `linear-gradient(135deg, ${PRIMITIVE_COLORS.dutch.blue[500]}, ${PRIMITIVE_COLORS.dutch.purple[400]}, ${PRIMITIVE_COLORS.dutch.orange[500]})`,
   },
 
-  // Ombres
+  // Ombres enrichies avec Élévations Apple
   shadow: {
     glass: '0 8px 32px rgba(31, 38, 135, 0.15)',
     glassLg: '0 16px 50px rgba(31, 38, 135, 0.2)',
     trinity: `0 10px 30px ${PRIMITIVE_COLORS.dutch.blue[500]}1A, 0 20px 50px ${PRIMITIVE_COLORS.dutch.purple[400]}1A`,
+    
+    // Élévations Liquid Glass Apple (LG-Elevation-01 à 04)
+    elevation01: '0 1px 2px rgba(0, 0, 0, 0.06)',
+    elevation02: '0 3px 8px rgba(0, 0, 0, 0.10)',
+    elevation03: '0 6px 16px rgba(0, 0, 0, 0.14)',
+    elevation04: '0 12px 28px rgba(0, 0, 0, 0.18)',
+    
     glow: {
       blue: `0 0 20px ${PRIMITIVE_COLORS.dutch.blue[500]}66, 0 0 40px ${PRIMITIVE_COLORS.dutch.blue[500]}33`,
       purple: `0 0 20px ${PRIMITIVE_COLORS.dutch.purple[400]}66, 0 0 40px ${PRIMITIVE_COLORS.dutch.purple[400]}33`,
       orange: `0 0 20px ${PRIMITIVE_COLORS.dutch.orange[500]}66, 0 0 40px ${PRIMITIVE_COLORS.dutch.orange[500]}33`,
+      
+      // Bords lumineux pour popovers Apple
+      popover: '0 0 0 1px rgba(255, 255, 255, 0.15), 0 0 8px rgba(255, 255, 255, 0.1)',
     },
   },
 } as const;
@@ -319,7 +356,7 @@ export const COMPONENT_TOKENS = {
   },
 } as const;
 
-// ========== GRADIENTS CENTRALISÉS ==========
+// ========== GRADIENTS CENTRALISÉS + LIQUID GLASS ==========
 export const GRADIENTS = {
   trinity: `linear-gradient(135deg, ${PRIMITIVE_COLORS.dutch.blue[500]}, ${PRIMITIVE_COLORS.dutch.purple[400]}, ${PRIMITIVE_COLORS.dutch.orange[500]})`,
   trinitySubtle: `linear-gradient(135deg, ${PRIMITIVE_COLORS.dutch.blue[100]}, ${PRIMITIVE_COLORS.dutch.purple[100]}, ${PRIMITIVE_COLORS.dutch.orange[100]})`,
@@ -334,15 +371,68 @@ export const GRADIENTS = {
   kidsLime: `linear-gradient(135deg, ${PRIMITIVE_COLORS.kids.lime[300]}, ${PRIMITIVE_COLORS.kids.lime[500]})`,
   kidsTurquoise: `linear-gradient(135deg, ${PRIMITIVE_COLORS.kids.turquoise[300]}, ${PRIMITIVE_COLORS.kids.turquoise[500]})`,
   
-  // Glassmorphisme coloré
+  // Glassmorphisme coloré enrichi avec variants Apple
   glassBlue: `linear-gradient(135deg, ${PRIMITIVE_COLORS.glass.blueLight}, ${PRIMITIVE_COLORS.glass.blueMedium})`,
+  glassBlue75: `linear-gradient(135deg, ${PRIMITIVE_COLORS.glass.blue50}, ${PRIMITIVE_COLORS.glass.blue75})`,
   glassPurple: `linear-gradient(135deg, ${PRIMITIVE_COLORS.glass.purpleLight}, ${PRIMITIVE_COLORS.glass.purpleMedium})`,
+  glassPurple75: `linear-gradient(135deg, ${PRIMITIVE_COLORS.glass.purple50}, ${PRIMITIVE_COLORS.glass.purple75})`,
   glassOrange: `linear-gradient(135deg, ${PRIMITIVE_COLORS.glass.orangeLight}, ${PRIMITIVE_COLORS.glass.orangeMedium})`,
+  glassOrange75: `linear-gradient(135deg, ${PRIMITIVE_COLORS.glass.orange50}, ${PRIMITIVE_COLORS.glass.orange75})`,
+  
+  // Gradients Liquid Glass Apple pour rôles contextuels
+  liquidHeader: `linear-gradient(135deg, ${PRIMITIVE_COLORS.glass.ultraThin}, rgba(255, 255, 255, 0.95))`,
+  liquidCard: `linear-gradient(135deg, ${PRIMITIVE_COLORS.glass.regular}, rgba(255, 255, 255, 0.75))`,
+  liquidSheet: `linear-gradient(135deg, ${PRIMITIVE_COLORS.glass.thick}, rgba(255, 255, 255, 0.65))`,
+  liquidPopover: `linear-gradient(135deg, ${PRIMITIVE_COLORS.glass.popover}, rgba(255, 255, 255, 0.8))`,
   
   // Gradients existants
   glass: `linear-gradient(135deg, ${PRIMITIVE_COLORS.glass.light}, ${PRIMITIVE_COLORS.glass.medium})`,
   gaming: `linear-gradient(135deg, ${PRIMITIVE_COLORS.dutch.purple[400]}, ${PRIMITIVE_COLORS.dutch.blue[500]})`,
   surface: `linear-gradient(to bottom, ${SEMANTIC_TOKENS.surface.primary}, ${SEMANTIC_TOKENS.surface.secondary})`,
+} as const;
+
+// ========== MOTION TOKENS APPLE ==========
+export const MOTION_TOKENS = {
+  // Animations Liquid Glass Apple
+  reveal: {
+    duration: '200ms',
+    easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+    keyframes: {
+      from: { opacity: '0', transform: 'scale(0.95)' },
+      to: { opacity: '1', transform: 'scale(1)' }
+    }
+  },
+  dismiss: {
+    duration: '150ms',
+    easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+    keyframes: {
+      from: { opacity: '1', transform: 'scale(1)' },
+      to: { opacity: '0', transform: 'scale(0.97)' }
+    }
+  },
+  parallax: {
+    low: '4%',
+    high: '8%'
+  },
+  // États d'interaction Apple
+  interaction: {
+    hover: {
+      duration: '120ms',
+      opacityIncrease: '10%',
+      elevationIncrease: 1,
+      transform: 'translateY(-2px)'
+    },
+    pressed: {
+      duration: '80ms',
+      opacityDecrease: '10%',
+      blurDecrease: '2px',
+      elevationDecrease: 1
+    },
+    disabled: {
+      opacity: '30%',
+      desaturation: '40%'
+    }
+  }
 } as const;
 
 // ========== EXPORT CENTRALISÉ ==========
