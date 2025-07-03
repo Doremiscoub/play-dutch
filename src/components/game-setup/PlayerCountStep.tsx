@@ -70,42 +70,39 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div className="flex items-center justify-center gap-8">
-            <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-              <Button
-                onClick={decrementCount}
-                disabled={playerCount <= MIN_PLAYERS}
-                size="lg"
-                className="w-16 h-16 rounded-2xl bg-white hover:bg-neutral-50 border-2 border-neutral-800 hover:border-neutral-900 text-neutral-900 hover:text-black disabled:opacity-30 disabled:cursor-not-allowed shadow-2xl hover:shadow-xl transition-all duration-200"
-              >
-                <Minus className="h-8 w-8 stroke-[3] text-neutral-900" />
-              </Button>
-            </motion.div>
+          <div className="flex items-center justify-center gap-6">
+            {/* Bouton Moins */}
+            <button
+              onClick={decrementCount}
+              disabled={playerCount <= MIN_PLAYERS}
+              className="flex items-center justify-center w-14 h-14 bg-red-500 hover:bg-red-600 disabled:bg-gray-300 disabled:cursor-not-allowed rounded-xl shadow-lg transition-colors duration-200"
+            >
+              <Minus className="w-6 h-6 text-white" strokeWidth={3} />
+            </button>
 
+            {/* Affichage du nombre */}
             <motion.div
               key={playerCount}
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              className="flex flex-col items-center gap-3"
+              className="flex flex-col items-center gap-2"
             >
-              <div className="w-28 h-28 rounded-3xl bg-gradient-to-br from-trinity-blue-500/40 via-trinity-purple-500/40 to-trinity-orange-500/40 flex items-center justify-center text-white text-4xl font-black shadow-lg border-2 border-white/50 backdrop-blur-sm">
+              <div className="w-24 h-24 rounded-2xl bg-blue-500 flex items-center justify-center text-white text-3xl font-bold shadow-lg">
                 {playerCount}
               </div>
-              <span className="text-lg font-semibold text-neutral-700 bg-white/60 px-4 py-2 rounded-xl shadow-sm">
+              <span className="text-sm font-medium text-gray-700 bg-white px-3 py-1 rounded-lg shadow-sm">
                 {playerCount === MIN_PLAYERS ? 'Minimum' : playerCount === MAX_PLAYERS ? 'Maximum' : 'Joueurs'}
               </span>
             </motion.div>
 
-            <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-              <Button
-                onClick={incrementCount}
-                disabled={playerCount >= MAX_PLAYERS}
-                size="lg"
-                className="w-16 h-16 rounded-2xl bg-white hover:bg-neutral-50 border-2 border-neutral-800 hover:border-neutral-900 text-neutral-900 hover:text-black disabled:opacity-30 disabled:cursor-not-allowed shadow-2xl hover:shadow-xl transition-all duration-200"
-              >
-                <Plus className="h-8 w-8 stroke-[3] text-neutral-900" />
-              </Button>
-            </motion.div>
+            {/* Bouton Plus */}
+            <button
+              onClick={incrementCount}
+              disabled={playerCount >= MAX_PLAYERS}
+              className="flex items-center justify-center w-14 h-14 bg-green-500 hover:bg-green-600 disabled:bg-gray-300 disabled:cursor-not-allowed rounded-xl shadow-lg transition-colors duration-200"
+            >
+              <Plus className="w-6 h-6 text-white" strokeWidth={3} />
+            </button>
           </div>
 
           <div className="text-center space-y-3">
