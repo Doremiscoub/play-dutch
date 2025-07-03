@@ -19,45 +19,48 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
   disabled = false,
 }) => {
   return (
-    <div className="fixed bottom-6 right-6 z-[99999] flex flex-col gap-3">
-      <style>{`
-        .floating-buttons * { pointer-events: auto; }
-      `}</style>
+    <div className="fixed bottom-6 right-6 z-[9999] flex flex-col gap-3 pointer-events-none">
       {/* Bouton principal - Ajouter une manche */}
       <motion.div
-        initial={{ opacity: 0, scale: 0.8, y: 20 }}
+        initial={{ opacity: 0, scale: 0.5, y: 50 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ duration: 0.4, type: "spring", stiffness: 200 }}
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
+        transition={{ duration: 0.6, type: "spring", stiffness: 150, damping: 10 }}
+        whileHover={{ scale: 1.1, y: -2 }}
+        whileTap={{ scale: 0.9 }}
         className="pointer-events-auto"
       >
         <Button
           onClick={onAddRound}
           disabled={disabled}
           size="lg"
-          className="relative h-16 w-16 rounded-full bg-gradient-to-br from-blue-500 via-purple-500 to-orange-500 hover:from-blue-600 hover:via-purple-600 hover:to-orange-600 text-white shadow-2xl hover:shadow-blue-500/50 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed group border-2 border-white/50 overflow-hidden ring-2 ring-white/30"
+          className="relative h-16 w-16 rounded-full bg-gradient-to-br from-emerald-400 via-blue-500 to-purple-600 hover:from-emerald-500 hover:via-blue-600 hover:to-purple-700 text-white shadow-2xl hover:shadow-emerald-500/30 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed group border-2 border-white/40 overflow-hidden backdrop-blur-sm"
         >
-          {/* Effet de brillance */}
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-500 ease-out" />
+          {/* Particules animées */}
+          <div className="absolute inset-0 rounded-full">
+            <div className="absolute top-2 left-3 w-1 h-1 bg-white/60 rounded-full animate-ping" style={{ animationDelay: '0s' }} />
+            <div className="absolute top-4 right-2 w-1 h-1 bg-white/40 rounded-full animate-ping" style={{ animationDelay: '0.5s' }} />
+            <div className="absolute bottom-3 left-2 w-1 h-1 bg-white/50 rounded-full animate-ping" style={{ animationDelay: '1s' }} />
+          </div>
           
-          {/* Icône avec meilleur contraste */}
-          <Plus className="relative z-20 h-8 w-8 text-white group-hover:rotate-90 transition-transform duration-300 drop-shadow-lg font-bold stroke-2" />
+          {/* Effet de brillance rotatif */}
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent rotate-45 translate-x-[-100%] group-hover:translate-x-[200%] transition-transform duration-700 ease-out" />
           
-          {/* Ring effect au survol */}
-          <div className="absolute inset-0 rounded-full bg-white/20 opacity-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300 -z-10" />
+          <Plus className="relative z-20 h-8 w-8 text-white group-hover:rotate-180 transition-transform duration-500 drop-shadow-lg stroke-[2.5]" />
+          
+          {/* Halo au survol */}
+          <div className="absolute inset-0 rounded-full bg-white/10 opacity-0 group-hover:opacity-100 group-hover:scale-150 transition-all duration-500" />
         </Button>
       </motion.div>
 
-      {/* Boutons secondaires */}
-      <div className="flex flex-col gap-2">
+      {/* Boutons secondaires avec design amélioré */}
+      <div className="flex flex-col gap-3">
         {/* Bouton Annuler */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.8, y: 20 }}
+          initial={{ opacity: 0, scale: 0.5, y: 30 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.1, type: "spring", stiffness: 200 }}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
+          transition={{ duration: 0.5, delay: 0.1, type: "spring", stiffness: 150 }}
+          whileHover={{ scale: 1.1, x: -3 }}
+          whileTap={{ scale: 0.9 }}
           className="pointer-events-auto"
         >
           <Button
@@ -65,29 +68,32 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
             size="icon"
             onClick={onUndoLastRound}
             disabled={!canUndo || disabled}
-            className={`relative h-12 w-12 rounded-full backdrop-blur-xl shadow-xl border-2 transition-all duration-300 group overflow-hidden ${
+            className={`relative h-14 w-14 rounded-full transition-all duration-300 group overflow-hidden border-2 backdrop-blur-sm ${
               canUndo && !disabled
-                ? 'bg-white/95 hover:bg-white text-dutch-blue hover:text-dutch-purple shadow-lg hover:shadow-xl border-white/60 hover:border-dutch-blue/40 ring-2 ring-white/30'
-                : 'bg-white/40 text-gray-400 cursor-not-allowed border-gray-300/40'
+                ? 'bg-gradient-to-br from-orange-400 to-red-500 hover:from-orange-500 hover:to-red-600 text-white shadow-xl hover:shadow-orange-500/30 border-white/40'
+                : 'bg-gray-200/80 text-gray-400 cursor-not-allowed border-gray-300/40 shadow-md'
             }`}
             title="Annuler la dernière manche"
           >
-            {/* Effet de brillance pour bouton actif */}
+            {/* Effet pulsant pour bouton actif */}
             {canUndo && !disabled && (
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-600/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-500" />
+              <>
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent -skew-x-12 translate-x-[-100%] group-hover:translate-x-[200%] transition-transform duration-600" />
+                <div className="absolute inset-0 rounded-full bg-white/10 animate-pulse" />
+              </>
             )}
             
-            <Undo2 className="relative z-10 h-5 w-5 group-hover:rotate-12 transition-transform duration-200 drop-shadow-sm" />
+            <Undo2 className="relative z-10 h-6 w-6 group-hover:-rotate-12 transition-transform duration-300 drop-shadow-sm" />
           </Button>
         </motion.div>
 
         {/* Bouton Terminer */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.8, y: 20 }}
+          initial={{ opacity: 0, scale: 0.5, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.2, type: "spring", stiffness: 200 }}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
+          transition={{ duration: 0.5, delay: 0.2, type: "spring", stiffness: 150 }}
+          whileHover={{ scale: 1.1, x: -3 }}
+          whileTap={{ scale: 0.9 }}
           className="pointer-events-auto"
         >
           <Button
@@ -95,13 +101,17 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
             size="icon"
             onClick={onEndGame}
             disabled={disabled}
-            className="relative h-12 w-12 rounded-full bg-white/95 hover:bg-white backdrop-blur-xl shadow-xl border-2 border-white/60 hover:border-dutch-purple/40 text-dutch-purple hover:text-dutch-orange transition-all duration-300 group overflow-hidden ring-2 ring-white/30"
+            className="relative h-14 w-14 rounded-full bg-gradient-to-br from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white shadow-xl hover:shadow-purple-500/30 transition-all duration-300 group overflow-hidden border-2 border-white/40 backdrop-blur-sm"
             title="Terminer la partie"
           >
             {/* Effet de brillance */}
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-purple-600/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-500" />
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent -skew-x-12 translate-x-[-100%] group-hover:translate-x-[200%] transition-transform duration-600" />
             
-            <Square className="relative z-10 h-5 w-5 group-hover:rotate-45 transition-transform duration-300 drop-shadow-sm" />
+            {/* Points lumineux */}
+            <div className="absolute top-2 right-3 w-1 h-1 bg-white/70 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <div className="absolute bottom-2 left-3 w-1 h-1 bg-white/50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            
+            <Square className="relative z-10 h-6 w-6 group-hover:rotate-90 transition-transform duration-400 drop-shadow-sm" />
           </Button>
         </motion.div>
       </div>
