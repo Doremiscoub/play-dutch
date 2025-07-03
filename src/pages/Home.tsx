@@ -9,8 +9,6 @@ import UnifiedHeader from '@/components/layout/UnifiedHeader';
 import PageShell from '@/components/layout/PageShell';
 import GamingHeroSection from '@/components/home/GamingHeroSection';
 import LazyHomeSections from '@/components/home/LazyHomeSections';
-import SEOMeta from '@/components/seo/SEOMeta';
-import PerformanceOptimizer from '@/components/common/PerformanceOptimizer';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -52,12 +50,7 @@ const Home: React.FC = () => {
   ];
 
   return (
-    <>
-      {/* SEO Meta Tags optimisés */}
-      <SEOMeta {...seoData} />
-      
-      <PageShell variant="default">
-        <PerformanceOptimizer>
+    <PageShell variant="default">
       {/* Fond simplifié et optimisé */}
       <div className="fixed inset-0 bg-gradient-to-br from-trinity-blue-50 via-trinity-purple-50 to-trinity-orange-50">
         {/* Particules gaming colorées */}
@@ -251,9 +244,7 @@ const Home: React.FC = () => {
 
       {/* Sections lazy-loaded pour optimiser les performances */}
       <LazyHomeSections navigate={navigate} />
-        </PerformanceOptimizer>
-      </PageShell>
-    </>
+    </PageShell>
   );
 };
 
