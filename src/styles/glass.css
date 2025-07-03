@@ -80,6 +80,10 @@
   background-color: rgba(139, 92, 246, 0.25);
 }
 
+.lg-tint-secondary-70 {
+  background-color: rgba(139, 92, 246, 0.35);
+}
+
 .lg-tint-secondary-75 {
   background-color: rgba(139, 92, 246, 0.375);
 }
@@ -92,12 +96,20 @@
   background-color: rgba(255, 159, 10, 0.25);
 }
 
+.lg-tint-accent-60 {
+  background-color: rgba(255, 159, 10, 0.3);
+}
+
 .lg-tint-accent-75 {
   background-color: rgba(255, 159, 10, 0.375);
 }
 
 .lg-tint-accent-100 {
   background-color: rgba(255, 159, 10, 0.5);
+}
+
+.lg-tint-primary-70 {
+  background-color: rgba(10, 132, 255, 0.35);
 }
 
 /* Élévations Apple (LG-Elevation-01 à 04) */
@@ -141,6 +153,7 @@
 .lg-opacity-80 {
   background-color: rgba(255, 255, 255, 0.8);
 }
+
 
 /* ========== LEGACY GLASS SYSTEM (Préservé) ========== */
 .glass-light {

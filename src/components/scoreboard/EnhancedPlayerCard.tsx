@@ -67,7 +67,7 @@ const EnhancedPlayerCard: React.FC<EnhancedPlayerCardProps> = ({
   return (
     <motion.div
       className={cn(
-        "lg-card lg-regular relative rounded-3xl border-2 cursor-pointer overflow-hidden group backdrop-blur-[12px] animate-lg-reveal",
+        "lg-card lg-regular relative rounded-3xl border-2 cursor-pointer overflow-hidden group animate-lg-reveal",
         getCardStyle(),
         isSelected || isExpanded ? "lg-elevation-04 ring-2 ring-trinity-blue-500/50 shadow-trinity scale-[1.02] border-trinity-blue-400" : "lg-elevation-02 hover:lg-elevation-03 hover:scale-[1.01] hover:shadow-glass-lg lg-hover-state"
       )}
@@ -187,7 +187,7 @@ const EnhancedPlayerCard: React.FC<EnhancedPlayerCardProps> = ({
             />
             
             <motion.div
-              className="lg-popover p-3 backdrop-blur-[12px] rounded-xl border-white/50 shadow-sm"
+              className="lg-popover lg-tint-primary-50 p-3 rounded-xl border-white/50 shadow-sm"
               whileHover={{ scale: 1.05 }}
               transition={{ duration: 0.12, ease: [0.4, 0, 0.2, 1] }}
             >
