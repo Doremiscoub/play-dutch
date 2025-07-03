@@ -39,17 +39,42 @@ const GameSetup: React.FC = () => {
       if (success) {
         console.log('✅ GameSetup: Game created successfully');
         
-        // Vérification que la sauvegarde a bien eu lieu
-        const savedData = localStorage.getItem('current_dutch_game');
-        console.log('🔍 GameSetup: localStorage verification:', !!savedData);
+        // Attendre un court délai pour s'assurer que toutes les sauvegardes sont terminées
+        await new Promise(resolve => setTimeout(resolve, 500));
         
-        if (savedData) {
-          console.log('📍 GameSetup: Navigating to /game...');
+        // Vérifications multiples de cohérence avant navigation
+        const savedData = localStorage.getItem('current_dutch_game');
+        const transferData = sessionStorage.getItem('game_transfer');
+        
+        console.log('🔍 GameSetup: localStorage verification:', !!savedData);
+        console.log('🔍 GameSetup: sessionStorage transfer:', !!transferData);
+        
+        if (savedData || transferData) {
+          console.log('📍 GameSetup: Data confirmed, navigating to /game...');
           navigate('/game');
           console.log('🏁 GameSetup: Navigation completed');
         } else {
-          console.warn('⚠️ GameSetup: No saved data found, navigation might fail');
-          // Naviguer quand même, l'état React pourrait suffire
+          console.warn('⚠️ GameSetup: No saved data found, attempting navigation with React state');
+          // Dernière chance - créer une sauvegarde d'urgence
+          const emergencyData = {
+            players: validNames.map((name, index) => ({
+              id: `emergency_${index}_${Date.now()}`,
+              name: name.trim(),
+              emoji: '🎮',
+              totalScore: 0,
+              rounds: [],
+              avatarColor: 'blue'
+            })),
+            roundHistory: [],
+            isGameOver: false,
+            scoreLimit: 100,
+            gameStartTime: new Date().toISOString(),
+            emergency: true,
+            lastUpdated: new Date().toISOString()
+          };
+          
+          localStorage.setItem('current_dutch_game', JSON.stringify(emergencyData));
+          console.log('🆘 GameSetup: Emergency data created, navigating');
           navigate('/game');
         }
       } else {

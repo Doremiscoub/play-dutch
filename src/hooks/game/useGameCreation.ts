@@ -70,30 +70,66 @@ export const useGameCreation = ({
       setGameStartTime(startTime);
       setIsInitialized(true);
       
-      console.log('💾 useGameCreation: Saving game state...');
-      // Sauvegarde SYNCHRONE et vérifiée
-      const saveResult = await saveCurrentGame(newPlayers, [], scoreLimit, startTime);
+      // Transfert d'état via sessionStorage pour garantir la continuité
+      const gameTransferData = {
+        players: newPlayers,
+        roundHistory: [],
+        isGameOver: false,
+        scoreLimit,
+        gameStartTime: startTime.toISOString(),
+        transferTimestamp: Date.now()
+      };
+      sessionStorage.setItem('game_transfer', JSON.stringify(gameTransferData));
       
-      if (saveResult) {
-        // Sauvegarde additionnelle directe en localStorage pour assurer la persistance
-        const gameData = {
+      console.log('💾 useGameCreation: Saving game state...');
+      // Sauvegarde SYNCHRONE et vérifiée avec timeout
+      const savePromise = saveCurrentGame(newPlayers, [], scoreLimit, startTime);
+      const timeoutPromise = new Promise<boolean>((_, reject) => 
+        setTimeout(() => reject(new Error('Save timeout')), 5000)
+      );
+      
+      try {
+        const saveResult = await Promise.race([savePromise, timeoutPromise]);
+        
+        if (saveResult) {
+          // Sauvegarde directe additionnelle en localStorage
+          const gameData = {
+            players: newPlayers,
+            roundHistory: [],
+            isGameOver: false,
+            scoreLimit,
+            gameStartTime: startTime.toISOString(),
+            lastUpdated: new Date().toISOString()
+          };
+          
+          localStorage.setItem(STORAGE_KEYS.CURRENT_GAME, JSON.stringify(gameData));
+          localStorage.setItem(STORAGE_KEYS.GAME_ACTIVE, 'true');
+          localStorage.removeItem(STORAGE_KEYS.PLAYER_SETUP);
+          
+          // Vérification de cohérence des données
+          const savedCheck = localStorage.getItem(STORAGE_KEYS.CURRENT_GAME);
+          if (!savedCheck) {
+            throw new Error('Sauvegarde vérification échouée');
+          }
+          
+          console.log('✅ useGameCreation: Game state saved and verified');
+        } else {
+          console.warn('⚠️ useGameCreation: Save returned false, using React state only');
+        }
+      } catch (saveError) {
+        console.error('❌ useGameCreation: Save failed or timeout:', saveError);
+        // Continue avec React state seulement, ajouter fallback localStorage direct
+        const emergencyData = {
           players: newPlayers,
           roundHistory: [],
           isGameOver: false,
           scoreLimit,
           gameStartTime: startTime.toISOString(),
+          emergency: true,
           lastUpdated: new Date().toISOString()
         };
-        
-        localStorage.setItem(STORAGE_KEYS.CURRENT_GAME, JSON.stringify(gameData));
-        localStorage.setItem(STORAGE_KEYS.GAME_ACTIVE, 'true');
-        localStorage.removeItem(STORAGE_KEYS.PLAYER_SETUP);
-        
-        console.log('✅ useGameCreation: Game state saved successfully');
-        console.log('🔍 useGameCreation: localStorage check:', !!localStorage.getItem(STORAGE_KEYS.CURRENT_GAME));
-      } else {
-        console.error('❌ useGameCreation: Failed to save game state');
-        // Ne pas échouer même si la sauvegarde échoue, continuer avec l'état React
+        localStorage.setItem(STORAGE_KEYS.CURRENT_GAME, JSON.stringify(emergencyData));
+        console.log('🆘 useGameCreation: Emergency save completed');
       }
       
       console.log('🎉 useGameCreation: Game created successfully with', newPlayers.length, 'players');
