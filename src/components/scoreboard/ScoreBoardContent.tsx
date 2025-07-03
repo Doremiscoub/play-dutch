@@ -4,9 +4,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Player } from '@/types';
 import EnhancedPlayerCard from './EnhancedPlayerCard';
 import ScoreTableView from '../ScoreTableView';
+import StatisticsView from './StatisticsView';
 
 interface ScoreBoardContentProps {
-  currentView: 'list' | 'table';
+  currentView: 'list' | 'table' | 'stats';
   sortedPlayers: Player[];
   players: Player[];
   roundCount: number;
@@ -84,7 +85,7 @@ const ScoreBoardContent: React.FC<ScoreBoardContentProps> = ({
             />
           ))}
         </motion.div>
-      ) : (
+      ) : currentView === 'table' ? (
         <motion.div
           key="table-view"
           initial={{ opacity: 0, y: 20 }}
@@ -97,6 +98,13 @@ const ScoreBoardContent: React.FC<ScoreBoardContentProps> = ({
             roundHistory={safeRoundHistory}
           />
         </motion.div>
+      ) : (
+        <StatisticsView
+          players={players}
+          roundCount={roundCount}
+          scoreLimit={scoreLimit}
+          roundHistory={safeRoundHistory}
+        />
       )}
     </AnimatePresence>
   );

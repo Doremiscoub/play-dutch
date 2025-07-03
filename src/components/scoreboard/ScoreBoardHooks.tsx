@@ -21,7 +21,7 @@ export const useScoreBoardLogic = ({
 }: UseScoreBoardLogicProps) => {
   const { playSound } = useSound();
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
-  const [currentView, setCurrentView] = useState<'list' | 'table'>('list');
+  const [currentView, setCurrentView] = useState<'list' | 'table' | 'stats'>('list');
 
   console.log('useScoreBoardLogic: Initializing with', { 
     playersCount: players?.length, 
@@ -101,7 +101,7 @@ export const useScoreBoardLogic = ({
     }
   }, [onEndGame, playSound]);
 
-  const handleViewChange = useCallback((view: 'list' | 'table') => {
+  const handleViewChange = useCallback((view: 'list' | 'table' | 'stats') => {
     console.log('useScoreBoardLogic: View changed to', view);
     setCurrentView(view);
     playSound('buttonClick');

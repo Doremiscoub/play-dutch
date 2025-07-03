@@ -6,13 +6,9 @@ import EndGameConfirmationDialog from './scoreboard/EndGameConfirmationDialog';
 
 import FloatingActionButtons from './scoreboard/FloatingActionButtons';
 import UnifiedHeader from '@/components/layout/UnifiedHeader';
-import DetailedGameStats from './scoreboard/DetailedGameStats';
-import GameStatsPanel from './scoreboard/GameStatsPanel';
-import DesktopSidePanel from './scoreboard/DesktopSidePanel';
-import ScoreTableView from './ScoreTableView';
-
+import ScoreBoardContent from './scoreboard/ScoreBoardContent';
+import ScoreBoardTabs from './scoreboard/ScoreBoardTabs';
 import { useScoreBoardLogic } from './scoreboard/ScoreBoardHooks';
-import FunPlayerCard from './scoreboard/FunPlayerCard';
 
 const ScoreBoard: React.FC<ScoreBoardProps> = ({
   players,
@@ -70,97 +66,25 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
 
   return (
     <div className="max-w-6xl mx-auto">
-      {/* Layout Desktop avec panneau latéral */}
-      <div className="flex gap-6">
+      {/* Contenu principal */}
+      <div className="space-y-6">
+        {/* Toggle des vues avec 3 options */}
+        <ScoreBoardTabs
+          currentView={currentView}
+          onViewChange={handleViewChange}
+        />
+
         {/* Contenu principal */}
-        <div className="flex-1 space-y-6">
-          {/* Toggle Liste/Tableau avec style glassmorphisme */}
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.2 }}
-            className="flex justify-center items-center space-x-4 mb-8 mt-4 px-4"
-          >
-            <motion.button
-              onClick={() => handleViewChange('list')}
-              className={`px-8 py-3 rounded-xl transition-all shadow-lg flex items-center gap-2 font-medium min-w-[180px] glass-button ${
-                currentView === 'list'
-                  ? 'bg-white text-dutch-blue shadow-xl scale-105 border-2 border-dutch-blue/60 ring-2 ring-dutch-blue/20'
-                  : 'bg-white/80 text-gray-800 hover:bg-white/95 border-2 border-gray-400/80 shadow-md hover:shadow-lg hover:border-dutch-blue/40'
-              }`}
-              whileHover={{ scale: currentView === 'list' ? 1.05 : 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <span className="h-4 w-4">📊</span>
-              <span className={`font-semibold ${currentView === 'list' ? 'text-dutch-blue' : 'text-gray-900'}`}>
-                Classement détaillé
-              </span>
-            </motion.button>
-            
-            <motion.button
-              onClick={() => handleViewChange('table')}
-              className={`px-8 py-3 rounded-xl transition-all shadow-lg flex items-center gap-2 font-medium min-w-[180px] glass-button ${
-                currentView === 'table'
-                  ? 'bg-white text-dutch-blue shadow-xl scale-105 border-2 border-dutch-blue/60 ring-2 ring-dutch-blue/20'
-                  : 'bg-white/80 text-gray-800 hover:bg-white/95 border-2 border-gray-400/80 shadow-md hover:shadow-lg hover:border-dutch-blue/40'
-              }`}
-              whileHover={{ scale: currentView === 'table' ? 1.05 : 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <span className="h-4 w-4">📋</span>
-              <span className={`font-semibold ${currentView === 'table' ? 'text-dutch-blue' : 'text-gray-900'}`}>
-                Tableau des manches
-              </span>
-            </motion.button>
-          </motion.div>
-
-          {/* Contenu principal */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-          >
-            {currentView === 'list' ? (
-              <div className="space-y-4">
-                {sortedPlayers.map((player, index) => (
-                  <FunPlayerCard
-                    key={player.id}
-                    player={player}
-                    rank={index + 1}
-                    totalPlayers={players.length}
-                    onSelect={handlePlayerSelect}
-                    isSelected={selectedPlayer?.id === player.id}
-                  />
-                ))}
-              </div>
-            ) : (
-              <ScoreTableView 
-                players={players} 
-                roundHistory={roundHistory}
-              />
-            )}
-          </motion.div>
-
-        </div>
-
-        {/* Panneau latéral desktop */}
-        <div className="hidden lg:block w-80">
-          <DetailedGameStats
-            players={players}
-            roundCount={roundCount}
-            scoreLimit={scoreLimit}
-            roundHistory={roundHistory}
-          />
-          
-          <div className="mt-6">
-            <DesktopSidePanel
-              showAICommentator={false}
-              players={players}
-              roundHistory={roundHistory}
-              selectedPlayer={selectedPlayer}
-            />
-          </div>
-        </div>
+        <ScoreBoardContent
+          currentView={currentView}
+          sortedPlayers={sortedPlayers}
+          players={players}
+          roundCount={roundCount}
+          scoreLimit={scoreLimit}
+          roundHistory={roundHistory}
+          selectedPlayer={selectedPlayer}
+          onPlayerSelect={handlePlayerSelect}
+        />
       </div>
 
       {/* End Game Confirmation */}

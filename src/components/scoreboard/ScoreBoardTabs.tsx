@@ -1,11 +1,11 @@
 
 import React from 'react';
-import { List, Table } from 'lucide-react';
+import { List, Table, BarChart3 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface ScoreBoardTabsProps {
-  currentView: 'list' | 'table';
-  onViewChange: (view: 'list' | 'table') => void;
+  currentView: 'list' | 'table' | 'stats';
+  onViewChange: (view: 'list' | 'table' | 'stats') => void;
 }
 
 const ScoreBoardTabs: React.FC<ScoreBoardTabsProps> = ({
@@ -40,6 +40,19 @@ const ScoreBoardTabs: React.FC<ScoreBoardTabsProps> = ({
           >
             <Table className="h-4 w-4" />
             <span>Tableau des manches</span>
+          </button>
+          
+          <button
+            className={cn(
+              "flex items-center gap-2 px-4 py-2 rounded-md font-medium transition-all duration-200",
+              currentView === 'stats' 
+                ? "bg-blue-500 text-white shadow-sm" 
+                : "text-gray-600 hover:text-blue-600 hover:bg-gray-50"
+            )}
+            onClick={() => onViewChange('stats')}
+          >
+            <BarChart3 className="h-4 w-4" />
+            <span>Statistiques</span>
           </button>
         </div>
       </div>
