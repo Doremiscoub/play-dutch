@@ -100,7 +100,7 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
 
   const availableQuickNames = QUICK_NAMES.filter(name => 
     !players.some(p => p.name === name)
-  ).slice(0, 3);
+  ).slice(0, 6);
 
   const canContinue = players.length === playerCount;
   const progressPercentage = (players.length / playerCount) * 100;
@@ -169,7 +169,7 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
             {availableQuickNames.length > 0 && (
               <div>
                 <p className="text-sm font-medium text-neutral-700 mb-2">Ajout rapide :</p>
-                <div className="flex gap-2">
+                <div className="flex gap-2 flex-wrap">
                   {availableQuickNames.map((name) => (
                     <Button
                       key={name}
