@@ -72,8 +72,8 @@ const GamingHeroSection: React.FC = () => {
         </div>
       </div>
 
-      {/* Contenu principal */}
-      <div className="relative z-10 text-center max-w-4xl mx-auto space-y-8">
+      {/* Contenu principal - logo remonté */}
+      <div className="relative z-10 text-center max-w-4xl mx-auto space-y-6 -mt-8">
         {/* Logo avec effet néon */}
         <motion.div
           initial={{ opacity: 0, scale: 0.5, y: 50 }}
@@ -99,7 +99,7 @@ const GamingHeroSection: React.FC = () => {
             <img 
               src="/lovable-uploads/0532ef39-c77c-4480-8d74-7af7665596ee.png"
               alt="Dutch Card Game - Professeur Cartouche"
-              className="w-auto h-56 sm:h-64 md:h-72 lg:h-80 xl:h-96 mx-auto object-contain drop-shadow-2xl"
+              className="w-auto h-64 sm:h-72 md:h-80 lg:h-96 xl:h-[28rem] mx-auto object-contain drop-shadow-2xl"
             />
           </div>
         </motion.div>
