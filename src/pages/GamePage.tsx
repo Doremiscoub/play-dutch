@@ -11,17 +11,33 @@ const GamePage: React.FC = () => {
 
   // Load existing game on mount
   useEffect(() => {
+    console.log('🎮 GamePage: useEffect triggered');
+    console.log('🔍 GamePage: isInitialized:', gameState.isInitialized);
+    console.log('🔍 GamePage: players:', gameState.players);
+    console.log('🔍 GamePage: players length:', gameState.players?.length);
+    
     if (!gameState.isInitialized) {
+      console.log('🔄 GamePage: Game not initialized, trying to load existing game...');
       const loaded = gameState.loadExistingGame();
+      console.log('📂 GamePage: Load existing game result:', loaded);
+      
       if (!loaded) {
-        console.log('No existing game found, redirecting to setup');
+        console.log('❌ GamePage: No existing game found, redirecting to setup');
         navigate('/setup');
+      } else {
+        console.log('✅ GamePage: Existing game loaded successfully');
       }
+    } else {
+      console.log('✅ GamePage: Game already initialized');
     }
   }, [gameState.isInitialized, gameState.loadExistingGame, navigate]);
 
   // Show loading if not initialized
   if (!gameState.isInitialized || !gameState.players || gameState.players.length === 0) {
+    console.log('⏳ GamePage: Showing loading screen');
+    console.log('🔍 GamePage: isInitialized:', gameState.isInitialized);
+    console.log('🔍 GamePage: players exist:', !!gameState.players);
+    console.log('🔍 GamePage: players length:', gameState.players?.length);
     return (
       <PageShell variant="game">
         <div className="min-h-screen flex items-center justify-center">

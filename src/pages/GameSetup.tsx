@@ -20,27 +20,36 @@ const GameSetup: React.FC = () => {
 
   const handleStartGame = async (playerNames: string[]) => {
     try {
-      console.log('GameSetup: Starting game with players:', playerNames);
+      console.log('🎮 GameSetup: Starting game with players:', playerNames);
       
       // Validation des noms avant création
       const validNames = playerNames.filter(name => name && name.trim().length >= 2);
+      console.log('✅ GameSetup: Valid names after filtering:', validNames);
+      
       if (validNames.length < 2) {
+        console.log('❌ GameSetup: Not enough valid players');
         toast.error('Il faut au moins 2 joueurs avec des noms valides');
         return;
       }
       
+      console.log('🚀 GameSetup: Creating new game...');
       const success = await createNewGame(validNames);
+      console.log('🎯 GameSetup: Game creation result:', success);
+      
       if (success) {
-        console.log('GameSetup: Game created successfully, navigating to /game');
-        // Small delay to ensure state is updated
-        setTimeout(() => {
-          navigate('/game');
-        }, 100);
+        console.log('✅ GameSetup: Game created successfully, navigating to /game');
+        console.log('🔍 GameSetup: Current location before navigation:', window.location.pathname);
+        
+        // Immediate navigation without delay
+        navigate('/game');
+        
+        console.log('🔍 GameSetup: Navigation called to /game');
       } else {
+        console.log('❌ GameSetup: Game creation failed');
         toast.error('Erreur lors de la création de la partie');
       }
     } catch (error) {
-      console.error('GameSetup: Failed to start game:', error);
+      console.error('💥 GameSetup: Failed to start game:', error);
       toast.error('Erreur lors de la création de la partie');
     }
   };
