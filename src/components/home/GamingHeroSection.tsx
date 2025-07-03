@@ -131,40 +131,24 @@ const GamingHeroSection: React.FC = () => {
             whileTap={{ scale: 0.95 }}
             className="relative group"
           >
-            {/* Effet glow Trinity coloré */}
+            {/* Effet glow simplifié */}
             <motion.div
-              className="absolute -inset-4 bg-gradient-to-r from-trinity-blue-400 via-trinity-purple-400 to-trinity-orange-400 rounded-2xl blur-xl opacity-70"
+              className="absolute -inset-3 bg-gradient-to-r from-blue-400 via-purple-400 to-orange-400 rounded-2xl blur-xl opacity-60"
               animate={{
-                scale: [1, 1.1, 1],
-                opacity: [0.7, 1, 0.7],
-                rotate: [0, 180, 360]
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-            />
-            
-            {/* Effet glow secondaire */}
-            <motion.div
-              className="absolute -inset-2 bg-gradient-to-l from-trinity-orange-300 via-trinity-blue-300 to-trinity-purple-300 rounded-2xl blur-lg opacity-50"
-              animate={{
-                scale: [1.05, 0.95, 1.05],
-                opacity: [0.5, 0.8, 0.5]
+                scale: [1, 1.05, 1],
+                opacity: [0.6, 0.8, 0.6]
               }}
               transition={{
                 duration: 2,
                 repeat: Infinity,
-                ease: "easeInOut",
-                delay: 1
+                ease: "easeInOut"
               }}
             />
             
             <Button
               onClick={() => navigate('/setup')}
               size="xl"
-              className="relative z-10 bg-gradient-to-r from-trinity-blue-500 via-trinity-purple-500 to-trinity-orange-500 hover:from-trinity-orange-400 hover:via-trinity-purple-400 hover:to-trinity-blue-400 text-white font-black text-xl sm:text-2xl px-16 py-8 shadow-2xl border-4 border-white rounded-2xl transition-all duration-300 hover:border-trinity-purple-300 hover:scale-105 animate-pulse"
+              className="relative z-10 bg-gradient-to-r from-blue-600 via-purple-600 to-orange-500 hover:from-orange-500 hover:via-purple-500 hover:to-blue-600 text-white font-black text-xl sm:text-2xl px-16 py-8 shadow-2xl border-4 border-white rounded-2xl transition-all duration-300 hover:scale-105"
             >
               <motion.div
                 className="flex items-center gap-4"
