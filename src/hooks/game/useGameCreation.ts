@@ -1,18 +1,18 @@
 import { useCallback } from 'react';
 import { toast } from 'sonner';
 import { v4 as uuidv4 } from 'uuid';
-import { Player } from '@/types';
+import { Player, RoundHistoryEntry } from '@/types';
 import { STORAGE_KEYS } from '@/utils/storageKeys';
 import { avatarColors, getRandomEmoji } from './constants';
 
 interface UseGameCreationProps {
   scoreLimit: number;
-  saveCurrentGame: (players: Player[], roundHistory: any[], scoreLimit: number, gameStartTime: Date | null, isGameOver?: boolean) => Promise<boolean>;
+  saveCurrentGame: (players: Player[], roundHistory: RoundHistoryEntry[], scoreLimit: number, gameStartTime: Date | null, isGameOver?: boolean) => Promise<boolean>;
   setPlayers: (players: Player[]) => void;
   setGameStartTime: (time: Date | null) => void;
   setIsInitialized: (initialized: boolean) => void;
   setInitError: (error: string | null) => void;
-  setRoundHistory: (history: any[]) => void;
+  setRoundHistory: (history: RoundHistoryEntry[]) => void;
   setShowGameOver: (show: boolean) => void;
   setShowScoreForm: (show: boolean) => void;
 }

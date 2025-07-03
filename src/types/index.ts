@@ -52,7 +52,7 @@ export interface ScoreBoardProps {
   onAddRound: (scores: number[], dutchPlayerId?: string) => void;
   onEndGame: () => void;
   onUndoLastRound: () => void;
-  roundHistory?: { scores: number[], dutchPlayerId?: string }[];
+  roundHistory?: RoundHistoryEntry[];
   isMultiplayer?: boolean;
   showGameEndConfirmation?: boolean;
   onConfirmEndGame?: () => void;
@@ -113,4 +113,10 @@ export interface AICommentData {
   type: 'info' | 'joke' | 'sarcasm' | 'encouragement';
   message: string;
   timestamp: number;
+}
+
+// Type pour l'historique des manches
+export interface RoundHistoryEntry {
+  scores: number[];
+  dutchPlayerId?: string;
 }

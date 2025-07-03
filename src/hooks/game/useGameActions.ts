@@ -1,10 +1,10 @@
 import { useCallback } from 'react';
 import { toast } from 'sonner';
-import { Player } from '@/types';
+import { Player, RoundHistoryEntry } from '@/types';
 
 interface UseGameActionsProps {
   players: Player[];
-  roundHistory: any[];
+  roundHistory: RoundHistoryEntry[];
   scoreLimit: number;
   gameStartTime: Date | null;
   showGameOver: boolean;
@@ -12,7 +12,7 @@ interface UseGameActionsProps {
   addRound: (players: Player[], scores: number[], dutchPlayerId?: string) => any;
   undoLastRound: (players: Player[], soundEnabled: boolean) => Player[];
   finalizeGame: (players: Player[], gameStartTime: Date | null) => Promise<boolean>;
-  saveCurrentGame: (players: Player[], roundHistory: any[], scoreLimit: number, gameStartTime: Date | null, isGameOver?: boolean) => Promise<boolean>;
+  saveCurrentGame: (players: Player[], roundHistory: RoundHistoryEntry[], scoreLimit: number, gameStartTime: Date | null, isGameOver?: boolean) => Promise<boolean>;
   setPlayers: (players: Player[]) => void;
   setShowGameOver: (show: boolean) => void;
   setShowScoreForm: (show: boolean) => void;

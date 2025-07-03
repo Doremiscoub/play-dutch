@@ -1,6 +1,6 @@
 
 import { useCallback } from 'react';
-import { Player } from '@/types';
+import { Player, RoundHistoryEntry } from '@/types';
 import { useGamePersistence } from '@/hooks/useGamePersistence';
 import { STORAGE_KEYS } from '@/utils/storageKeys';
 import { toast } from 'sonner';
@@ -10,7 +10,7 @@ export const useGameStatePersistence = () => {
 
   const saveCurrentGame = useCallback(async (
     players: Player[],
-    roundHistory: any[],
+    roundHistory: RoundHistoryEntry[],
     scoreLimit: number,
     gameStartTime: Date | null,
     isGameOver: boolean = false

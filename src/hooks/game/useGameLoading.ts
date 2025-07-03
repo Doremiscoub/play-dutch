@@ -1,12 +1,12 @@
 import { useCallback } from 'react';
 import { STORAGE_KEYS } from '@/utils/storageKeys';
-import { Player } from '@/types';
+import { Player, RoundHistoryEntry } from '@/types';
 
 interface UseGameLoadingProps {
   setPlayers: (players: Player[]) => void;
   setGameStartTime: (time: Date | null) => void;
   setScoreLimit: (limit: number) => void;
-  setRoundHistory: (history: any[]) => void;
+  setRoundHistory: (history: RoundHistoryEntry[]) => void;
   setIsInitialized: (initialized: boolean) => void;
 }
 
