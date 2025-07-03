@@ -15,8 +15,8 @@ const GameSetupCard: React.FC<GameSetupCardProps> = ({ selectedEmoji, children }
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
     >
-      <Card className="border border-white/50 bg-gradient-to-br from-white/95 to-white/85 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden">
-        <CardHeader className="bg-gradient-to-r from-dutch-blue/10 via-dutch-purple/8 to-dutch-orange/10 text-center">
+      <Card className="card-glass shadow-glass-lg overflow-hidden">
+        <CardHeader className="bg-gradient-to-r from-trinity-blue-50 via-trinity-purple-50 to-trinity-orange-50 text-center">
           <CardTitle className="flex items-center justify-center gap-3 text-2xl">
             <motion.span 
               className="text-3xl"
@@ -25,7 +25,7 @@ const GameSetupCard: React.FC<GameSetupCardProps> = ({ selectedEmoji, children }
             >
               {selectedEmoji}
             </motion.span>
-            <span className="bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange bg-clip-text text-transparent font-bold">
+            <span className="text-trinity font-bold">
               Configuration de partie
             </span>
           </CardTitle>

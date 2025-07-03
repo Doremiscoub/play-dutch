@@ -19,7 +19,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({ onClick, label, disabled = 
     >
       {/* Anneaux de lueur multiples avec rotations */}
       <motion.div
-        className="absolute -inset-12 bg-gradient-to-r from-dutch-blue/40 via-dutch-purple/40 to-dutch-orange/40 rounded-full blur-2xl opacity-0 group-hover:opacity-100"
+        className="absolute -inset-12 bg-gradient-to-r from-trinity-blue-200/40 via-trinity-purple-200/40 to-trinity-orange-200/40 rounded-full blur-2xl opacity-0 group-hover:opacity-100"
         animate={disabled ? {} : { 
           rotate: 360,
           scale: [0.8, 1.2, 0.8]
@@ -31,7 +31,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({ onClick, label, disabled = 
       />
       
       <motion.div
-        className="absolute -inset-8 bg-gradient-to-r from-dutch-orange/30 via-dutch-purple/30 to-dutch-blue/30 rounded-full blur-xl opacity-0 group-hover:opacity-100"
+        className="absolute -inset-8 bg-gradient-to-r from-trinity-orange-200/30 via-trinity-purple-200/30 to-trinity-blue-200/30 rounded-full blur-xl opacity-0 group-hover:opacity-100"
         animate={disabled ? {} : { 
           rotate: -360,
           scale: [1.1, 0.9, 1.1]
@@ -47,7 +47,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({ onClick, label, disabled = 
         {[...Array(12)].map((_, i) => (
           <motion.div
             key={i}
-            className="absolute w-3 h-3 bg-white/80 rounded-full"
+            className="absolute w-3 h-3 bg-glass-light rounded-full"
             animate={disabled ? {} : {
               rotate: 360,
               scale: [0, 1, 0],

@@ -67,7 +67,7 @@ const GameStatsCards: React.FC<GameStatsCardsProps> = ({
     >
       {stats.map((stat, index) => (
         <motion.div key={index} variants={itemVariants}>
-          <Card className="bg-white/80 backdrop-blur-sm border border-white/50 hover:bg-white/90 transition-all duration-300">
+          <Card className="card-glass hover:shadow-glass-lg transition-all duration-300">
             <CardContent className="p-6 text-center">
               <div className="flex items-center justify-center gap-3 mb-2">
                 <stat.icon className={`h-6 w-6 text-${stat.color}`} />

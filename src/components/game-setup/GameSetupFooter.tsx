@@ -16,10 +16,10 @@ const GameSetupFooter: React.FC<GameSetupFooterProps> = ({
   canStartGame 
 }) => {
   return (
-    <CardFooter className="bg-gradient-to-r from-gray-50/80 via-white/60 to-gray-50/80 border-t border-white/60">
+    <CardFooter className="bg-gradient-to-r from-neutral-50/80 via-background/60 to-neutral-50/80 border-t border-glass-border-light">
       <Button 
         onClick={() => onStartGame(playerNames)}
-        className="w-full bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange text-white shadow-xl hover:shadow-2xl transition-all duration-500 disabled:opacity-50 font-bold text-lg py-6"
+        className="w-full btn-glass-trinity font-display font-bold text-lg py-6 shadow-trinity"
         disabled={!canStartGame}
         size="lg"
       >

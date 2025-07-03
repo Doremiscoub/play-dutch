@@ -324,7 +324,7 @@ const BadgeSystem: React.FC<BadgeSystemProps> = ({ players, games, currentGameId
       case 'uncommon': return 'bg-green-200 text-green-800';
       case 'rare': return 'bg-blue-200 text-blue-800';
       case 'epic': return 'bg-purple-200 text-purple-800';
-      case 'legendary': return 'bg-dutch-orange/20 text-dutch-orange';
+      case 'legendary': return 'bg-trinity-orange-100/80 text-trinity-orange-700';
       default: return 'bg-gray-200 text-gray-800';
     }
   };
@@ -350,7 +350,7 @@ const BadgeSystem: React.FC<BadgeSystemProps> = ({ players, games, currentGameId
     <Card className="border border-white/50 bg-gradient-to-br from-white/90 to-white/70 backdrop-blur-md rounded-3xl shadow-md">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Medal className="h-5 w-5 text-dutch-orange" />
+          <Medal className="h-5 w-5 text-trinity-orange-600" />
           Badges et Récompenses
         </CardTitle>
         <CardDescription>
@@ -379,7 +379,7 @@ const BadgeSystem: React.FC<BadgeSystemProps> = ({ players, games, currentGameId
               {badges.map((badge) => (
                 <div
                   key={badge.id}
-                  className="bg-white/60 backdrop-blur-sm rounded-xl border border-white/50 p-3 cursor-pointer hover:shadow-md transition-shadow"
+                  className="card-glass p-3 cursor-pointer hover:shadow-glass-lg transition-shadow"
                   onClick={() => showBadgeDetails(badge)}
                 >
                   <div className="flex items-center gap-2">
@@ -404,19 +404,19 @@ const BadgeSystem: React.FC<BadgeSystemProps> = ({ players, games, currentGameId
           </TabsContent>
           
           <TabsContent value="progress" className="space-y-4">
-            <div className="bg-white/60 backdrop-blur-sm rounded-2xl border border-white/30 p-3">
+            <div className="card-glass p-3">
               <Accordion type="single" collapsible>
                 {players.map((player) => (
                   <AccordionItem key={player.id} value={player.id}>
                     <AccordionTrigger className="hover:no-underline">
                       <div className="flex items-center gap-2">
                         <Avatar className="h-6 w-6">
-                          <AvatarFallback className="bg-dutch-blue/10 text-dutch-blue text-xs">
+                          <AvatarFallback className="bg-trinity-blue-100 text-trinity-blue-700 text-xs">
                             {player.name.charAt(0).toUpperCase()}
                           </AvatarFallback>
                         </Avatar>
                         <span className="font-medium">{player.name}</span>
-                        <div className="text-xs bg-dutch-blue/10 text-dutch-blue px-2 py-0.5 rounded-full ml-2">
+                        <div className="text-xs bg-trinity-blue-100 text-trinity-blue-700 px-2 py-0.5 rounded-full ml-2">
                           {(playerBadges[player.id] || []).length} badges
                         </div>
                       </div>
@@ -453,11 +453,11 @@ const BadgeSystem: React.FC<BadgeSystemProps> = ({ players, games, currentGameId
                                 return (
                                   <div 
                                     key={badge.id} 
-                                    className="bg-white/70 rounded-lg p-2 cursor-pointer hover:bg-white"
+                                    className="card-glass rounded-lg p-2 cursor-pointer hover:shadow-glass-lg"
                                     onClick={() => showBadgeDetails(badge)}
                                   >
                                     <div className="flex items-center gap-2 mb-1">
-                                      <div className="h-6 w-6 rounded-full bg-white/90 flex items-center justify-center shadow-sm">
+                                      <div className="h-6 w-6 rounded-full bg-glass-light flex items-center justify-center shadow-sm">
                                         {renderBadgeIcon(badge, 'h-3.5 w-3.5')}
                                       </div>
                                       <span className="text-xs font-medium">{badge.name}</span>
@@ -482,7 +482,7 @@ const BadgeSystem: React.FC<BadgeSystemProps> = ({ players, games, currentGameId
       <CardFooter>
         <Button 
           variant="outline" 
-          className="w-full bg-white/50 border-dutch-orange/20 text-dutch-orange hover:bg-white/80"
+          className="w-full btn-glass border-trinity-orange-300/20 text-trinity-orange-600 hover:border-trinity-orange-400"
           onClick={() => setCurrentViewTab(currentViewTab === 'all' ? 'progress' : 'all')}
         >
           <Medal className="h-4 w-4 mr-2" />
@@ -492,7 +492,7 @@ const BadgeSystem: React.FC<BadgeSystemProps> = ({ players, games, currentGameId
       
       {/* Badge details dialog */}
       <Dialog open={showBadgeDialog} onOpenChange={setShowBadgeDialog}>
-        <DialogContent className="sm:max-w-md rounded-3xl bg-white/90 backdrop-blur-md border border-white/40">
+        <DialogContent className="sm:max-w-md rounded-3xl card-glass border-glass-border-light">
           <DialogHeader>
             <DialogTitle>Détails du badge</DialogTitle>
             <DialogDescription>
@@ -531,7 +531,7 @@ const BadgeSystem: React.FC<BadgeSystemProps> = ({ players, games, currentGameId
                     return (
                       <div key={player.id} className="bg-white/70 rounded-lg p-2 flex items-center gap-3">
                         <Avatar className="h-6 w-6">
-                          <AvatarFallback className="bg-dutch-blue/10 text-dutch-blue text-xs">
+                          <AvatarFallback className="bg-trinity-blue-100 text-trinity-blue-700 text-xs">
                             {player.name.charAt(0).toUpperCase()}
                           </AvatarFallback>
                         </Avatar>

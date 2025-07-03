@@ -24,7 +24,7 @@ const EmojiSelector: React.FC<EmojiSelectorProps> = ({ selectedEmoji, onEmojiSel
             p-3 rounded-2xl text-xl transition-all duration-200 min-w-[3rem] h-12
             ${selectedEmoji === emoji 
               ? 'bg-dutch-orange/30 ring-2 ring-dutch-orange shadow-lg' 
-              : 'bg-white/60 hover:bg-white/80 border border-white/60'
+              : 'btn-glass hover:shadow-glass-lg border border-glass-border-light'
             }
           `}
         >

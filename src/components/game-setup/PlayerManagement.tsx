@@ -36,7 +36,7 @@ const PlayerManagement: React.FC<PlayerManagementProps> = ({ players, setPlayers
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="text-xl font-semibold bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">
+        <h3 className="text-xl font-semibold text-trinity">
           Joueurs ({players.length})
         </h3>
         {players.length > 2 && (
@@ -44,7 +44,7 @@ const PlayerManagement: React.FC<PlayerManagementProps> = ({ players, setPlayers
             variant="outline"
             size="sm"
             onClick={handleShufflePlayers}
-            className="bg-white/70 hover:bg-white/90 border-dutch-purple/30"
+            className="btn-glass hover:border-trinity-purple-400"
           >
             <Shuffle className="h-4 w-4 mr-2" />
             Mélanger
@@ -62,10 +62,10 @@ const PlayerManagement: React.FC<PlayerManagementProps> = ({ players, setPlayers
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.8, y: -20 }}
               transition={{ type: "spring", stiffness: 400, damping: 25 }}
-              className="flex items-center justify-between p-4 bg-white/60 hover:bg-white/80 rounded-2xl border border-white/50 shadow-lg transition-all duration-300"
+              className="flex items-center justify-between p-4 card-glass hover:shadow-glass-lg rounded-2xl transition-all duration-300"
             >
               <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-dutch-blue/20 to-dutch-purple/20 flex items-center justify-center text-sm font-bold text-dutch-blue border border-dutch-blue/30">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-trinity-blue-100 to-trinity-purple-100 flex items-center justify-center text-sm font-bold text-trinity-blue-600 border border-trinity-blue-300">
                   {index + 1}
                 </div>
                 <span className="text-2xl">{player.emoji}</span>

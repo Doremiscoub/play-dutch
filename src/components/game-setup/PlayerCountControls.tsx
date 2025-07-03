@@ -43,12 +43,12 @@ const PlayerCountControls: React.FC<PlayerCountControlsProps> = ({
         size="icon"
         onClick={onRemovePlayer}
         disabled={playerCount <= minPlayers}
-        className="h-16 w-16 rounded-2xl bg-white/70 hover:bg-white/90 border border-dutch-blue/30 text-dutch-blue disabled:opacity-30"
+        className="h-16 w-16 rounded-2xl btn-glass hover:border-trinity-blue-400 text-trinity-blue-600 disabled:opacity-30"
       >
         <Minus className="h-8 w-8" />
       </Button>
 
-      <div className="text-6xl font-bold bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange bg-clip-text text-transparent min-w-[120px] text-center">
+      <div className="text-6xl font-bold text-trinity font-display min-w-[120px] text-center">
         {playerCount}
       </div>
 
@@ -57,7 +57,7 @@ const PlayerCountControls: React.FC<PlayerCountControlsProps> = ({
         size="icon"
         onClick={onAddPlayer}
         disabled={playerCount >= maxPlayers}
-        className="h-16 w-16 rounded-2xl bg-white/70 hover:bg-white/90 border border-dutch-orange/30 text-dutch-orange disabled:opacity-30"
+        className="h-16 w-16 rounded-2xl btn-glass hover:border-trinity-orange-400 text-trinity-orange-600 disabled:opacity-30"
       >
         <Plus className="h-8 w-8" />
       </Button>
