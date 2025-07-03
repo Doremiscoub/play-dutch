@@ -6,8 +6,6 @@ import { useSEO } from '@/hooks/useSEO';
 import ModernGameSetup from '@/components/game-setup/ModernGameSetup';
 import { useGameState } from '@/hooks/useGameState';
 import { toast } from 'sonner';
-import { STORAGE_KEYS } from '@/utils/storageKeys';
-import PageShell from '@/components/layout/PageShell';
 import UnifiedHeader from '@/components/layout/UnifiedHeader';
 
 const GameSetup: React.FC = () => {
@@ -52,36 +50,33 @@ const GameSetup: React.FC = () => {
   };
 
   return (
-    <PageShell variant="default">
-      {/* Fond coloré Trinity */}
-      <div className="fixed inset-0 bg-gradient-to-br from-trinity-blue-50 via-trinity-purple-50 to-trinity-orange-50">
-        {/* Particules gaming colorées */}
-        {[...Array(6)].map((_, i) => (
-          <motion.div
-            key={i}
-            className={`absolute w-3 h-3 rounded-full ${
-              i % 3 === 0 ? 'bg-trinity-blue-300/40' :
-              i % 3 === 1 ? 'bg-trinity-purple-300/40' : 'bg-trinity-orange-300/40'
-            }`}
-            style={{
-              left: `${20 + Math.random() * 60}%`,
-              top: `${20 + Math.random() * 60}%`,
-            }}
-            animate={{
-              y: [-15, 15, -15],
-              x: [-8, 8, -8],
-              scale: [1, 1.1, 1],
-              opacity: [0.4, 0.7, 0.4]
-            }}
-            transition={{
-              duration: 6 + i,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: i * 0.6
-            }}
-          />
-        ))}
-      </div>
+    <div className="min-h-screen relative bg-gradient-to-br from-trinity-blue-50 via-trinity-purple-50 to-trinity-orange-50">
+      {/* Particules gaming colorées */}
+      {[...Array(6)].map((_, i) => (
+        <motion.div
+          key={i}
+          className={`absolute w-3 h-3 rounded-full ${
+            i % 3 === 0 ? 'bg-trinity-blue-300/40' :
+            i % 3 === 1 ? 'bg-trinity-purple-300/40' : 'bg-trinity-orange-300/40'
+          }`}
+          style={{
+            left: `${20 + Math.random() * 60}%`,
+            top: `${20 + Math.random() * 60}%`,
+          }}
+          animate={{
+            y: [-15, 15, -15],
+            x: [-8, 8, -8],
+            scale: [1, 1.1, 1],
+            opacity: [0.4, 0.7, 0.4]
+          }}
+          transition={{
+            duration: 6 + i,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: i * 0.6
+          }}
+        />
+      ))}
 
       <UnifiedHeader 
         title="Créer une partie"
@@ -96,7 +91,7 @@ const GameSetup: React.FC = () => {
           <ModernGameSetup onStartGame={handleStartGame} />
         </div>
       </div>
-    </PageShell>
+    </div>
   );
 };
 
