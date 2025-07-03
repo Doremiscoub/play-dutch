@@ -13,6 +13,7 @@ interface UnifiedHeaderProps {
   onBack?: () => void;
   showSettings?: boolean;
   variant?: 'default' | 'game' | 'simple';
+  hideTitle?: boolean;
 }
 
 const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
@@ -22,7 +23,8 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
   showBackButton = false,
   onBack,
   showSettings = true,
-  variant = 'default'
+  variant = 'default',
+  hideTitle = false
 }) => {
   return (
     <motion.header 
@@ -60,23 +62,25 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
 
         {/* Center - Title and game info */}
         <div className="flex-1 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ 
-              duration: 0.8, 
-              delay: 0.3,
-              ease: [0.23, 1, 0.32, 1]
-            }}
-          >
-            <ModernTitle
-              variant="h3"
-              withSparkles
-              className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-600 to-orange-500 bg-clip-text text-transparent"
+          {!hideTitle && (
+            <motion.div
+              initial={{ opacity: 0, y: 20, scale: 0.9 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ 
+                duration: 0.8, 
+                delay: 0.3,
+                ease: [0.23, 1, 0.32, 1]
+              }}
             >
-              {title}
-            </ModernTitle>
-          </motion.div>
+              <ModernTitle
+                variant="h3"
+                withSparkles
+                className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-600 to-orange-500 bg-clip-text text-transparent"
+              >
+                {title}
+              </ModernTitle>
+            </motion.div>
+          )}
           {variant === 'game' && roundCount > 0 && (
             <motion.div 
               className="flex justify-center items-center gap-4 mt-3"

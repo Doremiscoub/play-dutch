@@ -46,6 +46,7 @@ const Home: React.FC = () => {
         title="Dutch Card Game"
         showBackButton={false}
         showSettings={true}
+        hideTitle={true}
       />
 
       {/* Hero Section Ultra-Simplifiée */}
