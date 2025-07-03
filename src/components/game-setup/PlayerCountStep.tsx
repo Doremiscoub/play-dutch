@@ -76,9 +76,9 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
                 onClick={decrementCount}
                 disabled={playerCount <= MIN_PLAYERS}
                 size="lg"
-                className="btn-glass w-16 h-16 rounded-2xl text-neutral-700 hover:text-neutral-800 disabled:opacity-30 disabled:cursor-not-allowed"
+                className="w-16 h-16 rounded-2xl bg-white/90 hover:bg-white border-2 border-trinity-blue-200 hover:border-trinity-blue-400 text-trinity-blue-700 hover:text-trinity-blue-800 disabled:opacity-30 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transition-all duration-200"
               >
-                <Minus className="h-6 w-6" />
+                <Minus className="h-6 w-6 font-bold" />
               </Button>
             </motion.div>
 
@@ -101,9 +101,9 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
                 onClick={incrementCount}
                 disabled={playerCount >= MAX_PLAYERS}
                 size="lg"
-                className="btn-glass w-16 h-16 rounded-2xl text-neutral-700 hover:text-neutral-800 disabled:opacity-30 disabled:cursor-not-allowed"
+                className="w-16 h-16 rounded-2xl bg-white/90 hover:bg-white border-2 border-trinity-orange-200 hover:border-trinity-orange-400 text-trinity-orange-700 hover:text-trinity-orange-800 disabled:opacity-30 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transition-all duration-200"
               >
-                <Plus className="h-6 w-6" />
+                <Plus className="h-6 w-6 font-bold" />
               </Button>
             </motion.div>
           </div>
