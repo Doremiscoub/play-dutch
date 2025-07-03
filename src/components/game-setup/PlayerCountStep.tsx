@@ -76,9 +76,9 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
                 onClick={decrementCount}
                 disabled={playerCount <= MIN_PLAYERS}
                 size="lg"
-                className="w-16 h-16 rounded-2xl bg-blue-500/40 hover:bg-blue-500/60 border-2 border-blue-500/60 text-white font-bold text-2xl disabled:opacity-30 disabled:cursor-not-allowed shadow-md hover:shadow-lg transition-all duration-200 backdrop-blur-sm"
+                className="relative z-10 w-16 h-16 rounded-2xl bg-white/80 hover:bg-white/90 border-2 border-blue-300/50 hover:border-blue-400/70 text-blue-600 hover:text-blue-700 font-bold text-2xl disabled:opacity-30 disabled:cursor-not-allowed shadow-sm hover:shadow-md transition-all duration-200 backdrop-blur-sm"
               >
-                <Minus className="h-8 w-8" />
+                <Minus className="h-8 w-8 relative z-20" />
               </Button>
             </motion.div>
 
@@ -101,9 +101,9 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
                 onClick={incrementCount}
                 disabled={playerCount >= MAX_PLAYERS}
                 size="lg"
-                className="w-16 h-16 rounded-2xl bg-orange-500/40 hover:bg-orange-500/60 border-2 border-orange-500/60 text-white font-bold text-2xl disabled:opacity-30 disabled:cursor-not-allowed shadow-md hover:shadow-lg transition-all duration-200 backdrop-blur-sm"
+                className="relative z-10 w-16 h-16 rounded-2xl bg-white/80 hover:bg-white/90 border-2 border-orange-300/50 hover:border-orange-400/70 text-orange-600 hover:text-orange-700 font-bold text-2xl disabled:opacity-30 disabled:cursor-not-allowed shadow-sm hover:shadow-md transition-all duration-200 backdrop-blur-sm"
               >
-                <Plus className="h-8 w-8" />
+                <Plus className="h-8 w-8 relative z-20" />
               </Button>
             </motion.div>
           </div>
