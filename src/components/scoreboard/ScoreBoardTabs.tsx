@@ -14,14 +14,14 @@ const ScoreBoardTabs: React.FC<ScoreBoardTabsProps> = ({
 }) => {
   return (
     <div className="flex justify-center mb-8 px-4">
-      <div className="bg-white/80 backdrop-blur-xl border-2 border-white/60 rounded-2xl p-2 shadow-2xl">
+      <div className="card-glass p-2 shadow-glass-lg">
         <div className="flex gap-2">
           <button
             className={cn(
-              "flex items-center gap-3 px-6 py-3 rounded-xl font-bold transition-all duration-300 min-w-[140px] justify-center",
+              "flex items-center gap-3 px-6 py-3 rounded-xl font-semibold transition-all duration-300 min-w-[140px] justify-center",
               currentView === 'list' 
-                ? "bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange text-white shadow-lg scale-105 transform" 
-                : "text-gray-700 hover:text-dutch-blue hover:bg-white/80 hover:scale-102"
+                ? "btn-glass-trinity text-white shadow-trinity scale-105 transform" 
+                : "text-foreground hover:text-trinity-blue-500 hover:bg-glass-light hover:scale-102"
             )}
             onClick={() => onViewChange('list')}
           >
@@ -32,10 +32,10 @@ const ScoreBoardTabs: React.FC<ScoreBoardTabsProps> = ({
           
           <button
             className={cn(
-              "flex items-center gap-3 px-6 py-3 rounded-xl font-bold transition-all duration-300 min-w-[140px] justify-center",
+              "flex items-center gap-3 px-6 py-3 rounded-xl font-semibold transition-all duration-300 min-w-[140px] justify-center",
               currentView === 'table' 
-                ? "bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange text-white shadow-lg scale-105 transform" 
-                : "text-gray-700 hover:text-dutch-blue hover:bg-white/80 hover:scale-102"
+                ? "btn-glass-trinity text-white shadow-trinity scale-105 transform" 
+                : "text-foreground hover:text-trinity-blue-500 hover:bg-glass-light hover:scale-102"
             )}
             onClick={() => onViewChange('table')}
           >
@@ -46,10 +46,10 @@ const ScoreBoardTabs: React.FC<ScoreBoardTabsProps> = ({
           
           <button
             className={cn(
-              "flex items-center gap-3 px-6 py-3 rounded-xl font-bold transition-all duration-300 min-w-[140px] justify-center",
+              "flex items-center gap-3 px-6 py-3 rounded-xl font-semibold transition-all duration-300 min-w-[140px] justify-center",
               currentView === 'stats' 
-                ? "bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange text-white shadow-lg scale-105 transform" 
-                : "text-gray-700 hover:text-dutch-blue hover:bg-white/80 hover:scale-102"
+                ? "btn-glass-trinity text-white shadow-trinity scale-105 transform" 
+                : "text-foreground hover:text-trinity-blue-500 hover:bg-glass-light hover:scale-102"
             )}
             onClick={() => onViewChange('stats')}
           >

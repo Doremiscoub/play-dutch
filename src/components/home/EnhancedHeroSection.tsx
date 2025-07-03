@@ -282,8 +282,9 @@ const EnhancedHeroSection: React.FC = () => {
               <div className="absolute -inset-1 bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange rounded-full blur opacity-60 group-hover:opacity-100 transition duration-500"></div>
               <Button
                 onClick={() => navigate('/setup')}
+                variant="trinity"
                 size="xl"
-                className="relative bg-gradient-to-r from-dutch-blue to-dutch-purple text-white px-12 py-6 text-xl font-bold rounded-full shadow-2xl hover:shadow-dutch-blue/25 transition-all duration-300 border-0 group"
+                className="font-display font-black text-xl px-12 py-6"
                 aria-label="Commencer une nouvelle partie de Dutch"
               >
                 <motion.div
@@ -304,9 +305,9 @@ const EnhancedHeroSection: React.FC = () => {
             >
               <Button
                 onClick={() => navigate('/rules')}
-                variant="outline"
+                variant="glass"
                 size="xl"
-                className="bg-white/30 backdrop-blur-xl border-2 border-dutch-blue/30 text-dutch-blue px-10 py-6 text-lg font-semibold rounded-full shadow-xl hover:bg-white/40 transition-all duration-300"
+                className="font-body font-semibold text-lg px-10 py-6"
                 aria-label="Découvrir les règles du jeu Dutch"
               >
                 <motion.div
