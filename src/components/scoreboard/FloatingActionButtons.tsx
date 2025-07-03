@@ -19,7 +19,7 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
   disabled = false,
 }) => {
   return (
-    <div className="fixed bottom-6 right-6 z-[100] flex flex-col gap-3">
+    <div className="fixed bottom-6 right-6 z-[9999] flex flex-col gap-3">
       {/* Bouton principal - Ajouter une manche */}
       <motion.div
         initial={{ opacity: 0, scale: 0.8, y: 20 }}
@@ -32,7 +32,7 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
           onClick={onAddRound}
           disabled={disabled}
           size="lg"
-          className="relative h-16 w-16 rounded-full bg-gradient-to-br from-dutch-blue via-dutch-purple to-dutch-orange hover:from-dutch-purple hover:via-dutch-orange hover:to-dutch-blue text-white shadow-2xl hover:shadow-dutch-lg transition-all duration-500 disabled:opacity-50 disabled:cursor-not-allowed group border-0 overflow-hidden"
+          className="relative h-16 w-16 rounded-full bg-gradient-to-br from-blue-600 via-purple-600 to-orange-500 hover:from-purple-600 hover:via-orange-500 hover:to-blue-600 text-white shadow-2xl transition-all duration-500 disabled:opacity-50 disabled:cursor-not-allowed group border-0 overflow-hidden"
         >
           {/* Effet de brillance */}
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-out" />
@@ -41,7 +41,7 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
           <Plus className="relative z-10 h-7 w-7 group-hover:rotate-90 transition-transform duration-300 drop-shadow-lg" />
           
           {/* Ring effect au survol */}
-          <div className="absolute inset-0 rounded-full bg-gradient-to-br from-dutch-blue/40 to-dutch-orange/40 opacity-0 group-hover:opacity-100 group-hover:scale-125 transition-all duration-300 -z-10 blur-md" />
+          <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-600/40 to-orange-500/40 opacity-0 group-hover:opacity-100 group-hover:scale-125 transition-all duration-300 -z-10 blur-md" />
         </Button>
       </motion.div>
 
@@ -62,14 +62,14 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
             disabled={!canUndo || disabled}
             className={`relative h-12 w-12 rounded-full backdrop-blur-xl shadow-xl border-0 transition-all duration-300 group overflow-hidden ${
               canUndo && !disabled
-                ? 'bg-white/95 hover:bg-white text-dutch-blue hover:text-dutch-purple shadow-lg hover:shadow-xl'
+                ? 'bg-white/95 hover:bg-white text-blue-600 hover:text-purple-600 shadow-lg hover:shadow-xl'
                 : 'bg-white/40 text-gray-400 cursor-not-allowed'
             }`}
             title="Annuler la dernière manche"
           >
             {/* Effet de brillance pour bouton actif */}
             {canUndo && !disabled && (
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-dutch-blue/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-500" />
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-600/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-500" />
             )}
             
             <Undo2 className="relative z-10 h-5 w-5 group-hover:rotate-12 transition-transform duration-200 drop-shadow-sm" />
@@ -89,11 +89,11 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
             size="icon"
             onClick={onEndGame}
             disabled={disabled}
-            className="relative h-12 w-12 rounded-full bg-white/95 hover:bg-white backdrop-blur-xl shadow-xl border-0 text-dutch-purple hover:text-dutch-orange transition-all duration-300 group overflow-hidden"
+            className="relative h-12 w-12 rounded-full bg-white/95 hover:bg-white backdrop-blur-xl shadow-xl border-0 text-purple-600 hover:text-orange-500 transition-all duration-300 group overflow-hidden"
             title="Terminer la partie"
           >
             {/* Effet de brillance */}
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-dutch-purple/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-500" />
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-purple-600/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-500" />
             
             <Square className="relative z-10 h-5 w-5 group-hover:rotate-45 transition-transform duration-300 drop-shadow-sm" />
           </Button>

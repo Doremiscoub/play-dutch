@@ -63,20 +63,26 @@ export const generateComment = (players: Player[], roundCount: number, scoreLimi
     return { comment: 'Préparation de la partie en cours ! Que l\'aventure commence !', type: 'info' as CommentType };
   }
 
-  const sortedPlayers = [...validPlayers].sort((a, b) => a.totalScore - b.totalScore);
+  // Vérification des données avant tri
+  const playersWithScores = validPlayers.filter(p => typeof p.totalScore === 'number' && !isNaN(p.totalScore));
+  if (playersWithScores.length === 0) {
+    return { comment: 'En attendant les premiers scores... Patience !', type: 'info' as CommentType };
+  }
+
+  const sortedPlayers = [...playersWithScores].sort((a, b) => a.totalScore - b.totalScore);
   const leader = sortedPlayers[0];
   const lastPlace = sortedPlayers[sortedPlayers.length - 1];
   
   // Vérifications de sécurité pour leader et lastPlace
-  if (!leader || !leader.name || typeof leader.totalScore !== 'number') {
+  if (!leader || !leader.name || typeof leader.totalScore !== 'number' || isNaN(leader.totalScore)) {
     return { comment: 'La partie se met en place ! Patience, ça arrive !', type: 'info' as CommentType };
   }
   
-  if (!lastPlace || !lastPlace.name || typeof lastPlace.totalScore !== 'number') {
+  if (!lastPlace || !lastPlace.name || typeof lastPlace.totalScore !== 'number' || isNaN(lastPlace.totalScore)) {
     return { comment: 'Préparatifs terminés ! C\'est parti pour l\'aventure !', type: 'info' as CommentType };
   }
   
-  const dutchCount = validPlayers.reduce((total, player) => 
+  const dutchCount = playersWithScores.reduce((total, player) => 
     total + (player.rounds?.filter(r => r?.isDutch).length || 0), 0
   );
   
@@ -129,7 +135,7 @@ export const generateComment = (players: Player[], roundCount: number, scoreLimi
     type = 'info';
   }
 
-  const recentDutch = validPlayers.some(player => 
+  const recentDutch = playersWithScores.some(player => 
     player.rounds?.length > 0 && player.rounds[player.rounds.length - 1]?.isDutch
   );
   

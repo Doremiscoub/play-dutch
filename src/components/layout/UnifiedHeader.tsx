@@ -72,11 +72,7 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
             <ModernTitle
               variant="h3"
               withSparkles
-              className="animate-gradient-shift dutch-gradient-text bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange"
-              style={{
-                backgroundSize: '200% 200%',
-                animation: 'gradient-shift 3s ease infinite'
-              }}
+              className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-600 to-orange-500 bg-clip-text text-transparent"
             >
               {title}
             </ModernTitle>
