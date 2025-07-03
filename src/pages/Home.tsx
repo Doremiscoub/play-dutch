@@ -8,14 +8,19 @@ import { Card, CardContent } from '@/components/ui/card';
 import UnifiedHeader from '@/components/layout/UnifiedHeader';
 import PageShell from '@/components/layout/PageShell';
 import GamingHeroSection from '@/components/home/GamingHeroSection';
+import ProfessorCartoucheSection from '@/components/home/ProfessorCartoucheSection';
+import HowItWorksSection from '@/components/home/HowItWorksSection';
+import GameCompanionSection from '@/components/home/GameCompanionSection';
+import RulesSection from '@/components/home/RulesSection';
+import FooterSection from '@/components/home/FooterSection';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
 
   useSEO({
-    title: 'Dutch Card Game - Application gratuite pour jeu de cartes entre amis',
-    description: 'Application web gratuite pour suivre les scores du jeu de cartes Dutch. Interface moderne, hors-ligne, avec IA commentateur Professeur Cartouche. Parfait pour vos soirées entre amis.',
-    keywords: 'dutch, jeu de cartes, application gratuite, score, soirée amis, cartes, jeu société, hors ligne, professeur cartouche'
+    title: 'Dutch Card Game - Application gratuite pour jeu de cartes entre amis avec IA',
+    description: 'Application web gratuite pour suivre les scores du jeu de cartes Dutch. Interface moderne, hors-ligne, avec IA commentateur Professeur Cartouche. Compagnon de jeu parfait pour vos soirées entre amis. Calculateur de scores automatique, statistiques avancées et commentaires humoristiques.',
+    keywords: 'dutch, jeu de cartes, application gratuite, score, soirée amis, cartes, jeu société, hors ligne, professeur cartouche, IA, compagnon de jeu, calculateur scores, statistiques jeu'
   });
 
   const features = [
@@ -237,6 +242,21 @@ const Home: React.FC = () => {
           </Card>
         </motion.div>
       </section>
+
+      {/* Section Professeur Cartouche */}
+      <ProfessorCartoucheSection />
+
+      {/* Section Comment ça marche */}
+      <HowItWorksSection />
+
+      {/* Section Compagnon de jeu */}
+      <GameCompanionSection />
+
+      {/* Section Règles */}
+      <RulesSection />
+
+      {/* Footer */}
+      <FooterSection />
     </PageShell>
   );
 };
