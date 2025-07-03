@@ -20,6 +20,7 @@ const config: Config = {
     },
     extend: {
       colors: {
+        // Shadcn UI semantic tokens
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -53,65 +54,93 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Dutch Color Scheme - iOS Inspired
-        'dutch-blue': {
-          DEFAULT: '#0A84FF',
-          50: '#E6F3FF',
-          100: '#B3DCFF',
-          200: '#80C5FF',
-          300: '#4DAFFF',
-          400: '#1A98FF',
-          500: '#0A84FF',
-          600: '#0062CC',
-          700: '#004B99',
-          800: '#003366',
-          900: '#001B33',
+        
+        // Dutch Trinity - Couleurs principales (utilisant des tokens sémantiques)
+        'dutch-blue': "hsl(var(--dutch-blue))",
+        'dutch-purple': "hsl(var(--dutch-purple))",
+        'dutch-orange': "hsl(var(--dutch-orange))",
+        'dutch-green': "hsl(var(--dutch-green))",
+        
+        // Variants Dutch Trinity avec échelle complète HSL
+        'trinity-blue': {
+          DEFAULT: "hsl(var(--dutch-blue))",
+          50: "hsl(221, 100%, 97%)",
+          100: "hsl(221, 95%, 92%)",
+          200: "hsl(221, 90%, 84%)",
+          300: "hsl(221, 85%, 72%)",
+          400: "hsl(221, 80%, 60%)",
+          500: "hsl(var(--dutch-blue))",
+          600: "hsl(221, 83%, 45%)",
+          700: "hsl(221, 85%, 35%)",
+          800: "hsl(221, 88%, 25%)",
+          900: "hsl(221, 90%, 15%)",
+          950: "hsl(221, 95%, 8%)",
         },
-        'dutch-purple': {
-          DEFAULT: '#8B5CF6',
-          50: '#F3F0FF',
-          100: '#E0D4FF',
-          200: '#C4B5FD',
-          300: '#A78BFA',
-          400: '#8B5CF6',
-          500: '#7C3AED',
-          600: '#6D28D9',
-          700: '#5B21B6',
-          800: '#4C1D95',
-          900: '#3C1A78',
+        'trinity-purple': {
+          DEFAULT: "hsl(var(--dutch-purple))",
+          50: "hsl(258, 100%, 97%)",
+          100: "hsl(258, 95%, 92%)",
+          200: "hsl(258, 90%, 84%)",
+          300: "hsl(258, 85%, 75%)",
+          400: "hsl(var(--dutch-purple))",
+          500: "hsl(258, 85%, 58%)",
+          600: "hsl(258, 88%, 48%)",
+          700: "hsl(258, 90%, 38%)",
+          800: "hsl(258, 92%, 28%)",
+          900: "hsl(258, 95%, 18%)",
+          950: "hsl(258, 98%, 10%)",
         },
-        'dutch-orange': {
-          DEFAULT: '#FF9F0A',
-          50: '#FFF8E6',
-          100: '#FFECB3',
-          200: '#FFE080',
-          300: '#FFD54D',
-          400: '#FFCA1A',
-          500: '#FF9F0A',
-          600: '#E67700',
-          700: '#CC5500',
-          800: '#B33300',
-          900: '#801A00',
+        'trinity-orange': {
+          DEFAULT: "hsl(var(--dutch-orange))",
+          50: "hsl(25, 100%, 97%)",
+          100: "hsl(25, 95%, 92%)",
+          200: "hsl(25, 90%, 84%)",
+          300: "hsl(25, 85%, 72%)",
+          400: "hsl(25, 80%, 60%)",
+          500: "hsl(var(--dutch-orange))",
+          600: "hsl(25, 95%, 45%)",
+          700: "hsl(25, 98%, 35%)",
+          800: "hsl(25, 100%, 25%)",
+          900: "hsl(25, 100%, 15%)",
+          950: "hsl(25, 100%, 8%)",
         },
-        // iOS Color System
-        'ios-blue': '#0A84FF',
-        'ios-purple': '#8B5CF6',
-        'ios-orange': '#FF9F0A',
-        'ios-green': '#30D158',
-        'ios-red': '#FF453A',
-        'ios-yellow': '#FFD60A',
-        'ios-pink': '#FF375F',
-        'ios-gray': {
-          50: '#F9FAFB',
-          100: '#F3F4F6',
-          200: '#E5E7EB',
-          300: '#D1D5DB',
-          400: '#9CA3AF',
-          500: '#6B7280',
-          600: '#4B5563',
-          700: '#374151',
-          800: '#1F2937',
-          900: '#111827',
+        
+        // Couleurs sémantiques Dutch
+        'success': "hsl(var(--dutch-green))",
+        'success-light': "hsl(142, 71%, 65%)",
+        'success-dark': "hsl(142, 71%, 35%)",
+        
+        'warning': "hsl(45, 95%, 53%)",
+        'warning-light': "hsl(45, 95%, 73%)",
+        'warning-dark': "hsl(45, 95%, 33%)",
+        
+        'error': "hsl(0, 85%, 60%)",
+        'error-light': "hsl(0, 85%, 80%)",
+        'error-dark': "hsl(0, 85%, 40%)",
+        
+        // Surfaces glassmorphisme VisionOS
+        'glass': {
+          DEFAULT: "rgba(255, 255, 255, 0.7)",
+          light: "rgba(255, 255, 255, 0.8)",
+          medium: "rgba(255, 255, 255, 0.6)",
+          heavy: "rgba(255, 255, 255, 0.5)",
+          dark: "rgba(30, 30, 30, 0.7)",
+        },
+        
+        // Neutral système unifié HSL
+        neutral: {
+          0: "hsl(0, 0%, 100%)",
+          50: "hsl(210, 40%, 98%)",
+          100: "hsl(210, 40%, 96%)",
+          200: "hsl(214, 32%, 91%)",
+          300: "hsl(213, 27%, 84%)",
+          400: "hsl(215, 20%, 65%)",
+          500: "hsl(215, 16%, 47%)",
+          600: "hsl(215, 19%, 35%)",
+          700: "hsl(215, 25%, 27%)",
+          800: "hsl(217, 33%, 17%)",
+          900: "hsl(222, 84%, 5%)",
+          950: "hsl(229, 84%, 2%)",
         },
       },
       borderRadius: {
@@ -254,16 +283,32 @@ const config: Config = {
         '5xl': '96px',
       },
       boxShadow: {
-        'glass': '0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
-        'glass-lg': '0 16px 50px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3)',
-        'glass-xl': '0 24px 70px rgba(0, 0, 0, 0.18), inset 0 2px 0 rgba(255, 255, 255, 0.35)',
-        'dutch': '0 10px 30px rgba(10, 132, 255, 0.2)',
-        'dutch-lg': '0 20px 50px rgba(10, 132, 255, 0.3)',
-        'glow': '0 0 20px rgba(139, 92, 246, 0.4)',
-        'glow-orange': '0 0 20px rgba(255, 159, 10, 0.4)',
+        // Système d'ombres glassmorphisme VisionOS
+        'glass': '0 8px 32px rgba(31, 38, 135, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
+        'glass-sm': '0 4px 16px rgba(31, 38, 135, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.15)',
+        'glass-lg': '0 16px 50px rgba(31, 38, 135, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3)',
+        'glass-xl': '0 24px 70px rgba(31, 38, 135, 0.18), inset 0 2px 0 rgba(255, 255, 255, 0.35)',
+        'glass-2xl': '0 32px 90px rgba(31, 38, 135, 0.22), inset 0 2px 0 rgba(255, 255, 255, 0.4)',
+        
+        // Ombres Dutch Trinity
+        'dutch-blue': '0 10px 30px hsla(var(--dutch-blue), 0.2)',
+        'dutch-purple': '0 10px 30px hsla(var(--dutch-purple), 0.2)',
+        'dutch-orange': '0 10px 30px hsla(var(--dutch-orange), 0.2)',
+        'dutch-trinity': '0 10px 30px hsla(var(--dutch-blue), 0.1), 0 20px 50px hsla(var(--dutch-purple), 0.1), 0 30px 70px hsla(var(--dutch-orange), 0.05)',
+        
+        // Effets gaming
+        'glow-blue': '0 0 20px hsla(var(--dutch-blue), 0.4), 0 0 40px hsla(var(--dutch-blue), 0.2)',
+        'glow-purple': '0 0 20px hsla(var(--dutch-purple), 0.4), 0 0 40px hsla(var(--dutch-purple), 0.2)',
+        'glow-orange': '0 0 20px hsla(var(--dutch-orange), 0.4), 0 0 40px hsla(var(--dutch-orange), 0.2)',
+        'holographic': '0 0 30px hsla(var(--dutch-blue), 0.3), 0 0 60px hsla(var(--dutch-purple), 0.2), 0 0 90px hsla(var(--dutch-orange), 0.1)',
       },
       fontFamily: {
-        'ios': ['-apple-system', 'BlinkMacSystemFont', 'SF Pro Display', 'sans-serif'],
+        // Dutch Typography System
+        'sans': ['Space Grotesk', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'SF Pro Display', 'system-ui', 'sans-serif'],
+        'display': ['Space Grotesk', 'system-ui', 'sans-serif'],
+        'body': ['Inter', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'],
+        'mono': ['JetBrains Mono', 'Fira Code', 'Consolas', 'monospace'],
+        'gaming': ['Orbitron', 'Space Grotesk', 'system-ui', 'sans-serif'],
       },
       fontSize: {
         'xxs': '0.625rem',
