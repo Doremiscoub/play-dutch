@@ -62,7 +62,7 @@ const ModernGameSetup: React.FC<ModernGameSetupProps> = ({ onStartGame }) => {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="w-full">
       <ProgressIndicator currentStep={currentStep} totalSteps={3} />
 
       {/* Contenu de l'étape */}
