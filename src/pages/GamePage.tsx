@@ -57,8 +57,8 @@ const GamePage: React.FC = () => {
         onCancelEndGame={gameState.handleCancelEndGame}
         onContinueGame={gameState.handleContinueGame}
         onRestart={gameState.handleRestart}
-        onOpenScoreForm={() => {}}
-        onCloseScoreForm={() => {}}
+        onOpenScoreForm={() => console.log('Open score form')}
+        onCloseScoreForm={() => console.log('Close score form')}
         onBackToSetup={handleBackToSetup}
       />
     </PageShell>

@@ -52,29 +52,24 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
         )}
         onClick={handleCardClick}
         whileHover={{ 
-          y: -8, 
-          scale: 1.02,
-          rotateX: 2,
-          rotateY: 1,
-          z: 50
+          y: -4, 
+          scale: 1.01
         }}
-        whileTap={{ scale: 0.99, rotateX: 0 }}
+        whileTap={{ scale: 0.99 }}
         layout
-        initial={{ opacity: 0, y: 30, rotateX: -15, scale: 0.9 }}
-        animate={{ opacity: 1, y: 0, rotateX: 0, scale: 1 }}
+        initial={{ opacity: 0, y: 20, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ 
-          duration: 0.8, 
-          delay: rank * 0.1,
+          duration: 0.3, 
+          delay: rank * 0.05,
           type: "spring",
-          stiffness: 100,
-          damping: 15
+          stiffness: 200,
+          damping: 20
         }}
         style={{
           transformStyle: 'preserve-3d',
         }}
       >
-        {/* Enhanced Rank Badge - Floating 3D */}
-        <FunPlayerCardRankBadge rank={rank} isWinner={cardData.isWinner} />
 
         {/* Enhanced Floating Background Particles */}
         <FunPlayerCardParticles />
@@ -103,7 +98,11 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
       </motion.div>
 
       {/* Enhanced Floating Winner Badge */}
-      <FloatingWinnerBadge isWinner={cardData.isWinner} cardRef={cardRef} />
+      {cardData.isWinner && (
+        <div className="absolute -top-2 -right-2 z-50">
+          <FloatingWinnerBadge isWinner={cardData.isWinner} cardRef={cardRef} />
+        </div>
+      )}
     </>
   );
 };

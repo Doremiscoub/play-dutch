@@ -60,7 +60,7 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
         {/* Center - Title and game info */}
         <div className="flex-1 text-center">
           <motion.h1 
-            className="text-3xl md:text-4xl font-extrabold dutch-gradient-text tracking-tight"
+            className="text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight"
             initial={{ opacity: 0, y: 20, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ 

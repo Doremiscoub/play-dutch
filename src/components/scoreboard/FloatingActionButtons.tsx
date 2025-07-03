@@ -1,0 +1,87 @@
+import React from 'react';
+import { Button } from '@/components/ui/button';
+import { Plus, Undo2, Square } from 'lucide-react';
+import { motion } from 'framer-motion';
+
+interface FloatingActionButtonsProps {
+  onAddRound: () => void;
+  onUndoLastRound: () => void;
+  onEndGame: () => void;
+  canUndo: boolean;
+  disabled?: boolean;
+}
+
+const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
+  onAddRound,
+  onUndoLastRound,
+  onEndGame,
+  canUndo,
+  disabled = false,
+}) => {
+  return (
+    <div className="fixed bottom-6 right-6 z-50 flex flex-col gap-3">
+      {/* Add Round Button - Primary */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.8, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+      >
+        <Button
+          onClick={onAddRound}
+          disabled={disabled}
+          size="lg"
+          className="h-14 w-14 rounded-full bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange hover:from-dutch-purple hover:to-dutch-orange text-white shadow-2xl hover:shadow-3xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed group"
+        >
+          <Plus className="h-6 w-6 group-hover:scale-110 transition-transform" />
+        </Button>
+      </motion.div>
+
+      {/* Secondary Actions */}
+      <div className="flex flex-col gap-2">
+        {/* Undo Button */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.1 }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={onUndoLastRound}
+            disabled={!canUndo || disabled}
+            className="h-12 w-12 rounded-full bg-white/90 hover:bg-white backdrop-blur-xl border-2 border-white/60 hover:border-white/80 transition-all duration-300 shadow-xl hover:shadow-2xl disabled:opacity-40 disabled:cursor-not-allowed group"
+            title="Annuler la dernière manche"
+          >
+            <Undo2 className="h-5 w-5 text-gray-600 group-hover:text-dutch-blue transition-colors" />
+          </Button>
+        </motion.div>
+
+        {/* End Game Button */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.2 }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={onEndGame}
+            disabled={disabled}
+            className="h-12 w-12 rounded-full bg-white/90 hover:bg-white backdrop-blur-xl border-2 border-white/60 hover:border-white/80 transition-all duration-300 shadow-xl hover:shadow-2xl group"
+            title="Terminer la partie"
+          >
+            <Square className="h-5 w-5 text-gray-600 group-hover:text-dutch-purple transition-colors" />
+          </Button>
+        </motion.div>
+      </div>
+    </div>
+  );
+};
+
+export default FloatingActionButtons;

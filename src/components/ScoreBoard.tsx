@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { ScoreBoardProps } from '@/types';
 import EndGameConfirmationDialog from './scoreboard/EndGameConfirmationDialog';
 
-import StickyActionButtons from './scoreboard/StickyActionButtons';
+import FloatingActionButtons from './scoreboard/FloatingActionButtons';
 import UnifiedHeader from '@/components/layout/UnifiedHeader';
 import DetailedGameStats from './scoreboard/DetailedGameStats';
 import GameStatsPanel from './scoreboard/GameStatsPanel';
@@ -86,7 +86,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
               className={`px-8 py-3 rounded-xl transition-all shadow-md flex items-center gap-2 font-medium min-w-[180px] glass-button ${
                 currentView === 'list'
                   ? 'bg-gradient-to-r from-dutch-blue to-dutch-purple text-white shadow-lg scale-105'
-                  : 'hover:bg-white/30'
+                  : 'bg-white/70 text-gray-700 hover:bg-white/90'
               }`}
               whileHover={{ scale: currentView === 'list' ? 1.05 : 1.02 }}
               whileTap={{ scale: 0.98 }}
@@ -100,7 +100,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
               className={`px-8 py-3 rounded-xl transition-all shadow-md flex items-center gap-2 font-medium min-w-[180px] glass-button ${
                 currentView === 'table'
                   ? 'bg-gradient-to-r from-dutch-blue to-dutch-purple text-white shadow-lg scale-105'
-                  : 'hover:bg-white/30'
+                  : 'bg-white/70 text-gray-700 hover:bg-white/90'
               }`}
               whileHover={{ scale: currentView === 'table' ? 1.05 : 1.02 }}
               whileTap={{ scale: 0.98 }}
@@ -137,28 +137,23 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
             )}
           </motion.div>
 
-          {/* Statistiques détaillées de la partie */}
+        </div>
+
+        {/* Panneau latéral desktop */}
+        <div className="hidden lg:block w-80">
           <DetailedGameStats
             players={players}
             roundCount={roundCount}
             scoreLimit={scoreLimit}
             roundHistory={roundHistory}
           />
-        </div>
-
-        {/* Panneau latéral desktop */}
-        <div className="hidden lg:block w-80">
-          <DesktopSidePanel
-            showAICommentator={false}
-            players={players}
-            roundHistory={roundHistory}
-            selectedPlayer={selectedPlayer}
-          />
           
           <div className="mt-6">
-            <GameStatsPanel
+            <DesktopSidePanel
+              showAICommentator={false}
               players={players}
               roundHistory={roundHistory}
+              selectedPlayer={selectedPlayer}
             />
           </div>
         </div>
@@ -171,8 +166,8 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
         onCancel={onCancelEndGame}
       />
 
-      {/* Sticky Action Buttons */}
-      <StickyActionButtons
+      {/* Floating Action Buttons */}
+      <FloatingActionButtons
         onAddRound={handleAddRound}
         onUndoLastRound={handleUndo}
         onEndGame={handleEndGame}
