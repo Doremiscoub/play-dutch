@@ -64,32 +64,178 @@ const EnhancedHeroSection: React.FC = () => {
         animate="animate"
         variants={animationVariants}
       >
-        {/* Enhanced Title with Space Grotesk font */}
-        <div className="relative mb-8">
+        {/* Enhanced Main Title with spectacular effects */}
+        <div className="relative flex items-center justify-center mb-8">
+          {/* Multiple glowing background layers */}
           <motion.div
-            className="absolute -inset-4 bg-gradient-to-r from-dutch-blue/30 via-dutch-purple/30 to-dutch-orange/30 rounded-3xl blur-2xl"
+            className="absolute -inset-8 bg-gradient-to-r from-dutch-blue/40 via-dutch-purple/40 to-dutch-orange/40 rounded-[3rem] blur-3xl"
             animate={prefersReducedMotion ? {} : {
-              scale: [1, 1.1, 1],
-              opacity: [0.3, 0.6, 0.3]
+              scale: [1, 1.2, 1],
+              opacity: [0.4, 0.7, 0.4],
+              rotate: [0, 180, 360]
             }}
             transition={{
-              duration: 4,
+              duration: 8,
               repeat: Infinity,
               ease: "easeInOut"
             }}
           />
-          <ModernTitle 
-            variant="h1" 
-            withSparkles 
-            withIcon 
-            className="relative z-10 text-6xl sm:text-8xl md:text-9xl lg:text-[12rem] font-black tracking-tighter leading-none"
+          <motion.div
+            className="absolute -inset-6 bg-gradient-to-r from-dutch-orange/30 via-dutch-blue/30 to-dutch-purple/30 rounded-3xl blur-2xl"
+            animate={prefersReducedMotion ? {} : {
+              scale: [1.2, 1, 1.2],
+              opacity: [0.3, 0.6, 0.3],
+              rotate: [360, 180, 0]
+            }}
+            transition={{
+              duration: 6,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 1
+            }}
+          />
+          
+          {/* Main title with enhanced styling */}
+          <motion.h1
+            initial={{ opacity: 0, scale: 0.8, y: prefersReducedMotion ? 0 : 50 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ 
+              duration: prefersReducedMotion ? 0.2 : 1.2, 
+              delay: 0.2,
+              type: "spring",
+              stiffness: 100,
+              damping: 15
+            }}
+            className="relative z-10 text-6xl sm:text-8xl md:text-9xl lg:text-[12rem] xl:text-[14rem] font-black tracking-tighter leading-none text-center"
             style={{
               fontFamily: "'Space Grotesk', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
-              textShadow: '0 0 30px rgba(30, 64, 175, 0.3), 0 0 60px rgba(124, 58, 237, 0.2)'
+              background: 'linear-gradient(135deg, hsl(var(--dutch-blue)), hsl(var(--dutch-purple)), hsl(var(--dutch-orange)), hsl(var(--dutch-green)))',
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              color: 'transparent',
+              textShadow: '0 0 40px rgba(30, 64, 175, 0.4), 0 0 80px rgba(124, 58, 237, 0.3), 0 0 120px rgba(249, 115, 22, 0.2)',
+              filter: 'drop-shadow(0 0 20px rgba(59, 130, 246, 0.5))'
             }}
           >
-            DUTCH
-          </ModernTitle>
+            {/* Animated text reveal effect */}
+            <motion.span
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.5 }}
+              className="inline-block"
+            >
+              D
+            </motion.span>
+            <motion.span
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.6 }}
+              className="inline-block"
+            >
+              U
+            </motion.span>
+            <motion.span
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.7 }}
+              className="inline-block"
+            >
+              T
+            </motion.span>
+            <motion.span
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.8 }}
+              className="inline-block"
+            >
+              C
+            </motion.span>
+            <motion.span
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.9 }}
+              className="inline-block"
+            >
+              H
+            </motion.span>
+            
+            {/* Sparkle effects around the title */}
+            <motion.div
+              className="absolute -top-12 -right-12 text-dutch-orange text-4xl"
+              animate={prefersReducedMotion ? {} : {
+                scale: [1, 1.3, 1],
+                rotate: [0, 180, 360],
+                opacity: [0.8, 1, 0.8]
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            >
+              ✨
+            </motion.div>
+            <motion.div
+              className="absolute -bottom-8 -left-8 text-dutch-purple text-3xl"
+              animate={prefersReducedMotion ? {} : {
+                scale: [1.2, 1, 1.2],
+                rotate: [360, 180, 0],
+                opacity: [0.7, 1, 0.7]
+              }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: 1
+              }}
+            >
+              ⭐
+            </motion.div>
+            <motion.div
+              className="absolute top-4 left-8 text-dutch-blue text-3xl"
+              animate={prefersReducedMotion ? {} : {
+                scale: [1, 1.4, 1],
+                rotate: [0, -180, -360],
+                opacity: [0.6, 1, 0.6]
+              }}
+              transition={{
+                duration: 5,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: 2
+              }}
+            >
+              💫
+            </motion.div>
+          </motion.h1>
+          
+          {/* Floating particles effect */}
+          {!prefersReducedMotion && (
+            <>
+              {[...Array(6)].map((_, i) => (
+                <motion.div
+                  key={i}
+                  className="absolute w-2 h-2 bg-dutch-orange/60 rounded-full"
+                  style={{
+                    left: `${20 + i * 10}%`,
+                    top: `${30 + (i % 3) * 20}%`,
+                  }}
+                  animate={{
+                    y: [-20, 20, -20],
+                    x: [-10, 10, -10],
+                    opacity: [0.4, 0.8, 0.4],
+                    scale: [1, 1.2, 1]
+                  }}
+                  transition={{
+                    duration: 3 + i * 0.5,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: i * 0.3
+                  }}
+                />
+              ))}
+            </>
+          )}
         </div>
         
         {/* Updated Tagline */}
