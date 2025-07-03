@@ -13,46 +13,49 @@ const ScoreBoardTabs: React.FC<ScoreBoardTabsProps> = ({
   onViewChange
 }) => {
   return (
-    <div className="flex justify-center mb-6">
-      <div className="bg-white border border-gray-200 rounded-lg p-1 shadow-sm">
-        <div className="flex gap-1">
+    <div className="flex justify-center mb-8 px-4">
+      <div className="bg-white/80 backdrop-blur-xl border-2 border-white/60 rounded-2xl p-2 shadow-2xl">
+        <div className="flex gap-2">
           <button
             className={cn(
-              "flex items-center gap-2 px-4 py-2 rounded-md font-medium transition-all duration-200",
+              "flex items-center gap-3 px-6 py-3 rounded-xl font-bold transition-all duration-300 min-w-[140px] justify-center",
               currentView === 'list' 
-                ? "bg-blue-500 text-white shadow-sm" 
-                : "text-gray-600 hover:text-blue-600 hover:bg-gray-50"
+                ? "bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange text-white shadow-lg scale-105 transform" 
+                : "text-gray-700 hover:text-dutch-blue hover:bg-white/80 hover:scale-102"
             )}
             onClick={() => onViewChange('list')}
           >
-            <List className="h-4 w-4" />
-            <span>Liste des joueurs</span>
+            <List className="h-5 w-5" />
+            <span className="hidden sm:inline">Classement</span>
+            <span className="sm:hidden">Liste</span>
           </button>
           
           <button
             className={cn(
-              "flex items-center gap-2 px-4 py-2 rounded-md font-medium transition-all duration-200",
+              "flex items-center gap-3 px-6 py-3 rounded-xl font-bold transition-all duration-300 min-w-[140px] justify-center",
               currentView === 'table' 
-                ? "bg-blue-500 text-white shadow-sm" 
-                : "text-gray-600 hover:text-blue-600 hover:bg-gray-50"
+                ? "bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange text-white shadow-lg scale-105 transform" 
+                : "text-gray-700 hover:text-dutch-blue hover:bg-white/80 hover:scale-102"
             )}
             onClick={() => onViewChange('table')}
           >
-            <Table className="h-4 w-4" />
-            <span>Tableau des manches</span>
+            <Table className="h-5 w-5" />
+            <span className="hidden sm:inline">Tableau</span>
+            <span className="sm:hidden">Manches</span>
           </button>
           
           <button
             className={cn(
-              "flex items-center gap-2 px-4 py-2 rounded-md font-medium transition-all duration-200",
+              "flex items-center gap-3 px-6 py-3 rounded-xl font-bold transition-all duration-300 min-w-[140px] justify-center",
               currentView === 'stats' 
-                ? "bg-blue-500 text-white shadow-sm" 
-                : "text-gray-600 hover:text-blue-600 hover:bg-gray-50"
+                ? "bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange text-white shadow-lg scale-105 transform" 
+                : "text-gray-700 hover:text-dutch-blue hover:bg-white/80 hover:scale-102"
             )}
             onClick={() => onViewChange('stats')}
           >
-            <BarChart3 className="h-4 w-4" />
-            <span>Statistiques</span>
+            <BarChart3 className="h-5 w-5" />
+            <span className="hidden sm:inline">Statistiques</span>
+            <span className="sm:hidden">Stats</span>
           </button>
         </div>
       </div>
