@@ -266,7 +266,7 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
                         variant="ghost"
                         size="sm"
                         onClick={() => startEditing(index)}
-                        className="text-trinity-blue-500 hover:text-trinity-blue-700 hover:bg-trinity-blue-50 rounded-xl"
+                        className="text-trinity-blue-600 bg-trinity-blue-100 hover:text-trinity-blue-700 hover:bg-trinity-blue-200 border border-trinity-blue-300 rounded-xl"
                       >
                         <Edit3 className="h-4 w-4" />
                       </Button>
@@ -274,7 +274,7 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
                         variant="ghost"
                         size="sm"
                         onClick={() => removePlayer(index)}
-                        className="text-red-500 hover:text-red-700 hover:bg-red-50 rounded-xl"
+                        className="text-red-600 bg-red-100 hover:text-red-700 hover:bg-red-200 border border-red-300 rounded-xl"
                       >
                         <X className="h-4 w-4" />
                       </Button>
