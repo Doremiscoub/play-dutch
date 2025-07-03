@@ -9,64 +9,63 @@ const GamingHeroSection: React.FC = () => {
 
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center px-4 py-8 overflow-hidden">
-      {/* Background gaming vibrant */}
-      <div className="absolute inset-0 bg-gradient-to-br from-dutch-blue via-dutch-purple to-dutch-orange">
-        {/* Overlay pour améliorer le contraste */}
-        <div className="absolute inset-0 bg-black/10" />
+      {/* Background Trinity coloré optimisé */}
+      <div className="absolute inset-0 bg-gradient-to-br from-trinity-blue-500 via-trinity-purple-500 to-trinity-orange-500">
+        {/* Overlay pour profondeur */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
         
-        {/* Éléments gaming décoratifs */}
+        {/* Éléments gaming simplifiés et colorés */}
         <div className="absolute inset-0">
-          {/* Cartes volantes */}
-          {[...Array(5)].map((_, i) => (
+          {/* Cartes stylisées */}
+          {[...Array(3)].map((_, i) => (
             <motion.div
               key={`card-${i}`}
-              className="absolute w-16 h-24 bg-white/20 rounded-lg border-2 border-white/30 backdrop-blur-sm"
+              className="absolute w-20 h-28 bg-gradient-to-br from-white to-neutral-100 rounded-xl border-4 border-trinity-orange-300 shadow-2xl"
               style={{
-                left: `${10 + i * 20}%`,
-                top: `${20 + i * 15}%`,
-                rotate: `${-15 + i * 10}deg`
+                left: `${15 + i * 25}%`,
+                top: `${25 + i * 20}%`,
+                rotate: `${-20 + i * 15}deg`
               }}
               animate={{
-                y: [-10, 10, -10],
-                rotate: [0, 5, 0],
-                scale: [1, 1.05, 1]
+                y: [-8, 8, -8],
+                rotate: [-5, 5, -5],
+                scale: [1, 1.02, 1]
               }}
               transition={{
-                duration: 3 + i * 0.5,
+                duration: 4 + i * 0.8,
                 repeat: Infinity,
                 ease: "easeInOut",
-                delay: i * 0.3
+                delay: i * 0.5
               }}
             >
-              <div className="w-full h-full flex items-center justify-center text-white/60 text-2xl font-bold">
-                {['♠', '♥', '♦', '♣', '🃏'][i]}
+              <div className="w-full h-full flex items-center justify-center text-trinity-purple-600 text-3xl font-black">
+                {['♠', '♥', '♦'][i]}
               </div>
             </motion.div>
           ))}
           
-          {/* Jetons de casino */}
-          {[...Array(4)].map((_, i) => (
+          {/* Jetons vibrants */}
+          {[...Array(2)].map((_, i) => (
             <motion.div
               key={`chip-${i}`}
-              className="absolute w-12 h-12 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 border-4 border-white shadow-lg"
+              className="absolute w-16 h-16 rounded-full bg-gradient-to-br from-trinity-orange-400 to-trinity-orange-600 border-4 border-white shadow-xl"
               style={{
-                right: `${5 + i * 15}%`,
-                top: `${30 + i * 20}%`,
+                right: `${10 + i * 20}%`,
+                top: `${40 + i * 25}%`,
               }}
               animate={{
-                y: [-15, 15, -15],
-                x: [-5, 5, -5],
-                rotate: [0, 360]
+                y: [-12, 12, -12],
+                rotate: [0, 180, 360]
               }}
               transition={{
-                duration: 4 + i * 0.7,
+                duration: 5 + i,
                 repeat: Infinity,
                 ease: "easeInOut",
-                delay: i * 0.4
+                delay: i * 0.6
               }}
             >
-              <div className="w-full h-full flex items-center justify-center text-white font-black text-xs">
-                {(i + 1) * 10}
+              <div className="w-full h-full flex items-center justify-center text-white font-black text-sm">
+                {(i + 1) * 50}
               </div>
             </motion.div>
           ))}
@@ -96,7 +95,7 @@ const GamingHeroSection: React.FC = () => {
             }}
           />
           
-          <div className="relative bg-white/10 backdrop-blur-md rounded-3xl p-8 border-4 border-white/30 shadow-2xl">
+          <div className="relative bg-white/95 backdrop-blur-xl rounded-3xl p-8 border-4 border-trinity-orange-400 shadow-2xl">
             <img 
               src="/lovable-uploads/0532ef39-c77c-4480-8d74-7af7665596ee.png"
               alt="Dutch Card Game - Professeur Cartouche"
@@ -112,27 +111,25 @@ const GamingHeroSection: React.FC = () => {
           transition={{ duration: 0.8, delay: 0.3 }}
           className="space-y-4"
         >
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white leading-tight">
+          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black leading-tight">
             <motion.span
-              className="inline-block"
+              className="inline-block bg-gradient-to-r from-trinity-purple-600 via-trinity-blue-600 to-trinity-purple-600 bg-clip-text text-transparent"
               animate={{
-                textShadow: [
-                  "0 0 20px #FFD700, 0 0 40px #FFD700, 0 0 60px #FFD700",
-                  "0 0 30px #FF6B6B, 0 0 50px #FF6B6B, 0 0 70px #FF6B6B",
-                  "0 0 20px #4ECDC4, 0 0 40px #4ECDC4, 0 0 60px #4ECDC4",
-                  "0 0 20px #FFD700, 0 0 40px #FFD700, 0 0 60px #FFD700"
-                ]
+                backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"]
               }}
               transition={{
-                duration: 4,
+                duration: 3,
                 repeat: Infinity,
                 ease: "easeInOut"
+              }}
+              style={{
+                backgroundSize: "200% 200%"
               }}
             >
               DUTCH
             </motion.span>
             <br />
-            <span className="text-yellow-300 text-shadow-lg">
+            <span className="bg-gradient-to-r from-trinity-orange-500 to-trinity-orange-600 bg-clip-text text-transparent font-black">
               CARD GAME
             </span>
           </h1>
@@ -141,10 +138,10 @@ const GamingHeroSection: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6 }}
-            className="text-xl sm:text-2xl md:text-3xl text-white font-bold max-w-3xl mx-auto leading-relaxed bg-black/20 backdrop-blur-sm rounded-2xl py-4 px-6 border-2 border-white/30"
+            className="text-xl sm:text-2xl md:text-3xl font-bold max-w-3xl mx-auto leading-relaxed bg-white/95 backdrop-blur-xl rounded-2xl py-6 px-8 border-3 border-trinity-blue-300 shadow-xl text-neutral-800"
           >
             🎮 Défiez vos amis avec le{' '}
-            <span className="text-yellow-300 font-black text-shadow-lg">Professeur Cartouche</span>{' '}
+            <span className="text-trinity-purple-600 font-black">Professeur Cartouche</span>{' '}
             🎓✨
           </motion.p>
         </motion.div>
@@ -162,24 +159,24 @@ const GamingHeroSection: React.FC = () => {
             whileTap={{ scale: 0.95 }}
             className="relative group"
           >
-            {/* Effet néon pour le bouton */}
+            {/* Effet glow coloré */}
             <motion.div
-              className="absolute -inset-4 bg-gradient-to-r from-yellow-400 via-pink-500 to-cyan-400 rounded-2xl blur-lg opacity-70"
+              className="absolute -inset-3 bg-gradient-to-r from-trinity-orange-400 via-trinity-purple-400 to-trinity-blue-400 rounded-2xl blur-xl opacity-60"
               animate={{
-                rotate: [0, 360],
-                scale: [1, 1.1, 1]
+                scale: [1, 1.05, 1],
+                opacity: [0.6, 0.8, 0.6]
               }}
               transition={{
-                duration: 3,
+                duration: 2,
                 repeat: Infinity,
-                ease: "linear"
+                ease: "easeInOut"
               }}
             />
             
             <Button
               onClick={() => navigate('/setup')}
               size="xl"
-              className="relative z-10 bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 hover:from-pink-500 hover:via-purple-500 hover:to-indigo-500 text-black hover:text-white font-black text-xl sm:text-2xl px-16 py-8 shadow-2xl border-4 border-white rounded-2xl transition-all duration-300 group-hover:border-yellow-300"
+              className="relative z-10 bg-gradient-to-r from-trinity-orange-500 to-trinity-orange-600 hover:from-trinity-purple-500 hover:to-trinity-blue-500 text-white font-black text-xl sm:text-2xl px-16 py-8 shadow-2xl border-4 border-white rounded-2xl transition-all duration-300 hover:border-trinity-orange-300 hover:scale-105"
             >
               <motion.div
                 className="flex items-center gap-4"
@@ -199,13 +196,13 @@ const GamingHeroSection: React.FC = () => {
             transition={{ duration: 0.6, delay: 1 }}
             className="flex justify-center items-center gap-8 flex-wrap"
           >
-            <div className="flex items-center gap-2 bg-white/20 backdrop-blur-md rounded-full px-6 py-3 border-2 border-white/40">
-              <Star className="h-5 w-5 text-yellow-300" />
-              <span className="text-white font-black text-lg">2,500+ joueurs</span>
+            <div className="flex items-center gap-3 bg-white/95 backdrop-blur-xl rounded-full px-8 py-4 border-3 border-trinity-orange-300 shadow-lg">
+              <Star className="h-6 w-6 text-trinity-orange-600" />
+              <span className="text-neutral-800 font-black text-lg">2,500+ joueurs</span>
             </div>
-            <div className="flex items-center gap-2 bg-white/20 backdrop-blur-md rounded-full px-6 py-3 border-2 border-white/40">
-              <Zap className="h-5 w-5 text-yellow-300" />
-              <span className="text-white font-black text-lg">100% gratuit</span>
+            <div className="flex items-center gap-3 bg-white/95 backdrop-blur-xl rounded-full px-8 py-4 border-3 border-trinity-purple-300 shadow-lg">
+              <Zap className="h-6 w-6 text-trinity-purple-600" />
+              <span className="text-neutral-800 font-black text-lg">100% gratuit</span>
             </div>
           </motion.div>
         </motion.div>
