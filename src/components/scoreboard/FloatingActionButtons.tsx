@@ -59,7 +59,7 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
           }}
         >
           {/* Arrière-plan semi-transparent pour améliorer la lisibilité */}
-          <div className="absolute inset-0 bg-black/10 rounded-full" />
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 via-purple-500/15 to-orange-500/20 rounded-full" />
           
           {/* Effet de brillance au survol */}
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent translate-x-[-100%] group-hover:translate-x-[200%] transition-transform duration-1000 ease-out" />
