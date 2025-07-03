@@ -37,11 +37,6 @@ const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({ currentStep, tota
           </div>
         ))}
       </div>
-      <div className="text-center mt-2">
-        <span className="text-sm text-neutral-700 font-medium">
-          Étape {currentStep} sur {totalSteps}
-        </span>
-      </div>
     </motion.div>
   );
 };
