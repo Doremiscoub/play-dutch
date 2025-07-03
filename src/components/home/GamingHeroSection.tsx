@@ -111,13 +111,22 @@ const GamingHeroSection: React.FC = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6 }}
-          className="text-2xl sm:text-3xl md:text-4xl font-black max-w-4xl mx-auto leading-relaxed text-white drop-shadow-2xl"
-          style={{
-            textShadow: '0 0 20px rgba(0,0,0,0.8), 0 4px 8px rgba(0,0,0,0.5)'
-          }}
+          className="text-2xl sm:text-3xl md:text-4xl font-black max-w-4xl mx-auto leading-relaxed"
         >
-          Défiez vos amis avec le{' '}
-          <span className="bg-gradient-to-r from-yellow-400 via-orange-500 to-pink-500 bg-clip-text text-transparent font-black">
+          <span 
+            className="text-white"
+            style={{
+              textShadow: '0 0 20px rgba(0,0,0,0.8), 0 4px 8px rgba(0,0,0,0.5)'
+            }}
+          >
+            Défiez vos amis avec le{' '}
+          </span>
+          <span 
+            className="bg-gradient-to-r from-yellow-400 via-orange-500 to-pink-500 bg-clip-text text-transparent font-black"
+            style={{
+              filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))'
+            }}
+          >
             Professeur Cartouche
           </span>
         </motion.p>
