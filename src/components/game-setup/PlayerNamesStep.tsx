@@ -287,10 +287,10 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
           onClick={onNext}
           disabled={!canContinue}
           size="lg"
-          className={`flex-1 py-6 text-lg font-bold rounded-2xl shadow-lg transition-all ${
+          className={`flex-1 py-6 text-lg font-bold rounded-2xl shadow-lg transition-all border-2 ${
             canContinue
-              ? 'bg-gradient-to-r from-trinity-blue-500 via-trinity-purple-500 to-trinity-orange-500 text-white hover:from-trinity-blue-600 hover:via-trinity-purple-600 hover:to-trinity-orange-600'
-              : 'bg-neutral-300 text-white cursor-not-allowed'
+              ? 'bg-gradient-to-r from-trinity-blue-600 via-trinity-purple-600 to-trinity-orange-600 text-white hover:from-trinity-blue-700 hover:via-trinity-purple-700 hover:to-trinity-orange-700 border-trinity-blue-500'
+              : 'bg-neutral-300 text-white cursor-not-allowed border-neutral-400'
           }`}
         >
           {canContinue ? 'Résumé de la partie' : `${playerCount - players.length} joueur${playerCount - players.length > 1 ? 's' : ''} manquant${playerCount - players.length > 1 ? 's' : ''}`}
