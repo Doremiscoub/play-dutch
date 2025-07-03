@@ -2,11 +2,12 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSEO } from '@/hooks/useSEO';
 import { motion } from 'framer-motion';
-import { ArrowRight, Gamepad2, Users, Trophy, Heart, Zap, Sparkles, BookOpen, Star } from 'lucide-react';
+import { ArrowRight, Gamepad2, Users, Trophy, Heart, Zap, Sparkles, BookOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import UnifiedHeader from '@/components/layout/UnifiedHeader';
 import PageShell from '@/components/layout/PageShell';
+import GamingHeroSection from '@/components/home/GamingHeroSection';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -97,175 +98,8 @@ const Home: React.FC = () => {
         hideTitle={true}
       />
 
-      {/* Hero Section Ultra-Colorée - Optimisée */}
-      <section className="relative min-h-[85vh] flex flex-col items-center justify-center px-4 py-8 z-10">
-        <div className="relative text-center max-w-5xl mx-auto">
-          {/* Logo avec effets colorés optimisés */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="relative mb-6"
-          >
-            {/* Halo simplifié */}
-            <motion.div
-              className="absolute inset-0 bg-gradient-to-r from-dutch-blue/20 via-dutch-purple/20 to-dutch-orange/20 rounded-full blur-xl scale-125"
-              animate={{
-                rotate: [0, 360],
-                scale: [1.1, 1.3, 1.1]
-              }}
-              transition={{
-                duration: 12,
-                repeat: Infinity,
-                ease: "linear"
-              }}
-            />
-            
-            <img 
-              src="/lovable-uploads/0532ef39-c77c-4480-8d74-7af7665596ee.png"
-              alt="Dutch Card Game"
-              className="relative z-10 w-auto h-32 sm:h-36 md:h-40 mx-auto object-contain drop-shadow-2xl"
-            />
-            
-            {/* Étoiles réduites et mieux positionnées */}
-            {[...Array(3)].map((_, i) => (
-              <motion.div
-                key={i}
-                className="absolute text-yellow-400 text-xl"
-                style={{
-                  top: `${30 + i * 20}%`,
-                  left: `${20 + i * 30}%`,
-                }}
-                animate={{
-                  scale: [0, 1, 0],
-                  rotate: [0, 180, 360],
-                  opacity: [0, 1, 0]
-                }}
-                transition={{
-                  duration: 3,
-                  repeat: Infinity,
-                  delay: i * 0.8,
-                  ease: "easeInOut"
-                }}
-              >
-                ⭐
-              </motion.div>
-            ))}
-          </motion.div>
-
-          {/* Titre avec gradient optimisé */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="mb-6"
-          >
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-black mb-4 leading-tight">
-              <span className="bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange bg-clip-text text-transparent drop-shadow-sm">
-                Le jeu de cartes Dutch
-              </span>
-              <br />
-              <span className="bg-gradient-to-r from-dutch-orange via-yellow-400 to-dutch-blue bg-clip-text text-transparent">
-                réinventé
-              </span>
-            </h1>
-            <p className="text-lg sm:text-xl text-gray-800 font-bold max-w-3xl mx-auto leading-relaxed bg-white/70 backdrop-blur-sm rounded-2xl py-3 px-6 shadow-lg border border-white/50">
-              🎉 Suivez vos scores, défiez vos amis, amusez-vous avec le{' '}
-              <span className="text-dutch-purple font-black">Professeur Cartouche</span> ! 🎓
-            </p>
-          </motion.div>
-
-          {/* CTA Mega-Visible Optimisé */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="mb-8"
-          >
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              {/* Bouton principal MEGA optimisé */}
-              <motion.div
-                whileHover={{ scale: 1.08, y: -3 }}
-                whileTap={{ scale: 0.95 }}
-                className="relative group"
-              >
-                {/* Effet de brillance simplifié */}
-                <motion.div
-                  className="absolute -inset-3 bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange rounded-xl blur opacity-60"
-                  animate={{
-                    rotate: [0, 360],
-                  }}
-                  transition={{
-                    duration: 4,
-                    repeat: Infinity,
-                    ease: "linear"
-                  }}
-                />
-                <Button
-                  onClick={() => navigate('/setup')}
-                  size="xl"
-                  className="relative z-10 bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange hover:from-dutch-purple hover:via-dutch-orange hover:to-dutch-blue text-white font-black text-lg sm:text-xl px-12 py-6 shadow-2xl border-3 border-white/60 group-hover:border-white transition-all duration-300"
-                >
-                  <motion.div
-                    className="flex items-center gap-3"
-                    whileHover={{ x: 3 }}
-                  >
-                    <Gamepad2 className="h-6 w-6 group-hover:animate-pulse" />
-                    🎮 JOUER MAINTENANT ! 🚀
-                    <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                  </motion.div>
-                </Button>
-              </motion.div>
-              
-              {/* Bouton secondaire amélioré */}
-              <motion.div
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Button
-                  onClick={() => navigate('/rules')}
-                  variant="outline"
-                  size="xl"
-                  className="border-3 border-dutch-blue bg-white/95 backdrop-blur-sm hover:bg-dutch-blue hover:text-white transition-all duration-300 text-dutch-blue font-bold text-base px-8 py-6 shadow-lg"
-                >
-                  <BookOpen className="h-5 w-5 mr-2" />
-                  📖 Les règles
-                </Button>
-              </motion.div>
-            </div>
-          </motion.div>
-
-          {/* Stats compactes et visibles */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-            className="grid grid-cols-3 gap-4 max-w-xl mx-auto"
-          >
-            <motion.div
-              whileHover={{ scale: 1.08, rotate: 2 }}
-              className="bg-gradient-to-br from-dutch-blue/90 to-dutch-purple/90 backdrop-blur-xl rounded-xl p-4 text-white shadow-xl border border-white/40"
-            >
-              <div className="text-2xl font-black">2,500+</div>
-              <div className="text-xs font-bold opacity-90">🏆 joueurs</div>
-            </motion.div>
-            <motion.div
-              whileHover={{ scale: 1.08, rotate: -2 }}
-              className="bg-gradient-to-br from-dutch-orange/90 to-yellow-400/90 backdrop-blur-xl rounded-xl p-4 text-white shadow-xl border border-white/40"
-            >
-              <div className="text-2xl font-black">15k+</div>
-              <div className="text-xs font-bold opacity-90">🎮 parties</div>
-            </motion.div>
-            <motion.div
-              whileHover={{ scale: 1.08, rotate: 2 }}
-              className="bg-gradient-to-br from-dutch-purple/90 to-pink-500/90 backdrop-blur-xl rounded-xl p-4 text-white shadow-xl border border-white/40"
-            >
-              <div className="text-2xl font-black">100%</div>
-              <div className="text-xs font-bold opacity-90">💖 gratuit</div>
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
+      {/* Nouvelle Hero Section Gaming */}
+      <GamingHeroSection />
 
       {/* Section Features Colorée */}
       <section className="relative py-20 px-4 z-10">
