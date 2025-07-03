@@ -22,7 +22,7 @@ const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({ currentStep, tota
                   ? 'bg-gradient-to-r from-trinity-blue-500 to-trinity-purple-500 text-white shadow-lg scale-110'
                   : step < currentStep
                   ? 'bg-trinity-blue-500 text-white'
-                  : 'bg-white/60 text-gray-400 border border-white/60'
+                  : 'bg-white text-neutral-500 border border-neutral-300'
               }`}
             >
               {step}
@@ -30,7 +30,7 @@ const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({ currentStep, tota
             {step < totalSteps && (
               <div
                 className={`w-12 h-1 mx-2 rounded-full transition-all ${
-                  step < currentStep ? 'bg-trinity-blue-500' : 'bg-white/30'
+                  step < currentStep ? 'bg-trinity-blue-500' : 'bg-neutral-300'
                 }`}
               />
             )}
@@ -38,7 +38,7 @@ const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({ currentStep, tota
         ))}
       </div>
       <div className="text-center mt-2">
-        <span className="text-sm text-gray-600 font-medium">
+        <span className="text-sm text-neutral-700 font-medium">
           Étape {currentStep} sur {totalSteps}
         </span>
       </div>

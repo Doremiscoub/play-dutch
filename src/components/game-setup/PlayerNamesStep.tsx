@@ -120,14 +120,14 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
           Noms des joueurs
         </h1>
         <div className="space-y-2">
-          <p className="text-neutral-600 font-medium">
+          <p className="text-neutral-700 font-medium">
             Ajoutez les {playerCount} joueurs pour votre partie
           </p>
           <div className="flex items-center gap-2 justify-center">
-            <Badge variant="secondary" className="bg-trinity-blue-100 text-trinity-blue-700">
+            <Badge variant="secondary" className="bg-trinity-blue-100 text-trinity-blue-700 border border-trinity-blue-200">
               {players.length}/{playerCount} joueurs
             </Badge>
-            <div className="w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
+            <div className="w-32 h-2 bg-neutral-300 rounded-full overflow-hidden">
               <motion.div
                 className="h-full bg-gradient-to-r from-trinity-blue-500 to-trinity-purple-500"
                 initial={{ width: 0 }}
@@ -141,7 +141,7 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
 
       {/* Formulaire d'ajout */}
       {players.length < playerCount && (
-        <Card className="card-glass">
+        <Card className="card-glass bg-white/80 border-2 border-white/60">
           <CardHeader className="pb-4">
             <CardTitle className="text-lg font-bold text-trinity-purple-700">
               Ajouter un joueur
@@ -153,14 +153,14 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
                 value={newPlayer}
                 onChange={(e) => setNewPlayer(e.target.value)}
                 placeholder={`Nom du joueur ${players.length + 1}`}
-                className="flex-1 bg-white/80 border-white/60 focus:border-trinity-blue-400 rounded-2xl"
+                className="flex-1 bg-white border-neutral-300 focus:border-trinity-blue-500 focus:ring-2 focus:ring-trinity-blue-200 rounded-2xl text-neutral-800"
                 onKeyDown={(e) => e.key === 'Enter' && addPlayer()}
                 maxLength={20}
               />
               <Button 
                 onClick={addPlayer}
                 disabled={players.length >= MAX_PLAYERS}
-                className="bg-gradient-to-r from-trinity-blue-500 to-trinity-purple-500 text-white rounded-2xl px-6"
+                className="bg-gradient-to-r from-trinity-blue-500 to-trinity-purple-500 hover:from-trinity-blue-600 hover:to-trinity-purple-600 text-white rounded-2xl px-6 shadow-lg"
               >
                 <Plus className="h-4 w-4" />
               </Button>
@@ -168,7 +168,7 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
 
             {availableQuickNames.length > 0 && (
               <div>
-                <p className="text-sm font-medium text-gray-600 mb-2">Ajout rapide :</p>
+                <p className="text-sm font-medium text-neutral-700 mb-2">Ajout rapide :</p>
                 <div className="flex gap-2">
                   {availableQuickNames.map((name) => (
                     <Button
@@ -176,7 +176,7 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
                       variant="outline"
                       size="sm"
                       onClick={() => quickAddPlayer(name)}
-                      className="bg-white/60 border-white/60 hover:bg-trinity-orange-50 rounded-xl"
+                      className="bg-white border-neutral-300 hover:bg-trinity-orange-50 hover:border-trinity-orange-300 text-neutral-700 rounded-xl"
                     >
                       + {name}
                     </Button>
@@ -190,7 +190,7 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
 
       {/* Liste des joueurs */}
       {players.length > 0 && (
-        <Card className="card-glass">
+        <Card className="card-glass bg-white/80 border-2 border-white/60">
           <CardHeader className="pb-4">
             <CardTitle className="text-lg font-bold text-trinity-orange-700">
               Joueurs ajoutés
@@ -206,7 +206,7 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
                     initial={{ opacity: 0, scale: 0.8, y: 20 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.8, y: -20 }}
-                    className="flex items-center justify-between p-4 bg-white/50 hover:bg-white/70 rounded-2xl transition-all border border-white/40 group"
+                    className="flex items-center justify-between p-4 bg-white/80 hover:bg-white rounded-2xl transition-all border border-neutral-200 group shadow-sm"
                   >
                     <div className="flex items-center gap-4">
                       <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${
@@ -234,13 +234,13 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
                           </div>
                         ) : (
                           <div 
-                            className="font-bold text-lg text-gray-800 cursor-pointer hover:text-trinity-blue-600"
+                            className="font-bold text-lg text-neutral-800 cursor-pointer hover:text-trinity-blue-600"
                             onClick={() => startEditing(index)}
                           >
                             {player.name}
                           </div>
                         )}
-                        <div className="text-sm text-gray-500">
+                        <div className="text-sm text-neutral-600">
                           {index === 0 ? 'Premier joueur' : `Joueur ${index + 1}`}
                         </div>
                       </div>
@@ -278,7 +278,7 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
           onClick={onBack}
           variant="outline"
           size="lg"
-          className="flex-1 py-6 text-lg font-bold rounded-2xl bg-white/60 border-white/60"
+          className="flex-1 py-6 text-lg font-bold rounded-2xl bg-white border-neutral-300 hover:bg-neutral-50 text-neutral-700"
         >
           <ArrowLeft className="h-5 w-5 mr-2" />
           Retour
@@ -290,7 +290,7 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
           className={`flex-1 py-6 text-lg font-bold rounded-2xl shadow-lg transition-all ${
             canContinue
               ? 'bg-gradient-to-r from-trinity-blue-500 via-trinity-purple-500 to-trinity-orange-500 text-white hover:from-trinity-blue-600 hover:via-trinity-purple-600 hover:to-trinity-orange-600'
-              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              : 'bg-neutral-300 text-neutral-500 cursor-not-allowed'
           }`}
         >
           {canContinue ? 'Résumé de la partie' : `${playerCount - players.length} joueur${playerCount - players.length > 1 ? 's' : ''} manquant${playerCount - players.length > 1 ? 's' : ''}`}
