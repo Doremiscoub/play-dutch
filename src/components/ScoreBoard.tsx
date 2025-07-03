@@ -85,14 +85,14 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
               onClick={() => handleViewChange('list')}
               className={`px-8 py-3 rounded-xl transition-all shadow-lg flex items-center gap-2 font-medium min-w-[180px] glass-button ${
                 currentView === 'list'
-                  ? 'bg-gradient-to-r from-dutch-blue to-dutch-purple text-white shadow-xl scale-105 border-2 border-white/60 ring-2 ring-dutch-blue/20'
+                  ? 'bg-white text-dutch-blue shadow-xl scale-105 border-2 border-dutch-blue/60 ring-2 ring-dutch-blue/20'
                   : 'bg-white/80 text-gray-800 hover:bg-white/95 border-2 border-gray-400/80 shadow-md hover:shadow-lg hover:border-dutch-blue/40'
               }`}
               whileHover={{ scale: currentView === 'list' ? 1.05 : 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
               <span className="h-4 w-4">📊</span>
-              <span className={`font-semibold ${currentView === 'list' ? 'text-white' : 'text-gray-900'}`}>
+              <span className={`font-semibold ${currentView === 'list' ? 'text-dutch-blue' : 'text-gray-900'}`}>
                 Classement détaillé
               </span>
             </motion.button>
@@ -101,14 +101,14 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
               onClick={() => handleViewChange('table')}
               className={`px-8 py-3 rounded-xl transition-all shadow-lg flex items-center gap-2 font-medium min-w-[180px] glass-button ${
                 currentView === 'table'
-                  ? 'bg-gradient-to-r from-dutch-blue to-dutch-purple text-white shadow-xl scale-105 border-2 border-white/60 ring-2 ring-dutch-blue/20'
+                  ? 'bg-white text-dutch-blue shadow-xl scale-105 border-2 border-dutch-blue/60 ring-2 ring-dutch-blue/20'
                   : 'bg-white/80 text-gray-800 hover:bg-white/95 border-2 border-gray-400/80 shadow-md hover:shadow-lg hover:border-dutch-blue/40'
               }`}
               whileHover={{ scale: currentView === 'table' ? 1.05 : 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
               <span className="h-4 w-4">📋</span>
-              <span className={`font-semibold ${currentView === 'table' ? 'text-white' : 'text-gray-900'}`}>
+              <span className={`font-semibold ${currentView === 'table' ? 'text-dutch-blue' : 'text-gray-900'}`}>
                 Tableau des manches
               </span>
             </motion.button>
