@@ -71,14 +71,14 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="flex items-center justify-center gap-8">
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
               <Button
                 onClick={decrementCount}
                 disabled={playerCount <= MIN_PLAYERS}
                 size="lg"
-                className="relative z-10 w-16 h-16 rounded-2xl bg-white/80 hover:bg-white/90 border-2 border-blue-300/50 hover:border-blue-400/70 text-blue-600 hover:text-blue-700 font-bold text-2xl disabled:opacity-30 disabled:cursor-not-allowed shadow-sm hover:shadow-md transition-all duration-200 backdrop-blur-sm"
+                className="btn-glass w-16 h-16 rounded-2xl text-neutral-700 hover:text-neutral-800 disabled:opacity-30 disabled:cursor-not-allowed"
               >
-                <Minus className="h-8 w-8 relative z-20" />
+                <Minus className="h-6 w-6" />
               </Button>
             </motion.div>
 
@@ -88,22 +88,22 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
               animate={{ scale: 1, opacity: 1 }}
               className="flex flex-col items-center gap-3"
             >
-              <div className="w-28 h-28 rounded-3xl bg-gradient-to-br from-blue-400/60 via-purple-500/60 to-orange-400/60 flex items-center justify-center text-white text-4xl font-black shadow-lg border-2 border-white/50 backdrop-blur-sm">
+              <div className="w-28 h-28 rounded-3xl bg-gradient-to-br from-trinity-blue-500/40 via-trinity-purple-500/40 to-trinity-orange-500/40 flex items-center justify-center text-white text-4xl font-black shadow-lg border-2 border-white/50 backdrop-blur-sm">
                 {playerCount}
               </div>
-              <span className="text-lg font-semibold text-gray-800 bg-white/60 px-4 py-2 rounded-xl shadow-sm">
+              <span className="text-lg font-semibold text-neutral-700 bg-white/60 px-4 py-2 rounded-xl shadow-sm">
                 {playerCount === MIN_PLAYERS ? 'Minimum' : playerCount === MAX_PLAYERS ? 'Maximum' : 'Joueurs'}
               </span>
             </motion.div>
 
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
               <Button
                 onClick={incrementCount}
                 disabled={playerCount >= MAX_PLAYERS}
                 size="lg"
-                className="relative z-10 w-16 h-16 rounded-2xl bg-white/80 hover:bg-white/90 border-2 border-orange-300/50 hover:border-orange-400/70 text-orange-600 hover:text-orange-700 font-bold text-2xl disabled:opacity-30 disabled:cursor-not-allowed shadow-sm hover:shadow-md transition-all duration-200 backdrop-blur-sm"
+                className="btn-glass w-16 h-16 rounded-2xl text-neutral-700 hover:text-neutral-800 disabled:opacity-30 disabled:cursor-not-allowed"
               >
-                <Plus className="h-8 w-8 relative z-20" />
+                <Plus className="h-6 w-6" />
               </Button>
             </motion.div>
           </div>
