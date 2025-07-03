@@ -45,7 +45,7 @@ const BadgeSystem: React.FC<BadgeSystemProps> = ({ players, games, currentGameId
       name: 'Première Victoire',
       description: 'Remporter sa première partie de Dutch Blitz',
       icon: Trophy,
-      color: '#FFD700',
+      color: 'hsl(var(--dutch-orange))',
       rarity: 'common',
       category: 'achievement',
       condition: (player, games) => {
@@ -58,7 +58,7 @@ const BadgeSystem: React.FC<BadgeSystemProps> = ({ players, games, currentGameId
       name: 'Penta-champion',
       description: 'Remporter 5 parties de Dutch Blitz',
       icon: Crown,
-      color: '#C0C0C0',
+      color: 'hsl(var(--muted-foreground))',
       rarity: 'uncommon',
       category: 'achievement',
       condition: (player, games) => {
@@ -71,7 +71,7 @@ const BadgeSystem: React.FC<BadgeSystemProps> = ({ players, games, currentGameId
       name: 'Maître de la Précision',
       description: 'Avoir un score inférieur à 3 dans un tour',
       icon: Target,
-      color: '#32CD32',
+      color: 'hsl(var(--success))',
       rarity: 'uncommon',
       category: 'performance',
       condition: (player) => {
@@ -84,7 +84,7 @@ const BadgeSystem: React.FC<BadgeSystemProps> = ({ players, games, currentGameId
       name: 'Roi du Dutch',
       description: 'Être le joueur qui dit "Dutch" 3 fois dans une même partie',
       icon: Zap,
-      color: '#FFA500',
+      color: 'hsl(var(--warning))',
       rarity: 'rare',
       category: 'performance',
       condition: (player) => {
@@ -97,7 +97,7 @@ const BadgeSystem: React.FC<BadgeSystemProps> = ({ players, games, currentGameId
       name: 'Équilibriste',
       description: 'Avoir des scores constants sur 5 tours consécutifs (variation < 3)',
       icon: Heart,
-      color: '#FF69B4',
+      color: 'hsl(var(--dutch-purple))',
       rarity: 'rare',
       category: 'consistency',
       condition: (player) => {
@@ -128,7 +128,7 @@ const BadgeSystem: React.FC<BadgeSystemProps> = ({ players, games, currentGameId
       name: 'Roi du Comeback',
       description: 'Passer de la dernière à la première place dans une partie',
       icon: Rocket,
-      color: '#4169E1',
+      color: 'hsl(var(--dutch-blue))',
       rarity: 'epic',
       category: 'performance',
       condition: (player, games) => {
@@ -278,7 +278,7 @@ const BadgeSystem: React.FC<BadgeSystemProps> = ({ players, games, currentGameId
   const celebrateBadge = () => {
     const duration = 2000;
     const animationEnd = Date.now() + duration;
-    const colors = ['#FFD700', '#FF4500', '#9932CC', '#1E90FF'];
+    const colors = ['hsl(var(--dutch-orange))', 'hsl(var(--dutch-blue))', 'hsl(var(--dutch-purple))', 'hsl(var(--success))'];
     
     const interval = setInterval(() => {
       const timeLeft = animationEnd - Date.now();

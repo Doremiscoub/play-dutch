@@ -30,10 +30,10 @@ const AdvancedThemeSelector = () => {
   
   const [editingTheme, setEditingTheme] = useState<CustomTheme | null>(null);
   const [themeName, setThemeName] = useState('');
-  const [primaryColor, setPrimaryColor] = useState('#1EAEDB');
-  const [secondaryColor, setSecondaryColor] = useState('#8B5CF6');
-  const [accentColor, setAccentColor] = useState('#F97316');
-  const [backgroundColor, setBackgroundColor] = useState('#FFFFFF');
+  const [primaryColor, setPrimaryColor] = useState('hsl(var(--dutch-blue))');
+  const [secondaryColor, setSecondaryColor] = useState('hsl(var(--dutch-purple))');
+  const [accentColor, setAccentColor] = useState('hsl(var(--dutch-orange))');
+  const [backgroundColor, setBackgroundColor] = useState('hsl(var(--background))');
   const [editingColorType, setEditingColorType] = useState<'primary' | 'secondary' | 'accent' | 'background'>('primary');
   
   // Convert theme config to proper format for display

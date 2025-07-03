@@ -44,7 +44,7 @@ export function CartoucheAvatar({
     return (
       <mesh position={position} rotation={rotation} scale={[scale * 0.5, scale * 0.5, scale * 0.5]}>
         <sphereGeometry args={[0.5, 16, 16]} /> {/* Forme de secours améliorée */}
-        <meshStandardMaterial color="#8B5CF6" />
+        <meshStandardMaterial color="hsl(var(--dutch-purple))" />
       </mesh>
     );
   }
@@ -78,7 +78,7 @@ export function CartoucheAvatar({
     return (
       <mesh position={position} rotation={rotation} scale={[scale * 0.5, scale * 0.5, scale * 0.5]}>
         <sphereGeometry args={[0.5, 16, 16]} />
-        <meshStandardMaterial color="#8B5CF6" />
+        <meshStandardMaterial color="hsl(var(--dutch-purple))" />
       </mesh>
     );
   }

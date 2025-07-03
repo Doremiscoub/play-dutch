@@ -25,8 +25,8 @@ const BrickBreaker: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   
   // Game state stored in refs to avoid re-renders during animation
   const gameStateRef = useRef({
-    paddle: { x: 0, y: 0, width: 100, height: 15, color: '#0ea5e9' },
-    ball: { x: 0, y: 0, radius: 8, dx: 4, dy: -4, color: '#f97316' },
+    paddle: { x: 0, y: 0, width: 100, height: 15, color: 'hsl(var(--dutch-blue))' },
+    ball: { x: 0, y: 0, radius: 8, dx: 4, dy: -4, color: 'hsl(var(--dutch-orange))' },
     bricks: [] as Brick[],
     width: 0,
     height: 0,
@@ -51,7 +51,7 @@ const BrickBreaker: React.FC<{ onClose: () => void }> = ({ onClose }) => {
       y: canvas.height - 30,
       width: 100,
       height: 15,
-      color: '#0ea5e9'
+      color: 'hsl(var(--dutch-blue))'
     };
     
     // Initialize ball
@@ -61,7 +61,7 @@ const BrickBreaker: React.FC<{ onClose: () => void }> = ({ onClose }) => {
       radius: 8,
       dx: 4,
       dy: -4,
-      color: '#f97316'
+      color: 'hsl(var(--dutch-orange))'
     };
     
     // Initialize bricks
@@ -71,7 +71,7 @@ const BrickBreaker: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     const brickHeight = 25;
     const bricks: Brick[] = [];
     
-    const colors = ['#8b5cf6', '#ec4899', '#0ea5e9', '#84cc16']; // Different colors for each row
+    const colors = ['hsl(var(--dutch-purple))', 'hsl(var(--dutch-blue))', 'hsl(var(--dutch-orange))', 'hsl(var(--success))']; // Different colors for each row
     
     for (let r = 0; r < brickRowCount; r++) {
       for (let c = 0; c < brickColumnCount; c++) {
