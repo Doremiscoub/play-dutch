@@ -67,16 +67,17 @@ const EnhancedPlayerCard: React.FC<EnhancedPlayerCardProps> = ({
   return (
     <motion.div
       className={cn(
-        "relative rounded-3xl border-2 transition-all duration-500 cursor-pointer overflow-hidden group",
+        "lg-card lg-regular relative rounded-3xl border-2 cursor-pointer overflow-hidden group backdrop-blur-[12px] animate-lg-reveal",
         getCardStyle(),
-        isSelected || isExpanded ? "ring-2 ring-trinity-blue-500/50 shadow-trinity scale-[1.02] border-trinity-blue-400" : "hover:scale-[1.01] hover:shadow-glass-lg hover:-translate-y-1"
+        isSelected || isExpanded ? "lg-elevation-04 ring-2 ring-trinity-blue-500/50 shadow-trinity scale-[1.02] border-trinity-blue-400" : "lg-elevation-02 hover:lg-elevation-03 hover:scale-[1.01] hover:shadow-glass-lg lg-hover-state"
       )}
       onClick={handleCardClick}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ 
         duration: 0.5, 
-        delay: rank * 0.05
+        delay: rank * 0.05,
+        ease: [0.4, 0, 0.2, 1] // Apple easing
       }}
       whileHover={{ y: -2 }}
     >
@@ -186,12 +187,13 @@ const EnhancedPlayerCard: React.FC<EnhancedPlayerCardProps> = ({
             />
             
             <motion.div
-              className="p-3 bg-white/60 backdrop-blur-sm rounded-xl border border-white/50 shadow-sm"
+              className="lg-popover p-3 backdrop-blur-[12px] rounded-xl border-white/50 shadow-sm"
               whileHover={{ scale: 1.05 }}
+              transition={{ duration: 0.12, ease: [0.4, 0, 0.2, 1] }}
             >
               <ChevronDown 
                 className={cn(
-                  "h-6 w-6 text-dutch-blue transition-transform duration-300",
+                  "h-6 w-6 text-dutch-blue lg-hover-state",
                   isExpanded ? "rotate-180" : ""
                 )}
               />
