@@ -96,7 +96,7 @@ const EnhancedHeroSection: React.FC = () => {
             <img 
               src="/lovable-uploads/0532ef39-c77c-4480-8d74-7af7665596ee.png"
               alt="Dutch - Logo du jeu avec Professeur Cartouche"
-              className="w-auto h-32 sm:h-40 md:h-48 lg:h-56 xl:h-64 max-w-full object-contain drop-shadow-2xl"
+              className="w-auto h-48 sm:h-56 md:h-64 lg:h-72 xl:h-80 2xl:h-96 max-w-full object-contain drop-shadow-2xl"
               style={{
                 filter: 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3))'
               }}
