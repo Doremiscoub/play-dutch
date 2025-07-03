@@ -76,9 +76,9 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
                 onClick={decrementCount}
                 disabled={playerCount <= MIN_PLAYERS}
                 size="lg"
-                className="w-16 h-16 rounded-2xl bg-white/90 hover:bg-white border-2 border-trinity-blue-200 hover:border-trinity-blue-400 text-trinity-blue-700 hover:text-trinity-blue-800 disabled:opacity-30 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transition-all duration-200"
+                className="w-16 h-16 rounded-2xl bg-white hover:bg-neutral-50 border-2 border-neutral-800 hover:border-neutral-900 text-neutral-900 hover:text-black disabled:opacity-30 disabled:cursor-not-allowed shadow-2xl hover:shadow-xl transition-all duration-200"
               >
-                <Minus className="h-6 w-6 font-bold" />
+                <Minus className="h-8 w-8 stroke-[3] text-neutral-900" />
               </Button>
             </motion.div>
 
@@ -101,9 +101,9 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
                 onClick={incrementCount}
                 disabled={playerCount >= MAX_PLAYERS}
                 size="lg"
-                className="w-16 h-16 rounded-2xl bg-white/90 hover:bg-white border-2 border-trinity-orange-200 hover:border-trinity-orange-400 text-trinity-orange-700 hover:text-trinity-orange-800 disabled:opacity-30 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transition-all duration-200"
+                className="w-16 h-16 rounded-2xl bg-white hover:bg-neutral-50 border-2 border-neutral-800 hover:border-neutral-900 text-neutral-900 hover:text-black disabled:opacity-30 disabled:cursor-not-allowed shadow-2xl hover:shadow-xl transition-all duration-200"
               >
-                <Plus className="h-6 w-6 font-bold" />
+                <Plus className="h-8 w-8 stroke-[3] text-neutral-900" />
               </Button>
             </motion.div>
           </div>
