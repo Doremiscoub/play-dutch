@@ -76,8 +76,7 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
                 onClick={decrementCount}
                 disabled={playerCount <= MIN_PLAYERS}
                 size="lg"
-                variant="outline"
-                className="w-16 h-16 rounded-2xl bg-white/60 border-white/60 hover:bg-trinity-blue-50 hover:border-trinity-blue-300 disabled:opacity-30 disabled:cursor-not-allowed"
+                className="btn-kids-blue w-16 h-16 rounded-2xl text-white font-bold text-2xl disabled:opacity-30 disabled:cursor-not-allowed"
               >
                 <Minus className="h-6 w-6" />
               </Button>
@@ -89,10 +88,10 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
               animate={{ scale: 1, opacity: 1 }}
               className="flex flex-col items-center gap-3"
             >
-              <div className="w-28 h-28 rounded-3xl bg-gradient-to-br from-trinity-blue-500 via-trinity-purple-500 to-trinity-orange-500 flex items-center justify-center text-white text-4xl font-black shadow-xl border-4 border-white/30">
+              <div className="w-28 h-28 rounded-3xl bg-gradient-to-br from-blue-500 via-purple-600 to-orange-500 flex items-center justify-center text-white text-4xl font-black shadow-xl border-4 border-white/50">
                 {playerCount}
               </div>
-              <span className="text-lg font-semibold text-gray-700">
+              <span className="text-lg font-semibold text-gray-800 bg-white/60 px-3 py-1 rounded-xl">
                 {playerCount === MIN_PLAYERS ? 'Minimum' : playerCount === MAX_PLAYERS ? 'Maximum' : 'Joueurs'}
               </span>
             </motion.div>
@@ -102,8 +101,7 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
                 onClick={incrementCount}
                 disabled={playerCount >= MAX_PLAYERS}
                 size="lg"
-                variant="outline"
-                className="w-16 h-16 rounded-2xl bg-white/60 border-white/60 hover:bg-trinity-orange-50 hover:border-trinity-orange-300 disabled:opacity-30 disabled:cursor-not-allowed"
+                className="btn-kids-orange w-16 h-16 rounded-2xl text-white font-bold text-2xl disabled:opacity-30 disabled:cursor-not-allowed"
               >
                 <Plus className="h-6 w-6" />
               </Button>
@@ -111,11 +109,11 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
           </div>
 
           <div className="text-center space-y-3">
-            <div className="bg-white/50 rounded-2xl p-4 border border-white/40">
-              <p className="text-xl font-bold text-trinity-purple-600 mb-1">
+            <div className="card-kids-purple rounded-2xl p-4">
+              <p className="text-xl font-bold text-white mb-1">
                 Durée estimée : ~{playerCount * ESTIMATED_MINUTES_PER_PLAYER} minutes
               </p>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-white/80">
                 Plus il y a de joueurs, plus la partie sera longue et amusante !
               </p>
             </div>
