@@ -100,7 +100,7 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
 
   const availableQuickNames = QUICK_NAMES.filter(name => 
     !players.some(p => p.name === name)
-  ).slice(0, 6);
+  );
 
   const canContinue = players.length === playerCount;
   const progressPercentage = (players.length / playerCount) * 100;
