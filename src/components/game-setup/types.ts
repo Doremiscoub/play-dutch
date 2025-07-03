@@ -20,6 +20,6 @@ export const MODERN_EMOJIS = ['🎮', '🎯', '🚀', '⭐', '🔥', '⚡', '�
 export const QUICK_NAMES = ['Rémi', 'Arthur', 'Luca', 'Ben', 'Jules', 'Val', 'Chachou', 'Pierrix', 'Jo', 'Helena'];
 
 export const MIN_PLAYERS = 2;
-export const MAX_PLAYERS = 10;
+export const MAX_PLAYERS = 12;
 export const DEFAULT_PLAYER_COUNT = 4;
 export const ESTIMATED_MINUTES_PER_PLAYER = 5;
