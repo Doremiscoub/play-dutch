@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Plus, Users, Shuffle, X, Gamepad2, Trophy } from 'lucide-react';
+import ProfessorAvatar from '@/components/game/ProfessorAvatar';
 import { Badge } from '@/components/ui/badge';
 
 interface Player {
@@ -119,11 +120,11 @@ const ModernGameSetup: React.FC<ModernGameSetupProps> = ({ onStartGame }) => {
         className="text-center space-y-4"
       >
         <motion.div 
-          className="mx-auto w-20 h-20 rounded-3xl bg-gradient-to-br from-trinity-blue-500 to-trinity-purple-500 flex items-center justify-center text-3xl shadow-lg border border-white/30"
+          className="mx-auto w-20 h-20 rounded-3xl bg-gradient-to-br from-trinity-blue-500 to-trinity-purple-500 flex items-center justify-center shadow-lg border border-white/30 overflow-hidden"
           animate={{ scale: [1, 1.05, 1] }}
           transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
         >
-          🎮
+          <ProfessorAvatar size="md" animate={true} mood="happy" showParticles={false} />
         </motion.div>
         <h1 className="text-3xl font-black bg-gradient-to-r from-trinity-blue-600 via-trinity-purple-600 to-trinity-orange-600 bg-clip-text text-transparent">
           Créer une partie
