@@ -8,19 +8,6 @@ const PlayerCardShineEffect: React.FC<PlayerCardShineEffectProps> = ({
 }) => {
   if (!isWinner) return null;
   return <>
-      {/* Primary Shimmer Effect - Diagonal Sweep */}
-      <motion.div className="absolute inset-0 bg-gradient-to-r from-transparent via-yellow-300/30 to-transparent -skew-x-12" animate={{
-      x: ['-100%', '100%']
-    }} transition={{
-      duration: 2.5,
-      repeat: Infinity,
-      ease: "easeInOut",
-      repeatDelay: 3
-    }} />
-      
-      {/* Secondary Shimmer - Vertical Sweep */}
-      
-      
       {/* Golden Pulse Effect */}
       <motion.div className="absolute inset-0 bg-gradient-to-br from-yellow-400/20 via-amber-300/10 to-orange-400/20 rounded-3xl" animate={{
       opacity: [0.1, 0.3],
