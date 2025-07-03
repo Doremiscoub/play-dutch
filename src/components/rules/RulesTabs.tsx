@@ -4,6 +4,7 @@ import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { UnifiedTabs } from '@/components/ui/unified-tabs';
 import IntroductionTab from './IntroductionTab';
 import SetupTab from './SetupTab';
+import CardValuesTab from './CardValuesTab';
 import GameplayTab from './GameplayTab';
 import SpecialCardsTab from './SpecialCardsTab';
 
@@ -16,8 +17,9 @@ const RulesTabs: React.FC<RulesTabsProps> = ({ activeTab, onTabChange }) => {
   const tabOptions = [
     { value: "introduction", label: "Introduction" },
     { value: "setup", label: "Mise en place" },
+    { value: "values", label: "Valeur des cartes" },
     { value: "gameplay", label: "Déroulement" },
-    { value: "special", label: "Cartes spéciales" },
+    { value: "special", label: "Pouvoirs" },
   ];
 
   return (
@@ -35,6 +37,10 @@ const RulesTabs: React.FC<RulesTabsProps> = ({ activeTab, onTabChange }) => {
       
       <TabsContent value="setup">
         <SetupTab />
+      </TabsContent>
+      
+      <TabsContent value="values">
+        <CardValuesTab />
       </TabsContent>
       
       <TabsContent value="gameplay">

@@ -12,12 +12,12 @@ const RulesSection: React.FC = () => {
     {
       icon: <Target className="h-6 w-6" />,
       title: "Objectif",
-      description: "Avoir le score le plus bas à la fin de la partie"
+      description: "Obtenir le total de points le plus BAS après plusieurs manches"
     },
     {
       icon: <Lightbulb className="h-6 w-6" />,
-      title: "Le Dutch",
-      description: "Le joueur qui coupe désigne un autre joueur qui double ses points"
+      title: "Cartes magiques",
+      description: "As = -1 pt, Joker = -3 pts, Roi noir = 0 pt ! Dames et Valets ont des pouvoirs spéciaux"
     }
   ];
 
@@ -32,10 +32,10 @@ const RulesSection: React.FC = () => {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-black bg-gradient-to-r from-trinity-orange-600 via-trinity-purple-600 to-trinity-blue-600 bg-clip-text text-transparent mb-6">
-            📖 Découvrez les règles du Dutch 📖
+            📖 Comment jouer au Dutch ? 📖
           </h2>
           <p className="text-xl text-neutral-700 font-bold max-w-3xl mx-auto">
-            Un jeu de cartes stratégique et amusant qui se joue entre amis !
+            Objectif : avoir le score le plus BAS ! Mémorisez, échangez, utilisez les pouvoirs des cartes.
           </p>
         </motion.div>
 
