@@ -347,7 +347,7 @@ const BadgeSystem: React.FC<BadgeSystemProps> = ({ players, games, currentGameId
   };
   
   return (
-    <Card className="border border-white/50 bg-gradient-to-br from-white/90 to-white/70 backdrop-blur-md rounded-3xl shadow-md">
+    <Card className="border border-glass-border-light card-glass backdrop-blur-md rounded-3xl shadow-md">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Medal className="h-5 w-5 text-trinity-orange-600" />
@@ -383,7 +383,7 @@ const BadgeSystem: React.FC<BadgeSystemProps> = ({ players, games, currentGameId
                   onClick={() => showBadgeDetails(badge)}
                 >
                   <div className="flex items-center gap-2">
-                    <div className="h-8 w-8 rounded-full bg-white flex items-center justify-center shadow-sm">
+                    <div className="h-8 w-8 rounded-full bg-background flex items-center justify-center shadow-sm">
                       {renderBadgeIcon(badge, 'h-5 w-5')}
                     </div>
                     <div>
@@ -431,7 +431,7 @@ const BadgeSystem: React.FC<BadgeSystemProps> = ({ players, games, currentGameId
                               {getPlayerBadges(player).map((badge) => (
                                 <div
                                   key={badge.id}
-                                  className="flex items-center gap-1 bg-white rounded-full px-2 py-1 border border-white/50 cursor-pointer shadow-sm"
+                                  className="flex items-center gap-1 bg-background rounded-full px-2 py-1 border border-glass-border-light cursor-pointer shadow-sm"
                                   onClick={() => showBadgeDetails(badge)}
                                 >
                                   {renderBadgeIcon(badge, 'h-3.5 w-3.5')}
@@ -529,7 +529,7 @@ const BadgeSystem: React.FC<BadgeSystemProps> = ({ players, games, currentGameId
                   {players.map((player) => {
                     const { earned, progress } = getBadgeProgress(player, selectedBadge);
                     return (
-                      <div key={player.id} className="bg-white/70 rounded-lg p-2 flex items-center gap-3">
+                      <div key={player.id} className="glass-medium rounded-lg p-2 flex items-center gap-3">
                         <Avatar className="h-6 w-6">
                           <AvatarFallback className="bg-trinity-blue-100 text-trinity-blue-700 text-xs">
                             {player.name.charAt(0).toUpperCase()}
@@ -570,7 +570,7 @@ const BadgeSystem: React.FC<BadgeSystemProps> = ({ players, games, currentGameId
             className="fixed bottom-20 right-0 left-0 flex justify-center z-50 pointer-events-none"
           >
             <motion.div 
-              className="bg-white/90 backdrop-blur-md border border-white/40 rounded-2xl p-4 shadow-lg pointer-events-auto max-w-xs"
+              className="glass-ultra-light backdrop-blur-md border border-glass-border-light rounded-2xl p-4 shadow-lg pointer-events-auto max-w-xs"
               initial={{ scale: 0.8 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.1 }}

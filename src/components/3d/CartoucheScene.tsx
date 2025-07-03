@@ -13,9 +13,9 @@ import ErrorBoundary from '../ErrorBoundary';
 const FallbackErrorComponent = ({ error }: { error: Error }) => {
   console.error('3D render error:', error);
   return (
-    <div className="h-full w-full flex items-center justify-center bg-white/50 rounded-full">
+    <div className="h-full w-full flex items-center justify-center glass-dark rounded-full">
       <div className="flex flex-col items-center">
-        <div className="w-10 h-10 bg-dutch-purple rounded-full flex items-center justify-center text-white text-xl">
+        <div className="w-10 h-10 bg-dutch-purple rounded-full flex items-center justify-center text-background text-xl">
           ?
         </div>
         <div className="text-xs font-medium text-dutch-purple/80 mt-2">
@@ -33,7 +33,7 @@ function Loader() {
   if (!active) return null;
   
   return (
-    <div className="h-full w-full flex items-center justify-center bg-white/50 rounded-full">
+    <div className="h-full w-full flex items-center justify-center glass-dark rounded-full">
       <div className="flex flex-col items-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-dutch-purple mb-2"></div>
         <div className="text-xs font-medium text-dutch-purple/80">
