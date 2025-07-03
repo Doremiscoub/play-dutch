@@ -9,66 +9,110 @@ const GamingHeroSection: React.FC = () => {
 
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center px-4 py-8 overflow-hidden">
-      {/* Background Trinity coloré optimisé */}
+      {/* Background Trinity coloré avec AnimatedBackground */}
       <div className="absolute inset-0 bg-gradient-to-br from-trinity-blue-500 via-trinity-purple-500 to-trinity-orange-500">
+        {/* AnimatedBackground avec vagues et points */}
+        <div className="absolute inset-0">
+          <div className="w-full h-full">
+            {/* Simulation du système de vagues et points de l'AnimatedBackground */}
+            <div className="absolute inset-0 opacity-30">
+              {/* Points flottants */}
+              {[...Array(8)].map((_, i) => (
+                <motion.div
+                  key={`dot-${i}`}
+                  className={`absolute w-2 h-2 rounded-full ${
+                    i % 3 === 0 ? 'bg-white/60' :
+                    i % 3 === 1 ? 'bg-yellow-300/60' : 'bg-orange-300/60'
+                  }`}
+                  style={{
+                    left: `${15 + Math.random() * 70}%`,
+                    top: `${15 + Math.random() * 70}%`,
+                  }}
+                  animate={{
+                    y: [-20, 20, -20],
+                    x: [-10, 10, -10],
+                    scale: [1, 1.2, 1],
+                    opacity: [0.4, 0.8, 0.4]
+                  }}
+                  transition={{
+                    duration: 8 + i * 0.5,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: i * 0.3
+                  }}
+                />
+              ))}
+              
+              {/* Vagues simulées */}
+              <motion.div
+                className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white/20 via-white/10 to-transparent"
+                animate={{
+                  transform: ['translateY(0px)', 'translateY(-10px)', 'translateY(0px)']
+                }}
+                transition={{
+                  duration: 6,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              />
+            </div>
+          </div>
+        </div>
+        
         {/* Overlay pour profondeur */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
         
-        {/* Éléments gaming simplifiés et colorés */}
+        {/* Éléments gaming stylisés (réduits) */}
         <div className="absolute inset-0">
-          {/* Cartes stylisées */}
-          {[...Array(3)].map((_, i) => (
-            <motion.div
-              key={`card-${i}`}
-              className="absolute w-20 h-28 bg-gradient-to-br from-white to-neutral-100 rounded-xl border-4 border-trinity-orange-300 shadow-2xl"
-              style={{
-                left: `${15 + i * 25}%`,
-                top: `${25 + i * 20}%`,
-                rotate: `${-20 + i * 15}deg`
-              }}
-              animate={{
-                y: [-8, 8, -8],
-                rotate: [-5, 5, -5],
-                scale: [1, 1.02, 1]
-              }}
-              transition={{
-                duration: 4 + i * 0.8,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: i * 0.5
-              }}
-            >
-              <div className="w-full h-full flex items-center justify-center text-trinity-purple-600 text-3xl font-black">
-                {['♠', '♥', '♦'][i]}
-              </div>
-            </motion.div>
-          ))}
-          
-          {/* Jetons vibrants */}
+          {/* Cartes stylisées (réduites) */}
           {[...Array(2)].map((_, i) => (
             <motion.div
-              key={`chip-${i}`}
-              className="absolute w-16 h-16 rounded-full bg-gradient-to-br from-trinity-orange-400 to-trinity-orange-600 border-4 border-white shadow-xl"
+              key={`card-${i}`}
+              className="absolute w-16 h-22 bg-gradient-to-br from-white/80 to-white/60 rounded-lg border-2 border-white/40 shadow-lg backdrop-blur-sm"
               style={{
-                right: `${10 + i * 20}%`,
-                top: `${40 + i * 25}%`,
+                left: `${20 + i * 60}%`,
+                top: `${20 + i * 15}%`,
+                rotate: `${-15 + i * 30}deg`
               }}
               animate={{
-                y: [-12, 12, -12],
-                rotate: [0, 180, 360]
+                y: [-6, 6, -6],
+                rotate: [-3, 3, -3],
+                scale: [1, 1.02, 1]
               }}
               transition={{
                 duration: 5 + i,
                 repeat: Infinity,
                 ease: "easeInOut",
-                delay: i * 0.6
+                delay: i * 0.8
               }}
             >
-              <div className="w-full h-full flex items-center justify-center text-white font-black text-sm">
-                {(i + 1) * 50}
+              <div className="w-full h-full flex items-center justify-center text-trinity-purple-600 text-xl font-black">
+                {['♠', '♥'][i]}
               </div>
             </motion.div>
           ))}
+          
+          {/* Jeton vibrant (réduit) */}
+          <motion.div
+            className="absolute w-12 h-12 rounded-full bg-gradient-to-br from-trinity-orange-400 to-trinity-orange-600 border-3 border-white/60 shadow-xl"
+            style={{
+              right: '15%',
+              top: '35%',
+            }}
+            animate={{
+              y: [-8, 8, -8],
+              rotate: [0, 180, 360]
+            }}
+            transition={{
+              duration: 6,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          >
+            <div className="w-full h-full flex items-center justify-center text-white font-black text-xs">
+              100
+            </div>
+          </motion.div>
         </div>
       </div>
 
