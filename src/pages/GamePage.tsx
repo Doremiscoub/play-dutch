@@ -49,7 +49,7 @@ const GamePage: React.FC = () => {
         gameMode="quick"
         currentTournament={null}
         tournamentProgress={null}
-        showScoreForm={false}
+        showScoreForm={gameState.showScoreForm}
         onAddRound={gameState.handleAddRound}
         onUndoLastRound={gameState.handleUndoLastRound}
         onRequestEndGame={gameState.handleRequestEndGame}
@@ -57,8 +57,8 @@ const GamePage: React.FC = () => {
         onCancelEndGame={gameState.handleCancelEndGame}
         onContinueGame={gameState.handleContinueGame}
         onRestart={gameState.handleRestart}
-        onOpenScoreForm={() => console.log('Open score form')}
-        onCloseScoreForm={() => console.log('Close score form')}
+        onOpenScoreForm={gameState.handleOpenScoreForm}
+        onCloseScoreForm={gameState.handleCloseScoreForm}
         onBackToSetup={handleBackToSetup}
       />
     </PageShell>

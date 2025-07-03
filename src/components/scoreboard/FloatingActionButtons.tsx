@@ -36,16 +36,16 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
           onClick={onAddRound}
           disabled={disabled}
           size="lg"
-          className="relative h-16 w-16 rounded-full bg-gradient-to-br from-dutch-blue via-dutch-purple to-dutch-orange hover:from-dutch-purple hover:via-dutch-orange hover:to-dutch-blue text-white shadow-2xl hover:shadow-dutch-blue/40 transition-all duration-500 disabled:opacity-50 disabled:cursor-not-allowed group border-2 border-white/30 overflow-hidden ring-4 ring-white/20"
+          className="relative h-16 w-16 rounded-full bg-gradient-to-br from-blue-500 via-purple-500 to-orange-500 hover:from-blue-600 hover:via-purple-600 hover:to-orange-600 text-white shadow-2xl hover:shadow-blue-500/50 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed group border-2 border-white/50 overflow-hidden ring-2 ring-white/30"
         >
           {/* Effet de brillance */}
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-out" />
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-500 ease-out" />
           
-          {/* Icône */}
-          <Plus className="relative z-10 h-7 w-7 group-hover:rotate-90 transition-transform duration-300 drop-shadow-lg" />
+          {/* Icône avec meilleur contraste */}
+          <Plus className="relative z-20 h-8 w-8 text-white group-hover:rotate-90 transition-transform duration-300 drop-shadow-lg font-bold stroke-2" />
           
           {/* Ring effect au survol */}
-          <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-600/40 to-orange-500/40 opacity-0 group-hover:opacity-100 group-hover:scale-125 transition-all duration-300 -z-10 blur-md" />
+          <div className="absolute inset-0 rounded-full bg-white/20 opacity-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300 -z-10" />
         </Button>
       </motion.div>
 

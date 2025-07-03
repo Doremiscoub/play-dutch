@@ -21,6 +21,7 @@ export const useGameState = () => {
   const [gameStartTime, setGameStartTime] = useState<Date | null>(null);
   const [scoreLimit, setScoreLimit] = useState<number>(100);
   const [showGameOver, setShowGameOver] = useState<boolean>(false);
+  const [showScoreForm, setShowScoreForm] = useState<boolean>(false);
   const [isInitialized, setIsInitialized] = useState(false);
   const [initError, setInitError] = useState<string | null>(null);
   const [soundEnabled] = useLocalStorage(STORAGE_KEYS.SOUND_ENABLED, true);
@@ -166,11 +167,20 @@ export const useGameState = () => {
     }
   }, [players, gameStartTime, finalizeGame]);
 
+  const handleOpenScoreForm = useCallback(() => {
+    setShowScoreForm(true);
+  }, []);
+
+  const handleCloseScoreForm = useCallback(() => {
+    setShowScoreForm(false);
+  }, []);
+
   const cleanup = useCallback(() => {
     setPlayers([]);
     setGameStartTime(null);
     setIsInitialized(false);
     setInitError(null);
+    setShowScoreForm(false);
     
     localStorage.removeItem(STORAGE_KEYS.CURRENT_GAME);
     localStorage.removeItem(STORAGE_KEYS.GAME_ACTIVE);
@@ -184,6 +194,7 @@ export const useGameState = () => {
     roundHistory,
     showGameOver,
     showGameEndConfirmation,
+    showScoreForm,
     scoreLimit,
     gameStartTime,
     isInitialized,
@@ -195,6 +206,8 @@ export const useGameState = () => {
     handleCancelEndGame,
     handleContinueGame,
     handleRestart,
+    handleOpenScoreForm,
+    handleCloseScoreForm,
     createNewGame,
     loadExistingGame,
     cleanup
@@ -203,6 +216,7 @@ export const useGameState = () => {
     roundHistory,
     showGameOver,
     showGameEndConfirmation,
+    showScoreForm,
     scoreLimit,
     gameStartTime,
     isInitialized,
@@ -214,6 +228,8 @@ export const useGameState = () => {
     handleCancelEndGame,
     handleContinueGame,
     handleRestart,
+    handleOpenScoreForm,
+    handleCloseScoreForm,
     createNewGame,
     loadExistingGame,
     cleanup
