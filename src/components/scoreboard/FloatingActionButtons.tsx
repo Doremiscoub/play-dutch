@@ -29,7 +29,7 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
         right: '20px'
       }}
     >
-      {/* Bouton principal - Ajouter une manche (en bas) */}
+      {/* Bouton principal - Ajouter une manche (en bas, centré) */}
       <motion.div
         initial={{ opacity: 0, scale: 0.8, y: 60 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -51,36 +51,39 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
         <Button
           onClick={onAddRound}
           disabled={disabled}
-          className="relative group px-6 py-4 h-16 rounded-full shadow-2xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden"
+          className="relative group px-8 py-4 h-16 rounded-full shadow-2xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden"
           style={{
             background: 'linear-gradient(135deg, hsl(var(--dutch-blue)), hsl(var(--dutch-purple)))',
-            border: '1px solid rgba(255, 255, 255, 0.2)',
+            border: '2px solid rgba(255, 255, 255, 0.3)',
             backdropFilter: 'blur(10px)',
           }}
         >
-          {/* Effet de brillance au survol */}
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[200%] transition-transform duration-1000 ease-out" />
+          {/* Arrière-plan semi-transparent pour améliorer la lisibilité */}
+          <div className="absolute inset-0 bg-black/20 rounded-full" />
           
-          {/* Contenu du bouton */}
+          {/* Effet de brillance au survol */}
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent translate-x-[-100%] group-hover:translate-x-[200%] transition-transform duration-1000 ease-out" />
+          
+          {/* Contenu du bouton avec contraste amélioré */}
           <div className="relative z-10 flex items-center gap-3">
-            <div className="p-1 rounded-full bg-white/20">
-              <Plus className="h-5 w-5 text-white stroke-[2.5]" />
+            <div className="p-1.5 rounded-full bg-white/30 backdrop-blur-sm">
+              <Plus className="h-5 w-5 text-white stroke-[3] drop-shadow-lg" />
             </div>
-            <span className="font-semibold text-white whitespace-nowrap tracking-wide">
+            <span className="font-bold text-white whitespace-nowrap tracking-wide text-lg drop-shadow-lg">
               Ajouter une manche
             </span>
           </div>
           
           {/* Ombre colorée dynamique */}
-          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-400/20 to-purple-400/20 blur-xl -z-10 group-hover:scale-110 transition-transform duration-300" />
+          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-400/30 to-purple-400/30 blur-xl -z-10 group-hover:scale-110 transition-transform duration-300" />
         </Button>
       </motion.div>
 
-      {/* Boutons secondaires avec design glassmorphic amélioré */}
-      <div className="flex flex-col gap-3">
+      {/* Boutons secondaires décalés vers la droite */}
+      <div className="flex flex-col gap-3 items-end" style={{ marginRight: '40px' }}>
         {/* Bouton Annuler */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.6, x: 20 }}
+          initial={{ opacity: 0, scale: 0.6, x: 40 }}
           animate={{ opacity: 1, scale: 1, x: 0 }}
           transition={{ 
             duration: 0.6, 
@@ -103,23 +106,25 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
             disabled={!canUndo || disabled}
             className={`relative h-14 w-14 rounded-full transition-all duration-300 group overflow-hidden backdrop-blur-md shadow-lg hover:shadow-xl ${
               canUndo && !disabled
-                ? 'bg-white/90 hover:bg-white text-orange-600 hover:text-orange-700 border border-orange-200/50 hover:border-orange-300/70'
-                : 'bg-white/60 text-gray-400 cursor-not-allowed border border-gray-200/60'
+                ? 'bg-white/95 hover:bg-white border-2 border-orange-300/70 hover:border-orange-400'
+                : 'bg-white/60 text-gray-400 cursor-not-allowed border-2 border-gray-200/60'
             }`}
             title="Annuler la dernière manche"
           >
-            {/* Effet subtil au survol pour bouton actif */}
+            {/* Effet coloré au survol pour bouton actif */}
             {canUndo && !disabled && (
-              <div className="absolute inset-0 bg-gradient-to-br from-orange-50/50 to-orange-100/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full" />
+              <div className="absolute inset-0 bg-gradient-to-br from-orange-100/60 to-orange-200/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full" />
             )}
             
-            <RotateCcw className="relative z-10 h-5 w-5 group-hover:-rotate-12 transition-transform duration-300" />
+            <RotateCcw className={`relative z-10 h-5 w-5 group-hover:-rotate-12 transition-transform duration-300 ${
+              canUndo && !disabled ? 'text-orange-600 group-hover:text-orange-700' : 'text-gray-400'
+            }`} />
           </Button>
         </motion.div>
 
         {/* Bouton Terminer */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.6, x: 20 }}
+          initial={{ opacity: 0, scale: 0.6, x: 40 }}
           animate={{ opacity: 1, scale: 1, x: 0 }}
           transition={{ 
             duration: 0.6, 
@@ -140,13 +145,13 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
             size="icon"
             onClick={onEndGame}
             disabled={disabled}
-            className="relative h-14 w-14 rounded-full bg-white/90 hover:bg-white text-gray-600 hover:text-gray-700 shadow-lg hover:shadow-xl transition-all duration-300 group overflow-hidden border border-gray-200/50 hover:border-gray-300/70 backdrop-blur-md"
+            className="relative h-14 w-14 rounded-full bg-white/95 hover:bg-white shadow-lg hover:shadow-xl transition-all duration-300 group overflow-hidden border-2 border-purple-300/70 hover:border-purple-400 backdrop-blur-md"
             title="Terminer la partie"
           >
-            {/* Effet subtil au survol */}
-            <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 to-gray-100/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full" />
+            {/* Effet coloré au survol */}
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-100/60 to-purple-200/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full" />
             
-            <Flag className="relative z-10 h-5 w-5 group-hover:scale-110 transition-transform duration-300" />
+            <Flag className="relative z-10 h-5 w-5 text-purple-600 group-hover:text-purple-700 group-hover:scale-110 transition-transform duration-300" />
           </Button>
         </motion.div>
       </div>
