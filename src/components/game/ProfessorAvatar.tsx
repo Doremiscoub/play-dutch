@@ -67,82 +67,80 @@ export default function ProfessorAvatar({
       {/* Enhanced Floating Particles - plus nombreuses et colorées */}
       <ProfessorAvatarParticles showParticles={showParticles || isHovered} />
 
-      {/* Double Glow Effect - plus prononcé */}
+      {/* Effets de glow modernisés avec tokens centralisés */}
       {(isHovered || animate) && (
         <>
           <motion.div
-            className="absolute -inset-4 bg-gradient-to-r from-dutch-blue/40 via-dutch-purple/40 to-dutch-orange/40 rounded-full blur-lg"
-            initial={{ opacity: 0, scale: 0.8 }}
+            className="absolute -inset-3 bg-gradient-to-r from-trinity-blue-500/30 via-trinity-purple-500/30 to-trinity-orange-500/30 rounded-full blur-lg"
+            initial={{ opacity: 0, scale: 0.9 }}
             animate={{ 
-              opacity: [0.3, 0.6, 0.3], 
-              scale: [0.8, 1.2, 0.8],
+              opacity: [0.2, 0.4, 0.2], 
+              scale: [0.9, 1.1, 0.9],
               rotate: [0, 180, 360]
             }}
             transition={{ 
-              duration: 4, 
+              duration: 5, 
               repeat: Infinity, 
               ease: "easeInOut"
             }}
           />
           <motion.div
-            className="absolute -inset-6 bg-gradient-to-r from-dutch-orange/20 via-dutch-blue/20 to-dutch-purple/20 rounded-full blur-xl"
-            initial={{ opacity: 0, scale: 0.6 }}
+            className="absolute -inset-5 bg-gradient-to-r from-trinity-orange-500/15 via-trinity-blue-500/15 to-trinity-purple-500/15 rounded-full blur-xl"
+            initial={{ opacity: 0, scale: 0.7 }}
             animate={{ 
-              opacity: [0.2, 0.4, 0.2], 
-              scale: [0.6, 1.4, 0.6],
+              opacity: [0.1, 0.3, 0.1], 
+              scale: [0.7, 1.3, 0.7],
               rotate: [360, 180, 0]
             }}
             transition={{ 
-              duration: 6, 
+              duration: 7, 
               repeat: Infinity, 
               ease: "easeInOut",
-              delay: 1
+              delay: 1.5
             }}
           />
         </>
       )}
 
-      {/* Container principal - cercle parfait avec bordure gradient animée */}
+      {/* Container principal - modernisé avec tokens centralisés */}
       <motion.div 
         className={cn(
-          "relative bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange p-1.5 rounded-full",
+          "relative bg-gradient-to-r from-trinity-blue-500 via-trinity-purple-500 to-trinity-orange-500 p-0.5 rounded-full shadow-lg",
           sizeClasses[size]
         )}
         animate={animate ? {
           ...moodAnimations[mood],
-          y: [0, -5, 0]
+          y: [0, -3, 0]
         } : {}}
         transition={{
-          duration: 3,
+          duration: 4,
           repeat: Infinity,
           ease: "easeInOut"
         }}
         whileHover={{ 
-          scale: 1.15,
-          rotate: 5,
-          y: -8,
-          boxShadow: "0 0 30px rgba(139, 92, 246, 0.5)",
+          scale: 1.1,
+          y: -4,
+          boxShadow: "0 8px 32px rgba(31, 38, 135, 0.3)",
           transition: { 
-            duration: 0.6,
+            duration: 0.4,
             type: "spring",
-            stiffness: 200,
-            damping: 10
+            stiffness: 300,
+            damping: 15
           }
         }}
         whileTap={{
-          scale: 0.95,
-          rotate: 5,
+          scale: 0.98,
           transition: { duration: 0.1 }
         }}
       >
-        {/* Avatar Container - parfaitement circulaire avec shadow interne */}
-        <div className="relative rounded-full overflow-hidden bg-white w-full h-full shadow-inner">
+        {/* Avatar Container - intégration glassmorphique */}
+        <div className="relative rounded-full overflow-hidden bg-white/90 backdrop-blur-sm w-full h-full border border-white/30">
           <ProfessorAvatarImage isHovered={isHovered} />
           
-          {/* Overlay effet glass au hover */}
+          {/* Overlay effet glass moderne */}
           {isHovered && (
             <motion.div
-              className="absolute inset-0 bg-gradient-to-br from-white/30 via-transparent to-dutch-blue/20 rounded-full"
+              className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-trinity-blue-500/10 rounded-full"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.3 }}
@@ -150,14 +148,14 @@ export default function ProfessorAvatar({
           )}
         </div>
 
-        {/* Pulse ring effect pour mood excited */}
+        {/* Pulse ring effect moderne pour mood excited */}
         {mood === 'excited' && (
           <motion.div
-            className="absolute inset-0 rounded-full border-2 border-dutch-orange/60"
+            className="absolute inset-0 rounded-full border-2 border-trinity-orange-500/60"
             initial={{ scale: 1, opacity: 0.8 }}
             animate={{ 
-              scale: [1, 1.3, 1.6], 
-              opacity: [0.8, 0.4, 0] 
+              scale: [1, 1.2, 1.4], 
+              opacity: [0.8, 0.3, 0] 
             }}
             transition={{ 
               duration: 2, 
@@ -168,26 +166,26 @@ export default function ProfessorAvatar({
         )}
       </motion.div>
 
-      {/* Enhanced Hover Effects - multiple rings qui s'étendent */}
+      {/* Effets hover modernisés avec tokens centralisés */}
       {isHovered && (
         <>
           <motion.div
-            className="absolute inset-0 rounded-full border-2 border-dutch-blue/40"
+            className="absolute inset-0 rounded-full border-2 border-trinity-blue-500/40"
             initial={{ scale: 1, opacity: 0.6 }}
-            animate={{ scale: 1.4, opacity: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
+            animate={{ scale: 1.3, opacity: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
           />
           <motion.div
-            className="absolute inset-0 rounded-full border border-dutch-purple/30"
+            className="absolute inset-0 rounded-full border border-trinity-purple-500/30"
             initial={{ scale: 1, opacity: 0.4 }}
-            animate={{ scale: 1.6, opacity: 0 }}
-            transition={{ duration: 1.2, ease: "easeOut", delay: 0.2 }}
+            animate={{ scale: 1.5, opacity: 0 }}
+            transition={{ duration: 0.9, ease: "easeOut", delay: 0.1 }}
           />
           <motion.div
-            className="absolute inset-0 rounded-full border border-dutch-orange/20"
+            className="absolute inset-0 rounded-full border border-trinity-orange-500/20"
             initial={{ scale: 1, opacity: 0.3 }}
-            animate={{ scale: 1.8, opacity: 0 }}
-            transition={{ duration: 1.6, ease: "easeOut", delay: 0.4 }}
+            animate={{ scale: 1.7, opacity: 0 }}
+            transition={{ duration: 1.2, ease: "easeOut", delay: 0.2 }}
           />
         </>
       )}
