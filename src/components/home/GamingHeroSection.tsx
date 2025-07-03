@@ -11,14 +11,8 @@ const GamingHeroSection: React.FC = () => {
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center px-4 py-8 overflow-hidden">
       
-      {/* Overlay Trinity coloré */}
-      <div className="absolute inset-0 bg-gradient-to-br from-trinity-blue-500/60 via-trinity-purple-500/60 to-trinity-orange-500/60" />
-        
-      {/* Overlay pour profondeur */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
-      
       {/* Éléments gaming stylisés (réduits) */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 pointer-events-none">
         {/* Cartes stylisées (réduites) */}
         {[...Array(2)].map((_, i) => (
           <motion.div
