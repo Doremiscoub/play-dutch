@@ -290,7 +290,7 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
           className={`flex-1 py-6 text-lg font-bold rounded-2xl shadow-lg transition-all ${
             canContinue
               ? 'bg-gradient-to-r from-trinity-blue-500 via-trinity-purple-500 to-trinity-orange-500 text-white hover:from-trinity-blue-600 hover:via-trinity-purple-600 hover:to-trinity-orange-600'
-              : 'bg-neutral-300 text-neutral-500 cursor-not-allowed'
+              : 'bg-neutral-300 text-white cursor-not-allowed'
           }`}
         >
           {canContinue ? 'Résumé de la partie' : `${playerCount - players.length} joueur${playerCount - players.length > 1 ? 's' : ''} manquant${playerCount - players.length > 1 ? 's' : ''}`}
