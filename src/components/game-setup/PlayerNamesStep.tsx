@@ -44,6 +44,11 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
       return;
     }
 
+    if (players.length >= playerCount) {
+      toast.error(`Maximum ${playerCount} joueurs`);
+      return;
+    }
+
     const newPlayerObj: Player = {
       name: newPlayer.trim(),
       emoji: MODERN_EMOJIS[players.length % MODERN_EMOJIS.length]

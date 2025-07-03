@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { toast } from 'sonner';
 import PlayerCountStep from './PlayerCountStep';
 import PlayerNamesStep from './PlayerNamesStep';
 import GameSummaryStep from './GameSummaryStep';
@@ -16,7 +17,12 @@ const ModernGameSetup: React.FC<ModernGameSetupProps> = ({ onStartGame }) => {
   const [players, setPlayers] = useState<Player[]>([]);
 
   const handleStartGame = () => {
-    onStartGame(players.map(p => p.name));
+    const playerNames = players.map(p => p.name).filter(name => name && name.trim().length > 0);
+    if (playerNames.length < 2) {
+      toast.error('Il faut au moins 2 joueurs pour commencer');
+      return;
+    }
+    onStartGame(playerNames);
   };
 
   const renderStep = () => {

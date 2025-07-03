@@ -56,11 +56,18 @@ export const useGameState = () => {
     }
 
     try {
+      console.log('Creating new game with players:', playerNames);
       setInitError(null);
       
-      const newPlayers: Player[] = playerNames.map((name, index) => ({
+      // Validation des noms de joueurs
+      const validPlayerNames = playerNames.filter(name => name && name.trim().length > 0);
+      if (validPlayerNames.length < 2) {
+        throw new Error('Noms de joueurs invalides');
+      }
+      
+      const newPlayers: Player[] = validPlayerNames.map((name, index) => ({
         id: uuidv4(),
-        name: name.trim() || `Joueur ${index + 1}`,
+        name: name.trim(),
         emoji: getRandomEmoji(),
         totalScore: 0,
         rounds: [],
@@ -69,24 +76,41 @@ export const useGameState = () => {
       
       const startTime = new Date();
       
+      // Clear any existing state first
+      setPlayers([]);
+      setRoundHistory([]);
+      setShowGameOver(false);
+      setShowScoreForm(false);
+      
+      // Set new state
       setPlayers(newPlayers);
       setGameStartTime(startTime);
       setIsInitialized(true);
       
-      // Sauvegarde initiale
-      await saveCurrentGame(newPlayers, [], scoreLimit, startTime);
-      localStorage.setItem(STORAGE_KEYS.GAME_ACTIVE, 'true');
-      localStorage.removeItem(STORAGE_KEYS.PLAYER_SETUP);
+      // Sauvegarde initiale avec retry
+      try {
+        await saveCurrentGame(newPlayers, [], scoreLimit, startTime);
+        localStorage.setItem(STORAGE_KEYS.GAME_ACTIVE, 'true');
+        localStorage.removeItem(STORAGE_KEYS.PLAYER_SETUP);
+      } catch (saveError) {
+        console.warn('Failed to save game state, continuing anyway:', saveError);
+      }
       
+      console.log('Game created successfully with', newPlayers.length, 'players');
       toast.success(`Partie créée avec ${newPlayers.length} joueurs !`);
       return true;
     } catch (error) {
       console.error('Game initialization failed:', error);
       setInitError('Erreur lors de l\'initialisation du jeu');
       toast.error('Erreur lors de l\'initialisation du jeu');
+      
+      // Reset state on error
+      setPlayers([]);
+      setGameStartTime(null);
+      setIsInitialized(false);
       return false;
     }
-  }, [scoreLimit, saveCurrentGame]);
+  }, [scoreLimit, saveCurrentGame, setRoundHistory]);
 
   const loadExistingGame = useCallback((): boolean => {
     try {

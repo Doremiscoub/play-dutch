@@ -23,10 +23,21 @@ const GameSetup: React.FC = () => {
   const handleStartGame = async (playerNames: string[]) => {
     try {
       console.log('GameSetup: Starting game with players:', playerNames);
-      const success = await createNewGame(playerNames);
+      
+      // Validation des noms avant création
+      const validNames = playerNames.filter(name => name && name.trim().length >= 2);
+      if (validNames.length < 2) {
+        toast.error('Il faut au moins 2 joueurs avec des noms valides');
+        return;
+      }
+      
+      const success = await createNewGame(validNames);
       if (success) {
         console.log('GameSetup: Game created successfully, navigating to /game');
-        navigate('/game');
+        // Small delay to ensure state is updated
+        setTimeout(() => {
+          navigate('/game');
+        }, 100);
       } else {
         toast.error('Erreur lors de la création de la partie');
       }
