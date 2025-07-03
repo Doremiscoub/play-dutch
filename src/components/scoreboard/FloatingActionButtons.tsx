@@ -1,4 +1,5 @@
 import React from 'react';
+import { createPortal } from 'react-dom';
 import { Button } from '@/components/ui/button';
 import { Plus, Undo2, Square } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -18,8 +19,16 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
   canUndo,
   disabled = false,
 }) => {
-  return (
-    <div className="fixed bottom-6 right-6 z-[99999] flex flex-col gap-3 pointer-events-none" style={{ position: 'fixed', zIndex: 99999 }}>
+  const buttonsContent = (
+    <div 
+      className="fixed bottom-6 right-6 flex flex-col gap-3 pointer-events-none"
+      style={{ 
+        position: 'fixed', 
+        zIndex: 999999,
+        bottom: '24px',
+        right: '24px'
+      }}
+    >
       {/* Bouton principal - Ajouter une manche */}
       <motion.div
         initial={{ opacity: 0, scale: 0.5, y: 50 }}
@@ -117,6 +126,11 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
       </div>
     </div>
   );
+
+  // Use createPortal to render directly in document.body
+  return typeof document !== 'undefined' 
+    ? createPortal(buttonsContent, document.body)
+    : null;
 };
 
 export default FloatingActionButtons;
