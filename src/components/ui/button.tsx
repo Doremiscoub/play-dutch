@@ -9,27 +9,36 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        // Dutch Trinity System
-        default: "btn-glass-trinity text-white font-semibold hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] rounded-xl",
-        glass: "btn-glass text-foreground font-medium hover:-translate-y-1 hover:scale-[1.02] active:scale-[0.98] rounded-xl",
-        trinity: "bg-gradient-to-r from-trinity-blue-500 via-trinity-purple-500 to-trinity-orange-500 text-white font-bold shadow-trinity hover:scale-105 rounded-xl",
+        // Kids System - Boutons colorés et visibles
+        default: "btn-kids-primary text-white font-bold hover:scale-105 hover:-translate-y-1 active:scale-95 rounded-xl shadow-lg",
+        kidsPrimary: "btn-kids-blue text-white font-bold hover:scale-105 hover:-translate-y-1 hover:shadow-glow-blue active:scale-95 rounded-xl",
+        kidsSecondary: "btn-kids-purple text-white font-bold hover:scale-105 hover:-translate-y-1 hover:shadow-glow-purple active:scale-95 rounded-xl",
+        kidsTertiary: "btn-kids-orange text-white font-bold hover:scale-105 hover:-translate-y-1 hover:shadow-glow-orange active:scale-95 rounded-xl",
+        fun: "btn-kids-fun text-white font-bold hover:scale-105 hover:-translate-y-1 hover:shadow-glow-rainbow active:scale-95 rounded-xl",
         
-        // Enhanced variants
-        destructive: "bg-gradient-to-r from-error to-error-dark text-white hover:from-error-dark hover:to-error shadow-lg hover:shadow-error/30 rounded-xl",
-        outline: "border-2 border-glass-border-light bg-glass-light/50 backdrop-blur-lg text-foreground hover:bg-glass-light hover:border-glass-border-medium hover:-translate-y-1 rounded-xl",
-        secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80 hover:-translate-y-0.5 rounded-xl",
-        ghost: "hover:bg-glass-light/60 hover:text-trinity-blue-500 hover:backdrop-blur-lg rounded-xl",
-        link: "text-trinity-blue-500 underline-offset-4 hover:underline hover:text-trinity-blue-600",
+        // Glass coloré - Remplace l'ancien glass transparent
+        glass: "btn-glass-colored text-white font-semibold backdrop-blur-lg hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] rounded-xl",
+        glassColored: "btn-glass-colored text-white font-semibold backdrop-blur-lg hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] rounded-xl",
+        
+        // Trinity amélioré
+        trinity: "btn-kids-primary text-white font-bold shadow-glow-blue hover:scale-105 hover:shadow-glow-rainbow rounded-xl",
+        
+        // Enhanced variants colorés
+        destructive: "bg-gradient-to-r from-red-400 to-red-600 text-white font-bold hover:from-red-500 hover:to-red-700 hover:scale-105 shadow-lg hover:shadow-red-500/30 rounded-xl",
+        outline: "border-2 border-kids-blue bg-kids-blue/20 backdrop-blur-lg text-white hover:bg-kids-blue/40 hover:border-kids-blue hover:-translate-y-1 rounded-xl",
+        secondary: "btn-kids-purple text-white hover:scale-105 hover:-translate-y-0.5 rounded-xl",
+        ghost: "hover:bg-kids-blue/20 hover:text-white hover:backdrop-blur-lg rounded-xl",
+        link: "text-kids-blue underline-offset-4 hover:underline hover:text-kids-purple",
         
         // Gaming variants
-        gaming: "bg-gradient-to-r from-trinity-purple-500 to-trinity-blue-500 text-white font-gaming text-xs tracking-wider uppercase hover:scale-105 shadow-glow-purple rounded-xl",
-        success: "bg-gradient-to-r from-success to-success-dark text-white hover:from-success-dark hover:to-success shadow-lg hover:shadow-success/30 rounded-xl",
+        gaming: "btn-kids-gaming text-white font-gaming text-xs tracking-wider uppercase hover:scale-110 hover:shadow-glow-rainbow rounded-xl",
+        success: "btn-kids-lime text-white font-bold hover:scale-105 hover:shadow-glow-lime rounded-xl",
         
-        // Legacy compatibility (mapped to new system)
-        "dutch-primary": "btn-glass-trinity text-white hover:scale-[1.02] rounded-xl",
-        "dutch-glass": "btn-glass text-foreground rounded-xl",
+        // Legacy compatibility (maintenant colorés)
+        "dutch-primary": "btn-kids-primary text-white hover:scale-[1.02] rounded-xl",
+        "dutch-glass": "btn-glass-colored text-white rounded-xl",
         "gradient": "trinity",
-        "vision-glass": "glass",
+        "vision-glass": "glassColored",
       },
       size: {
         default: "h-10 px-4 py-2",

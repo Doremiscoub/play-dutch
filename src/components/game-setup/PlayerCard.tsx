@@ -43,7 +43,17 @@ const PlayerCard: React.FC<PlayerCardProps> = ({
       exit="hidden"
       className="group"
     >
-      <Card className="bg-white/70 hover:bg-white/85 border border-white/50 transition-all duration-300">
+      <Card 
+        variant={
+          index === 0 ? 'kidsBlue' : 
+          index === 1 ? 'kidsPurple' : 
+          index === 2 ? 'kidsOrange' : 
+          index === 3 ? 'kidsPink' : 
+          index === 4 ? 'kidsLime' : 
+          'kidsTurquoise'
+        }
+        className="hover:shadow-glow-rainbow hover:scale-[1.02] transition-all duration-300"
+      >
         <CardContent className="p-4">
           <div className="flex items-center gap-4">
             <AnimatedPlayerBadge 
@@ -63,8 +73,9 @@ const PlayerCard: React.FC<PlayerCardProps> = ({
               type="text"
               value={player.name}
               onChange={(e) => onUpdateName(index, e.target.value)}
-              className="flex-1 bg-transparent border-none focus:outline-none focus:ring-2 focus:ring-dutch-blue/30 rounded-lg px-2 py-1 font-semibold text-gray-800"
+              className="flex-1 bg-transparent border-none focus:outline-none focus:ring-2 focus:ring-white/30 rounded-lg px-2 py-1 font-bold text-white placeholder-white/70"
               maxLength={15}
+              placeholder="Nom du joueur"
             />
           </div>
         </CardContent>

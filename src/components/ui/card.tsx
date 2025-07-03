@@ -8,10 +8,19 @@ const cardVariants = cva(
   {
     variants: {
       variant: {
-        default: "border bg-card",
-        glass: "glass-card border-white/30",
-        elevated: "bg-white shadow-lg border border-gray-200",
-        subtle: "bg-gray-50/80 border border-gray-200/50"
+        default: "card-glass-colored text-white backdrop-blur-lg",
+        glass: "card-glass-colored text-white backdrop-blur-lg",
+        glassColored: "card-glass-colored text-white backdrop-blur-lg",
+        kidsBlue: "card-kids-blue text-white shadow-lg backdrop-blur-lg",
+        kidsPurple: "card-kids-purple text-white shadow-lg backdrop-blur-lg",
+        kidsOrange: "card-kids-orange text-white shadow-lg backdrop-blur-lg",
+        kidsPink: "card-kids-pink text-white shadow-lg backdrop-blur-lg",
+        kidsLime: "card-kids-lime text-white shadow-lg backdrop-blur-lg",
+        kidsTurquoise: "card-kids-turquoise text-white shadow-lg backdrop-blur-lg",
+        gaming: "card-kids-gaming text-white shadow-lg backdrop-blur-lg",
+        fun: "card-kids-fun text-white shadow-lg backdrop-blur-lg",
+        elevated: "bg-background border border-border shadow-lg rounded-3xl",
+        subtle: "card-glass-colored text-white backdrop-blur-lg border border-white/30"
       }
     },
     defaultVariants: {

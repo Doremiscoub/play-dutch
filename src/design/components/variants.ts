@@ -41,57 +41,93 @@ export const createButtonVariants = () => {
   const tokens = DESIGN_TOKENS.component.button;
   
   return {
-    // Trinity - Bouton principal Dutch
+    // Trinity - Bouton principal Dutch (plus visible)
     trinity: {
-      base: "btn-glass-trinity text-white font-semibold",
-      hover: "hover:scale-[1.02] hover:-translate-y-1",
-      active: "active:scale-[0.98]",
-      focus: "focus:ring-2 focus:ring-dutch-blue/50",
-      disabled: "disabled:opacity-50 disabled:cursor-not-allowed",
-    },
-    
-    // Glass - Bouton glassmorphisme
-    glass: {
-      base: "btn-glass text-foreground font-medium",
-      hover: "hover:-translate-y-1 hover:scale-[1.02]",
-      active: "active:scale-[0.98]",
-      focus: "focus:ring-2 focus:ring-glass-border-strong",
-      disabled: "disabled:opacity-50 disabled:cursor-not-allowed",
-    },
-    
-    // Gaming - Bouton gaming avancé
-    gaming: {
-      base: "bg-gradient-gaming text-white font-gaming text-xs tracking-wider uppercase",
-      hover: "hover:scale-105 hover:shadow-glow-purple",
+      base: "btn-kids-primary text-white font-bold shadow-lg",
+      hover: "hover:scale-105 hover:-translate-y-1 hover:shadow-xl",
       active: "active:scale-95",
-      focus: "focus:ring-2 focus:ring-purple-500/50",
-      disabled: "disabled:opacity-30",
+      focus: "focus:ring-4 focus:ring-trinity-blue/50",
+      disabled: "disabled:opacity-50 disabled:cursor-not-allowed",
     },
     
-    // Success - Bouton de succès
-    success: {
-      base: "bg-gradient-to-r from-success to-success-dark text-white",
-      hover: "hover:from-success-dark hover:to-success hover:shadow-lg hover:shadow-success/30",
-      active: "active:scale-98",
-      focus: "focus:ring-2 focus:ring-success/50",
+    // Kids Primary - Bouton coloré pour enfants
+    kidsPrimary: {
+      base: "btn-kids-blue text-white font-bold",
+      hover: "hover:scale-105 hover:-translate-y-1 hover:shadow-glow-blue",
+      active: "active:scale-95",
+      focus: "focus:ring-4 focus:ring-blue-400/50",
       disabled: "disabled:opacity-50",
     },
     
-    // Warning - Bouton d'avertissement
-    warning: {
-      base: "bg-gradient-to-r from-warning to-warning-dark text-white",
-      hover: "hover:from-warning-dark hover:to-warning hover:shadow-lg hover:shadow-warning/30",
-      active: "active:scale-98",
-      focus: "focus:ring-2 focus:ring-warning/50",
+    // Kids Secondary - Bouton secondaire coloré
+    kidsSecondary: {
+      base: "btn-kids-purple text-white font-bold",
+      hover: "hover:scale-105 hover:-translate-y-1 hover:shadow-glow-purple",
+      active: "active:scale-95",
+      focus: "focus:ring-4 focus:ring-purple-400/50",
+      disabled: "disabled:opacity-50",
+    },
+    
+    // Kids Tertiary - Bouton tertiaire coloré
+    kidsTertiary: {
+      base: "btn-kids-orange text-white font-bold",
+      hover: "hover:scale-105 hover:-translate-y-1 hover:shadow-glow-orange",
+      active: "active:scale-95",
+      focus: "focus:ring-4 focus:ring-orange-400/50",
+      disabled: "disabled:opacity-50",
+    },
+    
+    // Glass coloré - Remplace l'ancien glass transparent
+    glassColored: {
+      base: "btn-glass-colored text-white font-semibold backdrop-blur-lg",
+      hover: "hover:scale-[1.02] hover:-translate-y-1 hover:shadow-glass-lg",
+      active: "active:scale-[0.98]",
+      focus: "focus:ring-2 focus:ring-trinity-blue/50",
+      disabled: "disabled:opacity-50",
+    },
+    
+    // Gaming - Bouton gaming amélioré
+    gaming: {
+      base: "btn-kids-gaming text-white font-gaming text-xs tracking-wider uppercase",
+      hover: "hover:scale-110 hover:shadow-glow-rainbow",
+      active: "active:scale-90",
+      focus: "focus:ring-4 focus:ring-purple-500/50",
+      disabled: "disabled:opacity-30",
+    },
+    
+    // Success - Bouton de succès coloré
+    success: {
+      base: "btn-kids-lime text-white font-bold",
+      hover: "hover:scale-105 hover:shadow-glow-lime",
+      active: "active:scale-95",
+      focus: "focus:ring-4 focus:ring-lime-400/50",
+      disabled: "disabled:opacity-50",
+    },
+    
+    // Fun - Bouton multi-couleurs
+    fun: {
+      base: "btn-kids-fun text-white font-bold",
+      hover: "hover:scale-105 hover:-translate-y-1 hover:shadow-glow-rainbow",
+      active: "active:scale-95",
+      focus: "focus:ring-4 focus:ring-pink-400/50",
+      disabled: "disabled:opacity-50",
+    },
+    
+    // Legacy compatibility - maintenant colorés
+    glass: {
+      base: "btn-glass-colored text-white font-medium backdrop-blur-lg",
+      hover: "hover:-translate-y-1 hover:scale-[1.02]",
+      active: "active:scale-[0.98]",
+      focus: "focus:ring-2 focus:ring-trinity-blue/50",
       disabled: "disabled:opacity-50",
     },
     
     // Error - Bouton destructif
     destructive: {
-      base: "bg-gradient-to-r from-error to-error-dark text-white",
-      hover: "hover:from-error-dark hover:to-error hover:shadow-lg hover:shadow-error/30",
-      active: "active:scale-98",
-      focus: "focus:ring-2 focus:ring-error/50",
+      base: "bg-gradient-to-r from-red-400 to-red-600 text-white font-bold",
+      hover: "hover:from-red-500 hover:to-red-700 hover:scale-105 hover:shadow-lg hover:shadow-red-500/30",
+      active: "active:scale-95",
+      focus: "focus:ring-4 focus:ring-red-400/50",
       disabled: "disabled:opacity-50",
     },
   };
@@ -100,17 +136,68 @@ export const createButtonVariants = () => {
 // ========== VARIANTS CARD ==========
 export const createCardVariants = () => {
   return {
-    // Glass - Carte glassmorphisme standard
-    glass: {
-      base: "card-glass text-card-foreground",
+    // Kids Cards - Cartes colorées pour enfants
+    kidsBlue: {
+      base: "card-kids-blue text-white shadow-lg backdrop-blur-lg",
+      hover: "hover:shadow-glow-blue hover:-translate-y-1 hover:scale-[1.02]",
+      interactive: "cursor-pointer transition-all duration-300",
+    },
+    
+    kidsPurple: {
+      base: "card-kids-purple text-white shadow-lg backdrop-blur-lg",
+      hover: "hover:shadow-glow-purple hover:-translate-y-1 hover:scale-[1.02]",
+      interactive: "cursor-pointer transition-all duration-300",
+    },
+    
+    kidsOrange: {
+      base: "card-kids-orange text-white shadow-lg backdrop-blur-lg",
+      hover: "hover:shadow-glow-orange hover:-translate-y-1 hover:scale-[1.02]",
+      interactive: "cursor-pointer transition-all duration-300",
+    },
+    
+    kidsPink: {
+      base: "card-kids-pink text-white shadow-lg backdrop-blur-lg",
+      hover: "hover:shadow-glow-pink hover:-translate-y-1 hover:scale-[1.02]",
+      interactive: "cursor-pointer transition-all duration-300",
+    },
+    
+    kidsLime: {
+      base: "card-kids-lime text-white shadow-lg backdrop-blur-lg",
+      hover: "hover:shadow-glow-lime hover:-translate-y-1 hover:scale-[1.02]",
+      interactive: "cursor-pointer transition-all duration-300",
+    },
+    
+    kidsTurquoise: {
+      base: "card-kids-turquoise text-white shadow-lg backdrop-blur-lg",
+      hover: "hover:shadow-glow-turquoise hover:-translate-y-1 hover:scale-[1.02]",
+      interactive: "cursor-pointer transition-all duration-300",
+    },
+    
+    // Glass coloré - Remplace l'ancien glass transparent
+    glassColored: {
+      base: "card-glass-colored text-foreground backdrop-blur-lg",
       hover: "hover:shadow-glass-lg hover:-translate-y-0.5",
       interactive: "cursor-pointer transition-all duration-300",
     },
     
-    // Gaming - Carte gaming avancée
+    // Gaming - Carte gaming améliorée
     gaming: {
-      base: "card-game text-card-foreground",
-      hover: "hover:shadow-trinity hover:scale-[1.01]",
+      base: "card-kids-gaming text-white shadow-lg backdrop-blur-lg",
+      hover: "hover:shadow-glow-rainbow hover:scale-[1.02]",
+      interactive: "cursor-pointer transition-all duration-300",
+    },
+    
+    // Fun - Carte multicolore
+    fun: {
+      base: "card-kids-fun text-white shadow-lg backdrop-blur-lg",
+      hover: "hover:shadow-glow-rainbow hover:-translate-y-1 hover:scale-[1.02]",
+      interactive: "cursor-pointer transition-all duration-300",
+    },
+    
+    // Legacy compatibility - maintenant colorées
+    glass: {
+      base: "card-glass-colored text-foreground backdrop-blur-lg",
+      hover: "hover:shadow-glass-lg hover:-translate-y-0.5",
       interactive: "cursor-pointer transition-all duration-300",
     },
     
@@ -119,13 +206,6 @@ export const createCardVariants = () => {
       base: "bg-background border border-border shadow-lg rounded-3xl p-6",
       hover: "hover:shadow-xl hover:-translate-y-1",
       interactive: "cursor-pointer transition-all duration-300",
-    },
-    
-    // Flat - Carte plate
-    flat: {
-      base: "bg-muted/50 border border-border/50 rounded-2xl p-4",
-      hover: "hover:bg-muted/70",
-      interactive: "cursor-pointer transition-colors duration-200",
     },
   };
 };

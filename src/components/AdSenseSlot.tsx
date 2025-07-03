@@ -91,11 +91,11 @@ const AdSenseSlot: React.FC<AdSenseSlotProps> = ({
   return (
     <div 
       ref={adRef}
-      className={`glass-light backdrop-blur-sm rounded-lg overflow-hidden p-2 w-[250px] mx-auto ${className}`}
+      className={`card-glass-colored backdrop-blur-lg rounded-lg overflow-hidden p-2 w-[250px] mx-auto ${className}`}
       aria-label="Annonce"
     >
       {!isAdInjected && (
-        <div className="text-gray-400 text-sm text-center animate-pulse p-4">
+        <div className="text-white/70 text-sm text-center animate-pulse p-4 font-semibold">
           Espace publicitaire
         </div>
       )}

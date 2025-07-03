@@ -181,6 +181,130 @@ body {
   }
 }
 
+/* ========== KIDS BUTTONS COLORÉS ========== */
+.btn-kids-primary {
+  background: linear-gradient(135deg, hsl(221, 83%, 53%), hsl(258, 90%, 66%), hsl(25, 95%, 53%));
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3), 0 0 20px rgba(147, 51, 234, 0.2);
+}
+
+.btn-kids-blue {
+  background: linear-gradient(135deg, hsl(221, 85%, 72%), hsl(221, 83%, 53%));
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(59, 130, 246, 0.4);
+  box-shadow: 0 8px 32px rgba(59, 130, 246, 0.4);
+}
+
+.btn-kids-purple {
+  background: linear-gradient(135deg, hsl(258, 85%, 75%), hsl(258, 90%, 66%));
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(147, 51, 234, 0.4);
+  box-shadow: 0 8px 32px rgba(147, 51, 234, 0.4);
+}
+
+.btn-kids-orange {
+  background: linear-gradient(135deg, hsl(25, 85%, 72%), hsl(25, 95%, 53%));
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(249, 115, 22, 0.4);
+  box-shadow: 0 8px 32px rgba(249, 115, 22, 0.4);
+}
+
+.btn-kids-lime {
+  background: linear-gradient(135deg, hsl(84, 75%, 65%), hsl(84, 75%, 45%));
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(132, 204, 22, 0.4);
+  box-shadow: 0 8px 32px rgba(132, 204, 22, 0.4);
+}
+
+.btn-kids-gaming {
+  background: linear-gradient(135deg, hsl(326, 75%, 60%), hsl(84, 75%, 45%), hsl(174, 70%, 45%));
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(236, 72, 153, 0.4);
+  box-shadow: 0 8px 32px rgba(236, 72, 153, 0.3), 0 0 20px rgba(132, 204, 22, 0.2);
+}
+
+.btn-kids-fun {
+  background: linear-gradient(135deg, hsl(326, 75%, 60%), hsl(84, 75%, 45%), hsl(174, 70%, 45%));
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(236, 72, 153, 0.4);
+  box-shadow: 0 8px 32px rgba(236, 72, 153, 0.3), 0 0 40px rgba(20, 184, 166, 0.2);
+}
+
+.btn-glass-colored {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(147, 51, 234, 0.3));
+  backdrop-filter: blur(15px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px rgba(59, 130, 246, 0.2);
+}
+
+/* ========== KIDS CARDS COLORÉES ========== */
+.card-kids-blue {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(59, 130, 246, 0.5));
+  backdrop-filter: blur(15px);
+  border: 2px solid rgba(59, 130, 246, 0.4);
+  box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3);
+}
+
+.card-kids-purple {
+  background: linear-gradient(135deg, rgba(147, 51, 234, 0.3), rgba(147, 51, 234, 0.5));
+  backdrop-filter: blur(15px);
+  border: 2px solid rgba(147, 51, 234, 0.4);
+  box-shadow: 0 8px 32px rgba(147, 51, 234, 0.3);
+}
+
+.card-kids-orange {
+  background: linear-gradient(135deg, rgba(249, 115, 22, 0.3), rgba(249, 115, 22, 0.5));
+  backdrop-filter: blur(15px);
+  border: 2px solid rgba(249, 115, 22, 0.4);
+  box-shadow: 0 8px 32px rgba(249, 115, 22, 0.3);
+}
+
+.card-kids-pink {
+  background: linear-gradient(135deg, rgba(236, 72, 153, 0.3), rgba(236, 72, 153, 0.5));
+  backdrop-filter: blur(15px);
+  border: 2px solid rgba(236, 72, 153, 0.4);
+  box-shadow: 0 8px 32px rgba(236, 72, 153, 0.3);
+}
+
+.card-kids-lime {
+  background: linear-gradient(135deg, rgba(132, 204, 22, 0.3), rgba(132, 204, 22, 0.5));
+  backdrop-filter: blur(15px);
+  border: 2px solid rgba(132, 204, 22, 0.4);
+  box-shadow: 0 8px 32px rgba(132, 204, 22, 0.3);
+}
+
+.card-kids-turquoise {
+  background: linear-gradient(135deg, rgba(20, 184, 166, 0.3), rgba(20, 184, 166, 0.5));
+  backdrop-filter: blur(15px);
+  border: 2px solid rgba(20, 184, 166, 0.4);
+  box-shadow: 0 8px 32px rgba(20, 184, 166, 0.3);
+}
+
+.card-glass-colored {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(147, 51, 234, 0.2));
+  backdrop-filter: blur(15px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px rgba(59, 130, 246, 0.2);
+}
+
+/* ========== SHADOW EFFECTS COLORÉS ========== */
+.shadow-glow-blue {
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.6), 0 0 40px rgba(59, 130, 246, 0.3);
+}
+
+.shadow-glow-purple {
+  box-shadow: 0 0 20px rgba(147, 51, 234, 0.6), 0 0 40px rgba(147, 51, 234, 0.3);
+}
+
+.shadow-glow-orange {
+  box-shadow: 0 0 20px rgba(249, 115, 22, 0.6), 0 0 40px rgba(249, 115, 22, 0.3);
+}
+
+.shadow-glow-rainbow {
+  box-shadow: 0 0 20px rgba(236, 72, 153, 0.4), 0 0 40px rgba(132, 204, 22, 0.3), 0 0 60px rgba(20, 184, 166, 0.2);
+}
+
 /* Skip links pour l'accessibilité */
 .skip-links {
   position: fixed;

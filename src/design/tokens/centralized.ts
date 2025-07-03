@@ -72,13 +72,64 @@ export const PRIMITIVE_COLORS = {
     900: 'hsl(222, 84%, 5%)', // Near black
   },
 
-  // Glassmorphisme Transparencies
+  // Fun Colors for Kids Interface
+  kids: {
+    pink: {
+      50: 'hsl(326, 85%, 96%)',
+      100: 'hsl(326, 80%, 88%)',
+      200: 'hsl(326, 75%, 80%)',
+      300: 'hsl(326, 70%, 70%)',
+      400: 'hsl(326, 75%, 60%)',
+      500: 'hsl(326, 80%, 50%)', // PRIMARY
+      600: 'hsl(326, 85%, 40%)',
+      700: 'hsl(326, 90%, 30%)',
+      800: 'hsl(326, 95%, 20%)',
+      900: 'hsl(326, 100%, 15%)',
+    },
+    lime: {
+      50: 'hsl(84, 90%, 95%)',
+      100: 'hsl(84, 85%, 85%)',
+      200: 'hsl(84, 80%, 75%)',
+      300: 'hsl(84, 75%, 65%)',
+      400: 'hsl(84, 70%, 55%)',
+      500: 'hsl(84, 75%, 45%)', // PRIMARY
+      600: 'hsl(84, 80%, 35%)',
+      700: 'hsl(84, 85%, 25%)',
+      800: 'hsl(84, 90%, 20%)',
+      900: 'hsl(84, 95%, 15%)',
+    },
+    turquoise: {
+      50: 'hsl(174, 85%, 95%)',
+      100: 'hsl(174, 80%, 85%)',
+      200: 'hsl(174, 75%, 75%)',
+      300: 'hsl(174, 70%, 65%)',
+      400: 'hsl(174, 65%, 55%)',
+      500: 'hsl(174, 70%, 45%)', // PRIMARY
+      600: 'hsl(174, 75%, 35%)',
+      700: 'hsl(174, 80%, 25%)',
+      800: 'hsl(174, 85%, 20%)',
+      900: 'hsl(174, 90%, 15%)',
+    },
+  },
+
+  // Glassmorphisme avec Teintes Colorées
   glass: {
     ultraLight: 'rgba(255, 255, 255, 0.9)',
     light: 'rgba(255, 255, 255, 0.8)',
     medium: 'rgba(255, 255, 255, 0.7)',
     heavy: 'rgba(255, 255, 255, 0.6)',
     dark: 'rgba(255, 255, 255, 0.5)',
+    // Glassmorphisme coloré Trinity
+    blueLight: 'rgba(59, 130, 246, 0.2)',
+    blueMedium: 'rgba(59, 130, 246, 0.3)',
+    purpleLight: 'rgba(147, 51, 234, 0.2)',
+    purpleMedium: 'rgba(147, 51, 234, 0.3)',
+    orangeLight: 'rgba(249, 115, 22, 0.2)',
+    orangeMedium: 'rgba(249, 115, 22, 0.3)',
+    // Kids variants
+    pinkLight: 'rgba(236, 72, 153, 0.2)',
+    limeLight: 'rgba(132, 204, 22, 0.2)',
+    turquoiseLight: 'rgba(20, 184, 166, 0.2)',
     // Dark mode variants
     darkUltraLight: 'rgba(30, 30, 30, 0.9)',
     darkLight: 'rgba(30, 30, 30, 0.8)',
@@ -272,6 +323,23 @@ export const COMPONENT_TOKENS = {
 export const GRADIENTS = {
   trinity: `linear-gradient(135deg, ${PRIMITIVE_COLORS.dutch.blue[500]}, ${PRIMITIVE_COLORS.dutch.purple[400]}, ${PRIMITIVE_COLORS.dutch.orange[500]})`,
   trinitySubtle: `linear-gradient(135deg, ${PRIMITIVE_COLORS.dutch.blue[100]}, ${PRIMITIVE_COLORS.dutch.purple[100]}, ${PRIMITIVE_COLORS.dutch.orange[100]})`,
+  trinityBright: `linear-gradient(135deg, ${PRIMITIVE_COLORS.dutch.blue[400]}, ${PRIMITIVE_COLORS.dutch.purple[300]}, ${PRIMITIVE_COLORS.dutch.orange[400]})`,
+  
+  // Gradients colorés pour enfants
+  kidsFun: `linear-gradient(135deg, ${PRIMITIVE_COLORS.kids.pink[400]}, ${PRIMITIVE_COLORS.kids.lime[400]}, ${PRIMITIVE_COLORS.kids.turquoise[400]})`,
+  kidsBlue: `linear-gradient(135deg, ${PRIMITIVE_COLORS.dutch.blue[300]}, ${PRIMITIVE_COLORS.dutch.blue[500]})`,
+  kidsPurple: `linear-gradient(135deg, ${PRIMITIVE_COLORS.dutch.purple[300]}, ${PRIMITIVE_COLORS.dutch.purple[500]})`,
+  kidsOrange: `linear-gradient(135deg, ${PRIMITIVE_COLORS.dutch.orange[300]}, ${PRIMITIVE_COLORS.dutch.orange[500]})`,
+  kidsPink: `linear-gradient(135deg, ${PRIMITIVE_COLORS.kids.pink[300]}, ${PRIMITIVE_COLORS.kids.pink[500]})`,
+  kidsLime: `linear-gradient(135deg, ${PRIMITIVE_COLORS.kids.lime[300]}, ${PRIMITIVE_COLORS.kids.lime[500]})`,
+  kidsTurquoise: `linear-gradient(135deg, ${PRIMITIVE_COLORS.kids.turquoise[300]}, ${PRIMITIVE_COLORS.kids.turquoise[500]})`,
+  
+  // Glassmorphisme coloré
+  glassBlue: `linear-gradient(135deg, ${PRIMITIVE_COLORS.glass.blueLight}, ${PRIMITIVE_COLORS.glass.blueMedium})`,
+  glassPurple: `linear-gradient(135deg, ${PRIMITIVE_COLORS.glass.purpleLight}, ${PRIMITIVE_COLORS.glass.purpleMedium})`,
+  glassOrange: `linear-gradient(135deg, ${PRIMITIVE_COLORS.glass.orangeLight}, ${PRIMITIVE_COLORS.glass.orangeMedium})`,
+  
+  // Gradients existants
   glass: `linear-gradient(135deg, ${PRIMITIVE_COLORS.glass.light}, ${PRIMITIVE_COLORS.glass.medium})`,
   gaming: `linear-gradient(135deg, ${PRIMITIVE_COLORS.dutch.purple[400]}, ${PRIMITIVE_COLORS.dutch.blue[500]})`,
   surface: `linear-gradient(to bottom, ${SEMANTIC_TOKENS.surface.primary}, ${SEMANTIC_TOKENS.surface.secondary})`,
