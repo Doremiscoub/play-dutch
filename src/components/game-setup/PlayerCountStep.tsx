@@ -75,7 +75,7 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
             <button
               onClick={decrementCount}
               disabled={playerCount <= MIN_PLAYERS}
-              className="flex items-center justify-center w-14 h-14 bg-trinity-orange-500 hover:bg-trinity-orange-600 disabled:bg-neutral-300 disabled:cursor-not-allowed rounded-xl shadow-lg transition-colors duration-200"
+              className="flex items-center justify-center w-14 h-14 bg-red-500 hover:bg-red-600 disabled:bg-gray-300 disabled:cursor-not-allowed rounded-xl shadow-lg transition-colors duration-200"
             >
               <Minus className="w-6 h-6 text-white" strokeWidth={3} />
             </button>
@@ -87,10 +87,10 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
               animate={{ scale: 1, opacity: 1 }}
               className="flex flex-col items-center gap-2"
             >
-              <div className="w-24 h-24 rounded-2xl bg-trinity-blue-500 flex items-center justify-center text-white text-3xl font-bold shadow-lg">
+              <div className="w-24 h-24 rounded-2xl bg-blue-500 flex items-center justify-center text-white text-3xl font-bold shadow-lg">
                 {playerCount}
               </div>
-              <span className="text-sm font-medium text-neutral-700 bg-white px-3 py-1 rounded-lg shadow-sm">
+              <span className="text-sm font-medium text-gray-700 bg-white px-3 py-1 rounded-lg shadow-sm">
                 {playerCount === MIN_PLAYERS ? 'Minimum' : playerCount === MAX_PLAYERS ? 'Maximum' : 'Joueurs'}
               </span>
             </motion.div>
@@ -99,7 +99,7 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
             <button
               onClick={incrementCount}
               disabled={playerCount >= MAX_PLAYERS}
-              className="flex items-center justify-center w-14 h-14 bg-trinity-green-500 hover:bg-trinity-green-600 disabled:bg-neutral-300 disabled:cursor-not-allowed rounded-xl shadow-lg transition-colors duration-200"
+              className="flex items-center justify-center w-14 h-14 bg-green-500 hover:bg-green-600 disabled:bg-gray-300 disabled:cursor-not-allowed rounded-xl shadow-lg transition-colors duration-200"
             >
               <Plus className="w-6 h-6 text-white" strokeWidth={3} />
             </button>
