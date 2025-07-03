@@ -7,11 +7,7 @@ import { ArrowLeft, Plus, Check, Edit3 } from 'lucide-react';
 import { toast } from 'sonner';
 import ProfessorAvatar from '@/components/game/ProfessorAvatar';
 import { Badge } from '@/components/ui/badge';
-
-interface Player {
-  name: string;
-  emoji: string;
-}
+import { Player, MODERN_EMOJIS, QUICK_NAMES, MAX_PLAYERS } from './types';
 
 interface PlayerNamesStepProps {
   playerCount: number;
@@ -20,9 +16,6 @@ interface PlayerNamesStepProps {
   onNext: () => void;
   onBack: () => void;
 }
-
-const modernEmojis = ['🎮', '🎯', '🚀', '⭐', '🔥', '⚡', '🎲', '🎪', '🌟', '💎', '🎨', '🦄'];
-const quickNames = ['Alex', 'Charlie', 'Dana', 'Eve', 'Frank', 'Grace', 'Hugo', 'Iris'];
 
 const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
   playerCount,
@@ -53,7 +46,7 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
 
     const newPlayerObj: Player = {
       name: newPlayer.trim(),
-      emoji: modernEmojis[players.length % modernEmojis.length]
+      emoji: MODERN_EMOJIS[players.length % MODERN_EMOJIS.length]
     };
 
     onPlayersChange([...players, newPlayerObj]);
@@ -66,7 +59,7 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
     
     const newPlayerObj: Player = {
       name,
-      emoji: modernEmojis[players.length % modernEmojis.length]
+      emoji: MODERN_EMOJIS[players.length % MODERN_EMOJIS.length]
     };
     
     onPlayersChange([...players, newPlayerObj]);
@@ -100,7 +93,7 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
     toast.info(`${removedPlayer.name} a quitté la partie`);
   };
 
-  const availableQuickNames = quickNames.filter(name => 
+  const availableQuickNames = QUICK_NAMES.filter(name => 
     !players.some(p => p.name === name)
   ).slice(0, 3);
 
@@ -161,6 +154,7 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
               />
               <Button 
                 onClick={addPlayer}
+                disabled={players.length >= MAX_PLAYERS}
                 className="bg-gradient-to-r from-trinity-blue-500 to-trinity-purple-500 text-white rounded-2xl px-6"
               >
                 <Plus className="h-4 w-4" />

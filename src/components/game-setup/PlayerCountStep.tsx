@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Users, Plus, Minus } from 'lucide-react';
 import ProfessorAvatar from '@/components/game/ProfessorAvatar';
+import { MIN_PLAYERS, MAX_PLAYERS, ESTIMATED_MINUTES_PER_PLAYER } from './types';
 
 interface PlayerCountStepProps {
   playerCount: number;
@@ -17,13 +18,13 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
   onNext
 }) => {
   const incrementCount = () => {
-    if (playerCount < 10) {
+    if (playerCount < MAX_PLAYERS) {
       onPlayerCountChange(playerCount + 1);
     }
   };
 
   const decrementCount = () => {
-    if (playerCount > 2) {
+    if (playerCount > MIN_PLAYERS) {
       onPlayerCountChange(playerCount - 1);
     }
   };
@@ -60,7 +61,7 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Button
                 onClick={decrementCount}
-                disabled={playerCount <= 2}
+                disabled={playerCount <= MIN_PLAYERS}
                 size="lg"
                 variant="outline"
                 className="w-16 h-16 rounded-2xl bg-white/60 border-white/60 hover:bg-trinity-blue-50 hover:border-trinity-blue-300 disabled:opacity-30"
@@ -79,14 +80,14 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
                 {playerCount}
               </div>
               <span className="text-sm text-gray-600 font-medium">
-                {playerCount === 2 ? 'Minimum' : playerCount === 10 ? 'Maximum' : 'Joueurs'}
+                {playerCount === MIN_PLAYERS ? 'Minimum' : playerCount === MAX_PLAYERS ? 'Maximum' : 'Joueurs'}
               </span>
             </motion.div>
 
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Button
                 onClick={incrementCount}
-                disabled={playerCount >= 10}
+                disabled={playerCount >= MAX_PLAYERS}
                 size="lg"
                 variant="outline"
                 className="w-16 h-16 rounded-2xl bg-white/60 border-white/60 hover:bg-trinity-orange-50 hover:border-trinity-orange-300 disabled:opacity-30"
@@ -98,7 +99,7 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
 
           <div className="text-center space-y-2">
             <p className="text-lg font-semibold text-trinity-purple-600">
-              Durée estimée : ~{playerCount * 5} minutes
+              Durée estimée : ~{playerCount * ESTIMATED_MINUTES_PER_PLAYER} minutes
             </p>
             <p className="text-sm text-gray-500">
               Plus il y a de joueurs, plus la partie sera longue et amusante !

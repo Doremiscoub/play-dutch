@@ -5,11 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowLeft, Gamepad2, Trophy, Clock, Users, Edit, Sparkles } from 'lucide-react';
 import ProfessorAvatar from '@/components/game/ProfessorAvatar';
 import { Badge } from '@/components/ui/badge';
-
-interface Player {
-  name: string;
-  emoji: string;
-}
+import { Player, ESTIMATED_MINUTES_PER_PLAYER } from './types';
 
 interface GameSummaryStepProps {
   playerCount: number;
@@ -28,7 +24,7 @@ const GameSummaryStep: React.FC<GameSummaryStepProps> = ({
   onEditPlayers,
   onEditCount
 }) => {
-  const gameEstimate = playerCount * 5;
+  const gameEstimate = playerCount * ESTIMATED_MINUTES_PER_PLAYER;
 
   return (
     <div className="space-y-8">
