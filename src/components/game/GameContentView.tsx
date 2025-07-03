@@ -50,7 +50,7 @@ const GameContentView: React.FC<GameContentViewProps> = ({
         onGameEnd={onGameEnd}
         onRestart={onRestart}
       >
-        <div className="min-h-screen bg-gradient-to-br from-dutch-blue/5 via-white to-dutch-purple/5 pb-32">
+        <div className="min-h-screen bg-gradient-to-br from-trinity-blue-50 via-background to-trinity-purple-50 pb-32">
           <div className="max-w-6xl mx-auto">
             {/* Professeur Cartouche - En haut et centré */}
             <motion.div

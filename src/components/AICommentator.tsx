@@ -50,11 +50,11 @@ const AICommentator: React.FC<AICommentatorProps> = ({
   if (!comment) return null;
 
   const commentStyles = {
-    info: 'border-dutch-blue/20 bg-gradient-to-br from-dutch-blue/5 to-dutch-purple/5',
-    joke: 'border-dutch-orange/20 bg-gradient-to-br from-dutch-orange/5 to-dutch-purple/5',
-    sarcasm: 'border-dutch-purple/20 bg-gradient-to-br from-dutch-purple/5 to-dutch-blue/5',
-    encouragement: 'border-dutch-green/20 bg-gradient-to-br from-dutch-green/5 to-dutch-blue/5',
-    headline: 'border-dutch-orange/20 bg-gradient-to-r from-dutch-orange/10 to-dutch-purple/10'
+    info: 'border-trinity-blue-300/20 bg-gradient-to-br from-trinity-blue-50/80 to-trinity-purple-50/80',
+    joke: 'border-trinity-orange-300/20 bg-gradient-to-br from-trinity-orange-50/80 to-trinity-purple-50/80',
+    sarcasm: 'border-trinity-purple-300/20 bg-gradient-to-br from-trinity-purple-50/80 to-trinity-blue-50/80',
+    encouragement: 'border-success/20 bg-gradient-to-br from-success-light/20 to-trinity-blue-50/80',
+    headline: 'border-trinity-orange-300/20 bg-gradient-to-r from-trinity-orange-100/60 to-trinity-purple-100/60'
   };
 
   const speakMessage = async () => {
@@ -87,8 +87,8 @@ const AICommentator: React.FC<AICommentatorProps> = ({
           )}
         >
           <div className="absolute inset-0 opacity-30">
-            <div className="absolute -left-10 -top-10 w-40 h-40 bg-gradient-to-br from-dutch-purple/20 to-transparent rounded-full blur-3xl" />
-            <div className="absolute -right-10 -bottom-10 w-40 h-40 bg-gradient-to-br from-dutch-blue/20 to-transparent rounded-full blur-3xl" />
+            <div className="absolute -left-10 -top-10 w-40 h-40 bg-gradient-to-br from-trinity-purple-200/30 to-transparent rounded-full blur-3xl" />
+            <div className="absolute -right-10 -bottom-10 w-40 h-40 bg-gradient-to-br from-trinity-blue-200/30 to-transparent rounded-full blur-3xl" />
           </div>
 
           <div className="flex items-start gap-6 relative z-10">
@@ -109,7 +109,7 @@ const AICommentator: React.FC<AICommentatorProps> = ({
                 <motion.p 
                   initial={{ opacity: 0, y: 5 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="text-xl font-bold leading-relaxed tracking-wide bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent"
+                  className="text-xl font-bold leading-relaxed tracking-wide text-trinity"
                 >
                   {comment}
                 </motion.p>

@@ -48,15 +48,15 @@ const EnhancedPlayerCard: React.FC<EnhancedPlayerCardProps> = ({
 
   const getCardStyle = () => {
     if (isWinner) {
-      return "bg-gradient-to-br from-dutch-orange/10 via-yellow-50/80 to-amber-50/60 border-dutch-orange/30 shadow-lg backdrop-blur-xl";
+      return "card-game bg-gradient-to-br from-trinity-orange-50 via-trinity-orange-100 to-trinity-orange-200/60 border-trinity-orange-300 shadow-trinity";
     }
     if (isLastPlace) {
-      return "bg-gradient-to-br from-red-50/80 via-pink-50/60 to-rose-50/40 border-red-300/40 shadow-lg backdrop-blur-xl";
+      return "card-glass bg-gradient-to-br from-error-light/20 via-error/10 to-error-dark/5 border-error-light/40 shadow-glass-lg";
     }
     if (rank <= 3) {
-      return "bg-gradient-to-br from-dutch-green/10 via-emerald-50/80 to-teal-50/60 border-dutch-green/30 shadow-lg backdrop-blur-xl";
+      return "card-game bg-gradient-to-br from-success-light/20 via-success/10 to-success-dark/5 border-success-light/40 shadow-trinity";
     }
-    return "bg-white/80 border-white/60 shadow-lg backdrop-blur-xl";
+    return "card-glass shadow-glass";
   };
 
   const handleCardClick = () => {
@@ -69,7 +69,7 @@ const EnhancedPlayerCard: React.FC<EnhancedPlayerCardProps> = ({
       className={cn(
         "relative rounded-3xl border-2 transition-all duration-500 cursor-pointer overflow-hidden group",
         getCardStyle(),
-        isSelected || isExpanded ? "ring-2 ring-dutch-blue/50 shadow-2xl scale-[1.02] border-dutch-blue/40" : "hover:scale-[1.01] hover:shadow-xl hover:-translate-y-1"
+        isSelected || isExpanded ? "ring-2 ring-trinity-blue-500/50 shadow-trinity scale-[1.02] border-trinity-blue-400" : "hover:scale-[1.01] hover:shadow-glass-lg hover:-translate-y-1"
       )}
       onClick={handleCardClick}
       initial={{ opacity: 0, y: 20 }}
@@ -112,7 +112,7 @@ const EnhancedPlayerCard: React.FC<EnhancedPlayerCardProps> = ({
 
       {/* Badge de rang amélioré */}
       <motion.div
-        className="absolute -top-4 -left-4 bg-gradient-to-br from-dutch-blue via-dutch-purple to-dutch-orange text-white text-xl font-black rounded-full w-14 h-14 flex items-center justify-center shadow-2xl border-3 border-white/90 backdrop-blur-sm"
+        className="absolute -top-4 -left-4 btn-glass-trinity text-white text-xl font-black rounded-full w-14 h-14 flex items-center justify-center shadow-trinity border-3 border-glass-border-light"
         initial={{ scale: 0, rotate: -180 }}
         animate={{ scale: 1, rotate: 0 }}
         transition={{ 

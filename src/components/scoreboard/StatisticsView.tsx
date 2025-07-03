@@ -143,7 +143,7 @@ const StatisticsView: React.FC<StatisticsViewProps> = ({
               type: "spring",
               stiffness: 100
             }}
-            className="bg-white/80 backdrop-blur-xl border-2 border-white/60 rounded-3xl p-6 shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-[1.02]"
+            className="card-glass p-6 shadow-glass-lg hover:shadow-trinity transition-all duration-300 hover:scale-[1.02]"
           >
             {/* En-tête de carte */}
             <div className="flex items-center gap-3 mb-6">
@@ -161,7 +161,7 @@ const StatisticsView: React.FC<StatisticsViewProps> = ({
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.5 + index * 0.1 + itemIndex * 0.05 }}
-                  className="flex justify-between items-center p-3 bg-white/60 backdrop-blur-sm rounded-xl border border-white/50"
+                  className="flex justify-between items-center p-3 bg-glass-medium backdrop-blur-sm rounded-xl border border-glass-border-medium"
                 >
                   <span className="text-sm font-medium text-gray-700">{item.label}</span>
                   <div className="text-right">
@@ -184,7 +184,7 @@ const StatisticsView: React.FC<StatisticsViewProps> = ({
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.8 }}
-        className="bg-white/80 backdrop-blur-xl border-2 border-white/60 rounded-3xl p-8 shadow-2xl"
+        className="card-glass p-8 shadow-trinity"
       >
         <div className="flex items-center gap-3 mb-6">
           <div className="p-3 bg-gradient-to-r from-dutch-green to-dutch-blue rounded-xl shadow-lg">

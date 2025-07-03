@@ -51,12 +51,9 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
         <Button
           onClick={onAddRound}
           disabled={disabled}
-          className="relative group px-8 py-4 h-16 rounded-full shadow-2xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden"
-          style={{
-            background: 'linear-gradient(135deg, hsl(var(--dutch-blue)), hsl(var(--dutch-purple)), hsl(var(--dutch-orange)))',
-            border: '2px solid rgba(255, 255, 255, 0.3)',
-            backdropFilter: 'blur(10px)',
-          }}
+          variant="trinity"
+          size="xl"
+          className="relative group px-8 py-4 h-16 rounded-full shadow-trinity transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden"
         >
           {/* Arrière-plan semi-transparent pour améliorer la lisibilité */}
           <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 via-purple-500/15 to-orange-500/20 rounded-full" />
@@ -100,14 +97,14 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
           className="pointer-events-auto"
         >
           <Button
-            variant="ghost"
-            size="icon"
+            variant="glass"
+            size="icon-lg"
             onClick={onUndoLastRound}
             disabled={!canUndo || disabled}
-            className={`relative h-14 w-14 rounded-full transition-all duration-300 group overflow-hidden backdrop-blur-md shadow-lg hover:shadow-xl ${
+            className={`relative h-14 w-14 rounded-full transition-all duration-300 group overflow-hidden shadow-glass hover:shadow-glass-lg ${
               canUndo && !disabled
-                ? 'bg-white/95 hover:bg-white border-2 border-orange-300/70 hover:border-orange-400'
-                : 'bg-white/60 text-gray-400 cursor-not-allowed border-2 border-gray-200/60'
+                ? 'hover:border-trinity-orange-400 hover:text-trinity-orange-600'
+                : 'opacity-50 cursor-not-allowed text-muted-foreground'
             }`}
             title="Annuler la dernière manche"
           >
@@ -117,7 +114,7 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
             )}
             
             <RotateCcw className={`relative z-10 h-5 w-5 group-hover:-rotate-12 transition-transform duration-300 ${
-              canUndo && !disabled ? 'text-orange-600 group-hover:text-orange-700' : 'text-gray-400'
+              canUndo && !disabled ? 'group-hover:text-trinity-orange-700' : ''
             }`} />
           </Button>
         </motion.div>
@@ -141,17 +138,17 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
           className="pointer-events-auto"
         >
           <Button
-            variant="ghost"
-            size="icon"
+            variant="glass"
+            size="icon-lg"
             onClick={onEndGame}
             disabled={disabled}
-            className="relative h-14 w-14 rounded-full bg-white/95 hover:bg-white shadow-lg hover:shadow-xl transition-all duration-300 group overflow-hidden border-2 border-purple-300/70 hover:border-purple-400 backdrop-blur-md"
+            className="relative h-14 w-14 rounded-full shadow-glass hover:shadow-glass-lg transition-all duration-300 group overflow-hidden hover:border-trinity-purple-400 hover:text-trinity-purple-600"
             title="Terminer la partie"
           >
             {/* Effet coloré au survol */}
             <div className="absolute inset-0 bg-gradient-to-br from-purple-100/60 to-purple-200/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full" />
             
-            <Flag className="relative z-10 h-5 w-5 text-purple-600 group-hover:text-purple-700 group-hover:scale-110 transition-transform duration-300" />
+            <Flag className="relative z-10 h-5 w-5 group-hover:text-trinity-purple-700 group-hover:scale-110 transition-transform duration-300" />
           </Button>
         </motion.div>
       </div>
