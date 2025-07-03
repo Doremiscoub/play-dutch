@@ -80,8 +80,8 @@ const EnhancedHeroSection: React.FC = () => {
             }}
           />
           
-          {/* Main title with improved readability */}
-          <motion.h1
+          {/* Logo principal avec votre image */}
+          <motion.div
             initial={{ opacity: 0, scale: 0.8, y: prefersReducedMotion ? 0 : 50 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ 
@@ -91,60 +91,18 @@ const EnhancedHeroSection: React.FC = () => {
               stiffness: 100,
               damping: 15
             }}
-            className="relative z-10 text-6xl sm:text-8xl md:text-9xl lg:text-[12rem] xl:text-[14rem] font-black tracking-tighter leading-none text-center"
-            style={{
-              fontFamily: "'Space Grotesk', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
-              background: 'linear-gradient(135deg, hsl(var(--dutch-blue)), hsl(var(--dutch-purple)), hsl(var(--dutch-orange)))',
-              backgroundClip: 'text',
-              WebkitBackgroundClip: 'text',
-              color: 'transparent',
-              textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
-              WebkitTextStroke: '1px rgba(255, 255, 255, 0.1)'
-            }}
+            className="relative z-10 flex items-center justify-center"
           >
-            {/* Animated text reveal effect */}
-            <motion.span
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.5 }}
-              className="inline-block"
-            >
-              D
-            </motion.span>
-            <motion.span
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.6 }}
-              className="inline-block"
-            >
-              U
-            </motion.span>
-            <motion.span
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.7 }}
-              className="inline-block"
-            >
-              T
-            </motion.span>
-            <motion.span
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.8 }}
-              className="inline-block"
-            >
-              C
-            </motion.span>
-            <motion.span
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.9 }}
-              className="inline-block"
-            >
-              H
-            </motion.span>
+            <img 
+              src="/lovable-uploads/0532ef39-c77c-4480-8d74-7af7665596ee.png"
+              alt="Dutch - Logo du jeu avec Professeur Cartouche"
+              className="w-auto h-32 sm:h-40 md:h-48 lg:h-56 xl:h-64 max-w-full object-contain drop-shadow-2xl"
+              style={{
+                filter: 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3))'
+              }}
+            />
             
-            {/* Sparkle effects around the title */}
+            {/* Sparkle effects around the logo */}
             <motion.div
               className="absolute -top-12 -right-12 text-dutch-orange text-4xl"
               animate={prefersReducedMotion ? {} : {
@@ -192,7 +150,7 @@ const EnhancedHeroSection: React.FC = () => {
             >
               💫
             </motion.div>
-          </motion.h1>
+          </motion.div>
           
           {/* Floating particles effect */}
           {!prefersReducedMotion && (
