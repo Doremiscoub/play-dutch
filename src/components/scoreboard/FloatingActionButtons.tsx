@@ -19,7 +19,7 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
   disabled = false,
 }) => {
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col gap-3">
+    <div className="fixed bottom-6 right-6 z-50 flex flex-col gap-3" style={{ position: 'fixed' }}>
       {/* Add Round Button - Primary */}
       <motion.div
         initial={{ opacity: 0, scale: 0.8, y: 20 }}
@@ -32,7 +32,7 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
           onClick={onAddRound}
           disabled={disabled}
           size="lg"
-          className="h-14 w-14 rounded-full bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange hover:from-dutch-purple hover:to-dutch-orange text-white shadow-2xl hover:shadow-3xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed group"
+          className="h-16 w-16 rounded-full bg-gradient-to-br from-dutch-blue via-dutch-purple to-dutch-orange hover:from-dutch-purple hover:via-dutch-orange hover:to-dutch-blue text-white shadow-xl hover:shadow-2xl transition-all duration-500 disabled:opacity-50 disabled:cursor-not-allowed group border-2 border-white/20 backdrop-blur-sm"
         >
           <Plus className="h-6 w-6 group-hover:scale-110 transition-transform" />
         </Button>
@@ -53,7 +53,7 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
             size="icon"
             onClick={onUndoLastRound}
             disabled={!canUndo || disabled}
-            className="h-12 w-12 rounded-full bg-white/90 hover:bg-white backdrop-blur-xl border-2 border-white/60 hover:border-white/80 transition-all duration-300 shadow-xl hover:shadow-2xl disabled:opacity-40 disabled:cursor-not-allowed group"
+            className="h-12 w-12 rounded-full bg-white/95 hover:bg-white backdrop-blur-xl border-2 border-dutch-blue/20 hover:border-dutch-blue/40 transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-40 disabled:cursor-not-allowed group"
             title="Annuler la dernière manche"
           >
             <Undo2 className="h-5 w-5 text-gray-600 group-hover:text-dutch-blue transition-colors" />
@@ -73,7 +73,7 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
             size="icon"
             onClick={onEndGame}
             disabled={disabled}
-            className="h-12 w-12 rounded-full bg-white/90 hover:bg-white backdrop-blur-xl border-2 border-white/60 hover:border-white/80 transition-all duration-300 shadow-xl hover:shadow-2xl group"
+            className="h-12 w-12 rounded-full bg-white/95 hover:bg-white backdrop-blur-xl border-2 border-dutch-purple/20 hover:border-dutch-purple/40 transition-all duration-300 shadow-lg hover:shadow-xl group"
             title="Terminer la partie"
           >
             <Square className="h-5 w-5 text-gray-600 group-hover:text-dutch-purple transition-colors" />

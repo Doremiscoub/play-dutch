@@ -16,6 +16,11 @@ export const generateComment = (players: Player[], roundCount: number, scoreLimi
   const leader = sortedPlayers[0];
   const lastPlace = sortedPlayers[sortedPlayers.length - 1];
   
+  // Vérifications de sécurité pour éviter les "undefined"
+  if (!leader || !leader.name || !lastPlace || !lastPlace.name) {
+    return { comment: 'La partie commence ! Bonne chance à tous !', type: 'info' as const };
+  }
+  
   if (roundCount === 0) {
     return {
       comment: `Parfait ! ${players.length} joueurs prêts pour l'aventure. Objectif : ${scoreLimit} points. Que le meilleur gagne !`,

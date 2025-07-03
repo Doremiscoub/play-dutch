@@ -85,8 +85,8 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
               onClick={() => handleViewChange('list')}
               className={`px-8 py-3 rounded-xl transition-all shadow-md flex items-center gap-2 font-medium min-w-[180px] glass-button ${
                 currentView === 'list'
-                  ? 'bg-gradient-to-r from-dutch-blue to-dutch-purple text-white shadow-lg scale-105'
-                  : 'bg-white/70 text-gray-700 hover:bg-white/90'
+                  ? 'bg-gradient-to-r from-dutch-blue to-dutch-purple text-white shadow-lg scale-105 border-2 border-white/30'
+                  : 'bg-white/80 text-gray-700 hover:bg-white/90 border-2 border-gray-200/50'
               }`}
               whileHover={{ scale: currentView === 'list' ? 1.05 : 1.02 }}
               whileTap={{ scale: 0.98 }}
@@ -99,8 +99,8 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
               onClick={() => handleViewChange('table')}
               className={`px-8 py-3 rounded-xl transition-all shadow-md flex items-center gap-2 font-medium min-w-[180px] glass-button ${
                 currentView === 'table'
-                  ? 'bg-gradient-to-r from-dutch-blue to-dutch-purple text-white shadow-lg scale-105'
-                  : 'bg-white/70 text-gray-700 hover:bg-white/90'
+                  ? 'bg-gradient-to-r from-dutch-blue to-dutch-purple text-white shadow-lg scale-105 border-2 border-white/30'
+                  : 'bg-white/80 text-gray-700 hover:bg-white/90 border-2 border-gray-200/50'
               }`}
               whileHover={{ scale: currentView === 'table' ? 1.05 : 1.02 }}
               whileTap={{ scale: 0.98 }}

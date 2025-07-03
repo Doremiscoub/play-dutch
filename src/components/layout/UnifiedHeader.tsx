@@ -3,6 +3,7 @@ import { ArrowLeft, Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 import GameSettings from '@/components/GameSettings';
+import { ModernTitle } from '@/components/ui/modern-title';
 
 interface UnifiedHeaderProps {
   title: string;
@@ -59,8 +60,7 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
 
         {/* Center - Title and game info */}
         <div className="flex-1 text-center">
-          <motion.h1 
-            className="text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight"
+          <motion.div
             initial={{ opacity: 0, y: 20, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ 
@@ -69,8 +69,14 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
               ease: [0.23, 1, 0.32, 1]
             }}
           >
-            {title}
-          </motion.h1>
+            <ModernTitle
+              variant="h3"
+              withSparkles
+              className="dutch-gradient-text animate-gradient-shift"
+            >
+              {title}
+            </ModernTitle>
+          </motion.div>
           {variant === 'game' && roundCount > 0 && (
             <motion.div 
               className="flex justify-center items-center gap-4 mt-3"

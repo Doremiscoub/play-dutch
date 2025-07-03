@@ -127,44 +127,80 @@ const DetailedGameStats: React.FC<DetailedGameStatsProps> = ({
           </h3>
         </motion.div>
         
-        {/* Grille de statistiques avec animations séquentielles */}
+        {/* Statistiques réorganisées en cartes plus lisibles */}
         <motion.div 
-          className="grid grid-cols-2 md:grid-cols-4 gap-4"
+          className="grid grid-cols-1 md:grid-cols-2 gap-6"
           variants={{
             hidden: { opacity: 0 },
             visible: {
               opacity: 1,
               transition: {
-                staggerChildren: 0.1
+                staggerChildren: 0.15
               }
             }
           }}
           initial="hidden"
           animate="visible"
         >
-          {[
-            { icon: Trophy, label: "Manches", value: stats.totalRounds, color: "from-yellow-400 to-yellow-600" },
-            { icon: Target, label: "Moy. générale", value: stats.averageScore, color: "from-blue-400 to-blue-600" },
-            { icon: TrendingUp, label: "Meilleur score", value: stats.bestScore, color: "from-green-400 to-green-600" },
-            { icon: Award, label: "Dutch réussis", value: stats.dutchCount, color: "from-purple-400 to-purple-600" }
-          ].map((stat, index) => (
-            <motion.div
-              key={stat.label}
-              variants={{
-                hidden: { opacity: 0, y: 20, scale: 0.9 },
-                visible: { opacity: 1, y: 0, scale: 1 }
-              }}
-              className="bg-white/60 backdrop-blur-lg border border-white/40 rounded-2xl p-4 hover:bg-white/80 transition-all duration-300 hover:scale-105 hover:shadow-lg"
-            >
-              <div className="flex items-center gap-3 mb-2">
-                <div className={`p-2 bg-gradient-to-r ${stat.color} rounded-xl shadow-sm`}>
-                  <stat.icon className="h-4 w-4 text-white" />
-                </div>
-                <span className="text-sm font-medium text-gray-600">{stat.label}</span>
+          {/* Carte Performance Générale */}
+          <motion.div
+            variants={{
+              hidden: { opacity: 0, y: 20, scale: 0.9 },
+              visible: { opacity: 1, y: 0, scale: 1 }
+            }}
+            className="bg-white/70 backdrop-blur-lg border border-white/50 rounded-2xl p-6 hover:bg-white/85 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl"
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-3 bg-gradient-to-r from-dutch-blue to-dutch-purple rounded-xl shadow-sm">
+                <Trophy className="h-5 w-5 text-white" />
               </div>
-              <div className="text-2xl font-bold text-gray-800">{stat.value}</div>
-            </motion.div>
-          ))}
+              <h4 className="text-lg font-bold text-gray-800">Performance</h4>
+            </div>
+            <div className="space-y-3">
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-gray-600">Manches jouées</span>
+                <span className="text-xl font-bold text-gray-800">{stats.totalRounds}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-gray-600">Meilleur score</span>
+                <span className="text-xl font-bold text-green-600">{stats.bestScore}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-gray-600">Score moyen</span>
+                <span className="text-xl font-bold text-blue-600">{stats.averageScore}</span>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Carte Événements Spéciaux */}
+          <motion.div
+            variants={{
+              hidden: { opacity: 0, y: 20, scale: 0.9 },
+              visible: { opacity: 1, y: 0, scale: 1 }
+            }}
+            className="bg-white/70 backdrop-blur-lg border border-white/50 rounded-2xl p-6 hover:bg-white/85 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl"
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-3 bg-gradient-to-r from-dutch-purple to-dutch-orange rounded-xl shadow-sm">
+                <Award className="h-5 w-5 text-white" />
+              </div>
+              <h4 className="text-lg font-bold text-gray-800">Événements</h4>
+            </div>
+            <div className="space-y-3">
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-gray-600">Dutch réussis</span>
+                <span className="text-xl font-bold text-purple-600">{stats.dutchCount}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-gray-600">Joueurs actifs</span>
+                <span className="text-xl font-bold text-orange-600">{stats.totalPlayers}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-gray-600">Pire score</span>
+                <span className="text-xl font-bold text-red-500">{stats.worstScore}</span>
+              </div>
+            </div>
+          </motion.div>
         </motion.div>
       </div>
     </motion.div>
