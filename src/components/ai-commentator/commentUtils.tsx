@@ -53,14 +53,29 @@ export const getCommentStyle = (commentType: CommentType): CommentStyle => {
 };
 
 export const generateComment = (players: Player[], roundCount: number, scoreLimit: number) => {
-  if (!players || players.length === 0) return { comment: '', type: 'info' as CommentType };
+  // Validation robuste avec commentaires par défaut
+  if (!players || players.length === 0 || !Array.isArray(players)) {
+    return { comment: 'Bienvenue dans votre partie ! Que la meilleure stratégie gagne !', type: 'info' as CommentType };
+  }
 
-  const validPlayers = players.filter(p => p && p.name && typeof p.totalScore === 'number');
-  if (validPlayers.length === 0) return { comment: '', type: 'info' as CommentType };
+  const validPlayers = players.filter(p => p && p.name && typeof p.name === 'string' && p.name.trim() && typeof p.totalScore === 'number');
+  if (validPlayers.length === 0) {
+    return { comment: 'Préparation de la partie en cours ! Que l\'aventure commence !', type: 'info' as CommentType };
+  }
 
   const sortedPlayers = [...validPlayers].sort((a, b) => a.totalScore - b.totalScore);
   const leader = sortedPlayers[0];
   const lastPlace = sortedPlayers[sortedPlayers.length - 1];
+  
+  // Vérifications de sécurité pour leader et lastPlace
+  if (!leader || !leader.name || typeof leader.totalScore !== 'number') {
+    return { comment: 'La partie se met en place ! Patience, ça arrive !', type: 'info' as CommentType };
+  }
+  
+  if (!lastPlace || !lastPlace.name || typeof lastPlace.totalScore !== 'number') {
+    return { comment: 'Préparatifs terminés ! C\'est parti pour l\'aventure !', type: 'info' as CommentType };
+  }
+  
   const dutchCount = validPlayers.reduce((total, player) => 
     total + (player.rounds?.filter(r => r?.isDutch).length || 0), 0
   );

@@ -237,12 +237,14 @@ body {
 }
 
 .dutch-gradient-text {
-  background: linear-gradient(135deg, hsl(221 83% 53%), hsl(258 90% 66%), hsl(25 95% 53%));
+  background: linear-gradient(135deg, hsl(var(--dutch-blue)), hsl(var(--dutch-purple)), hsl(var(--dutch-orange)));
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-size: 200% 200%;
   animation: gradient-shift 3s ease infinite;
+  /* Fallback pour navigateurs non supportés */
+  color: hsl(var(--dutch-blue));
 }
 
 @keyframes gradient-shift {
