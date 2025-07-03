@@ -1,0 +1,304 @@
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ArrowLeft, Plus, Check, Edit3 } from 'lucide-react';
+import { toast } from 'sonner';
+import ProfessorAvatar from '@/components/game/ProfessorAvatar';
+import { Badge } from '@/components/ui/badge';
+
+interface Player {
+  name: string;
+  emoji: string;
+}
+
+interface PlayerNamesStepProps {
+  playerCount: number;
+  players: Player[];
+  onPlayersChange: (players: Player[]) => void;
+  onNext: () => void;
+  onBack: () => void;
+}
+
+const modernEmojis = ['🎮', '🎯', '🚀', '⭐', '🔥', '⚡', '🎲', '🎪', '🌟', '💎', '🎨', '🦄'];
+const quickNames = ['Alex', 'Charlie', 'Dana', 'Eve', 'Frank', 'Grace', 'Hugo', 'Iris'];
+
+const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
+  playerCount,
+  players,
+  onPlayersChange,
+  onNext,
+  onBack
+}) => {
+  const [newPlayer, setNewPlayer] = useState('');
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [editingName, setEditingName] = useState('');
+
+  const addPlayer = () => {
+    if (!newPlayer.trim()) {
+      toast.error('Entrez un nom de joueur');
+      return;
+    }
+
+    if (newPlayer.trim().length < 2) {
+      toast.error('Le nom doit contenir au moins 2 caractères');
+      return;
+    }
+
+    if (players.some(p => p.name.toLowerCase() === newPlayer.trim().toLowerCase())) {
+      toast.error('Ce joueur existe déjà');
+      return;
+    }
+
+    const newPlayerObj: Player = {
+      name: newPlayer.trim(),
+      emoji: modernEmojis[players.length % modernEmojis.length]
+    };
+
+    onPlayersChange([...players, newPlayerObj]);
+    setNewPlayer('');
+    toast.success(`${newPlayer.trim()} rejoint la partie !`, { icon: '🎮' });
+  };
+
+  const quickAddPlayer = (name: string) => {
+    if (players.some(p => p.name === name) || players.length >= playerCount) return;
+    
+    const newPlayerObj: Player = {
+      name,
+      emoji: modernEmojis[players.length % modernEmojis.length]
+    };
+    
+    onPlayersChange([...players, newPlayerObj]);
+    toast.success(`${name} rejoint la partie !`, { icon: '🎮' });
+  };
+
+  const startEditing = (index: number) => {
+    setEditingIndex(index);
+    setEditingName(players[index].name);
+  };
+
+  const saveEdit = () => {
+    if (!editingName.trim() || editingIndex === null) return;
+
+    if (players.some((p, i) => i !== editingIndex && p.name.toLowerCase() === editingName.trim().toLowerCase())) {
+      toast.error('Ce nom est déjà utilisé');
+      return;
+    }
+
+    const updatedPlayers = [...players];
+    updatedPlayers[editingIndex] = { ...updatedPlayers[editingIndex], name: editingName.trim() };
+    onPlayersChange(updatedPlayers);
+    setEditingIndex(null);
+    setEditingName('');
+    toast.success('Nom modifié !');
+  };
+
+  const removePlayer = (index: number) => {
+    const removedPlayer = players[index];
+    onPlayersChange(players.filter((_, i) => i !== index));
+    toast.info(`${removedPlayer.name} a quitté la partie`);
+  };
+
+  const availableQuickNames = quickNames.filter(name => 
+    !players.some(p => p.name === name)
+  ).slice(0, 3);
+
+  const canContinue = players.length === playerCount;
+  const progressPercentage = (players.length / playerCount) * 100;
+
+  return (
+    <div className="space-y-8">
+      {/* Header avec progress */}
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="text-center space-y-4"
+      >
+        <div className="mx-auto w-20 h-20 rounded-3xl bg-gradient-to-br from-trinity-blue-500 to-trinity-purple-500 flex items-center justify-center shadow-lg border border-white/30 overflow-hidden">
+          <ProfessorAvatar size="md" animate={true} mood="happy" showParticles={false} />
+        </div>
+        <h1 className="text-3xl font-black bg-gradient-to-r from-trinity-blue-600 via-trinity-purple-600 to-trinity-orange-600 bg-clip-text text-transparent">
+          Noms des joueurs
+        </h1>
+        <div className="space-y-2">
+          <p className="text-neutral-600 font-medium">
+            Ajoutez les {playerCount} joueurs pour votre partie
+          </p>
+          <div className="flex items-center gap-2 justify-center">
+            <Badge variant="secondary" className="bg-trinity-blue-100 text-trinity-blue-700">
+              {players.length}/{playerCount} joueurs
+            </Badge>
+            <div className="w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
+              <motion.div
+                className="h-full bg-gradient-to-r from-trinity-blue-500 to-trinity-purple-500"
+                initial={{ width: 0 }}
+                animate={{ width: `${progressPercentage}%` }}
+                transition={{ duration: 0.3 }}
+              />
+            </div>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Formulaire d'ajout */}
+      {players.length < playerCount && (
+        <Card className="card-glass">
+          <CardHeader className="pb-4">
+            <CardTitle className="text-lg font-bold text-trinity-purple-700">
+              Ajouter un joueur
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex gap-3">
+              <Input
+                value={newPlayer}
+                onChange={(e) => setNewPlayer(e.target.value)}
+                placeholder={`Nom du joueur ${players.length + 1}`}
+                className="flex-1 bg-white/80 border-white/60 focus:border-trinity-blue-400 rounded-2xl"
+                onKeyDown={(e) => e.key === 'Enter' && addPlayer()}
+                maxLength={20}
+              />
+              <Button 
+                onClick={addPlayer}
+                className="bg-gradient-to-r from-trinity-blue-500 to-trinity-purple-500 text-white rounded-2xl px-6"
+              >
+                <Plus className="h-4 w-4" />
+              </Button>
+            </div>
+
+            {availableQuickNames.length > 0 && (
+              <div>
+                <p className="text-sm font-medium text-gray-600 mb-2">Ajout rapide :</p>
+                <div className="flex gap-2">
+                  {availableQuickNames.map((name) => (
+                    <Button
+                      key={name}
+                      variant="outline"
+                      size="sm"
+                      onClick={() => quickAddPlayer(name)}
+                      className="bg-white/60 border-white/60 hover:bg-trinity-orange-50 rounded-xl"
+                    >
+                      + {name}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Liste des joueurs */}
+      {players.length > 0 && (
+        <Card className="card-glass">
+          <CardHeader className="pb-4">
+            <CardTitle className="text-lg font-bold text-trinity-orange-700">
+              Joueurs ajoutés
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              <AnimatePresence mode="popLayout">
+                {players.map((player, index) => (
+                  <motion.div 
+                    key={`${player.name}-${index}`}
+                    layout
+                    initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.8, y: -20 }}
+                    className="flex items-center justify-between p-4 bg-white/50 hover:bg-white/70 rounded-2xl transition-all border border-white/40 group"
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${
+                        index === 0 ? 'from-amber-400 to-amber-600' :
+                        index === 1 ? 'from-gray-300 to-gray-500' :
+                        index === 2 ? 'from-orange-400 to-orange-600' :
+                        'from-trinity-blue-400 to-trinity-purple-500'
+                      } flex items-center justify-center text-white font-bold text-lg shadow-lg`}>
+                        {index + 1}
+                      </div>
+                      <div className="text-3xl">{player.emoji}</div>
+                      <div>
+                        {editingIndex === index ? (
+                          <div className="flex gap-2">
+                            <Input
+                              value={editingName}
+                              onChange={(e) => setEditingName(e.target.value)}
+                              className="w-32 h-8 text-sm"
+                              onKeyDown={(e) => e.key === 'Enter' && saveEdit()}
+                              autoFocus
+                            />
+                            <Button size="sm" onClick={saveEdit} className="h-8">
+                              <Check className="h-3 w-3" />
+                            </Button>
+                          </div>
+                        ) : (
+                          <div 
+                            className="font-bold text-lg text-gray-800 cursor-pointer hover:text-trinity-blue-600"
+                            onClick={() => startEditing(index)}
+                          >
+                            {player.name}
+                          </div>
+                        )}
+                        <div className="text-sm text-gray-500">
+                          {index === 0 ? 'Premier joueur' : `Joueur ${index + 1}`}
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => startEditing(index)}
+                        className="text-trinity-blue-500 hover:text-trinity-blue-700 rounded-xl"
+                      >
+                        <Edit3 className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => removePlayer(index)}
+                        className="text-red-500 hover:text-red-700 rounded-xl"
+                      >
+                        ×
+                      </Button>
+                    </div>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Navigation */}
+      <div className="flex gap-4">
+        <Button
+          onClick={onBack}
+          variant="outline"
+          size="lg"
+          className="flex-1 py-6 text-lg font-bold rounded-2xl bg-white/60 border-white/60"
+        >
+          <ArrowLeft className="h-5 w-5 mr-2" />
+          Retour
+        </Button>
+        <Button
+          onClick={onNext}
+          disabled={!canContinue}
+          size="lg"
+          className={`flex-1 py-6 text-lg font-bold rounded-2xl shadow-lg transition-all ${
+            canContinue
+              ? 'bg-gradient-to-r from-trinity-blue-500 via-trinity-purple-500 to-trinity-orange-500 text-white hover:from-trinity-blue-600 hover:via-trinity-purple-600 hover:to-trinity-orange-600'
+              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+          }`}
+        >
+          {canContinue ? 'Résumé de la partie' : `${playerCount - players.length} joueur${playerCount - players.length > 1 ? 's' : ''} manquant${playerCount - players.length > 1 ? 's' : ''}`}
+        </Button>
+      </div>
+    </div>
+  );
+};
+
+export default PlayerNamesStep;
