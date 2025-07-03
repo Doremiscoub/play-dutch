@@ -52,17 +52,17 @@ const AdvancedThemeSelector = () => {
 
   const startCreatingTheme = () => {
     setThemeName('New Theme');
-    setPrimaryColor('#1EAEDB');
-    setSecondaryColor('#8B5CF6');
-    setAccentColor('#F97316');
-    setBackgroundColor('#FFFFFF');
+    setPrimaryColor('hsl(var(--dutch-blue))');
+    setSecondaryColor('hsl(var(--dutch-purple))');
+    setAccentColor('hsl(var(--dutch-orange))');
+    setBackgroundColor('hsl(var(--background))');
     setEditingTheme({
       id: `custom-${Date.now()}`,
       name: 'New Theme',
-      primary: '#1EAEDB',
-      secondary: '#8B5CF6',
-      accent: '#F97316',
-      background: '#FFFFFF',
+      primary: 'hsl(var(--dutch-blue))',
+      secondary: 'hsl(var(--dutch-purple))',
+      accent: 'hsl(var(--dutch-orange))',
+      background: 'hsl(var(--background))',
       isCustom: true
     });
   };

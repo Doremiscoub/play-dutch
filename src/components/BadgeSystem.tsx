@@ -143,7 +143,7 @@ const BadgeSystem: React.FC<BadgeSystemProps> = ({ players, games, currentGameId
       name: 'Partie Parfaite',
       description: 'Terminer une partie sans jamais dépasser 5 points par tour',
       icon: Sparkles,
-      color: '#9932CC',
+      color: 'hsl(var(--dutch-purple))',
       rarity: 'legendary',
       category: 'performance',
       condition: (player) => {
@@ -158,7 +158,7 @@ const BadgeSystem: React.FC<BadgeSystemProps> = ({ players, games, currentGameId
       name: 'Vétéran',
       description: 'Participer à 10 parties de Dutch Blitz',
       icon: Star,
-      color: '#1E90FF',
+      color: 'hsl(var(--dutch-blue))',
       rarity: 'common',
       category: 'achievement',
       condition: (player, games) => {
@@ -174,7 +174,7 @@ const BadgeSystem: React.FC<BadgeSystemProps> = ({ players, games, currentGameId
       name: 'En Feu',
       description: 'Gagner 3 parties consécutives',
       icon: Flame,
-      color: '#FF4500',
+      color: 'hsl(var(--warning))',
       rarity: 'epic',
       category: 'consistency',
       condition: (player, games) => {
@@ -203,7 +203,7 @@ const BadgeSystem: React.FC<BadgeSystemProps> = ({ players, games, currentGameId
       name: 'Social',
       description: 'Jouer en mode multijoueur',
       icon: Gift,
-      color: '#3CB371',
+      color: 'hsl(var(--success))',
       rarity: 'uncommon',
       category: 'special',
       condition: (player, games) => {
