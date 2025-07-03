@@ -55,7 +55,7 @@ export const PerformanceAnalyzer: React.FC<PerformanceAnalyzerProps> = ({
           <div className="text-gray-500">Moyenne</div>
         </div>
         <div className="text-center">
-          <div className={`font-semibold ${stats.improvementRate < 0 ? 'text-green-600' : 'text-orange-600'}`}>
+          <div className={`font-semibold ${stats.improvementRate < 0 ? 'text-trinity-green-600' : 'text-trinity-orange-600'}`}>
             {stats.improvementRate > 0 ? '+' : ''}{stats.improvementRate.toFixed(1)}
           </div>
           <div className="text-gray-500">Tendance</div>
@@ -121,12 +121,12 @@ const analyzePerformance = (player: Player, position: number, totalPlayers: numb
   } else if (isLosing) {
     title = 'Remontada Possible';
     description = 'Position difficile mais rien n\'est joué !';
-    icon = <AlertTriangle className="h-4 w-4 text-orange-600" />;
+    icon = <AlertTriangle className="h-4 w-4 text-trinity-orange-600" />;
     advice = 'Un Dutch bien placé peut tout changer !';
   } else {
     title = 'Performance Stable';
     description = 'Jeu correct sans surprise notable.';
-    icon = <Target className="h-4 w-4 text-blue-600" />;
+    icon = <Target className="h-4 w-4 text-trinity-blue-600" />;
     advice = 'Cherchez des opportunités pour prendre l\'avantage !';
   }
 

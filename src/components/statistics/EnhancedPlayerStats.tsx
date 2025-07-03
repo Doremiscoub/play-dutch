@@ -161,24 +161,24 @@ const EnhancedPlayerStats: React.FC<EnhancedPlayerStatsProps> = ({ players, clas
               </div>
 
               <div className="grid grid-cols-2 gap-4">
-                <div className="text-center p-3 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl">
-                  <div className="text-sm text-gray-600 mb-1">Moyenne</div>
-                  <div className="text-2xl font-bold text-blue-600">{stats.average}</div>
+                <div className="text-center p-3 bg-gradient-to-br from-trinity-blue-50 to-trinity-blue-100 rounded-xl">
+                  <div className="text-sm text-neutral-600 mb-1">Moyenne</div>
+                  <div className="text-2xl font-bold text-trinity-blue-600">{stats.average}</div>
                 </div>
                 
-                <div className="text-center p-3 bg-gradient-to-br from-green-50 to-green-100 rounded-xl">
-                  <div className="text-sm text-gray-600 mb-1">Meilleur</div>
-                  <div className="text-2xl font-bold text-green-600">{stats.bestRound}</div>
+                <div className="text-center p-3 bg-gradient-to-br from-trinity-green-50 to-trinity-green-100 rounded-xl">
+                  <div className="text-sm text-neutral-600 mb-1">Meilleur</div>
+                  <div className="text-2xl font-bold text-trinity-green-600">{stats.bestRound}</div>
                 </div>
                 
-                <div className="text-center p-3 bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl">
-                  <div className="text-sm text-gray-600 mb-1">Dutch</div>
-                  <div className="text-2xl font-bold text-orange-600">{stats.dutchCount}</div>
+                <div className="text-center p-3 bg-gradient-to-br from-trinity-orange-50 to-trinity-orange-100 rounded-xl">
+                  <div className="text-sm text-neutral-600 mb-1">Dutch</div>
+                  <div className="text-2xl font-bold text-trinity-orange-600">{stats.dutchCount}</div>
                 </div>
                 
-                <div className="text-center p-3 bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl">
-                  <div className="text-sm text-gray-600 mb-1">Régularité</div>
-                  <div className="text-2xl font-bold text-purple-600">{stats.consistency}</div>
+                <div className="text-center p-3 bg-gradient-to-br from-trinity-purple-50 to-trinity-purple-100 rounded-xl">
+                  <div className="text-sm text-neutral-600 mb-1">Régularité</div>
+                  <div className="text-2xl font-bold text-trinity-purple-600">{stats.consistency}</div>
                 </div>
               </div>
 
@@ -186,9 +186,9 @@ const EnhancedPlayerStats: React.FC<EnhancedPlayerStatsProps> = ({ players, clas
                 <Badge 
                   variant="outline" 
                   className={`${
-                    stats.trend === 'improving' ? 'bg-green-100 text-green-700' :
-                    stats.trend === 'declining' ? 'bg-red-100 text-red-700' :
-                    'bg-blue-100 text-blue-700'
+                    stats.trend === 'improving' ? 'bg-trinity-green-100 text-trinity-green-700' :
+                    stats.trend === 'declining' ? 'bg-trinity-red-100 text-trinity-red-700' :
+                    'bg-trinity-blue-100 text-trinity-blue-700'
                   }`}
                 >
                   {stats.trend === 'improving' ? 'En progression' :

@@ -109,11 +109,11 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
           </div>
 
           <div className="text-center space-y-3">
-            <div className="bg-purple-500/15 backdrop-blur-sm rounded-2xl p-4 border border-purple-500/30 shadow-sm">
-              <p className="text-xl font-bold text-purple-800 mb-1">
+            <div className="bg-trinity-purple-500/15 backdrop-blur-sm rounded-2xl p-4 border border-trinity-purple-500/30 shadow-sm">
+              <p className="text-xl font-bold text-trinity-purple-800 mb-1">
                 Durée estimée : ~{playerCount * ESTIMATED_MINUTES_PER_PLAYER} minutes
               </p>
-              <p className="text-sm text-purple-700/80">
+              <p className="text-sm text-trinity-purple-700/80">
                 Plus il y a de joueurs, plus la partie sera longue et amusante !
               </p>
             </div>

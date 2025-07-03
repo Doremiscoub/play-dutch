@@ -42,6 +42,7 @@
   --dutch-purple: 258 90% 66%;    /* Violet gaming #8B5CF6 */
   --dutch-orange: 25 95% 53%;     /* Orange énergique #FF9F0A */
   --dutch-green: 142 71% 45%;     /* Vert success #30D158 */
+  --dutch-red: 0 84% 60%;         /* Rouge erreur #FF453A */
   
   /* === VARIATIONS TRINITY === */
   /* Bleu - Variations sémantiques */
@@ -56,8 +57,26 @@
   
   /* Orange - Variations énergie */
   --trinity-orange-50: 25 100% 97%;
+  --trinity-orange-100: 25 95% 90%;
   --trinity-orange-500: 25 95% 53%;
+  --trinity-orange-600: 25 85% 45%;
   --trinity-orange-900: 25 100% 15%;
+  
+  /* Vert - Variations success */
+  --trinity-green-50: 142 100% 97%;
+  --trinity-green-100: 142 85% 90%;
+  --trinity-green-500: 142 71% 45%;
+  --trinity-green-600: 142 71% 40%;
+  --trinity-green-700: 142 71% 35%;
+  --trinity-green-900: 142 85% 15%;
+  
+  /* Rouge - Variations erreur */
+  --trinity-red-50: 0 100% 97%;
+  --trinity-red-100: 0 95% 90%;
+  --trinity-red-500: 0 84% 60%;
+  --trinity-red-600: 0 84% 55%;
+  --trinity-red-700: 0 84% 50%;
+  --trinity-red-900: 0 85% 15%;
   
   /* === GLASSMORPHISME VISIONOS === */
   --glass-ultra-light: rgba(255, 255, 255, 0.9);

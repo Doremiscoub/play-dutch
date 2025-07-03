@@ -163,11 +163,11 @@ const DetailedGameStats: React.FC<DetailedGameStatsProps> = ({
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-sm text-gray-600">Meilleur score</span>
-                <span className="text-xl font-bold text-green-600">{stats.bestScore}</span>
+                <span className="text-xl font-bold text-trinity-green-600">{stats.bestScore}</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-sm text-gray-600">Score moyen</span>
-                <span className="text-xl font-bold text-blue-600">{stats.averageScore}</span>
+                <span className="text-xl font-bold text-trinity-blue-600">{stats.averageScore}</span>
               </div>
             </div>
           </motion.div>
@@ -181,23 +181,23 @@ const DetailedGameStats: React.FC<DetailedGameStatsProps> = ({
             className="bg-white/70 backdrop-blur-lg border border-white/50 rounded-2xl p-6 hover:bg-white/85 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl"
           >
             <div className="flex items-center gap-3 mb-4">
-              <div className="p-3 bg-gradient-to-r from-dutch-purple to-dutch-orange rounded-xl shadow-sm">
+              <div className="p-3 bg-gradient-to-r from-trinity-purple-500 to-trinity-orange-500 rounded-xl shadow-sm">
                 <Award className="h-5 w-5 text-white" />
               </div>
-              <h4 className="text-lg font-bold text-gray-800">Événements</h4>
+              <h4 className="text-lg font-bold text-neutral-800">Événements</h4>
             </div>
             <div className="space-y-3">
               <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-600">Dutch réussis</span>
-                <span className="text-xl font-bold text-purple-600">{stats.dutchCount}</span>
+                <span className="text-sm text-neutral-600">Dutch réussis</span>
+                <span className="text-xl font-bold text-trinity-purple-600">{stats.dutchCount}</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-600">Joueurs actifs</span>
-                <span className="text-xl font-bold text-orange-600">{stats.totalPlayers}</span>
+                <span className="text-sm text-neutral-600">Joueurs actifs</span>
+                <span className="text-xl font-bold text-trinity-orange-600">{stats.totalPlayers}</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-600">Pire score</span>
-                <span className="text-xl font-bold text-red-500">{stats.worstScore}</span>
+                <span className="text-sm text-neutral-600">Pire score</span>
+                <span className="text-xl font-bold text-trinity-red-500">{stats.worstScore}</span>
               </div>
             </div>
           </motion.div>
