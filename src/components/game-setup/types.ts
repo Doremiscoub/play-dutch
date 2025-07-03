@@ -17,7 +17,7 @@ export const GAME_SETUP_STEPS: GameSetupStep[] = [
 
 export const MODERN_EMOJIS = ['🎮', '🎯', '🚀', '⭐', '🔥', '⚡', '🎲', '🎪', '🌟', '💎', '🎨', '🦄'];
 
-export const QUICK_NAMES = ['Alex', 'Charlie', 'Dana', 'Eve', 'Frank', 'Grace', 'Hugo', 'Iris'];
+export const QUICK_NAMES = ['Rémi', 'Arthur', 'Luca', 'Ben', 'Jules', 'Val', 'Chachou', 'Pierrix', 'Jo', 'Helena'];
 
 export const MIN_PLAYERS = 2;
 export const MAX_PLAYERS = 10;
