@@ -19,7 +19,10 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
   disabled = false,
 }) => {
   return (
-    <div className="fixed bottom-6 right-6 z-[9999] flex flex-col gap-3">
+    <div className="fixed bottom-6 right-6 z-[99999] flex flex-col gap-3">
+      <style>{`
+        .floating-buttons * { pointer-events: auto; }
+      `}</style>
       {/* Bouton principal - Ajouter une manche */}
       <motion.div
         initial={{ opacity: 0, scale: 0.8, y: 20 }}
@@ -27,12 +30,13 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
         transition={{ duration: 0.4, type: "spring", stiffness: 200 }}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
+        className="pointer-events-auto"
       >
         <Button
           onClick={onAddRound}
           disabled={disabled}
           size="lg"
-          className="relative h-16 w-16 rounded-full bg-gradient-to-br from-blue-600 via-purple-600 to-orange-500 hover:from-purple-600 hover:via-orange-500 hover:to-blue-600 text-white shadow-2xl transition-all duration-500 disabled:opacity-50 disabled:cursor-not-allowed group border-0 overflow-hidden"
+          className="relative h-16 w-16 rounded-full bg-gradient-to-br from-dutch-blue via-dutch-purple to-dutch-orange hover:from-dutch-purple hover:via-dutch-orange hover:to-dutch-blue text-white shadow-2xl hover:shadow-dutch-blue/40 transition-all duration-500 disabled:opacity-50 disabled:cursor-not-allowed group border-2 border-white/30 overflow-hidden ring-4 ring-white/20"
         >
           {/* Effet de brillance */}
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-out" />
@@ -54,16 +58,17 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
           transition={{ duration: 0.4, delay: 0.1, type: "spring", stiffness: 200 }}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
+          className="pointer-events-auto"
         >
           <Button
             variant="ghost"
             size="icon"
             onClick={onUndoLastRound}
             disabled={!canUndo || disabled}
-            className={`relative h-12 w-12 rounded-full backdrop-blur-xl shadow-xl border-0 transition-all duration-300 group overflow-hidden ${
+            className={`relative h-12 w-12 rounded-full backdrop-blur-xl shadow-xl border-2 transition-all duration-300 group overflow-hidden ${
               canUndo && !disabled
-                ? 'bg-white/95 hover:bg-white text-blue-600 hover:text-purple-600 shadow-lg hover:shadow-xl'
-                : 'bg-white/40 text-gray-400 cursor-not-allowed'
+                ? 'bg-white/95 hover:bg-white text-dutch-blue hover:text-dutch-purple shadow-lg hover:shadow-xl border-white/60 hover:border-dutch-blue/40 ring-2 ring-white/30'
+                : 'bg-white/40 text-gray-400 cursor-not-allowed border-gray-300/40'
             }`}
             title="Annuler la dernière manche"
           >
@@ -83,13 +88,14 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
           transition={{ duration: 0.4, delay: 0.2, type: "spring", stiffness: 200 }}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
+          className="pointer-events-auto"
         >
           <Button
             variant="ghost"
             size="icon"
             onClick={onEndGame}
             disabled={disabled}
-            className="relative h-12 w-12 rounded-full bg-white/95 hover:bg-white backdrop-blur-xl shadow-xl border-0 text-purple-600 hover:text-orange-500 transition-all duration-300 group overflow-hidden"
+            className="relative h-12 w-12 rounded-full bg-white/95 hover:bg-white backdrop-blur-xl shadow-xl border-2 border-white/60 hover:border-dutch-purple/40 text-dutch-purple hover:text-dutch-orange transition-all duration-300 group overflow-hidden ring-2 ring-white/30"
             title="Terminer la partie"
           >
             {/* Effet de brillance */}

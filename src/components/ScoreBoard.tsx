@@ -83,10 +83,10 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
           >
             <motion.button
               onClick={() => handleViewChange('list')}
-              className={`px-8 py-3 rounded-xl transition-all shadow-md flex items-center gap-2 font-medium min-w-[180px] glass-button ${
+              className={`px-8 py-3 rounded-xl transition-all shadow-lg flex items-center gap-2 font-medium min-w-[180px] glass-button ${
                 currentView === 'list'
-                  ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg scale-105 border-2 border-white/40'
-                  : 'bg-white/90 text-gray-900 hover:bg-white border-2 border-gray-300/60 shadow-sm hover:shadow-md'
+                  ? 'bg-gradient-to-r from-dutch-blue to-dutch-purple text-white shadow-xl scale-105 border-2 border-white/60 ring-2 ring-dutch-blue/20'
+                  : 'bg-white/80 text-gray-800 hover:bg-white/95 border-2 border-gray-400/80 shadow-md hover:shadow-lg hover:border-dutch-blue/40'
               }`}
               whileHover={{ scale: currentView === 'list' ? 1.05 : 1.02 }}
               whileTap={{ scale: 0.98 }}
@@ -99,10 +99,10 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
             
             <motion.button
               onClick={() => handleViewChange('table')}
-              className={`px-8 py-3 rounded-xl transition-all shadow-md flex items-center gap-2 font-medium min-w-[180px] glass-button ${
+              className={`px-8 py-3 rounded-xl transition-all shadow-lg flex items-center gap-2 font-medium min-w-[180px] glass-button ${
                 currentView === 'table'
-                  ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg scale-105 border-2 border-white/40'
-                  : 'bg-white/90 text-gray-900 hover:bg-white border-2 border-gray-300/60 shadow-sm hover:shadow-md'
+                  ? 'bg-gradient-to-r from-dutch-blue to-dutch-purple text-white shadow-xl scale-105 border-2 border-white/60 ring-2 ring-dutch-blue/20'
+                  : 'bg-white/80 text-gray-800 hover:bg-white/95 border-2 border-gray-400/80 shadow-md hover:shadow-lg hover:border-dutch-blue/40'
               }`}
               whileHover={{ scale: currentView === 'table' ? 1.05 : 1.02 }}
               whileTap={{ scale: 0.98 }}

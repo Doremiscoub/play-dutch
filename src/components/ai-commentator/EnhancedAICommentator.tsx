@@ -49,10 +49,19 @@ const EnhancedAICommentator: React.FC<EnhancedAICommentatorProps> = ({
 
   // Generate new comment when game state changes
   useEffect(() => {
-    const { comment, type } = generateComment(players, roundCount, scoreLimit);
-    setCurrentComment(comment);
-    setCommentType(type);
-    setCommentKey(prev => prev + 1);
+    const result = generateComment(players, roundCount, scoreLimit);
+    console.log('Generated comment result:', result);
+    
+    if (result && result.comment && typeof result.comment === 'string') {
+      setCurrentComment(result.comment);
+      setCommentType(result.type);
+      setCommentKey(prev => prev + 1);
+    } else {
+      console.warn('Invalid comment result:', result);
+      setCurrentComment('Prêt pour l\'aventure ! Que le meilleur gagne !');
+      setCommentType('info');
+      setCommentKey(prev => prev + 1);
+    }
   }, [players, roundCount, scoreLimit]);
 
   if (!currentComment) return null;
