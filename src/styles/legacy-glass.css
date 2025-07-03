@@ -1,0 +1,203 @@
+/* ========== CLASSES LEGACY POUR COMPATIBILITÉ ========== */
+
+/* Boutons glass legacy */
+.glass-button {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 0.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: 1rem;
+  transition: all 120ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-button:hover {
+  background: rgba(255, 255, 255, 0.8);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.14);
+}
+
+.btn-glass-trinity {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(147, 51, 234, 0.3), rgba(249, 115, 22, 0.3));
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 0.5px solid rgba(255, 255, 255, 0.2);
+  border-radius: 1rem;
+  color: white;
+  font-weight: bold;
+  transition: all 120ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-glass-trinity:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3), 0 20px 50px rgba(147, 51, 234, 0.2);
+}
+
+/* Cartes glass legacy */
+.card-glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 0.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: 1.5rem;
+  transition: all 120ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-glass:hover {
+  background: rgba(255, 255, 255, 0.8);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.14);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 0.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: 1.5rem;
+  color: white;
+}
+
+/* Overlays et modales */
+.glass-overlay {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 0.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: 1.5rem;
+}
+
+.glass-modal {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 0.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: 1.5rem;
+}
+
+.glass-panel {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 0.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: 1rem;
+}
+
+/* Shadow Trinity */
+.shadow-trinity {
+  box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3), 0 20px 50px rgba(147, 51, 234, 0.2);
+}
+
+/* Backgrounds glass */
+.bg-glass-light {
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.hover\:bg-glass-light:hover {
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.hover\:scale-102:hover {
+  transform: scale(1.02);
+}
+
+/* Borders glass */
+.border-glass-border-light {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.hover\:border-trinity-blue-400:hover {
+  border-color: rgba(59, 130, 246, 0.6);
+}
+
+.hover\:border-trinity-orange-400:hover {
+  border-color: rgba(249, 115, 22, 0.6);
+}
+
+.hover\:border-trinity-purple-400:hover {
+  border-color: rgba(147, 51, 234, 0.6);
+}
+
+/* Text colors */
+.text-trinity-blue-500 {
+  color: hsl(221, 83%, 53%);
+}
+
+.text-trinity-blue-600 {
+  color: hsl(221, 83%, 45%);
+}
+
+.text-trinity-blue-700 {
+  color: hsl(221, 85%, 35%);
+}
+
+.text-trinity-orange-600 {
+  color: hsl(25, 95%, 45%);
+}
+
+.text-trinity-orange-700 {
+  color: hsl(25, 98%, 35%);
+}
+
+.text-trinity-purple-600 {
+  color: hsl(258, 88%, 48%);
+}
+
+.text-trinity-purple-700 {
+  color: hsl(258, 90%, 38%);
+}
+
+.hover\:text-trinity-orange-600:hover {
+  color: hsl(25, 95%, 45%);
+}
+
+.hover\:text-trinity-orange-700:hover {
+  color: hsl(25, 98%, 35%);
+}
+
+.hover\:text-trinity-purple-600:hover {
+  color: hsl(258, 88%, 48%);
+}
+
+.hover\:text-trinity-purple-700:hover {
+  color: hsl(258, 90%, 38%);
+}
+
+.hover\:text-trinity-blue-500:hover {
+  color: hsl(221, 83%, 53%);
+}
+
+/* Tints manquantes */
+.lg-tint-primary-30 {
+  background-color: rgba(10, 132, 255, 0.15);
+}
+
+.hover\:lg-tint-primary-30:hover {
+  background-color: rgba(10, 132, 255, 0.2);
+}
+
+.hover\:lg-tint-accent-50:hover {
+  background-color: rgba(255, 159, 10, 0.25);
+}
+
+.hover\:lg-tint-secondary-50:hover {
+  background-color: rgba(139, 92, 246, 0.25);
+}
+
+/* Dark mode pour les classes legacy */
+.dark .glass-button {
+  background: rgba(30, 30, 30, 0.7);
+  border: 0.5px solid rgba(255, 255, 255, 0.1);
+}
+
+.dark .glass-card,
+.dark .card-glass {
+  background: rgba(30, 30, 30, 0.7);
+  border: 0.5px solid rgba(255, 255, 255, 0.1);
+}
+
+.dark .glass-overlay,
+.dark .glass-modal,
+.dark .glass-panel {
+  background: rgba(30, 30, 30, 0.6);
+  border: 0.5px solid rgba(255, 255, 255, 0.1);
+}

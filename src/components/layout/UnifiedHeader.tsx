@@ -46,10 +46,10 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
               transition={{ type: "spring", stiffness: 400, damping: 15 }}
             >
               <Button
-                variant="ghost"
+                variant="liquidHeader"
                 size="icon"
                 onClick={onBack}
-                className="glass-button rounded-xl"
+                className="rounded-xl"
                 aria-label="Retour"
               >
                 <ArrowLeft className="h-5 w-5" />
@@ -84,10 +84,10 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.5 }}
             >
-              <div className="glass-button px-4 py-1.5 rounded-full">
+              <div className="lg-popover lg-tint-primary-50 px-4 py-1.5 rounded-full">
                 <span className="text-sm font-semibold">Manche {roundCount}</span>
               </div>
-              <div className="glass-button px-4 py-1.5 rounded-full">
+              <div className="lg-popover lg-tint-secondary-50 px-4 py-1.5 rounded-full">
                 <span className="text-sm font-semibold">Objectif : {scoreLimit} pts</span>
               </div>
             </motion.div>

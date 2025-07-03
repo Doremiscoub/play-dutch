@@ -2,6 +2,7 @@
 @import url('./styles/base.css');
 @import url('./styles/theme.css');
 @import url('./styles/glass.css');
+@import url('./styles/legacy-glass.css');
 @import url('./styles/animations.css');
 @import url('./styles/enhanced-animations.css');
 @import url('./styles/transitions.css');

@@ -44,7 +44,7 @@ const GameSettings: React.FC = () => {
   return (
     <EnhancedDialog>
       <EnhancedDialogTrigger asChild>
-        <Button variant="ghost" size="icon" className="glass-button rounded-full">
+        <Button variant="liquidHeader" size="icon" className="rounded-full">
           <Settings className="h-5 w-5" />
         </Button>
       </EnhancedDialogTrigger>

@@ -53,7 +53,7 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
           disabled={disabled}
           variant="trinity"
           size="xl"
-          className="relative group px-8 py-4 h-16 rounded-full shadow-trinity transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden"
+          className="relative group px-8 py-4 h-16 rounded-full lg-elevation-04 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden"
         >
           {/* Arrière-plan semi-transparent pour améliorer la lisibilité */}
           <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 via-purple-500/15 to-orange-500/20 rounded-full" />
@@ -97,13 +97,13 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
           className="pointer-events-auto"
         >
           <Button
-            variant="glass"
+            variant="liquidPopover"
             size="icon-lg"
             onClick={onUndoLastRound}
             disabled={!canUndo || disabled}
-            className={`relative h-14 w-14 rounded-full transition-all duration-300 group overflow-hidden shadow-glass hover:shadow-glass-lg ${
+            className={`relative h-14 w-14 rounded-full transition-all duration-300 group overflow-hidden lg-elevation-02 hover:lg-elevation-03 ${
               canUndo && !disabled
-                ? 'hover:border-trinity-orange-400 hover:text-trinity-orange-600'
+                ? 'hover:lg-tint-accent-50'
                 : 'opacity-50 cursor-not-allowed text-muted-foreground'
             }`}
             title="Annuler la dernière manche"
@@ -138,11 +138,11 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
           className="pointer-events-auto"
         >
           <Button
-            variant="glass"
+            variant="liquidPopover"
             size="icon-lg"
             onClick={onEndGame}
             disabled={disabled}
-            className="relative h-14 w-14 rounded-full shadow-glass hover:shadow-glass-lg transition-all duration-300 group overflow-hidden hover:border-trinity-purple-400 hover:text-trinity-purple-600"
+            className="relative h-14 w-14 rounded-full lg-elevation-02 hover:lg-elevation-03 transition-all duration-300 group overflow-hidden hover:lg-tint-secondary-50"
             title="Terminer la partie"
           >
             {/* Effet coloré au survol */}
