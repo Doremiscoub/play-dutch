@@ -68,7 +68,7 @@ const EnhancedHeroSection: React.FC = () => {
         <div className="relative flex items-center justify-center mb-4">
           {/* Single glowing background layer */}
           <motion.div
-            className="absolute -inset-6 bg-gradient-to-r from-dutch-blue/20 via-dutch-purple/20 to-dutch-orange/20 rounded-3xl blur-xl"
+            className="absolute -inset-12 bg-gradient-to-r from-dutch-blue/20 via-dutch-purple/20 to-dutch-orange/20 rounded-3xl blur-xl"
             animate={prefersReducedMotion ? {} : {
               scale: [1, 1.05, 1],
               opacity: [0.3, 0.5, 0.3]
@@ -96,7 +96,7 @@ const EnhancedHeroSection: React.FC = () => {
             <img 
               src="/lovable-uploads/0532ef39-c77c-4480-8d74-7af7665596ee.png"
               alt="Dutch - Logo du jeu avec Professeur Cartouche"
-              className="w-auto h-64 sm:h-72 md:h-80 lg:h-96 xl:h-[28rem] 2xl:h-[32rem] max-w-full object-contain drop-shadow-2xl"
+              className="w-auto h-80 sm:h-96 md:h-[28rem] lg:h-[32rem] xl:h-[36rem] 2xl:h-[40rem] max-w-full object-contain drop-shadow-2xl"
               style={{
                 filter: 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3))'
               }}
