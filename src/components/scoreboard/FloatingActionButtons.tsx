@@ -53,13 +53,13 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
           disabled={disabled}
           className="relative group px-8 py-4 h-16 rounded-full shadow-2xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden"
           style={{
-            background: 'linear-gradient(135deg, hsl(var(--dutch-blue)), hsl(var(--dutch-purple)))',
+            background: 'linear-gradient(135deg, hsl(var(--dutch-blue)), hsl(var(--dutch-purple)), hsl(var(--dutch-orange)))',
             border: '2px solid rgba(255, 255, 255, 0.3)',
             backdropFilter: 'blur(10px)',
           }}
         >
           {/* Arrière-plan semi-transparent pour améliorer la lisibilité */}
-          <div className="absolute inset-0 bg-black/20 rounded-full" />
+          <div className="absolute inset-0 bg-black/10 rounded-full" />
           
           {/* Effet de brillance au survol */}
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent translate-x-[-100%] group-hover:translate-x-[200%] transition-transform duration-1000 ease-out" />
@@ -75,12 +75,12 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
           </div>
           
           {/* Ombre colorée dynamique */}
-          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-400/30 to-purple-400/30 blur-xl -z-10 group-hover:scale-110 transition-transform duration-300" />
+          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-400/30 via-purple-400/30 to-orange-400/30 blur-xl -z-10 group-hover:scale-110 transition-transform duration-300" />
         </Button>
       </motion.div>
 
       {/* Boutons secondaires décalés vers la droite */}
-      <div className="flex flex-col gap-3 items-end" style={{ marginRight: '40px' }}>
+      <div className="flex flex-col gap-3 items-end" style={{ marginRight: '90px' }}>
         {/* Bouton Annuler */}
         <motion.div
           initial={{ opacity: 0, scale: 0.6, x: 40 }}
