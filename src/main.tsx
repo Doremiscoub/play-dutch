@@ -5,12 +5,10 @@
  */
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { BrowserRouter } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import App from './App.tsx'
 import './index.css'
 import './styles/theme.css'
-import { Toaster } from "sonner"
 import { initializeSentry, SentryErrorBoundary } from './utils/sentryConfig'
 
 // Initialize Sentry as early as possible
@@ -55,14 +53,11 @@ const FallbackComponent = () => (
 root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <SentryErrorBoundary fallback={FallbackComponent}>
-            <App />
-            <Toaster position="top-center" richColors closeButton />
-          </SentryErrorBoundary>
-        </BrowserRouter>
-      </QueryClientProvider>
-    </React.StrictMode>
+      <SentryErrorBoundary fallback={FallbackComponent}>
+        <App />
+      </SentryErrorBoundary>
+    </QueryClientProvider>
+  </React.StrictMode>
 );
 
 // Performance monitoring pour production  
