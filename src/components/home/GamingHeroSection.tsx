@@ -104,30 +104,19 @@ const GamingHeroSection: React.FC = () => {
           </div>
         </motion.div>
 
-        {/* Titre MEGA gaming */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.3 }}
-          className="space-y-4"
+        {/* Titre supprimé pour design épuré avec logo uniquement */}
+        
+        {/* Sous-titre descriptif */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.6 }}
+          className="text-xl sm:text-2xl md:text-3xl font-bold max-w-3xl mx-auto leading-relaxed bg-white/95 backdrop-blur-xl rounded-2xl py-6 px-8 border-3 border-trinity-blue-300 shadow-xl text-neutral-800"
         >
-          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black leading-tight">
-            <span className="bg-gradient-to-r from-trinity-orange-500 to-trinity-orange-600 bg-clip-text text-transparent font-black">
-              CARD GAME
-            </span>
-          </h1>
-          
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6 }}
-            className="text-xl sm:text-2xl md:text-3xl font-bold max-w-3xl mx-auto leading-relaxed bg-white/95 backdrop-blur-xl rounded-2xl py-6 px-8 border-3 border-trinity-blue-300 shadow-xl text-neutral-800"
-          >
-            🎮 Défiez vos amis avec le{' '}
-            <span className="text-trinity-purple-600 font-black">Professeur Cartouche</span>{' '}
-            🎓✨
-          </motion.p>
-        </motion.div>
+          🎮 Défiez vos amis avec le{' '}
+          <span className="text-trinity-purple-600 font-black">Professeur Cartouche</span>{' '}
+          🎓✨
+        </motion.p>
 
         {/* CTA MEGA visible */}
         <motion.div
