@@ -166,27 +166,30 @@ const Home: React.FC = () => {
           viewport={{ once: true }}
           className="max-w-4xl mx-auto"
         >
-          <Card className="bg-gradient-to-br from-trinity-blue-500/95 via-trinity-purple-500/95 to-trinity-orange-500/95 backdrop-blur-xl border-0 shadow-3xl text-white overflow-hidden relative">
-            {/* Effets de particules dans le fond */}
+          <Card className="bg-gradient-to-br from-trinity-blue-600 via-trinity-purple-600 to-trinity-orange-600 backdrop-blur-xl border-0 shadow-3xl text-white overflow-hidden relative">
+            {/* Overlay pour améliorer le contraste */}
+            <div className="absolute inset-0 bg-black/20" />
+            
+            {/* Effets de particules dans le fond - réduits pour la lisibilité */}
             <div className="absolute inset-0 overflow-hidden">
-              {[...Array(8)].map((_, i) => (
+              {[...Array(4)].map((_, i) => (
                 <motion.div
                   key={i}
-                  className="absolute w-3 h-3 bg-white/30 rounded-full"
+                  className="absolute w-2 h-2 bg-white/15 rounded-full"
                   style={{
                     left: `${Math.random() * 100}%`,
                     top: `${Math.random() * 100}%`,
                   }}
                   animate={{
                     y: [-20, 20, -20],
-                    opacity: [0.3, 0.8, 0.3],
-                    scale: [1, 1.5, 1]
+                    opacity: [0.1, 0.3, 0.1],
+                    scale: [1, 1.2, 1]
                   }}
                   transition={{
-                    duration: 3 + i * 0.5,
+                    duration: 4 + i * 0.5,
                     repeat: Infinity,
                     ease: "easeInOut",
-                    delay: i * 0.3
+                    delay: i * 0.5
                   }}
                 />
               ))}
