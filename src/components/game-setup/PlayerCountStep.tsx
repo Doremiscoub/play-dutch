@@ -76,9 +76,9 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
                 onClick={decrementCount}
                 disabled={playerCount <= MIN_PLAYERS}
                 size="lg"
-                className="w-16 h-16 rounded-2xl bg-blue-500/20 hover:bg-blue-500/30 border-2 border-blue-500/40 text-blue-700 font-bold text-2xl disabled:opacity-30 disabled:cursor-not-allowed shadow-lg backdrop-blur-sm"
+                className="w-16 h-16 rounded-2xl bg-blue-500/40 hover:bg-blue-500/60 border-2 border-blue-500/60 text-white font-bold text-2xl disabled:opacity-30 disabled:cursor-not-allowed shadow-md hover:shadow-lg transition-all duration-200 backdrop-blur-sm"
               >
-                <Minus className="h-7 w-7" />
+                <Minus className="h-8 w-8" />
               </Button>
             </motion.div>
 
@@ -88,10 +88,10 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
               animate={{ scale: 1, opacity: 1 }}
               className="flex flex-col items-center gap-3"
             >
-              <div className="w-28 h-28 rounded-3xl bg-gradient-to-br from-blue-400/80 via-purple-500/80 to-orange-400/80 flex items-center justify-center text-white text-4xl font-black shadow-xl border-3 border-white/60 backdrop-blur-sm">
+              <div className="w-28 h-28 rounded-3xl bg-gradient-to-br from-blue-400/60 via-purple-500/60 to-orange-400/60 flex items-center justify-center text-white text-4xl font-black shadow-lg border-2 border-white/50 backdrop-blur-sm">
                 {playerCount}
               </div>
-              <span className="text-lg font-semibold text-gray-800 bg-white/70 px-4 py-2 rounded-xl shadow-sm">
+              <span className="text-lg font-semibold text-gray-800 bg-white/60 px-4 py-2 rounded-xl shadow-sm">
                 {playerCount === MIN_PLAYERS ? 'Minimum' : playerCount === MAX_PLAYERS ? 'Maximum' : 'Joueurs'}
               </span>
             </motion.div>
@@ -101,9 +101,9 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
                 onClick={incrementCount}
                 disabled={playerCount >= MAX_PLAYERS}
                 size="lg"
-                className="w-16 h-16 rounded-2xl bg-orange-500/20 hover:bg-orange-500/30 border-2 border-orange-500/40 text-orange-700 font-bold text-2xl disabled:opacity-30 disabled:cursor-not-allowed shadow-lg backdrop-blur-sm"
+                className="w-16 h-16 rounded-2xl bg-orange-500/40 hover:bg-orange-500/60 border-2 border-orange-500/60 text-white font-bold text-2xl disabled:opacity-30 disabled:cursor-not-allowed shadow-md hover:shadow-lg transition-all duration-200 backdrop-blur-sm"
               >
-                <Plus className="h-7 w-7" />
+                <Plus className="h-8 w-8" />
               </Button>
             </motion.div>
           </div>
