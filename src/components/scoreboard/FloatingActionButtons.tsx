@@ -79,8 +79,8 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
         </Button>
       </motion.div>
 
-      {/* Boutons secondaires décalés vers la droite */}
-      <div className="flex flex-col gap-3 items-end" style={{ marginRight: '90px' }}>
+      {/* Boutons secondaires alignés avec le bouton principal */}
+      <div className="flex flex-col gap-3 items-end" style={{ marginRight: '0px' }}>
         {/* Bouton Annuler */}
         <motion.div
           initial={{ opacity: 0, scale: 0.6, x: 40 }}
