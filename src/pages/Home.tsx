@@ -51,35 +51,6 @@ const Home: React.FC = () => {
 
   return (
     <PageShell variant="default">
-      {/* Fond simplifié et optimisé */}
-      <div className="fixed inset-0 bg-gradient-to-br from-trinity-blue-50 via-trinity-purple-50 to-trinity-orange-50">
-        {/* Particules gaming colorées */}
-        {[...Array(4)].map((_, i) => (
-          <motion.div
-            key={i}
-            className={`absolute w-4 h-4 rounded-full ${
-              i % 3 === 0 ? 'bg-trinity-blue-300/50' :
-              i % 3 === 1 ? 'bg-trinity-purple-300/50' : 'bg-trinity-orange-300/50'
-            }`}
-            style={{
-              left: `${20 + Math.random() * 60}%`,
-              top: `${20 + Math.random() * 60}%`,
-            }}
-            animate={{
-              y: [-20, 20, -20],
-              x: [-10, 10, -10],
-              scale: [1, 1.2, 1],
-              opacity: [0.5, 0.8, 0.5]
-            }}
-            transition={{
-              duration: 8 + i,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: i * 0.8
-            }}
-          />
-        ))}
-      </div>
 
       <UnifiedHeader 
         title="Dutch Card Game"
