@@ -37,7 +37,7 @@ export const useGameCreation = ({
     }
 
     try {
-      console.log('Creating new game with players:', playerNames);
+      console.log('🚀 useGameCreation: Creating new game with players:', playerNames);
       setInitError(null);
       
       // Validation des noms de joueurs
@@ -57,31 +57,50 @@ export const useGameCreation = ({
       
       const startTime = new Date();
       
+      console.log('🧹 useGameCreation: Clearing previous state...');
       // Clear any existing state first
       setPlayers([]);
       setRoundHistory([]);
       setShowGameOver(false);
       setShowScoreForm(false);
       
+      console.log('⚡ useGameCreation: Setting new state...');
       // Set new state
       setPlayers(newPlayers);
       setGameStartTime(startTime);
       setIsInitialized(true);
       
-      // Sauvegarde initiale avec retry
-      try {
-        await saveCurrentGame(newPlayers, [], scoreLimit, startTime);
+      console.log('💾 useGameCreation: Saving game state...');
+      // Sauvegarde SYNCHRONE et vérifiée
+      const saveResult = await saveCurrentGame(newPlayers, [], scoreLimit, startTime);
+      
+      if (saveResult) {
+        // Sauvegarde additionnelle directe en localStorage pour assurer la persistance
+        const gameData = {
+          players: newPlayers,
+          roundHistory: [],
+          isGameOver: false,
+          scoreLimit,
+          gameStartTime: startTime.toISOString(),
+          lastUpdated: new Date().toISOString()
+        };
+        
+        localStorage.setItem(STORAGE_KEYS.CURRENT_GAME, JSON.stringify(gameData));
         localStorage.setItem(STORAGE_KEYS.GAME_ACTIVE, 'true');
         localStorage.removeItem(STORAGE_KEYS.PLAYER_SETUP);
-      } catch (saveError) {
-        console.warn('Failed to save game state, continuing anyway:', saveError);
+        
+        console.log('✅ useGameCreation: Game state saved successfully');
+        console.log('🔍 useGameCreation: localStorage check:', !!localStorage.getItem(STORAGE_KEYS.CURRENT_GAME));
+      } else {
+        console.error('❌ useGameCreation: Failed to save game state');
+        // Ne pas échouer même si la sauvegarde échoue, continuer avec l'état React
       }
       
-      console.log('Game created successfully with', newPlayers.length, 'players');
+      console.log('🎉 useGameCreation: Game created successfully with', newPlayers.length, 'players');
       toast.success(`Partie créée avec ${newPlayers.length} joueurs !`);
       return true;
     } catch (error) {
-      console.error('Game initialization failed:', error);
+      console.error('💥 useGameCreation: Game initialization failed:', error);
       setInitError('Erreur lors de l\'initialisation du jeu');
       toast.error('Erreur lors de l\'initialisation du jeu');
       

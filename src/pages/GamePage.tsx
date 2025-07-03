@@ -16,21 +16,25 @@ const GamePage: React.FC = () => {
     console.log('🔍 GamePage: players:', gameState.players);
     console.log('🔍 GamePage: players length:', gameState.players?.length);
     
-    if (!gameState.isInitialized) {
-      console.log('🔄 GamePage: Game not initialized, trying to load existing game...');
-      const loaded = gameState.loadExistingGame();
-      console.log('📂 GamePage: Load existing game result:', loaded);
-      
-      if (!loaded) {
-        console.log('❌ GamePage: No existing game found, redirecting to setup');
-        navigate('/setup');
-      } else {
-        console.log('✅ GamePage: Existing game loaded successfully');
-      }
-    } else {
-      console.log('✅ GamePage: Game already initialized');
+    // Premier check: si on a déjà des joueurs en React state, pas besoin de charger
+    if (gameState.isInitialized && gameState.players && gameState.players.length > 0) {
+      console.log('✅ GamePage: Game already initialized with players in React state');
+      return;
     }
-  }, [gameState.isInitialized, gameState.loadExistingGame, navigate]);
+    
+    // Deuxième check: essayer de charger depuis localStorage
+    console.log('🔄 GamePage: Game not fully initialized, trying to load existing game...');
+    const loaded = gameState.loadExistingGame();
+    console.log('📂 GamePage: Load existing game result:', loaded);
+    
+    if (!loaded) {
+      console.log('❌ GamePage: No existing game found, redirecting to setup');
+      // Délai court pour éviter les redirections en boucle
+      setTimeout(() => navigate('/setup'), 100);
+    } else {
+      console.log('✅ GamePage: Existing game loaded successfully');
+    }
+  }, [gameState.isInitialized, gameState.players, gameState.loadExistingGame, navigate]);
 
   // Show loading if not initialized
   if (!gameState.isInitialized || !gameState.players || gameState.players.length === 0) {

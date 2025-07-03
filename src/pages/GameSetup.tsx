@@ -37,13 +37,21 @@ const GameSetup: React.FC = () => {
       console.log('🎯 GameSetup: Game creation result:', success);
       
       if (success) {
-        console.log('✅ GameSetup: Game created successfully, navigating to /game');
-        console.log('🔍 GameSetup: Current location before navigation:', window.location.pathname);
+        console.log('✅ GameSetup: Game created successfully');
         
-        // Immediate navigation without delay
-        navigate('/game');
+        // Vérification que la sauvegarde a bien eu lieu
+        const savedData = localStorage.getItem('current_dutch_game');
+        console.log('🔍 GameSetup: localStorage verification:', !!savedData);
         
-        console.log('🔍 GameSetup: Navigation called to /game');
+        if (savedData) {
+          console.log('📍 GameSetup: Navigating to /game...');
+          navigate('/game');
+          console.log('🏁 GameSetup: Navigation completed');
+        } else {
+          console.warn('⚠️ GameSetup: No saved data found, navigation might fail');
+          // Naviguer quand même, l'état React pourrait suffire
+          navigate('/game');
+        }
       } else {
         console.log('❌ GameSetup: Game creation failed');
         toast.error('Erreur lors de la création de la partie');
