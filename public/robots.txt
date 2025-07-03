@@ -1,31 +1,32 @@
 
 User-agent: *
 Allow: /
+
+# Pages importantes pour le SEO
+Allow: /setup
 Allow: /rules
+Allow: /history
 Allow: /about
+Allow: /faq
 Allow: /privacy
 Allow: /terms
 
-# Pages importantes pour le SEO
-Allow: /game/setup
+# Ressources statiques optimisées
+Allow: /lovable-uploads/
+Allow: /assets/
+Allow: /*.css
+Allow: /*.js
+Allow: /*.png
+Allow: /*.jpg
+Allow: /*.svg
+Allow: /manifest.json
 
-# Désindexer les pages dynamiques de jeu
-Disallow: /game?*
-Disallow: /settings
-Disallow: /history
+# Pages à ne pas indexer
+Disallow: /admin
+Disallow: /*?*
 
-# Sitemaps
-Sitemap: https://dutch-card-game.lovable.app/sitemap.xml
+# Sitemap
+Sitemap: https://dutchcardgame.com/sitemap.xml
 
-# Moteurs de recherche spécifiques
-User-agent: Googlebot
-Allow: /
-
-User-agent: Bingbot
-Allow: /
-
-User-agent: Twitterbot
-Allow: /
-
-User-agent: facebookexternalhit
-Allow: /
+# Dutch Card Game - Application gratuite pour jeu de cartes avec IA
+# Compagnon de jeu intelligent pour vos soirées entre amis

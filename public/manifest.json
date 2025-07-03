@@ -1,0 +1,63 @@
+{
+  "name": "Dutch Card Game",
+  "short_name": "Dutch Game",
+  "description": "Application gratuite pour jeu de cartes Dutch avec IA Professeur Cartouche",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0A84FF",
+  "orientation": "portrait-primary",
+  "categories": ["games", "entertainment", "social"],
+  "lang": "fr",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/lovable-uploads/0532ef39-c77c-4480-8d74-7af7665596ee.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/lovable-uploads/0532ef39-c77c-4480-8d74-7af7665596ee.png", 
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/lovable-uploads/94127af0-b0f8-4019-9883-7342435655da.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "platform": "wide",
+      "label": "Page d'accueil Dutch Card Game"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Nouvelle partie",
+      "short_name": "Jouer",
+      "description": "Démarrer une nouvelle partie de Dutch",
+      "url": "/setup",
+      "icons": [
+        {
+          "src": "/lovable-uploads/0532ef39-c77c-4480-8d74-7af7665596ee.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Historique",
+      "short_name": "Stats",
+      "description": "Voir l'historique des parties",
+      "url": "/history",
+      "icons": [
+        {
+          "src": "/lovable-uploads/0532ef39-c77c-4480-8d74-7af7665596ee.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  "prefer_related_applications": false
+}

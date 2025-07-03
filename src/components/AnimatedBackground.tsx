@@ -107,7 +107,8 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
         fpsRef.current.value = fpsRef.current.count;
         fpsRef.current.count = 0;
         fpsRef.current.lastTime = now;
-        console.log(`Wave Animation FPS: ${fpsRef.current.value}, Phase: ${phaseRef.current.toFixed(2)}`);
+        // Désactivé en production
+        // console.log(`Wave Animation FPS: ${fpsRef.current.value}, Phase: ${phaseRef.current.toFixed(2)}`);
       }
     };
 
