@@ -64,38 +64,23 @@ const EnhancedHeroSection: React.FC = () => {
         animate="animate"
         variants={animationVariants}
       >
-        {/* Enhanced Main Title with spectacular effects */}
+        {/* Enhanced Main Title - Simplified for readability */}
         <div className="relative flex items-center justify-center mb-8">
-          {/* Multiple glowing background layers */}
+          {/* Single glowing background layer */}
           <motion.div
-            className="absolute -inset-8 bg-gradient-to-r from-dutch-blue/40 via-dutch-purple/40 to-dutch-orange/40 rounded-[3rem] blur-3xl"
+            className="absolute -inset-6 bg-gradient-to-r from-dutch-blue/20 via-dutch-purple/20 to-dutch-orange/20 rounded-3xl blur-xl"
             animate={prefersReducedMotion ? {} : {
-              scale: [1, 1.2, 1],
-              opacity: [0.4, 0.7, 0.4],
-              rotate: [0, 180, 360]
-            }}
-            transition={{
-              duration: 8,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-          />
-          <motion.div
-            className="absolute -inset-6 bg-gradient-to-r from-dutch-orange/30 via-dutch-blue/30 to-dutch-purple/30 rounded-3xl blur-2xl"
-            animate={prefersReducedMotion ? {} : {
-              scale: [1.2, 1, 1.2],
-              opacity: [0.3, 0.6, 0.3],
-              rotate: [360, 180, 0]
+              scale: [1, 1.05, 1],
+              opacity: [0.3, 0.5, 0.3]
             }}
             transition={{
               duration: 6,
               repeat: Infinity,
-              ease: "easeInOut",
-              delay: 1
+              ease: "easeInOut"
             }}
           />
           
-          {/* Main title with enhanced styling */}
+          {/* Main title with improved readability */}
           <motion.h1
             initial={{ opacity: 0, scale: 0.8, y: prefersReducedMotion ? 0 : 50 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -109,12 +94,12 @@ const EnhancedHeroSection: React.FC = () => {
             className="relative z-10 text-6xl sm:text-8xl md:text-9xl lg:text-[12rem] xl:text-[14rem] font-black tracking-tighter leading-none text-center"
             style={{
               fontFamily: "'Space Grotesk', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
-              background: 'linear-gradient(135deg, hsl(var(--dutch-blue)), hsl(var(--dutch-purple)), hsl(var(--dutch-orange)), hsl(var(--dutch-green)))',
+              background: 'linear-gradient(135deg, hsl(var(--dutch-blue)), hsl(var(--dutch-purple)), hsl(var(--dutch-orange)))',
               backgroundClip: 'text',
               WebkitBackgroundClip: 'text',
               color: 'transparent',
-              textShadow: '0 0 40px rgba(30, 64, 175, 0.4), 0 0 80px rgba(124, 58, 237, 0.3), 0 0 120px rgba(249, 115, 22, 0.2)',
-              filter: 'drop-shadow(0 0 20px rgba(59, 130, 246, 0.5))'
+              textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
+              WebkitTextStroke: '1px rgba(255, 255, 255, 0.1)'
             }}
           >
             {/* Animated text reveal effect */}
