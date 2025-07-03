@@ -131,7 +131,7 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
         <Button
           onClick={onNext}
           size="lg"
-          className="w-full py-6 text-xl font-bold rounded-2xl shadow-xl bg-gradient-to-r from-trinity-blue-500 via-trinity-purple-500 to-trinity-orange-500 text-white hover:from-trinity-blue-600 hover:via-trinity-purple-600 hover:to-trinity-orange-600 transition-all duration-300 border border-white/20"
+          className="btn-kids-primary w-full py-6 text-xl font-bold rounded-2xl text-white"
         >
           <Users className="h-6 w-6 mr-3" />
           Suivant : Noms des joueurs
