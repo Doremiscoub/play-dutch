@@ -112,23 +112,6 @@ const GamingHeroSection: React.FC = () => {
           className="space-y-4"
         >
           <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black leading-tight">
-            <motion.span
-              className="inline-block bg-gradient-to-r from-trinity-purple-600 via-trinity-blue-600 to-trinity-purple-600 bg-clip-text text-transparent"
-              animate={{
-                backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"]
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-              style={{
-                backgroundSize: "200% 200%"
-              }}
-            >
-              DUTCH
-            </motion.span>
-            <br />
             <span className="bg-gradient-to-r from-trinity-orange-500 to-trinity-orange-600 bg-clip-text text-transparent font-black">
               CARD GAME
             </span>
