@@ -8,22 +8,33 @@ interface CommentStyle {
 }
 
 export const generateComment = (players: Player[], roundCount: number, scoreLimit: number) => {
-  if (!players || players.length === 0) {
+  // Vérifications de sécurité absolues
+  if (!players || players.length === 0 || !Array.isArray(players)) {
     return { comment: 'Bienvenue dans votre partie ! Que la meilleure stratégie gagne !', type: 'info' as const };
   }
 
-  const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
+  // Filtrer les joueurs valides
+  const validPlayers = players.filter(p => p && p.name && typeof p.totalScore === 'number');
+  if (validPlayers.length === 0) {
+    return { comment: 'La partie se prépare ! En route pour l\'aventure !', type: 'info' as const };
+  }
+
+  const sortedPlayers = [...validPlayers].sort((a, b) => a.totalScore - b.totalScore);
   const leader = sortedPlayers[0];
   const lastPlace = sortedPlayers[sortedPlayers.length - 1];
   
-  // Vérifications de sécurité pour éviter les "undefined"
-  if (!leader || !leader.name || !lastPlace || !lastPlace.name) {
+  // Vérifications supplémentaires
+  if (!leader || !leader.name || typeof leader.totalScore !== 'number') {
     return { comment: 'La partie commence ! Bonne chance à tous !', type: 'info' as const };
+  }
+
+  if (!lastPlace || !lastPlace.name || typeof lastPlace.totalScore !== 'number') {
+    return { comment: 'C\'est parti ! Montrez-nous votre meilleur jeu !', type: 'info' as const };
   }
   
   if (roundCount === 0) {
     return {
-      comment: `Parfait ! ${players.length} joueurs prêts pour l'aventure. Objectif : ${scoreLimit} points. Que le meilleur gagne !`,
+      comment: `Parfait ! ${validPlayers.length} joueurs prêts pour l'aventure. Objectif : ${scoreLimit} points. Que le meilleur gagne !`,
       type: 'info' as const
     };
   }
@@ -42,7 +53,7 @@ export const generateComment = (players: Player[], roundCount: number, scoreLimi
     };
   }
   
-  if (roundCount % 3 === 0) {
+  if (roundCount % 3 === 0 && roundCount > 0) {
     return {
       comment: `Après ${roundCount} manches, ${leader.name} mène toujours avec ${leader.totalScore} points. La tension monte !`,
       type: 'info' as const
@@ -52,7 +63,9 @@ export const generateComment = (players: Player[], roundCount: number, scoreLimi
   const jokes = [
     `${lastPlace.name}, courage ! Même les plus grands champions ont eu des débuts difficiles !`,
     `${leader.name} semble avoir trouvé la formule magique ! Bravo pour cette régularité !`,
-    `Manche ${roundCount} : l'intensité augmente ! Qui saura garder son sang-froid ?`
+    `Manche ${roundCount} : l'intensité augmente ! Qui saura garder son sang-froid ?`,
+    `Belle partie ! ${validPlayers.length} joueurs donnent tout pour la victoire !`,
+    `La stratégie paye ! Continuez comme ça, c'est passionnant à suivre !`
   ];
   
   return {

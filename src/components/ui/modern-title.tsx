@@ -4,14 +4,14 @@ import { VariantProps, cva } from 'class-variance-authority';
 import { SparkleIcon } from './sparkle-icon';
 
 const modernTitleVariants = cva(
-  "font-bold tracking-tight relative z-10 text-transparent bg-clip-text bg-[length:300%_auto]",
+  "font-bold tracking-tight relative z-10",
   {
     variants: {
       variant: {
-        h1: "text-4xl sm:text-5xl md:text-6xl lg:text-7xl bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange",
-        h2: "text-3xl sm:text-4xl md:text-5xl bg-gradient-to-r from-dutch-blue to-dutch-purple",
-        h3: "text-2xl sm:text-3xl bg-gradient-to-r from-dutch-purple to-dutch-orange",
-        h4: "text-xl sm:text-2xl bg-gradient-to-br from-dutch-blue via-dutch-purple to-dutch-orange",
+        h1: "text-4xl sm:text-5xl md:text-6xl lg:text-7xl",
+        h2: "text-3xl sm:text-4xl md:text-5xl",
+        h3: "text-2xl sm:text-3xl font-extrabold",
+        h4: "text-xl sm:text-2xl",
       },
       withSparkles: {
         true: "after:content-[''] after:absolute after:-inset-1 after:-z-10 after:bg-gradient-to-r after:from-dutch-blue/10 after:via-dutch-purple/10 after:to-dutch-orange/10 after:blur-lg after:rounded-lg",

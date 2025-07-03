@@ -45,7 +45,7 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
       <motion.div
         ref={cardRef}
         className={cn(
-          "relative rounded-3xl backdrop-blur-2xl border-2 shadow-glass-lg transition-all duration-700 cursor-pointer overflow-hidden group perspective-1000",
+          "relative rounded-3xl backdrop-blur-2xl border-2 shadow-glass-lg transition-all duration-700 cursor-pointer overflow-visible group perspective-1000",
           "bg-white/85 border-white/60 hover:bg-white/95 hover:shadow-glass-xl hover:backdrop-blur-4xl",
           getCardStyle(),
           isSelected || isExpanded ? "ring-4 ring-dutch-blue/50 shadow-dutch-lg scale-[1.02] border-dutch-blue/40 z-10" : "hover:scale-[1.015] hover:shadow-dutch hover:-translate-y-2"
@@ -70,6 +70,8 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
           transformStyle: 'preserve-3d',
         }}
       >
+        {/* Enhanced Floating Winner Badge - positioned inside the card */}
+        <FloatingWinnerBadge isWinner={cardData.isWinner} cardRef={cardRef} />
 
         {/* Enhanced Floating Background Particles */}
         <FunPlayerCardParticles />
@@ -96,13 +98,6 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
         {/* Ambient Glow Effect on Hover */}
         <FunPlayerCardAmbientGlow />
       </motion.div>
-
-      {/* Enhanced Floating Winner Badge */}
-      {cardData.isWinner && (
-        <div className="absolute -top-2 -right-2 z-50">
-          <FloatingWinnerBadge isWinner={cardData.isWinner} cardRef={cardRef} />
-        </div>
-      )}
     </>
   );
 };

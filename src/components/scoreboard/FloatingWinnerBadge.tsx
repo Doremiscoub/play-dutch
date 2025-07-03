@@ -13,7 +13,7 @@ const FloatingWinnerBadge: React.FC<FloatingWinnerBadgeProps> = ({ isWinner, car
 
   return (
     <motion.div
-      className="absolute -top-2 -right-2 z-40 pointer-events-none"
+      className="absolute -top-3 -right-3 z-40 pointer-events-none"
       initial={{ opacity: 0, scale: 0.3, rotate: -180 }}
       animate={{ 
         opacity: 1, 

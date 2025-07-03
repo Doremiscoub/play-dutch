@@ -34,7 +34,7 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
           size="lg"
           className="h-16 w-16 rounded-full bg-gradient-to-br from-dutch-blue via-dutch-purple to-dutch-orange hover:from-dutch-purple hover:via-dutch-orange hover:to-dutch-blue text-white shadow-xl hover:shadow-2xl transition-all duration-500 disabled:opacity-50 disabled:cursor-not-allowed group border-2 border-white/20 backdrop-blur-sm"
         >
-          <Plus className="h-6 w-6 group-hover:scale-110 transition-transform" />
+          <Plus className="h-7 w-7 group-hover:scale-110 transition-transform drop-shadow-sm" />
         </Button>
       </motion.div>
 
@@ -56,7 +56,7 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
             className="h-12 w-12 rounded-full bg-white/95 hover:bg-white backdrop-blur-xl border-2 border-dutch-blue/20 hover:border-dutch-blue/40 transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-40 disabled:cursor-not-allowed group"
             title="Annuler la dernière manche"
           >
-            <Undo2 className="h-5 w-5 text-gray-600 group-hover:text-dutch-blue transition-colors" />
+            <Undo2 className="h-5 w-5 text-dutch-blue group-hover:text-dutch-purple transition-colors drop-shadow-sm" />
           </Button>
         </motion.div>
 
@@ -76,7 +76,7 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
             className="h-12 w-12 rounded-full bg-white/95 hover:bg-white backdrop-blur-xl border-2 border-dutch-purple/20 hover:border-dutch-purple/40 transition-all duration-300 shadow-lg hover:shadow-xl group"
             title="Terminer la partie"
           >
-            <Square className="h-5 w-5 text-gray-600 group-hover:text-dutch-purple transition-colors" />
+            <Square className="h-5 w-5 text-dutch-purple group-hover:text-dutch-orange transition-colors drop-shadow-sm" />
           </Button>
         </motion.div>
       </div>
