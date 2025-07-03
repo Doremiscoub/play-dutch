@@ -320,12 +320,12 @@ const BadgeSystem: React.FC<BadgeSystemProps> = ({ players, games, currentGameId
   // Get badge rarity color
   const getRarityColor = (rarity: string) => {
     switch (rarity) {
-      case 'common': return 'bg-gray-200 text-gray-800';
-      case 'uncommon': return 'bg-green-200 text-green-800';
-      case 'rare': return 'bg-blue-200 text-blue-800';
-      case 'epic': return 'bg-purple-200 text-purple-800';
-      case 'legendary': return 'bg-trinity-orange-100/80 text-trinity-orange-700';
-      default: return 'bg-gray-200 text-gray-800';
+      case 'common': return 'badge-default';
+      case 'uncommon': return 'badge-success';
+      case 'rare': return 'badge-primary';
+      case 'epic': return 'badge-secondary';
+      case 'legendary': return 'badge-legendary';
+      default: return 'badge-default';
     }
   };
   
@@ -347,7 +347,7 @@ const BadgeSystem: React.FC<BadgeSystemProps> = ({ players, games, currentGameId
   };
   
   return (
-    <Card className="border border-glass-border-light card-glass backdrop-blur-md rounded-3xl shadow-md">
+    <Card variant="glassColored" className="border border-glass-border-light backdrop-blur-md rounded-3xl shadow-md">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Medal className="h-5 w-5 text-trinity-orange-600" />
@@ -379,7 +379,7 @@ const BadgeSystem: React.FC<BadgeSystemProps> = ({ players, games, currentGameId
               {badges.map((badge) => (
                 <div
                   key={badge.id}
-                  className="card-glass p-3 cursor-pointer hover:shadow-glass-lg transition-shadow"
+                  className="card-kids-blue p-3 cursor-pointer hover:shadow-glow-blue hover:scale-[1.02] transition-all duration-300"
                   onClick={() => showBadgeDetails(badge)}
                 >
                   <div className="flex items-center gap-2">
@@ -404,7 +404,7 @@ const BadgeSystem: React.FC<BadgeSystemProps> = ({ players, games, currentGameId
           </TabsContent>
           
           <TabsContent value="progress" className="space-y-4">
-            <div className="card-glass p-3">
+            <div className="card-kids-purple p-3">
               <Accordion type="single" collapsible>
                 {players.map((player) => (
                   <AccordionItem key={player.id} value={player.id}>

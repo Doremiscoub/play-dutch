@@ -40,8 +40,8 @@ const PlayerStatsCard: React.FC<PlayerStatsCardProps> = ({ player }) => {
   
   if (!stats) {
     return (
-      <div className="bg-white/70 backdrop-blur-sm rounded-xl p-4 border border-white">
-        <h3 className="text-sm font-semibold text-gray-600 mb-2">Aucune statistique disponible</h3>
+      <div className="card-kids-orange backdrop-blur-sm rounded-xl p-4 border border-white/30">
+        <h3 className="text-sm font-semibold text-white mb-2">Aucune statistique disponible</h3>
       </div>
     );
   }
@@ -52,12 +52,12 @@ const PlayerStatsCard: React.FC<PlayerStatsCardProps> = ({ player }) => {
   
   return (
     <motion.div
-      className="bg-white/80 backdrop-blur-sm rounded-xl p-5 border border-white shadow-sm"
+      className="card-kids-blue backdrop-blur-sm rounded-xl p-5 border border-white/30 shadow-lg"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <h3 className="text-lg font-semibold bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent mb-2">
+      <h3 className="text-lg font-semibold text-white mb-2">
         {player.name}
       </h3>
       
@@ -72,7 +72,7 @@ const PlayerStatsCard: React.FC<PlayerStatsCardProps> = ({ player }) => {
       {/* Badge de score total */}
       <div className="mb-4 flex items-center justify-center">
         <motion.div 
-          className="bg-gradient-to-r from-dutch-blue to-dutch-purple p-3 rounded-full shadow-md text-white font-bold text-xl w-20 h-20 flex items-center justify-center"
+          className="btn-kids-fun p-3 rounded-full shadow-glow-rainbow text-white font-bold text-xl w-20 h-20 flex items-center justify-center"
           initial={{ scale: 0.9 }}
           animate={{ scale: 1 }}
           transition={{ 
@@ -87,73 +87,73 @@ const PlayerStatsCard: React.FC<PlayerStatsCardProps> = ({ player }) => {
       
       <div className="space-y-3">
         {/* Moyenne */}
-        <div className="flex items-center justify-between bg-gray-100/70 p-2 rounded-lg">
+        <div className="flex items-center justify-between card-kids-turquoise p-2 rounded-lg">
           <div className="flex items-center">
-            <Target className="h-4.5 w-4.5 text-dutch-blue mr-2" />
-            <span className="text-gray-700 text-sm font-medium">Moyenne</span>
+            <Target className="h-4.5 w-4.5 text-white mr-2" />
+            <span className="text-white text-sm font-medium">Moyenne</span>
           </div>
-          <span className="font-semibold text-dutch-blue">{stats.averageScore} pts</span>
+          <span className="font-semibold text-white">{stats.averageScore} pts</span>
         </div>
         
         {/* Meilleur round */}
-        <div className="flex items-center justify-between bg-green-50 p-2 rounded-lg">
+        <div className="flex items-center justify-between card-kids-lime p-2 rounded-lg">
           <div className="flex items-center">
-            <Award className="h-4.5 w-4.5 text-green-600 mr-2" />
-            <span className="text-gray-700 text-sm font-medium">Meilleur round</span>
+            <Award className="h-4.5 w-4.5 text-white mr-2" />
+            <span className="text-white text-sm font-medium">Meilleur round</span>
           </div>
-          <span className="font-semibold text-green-600">{stats.bestRound} pts</span>
+          <span className="font-semibold text-white">{stats.bestRound} pts</span>
         </div>
         
         {/* Pire round */}
-        <div className="flex items-center justify-between bg-red-50 p-2 rounded-lg">
+        <div className="flex items-center justify-between card-kids-pink p-2 rounded-lg">
           <div className="flex items-center">
-            <Frown className="h-4.5 w-4.5 text-red-500 mr-2" />
-            <span className="text-gray-700 text-sm font-medium">Pire round</span>
+            <Frown className="h-4.5 w-4.5 text-white mr-2" />
+            <span className="text-white text-sm font-medium">Pire round</span>
           </div>
-          <span className="font-semibold text-red-500">{stats.worstRound} pts</span>
+          <span className="font-semibold text-white">{stats.worstRound} pts</span>
         </div>
         
         {/* Nombre de Dutch */}
-        <div className="flex items-center justify-between bg-amber-50 p-2 rounded-lg">
+        <div className="flex items-center justify-between card-kids-orange p-2 rounded-lg">
           <div className="flex items-center">
-            <Award className="h-4.5 w-4.5 text-amber-600 mr-2" />
-            <span className="text-gray-700 text-sm font-medium">Dutch réussis</span>
+            <Award className="h-4.5 w-4.5 text-white mr-2" />
+            <span className="text-white text-sm font-medium">Dutch réussis</span>
           </div>
-          <span className="font-semibold text-amber-600">{stats.dutchCount}</span>
+          <span className="font-semibold text-white">{stats.dutchCount}</span>
         </div>
         
         {/* Taux d'amélioration */}
-        <div className="flex items-center justify-between bg-blue-50 p-2 rounded-lg">
+        <div className="flex items-center justify-between card-kids-purple p-2 rounded-lg">
           <div className="flex items-center">
             {isImprovementPositive ? (
-              <TrendingDown className="h-4.5 w-4.5 text-green-500 mr-2" />
+              <TrendingDown className="h-4.5 w-4.5 text-white mr-2" />
             ) : (
-              <TrendingUp className="h-4.5 w-4.5 text-red-500 mr-2" />
+              <TrendingUp className="h-4.5 w-4.5 text-white mr-2" />
             )}
-            <span className="text-gray-700 text-sm font-medium">Progression</span>
+            <span className="text-white text-sm font-medium">Progression</span>
           </div>
-          <span className={`font-semibold ${isImprovementPositive ? 'text-green-500' : 'text-red-500'}`}>
+          <span className="font-semibold text-white">
             {isImprovementPositive ? '' : '+'}{stats.improvementRate} pts
           </span>
         </div>
         
         {/* Consistance */}
-        <div className="flex items-center justify-between bg-purple-50 p-2 rounded-lg">
+        <div className="flex items-center justify-between card-kids-gaming p-2 rounded-lg">
           <div className="flex items-center">
-            <Gauge className="h-4.5 w-4.5 text-dutch-purple mr-2" />
-            <span className="text-gray-700 text-sm font-medium">Consistance</span>
+            <Gauge className="h-4.5 w-4.5 text-white mr-2" />
+            <span className="text-white text-sm font-medium">Consistance</span>
           </div>
-          <span className="font-semibold text-dutch-purple">{stats.consistencyScore.toFixed(1)}</span>
+          <span className="font-semibold text-white">{stats.consistencyScore.toFixed(1)}</span>
         </div>
         
         {/* Streak */}
         {stats.streakInfo && stats.streakInfo.best > 1 && (
-          <div className="flex items-center justify-between bg-indigo-50 p-2 rounded-lg">
+          <div className="flex items-center justify-between card-kids-fun p-2 rounded-lg">
             <div className="flex items-center">
-              <Repeat className="h-4.5 w-4.5 text-indigo-600 mr-2" />
-              <span className="text-gray-700 text-sm font-medium">Meilleure série</span>
+              <Repeat className="h-4.5 w-4.5 text-white mr-2" />
+              <span className="text-white text-sm font-medium">Meilleure série</span>
             </div>
-            <span className="font-semibold text-indigo-600">{stats.streakInfo.best}</span>
+            <span className="font-semibold text-white">{stats.streakInfo.best}</span>
           </div>
         )}
       </div>

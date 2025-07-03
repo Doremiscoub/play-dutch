@@ -17,7 +17,7 @@ const PlayerBadges: React.FC<PlayerBadgesProps> = ({ player, compact = false, cl
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Badge variant="outline" className="mr-1">
+          <Badge variant="secondary" className="mr-1 badge-warning">
             <Flame className="h-3.5 w-3.5 mr-1" />
             {compact ? 'Meilleur' : 'Meilleur score'}
           </Badge>
@@ -33,7 +33,7 @@ const PlayerBadges: React.FC<PlayerBadgesProps> = ({ player, compact = false, cl
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Badge variant="outline" className="mr-1">
+          <Badge variant="secondary" className="mr-1 badge-primary">
             <Zap className="h-3.5 w-3.5 mr-1" />
             {compact ? 'Dutch' : 'Plus Dutch'}
           </Badge>
@@ -49,7 +49,7 @@ const PlayerBadges: React.FC<PlayerBadgesProps> = ({ player, compact = false, cl
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Badge variant="outline" className="mr-1">
+          <Badge variant="secondary" className="mr-1 badge-success">
             <Award className="h-3.5 w-3.5 mr-1" />
             {compact ? 'Série' : 'Série victoire'}
           </Badge>
@@ -65,7 +65,7 @@ const PlayerBadges: React.FC<PlayerBadgesProps> = ({ player, compact = false, cl
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Badge variant="outline" className="mr-1">
+          <Badge variant="secondary" className="mr-1 badge-success">
             <TrendingUp className="h-3.5 w-3.5 mr-1" />
             {compact ? 'Progrès' : 'Progression'}
           </Badge>
@@ -81,7 +81,7 @@ const PlayerBadges: React.FC<PlayerBadgesProps> = ({ player, compact = false, cl
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Badge variant="outline" className="mr-1">
+          <Badge variant="secondary" className="mr-1 badge-error">
             <TrendingDown className="h-3.5 w-3.5 mr-1" />
             {compact ? 'Déclin' : 'Déclin'}
           </Badge>
@@ -97,7 +97,7 @@ const PlayerBadges: React.FC<PlayerBadgesProps> = ({ player, compact = false, cl
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Badge variant="outline" className="mr-1">
+          <Badge variant="secondary" className="mr-1 badge-primary">
             <Shield className="h-3.5 w-3.5 mr-1" />
             {compact ? 'Consistant' : 'Consistance'}
           </Badge>
@@ -113,7 +113,7 @@ const PlayerBadges: React.FC<PlayerBadgesProps> = ({ player, compact = false, cl
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Badge variant="outline" className="mr-1">
+          <Badge variant="secondary" className="mr-1 badge-default">
             <Target className="h-3.5 w-3.5 mr-1" />
             {compact ? 'Moyenne' : 'Score moyen'}
           </Badge>
