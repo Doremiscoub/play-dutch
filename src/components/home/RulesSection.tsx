@@ -98,12 +98,15 @@ const RulesSection: React.FC = () => {
               transition={{ duration: 0.8, delay: 0.4 }}
               viewport={{ once: true }}
             >
-              <Card className="bg-gradient-to-br from-trinity-orange-500/95 to-trinity-purple-500/95 backdrop-blur-xl border-0 shadow-xl text-white overflow-hidden">
-                <CardContent className="p-8 text-center">
-                  <h3 className="text-2xl font-black mb-4">
+              <Card className="bg-gradient-to-br from-trinity-orange-600 to-trinity-purple-600 backdrop-blur-xl border-0 shadow-xl overflow-hidden relative">
+                {/* Overlay pour améliorer le contraste */}
+                <div className="absolute inset-0 bg-black/20" />
+                
+                <CardContent className="relative z-10 p-8 text-center">
+                  <h3 className="text-2xl font-black mb-4 text-white">
                     🎯 Envie d'en savoir plus ?
                   </h3>
-                  <p className="text-lg font-bold mb-6 opacity-90">
+                  <p className="text-lg font-bold mb-6 text-white/90">
                     Consultez le guide complet avec exemples et stratégies !
                   </p>
                   <motion.div
