@@ -25,9 +25,9 @@ const GamePage: React.FC = () => {
     return (
       <PageShell variant="game">
         <div className="min-h-screen flex items-center justify-center">
-          <div className="text-center">
-            <div className="animate-spin rounded-full border-b-2 mx-auto mb-4 h-8 w-8 border-blue-500"></div>
-            <p className="text-gray-700">Chargement de la partie...</p>
+          <div className="text-center lg-card lg-tint-primary-50 rounded-xl p-8 lg-elevation-02 animate-lg-reveal">
+            <div className="animate-spin rounded-full border-b-2 mx-auto mb-4 h-8 w-8 border-white"></div>
+            <p className="text-white">Chargement de la partie...</p>
           </div>
         </div>
       </PageShell>

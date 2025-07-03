@@ -117,7 +117,7 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
                     size="icon"
                     variant="outline"
                     onClick={() => adjustScore(index, -1)}
-                    className="w-8 h-8 rounded-full glass-button"
+                    className="w-8 h-8 rounded-full lg-popover lg-tint-primary-50 lg-hover-state"
                     disabled={isSubmitting}
                   >
                     <Minus className="h-3 w-3" />
@@ -142,7 +142,7 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
                     size="icon"
                     variant="outline"
                     onClick={() => adjustScore(index, 1)}
-                    className="w-8 h-8 rounded-full glass-button"
+                    className="w-8 h-8 rounded-full lg-popover lg-tint-primary-50 lg-hover-state"
                     disabled={isSubmitting}
                   >
                     <Plus className="h-3 w-3" />
@@ -152,10 +152,10 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
                     type="button"
                     size="sm"
                     variant={dutchPlayerId === player.id ? "default" : "outline"}
-                    className={`ml-2 rounded-full px-4 transition-all glass-button ${
+                    className={`ml-2 rounded-full px-4 transition-all lg-hover-state ${
                       dutchPlayerId === player.id
-                        ? "bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-md"
-                        : "text-green-700 hover:bg-green-50"
+                        ? "lg-card lg-tint-accent-60 text-white lg-elevation-03"
+                        : "lg-popover lg-tint-secondary-50 text-white hover:lg-tint-secondary-70"
                     }`}
                     onClick={() => handleDutchToggle(player.id)}
                     disabled={isSubmitting}
@@ -174,7 +174,7 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
               type="button" 
               onClick={onClose}
               disabled={isSubmitting}
-              className="glass-button"
+              className="lg-popover lg-tint-primary-50 lg-hover-state"
             >
               Annuler
             </Button>
