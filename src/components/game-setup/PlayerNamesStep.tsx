@@ -160,7 +160,7 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
               <Button 
                 onClick={addPlayer}
                 disabled={players.length >= MAX_PLAYERS}
-                className="bg-gradient-to-r from-trinity-blue-500 to-trinity-purple-500 hover:from-trinity-blue-600 hover:to-trinity-purple-600 text-white rounded-2xl px-6 shadow-lg"
+                className="bg-gradient-to-r from-trinity-blue-600 to-trinity-purple-600 hover:from-trinity-blue-700 hover:to-trinity-purple-700 text-white rounded-2xl px-6 shadow-lg border border-trinity-blue-400"
               >
                 <Plus className="h-4 w-4" />
               </Button>
