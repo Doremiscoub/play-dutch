@@ -19,7 +19,7 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
   disabled = false,
 }) => {
   return (
-    <div className="fixed bottom-6 right-6 z-[9999] flex flex-col gap-3 pointer-events-none">
+    <div className="fixed bottom-6 right-6 z-[99999] flex flex-col gap-3 pointer-events-none" style={{ position: 'fixed', zIndex: 99999 }}>
       {/* Bouton principal - Ajouter une manche */}
       <motion.div
         initial={{ opacity: 0, scale: 0.5, y: 50 }}
