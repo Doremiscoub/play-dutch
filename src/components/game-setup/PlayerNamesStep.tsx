@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, Reorder } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowLeft, Plus, Check, Edit3 } from 'lucide-react';
+import { ArrowLeft, Plus, Check, Edit3, GripVertical, X } from 'lucide-react';
 import { toast } from 'sonner';
 import ProfessorAvatar from '@/components/game/ProfessorAvatar';
 import { Badge } from '@/components/ui/badge';
@@ -96,6 +96,10 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
     const removedPlayer = players[index];
     onPlayersChange(players.filter((_, i) => i !== index));
     toast.info(`${removedPlayer.name} a quitté la partie`);
+  };
+
+  const handleReorder = (newOrder: Player[]) => {
+    onPlayersChange(newOrder);
   };
 
   const availableQuickNames = QUICK_NAMES.filter(name => 
@@ -192,30 +196,41 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
       {players.length > 0 && (
         <Card className="card-glass bg-white/80 border-2 border-white/60">
           <CardHeader className="pb-4">
-            <CardTitle className="text-lg font-bold text-trinity-orange-700">
-              Joueurs ajoutés
-            </CardTitle>
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-lg font-bold text-trinity-orange-700">
+                Joueurs ajoutés
+              </CardTitle>
+              <div className="flex items-center gap-2 text-sm text-neutral-600">
+                <GripVertical className="h-4 w-4" />
+                Glissez pour réorganiser
+              </div>
+            </div>
           </CardHeader>
           <CardContent>
-            <div className="space-y-3">
-              <AnimatePresence mode="popLayout">
-                {players.map((player, index) => (
-                  <motion.div 
-                    key={`${player.name}-${index}`}
-                    layout
-                    initial={{ opacity: 0, scale: 0.8, y: 20 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.8, y: -20 }}
-                    className="flex items-center justify-between p-4 bg-white/80 hover:bg-white rounded-2xl transition-all border border-neutral-200 group shadow-sm"
-                  >
+            <Reorder.Group axis="y" values={players} onReorder={handleReorder} className="space-y-3">
+              {players.map((player, index) => (
+                <Reorder.Item 
+                  key={`${player.name}-${index}`}
+                  value={player}
+                  className="cursor-grab active:cursor-grabbing"
+                  initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.8, y: -20 }}
+                  whileDrag={{ scale: 1.05, zIndex: 10 }}
+                  dragListener={editingIndex !== index}
+                >
+                  <div className="flex items-center justify-between p-4 bg-white/80 hover:bg-white rounded-2xl transition-all border border-neutral-200 group shadow-sm">
                     <div className="flex items-center gap-4">
-                      <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${
-                        index === 0 ? 'from-amber-400 to-amber-600' :
-                        index === 1 ? 'from-gray-300 to-gray-500' :
-                        index === 2 ? 'from-orange-400 to-orange-600' :
-                        'from-trinity-blue-400 to-trinity-purple-500'
-                      } flex items-center justify-center text-white font-bold text-lg shadow-lg`}>
-                        {index + 1}
+                      <div className="flex items-center gap-3">
+                        <GripVertical className="h-5 w-5 text-neutral-400 group-hover:text-neutral-600 transition-colors" />
+                        <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${
+                          index === 0 ? 'from-amber-400 to-amber-600' :
+                          index === 1 ? 'from-neutral-300 to-neutral-500' :
+                          index === 2 ? 'from-orange-400 to-orange-600' :
+                          'from-trinity-blue-400 to-trinity-purple-500'
+                        } flex items-center justify-center text-white font-bold text-lg shadow-lg`}>
+                          {index + 1}
+                        </div>
                       </div>
                       <div className="text-3xl">{player.emoji}</div>
                       <div>
@@ -246,12 +261,12 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
                       </div>
                     </div>
                     
-                    <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="flex gap-2">
                       <Button
                         variant="ghost"
                         size="sm"
                         onClick={() => startEditing(index)}
-                        className="text-trinity-blue-500 hover:text-trinity-blue-700 rounded-xl"
+                        className="text-trinity-blue-500 hover:text-trinity-blue-700 hover:bg-trinity-blue-50 rounded-xl"
                       >
                         <Edit3 className="h-4 w-4" />
                       </Button>
@@ -259,15 +274,15 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
                         variant="ghost"
                         size="sm"
                         onClick={() => removePlayer(index)}
-                        className="text-red-500 hover:text-red-700 rounded-xl"
+                        className="text-red-500 hover:text-red-700 hover:bg-red-50 rounded-xl"
                       >
-                        ×
+                        <X className="h-4 w-4" />
                       </Button>
                     </div>
-                  </motion.div>
-                ))}
-              </AnimatePresence>
-            </div>
+                  </div>
+                </Reorder.Item>
+              ))}
+            </Reorder.Group>
           </CardContent>
         </Card>
       )}
