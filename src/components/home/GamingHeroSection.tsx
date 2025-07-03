@@ -95,11 +95,11 @@ const GamingHeroSection: React.FC = () => {
             }}
           />
           
-          <div className="relative bg-white/95 backdrop-blur-xl rounded-3xl p-8 border-4 border-trinity-orange-400 shadow-2xl">
+          <div className="relative">
             <img 
               src="/lovable-uploads/0532ef39-c77c-4480-8d74-7af7665596ee.png"
               alt="Dutch Card Game - Professeur Cartouche"
-              className="w-auto h-32 sm:h-40 md:h-48 mx-auto object-contain drop-shadow-2xl"
+              className="w-auto h-40 sm:h-48 md:h-56 lg:h-64 mx-auto object-contain drop-shadow-2xl"
             />
           </div>
         </motion.div>
