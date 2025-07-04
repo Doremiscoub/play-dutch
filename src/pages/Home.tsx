@@ -187,7 +187,7 @@ const Home: React.FC = () => {
                     whileTap={{ scale: 0.95 }}
                   >
                     <Button
-                      onClick={() => navigate('/setup')}
+                      onClick={() => navigate('/simple-setup')}
                       size="xl"
                       className="bg-white text-trinity-purple-700 hover:bg-trinity-orange-100 hover:text-trinity-blue-700 font-black text-xl px-12 py-6 shadow-2xl border-4 border-white/80 transition-all duration-300 hover:scale-105"
                     >
