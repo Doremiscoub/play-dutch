@@ -16,6 +16,7 @@ const SimpleGamePage: React.FC = () => {
   const [showGameEndConfirmation, setShowGameEndConfirmation] = useState(false);
   const [scores, setScores] = useState<number[]>([]);
   const [dutchPlayerId, setDutchPlayerId] = useState<string | undefined>();
+  const [gameStartTime] = useState<Date>(new Date()); // Temps de début de la partie
 
   useEffect(() => {
     if (!hasGame) {
@@ -81,6 +82,12 @@ const SimpleGamePage: React.FC = () => {
       <UnifiedHeader 
         title={`Manche ${roundHistory.length + 1}`}
         showBackButton={true}
+        onBack={() => navigate('/setup')}
+        variant="game"
+        roundCount={roundHistory.length + 1}
+        scoreLimit={100}
+        gameStartTime={gameStartTime}
+        showRulesButton={true}
       />
       
       <div className="container mx-auto px-4 py-6">
