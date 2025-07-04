@@ -6,6 +6,7 @@ import NewRoundModal from '@/components/NewRoundModal';
 import PageShell from '@/components/layout/PageShell';
 import UnifiedHeader from '@/components/layout/UnifiedHeader';
 import ProfessorAvatar from '@/components/game/ProfessorAvatar';
+import AICommentator from '@/components/AICommentator';
 import { toast } from 'sonner';
 
 const SimpleGamePage: React.FC = () => {
@@ -93,6 +94,15 @@ const SimpleGamePage: React.FC = () => {
               showParticles={true} 
             />
           </div>
+        </div>
+
+        {/* Commentaires du Professeur Cartouche */}
+        <div className="mb-6">
+          <AICommentator 
+            players={players}
+            roundHistory={roundHistory}
+            className="mx-auto max-w-2xl"
+          />
         </div>
         
         <ScoreBoard
