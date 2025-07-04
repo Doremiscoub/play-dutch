@@ -1,9 +1,7 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowLeft, Gamepad2, Trophy, Clock, Users, Edit, Sparkles } from 'lucide-react';
-import ProfessorAvatar from '@/components/game/ProfessorAvatar';
 import { Badge } from '@/components/ui/badge';
 import { SetupPlayer, ESTIMATED_MINUTES_PER_PLAYER } from './types';
 
@@ -28,34 +26,25 @@ const GameSummaryStep: React.FC<GameSummaryStepProps> = ({
 
   return (
     <div className="space-y-6 p-6">
-      {/* Header avec Professor excité */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="text-center space-y-4"
-      >
-        <motion.div 
-          className="mx-auto w-20 h-20 rounded-3xl bg-gradient-to-br from-trinity-blue-500 to-trinity-purple-500 flex items-center justify-center shadow-lg border border-white/30 overflow-hidden"
-          animate={{ scale: [1, 1.05, 1], rotate: [0, 2, -2, 0] }}
-          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-        >
-          <ProfessorAvatar size="md" animate={true} mood="excited" showParticles={true} />
-        </motion.div>
+      {/* Header simple */}
+      <div className="text-center space-y-4">
+        <div className="mx-auto w-20 h-20 rounded-3xl bg-gradient-to-br from-trinity-blue-500 to-trinity-purple-500 flex items-center justify-center shadow-lg border border-white/30">
+          <div className="text-4xl">🏁</div>
+        </div>
         <h1 className="text-3xl font-black bg-gradient-to-r from-trinity-blue-600 via-trinity-purple-600 to-trinity-orange-600 bg-clip-text text-transparent">
           Tout est prêt !
         </h1>
         <p className="text-neutral-700 font-medium">
           Vérifiez les détails avant de commencer
         </p>
-      </motion.div>
+      </div>
 
       {/* Statistiques de la partie */}
       <Card className="card-glass bg-white/90 border border-white/60">
         <CardContent className="p-4">
           <div className="grid grid-cols-3 gap-3 text-center">
-            <motion.div 
+            <div 
               className="space-y-2 p-3 rounded-xl bg-white/80 hover:bg-white transition-all cursor-pointer border border-neutral-200"
-              whileHover={{ scale: 1.02 }}
               onClick={onEditCount}
             >
               <div className="text-xl font-bold text-trinity-blue-600">{playerCount}</div>
@@ -66,7 +55,7 @@ const GameSummaryStep: React.FC<GameSummaryStepProps> = ({
               <Button variant="ghost" size="sm" className="h-6 w-6 p-0 opacity-60 hover:opacity-100">
                 <Edit className="h-3 w-3" />
               </Button>
-            </motion.div>
+            </div>
             
             <div className="space-y-2 p-3 rounded-xl bg-white/80 border border-neutral-200">
               <div className="text-xl font-bold text-trinity-purple-600">~{gameEstimate}min</div>
@@ -108,11 +97,8 @@ const GameSummaryStep: React.FC<GameSummaryStepProps> = ({
         <CardContent>
           <div className="space-y-2">
             {players.map((player, index) => (
-              <motion.div 
+              <div 
                 key={`${player.name}-${index}`}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.05 }}
                 className="flex items-center gap-3 p-3 bg-white/90 rounded-xl border border-neutral-200 shadow-sm"
               >
                 <div className={`w-8 h-8 rounded-xl bg-gradient-to-br ${
@@ -130,25 +116,21 @@ const GameSummaryStep: React.FC<GameSummaryStepProps> = ({
                     {index === 0 ? 'Premier joueur' : `Position ${index + 1}`}
                   </div>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         </CardContent>
       </Card>
 
       {/* Message d'encouragement */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="text-center p-4 bg-gradient-to-r from-trinity-blue-50 via-trinity-purple-50 to-trinity-orange-50 rounded-xl border border-white/50"
-      >
+      <div className="text-center p-4 bg-gradient-to-r from-trinity-blue-50 via-trinity-purple-50 to-trinity-orange-50 rounded-xl border border-white/50">
         <p className="text-lg font-semibold text-trinity-purple-700 mb-1">
           🎉 C'est parti !
         </p>
         <p className="text-sm text-neutral-700">
           Le Professor Cartouche vous accompagnera avec ses commentaires et conseils.
         </p>
-      </motion.div>
+      </div>
 
       {/* Navigation et démarrage */}
       <div className="flex gap-3">
@@ -162,11 +144,7 @@ const GameSummaryStep: React.FC<GameSummaryStepProps> = ({
           Retour
         </Button>
         
-        <motion.div 
-          className="flex-2"
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-        >
+        <div className="flex-2">
           <Button
             onClick={onStartGame}
             size="lg"
@@ -175,7 +153,7 @@ const GameSummaryStep: React.FC<GameSummaryStepProps> = ({
             <Gamepad2 className="h-5 w-5 mr-2" />
             Commencer la partie !
           </Button>
-        </motion.div>
+        </div>
       </div>
     </div>
   );

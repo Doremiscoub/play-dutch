@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
 import { toast } from 'sonner';
 import PlayerCountStep from './PlayerCountStep';
 import PlayerNamesStep from './PlayerNamesStep';
@@ -74,15 +73,9 @@ const ModernGameSetup: React.FC<ModernGameSetupProps> = ({ onStartGame }) => {
       <ProgressIndicator currentStep={currentStep} totalSteps={3} />
 
       {/* Contenu de l'étape */}
-      <motion.div
-        key={currentStep}
-        initial={{ opacity: 0, x: 20 }}
-        animate={{ opacity: 1, x: 0 }}
-        exit={{ opacity: 0, x: -20 }}
-        transition={{ duration: 0.3 }}
-      >
+      <div key={currentStep}>
         {renderStep()}
-      </motion.div>
+      </div>
     </div>
   );
 };
