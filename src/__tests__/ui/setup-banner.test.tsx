@@ -2,12 +2,12 @@
 import { describe, it, expect } from 'vitest';
 import { render } from '@testing-library/react';
 import { screen } from '@testing-library/dom';
-import LocalGameSetupContainer from '../../components/game-setup/LocalGameSetupContainer';
+import LocalGameSetup from '../../components/game-setup/LocalGameSetup';
 
 describe('UI: Setup Banner', () => {
-  it('should display the single device info banner', () => {
-    render(<LocalGameSetupContainer onStartGame={() => {}} />);
+  it('should display the local game setup', () => {
+    render(<LocalGameSetup onStartGame={() => {}} />);
     
-    expect(screen.getByText(/un seul appareil suffit/i)).toBeInTheDocument();
+    expect(screen.getByText(/commencer la partie/i)).toBeInTheDocument();
   });
 });
