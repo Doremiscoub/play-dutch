@@ -1,105 +1,116 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useSimpleGameState } from '@/hooks/useSimpleGameState';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Card } from '@/components/ui/card';
+import { toast } from 'sonner';
+import { Users, Trophy } from 'lucide-react';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import LocalGameSetup from '@/components/game-setup/LocalGameSetup';
+import UnifiedHeader from '@/components/layout/UnifiedHeader';
+import PageShell from '@/components/layout/PageShell';
 
 const SimpleGameSetup: React.FC = () => {
   const navigate = useNavigate();
   const { createGame } = useSimpleGameState();
-  const [playerNames, setPlayerNames] = useState(['', '', '', '']);
 
-  const handleCreateGame = () => {
-    const validNames = playerNames.filter(name => name.trim().length >= 2);
-    
-    if (validNames.length < 2) {
-      alert('Il faut au moins 2 joueurs avec des noms valides');
+  const handleStartGame = (playerNames: string[]) => {
+    if (playerNames.length < 2) {
+      toast.error('Il faut au moins 2 joueurs pour démarrer une partie');
       return;
     }
 
-    if (createGame(validNames)) {
+    const success = createGame(playerNames);
+    if (success) {
       navigate('/simple-game');
-    }
-  };
-
-  const updatePlayerName = (index: number, name: string) => {
-    const newNames = [...playerNames];
-    newNames[index] = name;
-    setPlayerNames(newNames);
-  };
-
-  const addPlayer = () => {
-    setPlayerNames([...playerNames, '']);
-  };
-
-  const removePlayer = (index: number) => {
-    if (playerNames.length > 2) {
-      const newNames = playerNames.filter((_, i) => i !== index);
-      setPlayerNames(newNames);
+    } else {
+      toast.error('Erreur lors de la création de la partie');
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 p-4">
-      <div className="max-w-md mx-auto pt-8">
-        <Card className="p-6">
-          <h1 className="text-2xl font-bold text-center mb-6">Configuration Simple</h1>
-          
-          <div className="space-y-4">
-            {playerNames.map((name, index) => (
-              <motion.div 
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="flex gap-2"
-              >
-                <Input
-                  placeholder={`Joueur ${index + 1}`}
-                  value={name}
-                  onChange={(e) => updatePlayerName(index, e.target.value)}
-                  className="flex-1"
-                />
-                {playerNames.length > 2 && (
-                  <Button 
-                    variant="outline" 
-                    size="sm"
-                    onClick={() => removePlayer(index)}
-                  >
-                    ✕
-                  </Button>
-                )}
-              </motion.div>
-            ))}
-            
-            {playerNames.length < 8 && (
-              <Button variant="outline" onClick={addPlayer} className="w-full">
-                + Ajouter un joueur
-              </Button>
-            )}
+    <PageShell variant="game">
+      <UnifiedHeader 
+        title="Configuration de partie" 
+        showBackButton={true}
+      />
+
+      <div className="container mx-auto px-4 py-8 max-w-4xl">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          {/* En-tête principale */}
+          <div className="text-center mb-8">
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="mb-6"
+            >
+              <div className="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-trinity-blue-500 to-trinity-purple-600 rounded-full flex items-center justify-center">
+                <Users className="h-10 w-10 text-white" />
+              </div>
+              <h1 className="text-3xl md:text-4xl font-black bg-gradient-to-r from-trinity-blue-600 to-trinity-purple-600 bg-clip-text text-transparent mb-3">
+                Nouvelle partie Dutch
+              </h1>
+              <p className="text-lg text-neutral-600 font-medium">
+                Configurez votre partie pour commencer l'aventure !
+              </p>
+            </motion.div>
           </div>
 
-          <div className="mt-6 space-y-3">
-            <Button 
-              onClick={handleCreateGame} 
-              className="w-full"
-              disabled={playerNames.filter(n => n.trim().length >= 2).length < 2}
-            >
-              Commencer la partie
-            </Button>
-            
-            <Button 
-              variant="outline" 
-              onClick={() => navigate('/')} 
-              className="w-full"
-            >
-              Retour
-            </Button>
-          </div>
-        </Card>
+          {/* Carte principale de configuration */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+          >
+            <Card className="bg-white/95 backdrop-blur-xl border-0 shadow-2xl overflow-hidden">
+              <CardHeader className="bg-gradient-to-r from-trinity-blue-50 to-trinity-purple-50 border-b border-trinity-blue-100 pb-6">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-gradient-to-br from-trinity-blue-500 to-trinity-purple-600 rounded-full flex items-center justify-center">
+                    <Trophy className="h-6 w-6 text-white" />
+                  </div>
+                  <div>
+                    <h2 className="text-xl font-bold text-neutral-800">Configuration des joueurs</h2>
+                    <p className="text-neutral-600">Ajoutez les participants à votre partie</p>
+                  </div>
+                </div>
+              </CardHeader>
+              
+              <CardContent className="p-6">
+                <LocalGameSetup onStartGame={handleStartGame} />
+              </CardContent>
+            </Card>
+          </motion.div>
+
+          {/* Informations sur le jeu */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.6 }}
+            className="mt-8"
+          >
+            <Card className="bg-gradient-to-r from-trinity-blue-50 to-trinity-purple-50 border border-trinity-blue-200">
+              <CardContent className="p-6">
+                <h3 className="text-lg font-bold text-neutral-800 mb-3">🎯 Rappel des règles Dutch</h3>
+                <div className="grid md:grid-cols-2 gap-4 text-sm text-neutral-700">
+                  <div className="space-y-2">
+                    <p><strong>• Objectif :</strong> Avoir le score le plus bas</p>
+                    <p><strong>• Dutch :</strong> Joueur avec le score le plus bas de la manche</p>
+                  </div>
+                  <div className="space-y-2">
+                    <p><strong>• Fin de partie :</strong> Premier à atteindre 100 points</p>
+                    <p><strong>• Gagnant :</strong> Score total le plus bas</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        </motion.div>
       </div>
-    </div>
+    </PageShell>
   );
 };
 
