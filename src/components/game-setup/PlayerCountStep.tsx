@@ -86,7 +86,7 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
                   <div className="absolute bottom-3 right-3 w-1 h-1 bg-red-300 rounded-full animate-ping" style={{ animationDelay: '0.5s' }} />
                 </div>
                 
-                <Minus className="w-8 h-8 relative z-10" strokeWidth={3} />
+                <Minus className="w-10 h-10 relative z-10 text-white" strokeWidth={4} />
               </Button>
             </motion.div>
 
@@ -192,7 +192,7 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
                   <div className="absolute bottom-3 left-3 w-1 h-1 bg-green-300 rounded-full animate-ping" style={{ animationDelay: '0.3s' }} />
                 </div>
                 
-                <Plus className="w-8 h-8 relative z-10" strokeWidth={3} />
+                <Plus className="w-10 h-10 relative z-10 text-white" strokeWidth={4} />
               </Button>
             </motion.div>
           </div>
