@@ -9,7 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Users, User, Gamepad2, Globe, LogIn, Github, MapPin, Smartphone, Lock, LockOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import LocalGameSetup from './game-setup/LocalGameSetup';
+import ModernGameSetup from './game-setup/ModernGameSetup';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useAuth } from '@/context/AuthContext';
 
@@ -312,7 +312,7 @@ const MultiplayerGameSetup: React.FC<MultiplayerGameSetupProps> = ({
               Configurer les joueurs pour une partie locale
             </DialogDescription>
           </DialogHeader>
-          <LocalGameSetup onStartGame={handleLocalStart} />
+          <ModernGameSetup onStartGame={handleLocalStart} />
         </DialogContent>
       </Dialog>
       
