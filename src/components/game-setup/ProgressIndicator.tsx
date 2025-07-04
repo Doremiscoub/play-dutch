@@ -20,25 +20,25 @@ const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({ currentStep, tota
             <motion.div
               className={`relative w-14 h-14 rounded-full flex items-center justify-center text-lg font-bold transition-all duration-300 ${
                 step === currentStep
-                  ? 'bg-gradient-to-br from-trinity-blue-500 via-trinity-purple-500 to-trinity-orange-500 text-white shadow-xl scale-110'
+                  ? 'bg-gradient-to-br from-trinity-blue-600 via-trinity-purple-600 to-trinity-orange-600 text-white shadow-xl scale-110 border-2 border-white'
                   : step < currentStep
-                  ? 'bg-gradient-to-br from-trinity-blue-600 to-trinity-purple-600 text-white shadow-lg'
-                  : 'bg-white text-neutral-400 border-2 border-neutral-300 shadow-md'
+                  ? 'bg-gradient-to-br from-green-500 to-green-600 text-white shadow-lg border-2 border-green-400'
+                  : 'bg-neutral-100 text-neutral-500 border-2 border-neutral-300 shadow-sm'
               }`}
               animate={{
                 scale: step === currentStep ? 1.1 : 1,
                 boxShadow: step === currentStep 
-                  ? '0 10px 25px rgba(59, 130, 246, 0.4), 0 20px 40px rgba(147, 51, 234, 0.3)' 
+                  ? '0 8px 25px rgba(59, 130, 246, 0.4), 0 15px 35px rgba(147, 51, 234, 0.25)' 
                   : step < currentStep
-                  ? '0 8px 20px rgba(59, 130, 246, 0.3)'
-                  : '0 4px 10px rgba(0, 0, 0, 0.1)'
+                  ? '0 4px 15px rgba(34, 197, 94, 0.3)'
+                  : '0 2px 8px rgba(0, 0, 0, 0.08)'
               }}
               transition={{ duration: 0.3 }}
             >
               {/* Effet de brillance pour l'étape actuelle */}
               {step === currentStep && (
                 <motion.div
-                  className="absolute inset-0 rounded-full bg-gradient-to-br from-white/20 to-transparent"
+                  className="absolute inset-0 rounded-full bg-gradient-to-br from-white/30 to-white/10"
                   animate={{ rotate: 360 }}
                   transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
                 />
@@ -64,7 +64,7 @@ const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({ currentStep, tota
               <motion.div
                 className={`w-16 h-1 mx-3 rounded-full transition-all duration-500 ${
                   step < currentStep 
-                    ? 'bg-gradient-to-r from-trinity-blue-500 to-trinity-purple-500 shadow-lg' 
+                    ? 'bg-gradient-to-r from-green-500 to-green-600 shadow-md' 
                     : 'bg-neutral-200'
                 }`}
                 initial={{ scaleX: 0 }}
@@ -87,10 +87,10 @@ const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({ currentStep, tota
             <motion.span
               className={`text-sm font-medium transition-all duration-300 ${
                 index + 1 === currentStep
-                  ? 'text-trinity-purple-700 font-bold'
+                  ? 'text-trinity-blue-700 font-bold'
                   : index + 1 < currentStep
-                  ? 'text-trinity-blue-600'
-                  : 'text-neutral-500'
+                  ? 'text-green-600 font-semibold'
+                  : 'text-neutral-400'
               }`}
               animate={{
                 scale: index + 1 === currentStep ? 1.05 : 1
