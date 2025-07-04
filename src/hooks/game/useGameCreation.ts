@@ -37,11 +37,11 @@ export const useGameCreation = ({
     }
 
     try {
-      console.log('🚀 useGameCreation: Creating new game with players:', playerNames);
+      console.log('🚀 GAME_CREATION: Starting with players:', playerNames);
       setInitError(null);
       
-      // Validation des noms de joueurs
-      const validPlayerNames = playerNames.filter(name => name && name.trim().length > 0);
+      // Validation stricte des noms
+      const validPlayerNames = playerNames.filter(name => name && name.trim().length >= 2);
       if (validPlayerNames.length < 2) {
         throw new Error('Noms de joueurs invalides');
       }
@@ -56,97 +56,65 @@ export const useGameCreation = ({
       }));
       
       const startTime = new Date();
-      
-      console.log('🧹 useGameCreation: Clearing previous state...');
-      // Clear any existing state first
-      setPlayers([]);
-      setRoundHistory([]);
-      setShowGameOver(false);
-      setShowScoreForm(false);
-      
-      console.log('⚡ useGameCreation: Setting new state...');
-      // Set new state
-      setPlayers(newPlayers);
-      setGameStartTime(startTime);
-      setIsInitialized(true);
-      
-      // Transfert d'état via sessionStorage pour garantir la continuité
-      const gameTransferData = {
+      const gameData = {
         players: newPlayers,
         roundHistory: [],
         isGameOver: false,
         scoreLimit,
         gameStartTime: startTime.toISOString(),
-        transferTimestamp: Date.now()
+        lastUpdated: new Date().toISOString(),
+        validated: true
       };
-      sessionStorage.setItem('game_transfer', JSON.stringify(gameTransferData));
       
-      console.log('💾 useGameCreation: Saving game state...');
-      // Sauvegarde SYNCHRONE et vérifiée avec timeout
-      const savePromise = saveCurrentGame(newPlayers, [], scoreLimit, startTime);
-      const timeoutPromise = new Promise<boolean>((_, reject) => 
-        setTimeout(() => reject(new Error('Save timeout')), 5000)
-      );
+      console.log('💾 GAME_CREATION: Direct save to localStorage...');
+      // SAUVEGARDE DIRECTE ET SYNCHRONE - bypass les hooks complexes
+      localStorage.setItem(STORAGE_KEYS.CURRENT_GAME, JSON.stringify(gameData));
+      localStorage.setItem(STORAGE_KEYS.GAME_ACTIVE, 'true');
+      localStorage.removeItem(STORAGE_KEYS.PLAYER_SETUP);
       
-      try {
-        const saveResult = await Promise.race([savePromise, timeoutPromise]);
-        
-        if (saveResult) {
-          // Sauvegarde directe additionnelle en localStorage
-          const gameData = {
-            players: newPlayers,
-            roundHistory: [],
-            isGameOver: false,
-            scoreLimit,
-            gameStartTime: startTime.toISOString(),
-            lastUpdated: new Date().toISOString()
-          };
-          
-          localStorage.setItem(STORAGE_KEYS.CURRENT_GAME, JSON.stringify(gameData));
-          localStorage.setItem(STORAGE_KEYS.GAME_ACTIVE, 'true');
-          localStorage.removeItem(STORAGE_KEYS.PLAYER_SETUP);
-          
-          // Vérification de cohérence des données
-          const savedCheck = localStorage.getItem(STORAGE_KEYS.CURRENT_GAME);
-          if (!savedCheck) {
-            throw new Error('Sauvegarde vérification échouée');
-          }
-          
-          console.log('✅ useGameCreation: Game state saved and verified');
-        } else {
-          console.warn('⚠️ useGameCreation: Save returned false, using React state only');
-        }
-      } catch (saveError) {
-        console.error('❌ useGameCreation: Save failed or timeout:', saveError);
-        // Continue avec React state seulement, ajouter fallback localStorage direct
-        const emergencyData = {
-          players: newPlayers,
-          roundHistory: [],
-          isGameOver: false,
-          scoreLimit,
-          gameStartTime: startTime.toISOString(),
-          emergency: true,
-          lastUpdated: new Date().toISOString()
-        };
-        localStorage.setItem(STORAGE_KEYS.CURRENT_GAME, JSON.stringify(emergencyData));
-        console.log('🆘 useGameCreation: Emergency save completed');
+      // VÉRIFICATION IMMÉDIATE de la sauvegarde
+      const savedData = localStorage.getItem(STORAGE_KEYS.CURRENT_GAME);
+      if (!savedData) {
+        throw new Error('Échec de sauvegarde critique');
       }
       
-      console.log('🎉 useGameCreation: Game created successfully with', newPlayers.length, 'players');
+      const parsedData = JSON.parse(savedData);
+      if (!parsedData.players || parsedData.players.length !== newPlayers.length) {
+        throw new Error('Données sauvegardées corrompues');
+      }
+      
+      console.log('✅ GAME_CREATION: Data saved and verified in localStorage');
+      
+      // MISE À JOUR de l'état React APRÈS sauvegarde confirmée
+      setPlayers(newPlayers);
+      setGameStartTime(startTime);
+      setRoundHistory([]);
+      setIsInitialized(true);
+      setShowGameOver(false);
+      setShowScoreForm(false);
+      
+      // Transfert sécurisé pour navigation
+      sessionStorage.setItem('game_navigation_ready', 'true');
+      
+      console.log('🎉 GAME_CREATION: Game ready with', newPlayers.length, 'players');
       toast.success(`Partie créée avec ${newPlayers.length} joueurs !`);
       return true;
-    } catch (error) {
-      console.error('💥 useGameCreation: Game initialization failed:', error);
-      setInitError('Erreur lors de l\'initialisation du jeu');
-      toast.error('Erreur lors de l\'initialisation du jeu');
       
-      // Reset state on error
+    } catch (error) {
+      console.error('💥 GAME_CREATION: Critical failure:', error);
+      setInitError(`Erreur: ${error.message}`);
+      toast.error(`Erreur lors de la création: ${error.message}`);
+      
+      // Nettoyage complet en cas d'erreur
+      localStorage.removeItem(STORAGE_KEYS.CURRENT_GAME);
+      localStorage.removeItem(STORAGE_KEYS.GAME_ACTIVE);
+      sessionStorage.removeItem('game_navigation_ready');
       setPlayers([]);
       setGameStartTime(null);
       setIsInitialized(false);
       return false;
     }
-  }, [scoreLimit, saveCurrentGame, setRoundHistory, setPlayers, setGameStartTime, setIsInitialized, setInitError, setShowGameOver, setShowScoreForm]);
+  }, [scoreLimit, setRoundHistory, setPlayers, setGameStartTime, setIsInitialized, setInitError, setShowGameOver, setShowScoreForm]);
 
   return { createNewGame };
 };

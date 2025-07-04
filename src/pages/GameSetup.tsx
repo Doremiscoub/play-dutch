@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useSEO } from '@/hooks/useSEO';
@@ -18,72 +18,66 @@ const GameSetup: React.FC = () => {
     keywords: 'configuration, setup, joueurs, partie dutch'
   });
 
+  const [isCreating, setIsCreating] = useState(false);
+
   const handleStartGame = async (playerNames: string[]) => {
+    if (isCreating) return; // Éviter les double-clics
+    
     try {
-      console.log('🎮 GameSetup: Starting game with players:', playerNames);
+      setIsCreating(true);
+      console.log('🎮 GAME_SETUP: Starting game creation with players:', playerNames);
       
-      // Validation des noms avant création
+      // Validation stricte des noms
       const validNames = playerNames.filter(name => name && name.trim().length >= 2);
-      console.log('✅ GameSetup: Valid names after filtering:', validNames);
+      console.log('✅ GAME_SETUP: Valid names after filtering:', validNames);
       
       if (validNames.length < 2) {
-        console.log('❌ GameSetup: Not enough valid players');
         toast.error('Il faut au moins 2 joueurs avec des noms valides');
         return;
       }
       
-      console.log('🚀 GameSetup: Creating new game...');
+      console.log('🚀 GAME_SETUP: Creating new game...');
       const success = await createNewGame(validNames);
-      console.log('🎯 GameSetup: Game creation result:', success);
+      console.log('🎯 GAME_SETUP: Game creation result:', success);
       
       if (success) {
-        console.log('✅ GameSetup: Game created successfully');
+        console.log('✅ GAME_SETUP: Game created successfully');
         
-        // Attendre un court délai pour s'assurer que toutes les sauvegardes sont terminées
-        await new Promise(resolve => setTimeout(resolve, 500));
-        
-        // Vérifications multiples de cohérence avant navigation
+        // VÉRIFICATION IMMÉDIATE des données sauvegardées
         const savedData = localStorage.getItem('current_dutch_game');
-        const transferData = sessionStorage.getItem('game_transfer');
+        const navigationReady = sessionStorage.getItem('game_navigation_ready');
         
-        console.log('🔍 GameSetup: localStorage verification:', !!savedData);
-        console.log('🔍 GameSetup: sessionStorage transfer:', !!transferData);
+        console.log('🔍 GAME_SETUP: Saved data check:', !!savedData);
+        console.log('🔍 GAME_SETUP: Navigation ready:', !!navigationReady);
         
-        if (savedData || transferData) {
-          console.log('📍 GameSetup: Data confirmed, navigating to /game...');
-          navigate('/game');
-          console.log('🏁 GameSetup: Navigation completed');
-        } else {
-          console.warn('⚠️ GameSetup: No saved data found, attempting navigation with React state');
-          // Dernière chance - créer une sauvegarde d'urgence
-          const emergencyData = {
-            players: validNames.map((name, index) => ({
-              id: `emergency_${index}_${Date.now()}`,
-              name: name.trim(),
-              emoji: '🎮',
-              totalScore: 0,
-              rounds: [],
-              avatarColor: 'blue'
-            })),
-            roundHistory: [],
-            isGameOver: false,
-            scoreLimit: 100,
-            gameStartTime: new Date().toISOString(),
-            emergency: true,
-            lastUpdated: new Date().toISOString()
-          };
-          
-          localStorage.setItem('current_dutch_game', JSON.stringify(emergencyData));
-          console.log('🆘 GameSetup: Emergency data created, navigating');
-          navigate('/game');
+        if (savedData && navigationReady) {
+          // Vérification de l'intégrité des données
+          try {
+            const parsedData = JSON.parse(savedData);
+            if (parsedData.players && parsedData.players.length >= 2) {
+              console.log('📍 GAME_SETUP: Data integrity confirmed, navigating...');
+              sessionStorage.removeItem('game_navigation_ready');
+              navigate('/game');
+              return;
+            }
+          } catch (parseError) {
+            console.error('❌ GAME_SETUP: Data corruption detected:', parseError);
+          }
         }
+        
+        // Fallback en cas de problème
+        console.warn('⚠️ GAME_SETUP: Navigation conditions not met, data issue');
+        toast.error('Erreur de sauvegarde, veuillez réessayer');
+        
       } else {
-        console.log('❌ GameSetup: Game creation failed');
+        console.log('❌ GAME_SETUP: Game creation failed');
         toast.error('Erreur lors de la création de la partie');
       }
     } catch (error) {
-      console.error('💥 GameSetup: Failed to start game:', error);
-      toast.error('Erreur lors de la création de la partie');
+      console.error('💥 GAME_SETUP: Critical error:', error);
+      toast.error('Erreur critique lors de la création');
+    } finally {
+      setIsCreating(false);
     }
   };
 
@@ -130,7 +124,14 @@ const GameSetup: React.FC = () => {
       {/* Contenu principal */}
       <div className="relative z-10 p-6 pt-8">
         <div className="w-full max-w-2xl mx-auto">
-          <ModernGameSetup onStartGame={handleStartGame} />
+          {isCreating ? (
+            <div className="lg-card lg-tint-primary-50 rounded-xl p-8 lg-elevation-02 text-center">
+              <div className="animate-spin rounded-full border-b-2 mx-auto mb-4 h-8 w-8 border-white"></div>
+              <p className="text-white">Création de la partie en cours...</p>
+            </div>
+          ) : (
+            <ModernGameSetup onStartGame={handleStartGame} />
+          )}
         </div>
       </div>
     </div>

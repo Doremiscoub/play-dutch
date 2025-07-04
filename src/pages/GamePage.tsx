@@ -11,96 +11,103 @@ const GamePage: React.FC = () => {
   const [loadingAttempts, setLoadingAttempts] = useState(0);
   const [isInTransition, setIsInTransition] = useState(false);
 
-  // Load existing game on mount avec retry et délai de grâce
+  // Load existing game - logique simplifiée et unifiée
   useEffect(() => {
-    console.log('🎮 GamePage: useEffect triggered, attempt:', loadingAttempts);
-    console.log('🔍 GamePage: isInitialized:', gameState.isInitialized);
-    console.log('🔍 GamePage: players:', gameState.players);
-    console.log('🔍 GamePage: players length:', gameState.players?.length);
+    console.log('🎮 GAME_PAGE: Initialization check, attempt:', loadingAttempts);
+    console.log('🔍 GAME_PAGE: isInitialized:', gameState.isInitialized);
+    console.log('🔍 GAME_PAGE: players count:', gameState.players?.length);
     
-    // Premier check: si on a déjà des joueurs en React state, pas besoin de charger
-    if (gameState.isInitialized && gameState.players && gameState.players.length > 0) {
-      console.log('✅ GamePage: Game already initialized with players in React state');
+    // Si déjà initialisé avec des joueurs, on est bon
+    if (gameState.isInitialized && gameState.players && gameState.players.length >= 2) {
+      console.log('✅ GAME_PAGE: Game ready with players');
       setIsInTransition(false);
+      setLoadingAttempts(0);
       return;
     }
     
-    // Check du transfert sessionStorage (nouveau)
-    const gameTransfer = sessionStorage.getItem('game_transfer');
-    if (gameTransfer) {
+    // VÉRIFICATION DIRECTE des données sauvegardées
+    const savedData = localStorage.getItem('current_dutch_game');
+    console.log('🔍 GAME_PAGE: Checking localStorage:', !!savedData);
+    
+    if (savedData) {
       try {
-        const transferData = JSON.parse(gameTransfer);
-        const age = Date.now() - transferData.transferTimestamp;
+        const gameData = JSON.parse(savedData);
+        console.log('📊 GAME_PAGE: Found saved game with', gameData.players?.length, 'players');
         
-        if (age < 10000) { // 10 secondes max
-          console.log('🔄 GamePage: Found fresh game transfer data');
-          // Les données de transfert sont fraîches, attendre que l'état React se synchronise
-          setIsInTransition(true);
-          sessionStorage.removeItem('game_transfer');
+        if (gameData.players && gameData.players.length >= 2) {
+          console.log('🔄 GAME_PAGE: Loading saved game...');
+          const loaded = gameState.loadExistingGame();
           
-          // Délai de grâce pour la synchronisation
-          setTimeout(() => {
-            if (!gameState.isInitialized) {
-              console.log('🔄 GamePage: Transfer timeout, trying localStorage fallback');
-              setLoadingAttempts(prev => prev + 1);
-            }
-          }, 1500);
-          return;
+          if (loaded) {
+            console.log('✅ GAME_PAGE: Game loaded successfully');
+            setIsInTransition(false);
+            setLoadingAttempts(0);
+            return;
+          } else {
+            console.warn('⚠️ GAME_PAGE: Load function failed despite data presence');
+          }
         } else {
-          console.log('🗑️ GamePage: Transfer data too old, removing');
-          sessionStorage.removeItem('game_transfer');
+          console.warn('⚠️ GAME_PAGE: Invalid player data in saved game');
+          localStorage.removeItem('current_dutch_game');
         }
       } catch (error) {
-        console.error('❌ GamePage: Invalid transfer data:', error);
-        sessionStorage.removeItem('game_transfer');
+        console.error('❌ GAME_PAGE: Corrupted save data:', error);
+        localStorage.removeItem('current_dutch_game');
       }
     }
     
-    // Deuxième check: essayer de charger depuis localStorage avec retry
-    console.log('🔄 GamePage: Game not fully initialized, trying to load existing game...');
-    const loaded = gameState.loadExistingGame();
-    console.log('📂 GamePage: Load existing game result:', loaded);
-    
-    if (!loaded) {
-      if (loadingAttempts < 2) {
-        console.log(`🔄 GamePage: Load failed, retrying in 1s (attempt ${loadingAttempts + 1}/3)`);
-        setTimeout(() => {
-          setLoadingAttempts(prev => prev + 1);
-        }, 1000);
-      } else {
-        console.log('❌ GamePage: No existing game found after retries, redirecting to setup');
-        // Délai plus long pour éviter les redirections en boucle
-        setTimeout(() => navigate('/setup'), 2000);
-      }
+    // Pas de données valides trouvées
+    if (loadingAttempts < 1) {
+      console.log('🔄 GAME_PAGE: No valid data, retrying once...');
+      setLoadingAttempts(1);
+      setIsInTransition(true);
+      
+      setTimeout(() => {
+        setIsInTransition(false);
+        setLoadingAttempts(2);
+      }, 1000);
     } else {
-      console.log('✅ GamePage: Existing game loaded successfully');
-      setIsInTransition(false);
-      setLoadingAttempts(0);
+      console.log('❌ GAME_PAGE: No game found, redirecting to setup');
+      navigate('/setup', { replace: true });
     }
   }, [gameState.isInitialized, gameState.players, gameState.loadExistingGame, navigate, loadingAttempts]);
 
-  // Show loading if not initialized ou en transition
+  // Show loading ou error states
   if (!gameState.isInitialized || !gameState.players || gameState.players.length === 0 || isInTransition) {
-    console.log('⏳ GamePage: Showing loading screen');
-    console.log('🔍 GamePage: isInitialized:', gameState.isInitialized);
-    console.log('🔍 GamePage: players exist:', !!gameState.players);
-    console.log('🔍 GamePage: players length:', gameState.players?.length);
-    console.log('🔍 GamePage: isInTransition:', isInTransition);
-    console.log('🔍 GamePage: loadingAttempts:', loadingAttempts);
+    console.log('⏳ GAME_PAGE: Showing loading/error state');
+    console.log('🔍 GAME_PAGE: isInitialized:', gameState.isInitialized);
+    console.log('🔍 GAME_PAGE: players count:', gameState.players?.length);
+    console.log('🔍 GAME_PAGE: isInTransition:', isInTransition);
+    console.log('🔍 GAME_PAGE: loadingAttempts:', loadingAttempts);
+    
+    const showError = loadingAttempts >= 2 && !isInTransition;
     
     return (
       <PageShell variant="game">
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-center lg-card lg-tint-primary-50 rounded-xl p-8 lg-elevation-02 animate-lg-reveal">
-            <div className="animate-spin rounded-full border-b-2 mx-auto mb-4 h-8 w-8 border-white"></div>
-            <p className="text-white">
-              {isInTransition 
-                ? 'Synchronisation de la partie...' 
-                : loadingAttempts > 0 
-                  ? `Tentative de chargement ${loadingAttempts + 1}/3...`
-                  : 'Chargement de la partie...'
-              }
-            </p>
+            {showError ? (
+              <>
+                <div className="text-red-400 text-xl mb-4">⚠️</div>
+                <p className="text-white mb-4">Aucune partie en cours trouvée</p>
+                <button 
+                  onClick={() => navigate('/setup')}
+                  className="px-4 py-2 bg-white text-black rounded hover:bg-gray-200"
+                >
+                  Créer une nouvelle partie
+                </button>
+              </>
+            ) : (
+              <>
+                <div className="animate-spin rounded-full border-b-2 mx-auto mb-4 h-8 w-8 border-white"></div>
+                <p className="text-white">
+                  {isInTransition 
+                    ? 'Chargement de la partie...' 
+                    : 'Recherche de partie en cours...'
+                  }
+                </p>
+              </>
+            )}
           </div>
         </div>
       </PageShell>
