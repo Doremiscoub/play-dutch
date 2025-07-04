@@ -94,13 +94,21 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
                 ease: [0.23, 1, 0.32, 1]
               }}
             >
-              <ModernTitle
-                variant="h3"
-                withSparkles
-                className="text-xl sm:text-2xl font-extrabold bg-gradient-to-r from-trinity-blue-600 via-trinity-purple-600 to-trinity-orange-500 bg-clip-text text-transparent mb-3"
-              >
-                {variant === 'game' ? '🎯 Partie en cours' : title}
-              </ModernTitle>
+              <div className="relative">
+                {/* Fond avec glow effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-trinity-blue-500/20 via-trinity-purple-500/20 to-trinity-orange-500/20 rounded-2xl blur-xl"></div>
+                
+                {/* Titre principal */}
+                <div className="relative bg-white/90 backdrop-blur-xl rounded-2xl px-6 py-3 border border-white/60 shadow-xl">
+                  <h1 className="text-xl sm:text-2xl font-black text-gray-900 flex items-center justify-center gap-3">
+                    <span className="text-2xl">🎯</span>
+                    <span className="bg-gradient-to-r from-trinity-blue-700 via-trinity-purple-700 to-trinity-orange-700 bg-clip-text text-transparent font-extrabold">
+                      {variant === 'game' ? 'Partie en cours' : title}
+                    </span>
+                    <span className="text-2xl">🎯</span>
+                  </h1>
+                </div>
+              </div>
             </motion.div>
           )}
           
