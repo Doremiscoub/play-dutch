@@ -13,7 +13,7 @@ const FunPlayerCardRankBadge: React.FC<FunPlayerCardRankBadgeProps> = ({
 }) => {
   return (
     <motion.div
-      className="absolute -top-6 -left-6 z-60 bg-gradient-to-br from-dutch-blue via-dutch-purple to-dutch-orange text-white text-xl font-black rounded-full w-16 h-16 flex items-center justify-center shadow-glass-lg border-4 border-white/90 backdrop-blur-sm"
+      className="absolute -top-4 -left-4 z-60 bg-gradient-to-br from-dutch-blue via-dutch-purple to-dutch-orange text-white text-lg font-black rounded-full w-12 h-12 flex items-center justify-center shadow-glass-lg border-3 border-white/90 backdrop-blur-sm"
       initial={{ scale: 0, rotate: -270, z: -100 }}
       animate={{ scale: 1, rotate: 0, z: 0 }}
       transition={{ 

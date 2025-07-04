@@ -13,7 +13,7 @@ const FloatingWinnerBadge: React.FC<FloatingWinnerBadgeProps> = ({ isWinner, car
 
   return (
     <motion.div
-      className="absolute -top-3 -right-3 z-40 pointer-events-none"
+      className="absolute -top-2 -right-2 z-50 pointer-events-none"
       initial={{ opacity: 0, scale: 0.3, rotate: -180 }}
       animate={{ 
         opacity: 1, 
@@ -37,8 +37,8 @@ const FloatingWinnerBadge: React.FC<FloatingWinnerBadgeProps> = ({ isWinner, car
         <div className="absolute inset-0 bg-gradient-to-r from-amber-400 to-yellow-500 rounded-full blur-lg opacity-60 animate-pulse"></div>
         
         {/* Badge principal */}
-        <div className="relative bg-gradient-to-r from-amber-400 to-yellow-500 text-white rounded-full p-3 shadow-xl border-2 border-white/80 backdrop-blur-sm">
-          <Trophy className="h-5 w-5" />
+        <div className="relative bg-gradient-to-r from-amber-400 to-yellow-500 text-white rounded-full p-2.5 shadow-xl border-2 border-white/80 backdrop-blur-sm">
+          <Trophy className="h-4 w-4" />
         </div>
       </div>
     </motion.div>

@@ -5,6 +5,7 @@ import ScoreBoard from '@/components/ScoreBoard';
 import NewRoundModal from '@/components/NewRoundModal';
 import PageShell from '@/components/layout/PageShell';
 import UnifiedHeader from '@/components/layout/UnifiedHeader';
+import ProfessorAvatar from '@/components/game/ProfessorAvatar';
 import { toast } from 'sonner';
 
 const SimpleGamePage: React.FC = () => {
@@ -77,11 +78,23 @@ const SimpleGamePage: React.FC = () => {
   return (
     <PageShell variant="game">
       <UnifiedHeader 
-        title="Partie Dutch" 
+        title={`Manche ${roundHistory.length + 1}`}
         showBackButton={true}
       />
       
       <div className="container mx-auto px-4 py-6">
+        {/* Professeur Cartouche */}
+        <div className="flex justify-center mb-6">
+          <div className="relative">
+            <ProfessorAvatar 
+              size="lg" 
+              animate={true} 
+              mood={isGameOver ? "happy" : roundHistory.length === 0 ? "thinking" : "excited"} 
+              showParticles={true} 
+            />
+          </div>
+        </div>
+        
         <ScoreBoard
           players={players}
           onAddRound={() => {}} // Non utilisé car on utilise openScoreForm
