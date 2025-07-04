@@ -19,7 +19,7 @@ const SimpleGamePage: React.FC = () => {
     if (!hasGame) {
       const loaded = loadFromStorage();
       if (!loaded) {
-        navigate('/simple-setup');
+        navigate('/setup');
         return;
       }
     }
@@ -40,7 +40,7 @@ const SimpleGamePage: React.FC = () => {
 
   const handleConfirmEndGame = () => {
     resetGame();
-    navigate('/simple-setup');
+    navigate('/setup');
     setShowGameEndConfirmation(false);
   };
 
@@ -63,7 +63,7 @@ const SimpleGamePage: React.FC = () => {
           <div className="text-center space-y-4">
             <h2 className="text-xl font-bold">Aucune partie en cours</h2>
             <button 
-              onClick={() => navigate('/simple-setup')}
+              onClick={() => navigate('/setup')}
               className="px-6 py-3 bg-gradient-to-r from-trinity-blue-500 to-trinity-purple-500 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all"
             >
               Créer une partie
