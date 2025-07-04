@@ -68,16 +68,26 @@ const SimpleGamePage: React.FC = () => {
 
         {/* Scores des joueurs */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-          {players.map((player, index) => (
-            <Card key={player.id} className="p-4">
-              <div className="text-center">
-                <div className="text-2xl mb-2">{player.emoji}</div>
-                <h3 className="font-semibold">{player.name}</h3>
-                <div className="text-2xl font-bold text-blue-600">{player.totalScore}</div>
-                <div className="text-sm text-gray-500">{player.rounds.length} manches</div>
-              </div>
-            </Card>
-          ))}
+          {players.map((player, index) => {
+            const isWinning = player.totalScore === Math.min(...players.map(p => p.totalScore));
+            const dutchCount = player.rounds.filter(r => r.isDutch).length;
+            
+            return (
+              <Card key={player.id} className={`p-4 ${isWinning ? 'ring-2 ring-yellow-400 bg-yellow-50' : ''}`}>
+                <div className="text-center">
+                  <div className="text-2xl mb-2">{player.emoji}</div>
+                  <h3 className="font-semibold">{player.name}</h3>
+                  <div className={`text-2xl font-bold ${isWinning ? 'text-yellow-600' : 'text-blue-600'}`}>
+                    {player.totalScore}
+                  </div>
+                  <div className="text-sm text-gray-500">
+                    {player.rounds.length} manches • {dutchCount} Dutch
+                  </div>
+                  {isWinning && <div className="text-xs text-yellow-600 font-semibold">👑 En tête</div>}
+                </div>
+              </Card>
+            );
+          })}
         </div>
 
         {/* Game Over */}

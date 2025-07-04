@@ -101,17 +101,23 @@ export const useSimpleGameState = () => {
       rounds: [...player.rounds, { score: scores[index], isDutch: player.id === dutchPlayerId }]
     }));
 
+    // Déterminer qui a fait Dutch (le plus bas score de la manche)
+    const minScore = Math.min(...scores);
+    const dutchPlayerIndex = scores.indexOf(minScore);
+    const actualDutchPlayerId = updatedPlayers[dutchPlayerIndex]?.id;
+
     const newState = {
       ...gameState,
       players: updatedPlayers,
-      roundHistory: [...gameState.roundHistory, newRound],
+      roundHistory: [...gameState.roundHistory, { ...newRound, dutchPlayerId: actualDutchPlayerId }],
       isGameOver: updatedPlayers.some(p => p.totalScore >= gameState.scoreLimit)
     };
 
     setGameState(newState);
     saveToStorage(newState);
     
-    toast.success('Manche ajoutée');
+    const dutchPlayerName = updatedPlayers[dutchPlayerIndex]?.name;
+    toast.success(`Manche ajoutée - ${dutchPlayerName} a fait Dutch !`);
   }, [gameState, saveToStorage]);
 
   const undoLastRound = useCallback(() => {
@@ -139,7 +145,12 @@ export const useSimpleGameState = () => {
   }, [gameState, saveToStorage]);
 
   const resetGame = useCallback(() => {
+    // Nettoyer toutes les anciennes clés de stockage
     localStorage.removeItem(GAME_KEY);
+    localStorage.removeItem('current_dutch_game');
+    localStorage.removeItem('game_active');
+    localStorage.removeItem('player_setup');
+    
     setGameState({
       players: [],
       roundHistory: [],
@@ -147,6 +158,8 @@ export const useSimpleGameState = () => {
       gameStartTime: null,
       isGameOver: false
     });
+    
+    toast.success('Partie réinitialisée');
   }, []);
 
   return {

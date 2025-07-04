@@ -11,8 +11,6 @@ import AnimatedBackground from './components/AnimatedBackground';
 
 // Pages
 import Home from './pages/Home';
-import GamePage from './pages/GamePage';
-import GameSetup from './pages/GameSetup';
 import SimpleGameSetup from './pages/SimpleGameSetup';
 import SimpleGamePage from './pages/SimpleGamePage';
 import History from './pages/History';
@@ -75,8 +73,8 @@ const App: React.FC = () => {
               
               {/* Pages principales */}
               <Route index element={<Home />} />
-              <Route path="setup" element={<GameSetup />} />
-              <Route path="game" element={<GamePage />} />
+              <Route path="setup" element={<Navigate to="/simple-setup" replace />} />
+              <Route path="game" element={<Navigate to="/simple-game" replace />} />
               <Route path="simple-setup" element={<SimpleGameSetup />} />
               <Route path="simple-game" element={<SimpleGamePage />} />
               <Route path="history" element={<History />} />
