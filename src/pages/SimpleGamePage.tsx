@@ -84,18 +84,6 @@ const SimpleGamePage: React.FC = () => {
       />
       
       <div className="container mx-auto px-4 py-6">
-        {/* Professeur Cartouche */}
-        <div className="flex justify-center mb-6">
-          <div className="relative">
-            <ProfessorAvatar 
-              size="lg" 
-              animate={true} 
-              mood={isGameOver ? "happy" : roundHistory.length === 0 ? "thinking" : "excited"} 
-              showParticles={true} 
-            />
-          </div>
-        </div>
-
         {/* Commentaires du Professeur Cartouche */}
         <div className="mb-6">
           <AICommentator 
