@@ -105,7 +105,7 @@ const EnhancedPlayerCard: React.FC<EnhancedPlayerCardProps> = ({
       {/* Badge de rang repositionné - déborde de la carte */}
       <motion.div
         className={cn(
-          "absolute -top-4 -right-4 z-20",
+          "absolute -top-4 -left-4 z-20",
           "w-20 h-20 rounded-full flex flex-col items-center justify-center",
           "text-white font-black shadow-2xl border-4 border-white/30",
           "bg-gradient-to-br backdrop-blur-sm",
