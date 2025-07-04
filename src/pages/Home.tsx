@@ -9,7 +9,6 @@ import UnifiedHeader from '@/components/layout/UnifiedHeader';
 import PageShell from '@/components/layout/PageShell';
 import GamingHeroSection from '@/components/home/GamingHeroSection';
 import LazyHomeSections from '@/components/home/LazyHomeSections';
-import DebugGameSetup from '@/debug-game-setup';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -219,9 +218,6 @@ const Home: React.FC = () => {
 
       {/* Sections lazy-loaded pour optimiser les performances */}
       <LazyHomeSections navigate={navigate} />
-      
-      {/* DEBUG MODE - TO REMOVE AFTER TESTING */}
-      <DebugGameSetup />
     </PageShell>
   );
 };
