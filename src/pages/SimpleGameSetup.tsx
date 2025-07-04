@@ -1,12 +1,12 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { useSimpleGameState } from '@/hooks/useSimpleGameState';
 import { toast } from 'sonner';
 import { Card, CardContent } from '@/components/ui/card';
 import ModernGameSetup from '@/components/game-setup/ModernGameSetup';
 import UnifiedHeader from '@/components/layout/UnifiedHeader';
 import PageShell from '@/components/layout/PageShell';
-import SimpleErrorBoundary from '@/components/ui/simple-error-boundary';
 
 const SimpleGameSetup: React.FC = () => {
   const navigate = useNavigate();
@@ -34,14 +34,21 @@ const SimpleGameSetup: React.FC = () => {
       />
 
       <div className="container mx-auto px-4 py-8 max-w-4xl">
-        <div>
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
           {/* Configuration directe sans redondance */}
-          <SimpleErrorBoundary fallbackMessage="Erreur dans la configuration de la partie">
-            <ModernGameSetup onStartGame={handleStartGame} />
-          </SimpleErrorBoundary>
+          <ModernGameSetup onStartGame={handleStartGame} />
 
           {/* Informations sur le jeu */}
-          <div className="mt-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.6 }}
+            className="mt-8"
+          >
             <Card className="bg-gradient-to-r from-trinity-blue-50 to-trinity-purple-50 border border-trinity-blue-200">
               <CardContent className="p-6">
                 <h3 className="text-lg font-bold text-neutral-800 mb-3">🎯 Rappel des règles Dutch</h3>
@@ -57,8 +64,8 @@ const SimpleGameSetup: React.FC = () => {
                 </div>
               </CardContent>
             </Card>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </div>
     </PageShell>
   );

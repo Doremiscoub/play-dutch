@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { motion, AnimatePresence, Reorder } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowLeft, Plus, Check, Edit3, GripVertical, X } from 'lucide-react';
 import { toast } from 'sonner';
+import ProfessorAvatar from '@/components/game/ProfessorAvatar';
 import { Badge } from '@/components/ui/badge';
 import { SetupPlayer, MODERN_EMOJIS, QUICK_NAMES, MAX_PLAYERS } from './types';
 
@@ -110,9 +112,13 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
   return (
     <div className="space-y-6 p-6">
       {/* Header avec progress */}
-      <div className="text-center space-y-4">
-        <div className="mx-auto w-20 h-20 rounded-3xl bg-gradient-to-br from-trinity-blue-500 to-trinity-purple-500 flex items-center justify-center shadow-lg border border-white/30">
-          <div className="text-4xl">👥</div>
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="text-center space-y-4"
+      >
+        <div className="mx-auto w-20 h-20 rounded-3xl bg-gradient-to-br from-trinity-blue-500 to-trinity-purple-500 flex items-center justify-center shadow-lg border border-white/30 overflow-hidden">
+          <ProfessorAvatar size="md" animate={true} mood="happy" showParticles={false} />
         </div>
         <h1 className="text-3xl font-black bg-gradient-to-r from-trinity-blue-600 via-trinity-purple-600 to-trinity-orange-600 bg-clip-text text-transparent">
           Noms des joueurs
@@ -126,14 +132,16 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
               {players.length}/{playerCount}
             </Badge>
             <div className="w-24 h-2 bg-neutral-300 rounded-full overflow-hidden">
-              <div
-                className="h-full bg-gradient-to-r from-trinity-blue-500 to-trinity-purple-500 transition-all duration-300"
-                style={{ width: `${progressPercentage}%` }}
+              <motion.div
+                className="h-full bg-gradient-to-r from-trinity-blue-500 to-trinity-purple-500"
+                initial={{ width: 0 }}
+                animate={{ width: `${progressPercentage}%` }}
+                transition={{ duration: 0.3 }}
               />
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Formulaire d'ajout */}
       {players.length < playerCount && (
@@ -194,11 +202,17 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
             </div>
           </CardHeader>
           <CardContent>
-            <div className="space-y-3">
+            <Reorder.Group axis="y" values={players} onReorder={handleReorder} className="space-y-3">
               {players.map((player, index) => (
-                <div 
+                <Reorder.Item 
                   key={`${player.name}-${index}`}
-                  className="cursor-default"
+                  value={player}
+                  className="cursor-grab active:cursor-grabbing"
+                  initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.8, y: -20 }}
+                  whileDrag={{ scale: 1.05, zIndex: 10 }}
+                  dragListener={editingIndex !== index}
                 >
                   <div className="flex items-center justify-between p-3 bg-white/90 hover:bg-white rounded-xl transition-all border border-neutral-200 group shadow-sm">
                     <div className="flex items-center gap-3">
@@ -259,9 +273,9 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
                       </Button>
                     </div>
                   </div>
-                </div>
+                </Reorder.Item>
               ))}
-            </div>
+            </Reorder.Group>
           </CardContent>
         </Card>
       )}
