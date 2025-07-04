@@ -3,8 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useSimpleGameState } from '@/hooks/useSimpleGameState';
 import { toast } from 'sonner';
-import { Users, Trophy } from 'lucide-react';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import ModernGameSetup from '@/components/game-setup/ModernGameSetup';
 import UnifiedHeader from '@/components/layout/UnifiedHeader';
 import PageShell from '@/components/layout/PageShell';
@@ -21,7 +20,7 @@ const SimpleGameSetup: React.FC = () => {
 
     const success = createGame(playerNames);
     if (success) {
-      navigate('/simple-game');
+      navigate('/game');
     } else {
       toast.error('Erreur lors de la création de la partie');
     }
@@ -40,18 +39,8 @@ const SimpleGameSetup: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-      {/* Configuration directe sans redondance */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
-      >
-        <Card className="bg-white/95 backdrop-blur-xl border-0 shadow-2xl overflow-hidden">
-          <CardContent className="p-0">
-            <ModernGameSetup onStartGame={handleStartGame} />
-          </CardContent>
-        </Card>
-      </motion.div>
+          {/* Configuration directe sans redondance */}
+          <ModernGameSetup onStartGame={handleStartGame} />
 
           {/* Informations sur le jeu */}
           <motion.div

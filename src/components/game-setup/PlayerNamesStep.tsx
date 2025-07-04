@@ -110,7 +110,7 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
   const progressPercentage = (players.length / playerCount) * 100;
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 p-6">
       {/* Header avec progress */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -123,15 +123,15 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
         <h1 className="text-3xl font-black bg-gradient-to-r from-trinity-blue-600 via-trinity-purple-600 to-trinity-orange-600 bg-clip-text text-transparent">
           Noms des joueurs
         </h1>
-        <div className="space-y-2">
+        <div className="space-y-3">
           <p className="text-neutral-700 font-medium">
-            Ajoutez les {playerCount} joueurs pour votre partie
+            Ajoutez les {playerCount} joueurs
           </p>
-          <div className="flex items-center gap-2 justify-center">
+          <div className="flex items-center gap-3 justify-center">
             <Badge variant="secondary" className="bg-trinity-blue-100 text-trinity-blue-700 border border-trinity-blue-200">
-              {players.length}/{playerCount} joueurs
+              {players.length}/{playerCount}
             </Badge>
-            <div className="w-32 h-2 bg-neutral-300 rounded-full overflow-hidden">
+            <div className="w-24 h-2 bg-neutral-300 rounded-full overflow-hidden">
               <motion.div
                 className="h-full bg-gradient-to-r from-trinity-blue-500 to-trinity-purple-500"
                 initial={{ width: 0 }}
@@ -145,26 +145,21 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
 
       {/* Formulaire d'ajout */}
       {players.length < playerCount && (
-        <Card className="card-glass bg-white/80 border-2 border-white/60">
-          <CardHeader className="pb-4">
-            <CardTitle className="text-lg font-bold text-trinity-purple-700">
-              Ajouter un joueur
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
+        <Card className="card-glass bg-white/90 border border-white/60">
+          <CardContent className="p-4 space-y-4">
             <div className="flex gap-3">
               <Input
                 value={newPlayer}
                 onChange={(e) => setNewPlayer(e.target.value)}
-                placeholder={`Nom du joueur ${players.length + 1}`}
-                className="flex-1 bg-white border-neutral-300 focus:border-trinity-blue-500 focus:ring-2 focus:ring-trinity-blue-200 rounded-2xl text-neutral-800"
+                placeholder={`Joueur ${players.length + 1}`}
+                className="flex-1 bg-white border-neutral-300 focus:border-trinity-blue-500 focus:ring-1 focus:ring-trinity-blue-200 rounded-xl"
                 onKeyDown={(e) => e.key === 'Enter' && addPlayer()}
                 maxLength={20}
               />
               <Button 
                 onClick={addPlayer}
                 disabled={players.length >= MAX_PLAYERS}
-                className="bg-gradient-to-r from-trinity-blue-600 to-trinity-purple-600 hover:from-trinity-blue-700 hover:to-trinity-purple-700 text-white rounded-2xl px-6 shadow-lg border border-trinity-blue-400"
+                className="bg-gradient-to-r from-trinity-blue-600 to-trinity-purple-600 hover:from-trinity-blue-700 hover:to-trinity-purple-700 text-white rounded-xl px-4 shadow-md"
               >
                 <Plus className="h-4 w-4" />
               </Button>
@@ -172,15 +167,15 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
 
             {availableQuickNames.length > 0 && (
               <div>
-                <p className="text-sm font-medium text-neutral-700 mb-2">Ajout rapide :</p>
+                <p className="text-sm font-medium text-neutral-600 mb-2">Ajout rapide :</p>
                 <div className="flex gap-2 flex-wrap">
-                  {availableQuickNames.map((name) => (
+                  {availableQuickNames.slice(0, 6).map((name) => (
                     <Button
                       key={name}
                       variant="outline"
                       size="sm"
                       onClick={() => quickAddPlayer(name)}
-                      className="bg-white border-neutral-300 hover:bg-trinity-orange-50 hover:border-trinity-orange-300 text-neutral-700 rounded-xl"
+                      className="bg-white border-neutral-300 hover:bg-trinity-orange-50 hover:border-trinity-orange-300 text-neutral-700 rounded-lg text-xs"
                     >
                       + {name}
                     </Button>
@@ -194,15 +189,15 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
 
       {/* Liste des joueurs */}
       {players.length > 0 && (
-        <Card className="card-glass bg-white/80 border-2 border-white/60">
-          <CardHeader className="pb-4">
+        <Card className="card-glass bg-white/90 border border-white/60">
+          <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
               <CardTitle className="text-lg font-bold text-trinity-orange-700">
-                Joueurs ajoutés
+                Joueurs ({players.length}/{playerCount})
               </CardTitle>
-              <div className="flex items-center gap-2 text-sm text-neutral-600">
-                <GripVertical className="h-4 w-4" />
-                Glissez pour réorganiser
+              <div className="flex items-center gap-1 text-xs text-neutral-500">
+                <GripVertical className="h-3 w-3" />
+                Réorganiser
               </div>
             </div>
           </CardHeader>
@@ -219,64 +214,62 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
                   whileDrag={{ scale: 1.05, zIndex: 10 }}
                   dragListener={editingIndex !== index}
                 >
-                  <div className="flex items-center justify-between p-4 bg-white/80 hover:bg-white rounded-2xl transition-all border border-neutral-200 group shadow-sm">
-                    <div className="flex items-center gap-4">
-                      <div className="flex items-center gap-3">
-                        <GripVertical className="h-5 w-5 text-neutral-400 group-hover:text-neutral-600 transition-colors" />
-                        <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${
-                          index === 0 ? 'from-amber-400 to-amber-600' :
-                          index === 1 ? 'from-neutral-300 to-neutral-500' :
-                          index === 2 ? 'from-orange-400 to-orange-600' :
-                          'from-trinity-blue-400 to-trinity-purple-500'
-                        } flex items-center justify-center text-white font-bold text-lg shadow-lg`}>
-                          {index + 1}
-                        </div>
+                  <div className="flex items-center justify-between p-3 bg-white/90 hover:bg-white rounded-xl transition-all border border-neutral-200 group shadow-sm">
+                    <div className="flex items-center gap-3">
+                      <GripVertical className="h-4 w-4 text-neutral-400 group-hover:text-neutral-600 transition-colors" />
+                      <div className={`w-8 h-8 rounded-xl bg-gradient-to-br ${
+                        index === 0 ? 'from-amber-400 to-amber-600' :
+                        index === 1 ? 'from-neutral-300 to-neutral-500' :
+                        index === 2 ? 'from-orange-400 to-orange-600' :
+                        'from-trinity-blue-400 to-trinity-purple-500'
+                      } flex items-center justify-center text-white font-bold text-sm shadow-md`}>
+                        {index + 1}
                       </div>
-                      <div className="text-3xl">{player.emoji}</div>
+                      <div className="text-2xl">{player.emoji}</div>
                       <div>
                         {editingIndex === index ? (
                           <div className="flex gap-2">
                             <Input
                               value={editingName}
                               onChange={(e) => setEditingName(e.target.value)}
-                              className="w-32 h-8 text-sm"
+                              className="w-28 h-8 text-sm"
                               onKeyDown={(e) => e.key === 'Enter' && saveEdit()}
                               autoFocus
                             />
-                            <Button size="sm" onClick={saveEdit} className="h-8">
+                            <Button size="sm" onClick={saveEdit} className="h-8 px-2">
                               <Check className="h-3 w-3" />
                             </Button>
                           </div>
                         ) : (
                           <div 
-                            className="font-bold text-lg text-neutral-800 cursor-pointer hover:text-trinity-blue-600"
+                            className="font-semibold text-neutral-800 cursor-pointer hover:text-trinity-blue-600"
                             onClick={() => startEditing(index)}
                           >
                             {player.name}
                           </div>
                         )}
-                        <div className="text-sm text-neutral-600">
-                          {index === 0 ? 'Premier joueur' : `Joueur ${index + 1}`}
+                        <div className="text-xs text-neutral-500">
+                          {index === 0 ? 'Premier' : `#${index + 1}`}
                         </div>
                       </div>
                     </div>
                     
-                    <div className="flex gap-2">
+                    <div className="flex gap-1">
                       <Button
                         variant="ghost"
                         size="sm"
                         onClick={() => startEditing(index)}
-                        className="text-trinity-blue-600 bg-trinity-blue-100 hover:text-trinity-blue-700 hover:bg-trinity-blue-200 border border-trinity-blue-300 rounded-xl"
+                        className="h-8 w-8 p-0 text-trinity-blue-600 hover:bg-trinity-blue-100 rounded-lg"
                       >
-                        <Edit3 className="h-4 w-4" />
+                        <Edit3 className="h-3 w-3" />
                       </Button>
                       <Button
                         variant="ghost"
                         size="sm"
                         onClick={() => removePlayer(index)}
-                        className="text-red-600 bg-red-100 hover:text-red-700 hover:bg-red-200 border border-red-300 rounded-xl"
+                        className="h-8 w-8 p-0 text-red-600 hover:bg-red-100 rounded-lg"
                       >
-                        <X className="h-4 w-4" />
+                        <X className="h-3 w-3" />
                       </Button>
                     </div>
                   </div>
@@ -288,27 +281,27 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
       )}
 
       {/* Navigation */}
-      <div className="flex gap-4">
+      <div className="flex gap-3">
         <Button
           onClick={onBack}
           variant="outline"
           size="lg"
-          className="flex-1 py-6 text-lg font-bold rounded-2xl bg-white border-neutral-300 hover:bg-neutral-50 text-neutral-700"
+          className="flex-1 py-4 text-lg font-bold rounded-xl bg-white border-neutral-300 hover:bg-neutral-50 text-neutral-700"
         >
-          <ArrowLeft className="h-5 w-5 mr-2" />
+          <ArrowLeft className="h-4 w-4 mr-2" />
           Retour
         </Button>
         <Button
           onClick={onNext}
           disabled={!canContinue}
           size="lg"
-          className={`flex-1 py-6 text-lg font-bold rounded-2xl shadow-lg transition-all border-2 ${
+          className={`flex-1 py-4 text-lg font-bold rounded-xl shadow-lg transition-all border-2 ${
             canContinue
               ? 'bg-gradient-to-r from-trinity-blue-600 via-trinity-purple-600 to-trinity-orange-600 text-white hover:from-trinity-blue-700 hover:via-trinity-purple-700 hover:to-trinity-orange-700 border-trinity-blue-500'
-              : 'bg-neutral-300 text-white cursor-not-allowed border-neutral-400'
+              : 'bg-neutral-300 text-neutral-500 cursor-not-allowed border-neutral-400'
           }`}
         >
-          {canContinue ? 'Résumé de la partie' : `${playerCount - players.length} joueur${playerCount - players.length > 1 ? 's' : ''} manquant${playerCount - players.length > 1 ? 's' : ''}`}
+          {canContinue ? 'Continuer' : `Il manque ${playerCount - players.length} joueur${playerCount - players.length > 1 ? 's' : ''}`}
         </Button>
       </div>
     </div>

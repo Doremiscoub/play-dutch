@@ -30,15 +30,15 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8 p-6">
       {/* Header avec Professor */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="text-center space-y-6"
+        className="text-center space-y-4"
       >
         <motion.div 
-          className="mx-auto w-24 h-24 rounded-3xl bg-gradient-to-br from-trinity-blue-500 to-trinity-purple-500 flex items-center justify-center shadow-xl border-4 border-white/30 overflow-hidden"
+          className="mx-auto w-20 h-20 rounded-3xl bg-gradient-to-br from-trinity-blue-500 to-trinity-purple-500 flex items-center justify-center shadow-lg border border-white/30 overflow-hidden"
           animate={{ 
             scale: [1, 1.05, 1],
             rotate: [0, 2, -2, 0]
@@ -49,37 +49,31 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
             ease: "easeInOut"
           }}
         >
-          <ProfessorAvatar size="lg" animate={true} mood="thinking" showParticles={true} />
+          <ProfessorAvatar size="md" animate={true} mood="thinking" showParticles={true} />
         </motion.div>
-        <div className="space-y-3">
-          <h1 className="text-4xl font-black bg-gradient-to-r from-trinity-blue-600 via-trinity-purple-600 to-trinity-orange-600 bg-clip-text text-transparent">
+        <div className="space-y-2">
+          <h1 className="text-3xl font-black bg-gradient-to-r from-trinity-blue-600 via-trinity-purple-600 to-trinity-orange-600 bg-clip-text text-transparent">
             Combien de joueurs ?
           </h1>
-          <p className="text-lg text-neutral-700 font-medium max-w-md mx-auto">
-            Choisissez le nombre de participants pour votre partie de Dutch
+          <p className="text-neutral-700 font-medium max-w-md mx-auto">
+            Choisissez le nombre de participants
           </p>
         </div>
       </motion.div>
 
       {/* Sélecteur de nombre */}
-      <Card className="card-glass border-2 border-white/60 shadow-xl bg-white/80">
-        <CardHeader className="pb-6">
-          <CardTitle className="text-xl font-bold text-trinity-purple-700 flex items-center gap-3 justify-center">
-            <Users className="h-6 w-6" />
-            Nombre de joueurs
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <div className="flex items-center justify-center gap-6">
+      <Card className="card-glass border-2 border-white/60 shadow-lg bg-white/90">
+        <CardContent className="p-6">
+          <div className="flex items-center justify-center gap-8">
             {/* Bouton Moins */}
             <Button
               onClick={decrementCount}
               disabled={playerCount <= MIN_PLAYERS}
               size="lg"
               variant="default"
-              className="w-16 h-16 bg-gradient-to-br from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed rounded-2xl shadow-xl text-white border-2 border-red-400 disabled:border-gray-400 transition-all duration-200 hover:scale-110 active:scale-95"
+              className="w-14 h-14 bg-white border-2 border-neutral-300 hover:border-red-400 hover:bg-red-50 disabled:bg-neutral-100 disabled:border-neutral-200 disabled:cursor-not-allowed rounded-2xl shadow-md text-neutral-700 hover:text-red-600 disabled:text-neutral-400 transition-all duration-200 hover:scale-105 active:scale-95"
             >
-              <Minus className="w-8 h-8" strokeWidth={4} />
+              <Minus className="w-6 h-6" strokeWidth={3} />
             </Button>
 
             {/* Affichage du nombre */}
@@ -87,12 +81,12 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
               key={playerCount}
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              className="flex flex-col items-center gap-2"
+              className="flex flex-col items-center gap-3"
             >
-              <div className="w-24 h-24 rounded-2xl bg-trinity-purple-500 flex items-center justify-center text-white text-3xl font-bold shadow-lg">
+              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-trinity-blue-500 to-trinity-purple-500 flex items-center justify-center text-white text-2xl font-bold shadow-lg">
                 {playerCount}
               </div>
-              <span className="text-sm font-medium text-neutral-700 bg-white px-3 py-1 rounded-lg shadow-sm border border-neutral-200">
+              <span className="text-sm font-medium text-neutral-600">
                 {playerCount === MIN_PLAYERS ? 'Minimum' : playerCount === MAX_PLAYERS ? 'Maximum' : 'Joueurs'}
               </span>
             </motion.div>
@@ -103,19 +97,19 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
               disabled={playerCount >= MAX_PLAYERS}
               size="lg"
               variant="default"
-              className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed rounded-2xl shadow-xl text-white border-2 border-green-400 disabled:border-gray-400 transition-all duration-200 hover:scale-110 active:scale-95"
+              className="w-14 h-14 bg-white border-2 border-neutral-300 hover:border-green-400 hover:bg-green-50 disabled:bg-neutral-100 disabled:border-neutral-200 disabled:cursor-not-allowed rounded-2xl shadow-md text-neutral-700 hover:text-green-600 disabled:text-neutral-400 transition-all duration-200 hover:scale-105 active:scale-95"
             >
-              <Plus className="w-8 h-8" strokeWidth={4} />
+              <Plus className="w-6 h-6" strokeWidth={3} />
             </Button>
           </div>
 
-          <div className="text-center space-y-3">
-            <div className="bg-trinity-purple-100 backdrop-blur-sm rounded-2xl p-4 border border-trinity-purple-300 shadow-sm">
-              <p className="text-xl font-bold text-trinity-purple-700 mb-1">
-                Durée estimée : ~{playerCount * ESTIMATED_MINUTES_PER_PLAYER} minutes
+          <div className="text-center mt-6">
+            <div className="bg-trinity-blue-50 rounded-xl p-4 border border-trinity-blue-200">
+              <p className="text-lg font-semibold text-trinity-blue-700 mb-1">
+                ~{playerCount * ESTIMATED_MINUTES_PER_PLAYER} minutes
               </p>
-              <p className="text-sm text-trinity-purple-600">
-                Plus il y a de joueurs, plus la partie sera longue et amusante !
+              <p className="text-sm text-trinity-blue-600">
+                Durée estimée de la partie
               </p>
             </div>
           </div>
@@ -125,14 +119,13 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
       <motion.div
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
-        className="mt-8"
       >
         <Button
           onClick={onNext}
           size="lg"
-          className="w-full py-6 text-xl font-bold rounded-2xl bg-gradient-to-r from-trinity-blue-600 via-trinity-purple-600 to-trinity-orange-600 text-white hover:from-trinity-blue-700 hover:via-trinity-purple-700 hover:to-trinity-orange-700 shadow-xl border-2 border-trinity-blue-500"
+          className="w-full py-4 text-lg font-bold rounded-2xl bg-gradient-to-r from-trinity-blue-600 via-trinity-purple-600 to-trinity-orange-600 text-white hover:from-trinity-blue-700 hover:via-trinity-purple-700 hover:to-trinity-orange-700 shadow-lg border-2 border-trinity-blue-500"
         >
-          <Users className="h-6 w-6 mr-3" />
+          <Users className="h-5 w-5 mr-2" />
           Suivant : Noms des joueurs
         </Button>
       </motion.div>

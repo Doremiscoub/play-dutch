@@ -19,7 +19,7 @@ const SimpleGamePage: React.FC = () => {
     if (!hasGame) {
       const loaded = loadFromStorage();
       if (!loaded) {
-        navigate('/setup');
+      navigate('/setup');
         return;
       }
     }

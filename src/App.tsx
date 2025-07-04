@@ -74,8 +74,8 @@ const App: React.FC = () => {
               {/* Pages principales */}
               <Route index element={<Home />} />
               <Route path="setup" element={<SimpleGameSetup />} />
-              <Route path="game" element={<Navigate to="/simple-game" replace />} />
-              <Route path="simple-game" element={<SimpleGamePage />} />
+              
+              <Route path="game" element={<SimpleGamePage />} />
               <Route path="history" element={<History />} />
               <Route path="rules" element={<RulesPage />} />
               
