@@ -105,10 +105,10 @@ const EnhancedPlayerCard: React.FC<EnhancedPlayerCardProps> = ({
       {/* Badge de rang repositionné - déborde de la carte */}
       <motion.div
         className={cn(
-          "absolute -top-6 -right-6 z-20",
-          "w-16 h-16 rounded-full flex items-center justify-center",
-          "text-white text-xl font-black shadow-2xl border-4 border-white/30",
-          "bg-gradient-to-br",
+          "absolute -top-4 -right-4 z-20",
+          "w-20 h-20 rounded-full flex flex-col items-center justify-center",
+          "text-white font-black shadow-2xl border-4 border-white/30",
+          "bg-gradient-to-br backdrop-blur-sm",
           rank === 1 && "from-yellow-400 via-orange-500 to-red-500 shadow-orange-500/50",
           rank === 2 && "from-gray-300 via-gray-400 to-gray-500 shadow-gray-500/50", 
           rank === 3 && "from-amber-600 via-orange-700 to-yellow-800 shadow-amber-600/50",
@@ -124,7 +124,12 @@ const EnhancedPlayerCard: React.FC<EnhancedPlayerCardProps> = ({
         }}
         whileHover={{ scale: 1.1, rotate: 10 }}
       >
-        {rank === 1 ? '🏆' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank}
+        <div className="text-2xl mb-1">
+          {rank === 1 ? '🏆' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '🎯'}
+        </div>
+        <div className="text-xs font-bold leading-none">
+          {rank === 1 ? '1ER' : rank === 2 ? '2ÈME' : rank === 3 ? '3ÈME' : `${rank}ÈME`}
+        </div>
       </motion.div>
 
       {/* Trophée débordant pour le gagnant */}
