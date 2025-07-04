@@ -72,13 +72,15 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
         <CardContent className="space-y-6">
           <div className="flex items-center justify-center gap-6">
             {/* Bouton Moins */}
-            <button
+            <Button
               onClick={decrementCount}
               disabled={playerCount <= MIN_PLAYERS}
-              className="flex items-center justify-center w-14 h-14 bg-trinity-blue-500 hover:bg-trinity-blue-600 disabled:bg-neutral-300 disabled:cursor-not-allowed rounded-xl shadow-lg transition-colors duration-200"
+              size="lg"
+              variant="default"
+              className="w-16 h-16 bg-gradient-to-br from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed rounded-2xl shadow-xl text-white border-2 border-red-400 disabled:border-gray-400 transition-all duration-200 hover:scale-110 active:scale-95"
             >
-              <Minus className="w-6 h-6 text-white" strokeWidth={3} />
-            </button>
+              <Minus className="w-8 h-8" strokeWidth={4} />
+            </Button>
 
             {/* Affichage du nombre */}
             <motion.div
@@ -96,13 +98,15 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
             </motion.div>
 
             {/* Bouton Plus */}
-            <button
+            <Button
               onClick={incrementCount}
               disabled={playerCount >= MAX_PLAYERS}
-              className="flex items-center justify-center w-14 h-14 bg-trinity-orange-500 hover:bg-trinity-orange-600 disabled:bg-neutral-300 disabled:cursor-not-allowed rounded-xl shadow-lg transition-colors duration-200"
+              size="lg"
+              variant="default"
+              className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed rounded-2xl shadow-xl text-white border-2 border-green-400 disabled:border-gray-400 transition-all duration-200 hover:scale-110 active:scale-95"
             >
-              <Plus className="w-6 h-6 text-white" strokeWidth={3} />
-            </button>
+              <Plus className="w-8 h-8" strokeWidth={4} />
+            </Button>
           </div>
 
           <div className="text-center space-y-3">

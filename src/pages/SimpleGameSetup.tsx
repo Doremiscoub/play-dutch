@@ -40,50 +40,18 @@ const SimpleGameSetup: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          {/* En-tête principale */}
-          <div className="text-center mb-8">
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="mb-6"
-            >
-              <div className="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-trinity-blue-500 to-trinity-purple-600 rounded-full flex items-center justify-center">
-                <Users className="h-10 w-10 text-white" />
-              </div>
-              <h1 className="text-3xl md:text-4xl font-black bg-gradient-to-r from-trinity-blue-600 to-trinity-purple-600 bg-clip-text text-transparent mb-3">
-                Nouvelle partie Dutch
-              </h1>
-              <p className="text-lg text-neutral-600 font-medium">
-                Configurez votre partie pour commencer l'aventure !
-              </p>
-            </motion.div>
-          </div>
-
-          {/* Carte principale de configuration */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-          >
-            <Card className="bg-white/95 backdrop-blur-xl border-0 shadow-2xl overflow-hidden">
-              <CardHeader className="bg-gradient-to-r from-trinity-blue-50 to-trinity-purple-50 border-b border-trinity-blue-100 pb-6">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-gradient-to-br from-trinity-blue-500 to-trinity-purple-600 rounded-full flex items-center justify-center">
-                    <Trophy className="h-6 w-6 text-white" />
-                  </div>
-                  <div>
-                    <h2 className="text-xl font-bold text-neutral-800">Configuration des joueurs</h2>
-                    <p className="text-neutral-600">Ajoutez les participants à votre partie</p>
-                  </div>
-                </div>
-              </CardHeader>
-              
-              <CardContent className="p-6">
-                <ModernGameSetup onStartGame={handleStartGame} />
-              </CardContent>
-            </Card>
-          </motion.div>
+      {/* Configuration directe sans redondance */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+      >
+        <Card className="bg-white/95 backdrop-blur-xl border-0 shadow-2xl overflow-hidden">
+          <CardContent className="p-0">
+            <ModernGameSetup onStartGame={handleStartGame} />
+          </CardContent>
+        </Card>
+      </motion.div>
 
           {/* Informations sur le jeu */}
           <motion.div
