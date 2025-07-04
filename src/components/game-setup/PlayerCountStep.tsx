@@ -17,6 +17,7 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
   onPlayerCountChange,
   onNext
 }) => {
+  console.log('🎯 PlayerCountStep: Démarrage du composant', { playerCount });
   const incrementCount = () => {
     if (playerCount < MAX_PLAYERS) {
       onPlayerCountChange(playerCount + 1);
@@ -49,7 +50,7 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
             ease: "easeInOut"
           }}
         >
-          <ProfessorAvatar size="md" animate={true} mood="thinking" showParticles={true} />
+          <div className="text-4xl">🎯</div>
         </motion.div>
         <div className="space-y-2">
           <h1 className="text-3xl font-black bg-gradient-to-r from-trinity-blue-600 via-trinity-purple-600 to-trinity-orange-600 bg-clip-text text-transparent">
