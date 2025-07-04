@@ -7,12 +7,12 @@ import { ArrowLeft, Plus, Check, Edit3, GripVertical, X } from 'lucide-react';
 import { toast } from 'sonner';
 import ProfessorAvatar from '@/components/game/ProfessorAvatar';
 import { Badge } from '@/components/ui/badge';
-import { Player, MODERN_EMOJIS, QUICK_NAMES, MAX_PLAYERS } from './types';
+import { SetupPlayer, MODERN_EMOJIS, QUICK_NAMES, MAX_PLAYERS } from './types';
 
 interface PlayerNamesStepProps {
   playerCount: number;
-  players: Player[];
-  onPlayersChange: (players: Player[]) => void;
+  players: SetupPlayer[];
+  onPlayersChange: (players: SetupPlayer[]) => void;
   onNext: () => void;
   onBack: () => void;
 }
@@ -49,7 +49,7 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
       return;
     }
 
-    const newPlayerObj: Player = {
+    const newPlayerObj: SetupPlayer = {
       name: newPlayer.trim(),
       emoji: MODERN_EMOJIS[players.length % MODERN_EMOJIS.length]
     };
@@ -62,7 +62,7 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
   const quickAddPlayer = (name: string) => {
     if (players.some(p => p.name === name) || players.length >= playerCount) return;
     
-    const newPlayerObj: Player = {
+    const newPlayerObj: SetupPlayer = {
       name,
       emoji: MODERN_EMOJIS[players.length % MODERN_EMOJIS.length]
     };
@@ -98,7 +98,7 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
     toast.info(`${removedPlayer.name} a quitté la partie`);
   };
 
-  const handleReorder = (newOrder: Player[]) => {
+  const handleReorder = (newOrder: SetupPlayer[]) => {
     onPlayersChange(newOrder);
   };
 

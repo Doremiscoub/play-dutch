@@ -5,11 +5,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowLeft, Gamepad2, Trophy, Clock, Users, Edit, Sparkles } from 'lucide-react';
 import ProfessorAvatar from '@/components/game/ProfessorAvatar';
 import { Badge } from '@/components/ui/badge';
-import { Player, ESTIMATED_MINUTES_PER_PLAYER } from './types';
+import { SetupPlayer, ESTIMATED_MINUTES_PER_PLAYER } from './types';
 
 interface GameSummaryStepProps {
   playerCount: number;
-  players: Player[];
+  players: SetupPlayer[];
   onStartGame: () => void;
   onBack: () => void;
   onEditPlayers: () => void;

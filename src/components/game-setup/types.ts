@@ -1,4 +1,4 @@
-export interface Player {
+export interface SetupPlayer {
   name: string;
   emoji: string;
 }

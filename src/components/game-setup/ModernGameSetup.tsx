@@ -5,7 +5,7 @@ import PlayerCountStep from './PlayerCountStep';
 import PlayerNamesStep from './PlayerNamesStep';
 import GameSummaryStep from './GameSummaryStep';
 import ProgressIndicator from './ProgressIndicator';
-import { Player, DEFAULT_PLAYER_COUNT } from './types';
+import { SetupPlayer, DEFAULT_PLAYER_COUNT } from './types';
 
 interface ModernGameSetupProps {
   onStartGame: (playerNames: string[]) => void;
@@ -14,7 +14,7 @@ interface ModernGameSetupProps {
 const ModernGameSetup: React.FC<ModernGameSetupProps> = ({ onStartGame }) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [playerCount, setPlayerCount] = useState(DEFAULT_PLAYER_COUNT);
-  const [players, setPlayers] = useState<Player[]>([]);
+  const [players, setPlayers] = useState<SetupPlayer[]>([]);
 
   const handleStartGame = () => {
     const playerNames = players.map(p => p.name).filter(name => name && name.trim().length > 0);
