@@ -56,20 +56,9 @@ const GamePage: React.FC = () => {
       }
     }
     
-    // Pas de données valides trouvées
-    if (loadingAttempts < 1) {
-      console.log('🔄 GAME_PAGE: No valid data, retrying once...');
-      setLoadingAttempts(1);
-      setIsInTransition(true);
-      
-      setTimeout(() => {
-        setIsInTransition(false);
-        setLoadingAttempts(2);
-      }, 1000);
-    } else {
-      console.log('❌ GAME_PAGE: No game found, redirecting to setup');
-      navigate('/setup', { replace: true });
-    }
+    // Pas de données valides trouvées - redirection immédiate
+    console.log('❌ GAME_PAGE: No game found, redirecting to setup');
+    navigate('/setup', { replace: true });
   }, [gameState.isInitialized, gameState.players, gameState.loadExistingGame, navigate, loadingAttempts]);
 
   // Show loading ou error states

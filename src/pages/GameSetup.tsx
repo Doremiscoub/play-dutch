@@ -43,20 +43,16 @@ const GameSetup: React.FC = () => {
       if (success) {
         console.log('✅ GAME_SETUP: Game created successfully');
         
-        // VÉRIFICATION IMMÉDIATE des données sauvegardées
+        // VÉRIFICATION SIMPLE des données sauvegardées
         const savedData = localStorage.getItem('current_dutch_game');
-        const navigationReady = sessionStorage.getItem('game_navigation_ready');
-        
         console.log('🔍 GAME_SETUP: Saved data check:', !!savedData);
-        console.log('🔍 GAME_SETUP: Navigation ready:', !!navigationReady);
         
-        if (savedData && navigationReady) {
+        if (savedData) {
           // Vérification de l'intégrité des données
           try {
             const parsedData = JSON.parse(savedData);
             if (parsedData.players && parsedData.players.length >= 2) {
               console.log('📍 GAME_SETUP: Data integrity confirmed, navigating...');
-              sessionStorage.removeItem('game_navigation_ready');
               navigate('/game');
               return;
             }

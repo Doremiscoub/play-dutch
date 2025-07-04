@@ -56,45 +56,29 @@ export const useGameCreation = ({
       }));
       
       const startTime = new Date();
-      const gameData = {
-        players: newPlayers,
-        roundHistory: [],
-        isGameOver: false,
-        scoreLimit,
-        gameStartTime: startTime.toISOString(),
-        lastUpdated: new Date().toISOString(),
-        validated: true
-      };
       
-      console.log('💾 GAME_CREATION: Direct save to localStorage...');
-      // SAUVEGARDE DIRECTE ET SYNCHRONE - bypass les hooks complexes
-      localStorage.setItem(STORAGE_KEYS.CURRENT_GAME, JSON.stringify(gameData));
-      localStorage.setItem(STORAGE_KEYS.GAME_ACTIVE, 'true');
-      localStorage.removeItem(STORAGE_KEYS.PLAYER_SETUP);
+      console.log('💾 GAME_CREATION: Using unified save system...');
       
-      // VÉRIFICATION IMMÉDIATE de la sauvegarde
-      const savedData = localStorage.getItem(STORAGE_KEYS.CURRENT_GAME);
-      if (!savedData) {
-        throw new Error('Échec de sauvegarde critique');
-      }
-      
-      const parsedData = JSON.parse(savedData);
-      if (!parsedData.players || parsedData.players.length !== newPlayers.length) {
-        throw new Error('Données sauvegardées corrompues');
-      }
-      
-      console.log('✅ GAME_CREATION: Data saved and verified in localStorage');
-      
-      // MISE À JOUR de l'état React APRÈS sauvegarde confirmée
+      // MISE À JOUR de l'état React AVANT sauvegarde
       setPlayers(newPlayers);
       setGameStartTime(startTime);
       setRoundHistory([]);
-      setIsInitialized(true);
       setShowGameOver(false);
       setShowScoreForm(false);
       
-      // Transfert sécurisé pour navigation
-      sessionStorage.setItem('game_navigation_ready', 'true');
+      // UTILISER le système unifié de sauvegarde
+      const saveSuccess = await saveCurrentGame(newPlayers, [], scoreLimit, startTime, false);
+      
+      if (!saveSuccess) {
+        throw new Error('Échec de sauvegarde');
+      }
+      
+      console.log('✅ GAME_CREATION: Game saved successfully');
+      
+      // FINALISER l'initialisation
+      setIsInitialized(true);
+      localStorage.setItem(STORAGE_KEYS.GAME_ACTIVE, 'true');
+      localStorage.removeItem(STORAGE_KEYS.PLAYER_SETUP);
       
       console.log('🎉 GAME_CREATION: Game ready with', newPlayers.length, 'players');
       toast.success(`Partie créée avec ${newPlayers.length} joueurs !`);
@@ -108,13 +92,12 @@ export const useGameCreation = ({
       // Nettoyage complet en cas d'erreur
       localStorage.removeItem(STORAGE_KEYS.CURRENT_GAME);
       localStorage.removeItem(STORAGE_KEYS.GAME_ACTIVE);
-      sessionStorage.removeItem('game_navigation_ready');
       setPlayers([]);
       setGameStartTime(null);
       setIsInitialized(false);
       return false;
     }
-  }, [scoreLimit, setRoundHistory, setPlayers, setGameStartTime, setIsInitialized, setInitError, setShowGameOver, setShowScoreForm]);
+  }, [scoreLimit, saveCurrentGame, setRoundHistory, setPlayers, setGameStartTime, setIsInitialized, setInitError, setShowGameOver, setShowScoreForm]);
 
   return { createNewGame };
 };
