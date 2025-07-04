@@ -5,7 +5,7 @@ import { useSimpleGameState } from '@/hooks/useSimpleGameState';
 import { toast } from 'sonner';
 import { Users, Trophy } from 'lucide-react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import LocalGameSetup from '@/components/game-setup/LocalGameSetup';
+import ModernGameSetup from '@/components/game-setup/ModernGameSetup';
 import UnifiedHeader from '@/components/layout/UnifiedHeader';
 import PageShell from '@/components/layout/PageShell';
 
@@ -80,7 +80,7 @@ const SimpleGameSetup: React.FC = () => {
               </CardHeader>
               
               <CardContent className="p-6">
-                <LocalGameSetup onStartGame={handleStartGame} />
+                <ModernGameSetup onStartGame={handleStartGame} />
               </CardContent>
             </Card>
           </motion.div>
