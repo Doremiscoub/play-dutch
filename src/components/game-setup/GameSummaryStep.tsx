@@ -35,13 +35,13 @@ const GameSummaryStep: React.FC<GameSummaryStepProps> = ({
         className="text-center space-y-4"
       >
         <motion.div 
-          className="mx-auto w-20 h-20 rounded-3xl bg-gradient-to-br from-trinity-blue-500 to-trinity-purple-500 flex items-center justify-center shadow-lg border border-white/30 overflow-hidden"
+          className="mx-auto w-20 h-20 rounded-3xl bg-gradient-to-br from-primary/80 to-secondary/80 flex items-center justify-center shadow-lg border border-white/30 overflow-hidden"
           animate={{ scale: [1, 1.05, 1], rotate: [0, 2, -2, 0] }}
           transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
         >
           <ProfessorAvatar size="md" animate={true} mood="excited" showParticles={true} />
         </motion.div>
-        <h1 className="text-3xl font-black bg-gradient-to-r from-trinity-blue-600 via-trinity-purple-600 to-trinity-orange-600 bg-clip-text text-transparent">
+        <h1 className="text-3xl font-black text-trinity">
           Tout est prêt !
         </h1>
         <p className="text-neutral-700 font-medium">
@@ -58,7 +58,7 @@ const GameSummaryStep: React.FC<GameSummaryStepProps> = ({
               whileHover={{ scale: 1.02 }}
               onClick={onEditCount}
             >
-              <div className="text-xl font-bold text-trinity-blue-600">{playerCount}</div>
+              <div className="text-xl font-bold text-primary">{playerCount}</div>
               <div className="text-xs text-neutral-600 flex items-center gap-1 justify-center">
                 <Users className="h-3 w-3" />
                 Joueurs
@@ -69,7 +69,7 @@ const GameSummaryStep: React.FC<GameSummaryStepProps> = ({
             </motion.div>
             
             <div className="space-y-2 p-3 rounded-xl bg-white/80 border border-neutral-200">
-              <div className="text-xl font-bold text-trinity-purple-600">~{gameEstimate}min</div>
+              <div className="text-xl font-bold text-secondary">~{gameEstimate}min</div>
               <div className="text-xs text-neutral-600 flex items-center gap-1 justify-center">
                 <Clock className="h-3 w-3" />
                 Durée
@@ -77,7 +77,7 @@ const GameSummaryStep: React.FC<GameSummaryStepProps> = ({
             </div>
             
             <div className="space-y-2 p-3 rounded-xl bg-white/80 border border-neutral-200">
-              <div className="text-xl font-bold text-trinity-orange-600">Dutch</div>
+              <div className="text-xl font-bold text-accent">Dutch</div>
               <div className="text-xs text-neutral-600 flex items-center gap-1 justify-center">
                 <Trophy className="h-3 w-3" />
                 Mode
@@ -91,14 +91,14 @@ const GameSummaryStep: React.FC<GameSummaryStepProps> = ({
       <Card className="card-glass bg-white/90 border border-white/60">
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-lg font-bold text-trinity-orange-700">
+            <CardTitle className="text-lg font-bold text-accent/80">
               Joueurs ({players.length})
             </CardTitle>
             <Button
               variant="outline"
               size="sm"
               onClick={onEditPlayers}
-              className="bg-white border-neutral-300 hover:bg-trinity-purple-50 hover:border-trinity-purple-300 text-neutral-700 rounded-lg text-sm"
+              className="bg-white border-neutral-300 hover:bg-secondary/10 hover:border-secondary/30 text-neutral-700 rounded-lg text-sm"
             >
               <Edit className="h-3 w-3 mr-1" />
               Modifier
@@ -119,7 +119,7 @@ const GameSummaryStep: React.FC<GameSummaryStepProps> = ({
                   index === 0 ? 'from-amber-400 to-amber-600' :
                   index === 1 ? 'from-gray-300 to-gray-500' :
                   index === 2 ? 'from-orange-400 to-orange-600' :
-                  'from-trinity-blue-400 to-trinity-purple-500'
+                  'from-primary/80 to-secondary/80'
                 } flex items-center justify-center text-white font-bold text-sm shadow-md`}>
                   {index + 1}
                 </div>
@@ -140,9 +140,9 @@ const GameSummaryStep: React.FC<GameSummaryStepProps> = ({
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="text-center p-4 bg-gradient-to-r from-trinity-blue-50 via-trinity-purple-50 to-trinity-orange-50 rounded-xl border border-white/50"
+        className="text-center p-4 bg-gradient-to-r from-primary/5 via-secondary/5 to-accent/5 rounded-xl border border-white/50"
       >
-        <p className="text-lg font-semibold text-trinity-purple-700 mb-1">
+        <p className="text-lg font-semibold text-secondary mb-1">
           🎉 C'est parti !
         </p>
         <p className="text-sm text-neutral-700">
@@ -170,7 +170,7 @@ const GameSummaryStep: React.FC<GameSummaryStepProps> = ({
           <Button
             onClick={onStartGame}
             size="lg"
-            className="w-full py-4 text-lg font-black rounded-xl shadow-lg bg-gradient-to-r from-trinity-blue-600 via-trinity-purple-600 to-trinity-orange-600 text-white hover:from-trinity-blue-700 hover:via-trinity-purple-700 hover:to-trinity-orange-700 transform transition-all duration-300 border-2 border-trinity-blue-500"
+            className="w-full py-4 text-lg font-black rounded-xl shadow-lg btn-glass-trinity transform transition-all duration-300"
           >
             <Gamepad2 className="h-5 w-5 mr-2" />
             Commencer la partie !

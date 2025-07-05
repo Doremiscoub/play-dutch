@@ -117,10 +117,10 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
         animate={{ opacity: 1, y: 0 }}
         className="text-center space-y-4"
       >
-        <div className="mx-auto w-20 h-20 rounded-3xl bg-gradient-to-br from-trinity-blue-500 to-trinity-purple-500 flex items-center justify-center shadow-lg border border-white/30 overflow-hidden">
+        <div className="mx-auto w-20 h-20 rounded-3xl bg-gradient-to-br from-primary/80 to-secondary/80 flex items-center justify-center shadow-lg border border-white/30 overflow-hidden">
           <ProfessorAvatar size="md" animate={true} mood="happy" showParticles={false} />
         </div>
-        <h1 className="text-3xl font-black bg-gradient-to-r from-trinity-blue-600 via-trinity-purple-600 to-trinity-orange-600 bg-clip-text text-transparent">
+        <h1 className="text-3xl font-black text-trinity">
           Noms des joueurs
         </h1>
         <div className="space-y-3">
@@ -128,12 +128,12 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
             Ajoutez les {playerCount} joueurs
           </p>
           <div className="flex items-center gap-3 justify-center">
-            <Badge variant="secondary" className="bg-trinity-blue-100 text-trinity-blue-700 border border-trinity-blue-200">
+            <Badge variant="secondary" className="bg-primary/10 text-primary border border-primary/20">
               {players.length}/{playerCount}
             </Badge>
             <div className="w-24 h-2 bg-neutral-300 rounded-full overflow-hidden">
               <motion.div
-                className="h-full bg-gradient-to-r from-trinity-blue-500 to-trinity-purple-500"
+                className="h-full bg-gradient-to-r from-primary/80 to-secondary/80"
                 initial={{ width: 0 }}
                 animate={{ width: `${progressPercentage}%` }}
                 transition={{ duration: 0.3 }}
@@ -152,14 +152,14 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
                 value={newPlayer}
                 onChange={(e) => setNewPlayer(e.target.value)}
                 placeholder={`Joueur ${players.length + 1}`}
-                className="flex-1 bg-white border-neutral-300 focus:border-trinity-blue-500 focus:ring-1 focus:ring-trinity-blue-200 rounded-xl"
+                className="flex-1 bg-white border-neutral-300 focus:border-primary focus:ring-1 focus:ring-primary/20 rounded-xl"
                 onKeyDown={(e) => e.key === 'Enter' && addPlayer()}
                 maxLength={20}
               />
               <Button 
                 onClick={addPlayer}
                 disabled={players.length >= MAX_PLAYERS}
-                className="bg-gradient-to-r from-trinity-blue-600 to-trinity-purple-600 hover:from-trinity-blue-700 hover:to-trinity-purple-700 text-white rounded-xl px-4 shadow-md"
+                className="btn-glass-trinity rounded-xl px-4 shadow-md"
               >
                 <Plus className="h-4 w-4" />
               </Button>
@@ -175,7 +175,7 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
                       variant="outline"
                       size="sm"
                       onClick={() => quickAddPlayer(name)}
-                      className="bg-white border-neutral-300 hover:bg-trinity-orange-50 hover:border-trinity-orange-300 text-neutral-700 rounded-lg text-xs"
+                      className="bg-white border-neutral-300 hover:bg-accent/10 hover:border-accent/30 text-neutral-700 rounded-lg text-xs"
                     >
                       + {name}
                     </Button>
@@ -192,7 +192,7 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
         <Card className="card-glass bg-white/90 border border-white/60">
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-lg font-bold text-trinity-orange-700">
+              <CardTitle className="text-lg font-bold text-accent/80">
                 Joueurs ({players.length}/{playerCount})
               </CardTitle>
               <div className="flex items-center gap-1 text-xs text-neutral-500">
@@ -221,7 +221,7 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
                         index === 0 ? 'from-amber-400 to-amber-600' :
                         index === 1 ? 'from-neutral-300 to-neutral-500' :
                         index === 2 ? 'from-orange-400 to-orange-600' :
-                        'from-trinity-blue-400 to-trinity-purple-500'
+                        'from-primary/80 to-secondary/80'
                       } flex items-center justify-center text-white font-bold text-sm shadow-md`}>
                         {index + 1}
                       </div>
@@ -242,7 +242,7 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
                           </div>
                         ) : (
                           <div 
-                            className="font-semibold text-neutral-800 cursor-pointer hover:text-trinity-blue-600"
+                            className="font-semibold text-neutral-800 cursor-pointer hover:text-primary"
                             onClick={() => startEditing(index)}
                           >
                             {player.name}
@@ -259,7 +259,7 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
                         variant="ghost"
                         size="sm"
                         onClick={() => startEditing(index)}
-                        className="h-8 w-8 p-0 text-trinity-blue-600 hover:bg-trinity-blue-100 rounded-lg"
+                        className="h-8 w-8 p-0 text-primary hover:bg-primary/10 rounded-lg"
                       >
                         <Edit3 className="h-3 w-3" />
                       </Button>
@@ -297,7 +297,7 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
           size="lg"
           className={`flex-1 py-4 text-lg font-bold rounded-xl shadow-lg transition-all border-2 ${
             canContinue
-              ? 'bg-gradient-to-r from-trinity-blue-600 via-trinity-purple-600 to-trinity-orange-600 text-white hover:from-trinity-blue-700 hover:via-trinity-purple-700 hover:to-trinity-orange-700 border-trinity-blue-500'
+              ? 'btn-glass-trinity'
               : 'bg-neutral-300 text-neutral-500 cursor-not-allowed border-neutral-400'
           }`}
         >

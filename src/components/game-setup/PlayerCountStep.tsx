@@ -39,7 +39,7 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
         className="text-center space-y-4"
       >
         <motion.div 
-          className="mx-auto w-20 h-20 rounded-3xl bg-gradient-to-br from-trinity-blue-500 to-trinity-purple-500 flex items-center justify-center shadow-lg border border-white/30 overflow-hidden"
+          className="mx-auto w-20 h-20 rounded-3xl bg-gradient-to-br from-primary/80 to-secondary/80 flex items-center justify-center shadow-lg border border-white/30 overflow-hidden"
           animate={{ 
             scale: [1, 1.05, 1],
             rotate: [0, 2, -2, 0]
@@ -53,7 +53,7 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
           <div className="text-4xl">🎯</div>
         </motion.div>
         <div className="space-y-2">
-          <h1 className="text-3xl font-black bg-gradient-to-r from-trinity-blue-600 via-trinity-purple-600 to-trinity-orange-600 bg-clip-text text-transparent">
+          <h1 className="text-3xl font-black text-trinity">
             Combien de joueurs ?
           </h1>
           <p className="text-neutral-700 font-medium max-w-md mx-auto">
@@ -101,7 +101,7 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
             >
               <div className="relative group">
                 {/* Halo lumineux */}
-                <div className="absolute -inset-2 bg-gradient-to-br from-trinity-blue-400/30 via-trinity-purple-400/30 to-trinity-orange-400/30 rounded-3xl blur-lg opacity-70 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute -inset-2 bg-gradient-to-br from-primary/30 via-secondary/30 to-accent/30 rounded-3xl blur-lg opacity-70 group-hover:opacity-100 transition-opacity duration-300" />
                 
                 {/* Compteur principal */}
                 <div className="relative w-28 h-28 bg-white/25 backdrop-blur-2xl border border-white/40 rounded-3xl shadow-2xl flex items-center justify-center overflow-hidden">
@@ -121,7 +121,7 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
                   {/* Particules flottantes */}
                   <div className="absolute inset-0">
                     <motion.div 
-                      className="absolute top-3 left-4 w-1.5 h-1.5 bg-trinity-blue-400 rounded-full"
+                      className="absolute top-3 left-4 w-1.5 h-1.5 bg-primary/60 rounded-full"
                       animate={{ 
                         y: [0, -10, 0],
                         opacity: [0.5, 1, 0.5] 
@@ -129,7 +129,7 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
                       transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                     />
                     <motion.div 
-                      className="absolute bottom-4 right-5 w-1 h-1 bg-trinity-purple-400 rounded-full"
+                      className="absolute bottom-4 right-5 w-1 h-1 bg-secondary/60 rounded-full"
                       animate={{ 
                         y: [0, -8, 0],
                         opacity: [0.3, 0.8, 0.3] 
@@ -137,7 +137,7 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
                       transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
                     />
                     <motion.div 
-                      className="absolute top-5 right-3 w-0.5 h-0.5 bg-trinity-orange-400 rounded-full"
+                      className="absolute top-5 right-3 w-0.5 h-0.5 bg-accent/60 rounded-full"
                       animate={{ 
                         scale: [0.5, 1.2, 0.5],
                         opacity: [0.4, 1, 0.4] 
@@ -148,7 +148,7 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
                   
                   {/* Nombre principal */}
                   <motion.span 
-                    className="relative z-10 text-4xl font-black bg-gradient-to-br from-trinity-blue-600 via-trinity-purple-600 to-trinity-orange-600 bg-clip-text text-transparent"
+                    className="relative z-10 text-4xl font-black text-trinity"
                     animate={{ 
                       textShadow: [
                         "0 0 10px rgba(59, 130, 246, 0.3)",
@@ -164,7 +164,7 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
               </div>
               
               <motion.span 
-                className="text-sm font-bold bg-gradient-to-r from-trinity-blue-600 to-trinity-purple-600 bg-clip-text text-transparent px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full border border-white/30 shadow-lg"
+                className="text-sm font-bold text-primary px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full border border-white/30 shadow-lg"
                 animate={{ scale: [1, 1.05, 1] }}
                 transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
               >
@@ -199,11 +199,11 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
           </div>
 
           <div className="text-center mt-6">
-            <div className="bg-trinity-blue-50 rounded-xl p-4 border border-trinity-blue-200">
-              <p className="text-lg font-semibold text-trinity-blue-700 mb-1">
+            <div className="bg-primary/5 rounded-xl p-4 border border-primary/20">
+              <p className="text-lg font-semibold text-primary mb-1">
                 ~{playerCount * ESTIMATED_MINUTES_PER_PLAYER} minutes
               </p>
-              <p className="text-sm text-trinity-blue-600">
+              <p className="text-sm text-primary/80">
                 Durée estimée de la partie
               </p>
             </div>
@@ -218,7 +218,7 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
         <Button
           onClick={onNext}
           size="lg"
-          className="w-full py-4 text-lg font-bold rounded-2xl bg-gradient-to-r from-trinity-blue-600 via-trinity-purple-600 to-trinity-orange-600 text-white hover:from-trinity-blue-700 hover:via-trinity-purple-700 hover:to-trinity-orange-700 shadow-lg border-2 border-trinity-blue-500"
+          className="w-full py-4 text-lg font-bold rounded-2xl btn-glass-trinity shadow-lg"
         >
           <Users className="h-5 w-5 mr-2" />
           Suivant : Noms des joueurs
