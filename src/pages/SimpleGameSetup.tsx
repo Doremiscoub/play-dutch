@@ -49,7 +49,7 @@ const SimpleGameSetup: React.FC = () => {
             transition={{ duration: 0.5, delay: 0.6 }}
             className="mt-8"
           >
-            <Card className="bg-gradient-to-r from-trinity-blue-50 to-trinity-purple-50 border border-trinity-blue-200">
+            <Card className="bg-gradient-to-r from-primary/5 to-secondary/5 border border-primary/20">
               <CardContent className="p-6">
                 <h3 className="text-lg font-bold text-neutral-800 mb-3">🎯 Rappel des règles Dutch</h3>
                 <div className="grid md:grid-cols-2 gap-4 text-sm text-neutral-700">
