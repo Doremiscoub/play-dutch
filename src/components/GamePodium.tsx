@@ -46,7 +46,7 @@ const GamePodium: React.FC<GamePodiumProps> = ({
     if (onNewGame) {
       onNewGame();
     } else {
-      navigate('/game/setup');
+      navigate('/setup');
     }
   };
   

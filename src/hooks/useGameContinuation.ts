@@ -52,7 +52,7 @@ export const useGameContinuation = (
       localStorage.setItem('dutch_new_game_requested', 'true');
       
       console.log('useGameContinuation: Navigating to game setup');
-      navigate('/game/setup');
+      navigate('/setup');
       
       return true;
     } catch (error) {

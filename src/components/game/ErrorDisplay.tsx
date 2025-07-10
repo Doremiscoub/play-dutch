@@ -31,7 +31,7 @@ const ErrorDisplay: React.FC<ErrorDisplayProps> = ({ error, onRetry }) => {
         
         <div className="flex gap-3 justify-center">
           <Button 
-            onClick={() => navigate('/game/setup')}
+            onClick={() => navigate('/setup')}
             className="px-4 py-2 bg-dutch-blue text-white rounded-lg hover:bg-dutch-blue/90 transition-colors"
           >
             Configurer une partie
