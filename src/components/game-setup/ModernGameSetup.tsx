@@ -13,36 +13,9 @@ interface ModernGameSetupProps {
 }
 
 const ModernGameSetup: React.FC<ModernGameSetupProps> = ({ onStartGame }) => {
-  console.log('🔥 ModernGameSetup: RENDU INITIAL - Diagnostic complet');
   const [currentStep, setCurrentStep] = useState(1);
   const [playerCount, setPlayerCount] = useState(DEFAULT_PLAYER_COUNT);
   const [players, setPlayers] = useState<SetupPlayer[]>([]);
-
-  // Diagnostic complet du problème
-  React.useEffect(() => {
-    console.log('🔥 ModernGameSetup: useEffect - Composant monté');
-    console.log('🔥 CSS Trinity: .text-trinity existe?', 
-      document.querySelector('.text-trinity') !== null
-    );
-    console.log('🔥 CSS Trinity: .btn-glass-trinity existe?', 
-      document.querySelector('.btn-glass-trinity') !== null
-    );
-    
-    // Vérifier les styles CSS
-    const testDiv = document.createElement('div');
-    testDiv.className = 'text-trinity';
-    document.body.appendChild(testDiv);
-    const styles = window.getComputedStyle(testDiv);
-    console.log('🔥 CSS Trinity: background-image =', styles.backgroundImage);
-    console.log('🔥 CSS Trinity: color =', styles.color);
-    document.body.removeChild(testDiv);
-    
-    return () => {
-      console.log('🔥 ModernGameSetup: Composant démonté - PROBLÈME ICI!');
-    };
-  }, []);
-
-  console.log('🎯 ModernGameSetup: État actuel', { currentStep, playerCount, players: players.length });
 
   const handleStartGame = () => {
     const playerNames = players.map(p => p.name).filter(name => name && name.trim().length > 0);

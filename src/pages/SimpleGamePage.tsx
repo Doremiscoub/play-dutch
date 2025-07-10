@@ -18,17 +18,23 @@ const SimpleGamePage: React.FC = () => {
   const [dutchPlayerId, setDutchPlayerId] = useState<string | undefined>();
   const [gameStartTime] = useState<Date>(new Date()); // Temps de début de la partie
 
+  // Chargement initial UNIQUEMENT au montage du composant
   useEffect(() => {
-    if (!hasGame) {
-      const loaded = loadFromStorage();
-      if (!loaded) {
+    const loaded = loadFromStorage();
+    if (!loaded) {
       navigate('/setup');
-        return;
-      }
+      return;
     }
-    // Initialize scores array
+    // Initialize scores array only after successful load
     setScores(players.map(() => 0));
-  }, [hasGame, loadFromStorage, navigate, players]);
+  }, []); // VIDE - pas de dépendances pour éviter la boucle infinie !
+
+  // Separate effect for scores initialization when players change
+  useEffect(() => {
+    if (players.length > 0) {
+      setScores(players.map(() => 0));
+    }
+  }, [players.length]);
 
   const handleAddRound = () => {
     addRound(scores, dutchPlayerId);
