@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
@@ -12,7 +13,7 @@ interface ModernGameSetupProps {
 }
 
 const ModernGameSetup: React.FC<ModernGameSetupProps> = ({ onStartGame }) => {
-  console.log('🎯 ModernGameSetup: Démarrage du composant');
+  console.log('🎯 ModernGameSetup: Démarrage du composant - CSS Trinity test');
   const [currentStep, setCurrentStep] = useState(1);
   const [playerCount, setPlayerCount] = useState(DEFAULT_PLAYER_COUNT);
   const [players, setPlayers] = useState<SetupPlayer[]>([]);

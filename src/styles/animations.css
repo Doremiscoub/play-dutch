@@ -143,9 +143,9 @@
   font-weight: 900;
   letter-spacing: -0.02em;
   background: linear-gradient(to right,
-    var(--dutch-blue),
-    var(--dutch-purple),
-    var(--dutch-orange)
+    hsl(var(--dutch-blue)),
+    hsl(var(--dutch-purple)),
+    hsl(var(--dutch-orange))
   );
   background-size: 200% auto;
   -webkit-background-clip: text;
@@ -160,9 +160,9 @@
   position: absolute;
   inset: -4px;
   background: linear-gradient(to bottom right,
-    rgba(var(--dutch-blue-rgb), 0.2),
-    rgba(var(--dutch-purple-rgb), 0.2),
-    rgba(var(--dutch-orange-rgb), 0.2)
+    hsla(var(--dutch-blue), 0.2),
+    hsla(var(--dutch-purple), 0.2),
+    hsla(var(--dutch-orange), 0.2)
   );
   border-radius: 0.5rem;
   filter: blur(1rem);
@@ -184,42 +184,32 @@
   background-size: 200% auto;
   transition: all 0.3s ease;
   background-image: linear-gradient(to right, 
-    #1e40af,
-    #7c3aed,
-    #1e40af
+    hsl(var(--dutch-blue)),
+    hsl(var(--dutch-purple)),
+    hsl(var(--dutch-blue))
   );
   animation: gradientShift 6s ease infinite;
 }
 
 .gradient-button:hover {
   background-position: right center;
-  box-shadow: 0 0 15px rgba(30, 64, 175, 0.5);
+  box-shadow: 0 0 15px hsla(var(--dutch-blue), 0.5);
 }
 
 .gradient-button-orange {
   background-size: 200% auto;
   transition: all 0.3s ease;
   background-image: linear-gradient(to right, 
-    #ea580c,
-    #7c3aed,
-    #ea580c
+    hsl(var(--dutch-orange)),
+    hsl(var(--dutch-purple)),
+    hsl(var(--dutch-orange))
   );
   animation: gradientShift 6s ease infinite;
 }
 
 .gradient-button-orange:hover {
   background-position: right center;
-  box-shadow: 0 0 15px rgba(234, 88, 12, 0.5);
-}
-
-/* CSS Variables for Dutch colors */
-:root {
-  --dutch-blue: #1e40af;
-  --dutch-blue-rgb: 30, 64, 175;
-  --dutch-purple: #7c3aed;
-  --dutch-purple-rgb: 124, 58, 237;
-  --dutch-orange: #ea580c;
-  --dutch-orange-rgb: 234, 88, 12;
+  box-shadow: 0 0 15px hsla(var(--dutch-orange), 0.5);
 }
 
 .bg-size-200 {
