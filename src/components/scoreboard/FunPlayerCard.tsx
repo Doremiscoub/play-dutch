@@ -145,14 +145,14 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
           {/* Avatar & Rang */}
           <div className="flex items-center gap-3">
             <motion.div 
-              className="relative w-12 h-12 rounded-2xl backdrop-blur-md border-2 border-white/40 
-                         bg-gradient-to-br from-purple-500/30 via-pink-500/20 to-blue-500/25
-                         shadow-glass-lg flex items-center justify-center
-                         text-white font-black text-lg"
+              className="relative w-16 h-16 rounded-3xl backdrop-blur-md border-3 border-white/50 
+                         bg-gradient-to-br from-purple-500/40 via-pink-500/30 to-blue-500/35
+                         shadow-2xl shadow-purple-500/30 flex items-center justify-center
+                         text-white font-black text-2xl z-20"
               whileHover={{
-                scale: 1.1,
-                rotateY: 15,
-                boxShadow: "0 10px 30px rgba(168, 85, 247, 0.4)"
+                scale: 1.15,
+                rotateY: 20,
+                boxShadow: "0 20px 40px rgba(168, 85, 247, 0.6)"
               }}
               transition={{
                 type: "spring",
@@ -160,14 +160,28 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
                 damping: 15
               }}
             >
-              {/* Playful colorful shine effect */}
-              <div className="absolute inset-0 bg-gradient-to-tr from-yellow-300/25 via-pink-300/15 to-cyan-300/20 rounded-2xl" />
+              {/* Enhanced playful colorful shine effect */}
+              <div className="absolute inset-0 bg-gradient-to-tr from-yellow-300/35 via-pink-300/25 to-cyan-300/30 rounded-3xl" />
+              
+              {/* Pulsing outer glow */}
+              <motion.div 
+                className="absolute inset-0 rounded-3xl bg-gradient-to-r from-purple-400/40 to-pink-400/40 blur-sm"
+                animate={{ 
+                  scale: [1, 1.1, 1],
+                  opacity: [0.5, 0.8, 0.5]
+                }}
+                transition={{ 
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              />
               
               {/* Animated color orbs for extra playfulness */}
               <motion.div 
-                className="absolute top-1 right-1 w-2 h-2 rounded-full bg-gradient-to-r from-yellow-400 to-orange-400"
+                className="absolute top-1 right-1 w-3 h-3 rounded-full bg-gradient-to-r from-yellow-400 to-orange-400"
                 animate={{ 
-                  scale: [1, 1.3, 1],
+                  scale: [1, 1.4, 1],
                   opacity: [0.7, 1, 0.7]
                 }}
                 transition={{ 
@@ -180,10 +194,10 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
               {/* Winner crown overlay */}
               {isWinner && (
                 <motion.div 
-                  className="absolute -top-2 -right-2 w-6 h-6 rounded-full 
+                  className="absolute -top-3 -right-3 w-8 h-8 rounded-full 
                              bg-gradient-to-r from-amber-400 to-yellow-500
-                             border-2 border-white shadow-lg
-                             flex items-center justify-center text-xs"
+                             border-3 border-white shadow-xl
+                             flex items-center justify-center text-sm"
                   initial={{ scale: 0, rotate: -180 }}
                   animate={{ scale: 1, rotate: 0 }}
                   transition={{ delay: 0.3, type: "spring" }}
@@ -192,7 +206,7 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
                 </motion.div>
               )}
               
-              <span className="relative z-10 drop-shadow-sm">{rank}</span>
+              <span className="relative z-10 drop-shadow-lg">{rank}</span>
             </motion.div>
             
             <motion.div className="w-14 h-14 rounded-xl bg-white/80 backdrop-blur-sm border-2 border-white/60 shadow-lg flex items-center justify-center relative overflow-hidden" whileHover={{
