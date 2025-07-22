@@ -144,14 +144,24 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
         <div className="flex items-center gap-3 mb-2">
           {/* Avatar & Rang */}
           <div className="flex items-center gap-3">
-            <motion.div className={cn("w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg", theme.accent)} whileHover={{
+            <motion.div className={cn("relative w-10 h-10 rounded-full flex items-center justify-center text-white font-black text-sm shadow-md overflow-hidden", theme.accent)} whileHover={{
             scale: 1.1,
             rotate: 5
           }} transition={{
             type: "spring",
             stiffness: 300
           }}>
-              #{rank}
+              {/* Effet de brillance */}
+              <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent" />
+              
+              {/* Badge spécial pour le gagnant */}
+              {rank === 1 && (
+                <div className="absolute -top-1 -right-1 w-4 h-4 bg-yellow-400 rounded-full flex items-center justify-center">
+                  <span className="text-xs">👑</span>
+                </div>
+              )}
+              
+              <span className="relative z-10">{rank}</span>
             </motion.div>
             
             <motion.div className="w-14 h-14 rounded-xl bg-white/80 backdrop-blur-sm border-2 border-white/60 shadow-lg flex items-center justify-center relative overflow-hidden" whileHover={{
