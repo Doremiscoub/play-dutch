@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { Player, RoundHistoryEntry } from '@/types';
 import { v4 as uuidv4 } from 'uuid';
 import { toast } from 'sonner';
@@ -16,14 +16,22 @@ interface GameState {
   isGameOver: boolean;
 }
 
+// Store global pour partager l'état entre tous les composants
+let globalGameState: GameState = {
+  players: [],
+  roundHistory: [],
+  scoreLimit: 100,
+  gameStartTime: null,
+  isGameOver: false
+};
+
 export const useSimpleGameState = () => {
-  const [gameState, setGameState] = useState<GameState>({
-    players: [],
-    roundHistory: [],
-    scoreLimit: 100,
-    gameStartTime: null,
-    isGameOver: false
-  });
+  const [gameState, setGameState] = useState<GameState>(globalGameState);
+  
+  // Synchroniser avec le store global au montage
+  useEffect(() => {
+    setGameState(globalGameState);
+  }, []);
 
   const saveToStorage = useCallback((state: GameState) => {
     try {
@@ -46,10 +54,14 @@ export const useSimpleGameState = () => {
       const parsed = JSON.parse(saved);
       if (!parsed.players || parsed.players.length === 0) return false;
       
-      setGameState({
+      const newState = {
         ...parsed,
         gameStartTime: parsed.gameStartTime ? new Date(parsed.gameStartTime) : null
-      });
+      };
+      
+      // Mettre à jour le store global ET l'état local
+      globalGameState = newState;
+      setGameState(newState);
       return true;
     } catch (error) {
       console.error('Load failed:', error);
@@ -81,6 +93,8 @@ export const useSimpleGameState = () => {
       isGameOver: false
     };
 
+    // Mettre à jour le store global ET l'état local
+    globalGameState = newState;
     setGameState(newState);
     
     if (saveToStorage(newState)) {
@@ -113,6 +127,7 @@ export const useSimpleGameState = () => {
       isGameOver: updatedPlayers.some(p => p.totalScore >= gameState.scoreLimit)
     };
 
+    globalGameState = newState;
     setGameState(newState);
     saveToStorage(newState);
     
@@ -138,6 +153,7 @@ export const useSimpleGameState = () => {
       isGameOver: false
     };
 
+    globalGameState = newState;
     setGameState(newState);
     saveToStorage(newState);
     
@@ -151,13 +167,16 @@ export const useSimpleGameState = () => {
     localStorage.removeItem('game_active');
     localStorage.removeItem('player_setup');
     
-    setGameState({
+    const emptyState = {
       players: [],
       roundHistory: [],
       scoreLimit: 100,
       gameStartTime: null,
       isGameOver: false
-    });
+    };
+    
+    globalGameState = emptyState;
+    setGameState(emptyState);
     
     toast.success('Partie réinitialisée');
   }, []);

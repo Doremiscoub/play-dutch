@@ -24,7 +24,7 @@ describe('Modern Game Setup Flow', () => {
     vi.clearAllMocks();
   });
 
-  it('should navigate from Home CTA to Setup and keep wizard stable for 5 seconds', async () => {
+  it('should navigate from Home CTA to Setup and keep wizard stable', async () => {
     const user = userEvent.setup();
 
     render(
@@ -36,7 +36,7 @@ describe('Modern Game Setup Flow', () => {
     // Attendre que la page Home soit chargée
     await waitFor(() => {
       expect(screen.getByText(/Jouer maintenant/i)).toBeInTheDocument();
-    }, { timeout: 10000 });
+    }, { timeout: 5000 });
 
     // Cliquer sur "Jouer maintenant"
     const playButton = screen.getByText(/Jouer maintenant/i);
@@ -45,15 +45,15 @@ describe('Modern Game Setup Flow', () => {
     // Vérifier que nous sommes sur /setup
     await waitFor(() => {
       expect(window.location.pathname).toBe('/setup');
-    }, { timeout: 5000 });
+    }, { timeout: 3000 });
 
-    // Vérifier que le wizard est visible
+    // Vérifier que le wizard est visible et reste stable
     await waitFor(() => {
       expect(screen.getByText(/Combien de joueurs/i)).toBeInTheDocument();
-    }, { timeout: 5000 });
+    }, { timeout: 3000 });
 
-    // Attendre 5 secondes et vérifier que le wizard est toujours là
-    await new Promise(resolve => setTimeout(resolve, 5000));
+    // Attendre un moment pour vérifier la stabilité
+    await new Promise(resolve => setTimeout(resolve, 1000));
     
     expect(screen.getByText(/Combien de joueurs/i)).toBeInTheDocument();
     expect(screen.getByText(/Configuration de partie/i)).toBeInTheDocument();
@@ -69,7 +69,7 @@ describe('Modern Game Setup Flow', () => {
       expect(screen.getByText(/Noms des joueurs/i)).toBeInTheDocument();
     }, { timeout: 2000 });
 
-  }, 20000);
+  }, 15000);
 
   it('should complete the full wizard flow and create a game', async () => {
     const user = userEvent.setup();

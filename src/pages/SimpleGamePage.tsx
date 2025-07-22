@@ -38,7 +38,7 @@ const SimpleGamePage: React.FC = () => {
     }
   }, [players.length]);
 
-  // Guard: si pas de partie et qu'on n'a pas d'état de navigation depuis setup
+  // Guard: si pas de partie, afficher un message sans redirection automatique
   if (!hasGame) {
     return (
       <PageShell variant="game">
@@ -51,7 +51,7 @@ const SimpleGamePage: React.FC = () => {
           <p className="mb-6">Vous devez d'abord créer une partie pour jouer.</p>
           <button 
             onClick={() => navigate('/setup')}
-            className="bg-primary text-white px-6 py-3 rounded-lg"
+            className="bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors"
           >
             Créer une partie
           </button>
