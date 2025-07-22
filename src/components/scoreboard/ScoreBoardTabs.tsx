@@ -16,96 +16,99 @@ const ScoreBoardTabs: React.FC<ScoreBoardTabsProps> = ({
   return (
     <div className="flex justify-center mb-8 px-4">
       <motion.div 
-        className="bg-gradient-to-r from-white/80 to-white/60 backdrop-blur-xl border border-white/50 rounded-2xl p-3 shadow-lg"
+        className="bg-gradient-to-r from-purple-400/20 via-pink-400/20 to-orange-400/20 backdrop-blur-xl border border-purple-300/30 rounded-3xl p-4 shadow-xl"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <div className="flex gap-2">
+        <div className="flex gap-3">
           <motion.button
             className={cn(
-              "flex items-center gap-3 px-6 py-3 rounded-xl font-semibold transition-all duration-300 min-w-[140px] justify-center relative overflow-hidden",
+              "flex items-center gap-3 px-8 py-4 rounded-2xl font-bold transition-all duration-300 min-w-[140px] justify-center relative overflow-hidden",
               currentView === 'list' 
-                ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg transform scale-105" 
-                : "text-neutral-700 hover:bg-gradient-to-r hover:from-blue-400/20 hover:to-blue-500/20 hover:scale-102"
+                ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-xl transform scale-110" 
+                : "text-purple-700 hover:bg-gradient-to-r hover:from-purple-400/30 hover:to-pink-400/30 hover:scale-105"
             )}
             onClick={() => onViewChange('list')}
-            whileHover={{ y: -2 }}
-            whileTap={{ scale: 0.98 }}
+            whileHover={{ y: -3, rotate: 1 }}
+            whileTap={{ scale: 0.95 }}
           >
             {currentView === 'list' && (
               <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-blue-400/30 to-blue-600/30"
+                className="absolute inset-0 bg-gradient-to-r from-purple-400/40 to-pink-400/40"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.3 }}
               />
             )}
-            <motion.div
-              animate={{ rotate: currentView === 'list' ? [0, -10, 10, 0] : 0 }}
-              transition={{ duration: 0.5 }}
+            <motion.span
+              className="text-2xl relative z-10"
+              animate={{ rotate: currentView === 'list' ? [0, -15, 15, 0] : 0 }}
+              transition={{ duration: 0.6 }}
             >
-              <List className="h-5 w-5 relative z-10" />
-            </motion.div>
-            <span className="hidden sm:inline relative z-10">🏆 Classement</span>
+              🏆
+            </motion.span>
+            <span className="hidden sm:inline relative z-10">Classement</span>
             <span className="sm:hidden relative z-10">Liste</span>
           </motion.button>
           
           <motion.button
             className={cn(
-              "flex items-center gap-3 px-6 py-3 rounded-xl font-semibold transition-all duration-300 min-w-[140px] justify-center relative overflow-hidden",
+              "flex items-center gap-3 px-8 py-4 rounded-2xl font-bold transition-all duration-300 min-w-[140px] justify-center relative overflow-hidden",
               currentView === 'table' 
-                ? "bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-lg transform scale-105" 
-                : "text-neutral-700 hover:bg-gradient-to-r hover:from-purple-400/20 hover:to-purple-500/20 hover:scale-102"
+                ? "bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-xl transform scale-110" 
+                : "text-orange-700 hover:bg-gradient-to-r hover:from-orange-400/30 hover:to-red-400/30 hover:scale-105"
             )}
             onClick={() => onViewChange('table')}
-            whileHover={{ y: -2 }}
-            whileTap={{ scale: 0.98 }}
+            whileHover={{ y: -3, rotate: -1 }}
+            whileTap={{ scale: 0.95 }}
           >
             {currentView === 'table' && (
               <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-purple-400/30 to-purple-600/30"
+                className="absolute inset-0 bg-gradient-to-r from-orange-400/40 to-red-400/40"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.3 }}
               />
             )}
-            <motion.div
-              animate={{ rotate: currentView === 'table' ? [0, -10, 10, 0] : 0 }}
-              transition={{ duration: 0.5 }}
+            <motion.span
+              className="text-2xl relative z-10"
+              animate={{ rotate: currentView === 'table' ? [0, -15, 15, 0] : 0 }}
+              transition={{ duration: 0.6 }}
             >
-              <Table className="h-5 w-5 relative z-10" />
-            </motion.div>
-            <span className="hidden sm:inline relative z-10">📊 Tableau</span>
+              📊
+            </motion.span>
+            <span className="hidden sm:inline relative z-10">Tableau</span>
             <span className="sm:hidden relative z-10">Manches</span>
           </motion.button>
           
           <motion.button
             className={cn(
-              "flex items-center gap-3 px-6 py-3 rounded-xl font-semibold transition-all duration-300 min-w-[140px] justify-center relative overflow-hidden",
+              "flex items-center gap-3 px-8 py-4 rounded-2xl font-bold transition-all duration-300 min-w-[140px] justify-center relative overflow-hidden",
               currentView === 'stats' 
-                ? "bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg transform scale-105" 
-                : "text-neutral-700 hover:bg-gradient-to-r hover:from-green-400/20 hover:to-green-500/20 hover:scale-102"
+                ? "bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow-xl transform scale-110" 
+                : "text-cyan-700 hover:bg-gradient-to-r hover:from-cyan-400/30 hover:to-blue-400/30 hover:scale-105"
             )}
             onClick={() => onViewChange('stats')}
-            whileHover={{ y: -2 }}
-            whileTap={{ scale: 0.98 }}
+            whileHover={{ y: -3, rotate: 1 }}
+            whileTap={{ scale: 0.95 }}
           >
             {currentView === 'stats' && (
               <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-green-400/30 to-green-600/30"
+                className="absolute inset-0 bg-gradient-to-r from-cyan-400/40 to-blue-400/40"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.3 }}
               />
             )}
-            <motion.div
-              animate={{ rotate: currentView === 'stats' ? [0, -10, 10, 0] : 0 }}
-              transition={{ duration: 0.5 }}
+            <motion.span
+              className="text-2xl relative z-10"
+              animate={{ rotate: currentView === 'stats' ? [0, -15, 15, 0] : 0 }}
+              transition={{ duration: 0.6 }}
             >
-              <BarChart3 className="h-5 w-5 relative z-10" />
-            </motion.div>
-            <span className="hidden sm:inline relative z-10">📈 Statistiques</span>
+              📈
+            </motion.span>
+            <span className="hidden sm:inline relative z-10">Statistiques</span>
             <span className="sm:hidden relative z-10">Stats</span>
           </motion.button>
         </div>
