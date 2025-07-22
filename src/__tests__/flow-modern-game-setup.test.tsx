@@ -1,94 +1,128 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { render, waitFor } from '@testing-library/react';
-import { screen } from '@testing-library/dom';
-import { MemoryRouter } from 'react-router-dom';
+/**
+ * Test de stabilité pour le wizard ModernGameSetup
+ * Vérifie que le wizard reste visible et fonctionnel après navigation Home → Setup
+ */
+import React from 'react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import App from '../App';
+import { MemoryRouter } from 'react-router-dom';
+import { vi } from 'vitest';
+import App from '@/App';
 import { toast } from 'sonner';
 
-// Mock pour Sonner toast
-vi.mock('sonner', async () => {
-  const actual = await vi.importActual('sonner');
-  return {
-    ...actual,
-    toast: {
-      info: vi.fn(),
-      success: vi.fn(),
-      error: vi.fn(),
-    },
-    Toaster: () => null,
-  };
-});
+// Mock sonner
+vi.mock('sonner', () => ({
+  toast: {
+    success: vi.fn(),
+    error: vi.fn(),
+  },
+}));
 
-describe('Flow: Modern Game Setup (3 Steps)', () => {
+describe('Modern Game Setup Flow', () => {
   beforeEach(() => {
     localStorage.clear();
     vi.clearAllMocks();
   });
 
-  it('should complete the 3-step setup flow successfully', async () => {
+  it('should navigate from Home CTA to Setup and keep wizard stable for 5 seconds', async () => {
     const user = userEvent.setup();
+
+    render(
+      <MemoryRouter initialEntries={['/']}>
+        <App />
+      </MemoryRouter>
+    );
+
+    // Attendre que la page Home soit chargée
+    await waitFor(() => {
+      expect(screen.getByText(/Jouer maintenant/i)).toBeInTheDocument();
+    }, { timeout: 10000 });
+
+    // Cliquer sur "Jouer maintenant"
+    const playButton = screen.getByText(/Jouer maintenant/i);
+    await user.click(playButton);
+
+    // Vérifier que nous sommes sur /setup
+    await waitFor(() => {
+      expect(window.location.pathname).toBe('/setup');
+    }, { timeout: 5000 });
+
+    // Vérifier que le wizard est visible
+    await waitFor(() => {
+      expect(screen.getByText(/Combien de joueurs/i)).toBeInTheDocument();
+    }, { timeout: 5000 });
+
+    // Attendre 5 secondes et vérifier que le wizard est toujours là
+    await new Promise(resolve => setTimeout(resolve, 5000));
     
+    expect(screen.getByText(/Combien de joueurs/i)).toBeInTheDocument();
+    expect(screen.getByText(/Configuration de partie/i)).toBeInTheDocument();
+
+    // Tester l'interaction avec le wizard
+    const nextButton = screen.getByText(/Suivant/i);
+    expect(nextButton).toBeInTheDocument();
+    
+    await user.click(nextButton);
+    
+    // Vérifier qu'on peut passer à l'étape suivante
+    await waitFor(() => {
+      expect(screen.getByText(/Noms des joueurs/i)).toBeInTheDocument();
+    }, { timeout: 2000 });
+
+  }, 20000);
+
+  it('should complete the full wizard flow and create a game', async () => {
+    const user = userEvent.setup();
+
     render(
       <MemoryRouter initialEntries={['/setup']}>
         <App />
       </MemoryRouter>
     );
 
-    // ✅ Step 1: Player Count
+    // Étape 1: Nombre de joueurs
     await waitFor(() => {
       expect(screen.getByText(/Combien de joueurs/i)).toBeInTheDocument();
     });
-    
-    // Should show default 4 players
-    expect(screen.getByText('4')).toBeInTheDocument();
-    
-    // Click Next to go to Step 2
-    const nextButton = screen.getByText(/Suivant : Noms des joueurs/i);
+
+    const nextButton = screen.getByText(/Suivant/i);
     await user.click(nextButton);
 
-    // ✅ Step 2: Player Names
+    // Étape 2: Noms des joueurs
     await waitFor(() => {
       expect(screen.getByText(/Noms des joueurs/i)).toBeInTheDocument();
     });
-    
-    // Add 4 players
-    const addButtons = screen.getAllByRole('button', { name: /\+ \w+/i });
-    for (let i = 0; i < 4 && i < addButtons.length; i++) {
-      await user.click(addButtons[i]);
-    }
-    
-    // Wait for players to be added and continue button to be enabled
+
+    // Remplir les noms
+    const nameInputs = screen.getAllByLabelText(/Nom du joueur/i);
+    expect(nameInputs).toHaveLength(3); // Par défaut 3 joueurs
+
+    await user.type(nameInputs[0], 'Alice');
+    await user.type(nameInputs[1], 'Bob');
+    await user.type(nameInputs[2], 'Charlie');
+
+    const nextButton2 = screen.getByText(/Suivant/i);
+    await user.click(nextButton2);
+
+    // Étape 3: Récapitulatif
     await waitFor(() => {
-      const continueButton = screen.getByRole('button', { name: /Continuer/i });
-      expect(continueButton).not.toBeDisabled();
+      expect(screen.getByText(/Récapitulatif/i)).toBeInTheDocument();
     });
-    
-    const continueButton = screen.getByRole('button', { name: /Continuer/i });
-    await user.click(continueButton);
 
-    // ✅ Step 3: Game Summary
+    expect(screen.getByText('Alice')).toBeInTheDocument();
+    expect(screen.getByText('Bob')).toBeInTheDocument();
+    expect(screen.getByText('Charlie')).toBeInTheDocument();
+
+    // Commencer la partie
+    const startButton = screen.getByText(/Commencer la partie/i);
+    await user.click(startButton);
+
+    // Vérifier la navigation vers /game
     await waitFor(() => {
-      expect(screen.getByText(/Tout est prêt/i)).toBeInTheDocument();
+      expect(window.location.pathname).toBe('/game');
     });
-    
-    expect(screen.getByText(/Commencer la partie/i)).toBeInTheDocument();
-    
-    // Verify no error toasts
-    expect(toast.error).not.toHaveBeenCalled();
-  });
 
-  it('should show Step 1 immediately when accessing /setup', async () => {
-    render(
-      <MemoryRouter initialEntries={['/setup']}>
-        <App />
-      </MemoryRouter>
-    );
+    expect(toast.success).toHaveBeenCalledWith('Partie créée avec 3 joueurs!');
 
-    // Should show Step 1 without any loading or blank screen
-    await waitFor(() => {
-      expect(screen.getByText(/Combien de joueurs/i)).toBeInTheDocument();
-      expect(screen.getByText('4')).toBeInTheDocument();
-    }, { timeout: 2000 });
-  });
+  }, 20000);
 });

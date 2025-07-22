@@ -35,16 +35,16 @@ const SimpleGameSetup: React.FC = () => {
       />
 
       {/* Contenu principal avec z-index garantissant la visibilité */}
-      <div className="container mx-auto px-4 py-8 max-w-4xl relative">
+      <div className="container mx-auto px-4 py-8 max-w-4xl relative" style={{ zIndex: 2000 }}>
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           className="relative"
-          style={{ zIndex: 1000 }}
+          style={{ zIndex: 2000 }}
         >
           {/* Configuration directe - wizard 3 étapes */}
-          <div style={{ zIndex: 1000 }}>
+          <div style={{ zIndex: 2000, position: 'relative' }}>
             <ModernGameSetup onStartGame={handleStartGame} />
           </div>
 

@@ -41,7 +41,7 @@ const PageTransition: React.FC<PageTransitionProps> = ({ children }) => {
   const isGamePath = location.pathname === '/game';
   
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence mode="sync">
       <motion.div
         key={location.pathname}
         initial="initial"

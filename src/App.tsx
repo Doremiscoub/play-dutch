@@ -60,7 +60,7 @@ const App: React.FC = () => {
       <SupabaseAuthProvider>
         <Router>
           {/* Fond animé global avec vagues et pastilles - visible sur toute l'app */}
-          <div className="fixed inset-0 w-full h-full -z-10">
+          <div className="fixed inset-0 w-full h-full" style={{ zIndex: -10 }}>
             <AnimatedBackground variant="subtle" />
           </div>
           
