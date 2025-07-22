@@ -32,53 +32,59 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
   const getRankTheme = () => {
     const themes = {
       1: {
-        gradient: "from-purple-500/20 via-pink-500/15 to-purple-600/10",
-        border: "border-purple-400/50",
-        glow: "shadow-lg shadow-purple-500/20",
-        text: "text-purple-700",
-        accent: "bg-purple-500",
-        lightBg: "bg-purple-50/80"
+        gradient: "from-amber-500/25 via-yellow-400/20 to-orange-500/15",
+        border: "border-amber-400/60",
+        glow: "shadow-lg shadow-amber-500/30",
+        text: "text-amber-700",
+        accent: "bg-amber-500",
+        lightBg: "bg-amber-50/80",
+        rankGlow: "from-amber-400/50 to-yellow-400/50"
       },
       2: {
-        gradient: "from-orange-500/20 via-red-500/15 to-orange-600/10",
-        border: "border-orange-400/50",
-        glow: "shadow-lg shadow-orange-500/20",
-        text: "text-orange-700",
-        accent: "bg-orange-500",
-        lightBg: "bg-orange-50/80"
+        gradient: "from-blue-500/25 via-cyan-400/20 to-indigo-500/15",
+        border: "border-blue-400/60",
+        glow: "shadow-lg shadow-blue-500/30",
+        text: "text-blue-700",
+        accent: "bg-blue-500",
+        lightBg: "bg-blue-50/80",
+        rankGlow: "from-blue-400/50 to-cyan-400/50"
       },
       3: {
-        gradient: "from-cyan-500/20 via-blue-500/15 to-cyan-600/10",
-        border: "border-cyan-400/50",
-        glow: "shadow-lg shadow-cyan-500/20",
-        text: "text-cyan-700",
-        accent: "bg-cyan-500",
-        lightBg: "bg-cyan-50/80"
+        gradient: "from-emerald-500/25 via-green-400/20 to-teal-500/15",
+        border: "border-emerald-400/60",
+        glow: "shadow-lg shadow-emerald-500/30",
+        text: "text-emerald-700",
+        accent: "bg-emerald-500",
+        lightBg: "bg-emerald-50/80",
+        rankGlow: "from-emerald-400/50 to-green-400/50"
       },
       4: {
-        gradient: "from-green-500/20 via-emerald-500/15 to-green-600/10",
-        border: "border-green-400/50",
-        glow: "shadow-lg shadow-green-500/20",
-        text: "text-green-700",
-        accent: "bg-green-500",
-        lightBg: "bg-green-50/80"
+        gradient: "from-purple-500/25 via-violet-400/20 to-indigo-500/15",
+        border: "border-purple-400/60",
+        glow: "shadow-lg shadow-purple-500/30",
+        text: "text-purple-700",
+        accent: "bg-purple-500",
+        lightBg: "bg-purple-50/80",
+        rankGlow: "from-purple-400/50 to-violet-400/50"
       },
       5: {
-        gradient: "from-yellow-500/20 via-amber-500/15 to-yellow-600/10",
-        border: "border-yellow-400/50",
-        glow: "shadow-lg shadow-yellow-500/20",
-        text: "text-yellow-700",
-        accent: "bg-yellow-500",
-        lightBg: "bg-yellow-50/80"
+        gradient: "from-rose-500/25 via-pink-400/20 to-red-500/15",
+        border: "border-rose-400/60",
+        glow: "shadow-lg shadow-rose-500/30",
+        text: "text-rose-700",
+        accent: "bg-rose-500",
+        lightBg: "bg-rose-50/80",
+        rankGlow: "from-rose-400/50 to-pink-400/50"
       }
     };
     return themes[rank as keyof typeof themes] || {
-      gradient: "from-pink-500/20 via-purple-500/15 to-pink-600/10",
-      border: "border-pink-400/50",
-      glow: "shadow-lg shadow-pink-500/20",
-      text: "text-pink-700",
-      accent: "bg-pink-500",
-      lightBg: "bg-pink-50/80"
+      gradient: "from-slate-500/25 via-gray-400/20 to-zinc-500/15",
+      border: "border-slate-400/60",
+      glow: "shadow-lg shadow-slate-500/30",
+      text: "text-slate-700",
+      accent: "bg-slate-500",
+      lightBg: "bg-slate-50/80",
+      rankGlow: "from-slate-400/50 to-gray-400/50"
     };
   };
   const theme = getRankTheme();
@@ -145,14 +151,16 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
           {/* Avatar & Rang */}
           <div className="flex items-center gap-3">
             <motion.div 
-              className="relative w-16 h-16 rounded-3xl backdrop-blur-md border-3 border-white/50 
-                         bg-gradient-to-br from-purple-500/40 via-pink-500/30 to-blue-500/35
-                         shadow-2xl shadow-purple-500/30 flex items-center justify-center
-                         text-white font-black text-2xl z-20"
+              className={cn(
+                "relative w-16 h-16 rounded-3xl backdrop-blur-md border-3 border-white/50",
+                "flex items-center justify-center text-white font-black text-2xl z-20",
+                `bg-gradient-to-br ${theme.gradient}`,
+                theme.glow
+              )}
               whileHover={{
                 scale: 1.15,
                 rotateY: 20,
-                boxShadow: "0 20px 40px rgba(168, 85, 247, 0.6)"
+                boxShadow: `0 20px 40px ${theme.accent}50`
               }}
               transition={{
                 type: "spring",
@@ -160,15 +168,15 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
                 damping: 15
               }}
             >
-              {/* Enhanced playful colorful shine effect */}
-              <div className="absolute inset-0 bg-gradient-to-tr from-yellow-300/35 via-pink-300/25 to-cyan-300/30 rounded-3xl" />
+              {/* Themed background overlay */}
+              <div className={cn("absolute inset-0 rounded-3xl", `bg-gradient-to-tr ${theme.gradient}`)} />
               
-              {/* Pulsing outer glow */}
+              {/* Pulsing outer glow with theme colors */}
               <motion.div 
-                className="absolute inset-0 rounded-3xl bg-gradient-to-r from-purple-400/40 to-pink-400/40 blur-sm"
+                className={cn("absolute inset-0 rounded-3xl blur-sm", `bg-gradient-to-r ${theme.rankGlow}`)}
                 animate={{ 
                   scale: [1, 1.1, 1],
-                  opacity: [0.5, 0.8, 0.5]
+                  opacity: [0.4, 0.7, 0.4]
                 }}
                 transition={{ 
                   duration: 3,
