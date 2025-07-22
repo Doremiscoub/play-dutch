@@ -195,35 +195,42 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
               {dutchCount > 0 && <span className="text-orange-600">🏆 {dutchCount}</span>}
             </div>
             
-            {/* Bouton d'expansion redesigné */}
-            <motion.div className={cn(
-              "relative inline-flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold cursor-pointer overflow-hidden",
-              "bg-white/90 backdrop-blur-md border-2 border-white/60 shadow-lg",
-              "hover:bg-white hover:border-white/80 active:scale-95",
-              "transition-all duration-200"
+            {/* Bouton d'expansion minimaliste */}
+            <motion.button className={cn(
+              "group/btn mt-1 px-2 py-1.5 rounded-lg text-xs font-medium cursor-pointer",
+              "border border-white/30 backdrop-blur-sm",
+              "hover:border-white/50 hover:bg-white/10 active:scale-95",
+              "transition-all duration-200 flex items-center gap-1.5",
+              theme.lightBg,
+              theme.text
             )} whileHover={{
-            scale: 1.05,
-            y: -1
-          }} whileTap={{
-            scale: 0.95
-          }}>
-              {/* Effet de brillance au survol */}
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              
-              {/* Contenu du bouton */}
-              <div className="relative flex items-center gap-1.5">
-                <motion.span 
-                  className="text-lg"
-                  animate={isExpanded ? { rotate: 180 } : { rotate: 0 }}
-                  transition={{ duration: 0.2 }}
+              scale: 1.02
+            }} whileTap={{
+              scale: 0.98
+            }}>
+              <motion.div
+                animate={isExpanded ? { rotate: 180 } : { rotate: 0 }}
+                transition={{ duration: 0.15, ease: "easeOut" }}
+                className="w-3 h-3 flex items-center justify-center"
+              >
+                <svg 
+                  width="12" 
+                  height="12" 
+                  viewBox="0 0 24 24" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  strokeWidth="2.5" 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round"
+                  className="opacity-70 group-hover/btn:opacity-90"
                 >
-                  {isExpanded ? '🔼' : '🔽'}
-                </motion.span>
-                <span className={cn("font-semibold tracking-wide", theme.text)}>
-                  {isExpanded ? 'Moins' : 'Plus'}
-                </span>
-              </div>
-            </motion.div>
+                  <polyline points="6,9 12,15 18,9" />
+                </svg>
+              </motion.div>
+              <span className="opacity-80 group-hover/btn:opacity-100">
+                {isExpanded ? 'Réduire' : 'Détails'}
+              </span>
+            </motion.button>
           </div>
 
           {/* Score principal amélioré */}
