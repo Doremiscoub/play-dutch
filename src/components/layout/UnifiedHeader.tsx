@@ -102,13 +102,58 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
 
                   {/* Center - Title (absolutely centered) */}
                   <div className="absolute left-1/2 transform -translate-x-1/2">
-                    <h1 className="text-xl sm:text-2xl font-black text-gray-900 flex items-center justify-center gap-3 whitespace-nowrap">
-                      <span className="text-2xl">🎯</span>
-                      <span className="bg-gradient-to-r from-trinity-blue-700 via-trinity-purple-700 to-trinity-orange-700 bg-clip-text text-transparent font-extrabold">
+                    <motion.h1 
+                      className="text-xl sm:text-3xl font-black text-gray-900 flex items-center justify-center gap-2 sm:gap-4 whitespace-nowrap hover-scale"
+                      whileHover={{ 
+                        scale: 1.05,
+                        rotate: [-1, 1, -1, 0],
+                      }}
+                      transition={{ 
+                        duration: 0.3,
+                        rotate: { duration: 0.5, ease: "easeInOut" }
+                      }}
+                    >
+                      <motion.span 
+                        className="text-2xl sm:text-3xl"
+                        animate={{ 
+                          rotate: [0, 10, -10, 0],
+                          scale: [1, 1.1, 1] 
+                        }}
+                        transition={{ 
+                          duration: 2,
+                          repeat: Infinity,
+                          ease: "easeInOut"
+                        }}
+                      >
+                        🎯
+                      </motion.span>
+                      <motion.span 
+                        className="bg-gradient-to-r from-trinity-blue-700 via-trinity-purple-700 to-trinity-orange-700 bg-clip-text text-transparent font-extrabold text-shadow-lg story-link"
+                        whileHover={{
+                          backgroundPosition: "200% center"
+                        }}
+                        style={{
+                          backgroundSize: "200% 200%"
+                        }}
+                      >
                         {variant === 'game' ? 'Partie en cours' : title}
-                      </span>
-                      <span className="text-2xl">🎯</span>
-                    </h1>
+                      </motion.span>
+                      <motion.span 
+                        className="text-2xl sm:text-3xl"
+                        animate={{ 
+                          rotate: [0, -10, 10, 0],
+                          scale: [1, 1.1, 1] 
+                        }}
+                        transition={{ 
+                          duration: 2,
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                          delay: 1
+                        }}
+                      >
+                        🎯
+                      </motion.span>
+                    </motion.h1>
                   </div>
 
                   {/* Right side - Rules button and Settings */}
