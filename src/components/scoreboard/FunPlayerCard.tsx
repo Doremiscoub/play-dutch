@@ -428,11 +428,8 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
                   theme.text
                 )}
                 animate={isWinner ? {
-                  textShadow: [
-                    "0 0 0px rgba(0,0,0,0)",
-                    "0 0 10px rgba(255,215,0,0.8)",
-                    "0 0 0px rgba(0,0,0,0)"
-                  ]
+                  scale: [1, 1.05, 1],
+                  opacity: [1, 0.9, 1]
                 } : {}}
                 transition={{ duration: 2, repeat: isWinner ? Infinity : 0 }}
               >
@@ -501,12 +498,7 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
               <motion.span 
                 className="px-3 py-1.5 bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700 rounded-full text-xs font-bold flex items-center gap-1 border border-purple-200/60 backdrop-blur-sm"
                 animate={{ 
-                  scale: [1, 1.05, 1],
-                  boxShadow: [
-                    "0 0 0px rgba(147, 51, 234, 0)",
-                    "0 0 15px rgba(147, 51, 234, 0.3)",
-                    "0 0 0px rgba(147, 51, 234, 0)"
-                  ]
+                  scale: [1, 1.05, 1]
                 }}
                 transition={{ duration: 2, repeat: Infinity }}
                 whileHover={{ scale: 1.1, y: -2 }}
