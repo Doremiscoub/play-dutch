@@ -178,7 +178,28 @@ const PlayerCardContent: React.FC<PlayerCardContentProps> = ({
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.1 }}
               >
-                <PlayerCardStats player={player} rank={rank} />
+                <PlayerCardStats 
+                  player={player} 
+                  rank={rank} 
+                  colors={{
+                    gradient: rank === 1 ? "from-purple-500/30 via-pink-500/25 to-purple-600/20" :
+                             rank === 2 ? "from-orange-500/30 via-red-500/25 to-orange-600/20" :
+                             rank === 3 ? "from-cyan-500/30 via-blue-500/25 to-cyan-600/20" :
+                             "from-gray-500/30 via-gray-500/25 to-gray-600/20",
+                    border: rank === 1 ? "border-purple-400/60" :
+                           rank === 2 ? "border-orange-400/60" :
+                           rank === 3 ? "border-cyan-400/60" :
+                           "border-gray-400/60",
+                    glow: rank === 1 ? "shadow-purple-500/20" :
+                         rank === 2 ? "shadow-orange-500/20" :
+                         rank === 3 ? "shadow-cyan-500/20" :
+                         "shadow-gray-500/20",
+                    text: rank === 1 ? "text-purple-700" :
+                         rank === 2 ? "text-orange-700" :
+                         rank === 3 ? "text-cyan-700" :
+                         "text-gray-700"
+                  }}
+                />
               </motion.div>
               
               {/* Manches récentes */}
@@ -187,7 +208,28 @@ const PlayerCardContent: React.FC<PlayerCardContentProps> = ({
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.2 }}
               >
-                <PlayerCardRecentRounds player={player} rank={rank} />
+                <PlayerCardRecentRounds 
+                  player={player} 
+                  rank={rank}
+                  colors={{
+                    gradient: rank === 1 ? "from-purple-500/30 via-pink-500/25 to-purple-600/20" :
+                             rank === 2 ? "from-orange-500/30 via-red-500/25 to-orange-600/20" :
+                             rank === 3 ? "from-cyan-500/30 via-blue-500/25 to-cyan-600/20" :
+                             "from-gray-500/30 via-gray-500/25 to-gray-600/20",
+                    border: rank === 1 ? "border-purple-400/60" :
+                           rank === 2 ? "border-orange-400/60" :
+                           rank === 3 ? "border-cyan-400/60" :
+                           "border-gray-400/60",
+                    glow: rank === 1 ? "shadow-purple-500/20" :
+                         rank === 2 ? "shadow-orange-500/20" :
+                         rank === 3 ? "shadow-cyan-500/20" :
+                         "shadow-gray-500/20",
+                    text: rank === 1 ? "text-purple-700" :
+                         rank === 2 ? "text-orange-700" :
+                         rank === 3 ? "text-cyan-700" :
+                         "text-gray-700"
+                  }}
+                />
               </motion.div>
 
               {/* Informations supplémentaires pour le gagnant */}
