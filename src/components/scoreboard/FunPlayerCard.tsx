@@ -46,25 +46,31 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
         ref={cardRef}
         className={cn(
           "relative rounded-3xl backdrop-blur-2xl border-2 shadow-glass-lg transition-all duration-700 cursor-pointer overflow-visible group perspective-1000",
-          "bg-white/85 border-white/60 hover:bg-white/95 hover:shadow-glass-xl hover:backdrop-blur-4xl",
-          getCardStyle(),
-          isSelected || isExpanded ? "ring-4 ring-dutch-blue/50 shadow-dutch-lg scale-[1.02] border-dutch-blue/40 z-10" : "hover:scale-[1.015] hover:shadow-dutch hover:-translate-y-2"
+          rank === 1 ? "bg-gradient-to-br from-purple-400/30 via-pink-400/25 to-orange-400/20 border-purple-300/60" :
+          rank === 2 ? "bg-gradient-to-br from-orange-400/30 via-red-400/25 to-pink-400/20 border-orange-300/60" :
+          rank === 3 ? "bg-gradient-to-br from-cyan-400/30 via-blue-400/25 to-purple-400/20 border-cyan-300/60" :
+          rank === 4 ? "bg-gradient-to-br from-green-400/30 via-emerald-400/25 to-cyan-400/20 border-green-300/60" :
+          rank === 5 ? "bg-gradient-to-br from-yellow-400/30 via-orange-400/25 to-red-400/20 border-yellow-300/60" :
+          "bg-gradient-to-br from-pink-400/30 via-purple-400/25 to-blue-400/20 border-pink-300/60",
+          isSelected || isExpanded ? "ring-4 ring-purple-400/50 shadow-purple-lg scale-[1.02] border-purple-400/60 z-10" : 
+          "hover:scale-[1.02] hover:shadow-xl hover:-translate-y-3"
         )}
         onClick={handleCardClick}
         whileHover={{ 
-          y: -4, 
-          scale: 1.01
+          y: -6, 
+          scale: 1.02,
+          rotate: rank % 2 === 0 ? 1 : -1
         }}
-        whileTap={{ scale: 0.99 }}
+        whileTap={{ scale: 0.98 }}
         layout
-        initial={{ opacity: 0, y: 20, scale: 0.95 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
+        initial={{ opacity: 0, y: 30, scale: 0.9, rotateY: 45 }}
+        animate={{ opacity: 1, y: 0, scale: 1, rotateY: 0 }}
         transition={{ 
-          duration: 0.3, 
-          delay: rank * 0.05,
+          duration: 0.6, 
+          delay: rank * 0.1,
           type: "spring",
-          stiffness: 200,
-          damping: 20
+          stiffness: 250,
+          damping: 18
         }}
         style={{
           transformStyle: 'preserve-3d',
