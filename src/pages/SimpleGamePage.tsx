@@ -22,12 +22,36 @@ const SimpleGamePage: React.FC = () => {
   useEffect(() => {
     const loaded = loadFromStorage();
     if (!loaded) {
-      navigate('/setup');
-      return;
+      // Éviter la redirection automatique si on vient de setup
+      // L'utilisateur sera géré par le guard dans le component
+      console.log('No game found in storage, user should be redirected by UI logic');
+    } else {
+      // Initialize scores array only after successful load
+      setScores(players.map(() => 0));
     }
-    // Initialize scores array only after successful load
-    setScores(players.map(() => 0));
   }, []); // VIDE - pas de dépendances pour éviter la boucle infinie !
+
+  // Guard: si pas de partie et qu'on n'a pas d'état de navigation depuis setup
+  if (!hasGame) {
+    return (
+      <PageShell variant="game">
+        <UnifiedHeader 
+          title="Aucune partie en cours" 
+          showBackButton={true}
+        />
+        <div className="container mx-auto px-4 py-8 text-center">
+          <h2 className="text-2xl font-bold mb-4">Aucune partie en cours</h2>
+          <p className="mb-6">Vous devez d'abord créer une partie pour jouer.</p>
+          <button 
+            onClick={() => navigate('/setup')}
+            className="bg-primary text-white px-6 py-3 rounded-lg"
+          >
+            Créer une partie
+          </button>
+        </div>
+      </PageShell>
+    );
+  }
 
   // Separate effect for scores initialization when players change
   useEffect(() => {
@@ -61,27 +85,6 @@ const SimpleGamePage: React.FC = () => {
     setIsScoreFormOpen(true);
   };
 
-  if (!hasGame) {
-    return (
-      <PageShell variant="game">
-        <UnifiedHeader 
-          title="Aucune partie" 
-          showBackButton={true}
-        />
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="text-center space-y-4">
-            <h2 className="text-xl font-bold">Aucune partie en cours</h2>
-            <button 
-              onClick={() => navigate('/setup')}
-              className="px-6 py-3 bg-gradient-to-r from-trinity-blue-500 to-trinity-purple-500 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all"
-            >
-              Créer une partie
-            </button>
-          </div>
-        </div>
-      </PageShell>
-    );
-  }
 
   return (
     <PageShell variant="game">

@@ -38,9 +38,10 @@ const PageTransition: React.FC<PageTransitionProps> = ({ children }) => {
 
   // Prevent remounting the setup wizard when navigating from home to setup
   const isSetupPath = location.pathname === '/setup';
+  const isGamePath = location.pathname === '/game';
   
   return (
-    <AnimatePresence mode={isSetupPath ? "sync" : "wait"}>
+    <AnimatePresence mode="wait">
       <motion.div
         key={location.pathname}
         initial="initial"
@@ -48,7 +49,11 @@ const PageTransition: React.FC<PageTransitionProps> = ({ children }) => {
         exit="out"
         variants={pageVariants}
         transition={pageTransition}
-        className="min-h-screen relative z-10"
+        className="min-h-screen relative"
+        style={{ 
+          zIndex: isSetupPath ? 1000 : 10,
+          position: 'relative'
+        }}
       >
         {children}
       </motion.div>

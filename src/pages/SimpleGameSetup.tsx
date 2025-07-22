@@ -20,31 +20,33 @@ const SimpleGameSetup: React.FC = () => {
 
     const success = createGame(playerNames);
     if (success) {
-      navigate('/game');
+      // Navigation directe vers /game avec indication que la partie vient d'être créée
+      navigate('/game', { replace: true, state: { fromSetup: true } });
     } else {
       toast.error('Erreur lors de la création de la partie');
     }
   };
 
   return (
-    <div className="min-h-screen relative bg-background">
-      {/* Header fixe en haut */}
+    <PageShell variant="game">
       <UnifiedHeader 
         title="Configuration de partie" 
         showBackButton={true}
       />
 
-      {/* Contenu principal - Z-index élevé pour garantir la visibilité */}
-      <div className="container mx-auto px-4 py-8 max-w-4xl relative" style={{ zIndex: 100 }}>
+      {/* Contenu principal avec z-index garantissant la visibilité */}
+      <div className="container mx-auto px-4 py-8 max-w-4xl relative">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="relative" 
-          style={{ zIndex: 100 }}
+          className="relative"
+          style={{ zIndex: 1000 }}
         >
-          {/* Configuration directe sans redondance */}
-          <ModernGameSetup onStartGame={handleStartGame} />
+          {/* Configuration directe - wizard 3 étapes */}
+          <div style={{ zIndex: 1000 }}>
+            <ModernGameSetup onStartGame={handleStartGame} />
+          </div>
 
           {/* Informations sur le jeu */}
           <motion.div
@@ -71,7 +73,7 @@ const SimpleGameSetup: React.FC = () => {
           </motion.div>
         </motion.div>
       </div>
-    </div>
+    </PageShell>
   );
 };
 
