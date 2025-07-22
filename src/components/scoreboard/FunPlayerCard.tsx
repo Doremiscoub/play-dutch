@@ -144,24 +144,41 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
         <div className="flex items-center gap-3 mb-2">
           {/* Avatar & Rang */}
           <div className="flex items-center gap-3">
-            <motion.div className={cn("relative w-10 h-10 rounded-full flex items-center justify-center text-white font-black text-sm shadow-md overflow-hidden", theme.accent)} whileHover={{
-            scale: 1.1,
-            rotate: 5
-          }} transition={{
-            type: "spring",
-            stiffness: 300
-          }}>
-              {/* Effet de brillance */}
-              <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent" />
+            <motion.div 
+              className="relative w-12 h-12 rounded-2xl backdrop-blur-md border-2 border-white/30 
+                         bg-gradient-to-br from-primary/20 via-primary/10 to-primary/5
+                         shadow-glass-lg flex items-center justify-center
+                         text-primary-foreground font-black text-lg"
+              whileHover={{
+                scale: 1.1,
+                rotateY: 15,
+                boxShadow: "0 10px 30px rgba(0,0,0,0.2)"
+              }}
+              transition={{
+                type: "spring",
+                stiffness: 400,
+                damping: 15
+              }}
+            >
+              {/* Glassmorphism shine effect */}
+              <div className="absolute inset-0 bg-gradient-to-tr from-white/20 via-transparent to-white/10 rounded-2xl" />
               
-              {/* Badge spécial pour le gagnant */}
-              {rank === 1 && (
-                <div className="absolute -top-1 -right-1 w-4 h-4 bg-yellow-400 rounded-full flex items-center justify-center">
-                  <span className="text-xs">👑</span>
-                </div>
+              {/* Winner crown overlay */}
+              {isWinner && (
+                <motion.div 
+                  className="absolute -top-2 -right-2 w-6 h-6 rounded-full 
+                             bg-gradient-to-r from-amber-400 to-yellow-500
+                             border-2 border-white shadow-lg
+                             flex items-center justify-center text-xs"
+                  initial={{ scale: 0, rotate: -180 }}
+                  animate={{ scale: 1, rotate: 0 }}
+                  transition={{ delay: 0.3, type: "spring" }}
+                >
+                  👑
+                </motion.div>
               )}
               
-              <span className="relative z-10">{rank}</span>
+              <span className="relative z-10 drop-shadow-sm">{rank}</span>
             </motion.div>
             
             <motion.div className="w-14 h-14 rounded-xl bg-white/80 backdrop-blur-sm border-2 border-white/60 shadow-lg flex items-center justify-center relative overflow-hidden" whileHover={{
