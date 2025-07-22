@@ -103,28 +103,31 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
             disabled={!canUndo || disabled}
             className={`relative h-14 w-14 rounded-2xl transition-all duration-300 group overflow-hidden backdrop-blur-xl border-2 ${
               canUndo && !disabled
-                ? 'bg-gradient-to-br from-orange-500/90 via-orange-400/85 to-red-500/80 border-orange-300/60 hover:border-orange-200/80 shadow-lg shadow-orange-500/25 hover:shadow-xl hover:shadow-orange-500/35 hover:scale-105'
-                : 'bg-gray-500/70 border-gray-400/50 opacity-60 cursor-not-allowed'
+                ? 'bg-gradient-to-br from-orange-600/95 via-orange-500/90 to-red-600/85 border-orange-200/70 hover:border-orange-100/90 shadow-xl shadow-orange-600/30 hover:shadow-2xl hover:shadow-orange-600/40 hover:scale-105'
+                : 'bg-gray-600/85 border-gray-300/60 opacity-70 cursor-not-allowed'
             }`}
             title="Annuler la dernière manche"
           >
+            {/* Fond blanc pour améliorer la visibilité */}
+            <div className="absolute inset-0 bg-white/10 rounded-2xl" />
+            
             {/* Effet de brillance au survol */}
             {canUndo && !disabled && (
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[200%] transition-transform duration-700 ease-out rounded-2xl" />
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent translate-x-[-100%] group-hover:translate-x-[200%] transition-transform duration-700 ease-out rounded-2xl" />
             )}
             
             {/* Particules flottantes pour bouton actif */}
             {canUndo && !disabled && (
               <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <div className="absolute top-2 left-2 w-1 h-1 bg-white/60 rounded-full animate-ping" />
-                <div className="absolute bottom-3 right-2 w-1.5 h-1.5 bg-orange-200/80 rounded-full animate-pulse" />
+                <div className="absolute top-2 left-2 w-1 h-1 bg-white/70 rounded-full animate-ping" />
+                <div className="absolute bottom-3 right-2 w-1.5 h-1.5 bg-orange-100/90 rounded-full animate-pulse" />
               </div>
             )}
             
-            <RotateCcw className={`relative z-10 h-5 w-5 transition-all duration-300 ${
+            <RotateCcw className={`relative z-10 h-5 w-5 transition-all duration-300 stroke-[2.5] ${
               canUndo && !disabled 
                 ? 'text-white drop-shadow-lg group-hover:-rotate-12 group-hover:scale-110' 
-                : 'text-gray-200'
+                : 'text-white/80'
             }`} />
           </Button>
         </motion.div>
