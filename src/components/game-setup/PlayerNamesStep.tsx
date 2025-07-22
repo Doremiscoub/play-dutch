@@ -106,6 +106,7 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
                   <SimpleEmojiSelector
                     selectedEmoji={player.emoji}
                     onEmojiSelect={(emoji) => updatePlayerEmoji(index, emoji)}
+                    playerIndex={index}
                   />
 
                   {editingIndex === index ? (
