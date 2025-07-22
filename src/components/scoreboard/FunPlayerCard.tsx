@@ -195,13 +195,34 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
               {dutchCount > 0 && <span className="text-orange-600">🏆 {dutchCount}</span>}
             </div>
             
-            {/* Bouton d'expansion aligné à gauche */}
-            <motion.div className={cn("inline-flex px-2 py-1 rounded-full text-xs font-medium border backdrop-blur-sm cursor-pointer", `${theme.lightBg} ${theme.border} ${theme.text}`)} whileHover={{
-            scale: 1.05
+            {/* Bouton d'expansion redesigné */}
+            <motion.div className={cn(
+              "relative inline-flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold cursor-pointer overflow-hidden",
+              "bg-white/90 backdrop-blur-md border-2 border-white/60 shadow-lg",
+              "hover:bg-white hover:border-white/80 active:scale-95",
+              "transition-all duration-200"
+            )} whileHover={{
+            scale: 1.05,
+            y: -1
           }} whileTap={{
             scale: 0.95
           }}>
-              {isExpanded ? '🔼 Moins' : '🔽 Plus'}
+              {/* Effet de brillance au survol */}
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              
+              {/* Contenu du bouton */}
+              <div className="relative flex items-center gap-1.5">
+                <motion.span 
+                  className="text-lg"
+                  animate={isExpanded ? { rotate: 180 } : { rotate: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  {isExpanded ? '🔼' : '🔽'}
+                </motion.span>
+                <span className={cn("font-semibold tracking-wide", theme.text)}>
+                  {isExpanded ? 'Moins' : 'Plus'}
+                </span>
+              </div>
             </motion.div>
           </div>
 
