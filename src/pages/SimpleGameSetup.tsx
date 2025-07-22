@@ -1,4 +1,5 @@
-import React from 'react';
+
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useSimpleGameState } from '@/hooks/useSimpleGameState';
@@ -12,7 +13,16 @@ const SimpleGameSetup: React.FC = () => {
   const navigate = useNavigate();
   const { createGame } = useSimpleGameState();
 
+  useEffect(() => {
+    console.log('🔧 SimpleGameSetup MOUNTED');
+    return () => {
+      console.log('🔧 SimpleGameSetup UNMOUNTED');
+    };
+  }, []);
+
   const handleStartGame = (playerNames: string[]) => {
+    console.log('🎮 Starting game with players:', playerNames);
+    
     if (playerNames.length < 2) {
       toast.error('Il faut au moins 2 joueurs pour démarrer une partie');
       return;
@@ -20,7 +30,7 @@ const SimpleGameSetup: React.FC = () => {
 
     const success = createGame(playerNames);
     if (success) {
-      // Navigation directe vers /game avec indication que la partie vient d'être créée
+      console.log('✅ Game created successfully, navigating to /game');
       navigate('/game', { replace: true, state: { fromSetup: true } });
     } else {
       toast.error('Erreur lors de la création de la partie');
@@ -34,19 +44,15 @@ const SimpleGameSetup: React.FC = () => {
         showBackButton={true}
       />
 
-      {/* Contenu principal avec z-index garantissant la visibilité */}
-      <div className="container mx-auto px-4 py-8 max-w-4xl relative" style={{ zIndex: 2000 }}>
+      {/* Contenu principal avec z-index simplifié */}
+      <div className="container mx-auto px-4 py-8 max-w-4xl">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="relative"
-          style={{ zIndex: 2000 }}
         >
           {/* Configuration directe - wizard 3 étapes */}
-          <div style={{ zIndex: 2000, position: 'relative' }}>
-            <ModernGameSetup onStartGame={handleStartGame} />
-          </div>
+          <ModernGameSetup onStartGame={handleStartGame} />
 
           {/* Informations sur le jeu */}
           <motion.div

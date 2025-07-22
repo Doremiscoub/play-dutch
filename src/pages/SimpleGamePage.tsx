@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSimpleGameState } from '@/hooks/useSimpleGameState';
@@ -5,7 +6,6 @@ import ScoreBoard from '@/components/ScoreBoard';
 import NewRoundModal from '@/components/NewRoundModal';
 import PageShell from '@/components/layout/PageShell';
 import UnifiedHeader from '@/components/layout/UnifiedHeader';
-import ProfessorAvatar from '@/components/game/ProfessorAvatar';
 import AICommentator from '@/components/AICommentator';
 import { toast } from 'sonner';
 
@@ -16,30 +16,38 @@ const SimpleGamePage: React.FC = () => {
   const [showGameEndConfirmation, setShowGameEndConfirmation] = useState(false);
   const [scores, setScores] = useState<number[]>([]);
   const [dutchPlayerId, setDutchPlayerId] = useState<string | undefined>();
-  const [gameStartTime] = useState<Date>(new Date()); // Temps de début de la partie
+  const [gameStartTime] = useState<Date>(new Date());
 
-  // Chargement initial UNIQUEMENT au montage du composant
   useEffect(() => {
-    const loaded = loadFromStorage();
-    if (!loaded) {
-      // Éviter la redirection automatique si on vient de setup
-      // L'utilisateur sera géré par le guard dans le component
-      console.log('No game found in storage, user should be redirected by UI logic');
-    } else {
-      // Initialize scores array only after successful load
-      setScores(players.map(() => 0));
+    console.log('🎮 SimpleGamePage MOUNTED');
+    console.log('🎮 Current game state - hasGame:', hasGame, 'players:', players.length);
+    
+    // Tentative de chargement uniquement si aucune partie n'est active
+    if (!hasGame) {
+      console.log('🔍 No active game, trying to load from storage...');
+      const loaded = loadFromStorage();
+      if (!loaded) {
+        console.log('⚠️ No saved game found, but NOT redirecting automatically');
+        // Pas de redirection automatique - l'utilisateur peut décider
+      }
     }
-  }, []); // VIDE - pas de dépendances pour éviter la boucle infinie !
+    
+    return () => {
+      console.log('🎮 SimpleGamePage UNMOUNTED');
+    };
+  }, []); // Pas de dépendances pour éviter les boucles infinies
 
-  // Effect for scores initialization when players change - ALWAYS called
+  // Effect séparé pour l'initialisation des scores
   useEffect(() => {
     if (players.length > 0) {
       setScores(players.map(() => 0));
+      console.log('🎯 Scores initialized for', players.length, 'players');
     }
   }, [players.length]);
 
   // Guard: si pas de partie, afficher un message sans redirection automatique
   if (!hasGame) {
+    console.log('🚫 No game available, showing setup prompt');
     return (
       <PageShell variant="game">
         <UnifiedHeader 
@@ -85,6 +93,7 @@ const SimpleGamePage: React.FC = () => {
     setIsScoreFormOpen(true);
   };
 
+  console.log('🎮 SimpleGamePage rendering with', players.length, 'players');
 
   return (
     <PageShell variant="game">

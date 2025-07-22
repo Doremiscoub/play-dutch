@@ -12,6 +12,8 @@ const PageTransition: React.FC<PageTransitionProps> = ({ children }) => {
   const location = useLocation();
   const prefersReducedMotion = useReducedMotion();
 
+  console.log('🔄 PageTransition render for path:', location.pathname);
+
   const pageVariants = {
     initial: {
       opacity: 0,
@@ -33,15 +35,11 @@ const PageTransition: React.FC<PageTransitionProps> = ({ children }) => {
   const pageTransition = {
     type: 'tween',
     ease: 'anticipate',
-    duration: prefersReducedMotion ? 0.1 : 0.4
+    duration: prefersReducedMotion ? 0.1 : 0.3
   };
 
-  // Prevent remounting the setup wizard when navigating from home to setup
-  const isSetupPath = location.pathname === '/setup';
-  const isGamePath = location.pathname === '/game';
-  
   return (
-    <AnimatePresence mode="sync">
+    <AnimatePresence mode="wait" initial={false}>
       <motion.div
         key={location.pathname}
         initial="initial"
@@ -49,11 +47,9 @@ const PageTransition: React.FC<PageTransitionProps> = ({ children }) => {
         exit="out"
         variants={pageVariants}
         transition={pageTransition}
-        className="min-h-screen relative"
-        style={{ 
-          zIndex: isSetupPath ? 1000 : 10,
-          position: 'relative'
-        }}
+        className="min-h-screen"
+        onAnimationStart={() => console.log('🎭 Animation started for:', location.pathname)}
+        onAnimationComplete={() => console.log('🎭 Animation completed for:', location.pathname)}
       >
         {children}
       </motion.div>
