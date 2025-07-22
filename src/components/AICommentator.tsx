@@ -101,9 +101,73 @@ const AICommentator: React.FC<AICommentatorProps> = ({
             </div>
             
             <div className="flex-1 space-y-3">
-              <ModernTitle variant="h3">
-                Professeur Cartouche
-              </ModernTitle>
+              <motion.div 
+                className="relative"
+                whileHover={{ scale: 1.02 }}
+                transition={{ duration: 0.2 }}
+              >
+                <motion.h1 
+                  className="text-lg sm:text-xl font-black bg-gradient-to-r from-trinity-blue-700 via-trinity-purple-700 to-trinity-orange-700 bg-clip-text text-transparent flex items-center gap-2 hover-scale"
+                  whileHover={{
+                    rotate: [-0.5, 0.5, -0.5, 0],
+                    backgroundPosition: "200% center"
+                  }}
+                  style={{
+                    backgroundSize: "200% 200%"
+                  }}
+                  transition={{ 
+                    duration: 0.5,
+                    rotate: { duration: 0.6, ease: "easeInOut" }
+                  }}
+                >
+                  <motion.span
+                    animate={{
+                      rotate: [0, 5, -5, 0],
+                      scale: [1, 1.1, 1]
+                    }}
+                    transition={{
+                      duration: 3,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                  >
+                    🎓
+                  </motion.span>
+                  <span className="story-link">Professeur</span>
+                  <motion.span 
+                    className="text-trinity-orange-600 font-extrabold"
+                    animate={{
+                      textShadow: [
+                        "0 0 0px rgba(251, 146, 60, 0)",
+                        "0 0 10px rgba(251, 146, 60, 0.5)",
+                        "0 0 0px rgba(251, 146, 60, 0)"
+                      ]
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                      delay: 1
+                    }}
+                  >
+                    Cartouche
+                  </motion.span>
+                  <motion.span
+                    animate={{
+                      rotate: [0, -5, 5, 0],
+                      scale: [1, 1.1, 1]
+                    }}
+                    transition={{
+                      duration: 3,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                      delay: 1.5
+                    }}
+                  >
+                    🃏
+                  </motion.span>
+                </motion.h1>
+              </motion.div>
               
               {commentType === 'headline' ? (
                 <motion.p 
