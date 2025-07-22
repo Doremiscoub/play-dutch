@@ -61,7 +61,7 @@ const App: React.FC = () => {
         <Router>
           {/* Fond animé global avec vagues et pastilles - visible sur toute l'app */}
           <div className="fixed inset-0 w-full h-full -z-10">
-            <AnimatedBackground />
+            <AnimatedBackground variant="subtle" />
           </div>
           
           <RouteTracker />

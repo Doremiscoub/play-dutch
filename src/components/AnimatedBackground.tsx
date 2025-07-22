@@ -12,6 +12,7 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
     lastTime: 0,
     value: 0
   });
+  const isVisibleRef = useRef<boolean>(true);
   
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -173,15 +174,28 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
     };
 
     let animationId: number;
+    let lastTime = 0;
+    const targetFPS = 30; // Réduire de 60 FPS à 30 FPS pour éviter les conflits
+    const frameInterval = 1000 / targetFPS;
     
-    const animate = () => {
-      draw();
+    const animate = (currentTime: number) => {
+      if (isVisibleRef.current && currentTime - lastTime >= frameInterval) {
+        draw();
+        lastTime = currentTime;
+      }
       animationId = requestAnimationFrame(animate);
     };
 
-    animate();
+    // Gérer la visibilité de la page pour optimiser les performances
+    const handleVisibilityChange = () => {
+      isVisibleRef.current = !document.hidden;
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    animationId = requestAnimationFrame(animate);
 
     return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
       window.removeEventListener('resize', resizeCanvas);
       cancelAnimationFrame(animationId);
     };
