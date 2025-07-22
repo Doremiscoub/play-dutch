@@ -86,7 +86,7 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
         {[2, 3, 4, 5].map((count) => (
           <UnifiedButton
             key={count}
-            variant={playerCount === count ? "primary" : "ghost"}
+            variant={playerCount === count ? "primary" : "secondary"}
             size="md"
             onClick={() => onPlayerCountChange(count)}
             className="py-3 rounded-xl font-semibold"
