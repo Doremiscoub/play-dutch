@@ -191,19 +191,66 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
             </div>
           </div>
 
-          {/* Score principal */}
+          {/* Score principal amélioré */}
           <motion.div 
-            className="text-right"
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.2, type: "spring" }}
+            className="text-right relative"
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay: 0.2, type: "spring", stiffness: 300 }}
+            whileHover={{ scale: 1.05 }}
           >
-            <div className={cn("text-3xl font-black", theme.text)}>
-              {player.totalScore}
-            </div>
-            <div className="text-xs text-gray-500">
-              📊 {avgScore} moy
-            </div>
+            {/* Score avec fond glassmorphism */}
+            <motion.div 
+              className={cn(
+                "relative px-4 py-3 rounded-xl backdrop-blur-md border overflow-hidden",
+                theme.lightBg,
+                theme.border,
+                "shadow-glass-md"
+              )}
+              whileHover={{ 
+                boxShadow: "0 8px 32px rgba(0,0,0,0.1)",
+                y: -2
+              }}
+            >
+              {/* Effet de brillance */}
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              
+              {/* Score principal */}
+              <motion.div 
+                className={cn("text-3xl font-black leading-none", theme.text)}
+                whileHover={{ scale: 1.1 }}
+                transition={{ type: "spring", stiffness: 400 }}
+              >
+                {player.totalScore}
+              </motion.div>
+              
+              {/* Moyenne avec icône */}
+              <div className="flex items-center justify-end gap-1 mt-1">
+                <span className="text-xs opacity-60">📊</span>
+                <span className="text-xs font-medium opacity-80">
+                  {avgScore} moy
+                </span>
+              </div>
+              
+              {/* Indicateur de progression vers la limite */}
+              {scoreLimit && (
+                <div className="mt-2">
+                  <div className="w-full bg-white/20 rounded-full h-1">
+                    <motion.div
+                      className={cn("h-1 rounded-full", theme.accent)}
+                      initial={{ width: 0 }}
+                      animate={{ 
+                        width: `${Math.min((player.totalScore / scoreLimit) * 100, 100)}%` 
+                      }}
+                      transition={{ delay: 0.5, duration: 0.8 }}
+                    />
+                  </div>
+                  <div className="text-xs opacity-60 mt-1 text-center">
+                    {Math.max(0, scoreLimit - player.totalScore)} restant
+                  </div>
+                </div>
+              )}
+            </motion.div>
           </motion.div>
         </div>
 
