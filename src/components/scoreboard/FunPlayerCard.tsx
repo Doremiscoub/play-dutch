@@ -215,13 +215,74 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
               {/* Effet de brillance */}
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               
-              {/* Score principal */}
+              {/* Score principal avec effet 3D playful */}
               <motion.div 
-                className={cn("text-3xl font-black leading-none", theme.text)}
-                whileHover={{ scale: 1.1 }}
-                transition={{ type: "spring", stiffness: 400 }}
+                className="relative"
+                whileHover={{ scale: 1.15, rotateY: 5 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ type: "spring", stiffness: 400, damping: 10 }}
               >
-                {player.totalScore}
+                {/* Ombre du score pour effet 3D */}
+                <div 
+                  className="absolute inset-0 translate-x-1 translate-y-1 text-3xl font-black opacity-20 blur-sm"
+                  style={{ color: 'currentColor' }}
+                >
+                  {player.totalScore}
+                </div>
+                
+                {/* Score principal avec gradient et glow */}
+                <motion.div 
+                  className={cn(
+                    "relative text-3xl font-black leading-none bg-gradient-to-br bg-clip-text text-transparent",
+                    "from-current via-current to-current/80"
+                  )}
+                  style={{ 
+                    color: theme.text.replace('text-', ''),
+                    filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))'
+                  }}
+                  animate={{ 
+                    scale: isWinner ? [1, 1.05, 1] : 1,
+                  }}
+                  transition={{ 
+                    duration: 2, 
+                    repeat: isWinner ? Infinity : 0,
+                    ease: "easeInOut"
+                  }}
+                >
+                  {player.totalScore}
+                  
+                  {/* Particules scintillantes pour le gagnant */}
+                  {isWinner && (
+                    <>
+                      <motion.span
+                        className="absolute -top-1 -right-1 text-xs"
+                        animate={{ 
+                          rotate: 360,
+                          scale: [1, 1.2, 1]
+                        }}
+                        transition={{ 
+                          rotate: { duration: 3, repeat: Infinity, ease: "linear" },
+                          scale: { duration: 1.5, repeat: Infinity, ease: "easeInOut" }
+                        }}
+                      >
+                        ✨
+                      </motion.span>
+                      <motion.span
+                        className="absolute -bottom-1 -left-1 text-xs"
+                        animate={{ 
+                          rotate: -360,
+                          scale: [1, 1.3, 1]
+                        }}
+                        transition={{ 
+                          rotate: { duration: 2.5, repeat: Infinity, ease: "linear" },
+                          scale: { duration: 1.8, repeat: Infinity, ease: "easeInOut", delay: 0.5 }
+                        }}
+                      >
+                        🌟
+                      </motion.span>
+                    </>
+                  )}
+                </motion.div>
               </motion.div>
               
               {/* Moyenne avec icône */}
