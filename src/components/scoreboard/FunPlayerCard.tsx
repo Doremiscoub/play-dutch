@@ -259,11 +259,8 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
           </motion.div>
         </div>
 
-        {/* Stats rapides */}
-        <div className="flex items-center justify-between mb-3">
-          
-
-          {/* Indicateur d'expansion */}
+        {/* Indicateur d'expansion compact */}
+        <div className="flex justify-end mb-2">
           <motion.div className={cn("px-2 py-1 rounded-full text-xs font-medium border backdrop-blur-sm cursor-pointer", `${theme.lightBg} ${theme.border} ${theme.text}`)} whileHover={{
           scale: 1.05
         }} whileTap={{
