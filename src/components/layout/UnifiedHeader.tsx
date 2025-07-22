@@ -98,8 +98,9 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
                 {/* Fond avec glow effect */}
                 <div className="absolute inset-0 bg-gradient-to-r from-trinity-blue-500/20 via-trinity-purple-500/20 to-trinity-orange-500/20 rounded-2xl blur-xl"></div>
                 
-                {/* Titre principal */}
-                <div className="relative bg-white/90 backdrop-blur-xl rounded-2xl px-6 py-3 border border-white/60 shadow-xl">
+                {/* Conteneur unifié pour titre + pastilles */}
+                <div className="relative bg-white/90 backdrop-blur-xl rounded-2xl px-6 py-4 border border-white/60 shadow-xl space-y-3">
+                  {/* Titre principal */}
                   <h1 className="text-xl sm:text-2xl font-black text-gray-900 flex items-center justify-center gap-3">
                     <span className="text-2xl">🎯</span>
                     <span className="bg-gradient-to-r from-trinity-blue-700 via-trinity-purple-700 to-trinity-orange-700 bg-clip-text text-transparent font-extrabold">
@@ -107,68 +108,68 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
                     </span>
                     <span className="text-2xl">🎯</span>
                   </h1>
+                  
+                  {/* Pastilles d'information pour la partie */}
+                  {variant === 'game' && (
+                    <motion.div 
+                      className="flex flex-wrap justify-center items-center gap-2 sm:gap-3 pt-1"
+                      initial={{ opacity: 0, y: 15 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6, delay: 0.5 }}
+                    >
+                      {/* Numéro de manche */}
+                      <motion.div 
+                        className="flex items-center gap-2 bg-gradient-to-r from-trinity-blue-100/90 to-trinity-blue-50/90 backdrop-blur-xl px-3 py-2 rounded-xl border border-trinity-blue-200/60 shadow-lg"
+                        whileHover={{ scale: 1.05, y: -2 }}
+                        transition={{ type: "spring", stiffness: 300 }}
+                      >
+                        <Zap className="h-4 w-4 text-trinity-blue-600" />
+                        <span className="text-sm font-bold text-trinity-blue-700">
+                          Manche {roundCount || 1}
+                        </span>
+                      </motion.div>
+
+                      {/* Limite de points */}
+                      <motion.div 
+                        className="flex items-center gap-2 bg-gradient-to-r from-trinity-purple-100/90 to-trinity-purple-50/90 backdrop-blur-xl px-3 py-2 rounded-xl border border-trinity-purple-200/60 shadow-lg"
+                        whileHover={{ scale: 1.05, y: -2 }}
+                        transition={{ type: "spring", stiffness: 300 }}
+                      >
+                        <Target className="h-4 w-4 text-trinity-purple-600" />
+                        <span className="text-sm font-bold text-trinity-purple-700">
+                          Objectif {scoreLimit} pts
+                        </span>
+                      </motion.div>
+
+                      {/* Chronomètre */}
+                      {gameStartTime && (
+                        <motion.div 
+                          className="flex items-center gap-2 bg-gradient-to-r from-trinity-orange-100/90 to-trinity-orange-50/90 backdrop-blur-xl px-3 py-2 rounded-xl border border-trinity-orange-200/60 shadow-lg"
+                          whileHover={{ scale: 1.05, y: -2 }}
+                          animate={{ 
+                            boxShadow: [
+                              "0 4px 6px rgba(0, 0, 0, 0.1)",
+                              "0 4px 20px rgba(251, 146, 60, 0.3)",
+                              "0 4px 6px rgba(0, 0, 0, 0.1)"
+                            ]
+                          }}
+                          transition={{ 
+                            duration: 2, 
+                            repeat: Infinity, 
+                            ease: "easeInOut",
+                            scale: { type: "spring", stiffness: 300 }
+                          }}
+                        >
+                          <Clock className="h-4 w-4 text-trinity-orange-600" />
+                          <span className="text-sm font-bold text-trinity-orange-700 font-mono">
+                            {elapsedTime}
+                          </span>
+                        </motion.div>
+                      )}
+                    </motion.div>
+                  )}
                 </div>
               </div>
-            </motion.div>
-          )}
-          
-          {/* Pastilles d'information pour la partie */}
-          {variant === 'game' && (
-            <motion.div 
-              className="flex flex-wrap justify-center items-center gap-2 sm:gap-3"
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.5 }}
-            >
-              {/* Numéro de manche */}
-              <motion.div 
-                className="flex items-center gap-2 bg-gradient-to-r from-trinity-blue-100/90 to-trinity-blue-50/90 backdrop-blur-xl px-3 py-2 rounded-xl border border-trinity-blue-200/60 shadow-lg"
-                whileHover={{ scale: 1.05, y: -2 }}
-                transition={{ type: "spring", stiffness: 300 }}
-              >
-                <Zap className="h-4 w-4 text-trinity-blue-600" />
-                <span className="text-sm font-bold text-trinity-blue-700">
-                  Manche {roundCount || 1}
-                </span>
-              </motion.div>
-
-              {/* Limite de points */}
-              <motion.div 
-                className="flex items-center gap-2 bg-gradient-to-r from-trinity-purple-100/90 to-trinity-purple-50/90 backdrop-blur-xl px-3 py-2 rounded-xl border border-trinity-purple-200/60 shadow-lg"
-                whileHover={{ scale: 1.05, y: -2 }}
-                transition={{ type: "spring", stiffness: 300 }}
-              >
-                <Target className="h-4 w-4 text-trinity-purple-600" />
-                <span className="text-sm font-bold text-trinity-purple-700">
-                  Objectif {scoreLimit} pts
-                </span>
-              </motion.div>
-
-              {/* Chronomètre */}
-              {gameStartTime && (
-                <motion.div 
-                  className="flex items-center gap-2 bg-gradient-to-r from-trinity-orange-100/90 to-trinity-orange-50/90 backdrop-blur-xl px-3 py-2 rounded-xl border border-trinity-orange-200/60 shadow-lg"
-                  whileHover={{ scale: 1.05, y: -2 }}
-                  animate={{ 
-                    boxShadow: [
-                      "0 4px 6px rgba(0, 0, 0, 0.1)",
-                      "0 4px 20px rgba(251, 146, 60, 0.3)",
-                      "0 4px 6px rgba(0, 0, 0, 0.1)"
-                    ]
-                  }}
-                  transition={{ 
-                    duration: 2, 
-                    repeat: Infinity, 
-                    ease: "easeInOut",
-                    scale: { type: "spring", stiffness: 300 }
-                  }}
-                >
-                  <Clock className="h-4 w-4 text-trinity-orange-600" />
-                  <span className="text-sm font-bold text-trinity-orange-700 font-mono">
-                    {elapsedTime}
-                  </span>
-                </motion.div>
-              )}
             </motion.div>
           )}
         </div>
