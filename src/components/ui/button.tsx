@@ -18,7 +18,7 @@ const buttonVariants = cva(
         // ===== ENHANCED TRINITY + KIDS VARIANTS =====
         trinity: "btn-kids-primary text-white font-bold hover:scale-105 hover:-translate-y-0.5 hover:shadow-glow-blue active:scale-95 lg-hover-state rounded-xl",
         default: "btn-kids-primary text-white font-bold hover:scale-105 hover:-translate-y-0.5 active:scale-95 lg-hover-state rounded-xl shadow-lg",
-        kidsPrimary: "btn-kids-blue text-white font-bold hover:scale-105 hover:-translate-y-0.5 hover:shadow-glow-blue active:scale-95 lg-hover-state rounded-xl",
+        kidsPrimary: "btn-kids-primary text-white font-bold hover:scale-105 hover:-translate-y-0.5 hover:shadow-glow-blue active:scale-95 lg-hover-state rounded-xl",
         kidsSecondary: "btn-kids-purple text-white font-bold hover:scale-105 hover:-translate-y-0.5 hover:shadow-glow-purple active:scale-95 lg-hover-state rounded-xl",
         kidsTertiary: "btn-kids-orange text-white font-bold hover:scale-105 hover:-translate-y-0.5 hover:shadow-glow-orange active:scale-95 lg-hover-state rounded-xl",
         fun: "btn-kids-fun text-white font-bold hover:scale-105 hover:-translate-y-0.5 hover:shadow-glow-rainbow active:scale-95 lg-hover-state rounded-xl",

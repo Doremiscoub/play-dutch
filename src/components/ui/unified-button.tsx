@@ -16,7 +16,7 @@ const variantMap: Record<UnifiedButtonVariant, string> = {
   secondary: "kidsSecondary", 
   accent: "kidsTertiary",
   ghost: "ghost",
-  glass: "glass"
+  glass: "glassColored"
 };
 
 const sizeMap: Record<UnifiedButtonSize, string> = {
