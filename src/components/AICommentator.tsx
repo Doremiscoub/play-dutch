@@ -107,7 +107,7 @@ const AICommentator: React.FC<AICommentatorProps> = ({
                 transition={{ duration: 0.2 }}
               >
                 <motion.h1 
-                  className="text-lg sm:text-xl font-black bg-gradient-to-r from-trinity-blue-700 via-trinity-purple-700 to-trinity-orange-700 bg-clip-text text-transparent flex items-center gap-2 hover-scale"
+                  className="text-2xl sm:text-3xl font-black bg-gradient-to-r from-blue-600 via-purple-600 to-amber-500 bg-clip-text text-transparent flex items-center gap-3 hover-scale"
                   whileHover={{
                     rotate: [-0.5, 0.5, -0.5, 0],
                     backgroundPosition: "200% center"
