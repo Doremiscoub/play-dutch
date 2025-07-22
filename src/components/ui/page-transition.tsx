@@ -35,11 +35,11 @@ const PageTransition: React.FC<PageTransitionProps> = ({ children }) => {
   const pageTransition = {
     type: 'tween',
     ease: 'anticipate',
-    duration: prefersReducedMotion ? 0.1 : 0.3
+    duration: prefersReducedMotion ? 0.1 : 0.2
   };
 
   return (
-    <AnimatePresence mode="wait" initial={false}>
+    <AnimatePresence mode="sync" initial={false}>
       <motion.div
         key={location.pathname}
         initial="initial"
@@ -47,7 +47,7 @@ const PageTransition: React.FC<PageTransitionProps> = ({ children }) => {
         exit="out"
         variants={pageVariants}
         transition={pageTransition}
-        className="min-h-screen"
+        className="min-h-screen relative z-10"
         onAnimationStart={() => console.log('🎭 Animation started for:', location.pathname)}
         onAnimationComplete={() => console.log('🎭 Animation completed for:', location.pathname)}
       >
