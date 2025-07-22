@@ -139,9 +139,9 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
         </motion.div>}
 
       {/* Contenu principal */}
-      <div className="relative z-10 p-4">
+      <div className="relative z-10 p-3">
         {/* Header compact */}
-        <div className="flex items-center gap-4 mb-4">
+        <div className="flex items-center gap-3 mb-2">
           {/* Avatar & Rang */}
           <div className="flex items-center gap-3">
             <motion.div className={cn("w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg", theme.accent)} whileHover={{
