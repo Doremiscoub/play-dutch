@@ -41,9 +41,6 @@ const SimpleGameSetup: React.FC = () => {
           className="relative z-50"
         >
           {/* Configuration directe sans redondance */}
-          <div className="relative z-50 bg-red-500 p-4 text-white font-bold">
-            DEBUG: Cette div devrait être visible en rouge
-          </div>
           <ModernGameSetup onStartGame={handleStartGame} />
 
           {/* Informations sur le jeu */}

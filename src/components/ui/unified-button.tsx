@@ -28,7 +28,6 @@ const sizeMap: Record<UnifiedButtonSize, string> = {
 
 export const UnifiedButton = React.forwardRef<HTMLButtonElement, UnifiedButtonProps>(
   ({ variant = "primary", size = "md", className, ...props }, ref) => {
-    console.log("UnifiedButton render:", { variant, mappedVariant: variantMap[variant], size, mappedSize: sizeMap[size] });
     return (
       <Button
         ref={ref}
