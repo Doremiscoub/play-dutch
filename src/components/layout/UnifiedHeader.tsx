@@ -78,9 +78,9 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
               {/* Conteneur unifié pour tout le header */}
               <div className="relative bg-white/90 backdrop-blur-xl rounded-2xl px-6 py-4 border border-white/60 shadow-xl space-y-3">
                 {/* Ligne principale avec boutons et titre */}
-                <div className="flex items-center justify-between">
+                <div className="relative flex items-center justify-between">
                   {/* Left side - Back button */}
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-4 flex-1">
                     {showBackButton && onBack && (
                       <motion.div
                         whileHover={{ scale: 1.05 }}
@@ -100,9 +100,9 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
                     )}
                   </div>
 
-                  {/* Center - Title */}
-                  <div className="flex-1 text-center px-4">
-                    <h1 className="text-xl sm:text-2xl font-black text-gray-900 flex items-center justify-center gap-3">
+                  {/* Center - Title (absolutely centered) */}
+                  <div className="absolute left-1/2 transform -translate-x-1/2">
+                    <h1 className="text-xl sm:text-2xl font-black text-gray-900 flex items-center justify-center gap-3 whitespace-nowrap">
                       <span className="text-2xl">🎯</span>
                       <span className="bg-gradient-to-r from-trinity-blue-700 via-trinity-purple-700 to-trinity-orange-700 bg-clip-text text-transparent font-extrabold">
                         {variant === 'game' ? 'Partie en cours' : title}
@@ -112,7 +112,7 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
                   </div>
 
                   {/* Right side - Rules button and Settings */}
-                  <div className="flex items-center gap-2 sm:gap-3">
+                  <div className="flex items-center gap-2 sm:gap-3 flex-1 justify-end">
                     {/* Bouton Règles */}
                     {showRulesButton && (
                       <motion.div
