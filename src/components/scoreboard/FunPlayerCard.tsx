@@ -141,7 +141,7 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
       {/* Contenu principal */}
       <div className="relative z-10 p-3">
         {/* Header compact */}
-        <div className="flex items-center gap-3 mb-2">
+        <div className="flex items-center gap-6 mb-2 px-2">
           {/* Avatar & Rang */}
           <div className="flex items-center gap-3">
             <motion.div 
