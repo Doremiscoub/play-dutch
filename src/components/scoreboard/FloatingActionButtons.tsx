@@ -103,8 +103,8 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
             disabled={!canUndo || disabled}
             className={`relative h-14 w-14 rounded-2xl transition-all duration-300 group overflow-hidden backdrop-blur-xl border-2 ${
               canUndo && !disabled
-                ? 'bg-gradient-to-br from-orange-500/80 via-orange-400/70 to-red-500/60 border-orange-300/50 hover:border-orange-200/70 shadow-lg shadow-orange-500/20 hover:shadow-xl hover:shadow-orange-500/30 hover:scale-105'
-                : 'bg-gray-400/50 border-gray-300/40 opacity-50 cursor-not-allowed'
+                ? 'bg-gradient-to-br from-orange-500/90 via-orange-400/85 to-red-500/80 border-orange-300/60 hover:border-orange-200/80 shadow-lg shadow-orange-500/25 hover:shadow-xl hover:shadow-orange-500/35 hover:scale-105'
+                : 'bg-gray-500/70 border-gray-400/50 opacity-60 cursor-not-allowed'
             }`}
             title="Annuler la dernière manche"
           >
@@ -124,7 +124,7 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
             <RotateCcw className={`relative z-10 h-5 w-5 transition-all duration-300 ${
               canUndo && !disabled 
                 ? 'text-white drop-shadow-lg group-hover:-rotate-12 group-hover:scale-110' 
-                : 'text-gray-500'
+                : 'text-gray-200'
             }`} />
           </Button>
         </motion.div>
