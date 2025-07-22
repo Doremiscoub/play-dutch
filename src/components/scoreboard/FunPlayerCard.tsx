@@ -145,14 +145,14 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
           {/* Avatar & Rang */}
           <div className="flex items-center gap-3">
             <motion.div 
-              className="relative w-12 h-12 rounded-2xl backdrop-blur-md border-2 border-white/30 
-                         bg-gradient-to-br from-primary/20 via-primary/10 to-primary/5
+              className="relative w-12 h-12 rounded-2xl backdrop-blur-md border-2 border-white/40 
+                         bg-gradient-to-br from-purple-500/30 via-pink-500/20 to-blue-500/25
                          shadow-glass-lg flex items-center justify-center
-                         text-primary-foreground font-black text-lg"
+                         text-white font-black text-lg"
               whileHover={{
                 scale: 1.1,
                 rotateY: 15,
-                boxShadow: "0 10px 30px rgba(0,0,0,0.2)"
+                boxShadow: "0 10px 30px rgba(168, 85, 247, 0.4)"
               }}
               transition={{
                 type: "spring",
@@ -160,8 +160,22 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
                 damping: 15
               }}
             >
-              {/* Glassmorphism shine effect */}
-              <div className="absolute inset-0 bg-gradient-to-tr from-white/20 via-transparent to-white/10 rounded-2xl" />
+              {/* Playful colorful shine effect */}
+              <div className="absolute inset-0 bg-gradient-to-tr from-yellow-300/25 via-pink-300/15 to-cyan-300/20 rounded-2xl" />
+              
+              {/* Animated color orbs for extra playfulness */}
+              <motion.div 
+                className="absolute top-1 right-1 w-2 h-2 rounded-full bg-gradient-to-r from-yellow-400 to-orange-400"
+                animate={{ 
+                  scale: [1, 1.3, 1],
+                  opacity: [0.7, 1, 0.7]
+                }}
+                transition={{ 
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              />
               
               {/* Winner crown overlay */}
               {isWinner && (
