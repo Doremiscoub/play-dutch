@@ -2,7 +2,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Player } from '@/types';
-import ModernPlayerCard from './player-card/ModernPlayerCard';
+import FunPlayerCard from './FunPlayerCard';
 import ScoreTableView from '../ScoreTableView';
 import StatisticsView from './StatisticsView';
 
@@ -74,7 +74,7 @@ const ScoreBoardContent: React.FC<ScoreBoardContentProps> = ({
           className="space-y-4"
         >
           {playersToDisplay.map((player, index) => (
-            <ModernPlayerCard
+            <FunPlayerCard
               key={player.id}
               player={player}
               rank={index + 1}

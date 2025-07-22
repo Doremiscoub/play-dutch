@@ -1,16 +1,9 @@
 
-import React, { useState, useRef } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Player } from '@/types';
 import { cn } from '@/lib/utils';
-import { useFunPlayerCard } from './player-card/useFunPlayerCard';
-import PlayerCardContent from './player-card/PlayerCardContent';
-import PlayerCardShineEffect from './player-card/PlayerCardShineEffect';
-import FloatingWinnerBadge from './FloatingWinnerBadge';
-import FunPlayerCardRankBadge from './player-card/FunPlayerCardRankBadge';
-import FunPlayerCardParticles from './player-card/FunPlayerCardParticles';
-import FunPlayerCardHolographicEffect from './player-card/FunPlayerCardHolographicEffect';
-import FunPlayerCardAmbientGlow from './player-card/FunPlayerCardAmbientGlow';
+import { Trophy, TrendingUp, Star, Zap } from 'lucide-react';
 
 interface FunPlayerCardProps {
   player: Player;
@@ -18,6 +11,7 @@ interface FunPlayerCardProps {
   totalPlayers: number;
   onSelect: (player: Player) => void;
   isSelected: boolean;
+  scoreLimit?: number;
 }
 
 const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
@@ -25,96 +19,314 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
   rank,
   totalPlayers,
   onSelect,
-  isSelected
+  isSelected,
+  scoreLimit = 100
 }) => {
-  console.log('FunPlayerCard: Rendering enhanced card for', player.name);
   const [isExpanded, setIsExpanded] = useState(false);
-  const cardRef = useRef<HTMLDivElement>(null);
   
-  const { cardData, getCardStyle, handleCardClick } = useFunPlayerCard({
-    player,
-    rank,
-    totalPlayers,
-    onSelect,
-    isExpanded,
-    setIsExpanded
-  });
+  const isWinner = rank === 1;
+  const isLastPlace = rank === totalPlayers;
+  const avgScore = player.rounds.length > 0 
+    ? Math.round(player.totalScore / player.rounds.length * 10) / 10
+    : 0;
+  const bestRound = player.rounds.length > 0 
+    ? Math.min(...player.rounds.map(r => r.score))
+    : 0;
+  const dutchCount = player.rounds.filter(r => r.isDutch).length;
+  const recentRounds = player.rounds.slice(-3);
+  const hasPositiveTrend = recentRounds.length >= 2 && 
+    recentRounds[recentRounds.length - 1].score < recentRounds[recentRounds.length - 2].score;
+
+  // Système de couleurs unifié par rang
+  const getRankTheme = () => {
+    const themes = {
+      1: {
+        gradient: "from-purple-500/20 via-pink-500/15 to-purple-600/10",
+        border: "border-purple-400/50",
+        glow: "shadow-lg shadow-purple-500/20",
+        text: "text-purple-700",
+        accent: "bg-purple-500",
+        lightBg: "bg-purple-50/80"
+      },
+      2: {
+        gradient: "from-orange-500/20 via-red-500/15 to-orange-600/10",
+        border: "border-orange-400/50",
+        glow: "shadow-lg shadow-orange-500/20",
+        text: "text-orange-700",
+        accent: "bg-orange-500",
+        lightBg: "bg-orange-50/80"
+      },
+      3: {
+        gradient: "from-cyan-500/20 via-blue-500/15 to-cyan-600/10",
+        border: "border-cyan-400/50",
+        glow: "shadow-lg shadow-cyan-500/20",
+        text: "text-cyan-700",
+        accent: "bg-cyan-500",
+        lightBg: "bg-cyan-50/80"
+      },
+      4: {
+        gradient: "from-green-500/20 via-emerald-500/15 to-green-600/10",
+        border: "border-green-400/50",
+        glow: "shadow-lg shadow-green-500/20",
+        text: "text-green-700",
+        accent: "bg-green-500",
+        lightBg: "bg-green-50/80"
+      },
+      5: {
+        gradient: "from-yellow-500/20 via-amber-500/15 to-yellow-600/10",
+        border: "border-yellow-400/50",
+        glow: "shadow-lg shadow-yellow-500/20",
+        text: "text-yellow-700",
+        accent: "bg-yellow-500",
+        lightBg: "bg-yellow-50/80"
+      }
+    };
+    return themes[rank as keyof typeof themes] || {
+      gradient: "from-pink-500/20 via-purple-500/15 to-pink-600/10",
+      border: "border-pink-400/50",
+      glow: "shadow-lg shadow-pink-500/20",
+      text: "text-pink-700",
+      accent: "bg-pink-500",
+      lightBg: "bg-pink-50/80"
+    };
+  };
+
+  const theme = getRankTheme();
+
+  const handleCardClick = () => {
+    setIsExpanded(!isExpanded);
+    onSelect(player);
+  };
 
   return (
-    <>
+    <motion.div
+      className={cn(
+        "relative rounded-2xl backdrop-blur-xl border-2 transition-all duration-300 cursor-pointer overflow-hidden group",
+        `bg-gradient-to-br ${theme.gradient}`,
+        theme.border,
+        isSelected || isExpanded 
+          ? `ring-4 ring-purple-400/40 scale-[1.02] z-10 ${theme.glow}` 
+          : `hover:scale-[1.01] hover:-translate-y-1 ${theme.glow}`
+      )}
+      onClick={handleCardClick}
+      initial={{ opacity: 0, y: 20, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ 
+        duration: 0.3, 
+        delay: rank * 0.05,
+        type: "spring",
+        stiffness: 300
+      }}
+      whileHover={{ y: -3 }}
+      whileTap={{ scale: 0.98 }}
+      layout
+    >
+      {/* Effet de brillance subtle */}
       <motion.div
-        ref={cardRef}
-        className={cn(
-          "relative rounded-3xl backdrop-blur-2xl border-2 shadow-glass-lg transition-all duration-700 cursor-pointer overflow-visible group perspective-1000",
-          rank === 1 ? "bg-gradient-to-br from-purple-400/30 via-pink-400/25 to-orange-400/20 border-purple-300/60" :
-          rank === 2 ? "bg-gradient-to-br from-orange-400/30 via-red-400/25 to-pink-400/20 border-orange-300/60" :
-          rank === 3 ? "bg-gradient-to-br from-cyan-400/30 via-blue-400/25 to-purple-400/20 border-cyan-300/60" :
-          rank === 4 ? "bg-gradient-to-br from-green-400/30 via-emerald-400/25 to-cyan-400/20 border-green-300/60" :
-          rank === 5 ? "bg-gradient-to-br from-yellow-400/30 via-orange-400/25 to-red-400/20 border-yellow-300/60" :
-          "bg-gradient-to-br from-pink-400/30 via-purple-400/25 to-blue-400/20 border-pink-300/60",
-          isSelected || isExpanded ? "ring-4 ring-purple-400/50 shadow-purple-lg scale-[1.02] border-purple-400/60 z-10" : 
-          "hover:scale-[1.02] hover:shadow-xl hover:-translate-y-3"
-        )}
-        onClick={handleCardClick}
-        whileHover={{ 
-          y: -6, 
-          scale: 1.02,
-          rotate: rank % 2 === 0 ? 1 : -1
-        }}
-        whileTap={{ scale: 0.98 }}
-        layout
-        initial={{ opacity: 0, y: 30, scale: 0.9, rotateY: 45 }}
-        animate={{ opacity: 1, y: 0, scale: 1, rotateY: 0 }}
-        transition={{ 
-          duration: 0.6, 
-          delay: rank * 0.1,
-          type: "spring",
-          stiffness: 250,
-          damping: 18
-        }}
-        style={{
-          transformStyle: 'preserve-3d',
-        }}
-      >
-        {/* Enhanced Floating Winner Badge - positioned inside the card */}
-        <FloatingWinnerBadge isWinner={cardData.isWinner} cardRef={cardRef} />
+        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -skew-x-12"
+        initial={{ x: '-100%' }}
+        whileHover={{ x: '200%' }}
+        transition={{ duration: 0.6 }}
+      />
 
-        {/* Enhanced Floating Background Particles */}
-        <FunPlayerCardParticles />
+      {/* Badge gagnant flottant */}
+      {isWinner && (
+        <motion.div
+          className="absolute -top-2 -right-2 z-30"
+          initial={{ scale: 0, rotate: -45 }}
+          animate={{ scale: 1, rotate: 0 }}
+          transition={{ delay: 0.3, type: "spring" }}
+        >
+          <div className="bg-gradient-to-r from-yellow-400 to-orange-400 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-1">
+            <motion.span
+              animate={{ rotate: 360 }}
+              transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+            >
+              👑
+            </motion.span>
+            WINNER
+          </div>
+        </motion.div>
+      )}
 
-        {/* Enhanced Shine Effect for Winners */}
-        <PlayerCardShineEffect isWinner={cardData.isWinner} />
+      {/* Contenu principal */}
+      <div className="relative z-10 p-5">
+        {/* Header compact */}
+        <div className="flex items-center gap-4 mb-4">
+          {/* Avatar & Rang */}
+          <div className="flex items-center gap-3">
+            <motion.div
+              className={cn(
+                "w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg",
+                theme.accent
+              )}
+              whileHover={{ scale: 1.1, rotate: 5 }}
+              transition={{ type: "spring", stiffness: 300 }}
+            >
+              #{rank}
+            </motion.div>
+            
+            <motion.div 
+              className="w-14 h-14 rounded-xl bg-white/80 backdrop-blur-sm border-2 border-white/60 shadow-lg flex items-center justify-center relative overflow-hidden"
+              whileHover={{ scale: 1.05, rotate: [0, -3, 3, 0] }}
+            >
+              <span className="text-2xl">{player.emoji || '🎮'}</span>
+            </motion.div>
+          </div>
 
-        {/* Advanced Holographic Effect for Special Cards */}
-        <FunPlayerCardHolographicEffect 
-          isWinner={cardData.isWinner} 
-          isLastPlace={cardData.isLastPlace} 
-        />
+          {/* Nom et score */}
+          <div className="flex-1 min-w-0">
+            <motion.h3 
+              className={cn("text-lg font-bold truncate", theme.text)}
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+            >
+              {isWinner && '👑 '}{player.name}
+            </motion.h3>
+            <div className="flex items-center gap-2 text-sm text-gray-600">
+              <span>🎯 {player.rounds.length} manches</span>
+              {dutchCount > 0 && (
+                <span className="text-orange-600">🏆 {dutchCount}</span>
+              )}
+            </div>
+          </div>
 
-        {/* Main Card Content with Enhanced Padding */}
-        <div className="relative z-20 p-8">
-          <PlayerCardContent
-            player={player}
-            rank={rank}
-            isExpanded={isExpanded}
-            cardData={cardData}
-          />
+          {/* Score principal */}
+          <motion.div 
+            className="text-right"
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.2, type: "spring" }}
+          >
+            <div className={cn("text-3xl font-black", theme.text)}>
+              {player.totalScore}
+            </div>
+            <div className="text-xs text-gray-500">
+              📊 {avgScore} moy
+            </div>
+          </motion.div>
         </div>
 
-        {/* Ambient Glow Effect on Hover */}
-        <FunPlayerCardAmbientGlow />
-      </motion.div>
-    </>
+        {/* Stats rapides */}
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex gap-2">
+            {bestRound === 0 && (
+              <motion.span 
+                className="px-2 py-1 bg-purple-100/80 text-purple-700 rounded-full text-xs font-medium flex items-center gap-1"
+                animate={{ scale: [1, 1.1, 1] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                🎯 Perfect!
+              </motion.span>
+            )}
+            {hasPositiveTrend && (
+              <span className="px-2 py-1 bg-green-100/80 text-green-700 rounded-full text-xs font-medium flex items-center gap-1">
+                🔥 En forme
+              </span>
+            )}
+          </div>
+
+          {/* Indicateur d'expansion */}
+          <motion.div
+            className={cn(
+              "px-2 py-1 rounded-full text-xs font-medium border backdrop-blur-sm cursor-pointer",
+              `${theme.lightBg} ${theme.border} ${theme.text}`
+            )}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            {isExpanded ? '🔼 Moins' : '🔽 Plus'}
+          </motion.div>
+        </div>
+
+        {/* Contenu étendu */}
+        <AnimatePresence>
+          {isExpanded && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.2 }}
+              className="overflow-hidden border-t border-white/20 pt-3"
+            >
+              {/* Dernières manches */}
+              <div className="mb-4">
+                <h4 className={cn("text-sm font-bold mb-2", theme.text)}>
+                  📈 Dernières manches
+                </h4>
+                <div className="flex gap-2">
+                  {recentRounds.map((round, index) => {
+                    const getScoreColor = (score: number) => {
+                      if (score === 0) return 'bg-purple-100 text-purple-700 border-purple-200';
+                      if (score <= 5) return 'bg-green-100 text-green-700 border-green-200';
+                      if (score <= 15) return 'bg-yellow-100 text-yellow-700 border-yellow-200';
+                      return 'bg-red-100 text-red-700 border-red-200';
+                    };
+
+                    return (
+                      <motion.div
+                        key={index}
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: index * 0.1 }}
+                        className={cn(
+                          "px-2 py-1 rounded-lg border text-xs font-bold",
+                          getScoreColor(round.score)
+                        )}
+                      >
+                        {round.score}
+                        {round.isDutch && ' 🏆'}
+                      </motion.div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Stats détaillées */}
+              <div className="grid grid-cols-2 gap-3">
+                <div className={cn("p-3 rounded-xl border", theme.lightBg, theme.border)}>
+                  <div className="flex items-center gap-2 mb-1">
+                    <Star className="h-3 w-3" />
+                    <span className="text-xs text-gray-600">Meilleur</span>
+                  </div>
+                  <div className={cn("font-bold", theme.text)}>{bestRound}</div>
+                </div>
+                <div className={cn("p-3 rounded-xl border", theme.lightBg, theme.border)}>
+                  <div className="flex items-center gap-2 mb-1">
+                    <TrendingUp className="h-3 w-3" />
+                    <span className="text-xs text-gray-600">Tendance</span>
+                  </div>
+                  <div className={cn("font-bold", theme.text)}>
+                    {hasPositiveTrend ? '📈 ↗️' : '📊 →'}
+                  </div>
+                </div>
+              </div>
+
+              {/* Badge champion */}
+              {isWinner && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="mt-3 p-3 bg-gradient-to-r from-yellow-100 to-orange-100 border border-yellow-300 rounded-xl text-center"
+                >
+                  <div className="flex items-center justify-center gap-2 text-yellow-700 font-bold text-sm">
+                    <Trophy className="h-4 w-4" />
+                    🎉 Champion de la partie !
+                    <motion.span
+                      animate={{ rotate: 360 }}
+                      transition={{ duration: 2, repeat: Infinity }}
+                    >
+                      ⭐
+                    </motion.span>
+                  </div>
+                </motion.div>
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </motion.div>
   );
 };
 
-export default React.memo(FunPlayerCard, (prevProps, nextProps) => {
-  return (
-    prevProps.player.id === nextProps.player.id &&
-    prevProps.player.totalScore === nextProps.player.totalScore &&
-    prevProps.player.rounds.length === nextProps.player.rounds.length &&
-    prevProps.rank === nextProps.rank &&
-    prevProps.totalPlayers === nextProps.totalPlayers &&
-    prevProps.isSelected === nextProps.isSelected
-  );
-});
+export default React.memo(FunPlayerCard);
