@@ -1,6 +1,8 @@
 export interface SetupPlayer {
+  id: string;
   name: string;
   emoji: string;
+  isReady?: boolean;
 }
 
 export interface GameSetupStep {

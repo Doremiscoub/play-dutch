@@ -34,6 +34,7 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
         newPlayers.push({
           id: `player-${i + 1}`,
           name: players[i]?.name || `Joueur ${i + 1}`,
+          emoji: players[i]?.emoji || '🎮',
           isReady: players[i]?.isReady || false
         });
       }
