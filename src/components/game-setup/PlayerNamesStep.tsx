@@ -92,8 +92,8 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
             >
               <div className="card-glass p-4 rounded-xl">
                 <div className="flex items-center gap-3">
-                  <Badge variant="secondary" className="min-w-[80px]">
-                    Joueur {index + 1}
+                  <Badge variant="secondary" className="min-w-[80px] text-neutral-800">
+                    {player.emoji}
                   </Badge>
 
                   {editingIndex === index ? (
