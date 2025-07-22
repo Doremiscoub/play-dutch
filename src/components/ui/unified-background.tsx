@@ -26,7 +26,7 @@ export const UnifiedBackground: React.FC<UnifiedBackgroundProps> = ({
       )}
       
       {/* Contenu avec z-index élevé pour être au-dessus du fond */}
-      <div className="relative z-10">
+      <div className="relative z-20">
         {children}
       </div>
     </div>

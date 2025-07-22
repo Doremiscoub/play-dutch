@@ -36,8 +36,11 @@ const PageTransition: React.FC<PageTransitionProps> = ({ children }) => {
     duration: prefersReducedMotion ? 0.1 : 0.4
   };
 
+  // Prevent remounting the setup wizard when navigating from home to setup
+  const isSetupPath = location.pathname === '/setup';
+  
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence mode={isSetupPath ? "sync" : "wait"}>
       <motion.div
         key={location.pathname}
         initial="initial"
@@ -45,7 +48,7 @@ const PageTransition: React.FC<PageTransitionProps> = ({ children }) => {
         exit="out"
         variants={pageVariants}
         transition={pageTransition}
-        className="min-h-screen"
+        className="min-h-screen relative z-10"
       >
         {children}
       </motion.div>

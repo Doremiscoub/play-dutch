@@ -27,18 +27,21 @@ const SimpleGameSetup: React.FC = () => {
   };
 
   return (
-    <PageShell variant="game">
+    <div className="min-h-screen relative bg-background">
+      {/* Header fixe en haut */}
       <UnifiedHeader 
         title="Configuration de partie" 
         showBackButton={true}
       />
 
-      <div className="container mx-auto px-4 py-8 max-w-4xl relative z-50">
+      {/* Contenu principal - Z-index élevé pour garantir la visibilité */}
+      <div className="container mx-auto px-4 py-8 max-w-4xl relative" style={{ zIndex: 100 }}>
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="relative z-50"
+          className="relative" 
+          style={{ zIndex: 100 }}
         >
           {/* Configuration directe sans redondance */}
           <ModernGameSetup onStartGame={handleStartGame} />
@@ -68,7 +71,7 @@ const SimpleGameSetup: React.FC = () => {
           </motion.div>
         </motion.div>
       </div>
-    </PageShell>
+    </div>
   );
 };
 
