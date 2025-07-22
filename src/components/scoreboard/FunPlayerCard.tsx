@@ -193,10 +193,19 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
                 {isWinner && '👑 '}{player.name}
               </motion.span>
             </motion.h3>
-            <div className="flex items-center gap-2 text-sm text-gray-600">
+            <div className="flex items-center gap-2 text-sm text-gray-600 mb-2">
               <span>🎯 {player.rounds.length} manches</span>
               {dutchCount > 0 && <span className="text-orange-600">🏆 {dutchCount}</span>}
             </div>
+            
+            {/* Bouton d'expansion aligné à gauche */}
+            <motion.div className={cn("inline-flex px-2 py-1 rounded-full text-xs font-medium border backdrop-blur-sm cursor-pointer", `${theme.lightBg} ${theme.border} ${theme.text}`)} whileHover={{
+            scale: 1.05
+          }} whileTap={{
+            scale: 0.95
+          }}>
+              {isExpanded ? '🔼 Moins' : '🔽 Plus'}
+            </motion.div>
           </div>
 
           {/* Score principal amélioré */}
@@ -256,17 +265,6 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
                   </div>
                 </div>}
             </motion.div>
-          </motion.div>
-        </div>
-
-        {/* Indicateur d'expansion compact */}
-        <div className="flex justify-end mb-2">
-          <motion.div className={cn("px-2 py-1 rounded-full text-xs font-medium border backdrop-blur-sm cursor-pointer", `${theme.lightBg} ${theme.border} ${theme.text}`)} whileHover={{
-          scale: 1.05
-        }} whileTap={{
-          scale: 0.95
-        }}>
-            {isExpanded ? '🔼 Moins' : '🔽 Plus'}
           </motion.div>
         </div>
 
