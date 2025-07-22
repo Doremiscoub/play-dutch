@@ -51,9 +51,9 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
           size="lg"
           onClick={decrementCount}
           disabled={playerCount <= MIN_PLAYERS}
-          className="w-14 h-14 rounded-xl"
+          className="w-14 h-14 rounded-xl text-white"
         >
-          <Minus className="h-6 w-6" />
+          <Minus className="h-6 w-6 text-white" />
         </UnifiedButton>
 
         <div className="text-center">
@@ -75,9 +75,9 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
           size="lg"
           onClick={incrementCount}
           disabled={playerCount >= MAX_PLAYERS}
-          className="w-14 h-14 rounded-xl"
+          className="w-14 h-14 rounded-xl text-white"
         >
-          <Plus className="h-6 w-6" />
+          <Plus className="h-6 w-6 text-white" />
         </UnifiedButton>
       </div>
 
