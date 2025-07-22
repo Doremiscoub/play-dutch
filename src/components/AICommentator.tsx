@@ -178,13 +178,58 @@ const AICommentator: React.FC<AICommentatorProps> = ({
                   {comment}
                 </motion.p>
               ) : (
-                <motion.p 
+                <motion.div
                   initial={{ opacity: 0, y: 5 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="text-lg leading-relaxed tracking-wide text-gray-700"
+                  className="relative p-6 bg-gradient-to-br from-blue-50 via-purple-50 to-amber-50 rounded-2xl border-2 border-gradient-to-r from-blue-200 via-purple-200 to-amber-200 shadow-lg"
+                  whileHover={{ 
+                    scale: 1.02,
+                    boxShadow: "0 20px 40px rgba(59, 130, 246, 0.15)"
+                  }}
+                  transition={{ duration: 0.2 }}
                 >
-                  {comment}
-                </motion.p>
+                  {/* Effet de brillance */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 translate-x-[-100%] animate-[shimmer_3s_infinite]" />
+                  
+                  <motion.p 
+                    className="text-lg sm:text-xl font-semibold leading-relaxed tracking-wide text-gray-800 relative z-10"
+                    whileHover={{
+                      scale: 1.01
+                    }}
+                  >
+                    <motion.span
+                      className="inline-block"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.2 }}
+                    >
+                      💬
+                    </motion.span>
+                    {" "}
+                    <span className="bg-gradient-to-r from-gray-700 via-gray-800 to-gray-700 bg-clip-text text-transparent">
+                      {comment}
+                    </span>
+                  </motion.p>
+                  
+                  {/* Points de décoration */}
+                  <div className="absolute top-4 right-4 flex gap-1">
+                    {[0, 1, 2].map((i) => (
+                      <motion.div
+                        key={i}
+                        className="w-2 h-2 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full"
+                        animate={{
+                          scale: [1, 1.2, 1],
+                          opacity: [0.5, 1, 0.5]
+                        }}
+                        transition={{
+                          duration: 2,
+                          repeat: Infinity,
+                          delay: i * 0.3
+                        }}
+                      />
+                    ))}
+                  </div>
+                </motion.div>
               )}
             </div>
           </div>
