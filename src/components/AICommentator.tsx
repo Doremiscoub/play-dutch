@@ -91,8 +91,8 @@ const AICommentator: React.FC<AICommentatorProps> = ({
             <div className="absolute -right-10 -bottom-10 w-40 h-40 bg-gradient-to-br from-trinity-blue-200/30 to-transparent rounded-full blur-3xl" />
           </div>
 
-          <div className="flex items-start gap-6 relative z-10">
-            <div className="mt-1">
+          <div className="flex items-center gap-4 sm:gap-6 relative z-10">
+            <div className="flex-shrink-0">
               <ProfessorAvatar 
                 size="lg"
                 animate={true}
@@ -100,14 +100,14 @@ const AICommentator: React.FC<AICommentatorProps> = ({
               />
             </div>
             
-            <div className="flex-1 space-y-3">
+            <div className="flex-1 space-y-4">
               <motion.div 
-                className="relative"
-                whileHover={{ scale: 1.02 }}
+                className="text-center sm:text-left"
+                whileHover={{ scale: 1.01 }}
                 transition={{ duration: 0.2 }}
               >
                 <motion.h1 
-                  className="text-2xl sm:text-3xl font-black bg-gradient-to-r from-blue-600 via-purple-600 to-amber-500 bg-clip-text text-transparent flex items-center gap-3 hover-scale"
+                  className="text-xl sm:text-2xl md:text-3xl font-black bg-gradient-to-r from-blue-600 via-purple-600 to-amber-500 bg-clip-text text-transparent flex items-center justify-center sm:justify-start gap-2 sm:gap-3 hover-scale"
                   whileHover={{
                     rotate: [-0.5, 0.5, -0.5, 0],
                     backgroundPosition: "200% center"
@@ -181,18 +181,18 @@ const AICommentator: React.FC<AICommentatorProps> = ({
                 <motion.div
                   initial={{ opacity: 0, y: 5 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="relative p-6 bg-gradient-to-br from-blue-50 via-purple-50 to-amber-50 rounded-2xl border-2 border-gradient-to-r from-blue-200 via-purple-200 to-amber-200 shadow-lg"
+                  className="relative p-4 sm:p-6 bg-gradient-to-br from-blue-50/80 via-purple-50/80 to-amber-50/80 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-blue-200/50 shadow-lg"
                   whileHover={{ 
-                    scale: 1.02,
-                    boxShadow: "0 20px 40px rgba(59, 130, 246, 0.15)"
+                    scale: 1.01,
+                    boxShadow: "0 10px 30px rgba(59, 130, 246, 0.1)"
                   }}
-                  transition={{ duration: 0.2 }}
+                  transition={{ duration: 0.3 }}
                 >
                   {/* Effet de brillance */}
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 translate-x-[-100%] animate-[shimmer_3s_infinite]" />
                   
                   <motion.p 
-                    className="text-lg sm:text-xl font-semibold leading-relaxed tracking-wide text-gray-800 relative z-10"
+                    className="text-base sm:text-lg font-medium leading-relaxed text-gray-800 relative z-10 text-center sm:text-left"
                     whileHover={{
                       scale: 1.01
                     }}
