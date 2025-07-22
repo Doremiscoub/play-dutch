@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Player } from '@/types';
 import GameModeHandler from '@/components/game/GameModeHandler';
 import ScoreBoardWithAds from '@/components/scoreboard/ScoreBoardWithAds';
-import EnhancedAICommentator from '@/components/ai-commentator/EnhancedAICommentator';
+import IntelligentProfessorCartouche from '@/components/ai-commentator/IntelligentProfessorCartouche';
 
 interface GameContentViewProps {
   gameMode: 'quick' | 'tournament';
@@ -59,7 +59,7 @@ const GameContentView: React.FC<GameContentViewProps> = ({
               transition={{ duration: 0.5 }}
               className="mb-8 px-4 pt-4"
             >
-              <EnhancedAICommentator 
+              <IntelligentProfessorCartouche 
                 players={players}
                 roundCount={roundHistory.length}
                 scoreLimit={scoreLimit}
