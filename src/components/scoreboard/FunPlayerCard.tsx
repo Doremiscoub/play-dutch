@@ -132,7 +132,7 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
       {/* Badge gagnant flottant */}
       {isWinner && (
         <motion.div
-          className="absolute -top-2 -right-2 z-30"
+          className="absolute -top-2 -right-2 z-[100]"
           initial={{ scale: 0, rotate: -45 }}
           animate={{ scale: 1, rotate: 0 }}
           transition={{ delay: 0.3, type: "spring" }}
