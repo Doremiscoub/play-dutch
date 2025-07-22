@@ -7,6 +7,7 @@ import { UnifiedCard } from '@/components/ui/unified-card';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { SetupPlayer } from './types';
+import SimpleEmojiSelector from './SimpleEmojiSelector';
 
 interface PlayerNamesStepProps {
   playerCount: number;
@@ -29,12 +30,13 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
   // Initialiser les joueurs si nécessaire
   useEffect(() => {
     if (players.length !== playerCount) {
+      const defaultEmojis = ['🎮', '🎯', '🃏', '🎲', '🏆', '⭐', '🎊', '🎉', '🔥', '💫'];
       const newPlayers: SetupPlayer[] = [];
       for (let i = 0; i < playerCount; i++) {
         newPlayers.push({
           id: `player-${i + 1}`,
           name: players[i]?.name || `Joueur ${i + 1}`,
-          emoji: players[i]?.emoji || '🎮',
+          emoji: players[i]?.emoji || defaultEmojis[i % defaultEmojis.length],
           isReady: players[i]?.isReady || false
         });
       }
@@ -66,6 +68,15 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
     setTempName('');
   };
 
+  const updatePlayerEmoji = (index: number, emoji: string) => {
+    const updatedPlayers = [...players];
+    updatedPlayers[index] = {
+      ...updatedPlayers[index],
+      emoji
+    };
+    onPlayersChange(updatedPlayers);
+  };
+
   const canProceed = players.length >= 2 && players.every(p => p.name && p.name.trim().length > 0);
 
   return (
@@ -92,9 +103,10 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
             >
               <div className="card-glass p-4 rounded-xl">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center text-2xl">
-                    {player.emoji}
-                  </div>
+                  <SimpleEmojiSelector
+                    selectedEmoji={player.emoji}
+                    onEmojiSelect={(emoji) => updatePlayerEmoji(index, emoji)}
+                  />
 
                   {editingIndex === index ? (
                     <div className="flex-1 flex items-center gap-2">
