@@ -3,8 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Player } from '@/types';
 import { cn } from '@/lib/utils';
 import { ChevronDown, TrendingUp, TrendingDown, Award, Target } from 'lucide-react';
-import FloatingWinnerBadge from './FloatingWinnerBadge';
-import PlayerCardScore from './player-card/PlayerCardScore';
+
+
 interface EnhancedPlayerCardProps {
   player: Player;
   rank: number;
@@ -197,7 +197,27 @@ const EnhancedPlayerCard: React.FC<EnhancedPlayerCardProps> = ({
           delay: rank * 0.1 + 0.2,
           type: "spring"
         }}>
-            <PlayerCardScore score={player.totalScore} rank={rank} roundCount={player.rounds.length} isWinner={isWinner} />
+            <div className={cn(
+              "text-4xl font-black mb-1",
+              rank === 1 ? "text-yellow-600" :
+              rank === 2 ? "text-gray-600" :
+              rank === 3 ? "text-amber-700" :
+              "text-trinity-blue-700"
+            )}>
+              {player.totalScore}
+            </div>
+            <div className="text-sm text-gray-500 font-medium">
+              📊 {player.rounds.length} manches
+            </div>
+            {isWinner && (
+              <motion.div
+                className="text-xs font-bold text-yellow-700 flex items-center gap-1"
+                animate={{ scale: [1, 1.1, 1] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                👑 Champion
+              </motion.div>
+            )}
           </motion.div>
         </div>
 
@@ -490,8 +510,25 @@ const EnhancedPlayerCard: React.FC<EnhancedPlayerCardProps> = ({
         </AnimatePresence>
       </div>
 
-      {/* Badge gagnant flottant */}
-      <FloatingWinnerBadge isWinner={isWinner} cardRef={React.createRef()} />
+      {/* Badge gagnant intégré */}
+      {isWinner && (
+        <motion.div
+          className="absolute -top-2 -right-2 z-30"
+          initial={{ scale: 0, rotate: -45 }}
+          animate={{ scale: 1, rotate: 0 }}
+          transition={{ delay: 0.3, type: "spring" }}
+        >
+          <div className="bg-gradient-to-r from-yellow-400 to-orange-400 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-1">
+            <motion.span
+              animate={{ rotate: 360 }}
+              transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+            >
+              👑
+            </motion.span>
+            WINNER
+          </div>
+        </motion.div>
+      )}
     </motion.div>;
 };
 export default React.memo(EnhancedPlayerCard);
