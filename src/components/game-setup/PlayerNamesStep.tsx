@@ -74,7 +74,7 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
         <h2 className="text-trinity text-2xl font-bold mb-3">
           ✏️ Noms des joueurs
         </h2>
-        <p className="text-neutral-600">
+        <p className="text-neutral-700">
           Personnalisez les noms des {playerCount} joueurs
         </p>
       </div>
@@ -102,7 +102,7 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
                         value={tempName}
                         onChange={(e) => setTempName(e.target.value)}
                         placeholder="Nom du joueur"
-                        className="flex-1"
+                        className="flex-1 text-neutral-800 placeholder:text-neutral-500"
                         autoFocus
                         onKeyDown={(e) => {
                           if (e.key === 'Enter') saveEdit();
@@ -148,7 +148,7 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
 
       {/* Informations */}
       <div className="bg-gradient-to-r from-primary/5 to-secondary/5 rounded-xl p-4">
-        <p className="text-sm text-neutral-600">
+        <p className="text-sm text-neutral-700">
           <strong>💡 Astuce :</strong> Utilisez des noms courts et facilement reconnaissables pour une meilleure expérience de jeu
         </p>
       </div>
