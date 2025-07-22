@@ -11,6 +11,9 @@ interface PageTransitionProps {
 const PageTransition: React.FC<PageTransitionProps> = ({ children }) => {
   const location = useLocation();
   const prefersReducedMotion = useReducedMotion();
+  
+  // Désactiver les transitions pour les routes critiques
+  const disableTransition = location.pathname === '/setup';
 
   console.log('🔄 PageTransition render for path:', location.pathname);
 
@@ -37,6 +40,14 @@ const PageTransition: React.FC<PageTransitionProps> = ({ children }) => {
     ease: 'anticipate',
     duration: prefersReducedMotion ? 0.1 : 0.2
   };
+
+  if (disableTransition) {
+    return (
+      <div className="min-h-screen relative z-10">
+        {children}
+      </div>
+    );
+  }
 
   return (
     <AnimatePresence mode="wait" initial={false}>
