@@ -1,10 +1,9 @@
+
 import React from 'react';
-import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Users, Plus, Minus } from 'lucide-react';
-import ProfessorAvatar from '@/components/game/ProfessorAvatar';
-import { MIN_PLAYERS, MAX_PLAYERS, ESTIMATED_MINUTES_PER_PLAYER } from './types';
+import { Minus, Plus } from 'lucide-react';
+import { UnifiedButton } from '@/components/ui/unified-button';
+import { UnifiedCard } from '@/components/ui/unified-card';
+import { MIN_PLAYERS, MAX_PLAYERS } from './types';
 
 interface PlayerCountStepProps {
   playerCount: number;
@@ -30,200 +29,80 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
   };
 
   return (
-    <div className="space-y-8 p-6">
-      {/* Header avec Professor */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="text-center space-y-4"
-      >
-        <motion.div 
-          className="mx-auto w-20 h-20 rounded-3xl bg-gradient-to-br from-primary/80 to-secondary/80 flex items-center justify-center shadow-lg border border-white/30 overflow-hidden"
-          animate={{ 
-            scale: [1, 1.05, 1],
-            rotate: [0, 2, -2, 0]
-          }}
-          transition={{ 
-            duration: 4, 
-            repeat: Infinity, 
-            ease: "easeInOut"
-          }}
-        >
-          <div className="text-4xl">🎯</div>
-        </motion.div>
-        <div className="space-y-2">
-          <h1 className="text-3xl font-black text-trinity">
-            Combien de joueurs ?
-          </h1>
-          <p className="text-neutral-700 font-medium max-w-md mx-auto">
-            Choisissez le nombre de participants
-          </p>
-        </div>
-      </motion.div>
+    <UnifiedCard variant="glass" padding="lg" className="text-center space-y-8">
+      <div>
+        <h2 className="text-trinity text-2xl font-bold mb-3">
+          🎮 Combien de joueurs ?
+        </h2>
+        <p className="text-neutral-600 text-lg">
+          Choisissez le nombre de participants pour votre partie de Dutch
+        </p>
+      </div>
 
-      {/* Sélecteur de nombre */}
-      <Card className="card-glass border-2 border-white/60 shadow-lg bg-white/90">
-        <CardContent className="p-6">
-          <div className="flex items-center justify-center gap-8">
-            {/* Bouton Moins */}
-            <motion.div
-              whileHover={{ scale: 1.05, rotate: -5 }}
-              whileTap={{ scale: 0.95, rotate: 0 }}
-            >
-              <Button
-                onClick={decrementCount}
-                disabled={playerCount <= MIN_PLAYERS}
-                size="lg"
-                variant="default"
-                className="relative w-20 h-20 bg-white/20 backdrop-blur-xl border border-white/30 hover:bg-white/30 disabled:bg-neutral-200/50 disabled:cursor-not-allowed rounded-2xl shadow-2xl text-neutral-700 hover:text-red-500 disabled:text-neutral-400 transition-all duration-300 overflow-hidden group"
-              >
-                {/* Effet de brillance glassmorphique */}
-                <div className="absolute inset-0 bg-gradient-to-br from-white/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                
-                {/* Particules d'effet */}
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className="absolute top-2 left-2 w-1 h-1 bg-red-400 rounded-full animate-ping" />
-                  <div className="absolute bottom-3 right-3 w-1 h-1 bg-red-300 rounded-full animate-ping" style={{ animationDelay: '0.5s' }} />
-                </div>
-                
-                <Minus className="w-10 h-10 relative z-10 text-white" strokeWidth={4} />
-              </Button>
-            </motion.div>
-
-            {/* Affichage du nombre */}
-            <motion.div
-              key={playerCount}
-              initial={{ scale: 0.8, opacity: 0, rotateY: -180 }}
-              animate={{ scale: 1, opacity: 1, rotateY: 0 }}
-              transition={{ type: "spring", bounce: 0.6, duration: 0.8 }}
-              className="flex flex-col items-center gap-4"
-            >
-              <div className="relative group">
-                {/* Halo lumineux */}
-                <div className="absolute -inset-2 bg-gradient-to-br from-primary/30 via-secondary/30 to-accent/30 rounded-3xl blur-lg opacity-70 group-hover:opacity-100 transition-opacity duration-300" />
-                
-                {/* Compteur principal */}
-                <div className="relative w-28 h-28 bg-white/25 backdrop-blur-2xl border border-white/40 rounded-3xl shadow-2xl flex items-center justify-center overflow-hidden">
-                  {/* Effet de reflet animé */}
-                  <motion.div
-                    className="absolute inset-0 bg-gradient-to-br from-white/30 via-transparent to-transparent"
-                    animate={{ 
-                      background: [
-                        "linear-gradient(135deg, rgba(255,255,255,0.3) 0%, transparent 50%, transparent 100%)",
-                        "linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%)",
-                        "linear-gradient(135deg, transparent 0%, transparent 50%, rgba(255,255,255,0.3) 100%)"
-                      ]
-                    }}
-                    transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-                  />
-                  
-                  {/* Particules flottantes */}
-                  <div className="absolute inset-0">
-                    <motion.div 
-                      className="absolute top-3 left-4 w-1.5 h-1.5 bg-primary/60 rounded-full"
-                      animate={{ 
-                        y: [0, -10, 0],
-                        opacity: [0.5, 1, 0.5] 
-                      }}
-                      transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                    />
-                    <motion.div 
-                      className="absolute bottom-4 right-5 w-1 h-1 bg-secondary/60 rounded-full"
-                      animate={{ 
-                        y: [0, -8, 0],
-                        opacity: [0.3, 0.8, 0.3] 
-                      }}
-                      transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                    />
-                    <motion.div 
-                      className="absolute top-5 right-3 w-0.5 h-0.5 bg-accent/60 rounded-full"
-                      animate={{ 
-                        scale: [0.5, 1.2, 0.5],
-                        opacity: [0.4, 1, 0.4] 
-                      }}
-                      transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                    />
-                  </div>
-                  
-                  {/* Nombre principal */}
-                  <motion.span 
-                    className="relative z-10 text-4xl font-black text-trinity"
-                    animate={{ 
-                      textShadow: [
-                        "0 0 10px rgba(59, 130, 246, 0.3)",
-                        "0 0 20px rgba(147, 51, 234, 0.4)",
-                        "0 0 10px rgba(251, 146, 60, 0.3)"
-                      ]
-                    }}
-                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                  >
-                    {playerCount}
-                  </motion.span>
-                </div>
-              </div>
-              
-              <motion.span 
-                className="text-sm font-bold text-primary px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full border border-white/30 shadow-lg"
-                animate={{ scale: [1, 1.05, 1] }}
-                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-              >
-                ✨ Joueurs ✨
-              </motion.span>
-            </motion.div>
-
-            {/* Bouton Plus */}
-            <motion.div
-              whileHover={{ scale: 1.05, rotate: 5 }}
-              whileTap={{ scale: 0.95, rotate: 0 }}
-            >
-              <Button
-                onClick={incrementCount}
-                disabled={playerCount >= MAX_PLAYERS}
-                size="lg"
-                variant="default"
-                className="relative w-20 h-20 bg-white/20 backdrop-blur-xl border border-white/30 hover:bg-white/30 disabled:bg-neutral-200/50 disabled:cursor-not-allowed rounded-2xl shadow-2xl text-neutral-700 hover:text-green-500 disabled:text-neutral-400 transition-all duration-300 overflow-hidden group"
-              >
-                {/* Effet de brillance glassmorphique */}
-                <div className="absolute inset-0 bg-gradient-to-br from-white/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                
-                {/* Particules d'effet */}
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className="absolute top-2 right-2 w-1 h-1 bg-green-400 rounded-full animate-ping" />
-                  <div className="absolute bottom-3 left-3 w-1 h-1 bg-green-300 rounded-full animate-ping" style={{ animationDelay: '0.3s' }} />
-                </div>
-                
-                <Plus className="w-10 h-10 relative z-10 text-white" strokeWidth={4} />
-              </Button>
-            </motion.div>
-          </div>
-
-          <div className="text-center mt-6">
-            <div className="bg-primary/5 rounded-xl p-4 border border-primary/20">
-              <p className="text-lg font-semibold text-primary mb-1">
-                ~{playerCount * ESTIMATED_MINUTES_PER_PLAYER} minutes
-              </p>
-              <p className="text-sm text-primary/80">
-                Durée estimée de la partie
-              </p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      <motion.div
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
-      >
-        <Button
-          onClick={onNext}
+      {/* Sélecteur de nombre de joueurs */}
+      <div className="flex items-center justify-center gap-6">
+        <UnifiedButton
+          variant="secondary"
           size="lg"
-          className="w-full py-4 text-lg font-bold rounded-2xl btn-glass-trinity shadow-lg"
+          onClick={decrementCount}
+          disabled={playerCount <= MIN_PLAYERS}
+          className="w-14 h-14 rounded-xl"
         >
-          <Users className="h-5 w-5 mr-2" />
-          Suivant : Noms des joueurs
-        </Button>
-      </motion.div>
-    </div>
+          <Minus className="h-6 w-6" />
+        </UnifiedButton>
+
+        <div className="text-center">
+          <div className="text-6xl font-bold text-trinity mb-2">
+            {playerCount}
+          </div>
+          <div className="text-sm text-neutral-500">
+            {playerCount === 1 ? 'joueur' : 'joueurs'}
+          </div>
+        </div>
+
+        <UnifiedButton
+          variant="secondary"
+          size="lg"
+          onClick={incrementCount}
+          disabled={playerCount >= MAX_PLAYERS}
+          className="w-14 h-14 rounded-xl"
+        >
+          <Plus className="h-6 w-6" />
+        </UnifiedButton>
+      </div>
+
+      {/* Boutons rapides */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        {[2, 3, 4, 5].map((count) => (
+          <UnifiedButton
+            key={count}
+            variant={playerCount === count ? "primary" : "ghost"}
+            size="md"
+            onClick={() => onPlayerCountChange(count)}
+            className="py-3 rounded-xl font-semibold"
+          >
+            {count}
+          </UnifiedButton>
+        ))}
+      </div>
+
+      {/* Informations utiles */}
+      <div className="bg-gradient-to-r from-primary/5 to-secondary/5 rounded-xl p-4">
+        <p className="text-sm text-neutral-600">
+          <strong>💡 Conseil :</strong> Le Dutch est plus amusant avec 3-4 joueurs pour des parties équilibrées
+        </p>
+      </div>
+
+      {/* Bouton suivant */}
+      <UnifiedButton
+        variant="primary"
+        size="lg"
+        onClick={onNext}
+        className="w-full py-4 text-lg font-bold"
+      >
+        Continuer avec {playerCount} {playerCount === 1 ? 'joueur' : 'joueurs'} 🚀
+      </UnifiedButton>
+    </UnifiedCard>
   );
 };
 

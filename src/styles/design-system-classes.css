@@ -1,0 +1,208 @@
+
+/* ========== CLASSES DU SYSTÈME DE DESIGN CENTRALISÉ ========== */
+/* Implémentation des classes basées sur DESIGN_TOKENS centralisés */
+
+/* === TRINITY TEXT CLASSES === */
+.text-trinity {
+  background: linear-gradient(135deg, hsl(221, 83%, 53%), hsl(258, 90%, 66%), hsl(25, 95%, 53%));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% 200%;
+  animation: gradient-shift 4s ease infinite;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.text-display {
+  font-family: 'Space Grotesk', 'Inter', -apple-system, system-ui, sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.text-gaming {
+  font-family: 'Orbitron', 'Space Grotesk', system-ui, sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* === TRINITY BUTTON CLASSES === */
+.btn-glass-trinity {
+  background: linear-gradient(135deg, hsl(221, 83%, 53%), hsl(258, 90%, 66%), hsl(25, 95%, 53%));
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 0.5px solid rgba(255, 255, 255, 0.2);
+  border-radius: 1rem;
+  color: white;
+  font-weight: bold;
+  transition: all 120ms cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3), 0 20px 50px rgba(147, 51, 234, 0.2);
+}
+
+.btn-glass-trinity:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 15px 40px rgba(59, 130, 246, 0.4), 0 25px 60px rgba(147, 51, 234, 0.3);
+  background: linear-gradient(135deg, hsl(221, 83%, 58%), hsl(258, 90%, 70%), hsl(25, 95%, 58%));
+}
+
+.btn-glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 0.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: 1rem;
+  transition: all 120ms cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.14);
+}
+
+.btn-glass:hover {
+  background: rgba(255, 255, 255, 0.8);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+}
+
+/* === KIDS BUTTON VARIANTS === */
+.btn-kids-primary {
+  background: linear-gradient(135deg, hsl(221, 83%, 53%), hsl(258, 90%, 66%), hsl(25, 95%, 53%));
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 1rem;
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3), 0 0 20px rgba(147, 51, 234, 0.2);
+  transition: all 120ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-kids-blue {
+  background: linear-gradient(135deg, hsl(221, 85%, 72%), hsl(221, 83%, 53%));
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(59, 130, 246, 0.4);
+  border-radius: 1rem;
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 8px 32px rgba(59, 130, 246, 0.4);
+  transition: all 120ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-kids-purple {
+  background: linear-gradient(135deg, hsl(258, 85%, 75%), hsl(258, 90%, 66%));
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(147, 51, 234, 0.4);
+  border-radius: 1rem;
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 8px 32px rgba(147, 51, 234, 0.4);
+  transition: all 120ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-kids-orange {
+  background: linear-gradient(135deg, hsl(25, 85%, 72%), hsl(25, 95%, 53%));
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(249, 115, 22, 0.4);
+  border-radius: 1rem;
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 8px 32px rgba(249, 115, 22, 0.4);
+  transition: all 120ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* === CARD CLASSES === */
+.card-glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 0.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: 1.5rem;
+  transition: all 120ms cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.14);
+}
+
+.card-glass:hover {
+  background: rgba(255, 255, 255, 0.8);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+}
+
+.card-game {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.6));
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 1.5rem;
+  box-shadow: 0 10px 30px rgba(59, 130, 246, 0.1), 0 20px 50px rgba(147, 51, 234, 0.1);
+  transition: all 120ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* === SHADOW EFFECTS === */
+.shadow-glass {
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+}
+
+.shadow-glass-lg {
+  box-shadow: 0 16px 50px rgba(31, 38, 135, 0.2);
+}
+
+.shadow-trinity {
+  box-shadow: 0 10px 30px rgba(59, 130, 246, 0.1), 0 20px 50px rgba(147, 51, 234, 0.1);
+}
+
+.shadow-glow-blue {
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.6), 0 0 40px rgba(59, 130, 246, 0.3);
+}
+
+.shadow-glow-purple {
+  box-shadow: 0 0 20px rgba(147, 51, 234, 0.6), 0 0 40px rgba(147, 51, 234, 0.3);
+}
+
+.shadow-glow-orange {
+  box-shadow: 0 0 20px rgba(249, 115, 22, 0.6), 0 0 40px rgba(249, 115, 22, 0.3);
+}
+
+/* === HOVER EFFECTS === */
+.hover-lift {
+  transition: all 120ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* === ANIMATIONS === */
+@keyframes gradient-shift {
+  0%, 100% { 
+    background-position: 0% 50%; 
+  }
+  50% { 
+    background-position: 100% 50%; 
+  }
+}
+
+.animate-gradient-shift {
+  animation: gradient-shift 3s ease infinite;
+}
+
+/* === ACCESSIBILITY === */
+@media (prefers-reduced-motion: reduce) {
+  .text-trinity,
+  .btn-glass-trinity,
+  .card-glass,
+  .hover-lift {
+    animation: none !important;
+    transition: opacity 150ms ease !important;
+  }
+  
+  .hover-lift:hover {
+    transform: none;
+  }
+}
+
+@media (prefers-contrast: high) {
+  .btn-glass-trinity,
+  .btn-glass,
+  .card-glass {
+    border-width: 2px;
+    border-style: solid;
+  }
+}
