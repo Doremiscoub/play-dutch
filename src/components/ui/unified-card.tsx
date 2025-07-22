@@ -28,6 +28,7 @@ const paddingVariants = {
 
 export const UnifiedCard = React.forwardRef<HTMLDivElement, UnifiedCardProps>(
   ({ className, variant = "light", padding = "md", children, ...props }, ref) => {
+    console.log("UnifiedCard render:", { variant, mappedVariant: cardVariants[variant], padding });
     return (
       <Card
         ref={ref}

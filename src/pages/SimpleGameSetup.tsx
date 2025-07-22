@@ -33,13 +33,17 @@ const SimpleGameSetup: React.FC = () => {
         showBackButton={true}
       />
 
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <div className="container mx-auto px-4 py-8 max-w-4xl relative z-50">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
+          className="relative z-50"
         >
           {/* Configuration directe sans redondance */}
+          <div className="relative z-50 bg-red-500 p-4 text-white font-bold">
+            DEBUG: Cette div devrait être visible en rouge
+          </div>
           <ModernGameSetup onStartGame={handleStartGame} />
 
           {/* Informations sur le jeu */}
