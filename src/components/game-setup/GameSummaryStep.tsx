@@ -37,7 +37,7 @@ const GameSummaryStep: React.FC<GameSummaryStepProps> = ({
         }}>
           🎯 Récapitulatif
         </h2>
-        <p className="text-neutral-600">
+        <p className="text-neutral-700">
           Vérifiez les paramètres de votre partie avant de commencer
         </p>
       </div>
@@ -48,10 +48,12 @@ const GameSummaryStep: React.FC<GameSummaryStepProps> = ({
         <div className="card-glass p-4 rounded-xl">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Users className="h-5 w-5 text-primary" />
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-400/20 to-blue-500/30 flex items-center justify-center">
+                <Users className="h-5 w-5 text-blue-600" />
+              </div>
               <div>
-                <div className="font-medium">Nombre de joueurs</div>
-                <div className="text-sm text-neutral-500">{playerCount} participants</div>
+                <div className="font-medium text-neutral-800">Nombre de joueurs</div>
+                <div className="text-sm text-neutral-600">{playerCount} participants</div>
               </div>
             </div>
             <UnifiedButton
@@ -69,10 +71,12 @@ const GameSummaryStep: React.FC<GameSummaryStepProps> = ({
         <div className="card-glass p-4 rounded-xl">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-3">
-              <Target className="h-5 w-5 text-secondary" />
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-400/20 to-purple-500/30 flex items-center justify-center">
+                <Target className="h-5 w-5 text-purple-600" />
+              </div>
               <div>
-                <div className="font-medium">Joueurs</div>
-                <div className="text-sm text-neutral-500">{validPlayers.length} joueurs prêts</div>
+                <div className="font-medium text-neutral-800">Joueurs</div>
+                <div className="text-sm text-neutral-600">{validPlayers.length} joueurs prêts</div>
               </div>
             </div>
             <UnifiedButton
@@ -85,33 +89,68 @@ const GameSummaryStep: React.FC<GameSummaryStepProps> = ({
             </UnifiedButton>
           </div>
           
-          <div className="grid grid-cols-2 gap-2">
-            {validPlayers.map((player, index) => (
-              <motion.div
-                key={player.id}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <Badge 
-                  variant="secondary" 
-                  className="w-full justify-center py-2 text-sm"
+          <div className="grid grid-cols-2 gap-3">
+            {validPlayers.map((player, index) => {
+              const playerColors = [
+                'from-blue-400/20 to-blue-500/30 border-blue-400/40 text-blue-700',
+                'from-purple-400/20 to-purple-500/30 border-purple-400/40 text-purple-700',
+                'from-green-400/20 to-green-500/30 border-green-400/40 text-green-700',
+                'from-orange-400/20 to-orange-500/30 border-orange-400/40 text-orange-700',
+                'from-pink-400/20 to-pink-500/30 border-pink-400/40 text-pink-700',
+                'from-cyan-400/20 to-cyan-500/30 border-cyan-400/40 text-cyan-700'
+              ];
+              const colorClass = playerColors[index % playerColors.length];
+              
+              return (
+                <motion.div
+                  key={player.id}
+                  initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  transition={{ 
+                    delay: index * 0.1,
+                    type: "spring",
+                    stiffness: 300,
+                    damping: 20
+                  }}
+                  whileHover={{ scale: 1.05 }}
+                  className="transform-gpu"
                 >
-                  {player.name}
-                </Badge>
-              </motion.div>
-            ))}
+                  <div className={`
+                    bg-gradient-to-br ${colorClass}
+                    rounded-xl p-3 border-2 
+                    flex items-center justify-center gap-2
+                    transition-all duration-200
+                    hover:shadow-lg animate-fade-in
+                  `}>
+                    <span className="text-xl">{player.emoji}</span>
+                    <span className="font-medium text-sm">{player.name}</span>
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </div>
 
       {/* Règles rapides */}
       <div className="bg-gradient-to-r from-primary/5 to-secondary/5 rounded-xl p-4">
-        <h3 className="font-bold text-neutral-800 mb-2">🏆 Rappel des règles</h3>
-        <ul className="text-sm text-neutral-600 space-y-1">
-          <li>• <strong>Objectif :</strong> Avoir le score le plus bas</li>
-          <li>• <strong>Dutch :</strong> Le joueur avec le score le plus bas de la manche</li>
-          <li>• <strong>Fin :</strong> Premier à 100 points, gagnant = score total le plus bas</li>
+        <h3 className="font-bold text-neutral-800 mb-2 flex items-center gap-2">
+          <span className="text-xl">🏆</span> 
+          Rappel des règles
+        </h3>
+        <ul className="text-sm text-neutral-700 space-y-2">
+          <li className="flex items-start gap-2">
+            <span className="text-green-500 font-bold">•</span>
+            <span><strong className="text-neutral-800">Objectif :</strong> Avoir le score le plus bas</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-blue-500 font-bold">•</span>
+            <span><strong className="text-neutral-800">Dutch :</strong> Le joueur avec le score le plus bas de la manche</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-purple-500 font-bold">•</span>
+            <span><strong className="text-neutral-800">Fin :</strong> Premier à 100 points, gagnant = score total le plus bas</span>
+          </li>
         </ul>
       </div>
 
