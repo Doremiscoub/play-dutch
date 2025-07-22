@@ -31,7 +31,7 @@ const buttonVariants = cva(
         destructive: "bg-gradient-to-r from-red-400 to-red-600 text-white font-bold hover:from-red-500 hover:to-red-700 hover:scale-105 hover:shadow-lg hover:shadow-red-500/30 hover:-translate-y-0.5 active:scale-95 lg-hover-state rounded-xl",
         outline: "border-2 border-kids-blue bg-kids-blue/20 backdrop-blur-lg text-white hover:bg-kids-blue/40 hover:border-kids-blue hover:-translate-y-0.5 lg-hover-state rounded-xl",
         secondary: "btn-kids-purple text-white hover:scale-105 hover:-translate-y-0.5 lg-hover-state rounded-xl",
-        ghost: "bg-kids-blue/10 text-white hover:bg-kids-blue/20 hover:text-white hover:backdrop-blur-lg lg-hover-state rounded-xl",
+        ghost: "bg-dutch-blue/10 text-white hover:bg-dutch-blue/20 hover:text-white hover:backdrop-blur-lg lg-hover-state rounded-xl",
         link: "text-kids-blue underline-offset-4 hover:underline hover:text-kids-purple",
         
         // ===== ENHANCED GAMING/SPECIAL VARIANTS =====
