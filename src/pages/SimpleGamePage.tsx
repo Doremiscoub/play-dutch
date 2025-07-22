@@ -31,6 +31,13 @@ const SimpleGamePage: React.FC = () => {
     }
   }, []); // VIDE - pas de dépendances pour éviter la boucle infinie !
 
+  // Effect for scores initialization when players change - ALWAYS called
+  useEffect(() => {
+    if (players.length > 0) {
+      setScores(players.map(() => 0));
+    }
+  }, [players.length]);
+
   // Guard: si pas de partie et qu'on n'a pas d'état de navigation depuis setup
   if (!hasGame) {
     return (
@@ -52,13 +59,6 @@ const SimpleGamePage: React.FC = () => {
       </PageShell>
     );
   }
-
-  // Separate effect for scores initialization when players change
-  useEffect(() => {
-    if (players.length > 0) {
-      setScores(players.map(() => 0));
-    }
-  }, [players.length]);
 
   const handleAddRound = () => {
     addRound(scores, dutchPlayerId);
