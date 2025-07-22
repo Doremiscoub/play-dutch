@@ -101,20 +101,30 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
             size="icon-lg"
             onClick={onUndoLastRound}
             disabled={!canUndo || disabled}
-            className={`relative h-14 w-14 rounded-full transition-all duration-300 group overflow-hidden lg-elevation-02 hover:lg-elevation-03 ${
+            className={`relative h-14 w-14 rounded-2xl transition-all duration-300 group overflow-hidden backdrop-blur-xl border-2 ${
               canUndo && !disabled
-                ? 'hover:lg-tint-accent-50'
-                : 'opacity-50 cursor-not-allowed text-muted-foreground'
+                ? 'bg-gradient-to-br from-orange-500/80 via-orange-400/70 to-red-500/60 border-orange-300/50 hover:border-orange-200/70 shadow-lg shadow-orange-500/20 hover:shadow-xl hover:shadow-orange-500/30 hover:scale-105'
+                : 'bg-gray-400/50 border-gray-300/40 opacity-50 cursor-not-allowed'
             }`}
             title="Annuler la dernière manche"
           >
-            {/* Effet coloré au survol pour bouton actif */}
+            {/* Effet de brillance au survol */}
             {canUndo && !disabled && (
-              <div className="absolute inset-0 bg-gradient-to-br from-orange-100/60 to-orange-200/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full" />
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[200%] transition-transform duration-700 ease-out rounded-2xl" />
             )}
             
-            <RotateCcw className={`relative z-10 h-5 w-5 group-hover:-rotate-12 transition-transform duration-300 ${
-              canUndo && !disabled ? 'group-hover:text-trinity-orange-700' : ''
+            {/* Particules flottantes pour bouton actif */}
+            {canUndo && !disabled && (
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div className="absolute top-2 left-2 w-1 h-1 bg-white/60 rounded-full animate-ping" />
+                <div className="absolute bottom-3 right-2 w-1.5 h-1.5 bg-orange-200/80 rounded-full animate-pulse" />
+              </div>
+            )}
+            
+            <RotateCcw className={`relative z-10 h-5 w-5 transition-all duration-300 ${
+              canUndo && !disabled 
+                ? 'text-white drop-shadow-lg group-hover:-rotate-12 group-hover:scale-110' 
+                : 'text-gray-500'
             }`} />
           </Button>
         </motion.div>
@@ -142,13 +152,19 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
             size="icon-lg"
             onClick={onEndGame}
             disabled={disabled}
-            className="relative h-14 w-14 rounded-full lg-elevation-02 hover:lg-elevation-03 transition-all duration-300 group overflow-hidden hover:lg-tint-secondary-50"
+            className="relative h-14 w-14 rounded-2xl bg-gradient-to-br from-purple-500/80 via-purple-400/70 to-blue-500/60 border-2 border-purple-300/50 hover:border-purple-200/70 shadow-lg shadow-purple-500/20 hover:shadow-xl hover:shadow-purple-500/30 transition-all duration-300 group overflow-hidden backdrop-blur-xl hover:scale-105"
             title="Terminer la partie"
           >
-            {/* Effet coloré au survol */}
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-100/60 to-purple-200/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full" />
+            {/* Effet de brillance au survol */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[200%] transition-transform duration-700 ease-out rounded-2xl" />
             
-            <Flag className="relative z-10 h-5 w-5 group-hover:text-trinity-purple-700 group-hover:scale-110 transition-transform duration-300" />
+            {/* Particules flottantes */}
+            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <div className="absolute top-2 right-2 w-1 h-1 bg-white/60 rounded-full animate-ping" />
+              <div className="absolute bottom-2 left-3 w-1.5 h-1.5 bg-purple-200/80 rounded-full animate-pulse" />
+            </div>
+            
+            <Flag className="relative z-10 h-5 w-5 text-white drop-shadow-lg group-hover:scale-110 group-hover:rotate-12 transition-all duration-300" />
           </Button>
         </motion.div>
       </div>
