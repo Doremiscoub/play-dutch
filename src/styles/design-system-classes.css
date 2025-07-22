@@ -2,31 +2,6 @@
 /* ========== CLASSES DU SYSTÈME DE DESIGN CENTRALISÉ ========== */
 /* Implémentation des classes basées sur DESIGN_TOKENS centralisés */
 
-/* === TRINITY TEXT CLASSES === */
-.text-trinity {
-  /* Couleur de base visible en cas d'échec du gradient */
-  color: hsl(221, 83%, 53%);
-  background: linear-gradient(135deg, hsl(221, 83%, 53%), hsl(258, 90%, 66%), hsl(25, 95%, 53%));
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-size: 200% 200%;
-  animation: gradient-shift 4s ease infinite;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  /* Fallback pour les navigateurs qui ne supportent pas background-clip */
-  text-shadow: none;
-}
-
-/* Support amélioré pour différents navigateurs */
-@supports not (-webkit-background-clip: text) {
-  .text-trinity {
-    background: none;
-    color: hsl(221, 83%, 53%);
-    -webkit-text-fill-color: initial;
-  }
-}
-
 .text-display {
   font-family: 'Space Grotesk', 'Inter', -apple-system, system-ui, sans-serif;
   font-weight: 800;
@@ -198,8 +173,8 @@
 
 /* === ACCESSIBILITY === */
 @media (prefers-reduced-motion: reduce) {
-  .text-trinity,
   .btn-glass-trinity,
+  .btn-glass,
   .card-glass,
   .hover-lift {
     animation: none !important;

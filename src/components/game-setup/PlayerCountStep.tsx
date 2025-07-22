@@ -31,7 +31,7 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
   return (
     <UnifiedCard variant="glass" padding="lg" className="text-center space-y-8">
       <div>
-        <h2 className="text-trinity text-2xl font-bold mb-3">
+        <h2 className="text-2xl font-bold mb-3 bg-gradient-to-r from-kids-blue to-kids-purple bg-clip-text text-transparent">
           🎮 Combien de joueurs ?
         </h2>
         <p className="text-neutral-600 text-lg">
@@ -52,7 +52,7 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
         </UnifiedButton>
 
         <div className="text-center">
-          <div className="text-6xl font-bold text-trinity mb-2">
+          <div className="text-6xl font-bold mb-2 bg-gradient-to-r from-kids-blue to-kids-purple bg-clip-text text-transparent">
             {playerCount}
           </div>
           <div className="text-sm text-neutral-500">

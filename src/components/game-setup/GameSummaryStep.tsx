@@ -29,7 +29,7 @@ const GameSummaryStep: React.FC<GameSummaryStepProps> = ({
   return (
     <UnifiedCard variant="glass" padding="lg" className="space-y-6">
       <div className="text-center">
-        <h2 className="text-trinity text-2xl font-bold mb-3">
+        <h2 className="text-2xl font-bold mb-3 bg-gradient-to-r from-kids-blue to-kids-purple bg-clip-text text-transparent">
           🎯 Récapitulatif
         </h2>
         <p className="text-neutral-600">
