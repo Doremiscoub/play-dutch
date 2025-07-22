@@ -156,7 +156,7 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
             
             <motion.div className="w-14 h-14 rounded-xl bg-white/80 backdrop-blur-sm border-2 border-white/60 shadow-lg flex items-center justify-center relative overflow-hidden" whileHover={{
             scale: 1.05,
-            rotate: [0, -3, 3, 0]
+            rotate: 3
           }}>
               <span className="text-2xl">{player.emoji || '🎮'}</span>
             </motion.div>
@@ -174,17 +174,14 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
             scale: 1
           }} whileHover={{
             scale: 1.05,
-            x: 3,
-            rotate: [0, -1, 1, 0],
-            textShadow: "0 0 8px rgba(0,0,0,0.3)"
+            x: 3
           }} transition={{
             type: "spring",
             stiffness: 400,
             damping: 15
           }}>
               <motion.span animate={isWinner ? {
-              scale: [1, 1.1, 1],
-              rotate: [0, 5, -5, 0]
+              scale: 1.1
             } : {}} transition={{
               duration: 2,
               repeat: isWinner ? Infinity : 0,
