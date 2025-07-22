@@ -177,13 +177,34 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
           {/* Nom et score */}
           <div className="flex-1 min-w-0">
             <motion.h3 
-              className={cn("text-xl font-black truncate drop-shadow-sm", theme.text)}
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              whileHover={{ scale: 1.02, x: 2 }}
-              transition={{ type: "spring", stiffness: 300 }}
+              className={cn(
+                "text-2xl font-black truncate bg-gradient-to-r from-current via-current to-current bg-clip-text",
+                "drop-shadow-lg tracking-wide",
+                theme.text
+              )}
+              initial={{ opacity: 0, x: -10, scale: 0.9 }}
+              animate={{ opacity: 1, x: 0, scale: 1 }}
+              whileHover={{ 
+                scale: 1.05, 
+                x: 3,
+                rotate: [0, -1, 1, 0],
+                textShadow: "0 0 8px rgba(0,0,0,0.3)"
+              }}
+              transition={{ type: "spring", stiffness: 400, damping: 15 }}
             >
-              {isWinner && '👑 '}{player.name}
+              <motion.span
+                animate={isWinner ? {
+                  scale: [1, 1.1, 1],
+                  rotate: [0, 5, -5, 0]
+                } : {}}
+                transition={{
+                  duration: 2,
+                  repeat: isWinner ? Infinity : 0,
+                  repeatType: "reverse"
+                }}
+              >
+                {isWinner && '👑 '}{player.name}
+              </motion.span>
             </motion.h3>
             <div className="flex items-center gap-2 text-sm text-gray-600">
               <span>🎯 {player.rounds.length} manches</span>
