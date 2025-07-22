@@ -101,7 +101,7 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
   return (
     <motion.div
       className={cn(
-        "relative rounded-2xl backdrop-blur-xl border-2 transition-all duration-300 cursor-pointer overflow-hidden group",
+        "relative rounded-2xl backdrop-blur-xl border-2 transition-all duration-300 cursor-pointer overflow-visible group",
         `bg-gradient-to-br ${theme.gradient}`,
         theme.border,
         isSelected || isExpanded 
