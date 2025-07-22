@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Minus, Plus } from 'lucide-react';
 import { UnifiedButton } from '@/components/ui/unified-button';
@@ -51,9 +50,9 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
           size="lg"
           onClick={decrementCount}
           disabled={playerCount <= MIN_PLAYERS}
-          className="w-14 h-14 rounded-xl text-white"
+          className="w-14 h-14 rounded-xl text-white font-bold text-2xl"
         >
-          <Minus className="h-6 w-6 text-white" />
+          -
         </UnifiedButton>
 
         <div className="text-center">
@@ -75,9 +74,9 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
           size="lg"
           onClick={incrementCount}
           disabled={playerCount >= MAX_PLAYERS}
-          className="w-14 h-14 rounded-xl text-white"
+          className="w-14 h-14 rounded-xl text-white font-bold text-2xl"
         >
-          <Plus className="h-6 w-6 text-white" />
+          +
         </UnifiedButton>
       </div>
 
