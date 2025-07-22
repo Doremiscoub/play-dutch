@@ -27,10 +27,8 @@ const ModernGameSetup: React.FC<ModernGameSetupProps> = ({ onStartGame }) => {
   };
 
   const renderStep = () => {
-    console.log('🎯 ModernGameSetup: Rendu de l\'étape', currentStep);
     switch (currentStep) {
       case 1:
-        console.log('🎯 ModernGameSetup: Rendu PlayerCountStep');
         return (
           <PlayerCountStep
             playerCount={playerCount}
@@ -39,7 +37,6 @@ const ModernGameSetup: React.FC<ModernGameSetupProps> = ({ onStartGame }) => {
           />
         );
       case 2:
-        console.log('🎯 ModernGameSetup: Rendu PlayerNamesStep');
         return (
           <PlayerNamesStep
             playerCount={playerCount}
@@ -50,7 +47,6 @@ const ModernGameSetup: React.FC<ModernGameSetupProps> = ({ onStartGame }) => {
           />
         );
       case 3:
-        console.log('🎯 ModernGameSetup: Rendu GameSummaryStep');
         return (
           <GameSummaryStep
             playerCount={playerCount}
@@ -62,7 +58,6 @@ const ModernGameSetup: React.FC<ModernGameSetupProps> = ({ onStartGame }) => {
           />
         );
       default:
-        console.log('🎯 ModernGameSetup: Étape invalide', currentStep);
         return null;
     }
   };

@@ -201,6 +201,27 @@ body {
   }
 }
 
+/* ========== TRINITY CLASSES CRITICAL FIX ========== */
+/* Classes critiques manquantes qui causent l'invisibilité */
+.text-trinity {
+  color: hsl(var(--foreground));
+  font-weight: 800;
+}
+
+.btn-glass-trinity {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  color: hsl(var(--foreground));
+  transition: all 0.2s ease;
+}
+
+.btn-glass-trinity:hover {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: rgba(255, 255, 255, 0.9);
+  transform: translateY(-1px);
+}
+
 /* ========== KIDS BUTTONS COLORÉS ========== */
 .btn-kids-primary {
   background: linear-gradient(135deg, hsl(221, 83%, 53%), hsl(258, 90%, 66%), hsl(25, 95%, 53%));

@@ -9,11 +9,8 @@ import UnifiedHeader from '@/components/layout/UnifiedHeader';
 import PageShell from '@/components/layout/PageShell';
 
 const SimpleGameSetup: React.FC = () => {
-  console.log('🎯 SimpleGameSetup: RENDU PRINCIPAL - Début du composant');
   const navigate = useNavigate();
   const { createGame } = useSimpleGameState();
-
-  console.log('🎯 SimpleGameSetup: État des hooks initializé');
 
   const handleStartGame = (playerNames: string[]) => {
     if (playerNames.length < 2) {

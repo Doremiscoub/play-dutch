@@ -17,7 +17,6 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
   onPlayerCountChange,
   onNext
 }) => {
-  console.log('🎯 PlayerCountStep: Démarrage du composant', { playerCount });
   const incrementCount = () => {
     if (playerCount < MAX_PLAYERS) {
       onPlayerCountChange(playerCount + 1);
