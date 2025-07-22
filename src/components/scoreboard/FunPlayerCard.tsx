@@ -177,9 +177,11 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
           {/* Nom et score */}
           <div className="flex-1 min-w-0">
             <motion.h3 
-              className={cn("text-lg font-bold truncate", theme.text)}
+              className={cn("text-xl font-black truncate drop-shadow-sm", theme.text)}
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
+              whileHover={{ scale: 1.02, x: 2 }}
+              transition={{ type: "spring", stiffness: 300 }}
             >
               {isWinner && '👑 '}{player.name}
             </motion.h3>
