@@ -65,7 +65,7 @@ const GamingHeroSection: React.FC = () => {
       </div>
 
       {/* Contenu principal - logo remonté */}
-      <div className="relative z-10 text-center max-w-4xl mx-auto space-y-6 -mt-8">
+      <div className="relative z-10 text-center max-w-4xl mx-auto space-y-6 px-4 flex flex-col items-center justify-center">
         {/* Logo avec effet néon */}
         <motion.div
           initial={{ opacity: 0, scale: 0.5, y: 50 }}
@@ -153,15 +153,15 @@ const GamingHeroSection: React.FC = () => {
             <Button
               onClick={() => navigate('/setup')}
               size="xl"
-              className="relative z-10 bg-gradient-to-r from-blue-600 via-purple-600 to-orange-500 hover:from-orange-500 hover:via-purple-500 hover:to-blue-600 text-white font-black text-xl sm:text-2xl px-16 py-8 shadow-2xl border-4 border-white rounded-2xl transition-all duration-300 hover:scale-105"
+              className="relative z-10 bg-gradient-to-r from-blue-600 via-purple-600 to-orange-500 hover:from-orange-500 hover:via-purple-500 hover:to-blue-600 text-white font-black text-lg sm:text-xl px-8 sm:px-12 py-6 sm:py-8 shadow-2xl border-4 border-white rounded-2xl transition-all duration-300 hover:scale-105 w-auto max-w-full"
             >
               <motion.div
-                className="flex items-center gap-4"
+                className="flex items-center justify-center gap-2 sm:gap-4 text-center whitespace-nowrap overflow-hidden"
                 whileHover={{ x: 5 }}
               >
-                <Gamepad2 className="h-8 w-8 group-hover:animate-bounce" />
-                🚀 JOUER MAINTENANT ! 🎯
-                <ArrowRight className="h-6 w-6 group-hover:translate-x-2 transition-transform" />
+                <Gamepad2 className="h-6 w-6 sm:h-8 sm:w-8 group-hover:animate-bounce flex-shrink-0" />
+                <span className="truncate">🚀 JOUER ! 🎯</span>
+                <ArrowRight className="h-5 w-5 sm:h-6 sm:w-6 group-hover:translate-x-2 transition-transform flex-shrink-0" />
               </motion.div>
             </Button>
           </motion.div>
