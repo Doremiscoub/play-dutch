@@ -7,6 +7,7 @@ import NewRoundModal from '@/components/NewRoundModal';
 import PageShell from '@/components/layout/PageShell';
 import UnifiedHeader from '@/components/layout/UnifiedHeader';
 import AICommentator from '@/components/AICommentator';
+import { MobileOptimizer } from '@/components/ui/mobile-optimizer';
 import { toast } from 'sonner';
 
 const SimpleGamePage: React.FC = () => {
@@ -50,11 +51,12 @@ const SimpleGamePage: React.FC = () => {
     console.log('🚫 No game available, showing setup prompt');
     return (
       <PageShell variant="game">
-        <UnifiedHeader 
-          title="Aucune partie en cours" 
-          showBackButton={true}
-        />
-        <div className="container mx-auto px-4 py-8 text-center">
+        <MobileOptimizer pageType="game" className="min-h-screen">
+          <UnifiedHeader 
+            title="Aucune partie en cours" 
+            showBackButton={true}
+          />
+          <div className="container mx-auto px-4 py-8 text-center">
           <h2 className="text-2xl font-bold mb-4">Aucune partie en cours</h2>
           <p className="mb-6">Vous devez d'abord créer une partie pour jouer.</p>
           <button 
@@ -63,7 +65,8 @@ const SimpleGamePage: React.FC = () => {
           >
             Créer une partie
           </button>
-        </div>
+          </div>
+        </MobileOptimizer>
       </PageShell>
     );
   }
@@ -97,18 +100,19 @@ const SimpleGamePage: React.FC = () => {
 
   return (
     <PageShell variant="game">
-      <UnifiedHeader 
-        title={`Manche ${roundHistory.length + 1}`}
-        showBackButton={true}
-        onBack={() => navigate('/setup')}
-        variant="game"
-        roundCount={roundHistory.length + 1}
-        scoreLimit={100}
-        gameStartTime={gameStartTime}
-        showRulesButton={true}
-      />
-      
-      <div className="container mx-auto px-4 py-6">
+      <MobileOptimizer pageType="game" className="min-h-screen">
+        <UnifiedHeader 
+          title={`Manche ${roundHistory.length + 1}`}
+          showBackButton={true}
+          onBack={() => navigate('/setup')}
+          variant="game"
+          roundCount={roundHistory.length + 1}
+          scoreLimit={100}
+          gameStartTime={gameStartTime}
+          showRulesButton={true}
+        />
+        
+        <div className="container mx-auto px-4 py-6">
         {/* Commentaires du Professeur Cartouche */}
         <div className="mb-6">
           <AICommentator 
@@ -130,10 +134,10 @@ const SimpleGamePage: React.FC = () => {
           scoreLimit={100}
           openScoreForm={openScoreForm}
         />
-      </div>
+        </div>
 
-      {/* Modal pour ajouter une nouvelle manche */}
-      <NewRoundModal
+        {/* Modal pour ajouter une nouvelle manche */}
+        <NewRoundModal
         open={isScoreFormOpen}
         onClose={() => setIsScoreFormOpen(false)}
         players={players}
@@ -142,7 +146,8 @@ const SimpleGamePage: React.FC = () => {
         dutchPlayerId={dutchPlayerId}
         setDutchPlayerId={setDutchPlayerId}
         onAddRound={handleAddRound}
-      />
+        />
+      </MobileOptimizer>
     </PageShell>
   );
 };

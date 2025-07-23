@@ -1,6 +1,8 @@
 
 import React, { useEffect } from 'react';
-import { useMediaQuery } from '@/hooks/use-mobile';
+import { useDeviceDetect } from '@/hooks/use-mobile';
+import { AdaptiveLayout, useAdaptiveInterface } from './adaptive-layout';
+import { cn } from '@/lib/utils';
 
 interface MobileOptimizerProps {
   children: React.ReactNode;
@@ -9,6 +11,8 @@ interface MobileOptimizerProps {
   enableReducedMotion?: boolean;
   enableHaptics?: boolean;
   preventOverscroll?: boolean;
+  className?: string;
+  pageType?: 'home' | 'game' | 'setup' | 'rules' | 'history' | 'generic';
 }
 
 export const MobileOptimizer: React.FC<MobileOptimizerProps> = ({
@@ -17,12 +21,18 @@ export const MobileOptimizer: React.FC<MobileOptimizerProps> = ({
   disableZoom = false,
   enableReducedMotion = true,
   enableHaptics = true,
-  preventOverscroll = true
+  preventOverscroll = true,
+  className,
+  pageType = 'generic'
 }) => {
-  const isMobile = useMediaQuery('(max-width: 768px)');
-  const prefersReducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)');
+  const { isMobile, isTablet, isDesktop, orientation, getAdaptiveSpacing, getAdaptiveTextSize } = useAdaptiveInterface();
 
   useEffect(() => {
+    // Optimisations générales pour tous les appareils
+    document.body.classList.add(`device-${isMobile ? 'mobile' : isTablet ? 'tablet' : 'desktop'}`);
+    document.body.classList.add(`orientation-${orientation}`);
+    document.body.classList.add(`page-${pageType}`);
+    
     if (isMobile && enableTouchOptimization) {
       // Optimisation pour les appareils tactiles
       document.body.classList.add('touch-device');
@@ -45,52 +55,65 @@ export const MobileOptimizer: React.FC<MobileOptimizerProps> = ({
         document.body.style.overscrollBehavior = 'none';
         document.documentElement.style.overscrollBehavior = 'none';
       }
+    }
 
-      // Support du mode sombre automatique
-      const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
-      if (prefersDarkMode.matches) {
-        document.documentElement.classList.add('dark-mode-preferred');
-      }
-      
-      // Optimiser les animations pour mobile
-      if (enableReducedMotion && prefersReducedMotion) {
-        document.documentElement.classList.add('reduce-motion');
-      }
+    // Support des gestes système pour tous les appareils
+    document.body.style.touchAction = 'manipulation';
+    
+    // Optimisations pour Safari iOS
+    if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+      document.body.classList.add('ios-device');
+    }
 
-      // Support des gestes système
-      document.body.style.touchAction = 'manipulation';
-      
-      // Optimisations pour Safari iOS
-      if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
-        document.body.classList.add('ios-device');
-        // Prévenir le bounce sur iOS
-        document.addEventListener('touchmove', (e) => {
-          if ((e.target as Element).closest('.scrollable')) return;
-          e.preventDefault();
-        }, { passive: false });
-      }
-
-      // Optimisations pour Android
-      if (/Android/.test(navigator.userAgent)) {
-        document.body.classList.add('android-device');
-      }
+    // Optimisations pour Android
+    if (/Android/.test(navigator.userAgent)) {
+      document.body.classList.add('android-device');
     }
 
     return () => {
-      document.body.classList.remove('touch-device', 'ios-device', 'android-device');
-      document.documentElement.classList.remove('reduce-motion', 'dark-mode-preferred');
+      document.body.classList.remove(
+        'touch-device', 
+        'ios-device', 
+        'android-device',
+        `device-${isMobile ? 'mobile' : isTablet ? 'tablet' : 'desktop'}`,
+        `orientation-${orientation}`,
+        `page-${pageType}`
+      );
       if (preventOverscroll) {
         document.body.style.overscrollBehavior = '';
         document.documentElement.style.overscrollBehavior = '';
       }
     };
-  }, [isMobile, enableTouchOptimization, disableZoom, enableReducedMotion, prefersReducedMotion, preventOverscroll]);
+  }, [isMobile, isTablet, isDesktop, orientation, pageType, enableTouchOptimization, disableZoom, preventOverscroll]);
 
-  return (
-    <div className={`mobile-optimized ${isMobile ? 'is-mobile' : 'is-desktop'}`}>
-      {children}
-    </div>
-  );
+  // Layout adaptatif basé sur le type de page
+  const getPageSpecificLayout = () => {
+    const baseClasses = cn(
+      'mobile-optimized w-full',
+      getAdaptiveSpacing(),
+      getAdaptiveTextSize(),
+      {
+        'is-mobile': isMobile,
+        'is-tablet': isTablet,
+        'is-desktop': isDesktop,
+        [`page-${pageType}`]: true,
+        [`orientation-${orientation}`]: true
+      },
+      className
+    );
+
+    return (
+      <AdaptiveLayout
+        className={baseClasses}
+        enableTransitions={!enableReducedMotion}
+        orientation={orientation}
+      >
+        {children}
+      </AdaptiveLayout>
+    );
+  };
+
+  return getPageSpecificLayout();
 };
 
 // Styles CSS étendus pour les optimisations mobiles

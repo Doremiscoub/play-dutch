@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import UnifiedHeader from '@/components/layout/UnifiedHeader';
 import PageShell from '@/components/layout/PageShell';
+import { MobileOptimizer } from '@/components/ui/mobile-optimizer';
 import GamingHeroSection from '@/components/home/GamingHeroSection';
 import LazyHomeSections from '@/components/home/LazyHomeSections';
 
@@ -51,16 +52,16 @@ const Home: React.FC = () => {
 
   return (
     <PageShell variant="default">
+      <MobileOptimizer pageType="home" className="min-h-screen">
+        <UnifiedHeader 
+          title="Dutch Card Game"
+          showBackButton={false}
+          showSettings={true}
+          hideTitle={true}
+        />
 
-      <UnifiedHeader 
-        title="Dutch Card Game"
-        showBackButton={false}
-        showSettings={true}
-        hideTitle={true}
-      />
-
-      {/* Nouvelle Hero Section Gaming */}
-      <GamingHeroSection />
+        {/* Nouvelle Hero Section Gaming */}
+        <GamingHeroSection />
 
       {/* Section Features Colorée */}
       <section className="relative py-20 px-4 z-10">
@@ -216,8 +217,9 @@ const Home: React.FC = () => {
         </motion.div>
       </section>
 
-      {/* Sections lazy-loaded pour optimiser les performances */}
-      <LazyHomeSections navigate={navigate} />
+        {/* Sections lazy-loaded pour optimiser les performances */}
+        <LazyHomeSections navigate={navigate} />
+      </MobileOptimizer>
     </PageShell>
   );
 };

@@ -8,6 +8,7 @@
 @import url('./styles/vision-components.css');
 @import url('./styles/typography.css');
 @import url('./styles/design-system-classes.css');
+@import url('./styles/mobile-optimizations.css');
 
 @tailwind base;
 @tailwind components;

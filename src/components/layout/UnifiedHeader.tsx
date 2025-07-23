@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import GameSettings from '@/components/GameSettings';
 import { ModernTitle } from '@/components/ui/modern-title';
+import { useAdaptiveInterface } from '@/components/ui/adaptive-layout';
 
 interface UnifiedHeaderProps {
   title: string;
@@ -33,6 +34,14 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
 }) => {
   const navigate = useNavigate();
   const [elapsedTime, setElapsedTime] = useState<string>('00:00');
+  const { 
+    isMobile, 
+    isTablet, 
+    orientation, 
+    getAdaptiveSpacing, 
+    getAdaptiveTextSize, 
+    getAdaptiveButtonSize 
+  } = useAdaptiveInterface();
 
   // Chronomètre
   useEffect(() => {
@@ -48,10 +57,16 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
 
     return () => clearInterval(interval);
   }, [gameStartTime]);
+  // Classes adaptatives
+  const headerClasses = `relative z-10 ${getAdaptiveSpacing()} ${isMobile && orientation === 'landscape' ? 'py-2' : 'py-6'}`;
+  const titleSize = isMobile 
+    ? (orientation === 'landscape' ? 'text-lg' : 'text-xl') 
+    : 'text-3xl';
+
   return (
     <motion.header 
       data-testid="unified-header"
-      className="relative z-10 px-6 py-6"
+      className={headerClasses}
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ 
@@ -75,8 +90,10 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
               {/* Fond avec glow effect */}
               <div className="absolute inset-0 bg-gradient-to-r from-trinity-blue-500/20 via-trinity-purple-500/20 to-trinity-orange-500/20 rounded-2xl blur-xl"></div>
               
-              {/* Conteneur unifié pour tout le header */}
-              <div className="relative bg-white/90 backdrop-blur-xl rounded-2xl px-6 py-4 border border-white/60 shadow-xl space-y-3">
+                {/* Conteneur unifié pour tout le header */}
+                <div className={`relative bg-white/90 backdrop-blur-xl rounded-2xl border border-white/60 shadow-xl ${
+                  isMobile ? 'px-4 py-3 space-y-2' : 'px-6 py-4 space-y-3'
+                }`}>
                 {/* Ligne principale avec boutons et titre */}
                 <div className="relative flex items-center justify-between">
                   {/* Left side - Back button */}
@@ -103,7 +120,9 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
                   {/* Center - Title (absolutely centered) */}
                   <div className="absolute left-1/2 transform -translate-x-1/2">
                     <motion.h1 
-                      className="text-xl sm:text-3xl font-black text-gray-900 flex items-center justify-center gap-2 sm:gap-4 whitespace-nowrap hover-scale"
+                      className={`${titleSize} font-black text-gray-900 flex items-center justify-center ${
+                        isMobile ? 'gap-1' : 'gap-2 sm:gap-4'
+                      } whitespace-nowrap hover-scale`}
                       whileHover={{ 
                         scale: 1.05,
                         rotate: [-1, 1, -1, 0],
@@ -114,7 +133,7 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
                       }}
                     >
                       <motion.span 
-                        className="text-2xl sm:text-3xl"
+                        className={isMobile ? 'text-lg' : 'text-2xl sm:text-3xl'}
                         animate={{ 
                           rotate: [0, 10, -10, 0],
                           scale: [1, 1.1, 1] 
@@ -139,7 +158,7 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
                         {variant === 'game' ? 'Partie en cours' : title}
                       </motion.span>
                       <motion.span 
-                        className="text-2xl sm:text-3xl"
+                        className={isMobile ? 'text-lg' : 'text-2xl sm:text-3xl'}
                         animate={{ 
                           rotate: [0, -10, 10, 0],
                           scale: [1, 1.1, 1] 
@@ -157,7 +176,7 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
                   </div>
 
                   {/* Right side - Rules button and Settings */}
-                  <div className="flex items-center gap-2 sm:gap-3 flex-1 justify-end">
+                  <div className={`flex items-center ${isMobile ? 'gap-1' : 'gap-2 sm:gap-3'} flex-1 justify-end`}>
                     {/* Bouton Règles */}
                     {showRulesButton && (
                       <motion.div
@@ -167,13 +186,15 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
                       >
                         <Button
                           variant="liquidHeader"
-                          size="sm"
+                          size={isMobile ? "icon" : "sm"}
                           onClick={() => navigate('/rules')}
-                          className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-trinity-purple-100/90 to-trinity-blue-100/90 backdrop-blur-xl border border-trinity-purple-200/60 hover:from-trinity-purple-200/90 hover:to-trinity-blue-200/90 transition-all duration-300"
+                          className={`flex items-center rounded-xl bg-gradient-to-r from-trinity-purple-100/90 to-trinity-blue-100/90 backdrop-blur-xl border border-trinity-purple-200/60 hover:from-trinity-purple-200/90 hover:to-trinity-blue-200/90 transition-all duration-300 ${
+                            isMobile ? 'p-2' : 'gap-2'
+                          }`}
                           aria-label="Consulter les règles"
                         >
                           <BookOpen className="h-4 w-4 text-trinity-purple-600" />
-                          <span className="hidden sm:inline text-trinity-purple-700 font-semibold">Règles</span>
+                          {!isMobile && <span className="text-trinity-purple-700 font-semibold">Règles</span>}
                         </Button>
                       </motion.div>
                     )}
@@ -194,39 +215,41 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
                 {/* Pastilles d'information pour la partie */}
                 {variant === 'game' && (
                   <motion.div 
-                    className="flex flex-wrap justify-center items-center gap-2 sm:gap-3 pt-1"
+                    className={`flex flex-wrap justify-center items-center ${
+                      isMobile ? 'gap-1 pt-1' : 'gap-2 sm:gap-3 pt-1'
+                    }`}
                     initial={{ opacity: 0, y: 15 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.5 }}
                   >
                     {/* Numéro de manche */}
                     <motion.div 
-                      className="flex items-center gap-2 bg-gradient-to-r from-trinity-blue-100/90 to-trinity-blue-50/90 backdrop-blur-xl px-3 py-2 rounded-xl border border-trinity-blue-200/60 shadow-lg"
+                      className={`flex items-center ${isMobile ? 'gap-1 px-2 py-1' : 'gap-2 px-3 py-2'} bg-gradient-to-r from-trinity-blue-100/90 to-trinity-blue-50/90 backdrop-blur-xl rounded-xl border border-trinity-blue-200/60 shadow-lg`}
                       whileHover={{ scale: 1.05, y: -2 }}
                       transition={{ type: "spring", stiffness: 300 }}
                     >
-                      <Zap className="h-4 w-4 text-trinity-blue-600" />
-                      <span className="text-sm font-bold text-trinity-blue-700">
-                        Manche {roundCount || 1}
+                      <Zap className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} text-trinity-blue-600`} />
+                      <span className={`${isMobile ? 'text-xs' : 'text-sm'} font-bold text-trinity-blue-700`}>
+                        {isMobile ? `M${roundCount || 1}` : `Manche ${roundCount || 1}`}
                       </span>
                     </motion.div>
 
                     {/* Limite de points */}
                     <motion.div 
-                      className="flex items-center gap-2 bg-gradient-to-r from-trinity-purple-100/90 to-trinity-purple-50/90 backdrop-blur-xl px-3 py-2 rounded-xl border border-trinity-purple-200/60 shadow-lg"
+                      className={`flex items-center ${isMobile ? 'gap-1 px-2 py-1' : 'gap-2 px-3 py-2'} bg-gradient-to-r from-trinity-purple-100/90 to-trinity-purple-50/90 backdrop-blur-xl rounded-xl border border-trinity-purple-200/60 shadow-lg`}
                       whileHover={{ scale: 1.05, y: -2 }}
                       transition={{ type: "spring", stiffness: 300 }}
                     >
-                      <Target className="h-4 w-4 text-trinity-purple-600" />
-                      <span className="text-sm font-bold text-trinity-purple-700">
-                        Objectif {scoreLimit} pts
+                      <Target className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} text-trinity-purple-600`} />
+                      <span className={`${isMobile ? 'text-xs' : 'text-sm'} font-bold text-trinity-purple-700`}>
+                        {isMobile ? `${scoreLimit}pts` : `Objectif ${scoreLimit} pts`}
                       </span>
                     </motion.div>
 
                     {/* Chronomètre */}
                     {gameStartTime && (
                       <motion.div 
-                        className="flex items-center gap-2 bg-gradient-to-r from-trinity-orange-100/90 to-trinity-orange-50/90 backdrop-blur-xl px-3 py-2 rounded-xl border border-trinity-orange-200/60 shadow-lg"
+                        className={`flex items-center ${isMobile ? 'gap-1 px-2 py-1' : 'gap-2 px-3 py-2'} bg-gradient-to-r from-trinity-orange-100/90 to-trinity-orange-50/90 backdrop-blur-xl rounded-xl border border-trinity-orange-200/60 shadow-lg`}
                         whileHover={{ scale: 1.05, y: -2 }}
                         animate={{ 
                           boxShadow: [
@@ -242,8 +265,8 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
                           scale: { type: "spring", stiffness: 300 }
                         }}
                       >
-                        <Clock className="h-4 w-4 text-trinity-orange-600" />
-                        <span className="text-sm font-bold text-trinity-orange-700 font-mono">
+                        <Clock className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} text-trinity-orange-600`} />
+                        <span className={`${isMobile ? 'text-xs' : 'text-sm'} font-bold text-trinity-orange-700 font-mono`}>
                           {elapsedTime}
                         </span>
                       </motion.div>

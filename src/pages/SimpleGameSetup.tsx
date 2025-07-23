@@ -8,6 +8,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import ModernGameSetup from '@/components/game-setup/ModernGameSetup';
 import UnifiedHeader from '@/components/layout/UnifiedHeader';
 import PageShell from '@/components/layout/PageShell';
+import { MobileOptimizer } from '@/components/ui/mobile-optimizer';
 
 const SimpleGameSetup: React.FC = () => {
   const navigate = useNavigate();
@@ -39,13 +40,14 @@ const SimpleGameSetup: React.FC = () => {
 
   return (
     <PageShell variant="game">
-      <UnifiedHeader 
-        title="Configuration de partie" 
-        showBackButton={true}
-      />
+      <MobileOptimizer pageType="setup" className="min-h-screen">
+        <UnifiedHeader 
+          title="Configuration de partie" 
+          showBackButton={true}
+        />
 
-      {/* Contenu principal stabilisé */}
-      <div className="container mx-auto px-4 py-8 max-w-4xl relative z-20">
+        {/* Contenu principal stabilisé */}
+        <div className="container mx-auto px-4 py-8 max-w-4xl relative z-20">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -78,7 +80,8 @@ const SimpleGameSetup: React.FC = () => {
             </Card>
           </motion.div>
         </motion.div>
-      </div>
+        </div>
+      </MobileOptimizer>
     </PageShell>
   );
 };

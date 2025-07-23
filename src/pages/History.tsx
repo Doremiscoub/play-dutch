@@ -9,6 +9,7 @@ import { fr } from 'date-fns/locale';
 import { motion } from 'framer-motion';
 import { Game } from '@/types';
 import PageShell from '@/components/layout/PageShell';
+import { MobileOptimizer } from '@/components/ui/mobile-optimizer';
 
 interface GameHistoryProps {
   games: Game[];
@@ -100,16 +101,18 @@ const History: React.FC = () => {
 
   return (
     <PageShell variant="default">
-      <UnifiedHeader 
-        title="Historique des parties"
-        showBackButton
-        onBack={() => navigate('/')}
-        showSettings={false}
-      />
-      
-      <div className="container mx-auto px-4 py-8 relative z-10">
-        <GameHistory games={games} />
-      </div>
+      <MobileOptimizer pageType="history" className="min-h-screen">
+        <UnifiedHeader 
+          title="Historique des parties"
+          showBackButton
+          onBack={() => navigate('/')}
+          showSettings={false}
+        />
+        
+        <div className="container mx-auto px-4 py-8 relative z-10">
+          <GameHistory games={games} />
+        </div>
+      </MobileOptimizer>
     </PageShell>
   );
 };
