@@ -6,6 +6,7 @@ import EnhancedErrorBoundary from '@/components/ui/error-boundary-enhanced';
 import EnhancedLoading from '@/components/ui/enhanced-loading';
 import { useAppState } from '@/hooks/useAppState';
 import { toast } from 'sonner';
+import GlobalFooter from './GlobalFooter';
 
 const AppLayout: React.FC = () => {
   const { globalLoading, loadingMessage, globalError, setGlobalError } = useAppState();
@@ -20,7 +21,7 @@ const AppLayout: React.FC = () => {
 
   return (
     <EnhancedErrorBoundary>
-      <div className="min-h-screen relative">
+      <div className="min-h-screen relative flex flex-col">
         {/* Global loading overlay */}
         {globalLoading && (
           <EnhancedLoading 
@@ -30,9 +31,14 @@ const AppLayout: React.FC = () => {
         )}
         
         {/* Main content with page transitions */}
-        <PageTransition>
-          <Outlet />
-        </PageTransition>
+        <div className="flex-1">
+          <PageTransition>
+            <Outlet />
+          </PageTransition>
+        </div>
+
+        {/* Global Footer pour les routes sans PageShell */}
+        <GlobalFooter variant="minimal" className="mt-auto" />
       </div>
     </EnhancedErrorBoundary>
   );
