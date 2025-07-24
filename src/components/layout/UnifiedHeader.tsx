@@ -58,9 +58,9 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
     return () => clearInterval(interval);
   }, [gameStartTime]);
   // Classes adaptatives
-  const headerClasses = `relative z-10 ${getAdaptiveSpacing()} ${isMobile && orientation === 'landscape' ? 'py-2' : 'py-6'}`;
+  const headerClasses = `relative z-10 ${getAdaptiveSpacing()} ${isMobile && orientation === 'landscape' ? 'py-1' : isMobile ? 'py-3' : 'py-6'}`;
   const titleSize = isMobile 
-    ? (orientation === 'landscape' ? 'text-lg' : 'text-xl') 
+    ? (orientation === 'landscape' ? 'text-base' : 'text-lg') 
     : 'text-3xl';
 
   return (
@@ -92,7 +92,7 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
               
                 {/* Conteneur unifié pour tout le header */}
                 <div className={`relative bg-white/90 backdrop-blur-xl rounded-2xl border border-white/60 shadow-xl ${
-                  isMobile ? 'px-4 py-3 space-y-2' : 'px-6 py-4 space-y-3'
+                  isMobile ? 'px-3 py-2 space-y-1' : 'px-6 py-4 space-y-3'
                 }`}>
                 {/* Ligne principale avec boutons et titre */}
                 <div className="relative flex items-center justify-between">
@@ -106,12 +106,12 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
                       >
                         <Button
                           variant="liquidHeader"
-                          size="icon"
+                          size={isMobile ? "sm" : "icon"}
                           onClick={onBack}
-                          className="rounded-xl"
+                          className={`rounded-xl ${isMobile ? 'h-8 w-8' : ''}`}
                           aria-label="Retour"
                         >
-                          <ArrowLeft className="h-5 w-5" />
+                          <ArrowLeft className={`${isMobile ? 'h-4 w-4' : 'h-5 w-5'}`} />
                         </Button>
                       </motion.div>
                     )}
@@ -131,21 +131,21 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
                         duration: 0.3,
                         rotate: { duration: 0.5, ease: "easeInOut" }
                       }}
-                    >
-                      <motion.span 
-                        className={isMobile ? 'text-lg' : 'text-2xl sm:text-3xl'}
-                        animate={{ 
-                          rotate: [0, 10, -10, 0],
-                          scale: [1, 1.1, 1] 
-                        }}
-                        transition={{ 
-                          duration: 2,
-                          repeat: Infinity,
-                          ease: "easeInOut"
-                        }}
                       >
-                        🎯
-                      </motion.span>
+                        <motion.span 
+                          className={isMobile ? 'text-base' : 'text-2xl sm:text-3xl'}
+                          animate={{ 
+                            rotate: [0, 10, -10, 0],
+                            scale: [1, 1.1, 1] 
+                          }}
+                          transition={{ 
+                            duration: 2,
+                            repeat: Infinity,
+                            ease: "easeInOut"
+                          }}
+                        >
+                          🎯
+                        </motion.span>
                       <motion.span 
                         className="bg-gradient-to-r from-trinity-blue-700 via-trinity-purple-700 to-trinity-orange-700 bg-clip-text text-transparent font-extrabold text-shadow-lg story-link"
                         whileHover={{
@@ -157,21 +157,21 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
                       >
                         {variant === 'game' ? 'Partie en cours' : title}
                       </motion.span>
-                      <motion.span 
-                        className={isMobile ? 'text-lg' : 'text-2xl sm:text-3xl'}
-                        animate={{ 
-                          rotate: [0, -10, 10, 0],
-                          scale: [1, 1.1, 1] 
-                        }}
-                        transition={{ 
-                          duration: 2,
-                          repeat: Infinity,
-                          ease: "easeInOut",
-                          delay: 1
-                        }}
-                      >
-                        🎯
-                      </motion.span>
+                        <motion.span 
+                          className={isMobile ? 'text-base' : 'text-2xl sm:text-3xl'}
+                          animate={{ 
+                            rotate: [0, -10, 10, 0],
+                            scale: [1, 1.1, 1] 
+                          }}
+                          transition={{ 
+                            duration: 2,
+                            repeat: Infinity,
+                            ease: "easeInOut",
+                            delay: 1
+                          }}
+                        >
+                          🎯
+                        </motion.span>
                     </motion.h1>
                   </div>
 
@@ -184,18 +184,18 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
                         whileTap={{ scale: 0.95 }}
                         transition={{ type: "spring", stiffness: 400, damping: 15 }}
                       >
-                        <Button
-                          variant="liquidHeader"
-                          size={isMobile ? "icon" : "sm"}
-                          onClick={() => navigate('/rules')}
-                          className={`flex items-center rounded-xl bg-gradient-to-r from-trinity-purple-100/90 to-trinity-blue-100/90 backdrop-blur-xl border border-trinity-purple-200/60 hover:from-trinity-purple-200/90 hover:to-trinity-blue-200/90 transition-all duration-300 ${
-                            isMobile ? 'p-2' : 'gap-2'
-                          }`}
-                          aria-label="Consulter les règles"
-                        >
-                          <BookOpen className="h-4 w-4 text-trinity-purple-600" />
-                          {!isMobile && <span className="text-trinity-purple-700 font-semibold">Règles</span>}
-                        </Button>
+                          <Button
+                            variant="liquidHeader"
+                            size={isMobile ? "sm" : "sm"}
+                            onClick={() => navigate('/rules')}
+                            className={`flex items-center rounded-xl bg-gradient-to-r from-trinity-purple-100/90 to-trinity-blue-100/90 backdrop-blur-xl border border-trinity-purple-200/60 hover:from-trinity-purple-200/90 hover:to-trinity-blue-200/90 transition-all duration-300 ${
+                              isMobile ? 'p-1.5 h-8' : 'gap-2'
+                            }`}
+                            aria-label="Consulter les règles"
+                          >
+                            <BookOpen className={`${isMobile ? 'h-3.5 w-3.5' : 'h-4 w-4'} text-trinity-purple-600`} />
+                            {!isMobile && <span className="text-trinity-purple-700 font-semibold">Règles</span>}
+                          </Button>
                       </motion.div>
                     )}
                     
