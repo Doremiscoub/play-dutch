@@ -11,14 +11,14 @@ const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({ currentStep, tota
     <motion.div
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="mb-8"
+      className="mb-6 sm:mb-8"
     >
-      <div className="flex items-center justify-center gap-1">
+      <div className="flex items-center justify-center gap-1 px-4">
         {Array.from({ length: totalSteps }, (_, i) => i + 1).map((step) => (
           <div key={step} className="flex items-center">
             {/* Cercle d'étape */}
             <motion.div
-              className={`relative w-14 h-14 rounded-full flex items-center justify-center text-lg font-bold transition-all duration-300 ${
+              className={`relative w-10 h-10 sm:w-14 sm:h-14 rounded-full flex items-center justify-center text-sm sm:text-lg font-bold transition-all duration-300 ${
                 step === currentStep
                   ? 'bg-gradient-to-br from-trinity-blue-600 via-trinity-purple-600 to-trinity-orange-600 text-white shadow-xl scale-110 border-2 border-white'
                   : step < currentStep
@@ -62,7 +62,7 @@ const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({ currentStep, tota
             {/* Ligne de connexion */}
             {step < totalSteps && (
               <motion.div
-                className={`w-16 h-1 mx-3 rounded-full transition-all duration-500 ${
+                className={`w-8 sm:w-16 h-1 mx-1 sm:mx-3 rounded-full transition-all duration-500 ${
                   step < currentStep 
                     ? 'bg-gradient-to-r from-green-500 to-green-600 shadow-md' 
                     : 'bg-neutral-200'
@@ -81,11 +81,11 @@ const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({ currentStep, tota
       </div>
 
       {/* Labels des étapes */}
-      <div className="flex items-center justify-center gap-1 mt-4">
+      <div className="flex items-center justify-center gap-1 mt-3 sm:mt-4 px-4">
         {['Joueurs', 'Noms', 'Résumé'].map((label, index) => (
           <div key={label} className="flex items-center">
             <motion.span
-              className={`text-sm font-medium transition-all duration-300 ${
+              className={`text-xs sm:text-sm font-medium transition-all duration-300 text-center min-w-0 ${
                 index + 1 === currentStep
                   ? 'text-trinity-blue-700 font-bold'
                   : index + 1 < currentStep
@@ -98,7 +98,7 @@ const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({ currentStep, tota
             >
               {label}
             </motion.span>
-            {index < 2 && <div className="w-16 mx-3" />}
+            {index < 2 && <div className="w-8 sm:w-16 mx-1 sm:mx-3" />}
           </div>
         ))}
       </div>
