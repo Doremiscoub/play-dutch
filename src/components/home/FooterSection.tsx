@@ -55,7 +55,7 @@ const FooterSection: React.FC = () => {
               transition={{ duration: 0.5 }}
             />
           </div>
-          <h2 className="text-3xl font-black bg-gradient-to-r from-trinity-blue-400 via-trinity-purple-400 to-trinity-orange-400 bg-clip-text text-transparent mb-4">
+          <h2 className="text-3xl font-black bg-gradient-to-r from-trinity-blue-400 via-trinity-purple-400 to-trinity-orange-400 bg-clip-text text-transparent mb-4 leading-tight py-2">
             Dutch Card Game
           </h2>
           <p className="text-gray-300 font-semibold max-w-2xl mx-auto">

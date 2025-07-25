@@ -14,7 +14,7 @@ const ProfessorCartoucheSection: React.FC = () => {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-black bg-gradient-to-r from-trinity-purple-600 via-trinity-blue-600 to-trinity-orange-600 bg-clip-text text-transparent mb-6">
+          <h2 className="text-4xl md:text-5xl font-black bg-gradient-to-r from-trinity-purple-600 via-trinity-blue-600 to-trinity-orange-600 bg-clip-text text-transparent mb-6 leading-tight py-2">
             🎩✨ Rencontrez le Professeur Cartouche ✨🎩
           </h2>
           <p className="text-xl text-neutral-700 font-bold max-w-3xl mx-auto">
