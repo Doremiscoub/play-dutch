@@ -145,122 +145,152 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
         </motion.div>}
 
       {/* Contenu principal */}
-      <div className="relative z-10 p-3">
-        {/* Header compact */}
-        <div className="flex items-center gap-6 mb-2 px-2">
-          {/* Avatar & Rang */}
+      <div className="relative z-10 p-2 sm:p-3">
+        {/* Header mobile-first */}
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 mb-3">
+          {/* Row 1: Avatar + Nom + Score principal (mobile) */}
           <div className="flex items-center gap-3">
-            <motion.div 
-              className={cn(
-                "relative w-16 h-16 rounded-3xl backdrop-blur-md border-3 border-white/50",
-                "flex items-center justify-center text-white font-black text-2xl z-20",
-                `bg-gradient-to-br ${theme.gradient}`,
-                theme.glow
-              )}
-              whileHover={{
-                scale: 1.15,
-                rotateY: 20,
-                boxShadow: `0 20px 40px ${theme.accent}50`
-              }}
-              transition={{
-                type: "spring",
-                stiffness: 400,
-                damping: 15
-              }}
-            >
-              {/* Themed background overlay */}
-              <div className={cn("absolute inset-0 rounded-3xl", `bg-gradient-to-tr ${theme.gradient}`)} />
-              
-              {/* Pulsing outer glow with theme colors */}
+            {/* Avatar & Rang combinés */}
+            <div className="flex items-center gap-2">
               <motion.div 
-                className={cn("absolute inset-0 rounded-3xl blur-sm", `bg-gradient-to-r ${theme.rankGlow}`)}
-                animate={{ 
-                  scale: [1, 1.1, 1],
-                  opacity: [0.4, 0.7, 0.4]
+                className={cn(
+                  "relative w-12 h-12 sm:w-16 sm:h-16 rounded-2xl sm:rounded-3xl backdrop-blur-md border-2 sm:border-3 border-white/50",
+                  "flex items-center justify-center text-white font-black text-lg sm:text-2xl z-20",
+                  `bg-gradient-to-br ${theme.gradient}`,
+                  theme.glow
+                )}
+                whileHover={{
+                  scale: 1.15,
+                  rotateY: 20,
+                  boxShadow: `0 20px 40px ${theme.accent}50`
                 }}
-                transition={{ 
-                  duration: 3,
-                  repeat: Infinity,
-                  ease: "easeInOut"
+                transition={{
+                  type: "spring",
+                  stiffness: 400,
+                  damping: 15
                 }}
-              />
-              
-              {/* Animated color orbs for extra playfulness */}
-              <motion.div 
-                className="absolute top-1 right-1 w-3 h-3 rounded-full bg-gradient-to-r from-yellow-400 to-orange-400"
-                animate={{ 
-                  scale: [1, 1.4, 1],
-                  opacity: [0.7, 1, 0.7]
-                }}
-                transition={{ 
-                  duration: 2,
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
-              />
-              
-              {/* Winner crown overlay */}
-              {isWinner && (
+              >
+                {/* Themed background overlay */}
+                <div className={cn("absolute inset-0 rounded-2xl sm:rounded-3xl", `bg-gradient-to-tr ${theme.gradient}`)} />
+                
+                {/* Pulsing outer glow with theme colors */}
                 <motion.div 
-                  className="absolute -top-3 -right-3 w-8 h-8 rounded-full 
-                             bg-gradient-to-r from-amber-400 to-yellow-500
-                             border-3 border-white shadow-xl
-                             flex items-center justify-center text-sm"
-                  initial={{ scale: 0, rotate: -180 }}
-                  animate={{ scale: 1, rotate: 0 }}
-                  transition={{ delay: 0.3, type: "spring" }}
-                >
-                  👑
-                </motion.div>
-              )}
+                  className={cn("absolute inset-0 rounded-2xl sm:rounded-3xl blur-sm", `bg-gradient-to-r ${theme.rankGlow}`)}
+                  animate={{ 
+                    scale: [1, 1.1, 1],
+                    opacity: [0.4, 0.7, 0.4]
+                  }}
+                  transition={{ 
+                    duration: 3,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                />
+                
+                {/* Winner crown overlay */}
+                {isWinner && (
+                  <motion.div 
+                    className="absolute -top-2 -right-2 w-6 h-6 sm:w-8 sm:h-8 rounded-full 
+                               bg-gradient-to-r from-amber-400 to-yellow-500
+                               border-2 sm:border-3 border-white shadow-xl
+                               flex items-center justify-center text-xs sm:text-sm"
+                    initial={{ scale: 0, rotate: -180 }}
+                    animate={{ scale: 1, rotate: 0 }}
+                    transition={{ delay: 0.3, type: "spring" }}
+                  >
+                    👑
+                  </motion.div>
+                )}
+                
+                <span className="relative z-10 drop-shadow-lg">{rank}</span>
+              </motion.div>
               
-              <span className="relative z-10 drop-shadow-lg">{rank}</span>
-            </motion.div>
-            
-            <motion.div className="w-14 h-14 rounded-xl bg-white/80 backdrop-blur-sm border-2 border-white/60 shadow-lg flex items-center justify-center relative overflow-hidden" whileHover={{
-            scale: 1.05,
-            rotate: 3
-          }}>
-              <span className="text-2xl">{player.emoji || '🎮'}</span>
+              <motion.div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl bg-white/80 backdrop-blur-sm border-2 border-white/60 shadow-lg flex items-center justify-center relative overflow-hidden" whileHover={{
+              scale: 1.05,
+              rotate: 3
+            }}>
+                <span className="text-lg sm:text-2xl">{player.emoji || '🎮'}</span>
+              </motion.div>
+            </div>
+
+            {/* Nom et infos - mobile responsive */}
+            <div className="flex-1 min-w-0">
+              <motion.h3 className={cn("text-lg sm:text-2xl font-black truncate bg-gradient-to-r from-current via-current to-current bg-clip-text", "drop-shadow-lg tracking-wide", theme.text)} initial={{
+              opacity: 0,
+              x: -10,
+              scale: 0.9
+            }} animate={{
+              opacity: 1,
+              x: 0,
+              scale: 1
+            }} whileHover={{
+              scale: 1.05,
+              x: 3
+            }} transition={{
+              type: "spring",
+              stiffness: 400,
+              damping: 15
+            }}>
+                <motion.span animate={isWinner ? {
+                scale: 1.1
+              } : {}} transition={{
+                duration: 2,
+                repeat: isWinner ? Infinity : 0,
+                repeatType: "reverse"
+              }}>
+                  {isWinner && '👑 '}{player.name}
+                </motion.span>
+              </motion.h3>
+              
+              {/* Stats compactes sur mobile */}
+              <div className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm text-gray-600 mt-1">
+                <span>🎯 {player.rounds.length}</span>
+                {dutchCount > 0 && <span className="text-orange-600">🏆 {dutchCount}</span>}
+                <span className="hidden sm:inline">manches</span>
+              </div>
+            </div>
+
+            {/* Score principal - centré sur mobile */}
+            <motion.div className="text-center" initial={{
+              scale: 0,
+              opacity: 0
+            }} animate={{
+              scale: 1,
+              opacity: 1
+            }} transition={{
+              delay: 0.2,
+              type: "spring",
+              stiffness: 300
+            }} whileHover={{
+              scale: 1.05
+            }}>
+              <motion.div className={cn("relative px-3 sm:px-4 py-2 sm:py-3 rounded-xl backdrop-blur-md border overflow-hidden", theme.lightBg, theme.border, "shadow-glass-md")} whileHover={{
+              boxShadow: "0 8px 32px rgba(0,0,0,0.1)",
+              y: -2
+            }}>
+                {/* Score principal */}
+                <motion.div className={cn("text-2xl sm:text-3xl font-black leading-none", theme.text)} whileHover={{
+                scale: 1.1
+              }} transition={{
+                type: "spring",
+                stiffness: 400
+              }}>
+                  {player.totalScore}
+                </motion.div>
+                
+                {/* Moyenne en dessous sur mobile */}
+                <div className="text-xs opacity-60 mt-1">
+                  📊 {avgScore} moy
+                </div>
+              </motion.div>
             </motion.div>
           </div>
 
-          {/* Nom et score */}
-          <div className="flex-1 min-w-0">
-            <motion.h3 className={cn("text-2xl font-black truncate bg-gradient-to-r from-current via-current to-current bg-clip-text", "drop-shadow-lg tracking-wide", theme.text)} initial={{
-            opacity: 0,
-            x: -10,
-            scale: 0.9
-          }} animate={{
-            opacity: 1,
-            x: 0,
-            scale: 1
-          }} whileHover={{
-            scale: 1.05,
-            x: 3
-          }} transition={{
-            type: "spring",
-            stiffness: 400,
-            damping: 15
-          }}>
-              <motion.span animate={isWinner ? {
-              scale: 1.1
-            } : {}} transition={{
-              duration: 2,
-              repeat: isWinner ? Infinity : 0,
-              repeatType: "reverse"
-            }}>
-                {isWinner && '👑 '}{player.name}
-              </motion.span>
-            </motion.h3>
-            <div className="flex items-center gap-2 text-sm text-gray-600 mb-2">
-              <span>🎯 {player.rounds.length} manches</span>
-              {dutchCount > 0 && <span className="text-orange-600">🏆 {dutchCount}</span>}
-            </div>
-            
-            {/* Bouton d'expansion minimaliste */}
+          {/* Row 2: Actions et progression (mobile) */}
+          <div className="flex items-center justify-between sm:justify-start gap-3">
+            {/* Bouton d'expansion */}
             <motion.button className={cn(
-              "group/btn mt-1 px-2 py-1.5 rounded-lg text-xs font-medium cursor-pointer",
+              "group/btn px-3 py-1.5 rounded-lg text-xs font-medium cursor-pointer",
               "border border-white/30 backdrop-blur-sm",
               "hover:border-white/50 hover:bg-white/10 active:scale-95",
               "transition-all duration-200 flex items-center gap-1.5",
@@ -294,76 +324,26 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
                 {isExpanded ? 'Réduire' : 'Détails'}
               </span>
             </motion.button>
-          </div>
-
-            {/* Score principal amélioré - Layout 2 colonnes */}
-            <motion.div className="text-right relative" initial={{
-          scale: 0,
-          opacity: 0
-        }} animate={{
-          scale: 1,
-          opacity: 1
-        }} transition={{
-          delay: 0.2,
-          type: "spring",
-          stiffness: 300
-        }} whileHover={{
-          scale: 1.05
-        }}>
-              {/* Container glassmorphism */}
-              <motion.div className={cn("relative px-4 py-3 rounded-xl backdrop-blur-md border overflow-hidden", theme.lightBg, theme.border, "shadow-glass-md")} whileHover={{
-            boxShadow: "0 8px 32px rgba(0,0,0,0.1)",
-            y: -2
-          }}>
-                {/* Effet de brillance */}
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                
-                {/* Layout 2 colonnes */}
-                <div className="flex gap-3 items-center">
-                  {/* Colonne 1: Moyenne + Points restants */}
-                  <div className="flex flex-col gap-2 text-xs">
-                    {/* Moyenne avec icône */}
-                    <div className="flex items-center gap-1">
-                      <span className="opacity-60">📊</span>
-                      <span className="font-medium opacity-80">
-                        {avgScore} moy
-                      </span>
-                    </div>
-                    
-                    {/* Points restants */}
-                    {scoreLimit && (
-                      <div className="text-center">
-                        <div className="w-12 bg-white/20 rounded-full h-1 mb-1">
-                          <motion.div className={cn("h-1 rounded-full", theme.accent)} initial={{
-                        width: 0
-                      }} animate={{
-                        width: `${Math.min(player.totalScore / scoreLimit * 100, 100)}%`
-                      }} transition={{
-                        delay: 0.5,
-                        duration: 0.8
-                      }} />
-                        </div>
-                        <div className="opacity-60">
-                          {Math.max(0, scoreLimit - player.totalScore)} restant
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                  
-                  {/* Colonne 2: Score principal (toute la hauteur) */}
-                  <div className="flex items-center justify-center h-full">
-                    <motion.div className={cn("text-3xl font-black leading-none", theme.text)} whileHover={{
-                  scale: 1.1
+            
+            {/* Barre de progression - masquée sur très petit écran */}
+            {scoreLimit && (
+              <div className="hidden xs:flex flex-1 max-w-24 sm:max-w-32 flex-col gap-1">
+                <div className="w-full bg-white/20 rounded-full h-1.5">
+                  <motion.div className={cn("h-1.5 rounded-full", theme.accent)} initial={{
+                  width: 0
+                }} animate={{
+                  width: `${Math.min(player.totalScore / scoreLimit * 100, 100)}%`
                 }} transition={{
-                  type: "spring",
-                  stiffness: 400
-                }}>
-                      {player.totalScore}
-                    </motion.div>
-                  </div>
+                  delay: 0.5,
+                  duration: 0.8
+                }} />
                 </div>
-              </motion.div>
-            </motion.div>
+                <div className="text-xs opacity-60 text-center">
+                  {Math.max(0, scoreLimit - player.totalScore)} restant
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Contenu étendu */}
