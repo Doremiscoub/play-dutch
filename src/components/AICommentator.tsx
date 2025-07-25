@@ -91,8 +91,10 @@ const AICommentator: React.FC<AICommentatorProps> = ({
             <div className="absolute -right-10 -bottom-10 w-40 h-40 bg-gradient-to-br from-trinity-blue-200/30 to-transparent rounded-full blur-3xl" />
           </div>
 
-          <div className="flex items-center gap-4 sm:gap-6 relative z-10">
-            <div className="flex-shrink-0">
+          {/* Mobile Layout: Column */}
+          <div className="flex flex-col md:flex-row items-center gap-4 sm:gap-6 relative z-10">
+            {/* Avatar - Centered on mobile */}
+            <div className="flex-shrink-0 mx-auto md:mx-0">
               <ProfessorAvatar 
                 size="lg"
                 animate={true}
@@ -100,14 +102,16 @@ const AICommentator: React.FC<AICommentatorProps> = ({
               />
             </div>
             
-            <div className="flex-1 space-y-4">
+            {/* Content - Full width on mobile */}
+            <div className="flex-1 w-full space-y-3 md:space-y-4">
+              {/* Title - Always centered on mobile, left on desktop */}
               <motion.div 
-                className="text-center sm:text-left"
+                className="text-center md:text-left"
                 whileHover={{ scale: 1.01 }}
                 transition={{ duration: 0.2 }}
               >
                 <motion.h1 
-                  className="text-xl sm:text-2xl md:text-3xl font-black bg-gradient-to-r from-blue-600 via-purple-600 to-amber-500 bg-clip-text text-transparent flex items-center justify-center sm:justify-start gap-2 sm:gap-3 hover-scale"
+                  className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-black bg-gradient-to-r from-blue-600 via-purple-600 to-amber-500 bg-clip-text text-transparent flex items-center justify-center md:justify-start gap-2 sm:gap-3 hover-scale flex-wrap"
                   whileHover={{
                     rotate: [-0.5, 0.5, -0.5, 0],
                     backgroundPosition: "200% center"
