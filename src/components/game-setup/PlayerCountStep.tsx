@@ -39,19 +39,19 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
       </div>
 
       {/* Sélecteur de nombre de joueurs */}
-      <div className="flex items-center justify-center gap-4 sm:gap-6 px-4">
+      <div className="flex items-center justify-center gap-6 sm:gap-8 px-4">
         <UnifiedButton 
           variant="secondary" 
           size="lg" 
           onClick={decrementCount} 
           disabled={playerCount <= MIN_PLAYERS} 
-          className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl text-white font-bold text-xl sm:text-2xl touch-target min-h-[48px]"
+          className="w-16 h-16 sm:w-18 sm:h-18 rounded-2xl text-white font-bold text-2xl sm:text-3xl touch-target min-h-[64px] shadow-lg hover:shadow-xl transition-all"
         >
           -
         </UnifiedButton>
 
-        <div className="text-center flex-1 max-w-[120px]">
-          <div className="text-4xl sm:text-6xl font-bold mb-1 sm:mb-2" style={{
+        <div className="text-center flex-1 max-w-[140px] p-4">
+          <div className="text-6xl sm:text-8xl font-bold mb-2 sm:mb-3 leading-none" style={{
           background: 'linear-gradient(135deg, hsl(var(--dutch-blue)), hsl(var(--dutch-purple)))',
           backgroundClip: 'text',
           WebkitBackgroundClip: 'text',
@@ -59,7 +59,7 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
         }}>
             {playerCount}
           </div>
-          <div className="text-xs sm:text-sm text-neutral-500">
+          <div className="text-sm sm:text-base text-neutral-600 font-medium">
             {playerCount === 1 ? 'joueur' : 'joueurs'}
           </div>
         </div>
@@ -69,7 +69,7 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
           size="lg" 
           onClick={incrementCount} 
           disabled={playerCount >= MAX_PLAYERS} 
-          className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl text-white font-bold text-xl sm:text-2xl touch-target min-h-[48px]"
+          className="w-16 h-16 sm:w-18 sm:h-18 rounded-2xl text-white font-bold text-2xl sm:text-3xl touch-target min-h-[64px] shadow-lg hover:shadow-xl transition-all"
         >
           +
         </UnifiedButton>

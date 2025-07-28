@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { Button } from './ui/button';
 import { Minus, Plus, User, Zap } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from './ui/dialog';
+import useIsMobile from '@/hooks/use-mobile';
 
 interface NewRoundModalProps {
   players: Player[];
@@ -29,6 +30,7 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
 }) => {
   const firstInputRef = useRef<HTMLInputElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     if (open && firstInputRef.current) {
@@ -89,38 +91,42 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="sm:max-w-lg glass-modal">
+      <DialogContent className={`glass-modal ${isMobile ? 'sm:max-w-[95vw] max-h-[85vh]' : 'sm:max-w-lg'}`}>
         <DialogHeader>
-          <DialogTitle className="text-xl font-semibold text-gray-800">Ajouter une manche</DialogTitle>
+          <DialogTitle className={`font-semibold text-gray-800 ${isMobile ? 'text-lg' : 'text-xl'}`}>
+            Ajouter une manche
+          </DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="mt-4 space-y-4">
+        <form onSubmit={handleSubmit} className={`mt-4 ${isMobile ? 'space-y-3' : 'space-y-4'}`}>
           {players.map((player, index) => (
             <motion.div
               key={player.id}
-              className="p-4 vision-card"
+              className={`vision-card ${isMobile ? 'p-3' : 'p-4'}`}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.05, duration: 0.3 }}
             >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-dutch-blue to-dutch-purple flex items-center justify-center text-white font-medium text-sm">
+              <div className={`flex items-center ${isMobile ? 'flex-col gap-3' : 'justify-between'}`}>
+                <div className={`flex items-center gap-3 ${isMobile ? 'w-full justify-center' : ''}`}>
+                  <div className={`rounded-full bg-gradient-to-br from-dutch-blue to-dutch-purple flex items-center justify-center text-white font-medium ${isMobile ? 'w-6 h-6 text-xs' : 'w-8 h-8 text-sm'}`}>
                     {index + 1}
                   </div>
-                  <span className="font-medium text-gray-800">{player.name}</span>
+                  <span className={`font-medium text-gray-800 ${isMobile ? 'text-sm' : ''}`}>
+                    {isMobile && player.name.length > 12 ? player.name.substring(0, 12) + '...' : player.name}
+                  </span>
                 </div>
 
-                <div className="flex items-center gap-3">
+                <div className={`flex items-center ${isMobile ? 'gap-2 w-full justify-center' : 'gap-3'}`}>
                   <Button
                     type="button"
                     size="icon"
                     variant="outline"
                     onClick={() => adjustScore(index, -1)}
-                    className="w-8 h-8 rounded-full lg-popover lg-tint-primary-50 lg-hover-state"
+                    className={`rounded-full lg-popover lg-tint-primary-50 lg-hover-state ${isMobile ? 'w-10 h-10 min-h-[40px] touch-target' : 'w-8 h-8'}`}
                     disabled={isSubmitting}
                   >
-                    <Minus className="h-3 w-3" />
+                    <Minus className={`${isMobile ? 'h-4 w-4' : 'h-3 w-3'}`} />
                   </Button>
 
                   <input
@@ -132,7 +138,9 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
                         handleScoreChange(index, e.target.value);
                       }
                     }}
-                    className="w-16 h-10 px-2 text-center glass-input text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-dutch-blue/20 transition-all"
+                    className={`px-2 text-center glass-input text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-dutch-blue/20 transition-all ${
+                      isMobile ? 'w-20 h-12 text-lg touch-target' : 'w-16 h-10'
+                    }`}
                     placeholder="0"
                     disabled={isSubmitting}
                   />
@@ -142,17 +150,19 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
                     size="icon"
                     variant="outline"
                     onClick={() => adjustScore(index, 1)}
-                    className="w-8 h-8 rounded-full lg-popover lg-tint-primary-50 lg-hover-state"
+                    className={`rounded-full lg-popover lg-tint-primary-50 lg-hover-state ${isMobile ? 'w-10 h-10 min-h-[40px] touch-target' : 'w-8 h-8'}`}
                     disabled={isSubmitting}
                   >
-                    <Plus className="h-3 w-3" />
+                    <Plus className={`${isMobile ? 'h-4 w-4' : 'h-3 w-3'}`} />
                   </Button>
 
                   <Button
                     type="button"
                     size="sm"
                     variant={dutchPlayerId === player.id ? "default" : "outline"}
-                    className={`ml-2 rounded-full px-4 transition-all lg-hover-state ${
+                    className={`rounded-full transition-all lg-hover-state ${
+                      isMobile ? 'px-3 py-2 text-xs min-h-[40px] touch-target' : 'ml-2 px-4'
+                    } ${
                       dutchPlayerId === player.id
                         ? "lg-card lg-tint-accent-60 text-white lg-elevation-03"
                         : "lg-popover lg-tint-secondary-50 text-white hover:lg-tint-secondary-70"
@@ -160,28 +170,30 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
                     onClick={() => handleDutchToggle(player.id)}
                     disabled={isSubmitting}
                   >
-                    <Zap className="h-3 w-3 mr-1" />
-                    Dutch
+                    <Zap className={`${isMobile ? 'h-3 w-3 mr-1' : 'h-3 w-3 mr-1'}`} />
+                    {isMobile ? 'D' : 'Dutch'}
                   </Button>
                 </div>
               </div>
             </motion.div>
           ))}
 
-          <DialogFooter className="mt-6 gap-3">
+          <DialogFooter className={`${isMobile ? 'mt-4 gap-2 flex-col' : 'mt-6 gap-3'}`}>
             <Button 
               variant="outline" 
               type="button" 
               onClick={onClose}
               disabled={isSubmitting}
-              className="lg-popover lg-tint-primary-50 lg-hover-state"
+              className={`lg-popover lg-tint-primary-50 lg-hover-state ${isMobile ? 'w-full min-h-[48px] touch-target' : ''}`}
             >
               Annuler
             </Button>
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="bg-gradient-to-r from-dutch-blue to-dutch-purple text-white shadow-md hover:shadow-lg transition-all"
+              className={`bg-gradient-to-r from-dutch-blue to-dutch-purple text-white shadow-md hover:shadow-lg transition-all ${
+                isMobile ? 'w-full min-h-[48px] touch-target' : ''
+              }`}
             >
               {isSubmitting ? 'Validation...' : 'Valider la manche'}
             </Button>

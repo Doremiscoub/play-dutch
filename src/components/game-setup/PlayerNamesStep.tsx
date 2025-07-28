@@ -91,7 +91,7 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
       </div>
 
       {/* Liste des joueurs */}
-      <div className="grid gap-4">
+      <div className="grid gap-3 sm:gap-4">
         <AnimatePresence mode="popLayout">
           {players.map((player, index) => (
             <motion.div
@@ -101,8 +101,8 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.2, delay: index * 0.1 }}
             >
-              <div className="card-glass p-4 rounded-xl">
-                <div className="flex items-center gap-3">
+              <div className="card-glass p-3 sm:p-4 rounded-xl">
+                <div className="flex items-center gap-2 sm:gap-3">
                   <SimpleEmojiSelector
                     selectedEmoji={player.emoji}
                     onEmojiSelect={(emoji) => updatePlayerEmoji(index, emoji)}
@@ -110,12 +110,12 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
                   />
 
                   {editingIndex === index ? (
-                    <div className="flex-1 flex items-center gap-2">
+                    <div className="flex-1 flex items-center gap-1 sm:gap-2">
                       <Input
                         value={tempName}
                         onChange={(e) => setTempName(e.target.value)}
                         placeholder="Nom du joueur"
-                        className="flex-1 text-neutral-800 placeholder:text-neutral-500"
+                        className="flex-1 text-neutral-800 placeholder:text-neutral-500 h-10 touch-target"
                         autoFocus
                         onKeyDown={(e) => {
                           if (e.key === 'Enter') saveEdit();
@@ -127,6 +127,7 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
                         size="sm"
                         onClick={saveEdit}
                         disabled={!tempName.trim()}
+                        className="min-h-[40px] min-w-[40px] touch-target"
                       >
                         <Check className="h-4 w-4" />
                       </UnifiedButton>
@@ -134,19 +135,21 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
                         variant="ghost"
                         size="sm"
                         onClick={cancelEdit}
+                        className="min-h-[40px] min-w-[40px] touch-target"
                       >
                         <X className="h-4 w-4" />
                       </UnifiedButton>
                     </div>
                   ) : (
                     <div className="flex-1 flex items-center justify-between">
-                      <span className="font-medium text-neutral-800">
+                      <span className="font-medium text-neutral-800 truncate pr-2">
                         {player.name}
                       </span>
                       <UnifiedButton
                         variant="ghost"
                         size="sm"
                         onClick={() => startEditing(index)}
+                        className="min-h-[40px] min-w-[40px] touch-target flex-shrink-0"
                       >
                         <Edit3 className="h-4 w-4" />
                       </UnifiedButton>
@@ -167,12 +170,12 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
       </div>
 
       {/* Boutons de navigation */}
-      <div className="flex gap-3">
+      <div className="flex gap-2 sm:gap-3">
         <UnifiedButton
           variant="ghost"
           size="lg"
           onClick={onBack}
-          className="flex-1"
+          className="flex-1 min-h-[48px] touch-target"
         >
           ← Retour
         </UnifiedButton>
@@ -182,7 +185,7 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
           size="lg"
           onClick={onNext}
           disabled={!canProceed}
-          className="flex-2 font-bold"
+          className="flex-2 font-bold min-h-[48px] touch-target"
         >
           {canProceed ? 'Créer la partie 🎯' : 'Complétez les noms'}
         </UnifiedButton>

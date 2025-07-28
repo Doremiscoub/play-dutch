@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Player } from '@/types';
 import { cn } from '@/lib/utils';
 import { Trophy, TrendingUp, Star, Zap } from 'lucide-react';
+import useIsMobile from '@/hooks/use-mobile';
+import MobileFunPlayerCard from './MobileFunPlayerCard';
 interface FunPlayerCardProps {
   player: Player;
   rank: number;
@@ -19,6 +21,22 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
   isSelected,
   scoreLimit = 100
 }) => {
+  const isMobile = useIsMobile();
+  
+  // Utiliser la version mobile optimisée sur mobile
+  if (isMobile) {
+    return (
+      <MobileFunPlayerCard
+        player={player}
+        rank={rank}
+        totalPlayers={totalPlayers}
+        onSelect={onSelect}
+        isSelected={isSelected}
+        scoreLimit={scoreLimit}
+      />
+    );
+  }
+  
   const [isExpanded, setIsExpanded] = useState(false);
   const isWinner = rank === 1;
   const isLastPlace = rank === totalPlayers;
