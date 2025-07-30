@@ -19,7 +19,7 @@ export const HeroSection: React.FC = () => {
           transform="uppercase"
           spacing="wider"
           glow
-          className="mb-4 relative z-10"
+          className="mb-3 sm:mb-4 relative z-10 text-4xl sm:text-5xl md:text-6xl"
         >
           Dutch
         </GameHero>
@@ -30,7 +30,7 @@ export const HeroSection: React.FC = () => {
         color="magic"
         align="center"
         spacing="wide"
-        className="mb-6"
+        className="mb-4 sm:mb-6 text-xl sm:text-2xl md:text-3xl"
       >
         Card Battle Arena
       </GameTitle>
@@ -39,10 +39,10 @@ export const HeroSection: React.FC = () => {
         variant="large"
         color="muted"
         align="center"
-        className="max-w-md mx-auto"
+        className="max-w-sm sm:max-w-md mx-auto px-4 text-base sm:text-lg"
       >
         Affrontez vos amis dans des duels de cartes épiques ! 
-        <Sparkles className="inline-block ml-2 text-yellow-500" size={16} />
+        <Sparkles className="inline-block ml-2 text-yellow-500" size={14} />
       </GameText>
     </motion.div>
   );

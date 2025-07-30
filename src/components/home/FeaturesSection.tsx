@@ -36,11 +36,11 @@ export const FeaturesSection: React.FC = () => {
       transition={{ duration: 0.6 }}
       viewport={{ once: true }}
     >
-      <h2 className="text-4xl font-bold text-center mb-12 text-gray-800" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+      <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-8 sm:mb-12 text-gray-800 px-4" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
         Pourquoi choisir Dutch Card Game ?
       </h2>
       
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 px-4">
         {features.map((feature, index) => (
           <Enhanced3DFeatureCard
             key={index}

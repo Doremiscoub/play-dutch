@@ -74,7 +74,7 @@ export const Enhanced3DFeatureCard: React.FC<Enhanced3DFeatureCardProps> = ({
       )}
     >
       <motion.div
-        className="relative h-full bg-white/70 backdrop-blur-xl border border-white/50 rounded-3xl p-8 shadow-lg transition-all duration-300 group-hover:shadow-xl group-hover:bg-white/80"
+        className="relative h-full bg-white/70 backdrop-blur-xl border border-white/50 rounded-3xl p-4 sm:p-6 md:p-8 shadow-lg transition-all duration-300 group-hover:shadow-xl group-hover:bg-white/80"
         animate={prefersReducedMotion ? {} : {
           scale: isHovered ? 1.05 : 1,
         }}
@@ -85,7 +85,7 @@ export const Enhanced3DFeatureCard: React.FC<Enhanced3DFeatureCardProps> = ({
         
         {/* Icon with enhanced effects */}
         <motion.div
-          className="relative w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-to-r from-dutch-blue to-dutch-purple flex items-center justify-center text-white shadow-lg"
+          className="relative w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 mx-auto mb-4 sm:mb-6 rounded-2xl bg-gradient-to-r from-dutch-blue to-dutch-purple flex items-center justify-center text-white shadow-lg"
           style={prefersReducedMotion ? {} : {
             transformStyle: "preserve-3d",
             transform: "translateZ(20px)",
@@ -109,10 +109,10 @@ export const Enhanced3DFeatureCard: React.FC<Enhanced3DFeatureCardProps> = ({
           }}
           className="relative z-10 text-center"
         >
-          <h3 className="text-xl font-bold mb-4 text-gray-800 group-hover:text-dutch-blue transition-colors duration-300">
+          <h3 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4 text-gray-800 group-hover:text-dutch-blue transition-colors duration-300">
             {title}
           </h3>
-          <p className="text-gray-600 leading-relaxed">
+          <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
             {description}
           </p>
         </div>

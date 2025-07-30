@@ -21,12 +21,12 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
 }) => {
   const buttonsContent = (
     <div 
-      className="fixed bottom-6 right-6 flex flex-col-reverse gap-4 pointer-events-none"
+      className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 flex flex-col-reverse gap-2 sm:gap-4 pointer-events-none"
       style={{ 
         position: 'fixed', 
         zIndex: 999999,
-        bottom: '20px',
-        right: '20px'
+        bottom: 'env(safe-area-inset-bottom, 16px)',
+        right: '16px'
       }}
     >
       {/* Bouton principal - Ajouter une manche (en bas, centré) */}
@@ -53,7 +53,7 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
           disabled={disabled}
           variant="trinity"
           size="xl"
-          className="relative group px-8 py-4 h-16 rounded-full lg-elevation-04 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden"
+          className="relative group px-4 sm:px-8 py-3 sm:py-4 h-12 sm:h-16 rounded-full lg-elevation-04 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden"
         >
           {/* Arrière-plan semi-transparent pour améliorer la lisibilité */}
           <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 via-purple-500/15 to-orange-500/20 rounded-full" />
@@ -62,12 +62,15 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent translate-x-[-100%] group-hover:translate-x-[200%] transition-transform duration-1000 ease-out" />
           
           {/* Contenu du bouton avec contraste amélioré */}
-          <div className="relative z-10 flex items-center gap-3">
-            <div className="p-1.5 rounded-full bg-white/30 backdrop-blur-sm">
-              <Plus className="h-5 w-5 text-white stroke-[3] drop-shadow-lg" />
+          <div className="relative z-10 flex items-center gap-2 sm:gap-3">
+            <div className="p-1 sm:p-1.5 rounded-full bg-white/30 backdrop-blur-sm">
+              <Plus className="h-4 w-4 sm:h-5 sm:w-5 text-white stroke-[3] drop-shadow-lg" />
             </div>
-            <span className="font-bold text-white whitespace-nowrap tracking-wide text-lg drop-shadow-lg">
+            <span className="font-bold text-white whitespace-nowrap tracking-wide text-sm sm:text-lg drop-shadow-lg hidden xs:inline">
               Ajouter une manche
+            </span>
+            <span className="font-bold text-white text-sm drop-shadow-lg xs:hidden">
+              Ajouter
             </span>
           </div>
           
@@ -77,7 +80,7 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
       </motion.div>
 
       {/* Boutons secondaires alignés avec le bouton principal */}
-      <div className="flex flex-col gap-3 items-end" style={{ marginRight: '0px' }}>
+      <div className="flex flex-col gap-2 sm:gap-3 items-end" style={{ marginRight: '0px' }}>
         {/* Bouton Annuler */}
         <motion.div
           initial={{ opacity: 0, scale: 0.6, x: 40 }}
@@ -101,7 +104,7 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
             size="icon-lg"
             onClick={onUndoLastRound}
             disabled={!canUndo || disabled}
-            className={`relative h-14 w-14 rounded-2xl transition-all duration-300 group overflow-hidden backdrop-blur-xl border-2 ${
+            className={`relative h-10 w-10 sm:h-14 sm:w-14 rounded-2xl transition-all duration-300 group overflow-hidden backdrop-blur-xl border-2 ${
               canUndo && !disabled
                 ? 'bg-gradient-to-br from-orange-600/95 via-orange-500/90 to-red-600/85 border-orange-200/70 hover:border-orange-100/90 shadow-xl shadow-orange-600/30 hover:shadow-2xl hover:shadow-orange-600/40 hover:scale-105'
                 : 'bg-gray-600/85 border-gray-300/60 opacity-70 cursor-not-allowed'
@@ -124,7 +127,7 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
               </div>
             )}
             
-            <RotateCcw className={`relative z-10 h-5 w-5 transition-all duration-300 stroke-[2.5] ${
+            <RotateCcw className={`relative z-10 h-4 w-4 sm:h-5 sm:w-5 transition-all duration-300 stroke-[2.5] ${
               canUndo && !disabled 
                 ? 'text-white drop-shadow-lg group-hover:-rotate-12 group-hover:scale-110' 
                 : 'text-white/80'
@@ -155,7 +158,7 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
             size="icon-lg"
             onClick={onEndGame}
             disabled={disabled}
-            className="relative h-14 w-14 rounded-2xl bg-gradient-to-br from-purple-500/80 via-purple-400/70 to-blue-500/60 border-2 border-purple-300/50 hover:border-purple-200/70 shadow-lg shadow-purple-500/20 hover:shadow-xl hover:shadow-purple-500/30 transition-all duration-300 group overflow-hidden backdrop-blur-xl hover:scale-105"
+            className="relative h-10 w-10 sm:h-14 sm:w-14 rounded-2xl bg-gradient-to-br from-purple-500/80 via-purple-400/70 to-blue-500/60 border-2 border-purple-300/50 hover:border-purple-200/70 shadow-lg shadow-purple-500/20 hover:shadow-xl hover:shadow-purple-500/30 transition-all duration-300 group overflow-hidden backdrop-blur-xl hover:scale-105"
             title="Terminer la partie"
           >
             {/* Effet de brillance au survol */}
@@ -167,7 +170,7 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
               <div className="absolute bottom-2 left-3 w-1.5 h-1.5 bg-purple-200/80 rounded-full animate-pulse" />
             </div>
             
-            <Flag className="relative z-10 h-5 w-5 text-white drop-shadow-lg group-hover:scale-110 group-hover:rotate-12 transition-all duration-300" />
+            <Flag className="relative z-10 h-4 w-4 sm:h-5 sm:w-5 text-white drop-shadow-lg group-hover:scale-110 group-hover:rotate-12 transition-all duration-300" />
           </Button>
         </motion.div>
       </div>
