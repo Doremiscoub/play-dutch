@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSimpleGameState } from '@/hooks/useSimpleGameState';
+import { useSecureGameState } from '@/hooks/game/useSecureGameState';
 import ScoreBoard from '@/components/ScoreBoard';
 import NewRoundModal from '@/components/NewRoundModal';
 import PageShell from '@/components/layout/PageShell';
@@ -12,12 +12,25 @@ import { toast } from 'sonner';
 
 const SimpleGamePage: React.FC = () => {
   const navigate = useNavigate();
-  const { players, roundHistory, addRound, undoLastRound, resetGame, loadFromStorage, hasGame, isGameOver } = useSimpleGameState();
+  const {
+    players,
+    roundHistory,
+    scoreLimit,
+    gameStartTime,
+    isGameOver,
+    hasGame,
+    createGame,
+    addRound,
+    undoLastRound,
+    resetGame,
+    loadFromStorage,
+    performManualIntegrityCheck
+  } = useSecureGameState();
   const [isScoreFormOpen, setIsScoreFormOpen] = useState(false);
   const [showGameEndConfirmation, setShowGameEndConfirmation] = useState(false);
   const [scores, setScores] = useState<number[]>([]);
   const [dutchPlayerId, setDutchPlayerId] = useState<string | undefined>();
-  const [gameStartTime] = useState<Date>(new Date());
+  // gameStartTime now comes from useSecureGameState
 
   useEffect(() => {
     console.log('🎮 SimpleGamePage MOUNTED');
@@ -107,8 +120,8 @@ const SimpleGamePage: React.FC = () => {
           onBack={() => navigate('/setup')}
           variant="game"
           roundCount={roundHistory.length + 1}
-          scoreLimit={100}
-          gameStartTime={gameStartTime}
+          scoreLimit={scoreLimit}
+          gameStartTime={gameStartTime || new Date()}
           showRulesButton={true}
         />
         
@@ -131,7 +144,7 @@ const SimpleGamePage: React.FC = () => {
           showGameEndConfirmation={showGameEndConfirmation}
           onConfirmEndGame={handleConfirmEndGame}
           onCancelEndGame={handleCancelEndGame}
-          scoreLimit={100}
+          scoreLimit={scoreLimit}
           openScoreForm={openScoreForm}
         />
         </div>

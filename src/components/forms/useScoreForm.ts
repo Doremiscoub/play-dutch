@@ -1,7 +1,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { Player } from '@/types';
-import { validateScores } from './ScoreFormValidator';
+import { validateScores } from './EnhancedScoreFormValidator';
 import { toast } from 'sonner';
 
 export const useScoreForm = (
@@ -65,7 +65,8 @@ export const useScoreForm = (
       return;
     }
     
-    if (!validateScores(scores, players.map(p => p.id))) {
+    const validationResult = validateScores(scores, players.map(p => p.id));
+    if (!validationResult) {
       return;
     }
     
@@ -73,16 +74,12 @@ export const useScoreForm = (
     submitHandled.current = true;
     
     try {
-      // Convertir l'objet scores en array de scores dans le même ordre que les joueurs
-      const scoresArray = players.map(player => scores[player.id] || 0);
-      
-      // Fermer immédiatement le dialogue pour éviter la double soumission
+      // Utiliser les scores et dutchPlayer validés
       onClose();
       
-      // APRÈS la fermeture, soumettre les scores
-      // Petit délai pour s'assurer que le dialogue est bien fermé
+      // APRÈS la fermeture, soumettre les scores validés
       setTimeout(() => {
-        onSubmit(scoresArray, dutchPlayer);
+        onSubmit(validationResult.scores, validationResult.dutchPlayerId);
       }, 10);
     } catch (error) {
       console.error("Erreur lors de la soumission des scores:", error);
