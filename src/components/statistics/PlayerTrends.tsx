@@ -214,8 +214,8 @@ export const PlayerTrends: React.FC<PlayerTrendsProps> = ({
         <Card className="bg-gradient-to-br from-card/90 to-card/60 backdrop-blur-sm border-border/50">
           <CardHeader>
             <CardTitle className="flex items-center gap-3">
-              <TrendingUp className="h-5 w-5 text-primary" />
-              Évolution des Scores Cumulés
+              <TrendingUp className="h-5 w-5 text-trinity-blue-500" style={{ color: 'rgb(10,132,255)' }} />
+              <span className="text-trinity-blue-500" style={{ color: 'rgb(10,132,255)' }}>Évolution des Scores Cumulés</span>
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -264,8 +264,8 @@ export const PlayerTrends: React.FC<PlayerTrendsProps> = ({
         <Card className="bg-gradient-to-br from-card/90 to-card/60 backdrop-blur-sm border-border/50">
           <CardHeader>
             <CardTitle className="flex items-center gap-3">
-              <Activity className="h-5 w-5 text-secondary" />
-              Moyennes Mobiles (3 manches)
+              <Activity className="h-5 w-5 text-trinity-purple-500" style={{ color: 'rgb(139,92,246)' }} />
+              <span className="text-trinity-purple-500" style={{ color: 'rgb(139,92,246)' }}>Moyennes Mobiles (3 manches)</span>
             </CardTitle>
           </CardHeader>
           <CardContent>

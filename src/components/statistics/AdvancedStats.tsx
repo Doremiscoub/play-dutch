@@ -301,8 +301,8 @@ export const AdvancedStats: React.FC<AdvancedStatsProps> = ({
         <Card className="bg-gradient-to-br from-card/90 to-card/60 backdrop-blur-sm border-border/50">
           <CardHeader>
             <CardTitle className="flex items-center gap-3">
-              <BarChart3 className="h-5 w-5 text-primary" />
-              Distribution des Performances
+              <BarChart3 className="h-5 w-5 text-trinity-blue-500" style={{ color: 'rgb(10,132,255)' }} />
+              <span className="text-trinity-blue-500" style={{ color: 'rgb(10,132,255)' }}>Distribution des Performances</span>
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -337,8 +337,8 @@ export const AdvancedStats: React.FC<AdvancedStatsProps> = ({
         <Card className="bg-gradient-to-br from-card/90 to-card/60 backdrop-blur-sm border-border/50">
           <CardHeader>
             <CardTitle className="flex items-center gap-3">
-              <Crosshair className="h-5 w-5 text-secondary" />
-              Matrice de Performance Multidimensionnelle
+              <Crosshair className="h-5 w-5 text-trinity-purple-500" style={{ color: 'rgb(139,92,246)' }} />
+              <span className="text-trinity-purple-500" style={{ color: 'rgb(139,92,246)' }}>Matrice de Performance Multidimensionnelle</span>
             </CardTitle>
           </CardHeader>
           <CardContent>

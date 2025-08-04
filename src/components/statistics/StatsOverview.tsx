@@ -168,12 +168,14 @@ export const StatsOverview: React.FC<StatsOverviewProps> = ({
             <Card className="h-full bg-gradient-to-br from-card/90 to-card/60 backdrop-blur-sm border-border/50 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02]">
               <CardHeader className="pb-3">
                 <CardTitle className="flex items-center gap-3">
-                  <div className={`p-2 bg-gradient-to-r ${section.color} rounded-xl shadow-md`}>
+                  <div className="p-2 bg-gradient-to-r from-trinity-blue-500 to-trinity-purple-500 rounded-xl shadow-md" style={{
+                    background: 'linear-gradient(90deg, rgb(10,132,255), rgb(139,92,246))'
+                  }}>
                     {React.cloneElement(section.icon, {
                   className: "h-5 w-5 text-white"
                 })}
                   </div>
-                  <span className="font-bold text-[trinity-purple-700] text-blue-600">{section.title}</span>
+                  <span className="font-bold text-trinity-blue-500" style={{ color: 'rgb(10,132,255)' }}>{section.title}</span>
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
@@ -217,10 +219,12 @@ export const StatsOverview: React.FC<StatsOverviewProps> = ({
         <Card className="bg-gradient-to-br from-card/90 to-card/60 backdrop-blur-sm border-border/50 shadow-xl">
           <CardHeader>
             <CardTitle className="flex items-center gap-3">
-              <div className="p-3 bg-gradient-to-r from-primary via-secondary to-accent rounded-xl shadow-lg">
+              <div className="p-3 bg-gradient-to-r from-trinity-blue-500 via-trinity-purple-500 to-trinity-orange-500 rounded-xl shadow-lg" style={{
+                background: 'linear-gradient(90deg, rgb(10,132,255), rgb(139,92,246), rgb(255,159,10))'
+              }}>
                 <Users className="h-6 w-6 text-white" />
               </div>
-              <span className="text-2xl font-bold text-blue-600">Classement Live</span>
+              <span className="text-2xl font-bold text-trinity-blue-500" style={{ color: 'rgb(10,132,255)' }}>Classement Live</span>
               <Badge variant="secondary" className="ml-auto">
                 {filteredPlayers.length} joueur{filteredPlayers.length > 1 ? 's' : ''}
               </Badge>
@@ -261,7 +265,9 @@ export const StatsOverview: React.FC<StatsOverviewProps> = ({
                           {/* Barre de progression */}
                           <div className="relative">
                             <div className="w-full bg-muted/50 h-3 rounded-full overflow-hidden">
-                              <motion.div className="h-full bg-gradient-to-r from-primary via-secondary to-accent shadow-inner" initial={{
+                              <motion.div className="h-full bg-gradient-to-r from-trinity-blue-500 via-trinity-purple-500 to-trinity-orange-500 shadow-inner" style={{
+                            background: 'linear-gradient(90deg, rgb(10,132,255), rgb(139,92,246), rgb(255,159,10))'
+                          }} initial={{
                             width: 0
                           }} animate={{
                             width: `${percentage}%`

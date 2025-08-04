@@ -161,8 +161,8 @@ export const PlayerRadar: React.FC<PlayerRadarProps> = ({
         <Card className="bg-gradient-to-br from-card/90 to-card/60 backdrop-blur-sm border-border/50">
           <CardHeader>
             <CardTitle className="flex items-center gap-3">
-              <RadarIcon className="h-5 w-5 text-primary" />
-              Profils de Performance
+              <RadarIcon className="h-5 w-5 text-trinity-blue-500" style={{ color: 'rgb(10,132,255)' }} />
+              <span className="text-trinity-blue-500" style={{ color: 'rgb(10,132,255)' }}>Profils de Performance</span>
               <Badge variant="secondary" className="ml-auto">
                 {filteredPlayers.length} joueur{filteredPlayers.length > 1 ? 's' : ''}
               </Badge>
@@ -219,7 +219,7 @@ export const PlayerRadar: React.FC<PlayerRadarProps> = ({
               <CardHeader className="pb-3">
                 <CardTitle className="flex items-center gap-2 text-base">
                   <span className="text-2xl">{playerData.player.emoji || '😊'}</span>
-                  <span className="font-bold text-blue-600">{playerData.player.name}</span>
+                  <span className="font-bold text-trinity-blue-500" style={{ color: 'rgb(10,132,255)' }}>{playerData.player.name}</span>
                   {mostBalanced?.player.id === playerData.player.id && <Badge variant="outline" className="ml-auto bg-primary/10 text-primary border-primary/20">
                       <Crown className="h-3 w-3 mr-1" />
                       Équilibré
@@ -253,7 +253,9 @@ export const PlayerRadar: React.FC<PlayerRadarProps> = ({
                       </div>
                       <div className="flex items-center gap-2">
                         <div className="w-16 h-2 bg-muted rounded-full overflow-hidden">
-                          <motion.div className="h-full bg-gradient-to-r from-primary to-secondary rounded-full" initial={{
+                          <motion.div className="h-full bg-gradient-to-r from-trinity-blue-500 to-trinity-purple-500 rounded-full" style={{
+                      background: 'linear-gradient(90deg, rgb(10,132,255), rgb(139,92,246))'
+                    }} initial={{
                       width: 0
                     }} animate={{
                       width: `${value}%`
@@ -262,7 +264,7 @@ export const PlayerRadar: React.FC<PlayerRadarProps> = ({
                       delay: 0.3 + index * 0.1 + metricIndex * 0.05
                     }} />
                         </div>
-                        <span className="text-sm font-medium w-8 text-right text-orange-600">{value}</span>
+                        <span className="text-sm font-medium w-8 text-right text-trinity-orange-500" style={{ color: 'rgb(255,159,10)' }}>{value}</span>
                       </div>
                     </div>;
             })}
