@@ -9,11 +9,11 @@ import useIsMobile from '@/hooks/use-mobile';
 
 interface NewRoundModalProps {
   players: Player[];
-  scores: number[];
+  scores: { [playerId: string]: number };
   dutchPlayerId?: string;
   onClose: () => void;
   onAddRound: () => void;
-  setScores: React.Dispatch<React.SetStateAction<number[]>>;
+  setScores: React.Dispatch<React.SetStateAction<{ [playerId: string]: number }>>;
   setDutchPlayerId: React.Dispatch<React.SetStateAction<string | undefined>>;
   open: boolean;
 }
@@ -41,18 +41,16 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
     }
   }, [open]);
 
-  const handleScoreChange = (index: number, value: string) => {
-    const newScores = [...scores];
+  const handleScoreChange = (playerId: string, value: string) => {
     // Allow negative scores down to -6
     if (value === '' || value === '-') {
-      newScores[index] = 0;
+      setScores(prev => ({ ...prev, [playerId]: 0 }));
     } else {
       const parsedValue = parseInt(value);
       if (!isNaN(parsedValue) && parsedValue >= -6) {
-        newScores[index] = parsedValue;
+        setScores(prev => ({ ...prev, [playerId]: parsedValue }));
       }
     }
-    setScores(newScores);
   };
 
   const handleDutchToggle = (playerId: string) => {
@@ -69,24 +67,21 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
     if (isSubmitting) return;
 
     setIsSubmitting(true);
-
     onClose();
-
-    setTimeout(() => {
-      onAddRound();
-    }, 10);
+    onAddRound();
   };
 
   const validateNumberInput = (input: string): boolean => {
     return /^-?\d*$/.test(input);
   };
 
-  const adjustScore = (index: number, amount: number) => {
-    const newScores = [...scores];
-    const newValue = (newScores[index] || 0) + amount;
-    // Allow negative scores down to -6
-    newScores[index] = Math.max(-6, newValue);
-    setScores(newScores);
+  const adjustScore = (playerId: string, amount: number) => {
+    setScores(prev => {
+      const currentScore = prev[playerId] || 0;
+      const newValue = currentScore + amount;
+      // Allow negative scores down to -6
+      return { ...prev, [playerId]: Math.max(-6, newValue) };
+    });
   };
 
   return (
@@ -122,7 +117,7 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
                     type="button"
                     size="icon"
                     variant="outline"
-                    onClick={() => adjustScore(index, -1)}
+                    onClick={() => adjustScore(player.id, -1)}
                     className={`rounded-full lg-popover lg-tint-primary-50 lg-hover-state ${isMobile ? 'w-10 h-10 min-h-[40px] touch-target' : 'w-8 h-8'}`}
                     disabled={isSubmitting}
                   >
@@ -132,10 +127,10 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
                   <input
                     ref={index === 0 ? firstInputRef : undefined}
                     type="text"
-                    value={scores[index] === 0 ? '' : scores[index]}
+                    value={scores[player.id] === 0 ? '' : scores[player.id] || ''}
                     onChange={(e) => {
                       if (validateNumberInput(e.target.value)) {
-                        handleScoreChange(index, e.target.value);
+                        handleScoreChange(player.id, e.target.value);
                       }
                     }}
                     className={`px-2 text-center glass-input text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-dutch-blue/20 transition-all ${
@@ -149,7 +144,7 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
                     type="button"
                     size="icon"
                     variant="outline"
-                    onClick={() => adjustScore(index, 1)}
+                    onClick={() => adjustScore(player.id, 1)}
                     className={`rounded-full lg-popover lg-tint-primary-50 lg-hover-state ${isMobile ? 'w-10 h-10 min-h-[40px] touch-target' : 'w-8 h-8'}`}
                     disabled={isSubmitting}
                   >

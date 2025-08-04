@@ -28,7 +28,7 @@ const SimpleGamePage: React.FC = () => {
   } = useSecureGameState();
   const [isScoreFormOpen, setIsScoreFormOpen] = useState(false);
   const [showGameEndConfirmation, setShowGameEndConfirmation] = useState(false);
-  const [scores, setScores] = useState<number[]>([]);
+  const [scores, setScores] = useState<{ [playerId: string]: number }>({});
   const [dutchPlayerId, setDutchPlayerId] = useState<string | undefined>();
   // gameStartTime now comes from useSecureGameState
 
@@ -54,7 +54,11 @@ const SimpleGamePage: React.FC = () => {
   // Effect séparé pour l'initialisation des scores
   useEffect(() => {
     if (players.length > 0) {
-      setScores(players.map(() => 0));
+      const initialScores: { [playerId: string]: number } = {};
+      players.forEach(player => {
+        initialScores[player.id] = 0;
+      });
+      setScores(initialScores);
       console.log('🎯 Scores initialized for', players.length, 'players');
     }
   }, [players.length]);
@@ -85,9 +89,17 @@ const SimpleGamePage: React.FC = () => {
   }
 
   const handleAddRound = () => {
-    addRound(scores, dutchPlayerId);
+    // Convertir l'objet scores en array dans l'ordre des joueurs
+    const scoresArray = players.map(player => scores[player.id] || 0);
+    addRound(scoresArray, dutchPlayerId);
     setIsScoreFormOpen(false);
-    setScores(players.map(() => 0));
+    
+    // Réinitialiser les scores
+    const initialScores: { [playerId: string]: number } = {};
+    players.forEach(player => {
+      initialScores[player.id] = 0;
+    });
+    setScores(initialScores);
     setDutchPlayerId(undefined);
   };
 

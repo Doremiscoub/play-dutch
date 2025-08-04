@@ -19,20 +19,25 @@ const NewRoundScoreForm: React.FC<NewRoundScoreFormProps> = ({
   onClose,
   onSubmit
 }) => {
-  const [scores, setScores] = useState<number[]>(players.map(() => 0));
+  const [scores, setScores] = useState<{ [playerId: string]: number }>({});
   const [dutchPlayerId, setDutchPlayerId] = useState<string | undefined>(undefined);
   
   // Reset form when players change or when modal opens
   React.useEffect(() => {
     if (open) {
-      setScores(players.map(() => 0));
+      const initialScores: { [playerId: string]: number } = {};
+      players.forEach(player => {
+        initialScores[player.id] = 0;
+      });
+      setScores(initialScores);
       setDutchPlayerId(undefined);
     }
   }, [players, open]);
   
   const handleAddRound = () => {
-    // Submit scores and close modal in same tick
-    onSubmit(scores, dutchPlayerId);
+    // Convert scores object to array in player order
+    const scoresArray = players.map(player => scores[player.id] || 0);
+    onSubmit(scoresArray, dutchPlayerId);
     onClose();
   };
   
