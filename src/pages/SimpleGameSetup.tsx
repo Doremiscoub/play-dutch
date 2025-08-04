@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { useSimpleGameState } from '@/hooks/useSimpleGameState';
+import { useSecureGameState } from '@/hooks/game/useSecureGameState';
 import { toast } from 'sonner';
 import { Card, CardContent } from '@/components/ui/card';
 import ModernGameSetup from '@/components/game-setup/ModernGameSetup';
@@ -12,7 +12,7 @@ import { MobileOptimizer } from '@/components/ui/mobile-optimizer';
 
 const SimpleGameSetup: React.FC = () => {
   const navigate = useNavigate();
-  const { createGame } = useSimpleGameState();
+  const { createGame } = useSecureGameState();
 
   useEffect(() => {
     console.log('🔧 SimpleGameSetup MOUNTED');

@@ -135,6 +135,9 @@ class SecureGameStateManager {
 
   loadFromStorage(): boolean {
     try {
+      // Migration depuis l'ancien système
+      this.migrateFromLegacyStorage();
+      
       const saved = localStorage.getItem(GAME_KEY);
       if (!saved) {
         console.log('📂 No secure saved game found');
@@ -191,6 +194,34 @@ class SecureGameStateManager {
     localStorage.removeItem(GAME_KEY);
     console.log('🔄 Secure game state reset');
     this.listeners.forEach(listener => listener());
+  }
+
+  private migrateFromLegacyStorage(): void {
+    const legacyKey = 'dutch_simple_game';
+    const legacyData = localStorage.getItem(legacyKey);
+    
+    if (legacyData && !localStorage.getItem(GAME_KEY)) {
+      try {
+        const parsed = JSON.parse(legacyData);
+        if (parsed.players && parsed.players.length > 0) {
+          console.log('🔄 Migrating from legacy storage');
+          
+          // Migration vers le nouveau format
+          const migratedState = {
+            ...parsed,
+            lastIntegrityCheck: new Date().toISOString()
+          };
+          
+          localStorage.setItem(GAME_KEY, JSON.stringify(migratedState));
+          localStorage.removeItem(legacyKey);
+          
+          toast.info('Partie migrée vers le nouveau système sécurisé');
+        }
+      } catch (error) {
+        console.error('Migration failed:', error);
+        localStorage.removeItem(legacyKey);
+      }
+    }
   }
 
   cleanup(): void {
