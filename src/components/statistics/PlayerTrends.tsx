@@ -97,7 +97,7 @@ export const PlayerTrends: React.FC<PlayerTrendsProps> = ({
         trend: slope < -0.5 ? 'improving' : slope > 0.5 ? 'declining' : 'stable',
         momentum: slope,
         consistency,
-        recentForm: scores.slice(-3).reduce((a, b) => a + b, 0) / Math.min(3, scores.length)
+        recentForm: scores.length > 0 ? scores.slice(-3).reduce((a, b) => a + b, 0) / Math.min(3, scores.length) : 0
       };
     });
   };
