@@ -167,47 +167,49 @@ const Home: React.FC = () => {
               ))}
             </div>
             
-            <CardContent className="relative z-10 p-12 text-center">
+            <CardContent className="relative z-10 p-8 md:p-12 text-center">
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
                 viewport={{ once: true }}
-                className="space-y-8"
+                className="space-y-6"
               >
-                <h2 className="text-4xl md:text-5xl font-black mb-4">
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-black mb-3">
                   🎊 Prêt pour votre première partie ? 🎊
                 </h2>
-                <p className="text-xl font-bold mb-8 max-w-2xl mx-auto">
+                <p className="text-lg md:text-xl font-bold mb-6 max-w-2xl mx-auto leading-relaxed">
                   Lancez-vous dès maintenant dans l'aventure Dutch ! 
                   C'est gratuit, fun et sans inscription ! 🚀✨
                 </p>
-                <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+                <div className="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-lg mx-auto">
                   <motion.div
-                    whileHover={{ scale: 1.1, y: -5 }}
+                    whileHover={{ scale: 1.05, y: -3 }}
                     whileTap={{ scale: 0.95 }}
+                    className="w-full sm:w-auto"
                   >
                     <Button
                       onClick={() => navigate('/setup')}
                       size="xl"
-                      className="bg-white text-trinity-purple-700 hover:bg-trinity-orange-100 hover:text-trinity-blue-700 font-black text-xl px-12 py-6 shadow-2xl border-4 border-white/80 transition-all duration-300 hover:scale-105"
+                      className="w-full sm:w-auto bg-white text-trinity-purple-700 hover:bg-trinity-orange-100 hover:text-trinity-blue-700 font-black text-lg md:text-xl px-8 md:px-12 py-4 md:py-6 shadow-2xl border-4 border-white/80 transition-all duration-300"
                     >
-                      <Gamepad2 className="h-6 w-6 mr-3" />
+                      <Gamepad2 className="h-5 w-5 md:h-6 md:w-6 mr-2 md:mr-3" />
                       🎮 C'EST PARTI ! 🎯
                     </Button>
                   </motion.div>
                   <motion.div
                     whileHover={{ scale: 1.05, y: -2 }}
                     whileTap={{ scale: 0.95 }}
+                    className="w-full sm:w-auto"
                   >
                     <Button
-                      onClick={() => navigate('/history')}
+                      onClick={() => navigate('/rules')}
                       variant="outline"
-                      size="xl"
-                      className="border-4 border-white text-white bg-transparent hover:bg-white hover:text-trinity-purple-700 font-bold text-lg px-10 py-6 transition-all duration-300 hover:scale-105"
+                      size="lg"
+                      className="w-full sm:w-auto border-3 border-white text-white bg-white/10 hover:bg-white hover:text-trinity-purple-700 font-bold text-base md:text-lg px-6 md:px-8 py-3 md:py-4 transition-all duration-300 backdrop-blur-sm"
                     >
-                      <Trophy className="h-5 w-5 mr-2" />
-                      📊 Historique
+                      <BookOpen className="h-4 w-4 md:h-5 md:w-5 mr-2" />
+                      📖 Règles
                     </Button>
                   </motion.div>
                 </div>
