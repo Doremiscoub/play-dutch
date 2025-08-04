@@ -1,6 +1,6 @@
 import React from 'react';
 import { Player } from '@/types';
-import SportsCommentatorV3 from './SportsCommentatorV3';
+import EnhancedAICommentatorV2 from './EnhancedAICommentatorV2';
 
 interface IntelligentProfessorCartoucheProps {
   players: Player[];
@@ -8,9 +8,8 @@ interface IntelligentProfessorCartoucheProps {
   scoreLimit: number;
   recentEvent?: string;
   className?: string;
-  isGameActive?: boolean;
 }
 
 export default function IntelligentProfessorCartouche(props: IntelligentProfessorCartoucheProps) {
-  return <SportsCommentatorV3 {...props} isGameActive={props.isGameActive ?? true} />;
+  return <EnhancedAICommentatorV2 {...props} />;
 }

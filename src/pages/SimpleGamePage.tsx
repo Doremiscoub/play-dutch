@@ -6,7 +6,7 @@ import ScoreBoard from '@/components/ScoreBoard';
 import NewRoundModal from '@/components/NewRoundModal';
 import PageShell from '@/components/layout/PageShell';
 import UnifiedHeader from '@/components/layout/UnifiedHeader';
-import IntelligentProfessorCartouche from '@/components/ai-commentator/IntelligentProfessorCartouche';
+import AICommentator from '@/components/AICommentator';
 import { MobileOptimizer } from '@/components/ui/mobile-optimizer';
 import { toast } from 'sonner';
 
@@ -127,11 +127,11 @@ const SimpleGamePage: React.FC = () => {
     <PageShell variant="game">
       <MobileOptimizer pageType="game" className="min-h-screen">
         <UnifiedHeader 
-          title={roundHistory.length === 0 ? "Nouvelle partie" : `Manche ${roundHistory.length}`}
+          title={`Manche ${roundHistory.length + 1}`}
           showBackButton={true}
           onBack={() => navigate('/setup')}
           variant="game"
-          roundCount={roundHistory.length}
+          roundCount={roundHistory.length + 1}
           scoreLimit={scoreLimit}
           gameStartTime={gameStartTime || new Date()}
           showRulesButton={true}
@@ -140,11 +140,9 @@ const SimpleGamePage: React.FC = () => {
         <div className="container mx-auto px-4 py-6">
         {/* Commentaires du Professeur Cartouche */}
         <div className="mb-6">
-          <IntelligentProfessorCartouche 
+          <AICommentator 
             players={players}
-            roundCount={roundHistory.length}
-            scoreLimit={scoreLimit}
-            isGameActive={true}
+            roundHistory={roundHistory}
             className="mx-auto max-w-2xl"
           />
         </div>
