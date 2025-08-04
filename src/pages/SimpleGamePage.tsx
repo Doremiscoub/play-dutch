@@ -127,11 +127,11 @@ const SimpleGamePage: React.FC = () => {
     <PageShell variant="game">
       <MobileOptimizer pageType="game" className="min-h-screen">
         <UnifiedHeader 
-          title={`Manche ${roundHistory.length + 1}`}
+          title={roundHistory.length === 0 ? "Nouvelle partie" : `Manche ${roundHistory.length}`}
           showBackButton={true}
           onBack={() => navigate('/setup')}
           variant="game"
-          roundCount={roundHistory.length + 1}
+          roundCount={roundHistory.length}
           scoreLimit={scoreLimit}
           gameStartTime={gameStartTime || new Date()}
           showRulesButton={true}
@@ -142,7 +142,7 @@ const SimpleGamePage: React.FC = () => {
         <div className="mb-6">
           <IntelligentProfessorCartouche 
             players={players}
-            roundCount={roundHistory.length + 1}
+            roundCount={roundHistory.length}
             scoreLimit={scoreLimit}
             isGameActive={!isGameOver}
             className="mx-auto max-w-2xl"

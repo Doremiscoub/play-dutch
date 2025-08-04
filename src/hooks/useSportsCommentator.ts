@@ -123,10 +123,10 @@ export const useSportsCommentator = ({
     }
   }, [isGameActive]);
 
-  // Reset quand une nouvelle partie commence
+  // Reset quand une nouvelle partie commence et démarrage immédiat de la rotation
   useEffect(() => {
     if (players.length > 0 && roundCount === 0) {
-      console.log('[Cartouche] Nouvelle partie, reset du moteur');
+      console.log('[Cartouche] Nouvelle partie détectée, reset du moteur et démarrage rotation');
       resetEngine();
       setLastRoundProcessed(0);
       setCommentatorState({
@@ -135,8 +135,16 @@ export const useSportsCommentator = ({
         commentType: 'between_rounds',
         priority: 'low'
       });
+      
+      // Démarrer immédiatement la rotation pour une nouvelle partie
+      if (isGameActive) {
+        console.log('[Cartouche] Démarrage immédiat de la rotation pour nouvelle partie');
+        setTimeout(() => {
+          startBetweenRoundsRotation();
+        }, 1000); // Petit délai pour laisser le temps au reset
+      }
     }
-  }, [players.length, roundCount, resetEngine]);
+  }, [players.length, roundCount, resetEngine, isGameActive, startBetweenRoundsRotation]);
 
   // Nettoyage à la destruction du composant
   useEffect(() => {
