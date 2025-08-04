@@ -173,43 +173,45 @@ const Home: React.FC = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
                 viewport={{ once: true }}
-                className="space-y-6"
+                className="space-y-8"
               >
-                <h2 className="text-3xl md:text-4xl lg:text-5xl font-black mb-3">
-                  🎊 Prêt pour votre première partie ? 🎊
-                </h2>
-                <p className="text-lg md:text-xl font-bold mb-6 max-w-2xl mx-auto leading-relaxed">
-                  Lancez-vous dès maintenant dans l'aventure Dutch ! 
-                  C'est gratuit, fun et sans inscription ! 🚀✨
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-lg mx-auto">
+                <div className="space-y-4">
+                  <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-white leading-tight">
+                    Prêt pour votre première partie ?
+                  </h2>
+                  <p className="text-lg md:text-xl font-semibold text-white/90 max-w-2xl mx-auto leading-relaxed">
+                    Lancez-vous dès maintenant dans l'aventure Dutch !<br/>
+                    C'est gratuit, fun et sans inscription ! 🚀✨
+                  </p>
+                </div>
+                
+                <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
                   <motion.div
-                    whileHover={{ scale: 1.05, y: -3 }}
+                    whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="w-full sm:w-auto"
                   >
                     <Button
                       onClick={() => navigate('/setup')}
                       size="xl"
-                      className="w-full sm:w-auto bg-white text-trinity-purple-700 hover:bg-trinity-orange-100 hover:text-trinity-blue-700 font-black text-lg md:text-xl px-8 md:px-12 py-4 md:py-6 shadow-2xl border-4 border-white/80 transition-all duration-300"
+                      className="bg-white text-trinity-purple-700 hover:bg-trinity-orange-100 hover:text-trinity-blue-700 font-black text-lg px-8 py-4 shadow-xl rounded-2xl border-0 transition-all duration-300 min-w-[200px]"
                     >
-                      <Gamepad2 className="h-5 w-5 md:h-6 md:w-6 mr-2 md:mr-3" />
-                      🎮 C'EST PARTI ! 🎯
+                      <Gamepad2 className="h-5 w-5 mr-2" />
+                      C'EST PARTI !
                     </Button>
                   </motion.div>
+                  
                   <motion.div
-                    whileHover={{ scale: 1.05, y: -2 }}
+                    whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="w-full sm:w-auto"
                   >
                     <Button
                       onClick={() => navigate('/rules')}
                       variant="outline"
                       size="lg"
-                      className="w-full sm:w-auto border-3 border-white text-white bg-white/10 hover:bg-white hover:text-trinity-purple-700 font-bold text-base md:text-lg px-6 md:px-8 py-3 md:py-4 transition-all duration-300 backdrop-blur-sm"
+                      className="border-2 border-white/80 text-white bg-white/10 hover:bg-white hover:text-trinity-purple-700 font-semibold text-base px-6 py-3 rounded-2xl backdrop-blur-sm transition-all duration-300 min-w-[140px]"
                     >
-                      <BookOpen className="h-4 w-4 md:h-5 md:w-5 mr-2" />
-                      📖 Règles
+                      <BookOpen className="h-4 w-4 mr-2" />
+                      Règles
                     </Button>
                   </motion.div>
                 </div>
