@@ -23,7 +23,7 @@ export const UnifiedThemeProvider: React.FC<UnifiedThemeProviderProps> = ({
   defaultTheme = 'default',
   storageKey = 'dutch-theme'
 }) => {
-  const [theme, setTheme] = useState<ThemeType>(() => {
+  const [theme, setThemeState] = useState<ThemeType>(() => {
     // Initialize theme from localStorage or use default
     if (typeof window !== 'undefined') {
       try {
@@ -95,10 +95,14 @@ export const UnifiedThemeProvider: React.FC<UnifiedThemeProviderProps> = ({
     }
   }, [theme, mounted, storageKey]);
 
+  const setTheme = (newTheme: ThemeType) => {
+    setThemeState(newTheme);
+  };
+
   const isDark = theme === 'dark';
 
   const toggleTheme = () => {
-    setTheme(current => current === 'dark' ? 'light' : 'dark');
+    setTheme(theme === 'dark' ? 'light' : 'dark');
   };
 
   const contextValue: ThemeContextType = {
