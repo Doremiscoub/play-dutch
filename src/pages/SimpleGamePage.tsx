@@ -6,7 +6,7 @@ import ScoreBoard from '@/components/ScoreBoard';
 import NewRoundModal from '@/components/NewRoundModal';
 import PageShell from '@/components/layout/PageShell';
 import UnifiedHeader from '@/components/layout/UnifiedHeader';
-import AICommentator from '@/components/AICommentator';
+import IntelligentProfessorCartouche from '@/components/ai-commentator/IntelligentProfessorCartouche';
 import { MobileOptimizer } from '@/components/ui/mobile-optimizer';
 import { toast } from 'sonner';
 
@@ -140,9 +140,11 @@ const SimpleGamePage: React.FC = () => {
         <div className="container mx-auto px-4 py-6">
         {/* Commentaires du Professeur Cartouche */}
         <div className="mb-6">
-          <AICommentator 
+          <IntelligentProfessorCartouche 
             players={players}
-            roundHistory={roundHistory}
+            roundCount={roundHistory.length + 1}
+            scoreLimit={scoreLimit}
+            isGameActive={!isGameOver}
             className="mx-auto max-w-2xl"
           />
         </div>

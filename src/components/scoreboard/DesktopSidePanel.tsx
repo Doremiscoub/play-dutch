@@ -5,7 +5,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Player } from '@/types';
-import AICommentator from '../AICommentator';
+import IntelligentProfessorCartouche from '../ai-commentator/IntelligentProfessorCartouche';
 import PlayerStatsCard from './PlayerStatsCard';
 
 interface DesktopSidePanelProps {
@@ -30,9 +30,11 @@ const DesktopSidePanel: React.FC<DesktopSidePanelProps> = ({
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
-          <AICommentator 
+          <IntelligentProfessorCartouche 
             players={players}
-            roundHistory={roundHistory}
+            roundCount={roundHistory?.length || 0}
+            scoreLimit={500}
+            isGameActive={true}
           />
         </motion.div>
       )}
