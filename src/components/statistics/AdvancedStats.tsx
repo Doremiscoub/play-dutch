@@ -346,31 +346,33 @@ export const AdvancedStats: React.FC<AdvancedStatsProps> = ({
               {/* Graphique scatter consistance vs performance */}
               <div className="h-64">
                 <h4 className="text-sm font-medium mb-3 text-center">Consistance vs Performance</h4>
-                <ResponsiveContainer width="100%" height="100%">
-                  <ScatterChart margin={{ top: 10, right: 10, left: 10, bottom: 10 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                    <XAxis 
-                      dataKey="consistency" 
-                      stroke="hsl(var(--muted-foreground))" 
-                      fontSize={10}
-                      domain={[0, 100]}
-                      label={{ value: 'Consistance', position: 'insideBottom', offset: -5, fontSize: 10 }}
-                    />
-                    <YAxis 
-                      dataKey="performance" 
-                      stroke="hsl(var(--muted-foreground))" 
-                      fontSize={10}
-                      domain={[0, 100]}
-                      label={{ value: 'Performance', angle: -90, position: 'insideLeft', fontSize: 10 }}
-                    />
-                    <ChartTooltip content={<ChartTooltipContent />} />
-                    <Scatter data={performanceData} fill="hsl(var(--primary))">
-                      {performanceData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={`hsl(${index * 60}, 70%, 50%)`} />
-                      ))}
-                    </Scatter>
-                  </ScatterChart>
-                </ResponsiveContainer>
+                <ChartContainer config={{}}>
+                  <ResponsiveContainer width="100%" height="100%">
+                    <ScatterChart margin={{ top: 10, right: 10, left: 10, bottom: 10 }}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                      <XAxis 
+                        dataKey="consistency" 
+                        stroke="hsl(var(--muted-foreground))" 
+                        fontSize={10}
+                        domain={[0, 100]}
+                        label={{ value: 'Consistance', position: 'insideBottom', offset: -5, fontSize: 10 }}
+                      />
+                      <YAxis 
+                        dataKey="performance" 
+                        stroke="hsl(var(--muted-foreground))" 
+                        fontSize={10}
+                        domain={[0, 100]}
+                        label={{ value: 'Performance', angle: -90, position: 'insideLeft', fontSize: 10 }}
+                      />
+                      <ChartTooltip content={<ChartTooltipContent />} />
+                      <Scatter data={performanceData} fill="hsl(var(--primary))">
+                        {performanceData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={`hsl(${index * 60}, 70%, 50%)`} />
+                        ))}
+                      </Scatter>
+                    </ScatterChart>
+                  </ResponsiveContainer>
+                </ChartContainer>
               </div>
 
               {/* Graphique radar des métriques */}
