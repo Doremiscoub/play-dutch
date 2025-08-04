@@ -123,28 +123,28 @@ export const useSportsCommentator = ({
     }
   }, [isGameActive]);
 
-  // Reset quand une nouvelle partie commence et démarrage immédiat de la rotation
+  // Logique de démarrage unifiée - démarre la rotation immédiatement
   useEffect(() => {
-    if (players.length > 0 && roundCount === 0) {
-      console.log('[Cartouche] Nouvelle partie détectée, reset du moteur et démarrage rotation');
-      resetEngine();
-      setLastRoundProcessed(0);
-      setCommentatorState({
-        currentComment: '',
-        isVisible: false,
-        commentType: 'between_rounds',
-        priority: 'low'
-      });
+    console.log(`[Cartouche] Vérification conditions démarrage: players=${players.length}, roundCount=${roundCount}, isGameActive=${isGameActive}, isRotating=${isRotatingRef.current}`);
+    
+    // Conditions pour démarrer la rotation :
+    // 1. Au moins 1 joueur
+    // 2. Jeu actif
+    // 3. Pas déjà en cours de rotation
+    if (players.length > 0 && isGameActive && !isRotatingRef.current) {
+      console.log('[Cartouche] Conditions remplies, démarrage immédiat de la rotation');
       
-      // Démarrer immédiatement la rotation pour une nouvelle partie
-      if (isGameActive) {
-        console.log('[Cartouche] Démarrage immédiat de la rotation pour nouvelle partie');
-        setTimeout(() => {
-          startBetweenRoundsRotation();
-        }, 1000); // Petit délai pour laisser le temps au reset
+      // Reset du moteur si c'est une nouvelle partie (roundCount === 0)
+      if (roundCount === 0) {
+        console.log('[Cartouche] Reset du moteur pour nouvelle partie');
+        resetEngine();
+        setLastRoundProcessed(0);
       }
+      
+      // Démarrage immédiat sans délai
+      startBetweenRoundsRotation();
     }
-  }, [players.length, roundCount, resetEngine, isGameActive, startBetweenRoundsRotation]);
+  }, [players.length, roundCount, isGameActive, resetEngine, startBetweenRoundsRotation]);
 
   // Nettoyage à la destruction du composant
   useEffect(() => {
