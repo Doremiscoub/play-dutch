@@ -138,17 +138,6 @@ export const OptimizedStatsDashboard: React.FC<OptimizedStatsDashboardProps> = (
 
   return (
     <div className="min-h-screen relative">
-      {/* Background optimisé - réduit sur mobile */}
-      <div className="fixed inset-0 pointer-events-none z-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-trinity-blue-500/20 via-trinity-purple-500/20 to-trinity-orange-500/20" />
-        {!isMobile && (
-          <>
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgb(10,132,255)_0%,transparent_50%)] opacity-10" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgb(139,92,246)_0%,transparent_50%)] opacity-10" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_90%_40%,rgb(255,159,10)_0%,transparent_50%)] opacity-10" />
-          </>
-        )}
-      </div>
 
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6 md:space-y-8">
         {/* Header mobile-optimized */}
