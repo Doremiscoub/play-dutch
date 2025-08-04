@@ -140,12 +140,12 @@ export const OptimizedStatsDashboard: React.FC<OptimizedStatsDashboardProps> = (
     <div className="min-h-screen relative">
       {/* Background optimisé - réduit sur mobile */}
       <div className="fixed inset-0 pointer-events-none z-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-dutch-blue-500/5 via-dutch-purple-500/5 to-dutch-orange-500/5" />
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/5" />
         {!isMobile && (
           <>
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,hsl(214_100%_59%)_0%,transparent_50%)] opacity-[0.03]" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,hsl(258_90%_66%)_0%,transparent_50%)] opacity-[0.03]" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_90%_40%,hsl(32_100%_52%)_0%,transparent_50%)] opacity-[0.03]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,hsl(var(--primary))_0%,transparent_50%)] opacity-[0.03]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,hsl(var(--secondary))_0%,transparent_50%)] opacity-[0.03]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_90%_40%,hsl(var(--accent))_0%,transparent_50%)] opacity-[0.03]" />
           </>
         )}
       </div>
@@ -171,14 +171,14 @@ export const OptimizedStatsDashboard: React.FC<OptimizedStatsDashboardProps> = (
           
           <div className="flex items-center gap-2 md:gap-3">
             <motion.div
-              className="p-2 md:p-3 bg-gradient-to-r from-dutch-blue-500 via-dutch-purple-500 to-dutch-orange-500 rounded-xl md:rounded-2xl shadow-lg"
+              className="p-2 md:p-3 bg-gradient-to-r from-primary via-secondary to-accent rounded-xl md:rounded-2xl shadow-lg"
               whileHover={{ scale: 1.05, rotate: 5 }}
               transition={{ type: "spring", stiffness: 400, damping: 10 }}
             >
               <BarChart3 className="h-6 w-6 md:h-8 md:w-8 text-white" />
             </motion.div>
             <div>
-              <h1 className="text-2xl md:text-3xl lg:text-4xl font-black bg-gradient-to-r from-dutch-blue-500 via-dutch-purple-500 to-dutch-orange-500 bg-clip-text text-transparent">
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-black bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
                 Statistiques Dutch
               </h1>
               <p className="text-muted-foreground text-xs md:text-sm lg:text-base font-medium">
@@ -257,14 +257,14 @@ export const OptimizedStatsDashboard: React.FC<OptimizedStatsDashboardProps> = (
                   {/* Mini-header de section */}
                   <div className="flex items-center gap-3 md:gap-4">
                      <motion.div
-                       className="p-2 md:p-3 bg-gradient-to-r from-dutch-blue-500/20 via-dutch-purple-500/20 to-dutch-orange-500/20 backdrop-blur-xl rounded-xl md:rounded-2xl border border-white/30 shadow-lg"
+                       className="p-2 md:p-3 bg-gradient-to-r from-primary/20 via-secondary/20 to-accent/20 backdrop-blur-xl rounded-xl md:rounded-2xl border border-white/30 shadow-lg"
                        whileHover={{ scale: 1.05, rotate: 3 }}
                        transition={{ type: "spring", stiffness: 400, damping: 10 }}
                      >
                        {section.icon}
                      </motion.div>
                      <div>
-                       <h2 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-dutch-blue-500 to-dutch-purple-500 bg-clip-text text-transparent">
+                       <h2 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
                          {section.title}
                        </h2>
                       {!isMobile && (
