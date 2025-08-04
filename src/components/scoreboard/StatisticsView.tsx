@@ -1,6 +1,6 @@
 import React from 'react';
 import { Player } from '@/types';
-import { StatsDashboard } from '@/components/statistics/StatsDashboard';
+import { StatsDashboardSinglePage } from '@/components/statistics/StatsDashboardSinglePage';
 
 interface StatisticsViewProps {
   players: Player[];
@@ -16,7 +16,7 @@ const StatisticsView: React.FC<StatisticsViewProps> = ({
   roundHistory
 }) => {
   return (
-    <StatsDashboard 
+    <StatsDashboardSinglePage 
       players={players}
       roundCount={roundCount}
       scoreLimit={scoreLimit}
