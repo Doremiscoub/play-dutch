@@ -144,7 +144,7 @@ const SimpleGamePage: React.FC = () => {
             players={players}
             roundCount={roundHistory.length}
             scoreLimit={scoreLimit}
-            isGameActive={!isGameOver}
+            isGameActive={true}
             className="mx-auto max-w-2xl"
           />
         </div>
