@@ -202,9 +202,9 @@ export const RoundHeatmap: React.FC<RoundHeatmapProps> = ({
               <div className="text-lg font-bold text-purple-800">
                 {patterns.dutchRounds.length}
               </div>
-                      <div className="text-xs text-purple-600">
-                        {patterns.dutchRounds.length > 0 ? `Manches ${patterns.dutchRounds.join(', ')}` : 'Aucun'}
-                      </div>
+              <div className="text-xs text-purple-600">
+                {patterns.dutchRounds.length > 0 ? `Manches ${patterns.dutchRounds.join(', ')}` : 'Aucun'}
+              </div>
             </CardContent>
           </Card>
         </motion.div>
@@ -325,7 +325,7 @@ export const RoundHeatmap: React.FC<RoundHeatmapProps> = ({
                     </div>
                     <div className="flex items-center gap-2">
                       <div className="w-4 h-4 bg-red-500 rounded border"></div>
-                      <span>À améliorer (>75%)</span>
+                      <span>À améliorer (&gt;75%)</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <div className="w-4 h-4 bg-purple-500 rounded border relative">
