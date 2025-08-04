@@ -193,7 +193,7 @@ const Home: React.FC = () => {
                     <Button
                       onClick={() => navigate('/setup')}
                       size="xl"
-                      className="bg-white text-trinity-purple-700 hover:bg-trinity-orange-100 hover:text-trinity-blue-700 font-black text-lg px-8 py-4 shadow-xl rounded-2xl border-0 transition-all duration-300 min-w-[200px]"
+                      className="bg-white text-trinity-purple-900 hover:bg-trinity-purple-700 hover:text-white font-black text-lg px-8 py-4 shadow-xl rounded-2xl border-2 border-trinity-purple-200 transition-all duration-300 min-w-[200px]"
                     >
                       <Gamepad2 className="h-5 w-5 mr-2" />
                       C'EST PARTI !
