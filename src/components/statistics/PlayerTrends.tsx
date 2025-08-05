@@ -219,10 +219,10 @@ export const PlayerTrends: React.FC<PlayerTrendsProps> = ({
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="h-80">
+            <div className="h-84">
               <ChartContainer config={config}>
-                <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={cumulativeData} margin={{ top: 30, right: 40, left: 30, bottom: 30 }}>
+                <ResponsiveContainer width="100%" height="100%" minHeight={320}>
+                  <AreaChart data={cumulativeData} margin={{ top: 40, right: 50, left: 40, bottom: 40 }}>
                     <defs>
                       {filteredPlayers.map((player, index) => (
                         <linearGradient key={player.id} id={`gradient-${player.id}`} x1="0" y1="0" x2="0" y2="1">
@@ -242,10 +242,10 @@ export const PlayerTrends: React.FC<PlayerTrendsProps> = ({
                         type="monotoneX"
                         dataKey={player.name}
                         stroke={getPlayerColor(index)}
-                        strokeWidth={3}
+                        strokeWidth={2}
                         fill={`url(#gradient-${player.id})`}
-                        activeDot={{ r: 5, stroke: 'white', strokeWidth: 1 }}
-                        dot={{ r: 3, fill: getPlayerColor(index), stroke: 'white', strokeWidth: 1 }}
+                        activeDot={{ r: 4, stroke: 'white', strokeWidth: 1 }}
+                        dot={{ r: 2, fill: getPlayerColor(index), stroke: 'white', strokeWidth: 1 }}
                       />
                     ))}
                   </AreaChart>
@@ -272,8 +272,8 @@ export const PlayerTrends: React.FC<PlayerTrendsProps> = ({
           <CardContent>
             <div className="h-64">
               <ChartContainer config={config}>
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={movingAverageData} margin={{ top: 30, right: 40, left: 30, bottom: 30 }}>
+                <ResponsiveContainer width="100%" height="100%" minHeight={240}>
+                  <LineChart data={movingAverageData} margin={{ top: 35, right: 45, left: 35, bottom: 35 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                     <XAxis dataKey="round" stroke="hsl(var(--muted-foreground))" fontSize={12} />
                     <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} />
@@ -285,9 +285,9 @@ export const PlayerTrends: React.FC<PlayerTrendsProps> = ({
                         type="monotoneX"
                         dataKey={`${player.name}_avg`}
                         stroke={getPlayerColor(index)}
-                        strokeWidth={3}
-                        dot={{ r: 3, fill: getPlayerColor(index), stroke: 'white', strokeWidth: 1 }}
-                        activeDot={{ r: 5, stroke: 'white', strokeWidth: 1 }}
+                        strokeWidth={2}
+                        dot={{ r: 2, fill: getPlayerColor(index), stroke: 'white', strokeWidth: 1 }}
+                        activeDot={{ r: 4, stroke: 'white', strokeWidth: 1 }}
                         connectNulls={false}
                       />
                     ))}
