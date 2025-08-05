@@ -4,9 +4,9 @@ import { generateStructuredData } from './structuredDataGenerator';
 import { SEOProps } from './types';
 
 export const applySEOConfiguration = ({
-  title = 'Dutch Card Game - Application compagnon pour jeu de cartes',
-  description = 'Application web gratuite pour suivre les scores du jeu de cartes Dutch. Parfait pour vos soirées entre amis. Interface moderne, hors-ligne, avec IA commentateur.',
-  keywords = 'dutch, jeu de cartes, score, application, soirée, amis, cartes, jeu de société, digital',
+  title = 'Dutch Card Game - Application gratuite pour jeu de cartes entre amis',
+  description = 'Application web gratuite pour suivre les scores du jeu de cartes Dutch. Interface moderne, hors-ligne, avec IA commentateur. Parfait pour vos soirées entre amis. Support 2-10 joueurs.',
+  keywords = 'dutch, jeu de cartes, score, application, soirée, amis, cartes, jeu de société, digital, gratuit, PWA, hors-ligne, multijoueur, IA, commentateur, statistiques',
   image = '/opengraph-dutch.png',
   url = typeof window !== 'undefined' ? window.location.href : '',
   type = 'website',
@@ -58,7 +58,7 @@ export const applySEOConfiguration = ({
   
   // SEO technique avancé
   updateMetaTag('robots', 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1', 'name');
-  updateMetaTag('googlebot', 'index, follow', 'name');
+  updateMetaTag('googlebot', 'index, follow, noimageindex', 'name');
   updateMetaTag('viewport', 'width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes', 'name');
   updateMetaTag('theme-color', '#1EAEDB', 'name');
   updateMetaTag('application-name', 'Dutch Card Game', 'name');
@@ -67,6 +67,23 @@ export const applySEOConfiguration = ({
   updateMetaTag('apple-mobile-web-app-status-bar-style', 'default', 'name');
   updateMetaTag('format-detection', 'telephone=no', 'name');
   
+  // Meta tags additionnels pour le SEO avancé
+  updateMetaTag('mobile-web-app-capable', 'yes', 'name');
+  updateMetaTag('apple-touch-fullscreen', 'yes', 'name');
+  updateMetaTag('HandheldFriendly', 'true', 'name');
+  updateMetaTag('MobileOptimized', '320', 'name');
+  updateMetaTag('msapplication-TileColor', '#1EAEDB', 'name');
+  updateMetaTag('msapplication-TileImage', '/favicon-144.png', 'name');
+  
+  // Langue et localisation
+  updateMetaTag('content-language', 'fr-FR', 'http-equiv');
+  updateMetaTag('geo.region', 'FR', 'name');
+  updateMetaTag('geo.placename', 'France', 'name');
+  
+  // Performance et cache
+  updateMetaTag('cache-control', 'public, max-age=31536000', 'http-equiv');
+  updateMetaTag('expires', new Date(Date.now() + 86400000).toUTCString(), 'http-equiv');
+  
   // Canonical URL
   updateCanonicalLink(url);
   
@@ -74,6 +91,9 @@ export const applySEOConfiguration = ({
   addPreconnectLink('https://fonts.googleapis.com');
   addPreconnectLink('https://fonts.gstatic.com');
   addDNSPrefetchLink('https://www.google-analytics.com');
+  addDNSPrefetchLink('https://www.googletagmanager.com');
+  addDNSPrefetchLink('https://connect.facebook.net');
+  addDNSPrefetchLink('https://platform.twitter.com');
   
   // Données structurées JSON-LD enrichies
   addStructuredData(generateStructuredData({

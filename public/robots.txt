@@ -26,7 +26,7 @@ Disallow: /admin
 Disallow: /*?*
 
 # Sitemap
-Sitemap: https://dutchcardgame.com/sitemap.xml
+Sitemap: https://dutch-card-game.lovable.app/sitemap.xml
 
 # Dutch Card Game - Application gratuite pour jeu de cartes avec IA
 # Compagnon de jeu intelligent pour vos soirées entre amis
