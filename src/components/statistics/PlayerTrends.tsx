@@ -75,7 +75,7 @@ export const PlayerTrends: React.FC<PlayerTrendsProps> = ({
   const analyzeTrends = () => {
     return filteredPlayers.map(player => {
       const scores = player.rounds.map(r => r.score);
-      if (scores.length < 2) return { player, trend: 'stable', momentum: 0, consistency: 0 };
+      if (scores.length < 2) return { player, trend: 'stable', momentum: 0, consistency: 0, recentForm: 0 };
 
       // Calculer la tendance (régression linéaire simple)
       const n = scores.length;
@@ -181,7 +181,7 @@ export const PlayerTrends: React.FC<PlayerTrendsProps> = ({
 
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">Forme récente</span>
-                  <span className="font-semibold">{trend.recentForm.toFixed(1)} pts/manche</span>
+                  <span className="font-semibold">{(trend.recentForm || 0).toFixed(1)} pts/manche</span>
                 </div>
 
                 <div className="flex items-center justify-between">
