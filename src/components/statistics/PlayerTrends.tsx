@@ -108,14 +108,14 @@ export const PlayerTrends: React.FC<PlayerTrendsProps> = ({
 
   // Configuration des couleurs
   const playerColors = [
-    'hsl(var(--primary))',
-    'hsl(var(--secondary))', 
-    'hsl(var(--accent))',
-    '#F97316', 
-    '#8B5CF6', 
-    '#10B981',
-    '#FBBF24',
-    '#EF4444'
+    'rgb(59, 130, 246)',   // blue-500 
+    'rgb(139, 92, 246)',   // purple-500 
+    'rgb(16, 185, 129)',   // emerald-500 
+    'rgb(249, 115, 22)',   // orange-500 
+    'rgb(236, 72, 153)',   // pink-500 
+    'rgb(6, 182, 212)',    // cyan-500
+    'rgb(251, 191, 36)',   // yellow-500
+    'rgb(239, 68, 68)'     // red-500
   ];
 
   const getPlayerColor = (index: number): string => {
@@ -222,7 +222,7 @@ export const PlayerTrends: React.FC<PlayerTrendsProps> = ({
             <div className="h-80">
               <ChartContainer config={config}>
                 <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={cumulativeData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+                  <AreaChart data={cumulativeData} margin={{ top: 30, right: 40, left: 30, bottom: 30 }}>
                     <defs>
                       {filteredPlayers.map((player, index) => (
                         <linearGradient key={player.id} id={`gradient-${player.id}`} x1="0" y1="0" x2="0" y2="1">
@@ -239,7 +239,7 @@ export const PlayerTrends: React.FC<PlayerTrendsProps> = ({
                     {filteredPlayers.map((player, index) => (
                       <Area
                         key={player.id}
-                        type="linear"
+                        type="monotoneX"
                         dataKey={player.name}
                         stroke={getPlayerColor(index)}
                         strokeWidth={3}
@@ -273,7 +273,7 @@ export const PlayerTrends: React.FC<PlayerTrendsProps> = ({
             <div className="h-64">
               <ChartContainer config={config}>
                 <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={movingAverageData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+                  <LineChart data={movingAverageData} margin={{ top: 30, right: 40, left: 30, bottom: 30 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                     <XAxis dataKey="round" stroke="hsl(var(--muted-foreground))" fontSize={12} />
                     <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} />
@@ -282,7 +282,7 @@ export const PlayerTrends: React.FC<PlayerTrendsProps> = ({
                     {filteredPlayers.map((player, index) => (
                       <Line
                         key={`${player.id}-avg`}
-                        type="linear"
+                        type="monotoneX"
                         dataKey={`${player.name}_avg`}
                         stroke={getPlayerColor(index)}
                         strokeWidth={3}
