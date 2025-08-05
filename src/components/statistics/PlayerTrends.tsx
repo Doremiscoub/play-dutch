@@ -222,7 +222,7 @@ export const PlayerTrends: React.FC<PlayerTrendsProps> = ({
             <div className="h-80">
               <ChartContainer config={config}>
                 <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={cumulativeData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                  <AreaChart data={cumulativeData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
                     <defs>
                       {filteredPlayers.map((player, index) => (
                         <linearGradient key={player.id} id={`gradient-${player.id}`} x1="0" y1="0" x2="0" y2="1">
@@ -239,12 +239,13 @@ export const PlayerTrends: React.FC<PlayerTrendsProps> = ({
                     {filteredPlayers.map((player, index) => (
                       <Area
                         key={player.id}
-                        type="monotone"
+                        type="linear"
                         dataKey={player.name}
                         stroke={getPlayerColor(index)}
-                        strokeWidth={2}
+                        strokeWidth={3}
                         fill={`url(#gradient-${player.id})`}
-                        activeDot={{ r: 6, stroke: 'white', strokeWidth: 2 }}
+                        activeDot={{ r: 5, stroke: 'white', strokeWidth: 1 }}
+                        dot={{ r: 3, fill: getPlayerColor(index), stroke: 'white', strokeWidth: 1 }}
                       />
                     ))}
                   </AreaChart>
@@ -272,7 +273,7 @@ export const PlayerTrends: React.FC<PlayerTrendsProps> = ({
             <div className="h-64">
               <ChartContainer config={config}>
                 <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={movingAverageData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                  <LineChart data={movingAverageData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                     <XAxis dataKey="round" stroke="hsl(var(--muted-foreground))" fontSize={12} />
                     <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} />
@@ -281,12 +282,13 @@ export const PlayerTrends: React.FC<PlayerTrendsProps> = ({
                     {filteredPlayers.map((player, index) => (
                       <Line
                         key={`${player.id}-avg`}
-                        type="monotone"
+                        type="linear"
                         dataKey={`${player.name}_avg`}
                         stroke={getPlayerColor(index)}
                         strokeWidth={3}
-                        dot={{ r: 4, fill: getPlayerColor(index), stroke: 'white', strokeWidth: 2 }}
-                        activeDot={{ r: 6, stroke: 'white', strokeWidth: 2 }}
+                        dot={{ r: 3, fill: getPlayerColor(index), stroke: 'white', strokeWidth: 1 }}
+                        activeDot={{ r: 5, stroke: 'white', strokeWidth: 1 }}
+                        connectNulls={false}
                       />
                     ))}
                   </LineChart>
