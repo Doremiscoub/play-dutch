@@ -1,6 +1,8 @@
 import React from 'react';
 import { Player } from '@/types';
 import { OptimizedStatsDashboard } from '@/components/statistics/OptimizedStatsDashboard';
+import { MobileStatsOptimizer } from '@/components/statistics/MobileStatsOptimizer';
+import useIsMobile from '@/hooks/use-mobile';
 
 interface StatisticsViewProps {
   players: Player[];
@@ -15,7 +17,16 @@ const StatisticsView: React.FC<StatisticsViewProps> = ({
   scoreLimit,
   roundHistory
 }) => {
-  return (
+  const isMobile = useIsMobile();
+
+  return isMobile ? (
+    <MobileStatsOptimizer 
+      players={players}
+      roundCount={roundCount}
+      scoreLimit={scoreLimit}
+      roundHistory={roundHistory}
+    />
+  ) : (
     <OptimizedStatsDashboard 
       players={players}
       roundCount={roundCount}
