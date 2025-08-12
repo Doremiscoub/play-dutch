@@ -170,7 +170,7 @@ export const OptimizedStatsDashboard: React.FC<OptimizedStatsDashboardProps> = (
         <div className="space-y-8 md:space-y-12">
           {sections.sort((a, b) => a.priority - b.priority).map((section, index) => {
           const isVisible = visibleSections.has(section.id);
-          const shouldRender = section.priority <= 2 || isVisible || !isMobile;
+          const shouldRender = true; // Always render sections on mobile and desktop to avoid lazy-load issues inside scroll containers
           return <motion.section key={section.id} ref={createSectionRef(section.id)} data-testid={`stats-section-${section.id}`} initial={{
             opacity: 0,
             y: 40
