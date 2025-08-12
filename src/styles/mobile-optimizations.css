@@ -266,3 +266,23 @@
     font-size: 0.875rem;
   }
 }
+
+/* Containers & charts auto-scaling for stats */
+.stats-responsive,
+.stats-responsive * {
+  min-width: 0;
+}
+
+.stats-responsive canvas,
+.stats-responsive svg,
+.stats-responsive img,
+.stats-responsive video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Force common chart wrappers to fit parent width */
+.stats-responsive .recharts-wrapper,
+.stats-responsive .chart-container {
+  width: 100% !important;
+}

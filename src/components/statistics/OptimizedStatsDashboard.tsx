@@ -129,7 +129,7 @@ export const OptimizedStatsDashboard: React.FC<OptimizedStatsDashboardProps> = (
 
   // Ref callback pour tracker la visibilité
   const createSectionRef = useCallback((sectionId: string) => (element: HTMLElement | null) => trackElement(element, sectionId), [trackElement]);
-  return <div className="min-h-screen relative">
+  return <div className={`min-h-screen relative ${isMobile ? "mobile-optimized ultra-mobile safe-area-bottom overflow-x-hidden performance-optimized" : ""} stats-responsive`}>
 
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-0 space-y-6 md:space-y-8">
         {/* Header mobile-optimized */}
@@ -217,8 +217,8 @@ export const OptimizedStatsDashboard: React.FC<OptimizedStatsDashboardProps> = (
               opacity: 1
             }} transition={{
               delay: 0.3 + index * 0.1
-            }} className="glass-card bg-white/40 backdrop-blur-xl rounded-2xl md:rounded-3xl border border-white/50 shadow-xl overflow-hidden">
-                    <div className="p-4 md:p-6 lg:p-8">
+            }} className="glass-card w-full max-w-full bg-white/40 backdrop-blur-xl rounded-2xl md:rounded-3xl border border-white/50 shadow-xl overflow-hidden">
+                    <div className="p-4 md:p-6 lg:p-8 w-full max-w-full">
                       <LazyStatisticsSection sectionId={section.id} component={section.component} props={section.props} isVisible={shouldRender} />
                     </div>
                   </motion.div>
