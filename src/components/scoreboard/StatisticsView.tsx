@@ -18,21 +18,50 @@ const StatisticsView: React.FC<StatisticsViewProps> = ({
   roundHistory
 }) => {
   const isMobile = useIsMobile();
+  const [showFull, setShowFull] = React.useState(false);
 
-  return isMobile ? (
-    <MobileStatsOptimizer 
-      players={players}
-      roundCount={roundCount}
-      scoreLimit={scoreLimit}
-      roundHistory={roundHistory}
-    />
-  ) : (
-    <OptimizedStatsDashboard 
-      players={players}
-      roundCount={roundCount}
-      scoreLimit={scoreLimit}
-      roundHistory={roundHistory}
-    />
+  if (!isMobile) {
+    return (
+      <OptimizedStatsDashboard 
+        players={players}
+        roundCount={roundCount}
+        scoreLimit={scoreLimit}
+        roundHistory={roundHistory}
+      />
+    );
+  }
+
+  return (
+    <div className="space-y-4">
+      <div className="flex justify-end">
+        <button
+          type="button"
+          className="inline-flex items-center rounded-md border border-border bg-background px-3 py-1.5 text-sm font-medium text-foreground hover:bg-muted/50 transition"
+          onClick={() => setShowFull((v) => !v)}
+          aria-pressed={showFull}
+        >
+          {showFull ? 'Mode compact' : 'Mode complet'}
+        </button>
+      </div>
+
+      <MobileStatsOptimizer 
+        players={players}
+        roundCount={roundCount}
+        scoreLimit={scoreLimit}
+        roundHistory={roundHistory}
+      />
+
+      {showFull && (
+        <div className="pt-2">
+          <OptimizedStatsDashboard 
+            players={players}
+            roundCount={roundCount}
+            scoreLimit={scoreLimit}
+            roundHistory={roundHistory}
+          />
+        </div>
+      )}
+    </div>
   );
 };
 

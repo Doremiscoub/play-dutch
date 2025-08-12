@@ -129,7 +129,7 @@ export const MobileStatsOptimizer: React.FC<MobileStatsOptimizerProps> = ({
       <Card className="bg-gradient-to-br from-card/90 to-card/60 backdrop-blur-sm border-border/50">
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 text-lg">
-            <Medal className="h-5 w-5 text-secondary" />
+            <Medal className="h-5 w-5 text-secondary-foreground" />
             Classement
           </CardTitle>
         </CardHeader>
@@ -150,9 +150,9 @@ export const MobileStatsOptimizer: React.FC<MobileStatsOptimizerProps> = ({
                 >
                   {/* Position */}
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold ${
-                    globalRank === 1 ? 'bg-gradient-to-r from-yellow-500 to-orange-500' :
-                    globalRank === 2 ? 'bg-gradient-to-r from-gray-400 to-gray-600' :
-                    globalRank === 3 ? 'bg-gradient-to-r from-amber-600 to-yellow-700' :
+                    globalRank === 1 ? 'bg-gradient-to-r from-primary to-primary/70' :
+                    globalRank === 2 ? 'bg-gradient-to-r from-muted-foreground to-foreground/60' :
+                    globalRank === 3 ? 'bg-gradient-to-r from-secondary to-secondary/70' :
                     'bg-gradient-to-r from-primary to-secondary'
                   }`}>
                     {globalRank === 1 ? <Crown className="h-4 w-4" /> : globalRank}
@@ -180,7 +180,7 @@ export const MobileStatsOptimizer: React.FC<MobileStatsOptimizerProps> = ({
       <Card className="bg-gradient-to-br from-card/90 to-card/60 backdrop-blur-sm border-border/50">
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 text-lg">
-            <Activity className="h-5 w-5 text-accent" />
+            <Activity className="h-5 w-5 text-accent-foreground" />
             Forme Récente
           </CardTitle>
         </CardHeader>
@@ -205,9 +205,9 @@ export const MobileStatsOptimizer: React.FC<MobileStatsOptimizerProps> = ({
                 <Badge 
                   variant="outline"
                   className={`text-xs ${
-                    trend.trend === 'improving' ? 'border-green-500 text-green-700 bg-green-50' :
-                    trend.trend === 'declining' ? 'border-red-500 text-red-700 bg-red-50' :
-                    'border-blue-500 text-blue-700 bg-blue-50'
+                    trend.trend === 'improving' ? 'border-primary/40 text-primary bg-primary/10' :
+                    trend.trend === 'declining' ? 'border-destructive/40 text-destructive bg-destructive/10' :
+                    'border-muted-foreground/40 text-muted-foreground bg-muted/20'
                   }`}
                 >
                   {trend.trend === 'improving' && <TrendingDown className="h-3 w-3" />}
@@ -225,22 +225,22 @@ export const MobileStatsOptimizer: React.FC<MobileStatsOptimizerProps> = ({
         <Card className="bg-gradient-to-br from-card/90 to-card/60 backdrop-blur-sm border-border/50">
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center gap-2 text-lg">
-              <Star className="h-5 w-5 text-yellow-500" />
+              <Star className="h-5 w-5 text-primary" />
               Exploits
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 gap-3">
               {stats.perfectRounds > 0 && (
-                <div className="text-center p-3 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 rounded-xl border border-yellow-500/20">
-                  <Star className="h-6 w-6 text-yellow-500 mx-auto mb-1" />
+                <div className="text-center p-3 bg-gradient-to-r from-primary/10 to-primary/5 rounded-xl border border-primary/20">
+                  <Star className="h-6 w-6 text-primary mx-auto mb-1" />
                   <div className="text-lg font-bold text-foreground">{stats.perfectRounds}</div>
                   <div className="text-xs text-muted-foreground">Parfaites</div>
                 </div>
               )}
               {stats.dutchCount > 0 && (
-                <div className="text-center p-3 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-xl border border-blue-500/20">
-                  <Flame className="h-6 w-6 text-blue-500 mx-auto mb-1" />
+                <div className="text-center p-3 bg-gradient-to-r from-accent/10 to-accent/5 rounded-xl border border-accent/20">
+                  <Flame className="h-6 w-6 text-accent-foreground mx-auto mb-1" />
                   <div className="text-lg font-bold text-foreground">{stats.dutchCount}</div>
                   <div className="text-xs text-muted-foreground">Dutch</div>
                 </div>
