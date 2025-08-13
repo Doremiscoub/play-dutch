@@ -10,7 +10,7 @@ const SimplifiedHeroSection: React.FC = () => {
   const { isMobile } = useAdaptiveInterface();
 
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center px-4 py-8 bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <section className="relative min-h-screen flex flex-col items-center justify-center px-4 py-8 bg-gradient-to-br from-trinity-blue-100 via-trinity-purple-50 to-trinity-orange-100">
       
       {/* Contenu principal centré */}
       <div className="relative z-10 text-center max-w-4xl mx-auto space-y-8">
@@ -25,7 +25,7 @@ const SimplifiedHeroSection: React.FC = () => {
           <img 
             src="/lovable-uploads/0532ef39-c77c-4480-8d74-7af7665596ee.png"
             alt="Dutch - Professeur Cartouche"
-            className="w-auto h-48 sm:h-56 md:h-64 lg:h-72 mx-auto object-contain"
+            className="w-auto h-64 sm:h-72 md:h-80 lg:h-96 xl:h-[28rem] mx-auto object-contain"
           />
         </motion.div>
 
@@ -36,7 +36,7 @@ const SimplifiedHeroSection: React.FC = () => {
           transition={{ delay: 0.3, duration: 0.5 }}
           className="flex justify-center"
         >
-          <div className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-full font-bold text-sm">
+          <div className="inline-flex items-center gap-2 bg-white/80 text-trinity-blue-700 px-6 py-3 rounded-full font-bold text-sm border-2 border-trinity-blue-200 backdrop-blur-sm">
             📱 Application Compagnon
           </div>
         </motion.div>
@@ -68,9 +68,8 @@ const SimplifiedHeroSection: React.FC = () => {
           <Button
             onClick={() => navigate('/setup')}
             size="xl"
-            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold text-lg px-12 py-6 rounded-full shadow-lg hover:shadow-xl transition-all duration-200"
+            className="bg-gradient-to-r from-trinity-blue-600 to-trinity-purple-600 hover:from-trinity-blue-700 hover:to-trinity-purple-700 text-white font-black text-2xl px-16 py-8 rounded-full shadow-2xl hover:shadow-3xl transition-all duration-200 hover:scale-105 border-4 border-white/30"
           >
-            <Gamepad2 className="h-6 w-6 mr-3" />
             {isMobile ? 'JOUER' : '🎮 JOUER 🎯'}
           </Button>
         </motion.div>
@@ -82,13 +81,13 @@ const SimplifiedHeroSection: React.FC = () => {
           transition={{ delay: 0.9, duration: 0.5 }}
           className="flex flex-col sm:flex-row justify-center items-center gap-6 pt-8"
         >
-          <div className="flex items-center gap-2 bg-white rounded-full px-6 py-3 shadow-sm border border-gray-100">
-            <Star className="h-5 w-5 text-orange-500" />
+          <div className="flex items-center gap-2 bg-white/90 rounded-full px-6 py-3 shadow-md border border-trinity-orange-200 backdrop-blur-sm">
+            <Star className="h-5 w-5 text-trinity-orange-500" />
             <span className="text-gray-800 font-semibold">2,500+ joueurs</span>
           </div>
           
-          <div className="flex items-center gap-2 bg-white rounded-full px-6 py-3 shadow-sm border border-gray-100">
-            <Zap className="h-5 w-5 text-blue-500" />
+          <div className="flex items-center gap-2 bg-white/90 rounded-full px-6 py-3 shadow-md border border-trinity-blue-200 backdrop-blur-sm">
+            <Zap className="h-5 w-5 text-trinity-blue-500" />
             <span className="text-gray-800 font-semibold">100% gratuit</span>
           </div>
         </motion.div>
