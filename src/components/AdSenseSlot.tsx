@@ -1,5 +1,4 @@
-
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 
 interface AdSenseSlotProps {
   adClient: string;
@@ -17,8 +16,22 @@ const AdSenseSlot: React.FC<AdSenseSlotProps> = ({
   position
 }) => {
   const adRef = useRef<HTMLDivElement>(null);
-  const [isAdInjected, setIsAdInjected] = useState<boolean>(false);
+  const [isAdReady, setIsAdReady] = useState<boolean>(false);
   const [isScriptLoaded, setIsScriptLoaded] = useState<boolean>(false);
+  const adElementRef = useRef<HTMLElement | null>(null);
+
+  // Nettoyage sécurisé
+  const cleanupAd = useCallback(() => {
+    if (adElementRef.current && adRef.current && adRef.current.contains(adElementRef.current)) {
+      try {
+        adRef.current.removeChild(adElementRef.current);
+      } catch (error) {
+        console.warn('AdSense cleanup warning:', error);
+      }
+    }
+    adElementRef.current = null;
+    setIsAdReady(false);
+  }, []);
 
   // Vérifier si le script AdSense est déjà chargé
   useEffect(() => {
@@ -29,32 +42,34 @@ const AdSenseSlot: React.FC<AdSenseSlotProps> = ({
       return;
     }
     
-    try {
-      const script = document.createElement('script');
-      script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adClient}`;
-      script.async = true;
-      script.crossOrigin = 'anonymous';
-      
-      script.onload = () => {
-        console.info('Script AdSense chargé avec succès');
-        setIsScriptLoaded(true);
-      };
-      
-      script.onerror = (error) => {
-        console.error('Erreur lors du chargement du script AdSense:', error);
-      };
-      
-      document.head.appendChild(script);
-    } catch (error) {
-      console.error('Erreur lors de l\'initialisation d\'AdSense:', error);
-    }
+    const script = document.createElement('script');
+    script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adClient}`;
+    script.async = true;
+    script.crossOrigin = 'anonymous';
+    
+    script.onload = () => {
+      setIsScriptLoaded(true);
+    };
+    
+    script.onerror = (error) => {
+      console.error('Erreur lors du chargement du script AdSense:', error);
+    };
+    
+    document.head.appendChild(script);
+
+    return () => {
+      // Ne pas supprimer le script car d'autres composants peuvent l'utiliser
+    };
   }, [adClient]);
 
   // Injecter l'annonce une fois que le script est chargé
   useEffect(() => {
-    if (!isScriptLoaded || isAdInjected || !adRef.current) {
+    if (!isScriptLoaded || isAdReady || !adRef.current) {
       return;
     }
+
+    // Nettoyage préventif
+    cleanupAd();
 
     try {
       const adElement = document.createElement('ins');
@@ -65,28 +80,35 @@ const AdSenseSlot: React.FC<AdSenseSlotProps> = ({
       adElement.dataset.adFormat = adFormat;
       adElement.dataset.fullWidthResponsive = 'true';
       
-      // Nettoyer le conteneur avant d'insérer la nouvelle annonce
-      if (adRef.current.firstChild) {
-        adRef.current.innerHTML = '';
-      }
-      
-      adRef.current.appendChild(adElement);
+      // Vérifier que le conteneur existe toujours
+      if (adRef.current) {
+        adRef.current.appendChild(adElement);
+        adElementRef.current = adElement;
 
-      setTimeout(() => {
-        try {
-          if (window.adsbygoogle) {
-            (window.adsbygoogle = window.adsbygoogle || []).push({});
-            setIsAdInjected(true);
-            console.info('Annonce AdSense injectée avec succès');
+        // Délai pour permettre à l'élément de s'attacher au DOM
+        setTimeout(() => {
+          try {
+            if (window.adsbygoogle && adElementRef.current && adRef.current?.contains(adElementRef.current)) {
+              (window.adsbygoogle = window.adsbygoogle || []).push({});
+              setIsAdReady(true);
+            }
+          } catch (error) {
+            console.error('Erreur lors du push de l\'annonce:', error);
+            cleanupAd();
           }
-        } catch (error) {
-          console.error('Erreur lors du push de l\'annonce:', error);
-        }
-      }, 100);
+        }, 100);
+      }
     } catch (error) {
       console.error('Erreur lors de l\'injection de l\'annonce AdSense:', error);
     }
-  }, [isScriptLoaded, isAdInjected, adClient, adSlot, adFormat]);
+  }, [isScriptLoaded, adClient, adSlot, adFormat, isAdReady, cleanupAd]);
+
+  // Nettoyage au démontage
+  useEffect(() => {
+    return () => {
+      cleanupAd();
+    };
+  }, [cleanupAd]);
 
   return (
     <div 
@@ -94,7 +116,7 @@ const AdSenseSlot: React.FC<AdSenseSlotProps> = ({
       className={`card-glass-colored backdrop-blur-lg rounded-lg overflow-hidden p-2 w-[250px] mx-auto ${className}`}
       aria-label="Annonce"
     >
-      {!isAdInjected && (
+      {!isAdReady && (
         <div className="text-white/70 text-sm text-center animate-pulse p-4 font-semibold">
           Espace publicitaire
         </div>
