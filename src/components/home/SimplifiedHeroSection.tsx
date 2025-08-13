@@ -10,10 +10,10 @@ const SimplifiedHeroSection: React.FC = () => {
   const { isMobile } = useAdaptiveInterface();
 
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center px-4 py-8 bg-gradient-to-br from-trinity-blue-100 via-trinity-purple-50 to-trinity-orange-100">
+    <section className="relative min-h-screen flex flex-col items-center justify-center px-2 sm:px-4 py-4 sm:py-8 bg-gradient-to-br from-trinity-blue-100 via-trinity-purple-50 to-trinity-orange-100">
       
       {/* Contenu principal centré */}
-      <div className="relative z-10 text-center max-w-4xl mx-auto space-y-8">
+      <div className="relative z-10 text-center w-full max-w-4xl mx-auto space-y-6 sm:space-y-8 px-2 sm:px-4">
         
         {/* Logo principal */}
         <motion.div
@@ -36,7 +36,7 @@ const SimplifiedHeroSection: React.FC = () => {
           transition={{ delay: 0.3, duration: 0.5 }}
           className="flex justify-center"
         >
-          <div className="inline-flex items-center gap-2 bg-white/80 text-trinity-blue-700 px-6 py-3 rounded-full font-bold text-sm border-2 border-trinity-blue-200 backdrop-blur-sm">
+          <div className="inline-flex items-center gap-2 bg-white/80 text-trinity-blue-700 px-4 sm:px-6 py-2 sm:py-3 rounded-full font-bold text-xs sm:text-sm border-2 border-trinity-blue-200 backdrop-blur-sm w-full sm:w-auto max-w-xs sm:max-w-none justify-center">
             📱 Application Compagnon
           </div>
         </motion.div>
@@ -48,12 +48,12 @@ const SimplifiedHeroSection: React.FC = () => {
           transition={{ delay: 0.5, duration: 0.5 }}
           className="space-y-4"
         >
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-gray-900 leading-tight">
-            Sortez vos cartes, <span className="text-orange-500">on</span><br/>
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-gray-900 leading-tight px-2">
+            Sortez vos cartes, <span className="text-orange-500">on</span><br className="sm:hidden"/>
             <span className="text-orange-500">s'occupe des scores !</span>
           </h1>
           
-          <p className="text-lg sm:text-xl text-gray-600 font-medium max-w-2xl mx-auto leading-relaxed">
+          <p className="text-base sm:text-lg md:text-xl text-gray-600 font-medium max-w-full sm:max-w-2xl mx-auto leading-relaxed px-2">
             🃏 Votre smartphone devient votre carnet de scores intelligent
           </p>
         </motion.div>
@@ -63,12 +63,12 @@ const SimplifiedHeroSection: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.7, duration: 0.5 }}
-          className="pt-4"
+          className="pt-2 sm:pt-4 w-full flex justify-center"
         >
           <Button
             onClick={() => navigate('/setup')}
             size="xl"
-            className="bg-gradient-to-r from-trinity-blue-600 to-trinity-purple-600 hover:from-trinity-blue-700 hover:to-trinity-purple-700 text-white font-black text-2xl px-16 py-8 rounded-full shadow-2xl hover:shadow-3xl transition-all duration-200 hover:scale-105 border-4 border-white/30"
+            className="bg-gradient-to-r from-trinity-blue-600 to-trinity-purple-600 hover:from-trinity-blue-700 hover:to-trinity-purple-700 text-white font-black px-8 sm:px-12 md:px-16 py-4 sm:py-6 md:py-8 rounded-full shadow-2xl hover:shadow-3xl transition-all duration-200 hover:scale-105 border-4 border-white/30 w-full max-w-xs sm:max-w-sm md:max-w-none md:w-auto text-lg sm:text-xl md:text-2xl"
           >
             {isMobile ? 'JOUER' : '🎮 JOUER 🎯'}
           </Button>
@@ -79,16 +79,16 @@ const SimplifiedHeroSection: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.9, duration: 0.5 }}
-          className="flex flex-col sm:flex-row justify-center items-center gap-6 pt-8"
+          className="flex flex-col sm:flex-row justify-center items-center gap-3 sm:gap-6 pt-6 sm:pt-8 w-full px-2"
         >
-          <div className="flex items-center gap-2 bg-white/90 rounded-full px-6 py-3 shadow-md border border-trinity-orange-200 backdrop-blur-sm">
-            <Star className="h-5 w-5 text-trinity-orange-500" />
-            <span className="text-gray-800 font-semibold">2,500+ joueurs</span>
+          <div className="flex items-center gap-2 bg-white/90 rounded-full px-4 sm:px-6 py-2 sm:py-3 shadow-md border border-trinity-orange-200 backdrop-blur-sm w-full sm:w-auto max-w-xs sm:max-w-none justify-center">
+            <Star className="h-4 sm:h-5 w-4 sm:w-5 text-trinity-orange-500 flex-shrink-0" />
+            <span className="text-gray-800 font-semibold text-sm sm:text-base">2,500+ joueurs</span>
           </div>
           
-          <div className="flex items-center gap-2 bg-white/90 rounded-full px-6 py-3 shadow-md border border-trinity-blue-200 backdrop-blur-sm">
-            <Zap className="h-5 w-5 text-trinity-blue-500" />
-            <span className="text-gray-800 font-semibold">100% gratuit</span>
+          <div className="flex items-center gap-2 bg-white/90 rounded-full px-4 sm:px-6 py-2 sm:py-3 shadow-md border border-trinity-blue-200 backdrop-blur-sm w-full sm:w-auto max-w-xs sm:max-w-none justify-center">
+            <Zap className="h-4 sm:h-5 w-4 sm:w-5 text-trinity-blue-500 flex-shrink-0" />
+            <span className="text-gray-800 font-semibold text-sm sm:text-base">100% gratuit</span>
           </div>
         </motion.div>
       </div>

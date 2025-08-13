@@ -1,0 +1,125 @@
+/* Optimisations mobile pour maximiser l'utilisation de la largeur */
+
+/* Containers principaux */
+.mobile-full-width {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* Mobile: réduction des paddings sur les conteneurs */
+@media (max-width: 640px) {
+  .container,
+  .max-w-7xl,
+  .max-w-6xl,
+  .max-w-5xl,
+  .max-w-4xl,
+  .max-w-3xl,
+  .max-w-2xl {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+    width: 100% !important;
+  }
+
+  /* Sections avec padding minimal */
+  section {
+    padding-left: 0.25rem !important;
+    padding-right: 0.25rem !important;
+  }
+
+  /* Cards et composants prennent toute la largeur */
+  .mobile-optimized .grid > * {
+    width: 100% !important;
+  }
+
+  /* Header optimisé */
+  header .max-w-7xl {
+    padding-left: 0.25rem !important;
+    padding-right: 0.25rem !important;
+  }
+
+  /* Boutons prennent plus de largeur sur mobile */
+  .mobile-wide-button {
+    width: 100% !important;
+    max-width: 20rem !important;
+  }
+
+  /* Stats badges en pleine largeur */
+  .mobile-stats-badge {
+    width: 100% !important;
+    max-width: 16rem !important;
+    justify-content: center !important;
+  }
+
+  /* Réduction des gaps sur mobile */
+  .mobile-reduced-gap {
+    gap: 0.5rem !important;
+  }
+
+  /* Textes plus compacts sur mobile */
+  .mobile-compact-text {
+    font-size: 0.875rem !important;
+    line-height: 1.25rem !important;
+  }
+
+  /* Padding réduit pour les cards */
+  .mobile-compact-card {
+    padding: 0.75rem !important;
+  }
+
+  /* Hero section optimisée */
+  .hero-mobile-optimized {
+    padding-left: 0.25rem !important;
+    padding-right: 0.25rem !important;
+  }
+
+  .hero-mobile-optimized > * {
+    width: 100% !important;
+  }
+
+  /* Alignement centré pour les éléments principaux */
+  .mobile-center-content {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    width: 100% !important;
+  }
+
+  /* Élimination des marges latérales inutiles */
+  .no-mobile-margin {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+}
+
+/* Très petits écrans (< 375px) */
+@media (max-width: 375px) {
+  .container,
+  section,
+  .max-w-7xl,
+  .max-w-6xl,
+  .max-w-5xl,
+  .max-w-4xl {
+    padding-left: 0.125rem !important;
+    padding-right: 0.125rem !important;
+  }
+
+  /* Textes encore plus compacts */
+  h1 {
+    font-size: 1.5rem !important;
+    line-height: 2rem !important;
+  }
+
+  h2 {
+    font-size: 1.25rem !important;
+    line-height: 1.75rem !important;
+  }
+
+  /* Boutons plus compacts */
+  button {
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+    font-size: 0.875rem !important;
+  }
+}

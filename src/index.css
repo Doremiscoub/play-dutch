@@ -9,6 +9,7 @@
 @import url('./styles/typography.css');
 @import url('./styles/design-system-classes.css');
 @import url('./styles/mobile-optimizations.css');
+@import url('./styles/mobile-width-optimization.css');
 
 /* Mobile-first optimizations */
 @media (max-width: 380px) {

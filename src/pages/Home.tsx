@@ -62,8 +62,8 @@ const Home: React.FC = () => {
         <SimplifiedHeroSection />
 
       {/* Section Features Colorée */}
-      <section className="relative py-20 px-4 z-10">
-        <div className="max-w-6xl mx-auto">
+      <section className="relative py-12 sm:py-20 px-2 sm:px-4 z-10">
+        <div className="w-full max-w-6xl mx-auto px-2 sm:px-4">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -79,7 +79,7 @@ const Home: React.FC = () => {
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 w-full">
             {features.map((feature, index) => (
               <motion.div
                 key={index}
@@ -105,7 +105,7 @@ const Home: React.FC = () => {
                     }}
                   />
                   
-                  <CardContent className="relative z-10 p-8 text-center">
+                  <CardContent className="relative z-10 p-4 sm:p-6 lg:p-8 text-center">
                     <motion.div
                       className={`bg-gradient-to-br ${feature.gradient} rounded-2xl w-20 h-20 flex items-center justify-center mx-auto mb-6 text-white shadow-lg group-hover:shadow-xl transition-shadow duration-300`}
                       whileHover={{ rotate: 360, scale: 1.2 }}
@@ -128,13 +128,13 @@ const Home: React.FC = () => {
       </section>
 
       {/* CTA Final Ultra-Coloré */}
-      <section className="relative py-20 px-4 z-10">
+      <section className="relative py-12 sm:py-20 px-2 sm:px-4 z-10">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           whileInView={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="max-w-4xl mx-auto"
+          className="w-full max-w-4xl mx-auto px-2 sm:px-4"
         >
           <Card className="bg-gradient-to-br from-trinity-blue-600 via-trinity-purple-600 to-trinity-orange-600 backdrop-blur-xl border-0 shadow-3xl text-white overflow-hidden relative">
             {/* Overlay pour améliorer le contraste */}
@@ -165,7 +165,7 @@ const Home: React.FC = () => {
               ))}
             </div>
             
-            <CardContent className="relative z-10 p-8 md:p-12 text-center">
+            <CardContent className="relative z-10 p-6 sm:p-8 lg:p-12 text-center">
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
