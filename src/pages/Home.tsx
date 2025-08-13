@@ -6,6 +6,7 @@ import { ArrowRight, Gamepad2, Users, Trophy, Heart, Zap, Sparkles, BookOpen } f
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import UnifiedHeader from '@/components/layout/UnifiedHeader';
+import { useUnifiedHeader } from '@/hooks/useUnifiedHeader';
 import PageShell from '@/components/layout/PageShell';
 import { MobileOptimizer } from '@/components/ui/mobile-optimizer';
 import GamingHeroSection from '@/components/home/GamingHeroSection';
@@ -54,10 +55,7 @@ const Home: React.FC = () => {
     <PageShell variant="default">
       <MobileOptimizer pageType="home" className="min-h-screen">
         <UnifiedHeader 
-          title="Dutch Card Game"
-          showBackButton={false}
-          showSettings={true}
-          hideTitle={true}
+          {...useUnifiedHeader({ hideTitle: true })}
         />
 
         {/* Nouvelle Hero Section Gaming */}

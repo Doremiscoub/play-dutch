@@ -7,12 +7,14 @@ import { toast } from 'sonner';
 import { Card, CardContent } from '@/components/ui/card';
 import ModernGameSetup from '@/components/game-setup/ModernGameSetup';
 import UnifiedHeader from '@/components/layout/UnifiedHeader';
+import { useUnifiedHeader } from '@/hooks/useUnifiedHeader';
 import PageShell from '@/components/layout/PageShell';
 import { MobileOptimizer } from '@/components/ui/mobile-optimizer';
 
 const SimpleGameSetup: React.FC = () => {
   const navigate = useNavigate();
   const { createGame } = useSecureGameState();
+  const headerConfig = useUnifiedHeader();
 
   useEffect(() => {
     console.log('🔧 SimpleGameSetup MOUNTED');
@@ -41,10 +43,7 @@ const SimpleGameSetup: React.FC = () => {
   return (
     <PageShell variant="game">
       <MobileOptimizer pageType="setup" className="min-h-screen">
-        <UnifiedHeader 
-          title="Configuration de partie" 
-          showBackButton={true}
-        />
+        <UnifiedHeader {...headerConfig} />
 
         {/* Contenu principal stabilisé */}
         <div className="container mx-auto px-4 py-4 sm:py-8 max-w-4xl relative z-20">

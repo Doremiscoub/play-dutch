@@ -57,11 +57,13 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
 
     return () => clearInterval(interval);
   }, [gameStartTime]);
-  // Classes adaptatives
-  const headerClasses = `relative z-10 ${getAdaptiveSpacing()} ${isMobile && orientation === 'landscape' ? 'py-1' : isMobile ? 'py-2' : 'py-6'}`;
+  // Classes adaptatives améliorées
+  const headerClasses = `relative z-10 w-full ${
+    isMobile && orientation === 'landscape' ? 'py-1' : isMobile ? 'py-2' : 'py-6'
+  }`;
   const titleSize = isMobile 
-    ? (orientation === 'landscape' ? 'text-sm' : 'text-base') 
-    : 'text-3xl';
+    ? (orientation === 'landscape' ? 'text-xs' : 'text-sm') 
+    : 'text-2xl lg:text-3xl';
   
   // Helper pour tronquer les titres longs sur mobile
   const getTruncatedTitle = (title: string) => {
@@ -99,12 +101,12 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
               
                 {/* Conteneur unifié pour tout le header */}
                 <div className={`relative bg-white/90 backdrop-blur-xl rounded-2xl border border-white/60 shadow-xl ${
-                  isMobile ? 'px-3 py-2 space-y-2' : 'px-6 py-4 space-y-3'
+                  isMobile ? 'px-2 py-2 space-y-1' : 'px-6 py-4 space-y-3'
                 }`}>
                 {/* Ligne principale avec boutons et titre */}
-                <div className="relative flex items-center justify-between min-h-[44px]">
+                <div className="relative flex items-center justify-between min-h-[44px] w-full">
                   {/* Left side - Back button */}
-                  <div className={`flex items-center ${isMobile ? 'gap-2' : 'gap-4'} flex-shrink-0 min-w-[44px]`}>
+                  <div className={`flex items-center ${isMobile ? 'gap-1' : 'gap-4'} flex-shrink-0`}>
                     {showBackButton && onBack && (
                       <motion.div
                         whileHover={{ scale: 1.05 }}
@@ -115,21 +117,23 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
                           variant="liquidHeader"
                           size={isMobile ? "sm" : "icon"}
                           onClick={onBack}
-                          className={`rounded-xl flex-shrink-0 ${isMobile ? 'h-9 w-9 min-w-[36px]' : 'h-10 w-10'}`}
+                          className={`rounded-xl flex-shrink-0 ${
+                            isMobile ? 'h-8 w-8 min-w-[32px] p-1' : 'h-10 w-10'
+                          }`}
                           aria-label="Retour"
                         >
-                          <ArrowLeft className={`${isMobile ? 'h-4 w-4' : 'h-5 w-5'}`} />
+                          <ArrowLeft className={`${isMobile ? 'h-3 w-3' : 'h-5 w-5'}`} />
                         </Button>
                       </motion.div>
                     )}
                   </div>
 
                   {/* Center - Title */}
-                  <div className="flex-1 flex justify-center">
+                  <div className="flex-1 flex justify-center mx-2 overflow-hidden">
                     <motion.h1 
                       className={`${titleSize} font-black text-gray-900 flex items-center justify-center ${
-                        isMobile ? 'gap-1' : 'gap-2 sm:gap-4'
-                      } hover-scale text-center max-w-full`}
+                        isMobile ? 'gap-0.5' : 'gap-2 sm:gap-4'
+                      } hover-scale text-center truncate`}
                       whileHover={{ 
                         scale: 1.05,
                         rotate: [-1, 1, -1, 0],
@@ -190,7 +194,7 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
                   </div>
 
                   {/* Right side - Rules button and Settings */}
-                  <div className={`flex items-center ${isMobile ? 'gap-1' : 'gap-2 sm:gap-3'} flex-shrink-0 min-w-[44px] justify-end`}>
+                  <div className={`flex items-center ${isMobile ? 'gap-0.5' : 'gap-2 sm:gap-3'} flex-shrink-0 justify-end`}>
                     {/* Bouton Règles */}
                     {showRulesButton && (
                       <motion.div
@@ -203,11 +207,11 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
                           size={isMobile ? "sm" : "sm"}
                           onClick={() => navigate('/rules')}
                           className={`flex items-center rounded-xl bg-gradient-to-r from-trinity-purple-100/90 to-trinity-blue-100/90 backdrop-blur-xl border border-trinity-purple-200/60 hover:from-trinity-purple-200/90 hover:to-trinity-blue-200/90 transition-all duration-300 ${
-                            isMobile ? 'p-1 h-7 w-7' : 'gap-2'
+                            isMobile ? 'p-0.5 h-6 w-6 min-w-[24px]' : 'gap-2 px-3 py-1.5'
                           }`}
                           aria-label="Consulter les règles"
                         >
-                          <BookOpen className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} text-trinity-purple-600`} />
+                          <BookOpen className={`${isMobile ? 'h-2.5 w-2.5' : 'h-4 w-4'} text-trinity-purple-600`} />
                           {!isMobile && <span className="text-trinity-purple-700 font-semibold">Règles</span>}
                         </Button>
                       </motion.div>
