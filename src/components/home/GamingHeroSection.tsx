@@ -3,10 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowRight, Gamepad2, Zap, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useAdaptiveInterface } from '@/components/ui/adaptive-layout';
 
 
 const GamingHeroSection: React.FC = () => {
   const navigate = useNavigate();
+  const { isMobile } = useAdaptiveInterface();
 
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center px-4 py-8 overflow-hidden">
@@ -160,7 +162,7 @@ const GamingHeroSection: React.FC = () => {
                 whileHover={{ x: 5 }}
               >
                 <Gamepad2 className="h-6 w-6 sm:h-8 sm:w-8 group-hover:animate-bounce flex-shrink-0" />
-                <span className="whitespace-nowrap">🚀 JOUER ! 🎯</span>
+                <span className="whitespace-nowrap">{isMobile ? 'JOUER' : '🚀 JOUER ! 🎯'}</span>
                 <ArrowRight className="h-5 w-5 sm:h-6 sm:w-6 group-hover:translate-x-2 transition-transform flex-shrink-0" />
               </motion.div>
             </Button>

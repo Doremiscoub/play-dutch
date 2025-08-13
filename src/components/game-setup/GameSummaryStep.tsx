@@ -3,6 +3,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Edit, Users, Target } from 'lucide-react';
 import { UnifiedButton } from '@/components/ui/unified-button';
+import { useAdaptiveInterface } from '@/components/ui/adaptive-layout';
 import { UnifiedCard } from '@/components/ui/unified-card';
 import { Badge } from '@/components/ui/badge';
 import { SetupPlayer } from './types';
@@ -24,6 +25,7 @@ const GameSummaryStep: React.FC<GameSummaryStepProps> = ({
   onEditPlayers,
   onEditCount
 }) => {
+  const { isMobile } = useAdaptiveInterface();
   const validPlayers = players.filter(p => p.name && p.name.trim().length > 0);
 
   return (
@@ -171,7 +173,7 @@ const GameSummaryStep: React.FC<GameSummaryStepProps> = ({
           onClick={onStartGame}
           className="flex-2 font-bold text-sm sm:text-lg px-4 py-2 min-w-0 leading-tight"
         >
-          <span className="whitespace-nowrap">🚀 Commencer la partie !</span>
+          <span className="whitespace-nowrap">{isMobile ? 'Jouer' : '🚀 Commencer la partie !'}</span>
         </UnifiedButton>
       </div>
     </UnifiedCard>

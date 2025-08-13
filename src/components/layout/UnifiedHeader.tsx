@@ -64,7 +64,11 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
   const titleSize = isMobile 
     ? (orientation === 'landscape' ? 'text-xs' : 'text-sm') 
     : 'text-2xl lg:text-3xl';
-
+  
+  // Helper pour adapter les textes sur mobile
+  const getMobileAdaptedText = (fullText: string, shortText: string) => {
+    return isMobile ? shortText : fullText;
+  };
   return (
     <motion.header 
       data-testid="unified-header"
@@ -162,8 +166,14 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
                         }}
                       >
                         {variant === 'game' 
-                          ? 'Partie en cours' 
-                          : title
+                          ? getMobileAdaptedText('Partie en cours', 'Partie')
+                          : getMobileAdaptedText(title, 
+                              title === 'Configuration de partie' ? 'Configuration' :
+                              title === 'Historique des parties' ? 'Historique' :
+                              title === 'Règles du jeu' ? 'Règles' :
+                              title === 'Dutch - Carnet de scores' ? 'Dutch' :
+                              title.length > 12 ? title.substring(0, 12) : title
+                            )
                         }
                       </motion.span>
                       {!isMobile && (
@@ -241,7 +251,7 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
                     >
                       <Zap className={`${isMobile ? 'h-2.5 w-2.5' : 'h-4 w-4'} text-trinity-blue-600`} />
                       <span className={`${isMobile ? 'text-[10px]' : 'text-sm'} font-bold text-trinity-blue-700`}>
-                        {isMobile ? `M${roundCount || 1}` : `Manche ${roundCount || 1}`}
+                        {getMobileAdaptedText(`Manche ${roundCount || 1}`, `M${roundCount || 1}`)}
                       </span>
                     </motion.div>
 
@@ -253,7 +263,7 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
                     >
                       <Target className={`${isMobile ? 'h-2.5 w-2.5' : 'h-4 w-4'} text-trinity-purple-600`} />
                       <span className={`${isMobile ? 'text-[10px]' : 'text-sm'} font-bold text-trinity-purple-700`}>
-                        {isMobile ? `${scoreLimit}pts` : `Objectif ${scoreLimit} pts`}
+                        {getMobileAdaptedText(`Objectif ${scoreLimit} pts`, `${scoreLimit}pts`)}
                       </span>
                     </motion.div>
 
