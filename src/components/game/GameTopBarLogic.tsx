@@ -1,33 +1,39 @@
+import { useUnifiedHeader } from '@/hooks/useUnifiedHeader';
+
 interface GameTopBarProps {
   showGameOver: boolean;
   roundHistoryLength: number;
   scoreLimit: number;
   onNavigateHome: () => void;
+  gameStartTime?: Date;
 }
 
 export const useGameTopBarProps = ({ 
   showGameOver, 
   roundHistoryLength, 
   scoreLimit, 
-  onNavigateHome 
+  onNavigateHome,
+  gameStartTime
 }: GameTopBarProps) => {
   if (showGameOver) {
-    return {
+    return useUnifiedHeader({
       title: "Partie terminée",
       showBackButton: true,
       onBack: onNavigateHome,
       showSettings: true,
-      variant: "default" as const
-    };
+      variant: "default"
+    });
   }
   
-  return {
+  return useUnifiedHeader({
     title: "Partie en cours",
     roundCount: roundHistoryLength,
     scoreLimit: scoreLimit,
     showBackButton: true,
     onBack: onNavigateHome,
     showSettings: true,
-    variant: "game" as const
-  };
+    showRulesButton: false,
+    variant: "game",
+    gameStartTime: gameStartTime
+  });
 };

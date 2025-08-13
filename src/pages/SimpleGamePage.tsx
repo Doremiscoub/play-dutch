@@ -6,6 +6,7 @@ import ScoreBoard from '@/components/ScoreBoard';
 import NewRoundModal from '@/components/NewRoundModal';
 import PageShell from '@/components/layout/PageShell';
 import UnifiedHeader from '@/components/layout/UnifiedHeader';
+import { useUnifiedHeader } from '@/hooks/useUnifiedHeader';
 import AICommentator from '@/components/AICommentator';
 import { MobileOptimizer } from '@/components/ui/mobile-optimizer';
 import { toast } from 'sonner';
@@ -127,14 +128,15 @@ const SimpleGamePage: React.FC = () => {
     <PageShell variant="game">
       <MobileOptimizer pageType="game" className="min-h-screen">
         <UnifiedHeader 
-          title={`Manche ${roundHistory.length + 1}`}
-          showBackButton={true}
-          onBack={() => navigate('/setup')}
-          variant="game"
-          roundCount={roundHistory.length + 1}
-          scoreLimit={scoreLimit}
-          gameStartTime={gameStartTime || new Date()}
-          showRulesButton={true}
+          {...useUnifiedHeader({
+            title: `Manche ${roundHistory.length + 1}`,
+            variant: "game",
+            roundCount: roundHistory.length + 1,
+            scoreLimit: scoreLimit,
+            gameStartTime: gameStartTime || new Date(),
+            showRulesButton: true,
+            onBack: () => navigate('/setup')
+          })}
         />
         
         <div className="container mx-auto px-4 py-6">

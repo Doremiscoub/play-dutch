@@ -4,6 +4,7 @@ import { Game } from '@/types';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import UnifiedHeader from '@/components/layout/UnifiedHeader';
+import { useUnifiedHeader } from '@/hooks/useUnifiedHeader';
 import { UnifiedTabs } from '@/components/ui/unified-tabs';
 import { Trophy, Calendar, Users } from 'lucide-react';
 import { format } from 'date-fns';
@@ -33,12 +34,7 @@ const HistoryPage: React.FC = () => {
 
   return (
     <PageShell variant="default">
-      <UnifiedHeader 
-        title="Historique"
-        showBackButton
-        onBack={handleBack}
-        showSettings={true}
-      />
+      <UnifiedHeader {...useUnifiedHeader()} />
 
       <div className="w-full max-w-6xl mx-auto px-4 pt-4">
         <div className="mb-6">

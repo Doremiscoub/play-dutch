@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import UnifiedHeader from '@/components/layout/UnifiedHeader';
+import { useUnifiedHeader } from '@/hooks/useUnifiedHeader';
 import { useSupabaseAuth } from '@/context/SupabaseAuthContext';
 import { toast } from 'sonner';
 import SignInForm from '@/components/auth/SignInForm';
@@ -32,12 +33,7 @@ const SignIn: React.FC = () => {
             transition={{ duration: 0.5 }}
             className="w-full max-w-md z-10"
           >
-            <UnifiedHeader 
-              title="Connexion"
-              showBackButton
-              onBack={() => navigate('/')}
-              showSettings={false}
-            />
+            <UnifiedHeader {...useUnifiedHeader()} />
             
             <div className="bg-white/70 backdrop-blur-md rounded-3xl shadow-lg border border-white/40 p-8">
               <h2 className="text-2xl font-medium text-dutch-blue mb-4">Mode hors ligne</h2>
@@ -79,10 +75,9 @@ const SignIn: React.FC = () => {
           className="w-full max-w-md z-10"
         >
           <UnifiedHeader 
-            title={isSignUp ? "Inscription" : "Connexion"}
-            showBackButton
-            onBack={() => navigate('/')}
-            showSettings={false}
+            {...useUnifiedHeader({ 
+              title: isSignUp ? "Inscription" : "Connexion"
+            })}
           />
           
           <div className="bg-white/70 backdrop-blur-md rounded-3xl shadow-lg border border-white/40 p-6">

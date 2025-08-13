@@ -18,6 +18,7 @@ interface GamePageContainerProps {
   showGameOver: boolean;
   showGameEndConfirmation: boolean;
   scoreLimit: number;
+  gameStartTime?: Date;
   gameMode: 'quick' | 'tournament';
   currentTournament: any;
   tournamentProgress: any;
@@ -40,6 +41,7 @@ const GamePageContainer: React.FC<GamePageContainerProps> = ({
   showGameOver,
   showGameEndConfirmation,
   scoreLimit,
+  gameStartTime,
   gameMode,
   currentTournament,
   tournamentProgress,
@@ -75,7 +77,8 @@ const GamePageContainer: React.FC<GamePageContainerProps> = ({
     showGameOver,
     roundHistoryLength: roundHistory.length,
     scoreLimit,
-    onNavigateHome: () => navigate('/')
+    onNavigateHome: () => navigate('/'),
+    gameStartTime
   });
 
   return (
