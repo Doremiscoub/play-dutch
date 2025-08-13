@@ -9,7 +9,7 @@ import UnifiedHeader from '@/components/layout/UnifiedHeader';
 import { useUnifiedHeader } from '@/hooks/useUnifiedHeader';
 import PageShell from '@/components/layout/PageShell';
 import { MobileOptimizer } from '@/components/ui/mobile-optimizer';
-import GamingHeroSection from '@/components/home/GamingHeroSection';
+import SimplifiedHeroSection from '@/components/home/SimplifiedHeroSection';
 import LazyHomeSections from '@/components/home/LazyHomeSections';
 
 const Home: React.FC = () => {
@@ -59,7 +59,7 @@ const Home: React.FC = () => {
         />
 
         {/* Nouvelle Hero Section Gaming */}
-        <GamingHeroSection />
+        <SimplifiedHeroSection />
 
       {/* Section Features Colorée */}
       <section className="relative py-20 px-4 z-10">
