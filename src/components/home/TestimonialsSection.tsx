@@ -13,7 +13,7 @@ export const TestimonialsSection: React.FC = () => {
       viewport={{ once: true }}
     >
       <h2 className="text-4xl font-bold text-center mb-12 text-gray-800" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-        Ce que disent nos joueurs
+        🗣️ Ce que disent nos utilisateurs
       </h2>
       
       <div className="max-w-2xl mx-auto">

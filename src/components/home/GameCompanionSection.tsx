@@ -45,11 +45,11 @@ const GameCompanionSection: React.FC = () => {
             🤝 Votre compagnon de jeu idéal 🤝
           </h2>
           <p className="text-xl text-neutral-700 font-bold max-w-4xl mx-auto mb-8">
-            Dutch Card Game n'est pas qu'une simple application - c'est le partenaire parfait pour vos soirées jeux !
+            Dutch Card Game n'est pas un jeu - c'est le partenaire parfait pour vos parties de cartes réelles !
           </p>
           <div className="max-w-3xl mx-auto bg-gradient-to-r from-trinity-blue-100 to-trinity-purple-100 rounded-2xl p-8 border-2 border-trinity-blue-200">
             <p className="text-lg text-neutral-800 font-bold leading-relaxed">
-              💡 <strong>L'idée :</strong> Remplacer définitivement le carnet de scores papier tout en ajoutant une dimension interactive et amusante à vos parties grâce au Professeur Cartouche !
+              💡 <strong>Le concept :</strong> Gardez vos cartes Dutch physiques et laissez l'application s'occuper intelligemment des calculs, statistiques et commentaires du Professeur Cartouche !
             </p>
           </div>
         </motion.div>
@@ -112,7 +112,7 @@ const GameCompanionSection: React.FC = () => {
                 viewport={{ once: true }}
               >
                 <p className="text-2xl md:text-3xl font-black mb-6 leading-relaxed text-white">
-                  Depuis qu'on utilise Dutch Card Game, nos soirées cartes sont encore plus fun ! Le Professeur Cartouche nous fait mourir de rire avec ses commentaires ! 😂
+                  Depuis qu'on utilise l'application compagnon Dutch, nos soirées cartes sont parfaites ! Plus de disputes de scores et le Professeur nous fait mourir de rire ! 😂🃏
                 </p>
                 <p className="text-xl font-bold text-white/90">
                   - Marie & ses amis, utilisateurs conquis

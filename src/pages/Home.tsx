@@ -17,36 +17,36 @@ const Home: React.FC = () => {
 
   // SEO optimisé
   const seoData = {
-    title: 'Dutch Card Game - Application gratuite pour jeu de cartes entre amis avec IA',
-    description: 'Application web gratuite pour suivre les scores du jeu de cartes Dutch. Interface moderne, hors-ligne, avec IA commentateur Professeur Cartouche. Compagnon de jeu parfait pour vos soirées entre amis. Calculateur de scores automatique, statistiques avancées et commentaires humoristiques.',
-    keywords: 'dutch, jeu de cartes, application gratuite, score, soirée amis, cartes, jeu société, hors ligne, professeur cartouche, IA, compagnon de jeu, calculateur scores, statistiques jeu, gaming, cartes entre amis'
+    title: 'Dutch Card Game - Application compagnon gratuite pour jeu de cartes avec IA',
+    description: 'Application compagnon pour vos parties de cartes Dutch réelles. Calculez automatiquement les scores, consultez les statistiques et amusez-vous avec le Professeur Cartouche ! Fonctionne hors-ligne, gratuit et sans inscription.',
+    keywords: 'dutch, application compagnon, cartes physiques, calculateur scores, professeur cartouche, IA commentateur, hors ligne, gratuit, soirée entre amis, compagnon de jeu'
   };
 
   useSEO(seoData);
 
   const features = [
     {
-      icon: <Zap className="h-6 w-6" />,
-      title: "Interface simple",
-      description: "Ajoutez les scores en un clic",
+      icon: <div className="text-2xl">🃏</div>,
+      title: "Compagnon de cartes",
+      description: "Sortez vos cartes Dutch, on gère les scores !",
       gradient: "from-trinity-orange-400 to-trinity-orange-600"
     },
     {
       icon: <Users className="h-6 w-6" />,
       title: "2 à 10 joueurs",
-      description: "Pour toutes les tablées",
+      description: "Parfait pour vos tablées entre amis",
       gradient: "from-trinity-blue-400 to-trinity-blue-600"
     },
     {
       icon: <Heart className="h-6 w-6" />,
-      title: "100% gratuit",
-      description: "Aucun abonnement requis",
+      title: "100% hors-ligne",
+      description: "Fonctionne sans internet ni inscription",
       gradient: "from-trinity-purple-400 to-trinity-purple-600"
     },
     {
       icon: <Sparkles className="h-6 w-6" />,
       title: "IA Professeur Cartouche",
-      description: "Commentaires humoristiques",
+      description: "Commentaires intelligents en temps réel",
       gradient: "from-trinity-blue-500 to-trinity-purple-500"
     }
   ];
@@ -72,10 +72,10 @@ const Home: React.FC = () => {
             className="text-center mb-16"
           >
             <h2 className="text-4xl md:text-5xl font-black bg-gradient-to-r from-trinity-blue-600 via-trinity-purple-600 to-trinity-orange-600 bg-clip-text text-transparent mb-6 leading-tight py-2">
-              🌟 Pourquoi Dutch Card Game ? 🌟
+              🌟 Votre Compagnon de Jeu Idéal 🌟
             </h2>
             <p className="text-xl text-neutral-700 font-bold max-w-3xl mx-auto">
-              Une application pensée pour transformer vos soirées jeux en moments inoubliables ! 🎉
+              🃏 Sortez vos cartes Dutch physiques et laissez l'application s'occuper du reste ! 📱✨
             </p>
           </motion.div>
 
@@ -175,11 +175,11 @@ const Home: React.FC = () => {
               >
                 <div className="space-y-4">
                   <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-white leading-tight">
-                    Prêt pour votre première partie ?
+                    Prêt à accompagner votre première partie ?
                   </h2>
                   <p className="text-lg md:text-xl font-semibold text-white/90 max-w-2xl mx-auto leading-relaxed">
-                    Lancez-vous dès maintenant dans l'aventure Dutch !<br/>
-                    C'est gratuit, fun et sans inscription ! 🚀✨
+                    🃏 Sortez vos cartes Dutch et lancez l'application compagnon !<br/>
+                    C'est gratuit, intelligent et sans inscription ! 🚀✨
                   </p>
                 </div>
                 

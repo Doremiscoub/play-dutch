@@ -6,6 +6,7 @@ import { StatsSection } from '@/components/home/StatsSection';
 import { TestimonialsSection } from '@/components/home/TestimonialsSection';
 import { CTASection } from '@/components/home/CTASection';
 import OnlineModeTeaser from '@/components/home/OnlineModeTeaser';
+import CompanionAppFAQ from '@/components/home/CompanionAppFAQ';
 import SEOFooter from '@/components/SEOFooter';
 
 const SEOContentSection: React.FC = () => {
@@ -15,6 +16,7 @@ const SEOContentSection: React.FC = () => {
         <FeaturesSection />
         <HowToPlaySection />
         <OnlineModeTeaser />
+        <CompanionAppFAQ />
         <StatsSection />
         <TestimonialsSection />
         <CTASection />
