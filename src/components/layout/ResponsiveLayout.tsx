@@ -27,7 +27,7 @@ const ResponsiveLayout: React.FC<ResponsiveLayoutProps> = ({
   return (
     <div className="grid lg:grid-cols-[250px_1fr_250px] gap-6 w-full">
       {/* Sidebar gauche - Desktop uniquement */}
-      <aside className="hidden lg:flex flex-col justify-start items-center pt-8 space-y-6">
+      <aside className="hidden lg:flex flex-col justify-start items-center pt-8">
         <AdSlot placement="sidebar" />
       </aside>
       
@@ -35,22 +35,26 @@ const ResponsiveLayout: React.FC<ResponsiveLayoutProps> = ({
       <main className="w-full px-4">
         {children}
         
-        {/* Banner mobile après contenu */}
+        {/* Premium CTA et Banner mobile après contenu */}
         {isMobile && (
           <div className="mt-8 space-y-4">
-            <AdSlot placement="banner" />
             {showPremiumCTA && (
               <PremiumUpgradeButton variant="banner" />
             )}
+            <AdSlot placement="banner" />
+          </div>
+        )}
+        
+        {/* Premium CTA desktop */}
+        {!isMobile && showPremiumCTA && (
+          <div className="mt-8 flex justify-center">
+            <PremiumUpgradeButton variant="compact" />
           </div>
         )}
       </main>
       
-      {/* Sidebar droite - Desktop uniquement */}
-      <aside className="hidden lg:flex flex-col justify-start items-center pt-8 space-y-6">
-        {showPremiumCTA && (
-          <PremiumUpgradeButton variant="compact" />
-        )}
+      {/* Sidebar droite - Desktop uniquement, alignée avec la gauche */}
+      <aside className="hidden lg:flex flex-col justify-start items-center pt-8">
         <AdSlot placement="sidebar" />
       </aside>
     </div>
