@@ -142,7 +142,7 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
                     </div>
                   ) : (
                     <div className="flex-1 flex items-center justify-between">
-                      <span className="font-medium text-neutral-800 truncate pr-2">
+                      <span className="font-medium text-neutral-800 leading-tight break-words pr-2">
                         {player.name}
                       </span>
                       <UnifiedButton

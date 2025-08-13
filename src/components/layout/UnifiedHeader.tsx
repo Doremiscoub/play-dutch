@@ -64,13 +64,6 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
   const titleSize = isMobile 
     ? (orientation === 'landscape' ? 'text-xs' : 'text-sm') 
     : 'text-2xl lg:text-3xl';
-  
-  // Helper pour tronquer les titres longs sur mobile
-  const getTruncatedTitle = (title: string) => {
-    if (!isMobile) return title;
-    if (title.length > 15) return title.substring(0, 15) + '...';
-    return title;
-  };
 
   return (
     <motion.header 
@@ -133,7 +126,7 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
                     <motion.h1 
                       className={`${titleSize} font-black text-gray-900 flex items-center justify-center ${
                         isMobile ? 'gap-0.5' : 'gap-2 sm:gap-4'
-                      } hover-scale text-center truncate`}
+                      } hover-scale text-center leading-tight break-words hyphens-auto`}
                       whileHover={{ 
                         scale: 1.05,
                         rotate: [-1, 1, -1, 0],
@@ -160,7 +153,7 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
                         </motion.span>
                       )}
                       <motion.span 
-                        className="bg-gradient-to-r from-trinity-blue-700 via-trinity-purple-700 to-trinity-orange-700 bg-clip-text text-transparent font-extrabold text-shadow-lg story-link truncate"
+                        className="bg-gradient-to-r from-trinity-blue-700 via-trinity-purple-700 to-trinity-orange-700 bg-clip-text text-transparent font-extrabold text-shadow-lg story-link leading-tight break-words hyphens-auto"
                         whileHover={{
                           backgroundPosition: "200% center"
                         }}
@@ -169,8 +162,8 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
                         }}
                       >
                         {variant === 'game' 
-                          ? getTruncatedTitle('Partie en cours') 
-                          : getTruncatedTitle(title)
+                          ? 'Partie en cours' 
+                          : title
                         }
                       </motion.span>
                       {!isMobile && (

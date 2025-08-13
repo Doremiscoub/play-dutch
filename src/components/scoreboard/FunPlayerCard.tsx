@@ -245,7 +245,7 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
 
           {/* Nom et score */}
           <div className="flex-1 min-w-0">
-            <motion.h3 className={cn("text-2xl font-black truncate bg-gradient-to-r from-current via-current to-current bg-clip-text", "drop-shadow-lg tracking-wide", theme.text)} initial={{
+            <motion.h3 className={cn("text-2xl font-black leading-tight break-words hyphens-auto bg-gradient-to-r from-current via-current to-current bg-clip-text", "drop-shadow-lg tracking-wide", theme.text)} initial={{
             opacity: 0,
             x: -10,
             scale: 0.9

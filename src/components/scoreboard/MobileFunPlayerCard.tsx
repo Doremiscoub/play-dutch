@@ -125,7 +125,7 @@ const MobileFunPlayerCard: React.FC<MobileFunPlayerCardProps> = ({
 
           {/* Nom et infos principales */}
           <div className="flex-1 min-w-0">
-            <h3 className={cn("font-bold text-base truncate", theme.text)}>
+            <h3 className={cn("font-bold text-base leading-tight break-words hyphens-auto", theme.text)}>
               {player.name}
             </h3>
             <div className="flex items-center gap-2 text-xs text-gray-600">

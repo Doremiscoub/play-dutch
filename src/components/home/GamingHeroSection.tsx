@@ -160,7 +160,7 @@ const GamingHeroSection: React.FC = () => {
                 whileHover={{ x: 5 }}
               >
                 <Gamepad2 className="h-6 w-6 sm:h-8 sm:w-8 group-hover:animate-bounce flex-shrink-0" />
-                <span className="truncate">🚀 JOUER ! 🎯</span>
+                <span className="whitespace-nowrap">🚀 JOUER ! 🎯</span>
                 <ArrowRight className="h-5 w-5 sm:h-6 sm:w-6 group-hover:translate-x-2 transition-transform flex-shrink-0" />
               </motion.div>
             </Button>

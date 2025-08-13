@@ -141,7 +141,7 @@ const EnhancedPlayerCard: React.FC<EnhancedPlayerCardProps> = ({
             
             {/* Nom et statut avec animations */}
             <div className="flex-1 min-w-0">
-              <motion.h3 className={cn("text-2xl font-black tracking-tight mb-1 truncate", isWinner && "bg-gradient-to-r from-yellow-600 via-orange-600 to-red-600 bg-clip-text text-transparent", isLastPlace && "text-red-600", !isWinner && !isLastPlace && "bg-gradient-to-r from-trinity-blue-700 to-trinity-purple-700 bg-clip-text text-transparent")} initial={{
+              <motion.h3 className={cn("text-2xl font-black tracking-tight mb-1 leading-tight break-words hyphens-auto", isWinner && "bg-gradient-to-r from-yellow-600 via-orange-600 to-red-600 bg-clip-text text-transparent", isLastPlace && "text-red-600", !isWinner && !isLastPlace && "bg-gradient-to-r from-trinity-blue-700 to-trinity-purple-700 bg-clip-text text-transparent")} initial={{
               opacity: 0,
               x: -20
             }} animate={{
