@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSEO } from '@/hooks/useSEO';
 import { motion } from 'framer-motion';
-import { ArrowRight, Gamepad2, Users, Trophy, Heart, Zap, Sparkles, BookOpen } from 'lucide-react';
+import { Gamepad2, Users, Heart, Sparkles, BookOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import UnifiedHeader from '@/components/layout/UnifiedHeader';
@@ -11,13 +11,11 @@ import PageShell from '@/components/layout/PageShell';
 import { MobileOptimizer } from '@/components/ui/mobile-optimizer';
 import SimplifiedHeroSection from '@/components/home/SimplifiedHeroSection';
 import LazyHomeSections from '@/components/home/LazyHomeSections';
-import AdSenseManager from '@/components/ads/AdSenseManager';
-import PremiumUpgradeButton from '@/components/subscription/PremiumUpgradeButton';
-import useIsMobile from '@/hooks/use-mobile';
+import { AdProvider } from '@/contexts/AdContext';
+import ResponsiveLayout from '@/components/layout/ResponsiveLayout';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
-  const isMobile = useIsMobile();
 
   // SEO optimisé
   const seoData = {
@@ -57,28 +55,14 @@ const Home: React.FC = () => {
 
   return (
     <PageShell variant="default">
-      <MobileOptimizer pageType="home" className="min-h-screen">
-        <UnifiedHeader 
-          {...useUnifiedHeader({ hideTitle: true })}
-        />
+      <AdProvider>
+        <MobileOptimizer pageType="home" className="min-h-screen">
+          <UnifiedHeader 
+            {...useUnifiedHeader({ hideTitle: true })}
+          />
 
-        <div className="grid lg:grid-cols-[250px_1fr_250px] gap-4 w-full">
-          {/* Desktop left sidebar ads */}
-          <aside className="hidden lg:flex lg:justify-end lg:items-start lg:pt-8 lg:pr-4">
-            <AdSenseManager placement="homepage-sidebar" />
-          </aside>
-          
-          {/* Main content */}
-          <main className="w-full">
-            {/* Nouvelle Hero Section Gaming */}
+          <ResponsiveLayout showPremiumCTA>
             <SimplifiedHeroSection />
-            
-            {/* Mobile banner ad after hero */}
-            {isMobile && (
-              <div className="px-4 py-6">
-                <AdSenseManager placement="homepage-banner" />
-              </div>
-            )}
 
       {/* Section Features Colorée */}
       <section className="relative py-12 sm:py-20 px-2 sm:px-4 z-10">
@@ -238,24 +222,10 @@ const Home: React.FC = () => {
         </motion.div>
       </section>
 
-            {/* Sections lazy-loaded pour optimiser les performances */}
             <LazyHomeSections navigate={navigate} />
-            
-            {/* Mobile premium upgrade banner */}
-            {isMobile && (
-              <div className="px-4 py-6">
-                <PremiumUpgradeButton variant="banner" />
-              </div>
-            )}
-          </main>
-          
-          {/* Desktop right sidebar with premium upgrade */}
-          <aside className="hidden lg:flex lg:flex-col lg:justify-start lg:items-start lg:pt-8 lg:pl-4 space-y-6">
-            <PremiumUpgradeButton variant="default" />
-            <AdSenseManager placement="homepage-sidebar" />
-          </aside>
-        </div>
-      </MobileOptimizer>
+          </ResponsiveLayout>
+        </MobileOptimizer>
+      </AdProvider>
     </PageShell>
   );
 };
