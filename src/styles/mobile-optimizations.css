@@ -60,7 +60,7 @@
   }
   
   .responsive-grid-2 {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
     gap: 0.75rem;
   }
   
@@ -74,11 +74,39 @@
     margin: 0.5rem 0;
   }
   
-  /* Améliorer la zone de toucher */
+  /* Force single column for statistics on mobile */
+  .stats-mobile-single {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+  
+  /* Adaptive text sizes - no more text-xs on mobile */
+  .text-xs {
+    font-size: 0.875rem !important;
+  }
+  
+  .text-sm {
+    font-size: 1rem !important;
+  }
+  
+  /* Enhanced touch targets */
   .touch-target {
     min-height: 44px;
     min-width: 44px;
     padding: 0.75rem;
+    cursor: pointer;
+  }
+  
+  .touch-button {
+    min-height: 48px;
+    min-width: 48px;
+    padding: 0.75rem 1rem;
+  }
+  
+  /* Stack cards vertically */
+  .mobile-stack > * {
+    width: 100% !important;
+    margin-bottom: 1rem;
   }
   
   /* Optimiser les animations pour mobile */

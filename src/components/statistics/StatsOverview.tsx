@@ -4,6 +4,7 @@ import { Player } from '@/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Trophy, Target, Award, TrendingUp, Users, Zap, BarChart3, Star, Timer, Flame, Activity, Crown, Medal } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { useMobileLayout, useMobileAdaptation } from '@/hooks/useMobileAdaptation';
 interface StatsOverviewProps {
   players: Player[];
   roundCount: number;
@@ -21,6 +22,8 @@ export const StatsOverview: React.FC<StatsOverviewProps> = ({
   roundHistory,
   selectedPlayer
 }) => {
+  const { getGridClasses } = useMobileLayout();
+  const { shortLabels, reducedAnimations } = useMobileAdaptation();
   // Calculs des statistiques globales
   const calculateGlobalStats = () => {
     if (!players.length) return null;
@@ -150,18 +153,18 @@ export const StatsOverview: React.FC<StatsOverviewProps> = ({
   }];
   return <div className="space-y-8">
       {/* Métriques clés */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className={`grid ${getGridClasses('grid-cols-1 lg:grid-cols-3')} gap-6`}>
         {keyMetrics.map((section, sectionIndex) => <motion.div key={sectionIndex} initial={{
         opacity: 0,
-        y: 40,
-        scale: 0.95
+        y: reducedAnimations ? 0 : 40,
+        scale: reducedAnimations ? 1 : 0.95
       }} animate={{
         opacity: 1,
         y: 0,
         scale: 1
       }} transition={{
-        duration: 0.6,
-        delay: sectionIndex * 0.1,
+        duration: reducedAnimations ? 0.1 : 0.6,
+        delay: reducedAnimations ? 0 : sectionIndex * 0.1,
         type: "spring",
         stiffness: 100
       }}>
@@ -175,28 +178,35 @@ export const StatsOverview: React.FC<StatsOverviewProps> = ({
                   className: "h-5 w-5 text-white"
                 })}
                   </div>
-                  <span className="font-bold text-trinity-blue-500" style={{ color: 'rgb(10,132,255)' }}>{section.title}</span>
+                  <span className={`font-bold text-trinity-blue-500 ${shortLabels ? 'text-sm' : 'text-base'}`} style={{ color: 'rgb(10,132,255)' }}>
+                    {section.title}
+                  </span>
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
                 {section.metrics.map((metric, metricIndex) => <motion.div key={metricIndex} initial={{
               opacity: 0,
-              x: -20
+              x: reducedAnimations ? 0 : -20
             }} animate={{
               opacity: 1,
               x: 0
             }} transition={{
-              delay: 0.3 + sectionIndex * 0.1 + metricIndex * 0.05
+              delay: reducedAnimations ? 0 : 0.3 + sectionIndex * 0.1 + metricIndex * 0.05
             }} className="flex items-center justify-between p-3 bg-muted/30 backdrop-blur-sm rounded-xl border border-border/20 hover:bg-muted/50 transition-colors">
                     <div className="flex items-center gap-2">
                       {React.cloneElement(metric.icon, {
                   className: "h-4 w-4 text-muted-foreground"
                 })}
-                      <span className="text-sm font-medium text-muted-foreground">{metric.label}</span>
+                      <span className="text-sm font-medium text-muted-foreground">
+                        {shortLabels && metric.label.length > 12 ? 
+                          metric.label.split(' ')[0] : metric.label}
+                      </span>
                     </div>
                     <div className="text-right">
-                      <span className="text-lg font-bold text-foreground">
-                        {typeof metric.value === 'number' ? metric.value.toLocaleString() : metric.value}
+                      <span className={`${shortLabels ? 'text-base' : 'text-lg'} font-bold text-foreground`}>
+                        {typeof metric.value === 'number' ? metric.value.toLocaleString() : 
+                         (shortLabels && typeof metric.value === 'string' && metric.value.length > 10) ? 
+                           metric.value.slice(0, 8) + '...' : metric.value}
                       </span>
                       {metric.suffix && <span className="text-xs text-muted-foreground ml-1">{metric.suffix}</span>}
                     </div>

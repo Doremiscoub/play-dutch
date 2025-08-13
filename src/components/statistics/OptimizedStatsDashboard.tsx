@@ -6,6 +6,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import useIsMobile from '@/hooks/use-mobile';
 import { LazyStatisticsSection, useVisibilityTracker } from './LazyStatisticsSection';
+import { useMobileLayout, useMobileAdaptation } from '@/hooks/useMobileAdaptation';
 
 // Import des composants avec lazy loading
 import { StatsOverview } from './StatsOverview';
@@ -37,6 +38,8 @@ export const OptimizedStatsDashboard: React.FC<OptimizedStatsDashboardProps> = (
     visibleSections,
     trackElement
   } = useVisibilityTracker();
+  const { getGridClasses } = useMobileLayout();
+  const { shortLabels, reducedAnimations } = useMobileAdaptation();
 
   // Memoization des props pour éviter les re-renders inutiles
   const memoizedProps = useMemo(() => ({
@@ -129,7 +132,7 @@ export const OptimizedStatsDashboard: React.FC<OptimizedStatsDashboardProps> = (
 
   // Ref callback pour tracker la visibilité
   const createSectionRef = useCallback((sectionId: string) => (element: HTMLElement | null) => trackElement(element, sectionId), [trackElement]);
-  return <div className={`min-h-screen relative ${isMobile ? "mobile-optimized ultra-mobile safe-area-bottom overflow-x-hidden performance-optimized" : ""} stats-responsive`}>
+  return <div className={`min-h-screen relative ${isMobile ? "mobile-optimized ultra-mobile safe-area-bottom overflow-x-hidden performance-optimized stats-mobile-single" : ""} stats-responsive`}>
 
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-0 space-y-6 md:space-y-8">
         {/* Header mobile-optimized */}
@@ -138,30 +141,31 @@ export const OptimizedStatsDashboard: React.FC<OptimizedStatsDashboardProps> = (
         {/* Sélecteur de joueur mobile-optimized */}
         {players.length > 0 && <motion.div initial={{
         opacity: 0,
-        y: 20
+        y: reducedAnimations ? 0 : 20
       }} animate={{
         opacity: 1,
         y: 0
       }} transition={{
-        delay: 0.1
+        delay: reducedAnimations ? 0 : 0.1
       }} className="glass-card bg-white/70 backdrop-blur-xl rounded-2xl md:rounded-3xl p-4 md:p-6 border border-white/50 shadow-xl">
-            <div className="flex flex-wrap items-center gap-2 md:gap-3">
-              <span className="text-xs md:text-sm font-semibold text-foreground flex items-center gap-2">
+            <div className={`flex flex-wrap items-center gap-2 md:gap-3 ${getGridClasses('flex')}`}>
+              <span className="text-sm md:text-sm font-semibold text-foreground flex items-center gap-2">
                 <Users className="h-3 w-3 md:h-4 md:w-4 text-primary" />
-                {isMobile ? 'Focus :' : 'Focus sur un joueur :'}
+                {shortLabels ? 'Focus :' : 'Focus sur un joueur :'}
               </span>
-              <Button onClick={() => handlePlayerSelect(null)} variant={!selectedPlayer ? "default" : "ghost"} size="sm" className={`rounded-xl md:rounded-2xl text-xs md:text-sm font-medium transition-all duration-300 ${!selectedPlayer ? 'bg-gradient-to-r from-trinity-blue-500 to-trinity-purple-500 text-white shadow-lg hover:shadow-xl transform hover:scale-105' : 'glass-button bg-white/50 hover:bg-white/70 text-foreground border border-white/30'}`} style={!selectedPlayer ? {
+              <Button onClick={() => handlePlayerSelect(null)} variant={!selectedPlayer ? "default" : "ghost"} size="sm" className={`touch-button rounded-xl md:rounded-2xl text-sm md:text-sm font-medium transition-all duration-300 ${!selectedPlayer ? 'bg-gradient-to-r from-trinity-blue-500 to-trinity-purple-500 text-white shadow-lg hover:shadow-xl transform hover:scale-105' : 'glass-button bg-white/50 hover:bg-white/70 text-foreground border border-white/30'}`} style={!selectedPlayer ? {
             background: 'linear-gradient(90deg, rgb(10,132,255), rgb(139,92,246))',
             color: 'white'
           } : undefined}>
-                {isMobile ? 'Tous' : 'Tous les joueurs'}
+                {shortLabels ? 'Tous' : 'Tous les joueurs'}
               </Button>
-              {players.map(player => <Button key={player.id} onClick={() => handlePlayerSelect(player)} variant={selectedPlayer?.id === player.id ? "default" : "ghost"} size="sm" className={`rounded-xl md:rounded-2xl text-xs md:text-sm font-medium transition-all duration-300 flex items-center gap-1 md:gap-2 ${selectedPlayer?.id === player.id ? 'bg-gradient-to-r from-trinity-blue-500 to-trinity-purple-500 text-white shadow-lg hover:shadow-xl transform hover:scale-105' : 'glass-button bg-white/50 hover:bg-white/70 text-foreground border border-white/30'}`} style={selectedPlayer?.id === player.id ? {
+              {players.map(player => <Button key={player.id} onClick={() => handlePlayerSelect(player)} variant={selectedPlayer?.id === player.id ? "default" : "ghost"} size="sm" className={`touch-button rounded-xl md:rounded-2xl text-sm md:text-sm font-medium transition-all duration-300 flex items-center gap-1 md:gap-2 ${selectedPlayer?.id === player.id ? 'bg-gradient-to-r from-trinity-blue-500 to-trinity-purple-500 text-white shadow-lg hover:shadow-xl transform hover:scale-105' : 'glass-button bg-white/50 hover:bg-white/70 text-foreground border border-white/30'}`} style={selectedPlayer?.id === player.id ? {
             background: 'linear-gradient(90deg, rgb(10,132,255), rgb(139,92,246))',
             color: 'white'
           } : undefined}>
-                  <span className="text-sm md:text-base">{player.emoji || '😊'}</span>
-                  {isMobile ? player.name.split(' ')[0] : player.name}
+                  <span className="text-base md:text-base">{player.emoji || '😊'}</span>
+                  {shortLabels && player.name.length > 8 ? player.name.slice(0, 6) + '...' : 
+                   isMobile ? player.name.split(' ')[0] : player.name}
                 </Button>)}
             </div>
           </motion.div>}
