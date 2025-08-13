@@ -169,9 +169,9 @@ const GameSummaryStep: React.FC<GameSummaryStepProps> = ({
           variant="primary"
           size="lg"
           onClick={onStartGame}
-          className="flex-2 font-bold text-lg"
+          className="flex-2 font-bold text-sm sm:text-lg px-4 py-2 min-w-0 overflow-hidden"
         >
-          🚀 Commencer la partie !
+          <span className="truncate">🚀 Commencer la partie !</span>
         </UnifiedButton>
       </div>
     </UnifiedCard>
