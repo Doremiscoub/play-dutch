@@ -99,12 +99,12 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
               
                 {/* Conteneur unifié pour tout le header */}
                 <div className={`relative bg-white/90 backdrop-blur-xl rounded-2xl border border-white/60 shadow-xl ${
-                  isMobile ? 'px-2 py-1.5 space-y-1' : 'px-6 py-4 space-y-3'
+                  isMobile ? 'px-3 py-2 space-y-2' : 'px-6 py-4 space-y-3'
                 }`}>
                 {/* Ligne principale avec boutons et titre */}
-                <div className="relative flex items-center justify-between">
+                <div className="relative flex items-center justify-between min-h-[44px]">
                   {/* Left side - Back button */}
-                  <div className="flex items-center gap-4 flex-1">
+                  <div className={`flex items-center ${isMobile ? 'gap-2' : 'gap-4'} flex-shrink-0`}>
                     {showBackButton && onBack && (
                       <motion.div
                         whileHover={{ scale: 1.05 }}
@@ -115,7 +115,7 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
                           variant="liquidHeader"
                           size={isMobile ? "sm" : "icon"}
                           onClick={onBack}
-                          className={`rounded-xl ${isMobile ? 'h-8 w-8' : ''}`}
+                          className={`rounded-xl flex-shrink-0 ${isMobile ? 'h-9 w-9 min-w-[36px]' : 'h-10 w-10'}`}
                           aria-label="Retour"
                         >
                           <ArrowLeft className={`${isMobile ? 'h-4 w-4' : 'h-5 w-5'}`} />
@@ -124,12 +124,12 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
                     )}
                   </div>
 
-                  {/* Center - Title (absolutely centered) */}
-                  <div className="absolute left-1/2 transform -translate-x-1/2 max-w-[60%]">
+                  {/* Center - Title */}
+                  <div className={`flex-1 flex justify-center ${isMobile ? 'px-2' : 'px-4'}`}>
                     <motion.h1 
                       className={`${titleSize} font-black text-gray-900 flex items-center justify-center ${
-                        isMobile ? 'gap-0.5' : 'gap-2 sm:gap-4'
-                      } hover-scale`}
+                        isMobile ? 'gap-1' : 'gap-2 sm:gap-4'
+                      } hover-scale text-center`}
                       whileHover={{ 
                         scale: 1.05,
                         rotate: [-1, 1, -1, 0],
@@ -190,7 +190,7 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
                   </div>
 
                   {/* Right side - Rules button and Settings */}
-                  <div className={`flex items-center ${isMobile ? 'gap-0.5' : 'gap-2 sm:gap-3'} flex-1 justify-end`}>
+                  <div className={`flex items-center ${isMobile ? 'gap-1' : 'gap-2 sm:gap-3'} flex-shrink-0`}>
                     {/* Bouton Règles */}
                     {showRulesButton && (
                       <motion.div
