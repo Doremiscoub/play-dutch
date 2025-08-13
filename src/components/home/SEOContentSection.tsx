@@ -5,6 +5,7 @@ import { HowToPlaySection } from '@/components/home/HowToPlaySection';
 import { StatsSection } from '@/components/home/StatsSection';
 import { TestimonialsSection } from '@/components/home/TestimonialsSection';
 import { CTASection } from '@/components/home/CTASection';
+import OnlineModeTeaser from '@/components/home/OnlineModeTeaser';
 import SEOFooter from '@/components/SEOFooter';
 
 const SEOContentSection: React.FC = () => {
@@ -13,6 +14,7 @@ const SEOContentSection: React.FC = () => {
       <div className="container mx-auto px-4 py-16">
         <FeaturesSection />
         <HowToPlaySection />
+        <OnlineModeTeaser />
         <StatsSection />
         <TestimonialsSection />
         <CTASection />

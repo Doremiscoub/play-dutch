@@ -6,24 +6,24 @@ import { Enhanced3DFeatureCard } from '@/components/home/Enhanced3DFeatureCard';
 
 const features = [
   {
-    icon: <Zap className="h-8 w-8" />,
-    title: "Facile à utiliser",
-    description: "Interface intuitive pour ajouter les scores en quelques clics"
+    icon: <div className="text-2xl">🃏</div>,
+    title: "Compagnon parfait",
+    description: "Remplace votre carnet de scores papier par une expérience interactive"
   },
   {
     icon: <Users className="h-8 w-8" />,
     title: "2 à 10 joueurs",
-    description: "Parfait pour les petites et grandes tablées entre amis"
+    description: "Parfait pour accompagner vos parties entre amis autour de la table"
   },
   {
     icon: <Heart className="h-8 w-8" />,
-    title: "100% Gratuit",
-    description: "Aucun abonnement, aucune publicité intrusive, juste du plaisir"
+    title: "100% Hors-ligne",
+    description: "Fonctionne sans internet, vos données restent sur votre appareil"
   },
   {
     icon: <Sparkles className="h-8 w-8" />,
     title: "IA Commentateur",
-    description: "Professeur Cartouche commente vos parties avec humour"
+    description: "Professeur Cartouche analyse et commente vos performances en temps réel"
   }
 ];
 
@@ -37,7 +37,7 @@ export const FeaturesSection: React.FC = () => {
       viewport={{ once: true }}
     >
       <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-8 sm:mb-12 text-gray-800 px-4" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-        Pourquoi choisir Dutch Card Game ?
+        Pourquoi choisir l'Application Compagnon Dutch ?
       </h2>
       
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 px-4">

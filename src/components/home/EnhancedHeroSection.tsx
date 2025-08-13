@@ -57,14 +57,18 @@ const EnhancedHeroSection: React.FC = () => {
           }}
           className="space-y-4"
         >
+          <div className="inline-flex items-center gap-2 bg-dutch-blue/10 text-dutch-blue px-4 py-2 rounded-full font-semibold text-sm mb-4 border border-dutch-blue/20">
+            📱 Application Compagnon
+          </div>
+          
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
-            Jouez au <span className="text-dutch-blue">Dutch</span>
+            Accompagnez vos parties de <span className="text-dutch-blue">Dutch</span>
             <br />
-            <span className="text-dutch-orange">avec style</span>
+            <span className="text-dutch-orange">en toute simplicité</span>
           </h1>
           
           <p className="text-xl sm:text-2xl text-gray-600 font-medium max-w-2xl mx-auto leading-relaxed">
-            L'application de score qui transforme vos parties entre amis
+            🃏 L'application compagnon pour vos parties de cartes réelles
           </p>
         </motion.div>
 

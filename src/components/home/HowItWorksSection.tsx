@@ -6,24 +6,31 @@ import { Card, CardContent } from '@/components/ui/card';
 const HowItWorksSection: React.FC = () => {
   const steps = [
     {
+      number: "0",
+      icon: <div className="text-2xl">🃏</div>,
+      title: "Sortez vos cartes Dutch",
+      description: "Préparez votre jeu de cartes physique pour jouer entre amis",
+      gradient: "from-green-500 to-emerald-500"
+    },
+    {
       number: "1",
       icon: <Users className="h-8 w-8" />,
       title: "Créez votre partie",
-      description: "Ajoutez 2 à 10 joueurs et définissez vos paramètres de jeu",
+      description: "Ajoutez 2 à 10 joueurs dans l'application compagnon",
       gradient: "from-trinity-blue-500 to-trinity-purple-500"
     },
     {
       number: "2", 
       icon: <Plus className="h-8 w-8" />,
-      title: "Ajoutez les scores",
-      description: "Saisissez les points manche par manche en un seul clic",
+      title: "Jouez & saisissez",
+      description: "Jouez aux cartes et saisissez les scores dans l'application",
       gradient: "from-trinity-purple-500 to-trinity-orange-500"
     },
     {
       number: "3",
       icon: <BarChart3 className="h-8 w-8" />,
-      title: "Suivez les statistiques", 
-      description: "Le Professeur Cartouche analyse et commente vos performances",
+      title: "Suivez en temps réel", 
+      description: "L'app calcule automatiquement et le Professeur commente",
       gradient: "from-trinity-orange-500 to-trinity-blue-500"
     },
     {
@@ -48,12 +55,15 @@ const HowItWorksSection: React.FC = () => {
           <h2 className="text-4xl md:text-5xl font-black bg-gradient-to-r from-trinity-blue-600 via-trinity-purple-600 to-trinity-orange-600 bg-clip-text text-transparent mb-6 leading-tight py-2">
             🚀 Comment ça marche ? 🚀
           </h2>
-          <p className="text-xl text-neutral-700 font-bold max-w-3xl mx-auto">
-            Lancez votre partie en 4 étapes simples et laissez la magie opérer !
+          <p className="text-xl text-neutral-700 font-bold max-w-3xl mx-auto mb-4">
+            Sortez vos cartes Dutch et lancez l'application compagnon !
+          </p>
+          <p className="text-lg text-neutral-600 font-semibold max-w-3xl mx-auto">
+            🃏 Cartes physiques + 📱 Application = ✨ Expérience parfaite
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-8">
           {steps.map((step, index) => (
             <motion.div
               key={index}

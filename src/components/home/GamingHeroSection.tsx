@@ -100,30 +100,53 @@ const GamingHeroSection: React.FC = () => {
 
         {/* Titre supprimé pour design épuré avec logo uniquement */}
         
+        {/* Badge Application Compagnon */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.4 }}
+          className="mb-4"
+        >
+          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-trinity-blue-500 to-trinity-purple-500 text-white px-6 py-3 rounded-full font-black text-sm shadow-lg border-2 border-white/40">
+            📱 Application Compagnon
+          </div>
+        </motion.div>
+
         {/* Sous-titre descriptif */}
-        <motion.p
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6 }}
-          className="text-2xl sm:text-3xl md:text-4xl font-black max-w-4xl mx-auto leading-relaxed"
+          className="space-y-4"
         >
-          <span 
-            className="text-white"
+          <p className="text-2xl sm:text-3xl md:text-4xl font-black max-w-4xl mx-auto leading-relaxed">
+            <span 
+              className="text-white"
+              style={{
+                textShadow: '0 0 20px rgba(0,0,0,0.8), 0 4px 8px rgba(0,0,0,0.5)'
+              }}
+            >
+              Sortez vos cartes,{' '}
+            </span>
+            <span 
+              className="bg-gradient-to-r from-yellow-400 via-orange-500 to-pink-500 bg-clip-text text-transparent font-black"
+              style={{
+                filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))'
+              }}
+            >
+              on s'occupe des scores !
+            </span>
+          </p>
+          
+          <p 
+            className="text-lg sm:text-xl text-white/90 font-bold max-w-3xl mx-auto"
             style={{
-              textShadow: '0 0 20px rgba(0,0,0,0.8), 0 4px 8px rgba(0,0,0,0.5)'
+              textShadow: '0 0 10px rgba(0,0,0,0.8)'
             }}
           >
-            Défiez vos amis avec le{' '}
-          </span>
-          <span 
-            className="bg-gradient-to-r from-yellow-400 via-orange-500 to-pink-500 bg-clip-text text-transparent font-black"
-            style={{
-              filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))'
-            }}
-          >
-            Professeur Cartouche
-          </span>
-        </motion.p>
+            🃏 Votre smartphone devient votre carnet de scores intelligent
+          </p>
+        </motion.div>
 
         {/* CTA MEGA visible */}
         <motion.div
