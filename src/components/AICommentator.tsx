@@ -137,7 +137,7 @@ const AICommentator: React.FC<AICommentatorProps> = ({
                   >
                     🎓
                   </motion.span>
-                  <span className="story-link">Professeur</span>
+                  <span className="text-trinity-blue-700 font-bold">Professeur</span>
                   <motion.span 
                     className="text-trinity-orange-600 font-extrabold"
                     animate={{
