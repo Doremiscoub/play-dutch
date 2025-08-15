@@ -10,6 +10,8 @@ import { useUnifiedHeader } from '@/hooks/useUnifiedHeader';
 import AICommentator from '@/components/AICommentator';
 import { MobileOptimizer } from '@/components/ui/mobile-optimizer';
 import { toast } from 'sonner';
+import { AdProvider } from '@/contexts/AdContext';
+import GameLayout from '@/components/layout/GameLayout';
 
 const SimpleGamePage: React.FC = () => {
   const navigate = useNavigate();
@@ -126,55 +128,57 @@ const SimpleGamePage: React.FC = () => {
 
   return (
     <PageShell variant="game">
-      <MobileOptimizer pageType="game" className="min-h-screen">
-        <UnifiedHeader 
-          {...useUnifiedHeader({
-            title: `Manche ${roundHistory.length + 1}`,
-            variant: "game",
-            roundCount: roundHistory.length + 1,
-            scoreLimit: scoreLimit,
-            gameStartTime: gameStartTime || new Date(),
-            showRulesButton: true,
-            onBack: () => navigate('/setup')
-          })}
-        />
-        
-        <div className="container mx-auto px-4 py-6">
-        {/* Commentaires du Professeur Cartouche */}
-        <div className="mb-6">
-          <AICommentator 
-            players={players}
-            roundHistory={roundHistory}
-            className="mx-auto max-w-2xl"
+      <AdProvider>
+        <MobileOptimizer pageType="game" className="min-h-screen">
+          <UnifiedHeader 
+            {...useUnifiedHeader({
+              title: `Manche ${roundHistory.length + 1}`,
+              variant: "game",
+              roundCount: roundHistory.length + 1,
+              scoreLimit: scoreLimit,
+              gameStartTime: gameStartTime || new Date(),
+              showRulesButton: true,
+              onBack: () => navigate('/setup')
+            })}
           />
-        </div>
-        
-        <ScoreBoard
-          players={players}
-          onAddRound={() => {}} // Non utilisé car on utilise openScoreForm
-          onUndoLastRound={undoLastRound}
-          onEndGame={handleEndGame}
-          roundHistory={roundHistory}
-          showGameEndConfirmation={showGameEndConfirmation}
-          onConfirmEndGame={handleConfirmEndGame}
-          onCancelEndGame={handleCancelEndGame}
-          scoreLimit={scoreLimit}
-          openScoreForm={openScoreForm}
-        />
-        </div>
+          
+          <GameLayout>
+            {/* Commentaires du Professeur Cartouche */}
+            <div className="mb-6">
+              <AICommentator 
+                players={players}
+                roundHistory={roundHistory}
+                className="mx-auto max-w-2xl"
+              />
+            </div>
+            
+            <ScoreBoard
+              players={players}
+              onAddRound={() => {}} // Non utilisé car on utilise openScoreForm
+              onUndoLastRound={undoLastRound}
+              onEndGame={handleEndGame}
+              roundHistory={roundHistory}
+              showGameEndConfirmation={showGameEndConfirmation}
+              onConfirmEndGame={handleConfirmEndGame}
+              onCancelEndGame={handleCancelEndGame}
+              scoreLimit={scoreLimit}
+              openScoreForm={openScoreForm}
+            />
+          </GameLayout>
 
-        {/* Modal pour ajouter une nouvelle manche */}
-        <NewRoundModal
-        open={isScoreFormOpen}
-        onClose={() => setIsScoreFormOpen(false)}
-        players={players}
-        scores={scores}
-        setScores={setScores}
-        dutchPlayerId={dutchPlayerId}
-        setDutchPlayerId={setDutchPlayerId}
-        onAddRound={handleAddRound}
-        />
-      </MobileOptimizer>
+          {/* Modal pour ajouter une nouvelle manche */}
+          <NewRoundModal
+            open={isScoreFormOpen}
+            onClose={() => setIsScoreFormOpen(false)}
+            players={players}
+            scores={scores}
+            setScores={setScores}
+            dutchPlayerId={dutchPlayerId}
+            setDutchPlayerId={setDutchPlayerId}
+            onAddRound={handleAddRound}
+          />
+        </MobileOptimizer>
+      </AdProvider>
     </PageShell>
   );
 };

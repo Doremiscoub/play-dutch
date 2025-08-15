@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Player } from '@/types';
 import GameModeHandler from '@/components/game/GameModeHandler';
-import ScoreBoardWithAds from '@/components/scoreboard/ScoreBoardWithAds';
+import ScoreBoard from '@/components/ScoreBoard';
 import IntelligentProfessorCartouche from '@/components/ai-commentator/IntelligentProfessorCartouche';
 
 interface GameContentViewProps {
@@ -66,7 +66,7 @@ const GameContentView: React.FC<GameContentViewProps> = ({
               />
             </motion.div>
 
-            <ScoreBoardWithAds
+            <ScoreBoard
               players={players}
               roundHistory={roundHistory}
               onAddRound={onAddRound}
