@@ -11,44 +11,48 @@ interface GameLayoutProps {
 const GameLayout: React.FC<GameLayoutProps> = ({ children, className }) => {
   const { shouldShowAds, isMobile } = useAds();
 
-  // Mobile : layout simple avec bannière optionnelle
+  // Mobile : layout simple avec bannière optionnelle en haut
   if (isMobile) {
     return (
-      <div className={cn('min-h-screen flex flex-col', className)}>
+      <div className={cn('w-full', className)}>
         {/* Bannière top mobile */}
         {shouldShowAds && (
-          <div className="w-full flex justify-center py-4 px-4">
+          <div className="w-full flex justify-center py-2 mb-4">
             <AdSlot placement="game-banner-mobile" />
           </div>
         )}
         
         {/* Contenu principal */}
-        <div className="flex-1 px-4">
+        <div className="w-full">
           {children}
         </div>
       </div>
     );
   }
 
-  // Desktop : layout avec sidebars fixes
+  // Desktop : layout avec sidebars pour le contenu de jeu uniquement
   return (
-    <div className={cn('min-h-screen grid grid-cols-[250px_1fr_250px] gap-6', className)}>
-      {/* Sidebar gauche fixe */}
-      <aside className="sticky top-0 h-screen flex flex-col justify-start items-center pt-8">
+    <div className={cn('w-full grid grid-cols-[250px_1fr_250px] gap-6 min-h-[80vh]', className)}>
+      {/* Sidebar gauche */}
+      <aside className="flex flex-col justify-start items-center pt-4">
         {shouldShowAds && (
-          <AdSlot placement="game-sidebar-left" />
+          <div className="sticky top-4">
+            <AdSlot placement="game-sidebar-left" />
+          </div>
         )}
       </aside>
       
-      {/* Contenu central scrollable */}
-      <main className="w-full min-h-screen">
+      {/* Contenu central */}
+      <main className="w-full">
         {children}
       </main>
       
-      {/* Sidebar droite fixe */}
-      <aside className="sticky top-0 h-screen flex flex-col justify-start items-center pt-8">
+      {/* Sidebar droite */}
+      <aside className="flex flex-col justify-start items-center pt-4">
         {shouldShowAds && (
-          <AdSlot placement="game-sidebar-right" />
+          <div className="sticky top-4">
+            <AdSlot placement="game-sidebar-right" />
+          </div>
         )}
       </aside>
     </div>

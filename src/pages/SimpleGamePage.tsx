@@ -142,8 +142,8 @@ const SimpleGamePage: React.FC = () => {
             })}
           />
           
-          <GameLayout>
-            {/* Commentaires du Professeur Cartouche */}
+          {/* Commentaires du Professeur Cartouche */}
+          <div className="w-full max-w-7xl mx-auto px-4 py-6">
             <div className="mb-6">
               <AICommentator 
                 players={players}
@@ -152,19 +152,21 @@ const SimpleGamePage: React.FC = () => {
               />
             </div>
             
-            <ScoreBoard
-              players={players}
-              onAddRound={() => {}} // Non utilisé car on utilise openScoreForm
-              onUndoLastRound={undoLastRound}
-              onEndGame={handleEndGame}
-              roundHistory={roundHistory}
-              showGameEndConfirmation={showGameEndConfirmation}
-              onConfirmEndGame={handleConfirmEndGame}
-              onCancelEndGame={handleCancelEndGame}
-              scoreLimit={scoreLimit}
-              openScoreForm={openScoreForm}
-            />
-          </GameLayout>
+            <GameLayout>
+              <ScoreBoard
+                players={players}
+                onAddRound={() => {}} // Non utilisé car on utilise openScoreForm
+                onUndoLastRound={undoLastRound}
+                onEndGame={handleEndGame}
+                roundHistory={roundHistory}
+                showGameEndConfirmation={showGameEndConfirmation}
+                onConfirmEndGame={handleConfirmEndGame}
+                onCancelEndGame={handleCancelEndGame}
+                scoreLimit={scoreLimit}
+                openScoreForm={openScoreForm}
+              />
+            </GameLayout>
+          </div>
 
           {/* Modal pour ajouter une nouvelle manche */}
           <NewRoundModal
