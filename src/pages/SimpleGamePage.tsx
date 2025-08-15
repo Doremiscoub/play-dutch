@@ -142,17 +142,17 @@ const SimpleGamePage: React.FC = () => {
             })}
           />
           
-          {/* Commentaires du Professeur Cartouche */}
-          <div className="w-full max-w-7xl mx-auto px-4 py-6">
-            <div className="mb-6">
-              <AICommentator 
-                players={players}
-                roundHistory={roundHistory}
-                className="mx-auto max-w-2xl"
-              />
-            </div>
-            
-            <GameLayout>
+          <GameLayout>
+            <div className="w-full max-w-7xl mx-auto px-4 py-6">
+              {/* Commentaires du Professeur Cartouche */}
+              <div className="mb-6">
+                <AICommentator 
+                  players={players}
+                  roundHistory={roundHistory}
+                  className="mx-auto max-w-2xl"
+                />
+              </div>
+              
               <ScoreBoard
                 players={players}
                 onAddRound={() => {}} // Non utilisé car on utilise openScoreForm
@@ -165,8 +165,8 @@ const SimpleGamePage: React.FC = () => {
                 scoreLimit={scoreLimit}
                 openScoreForm={openScoreForm}
               />
-            </GameLayout>
-          </div>
+            </div>
+          </GameLayout>
 
           {/* Modal pour ajouter une nouvelle manche */}
           <NewRoundModal
