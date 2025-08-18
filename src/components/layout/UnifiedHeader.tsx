@@ -8,7 +8,6 @@ import { ModernTitle } from '@/components/ui/modern-title';
 import { useAdaptiveInterface } from '@/components/ui/adaptive-layout';
 import { MobileGameHeader } from './MobileGameHeader';
 import { MobilePageHeader } from './MobilePageHeader';
-import { MobileHomeHeader } from './MobileHomeHeader';
 import useIsMobile from '@/hooks/use-mobile';
 
 interface UnifiedHeaderProps {
@@ -63,14 +62,9 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
       );
     }
 
-    // Header pour la page d'accueil
+    // Header générique pour toutes les autres pages (sauf accueil)
     if (title === 'Dutch - Carnet de scores' || title === 'Dutch') {
-      return (
-        <MobileHomeHeader
-          title="Dutch"
-          showSettings={showSettings}
-        />
-      );
+      return null; // Pas de header sur la page d'accueil
     }
 
     // Header générique pour toutes les autres pages

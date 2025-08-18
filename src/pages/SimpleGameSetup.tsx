@@ -44,7 +44,14 @@ const SimpleGameSetup: React.FC = () => {
   return (
     <PageShell variant="game">
       <MobileOptimizer pageType="setup" className="min-h-screen">
-        <UnifiedHeader {...headerConfig} />
+        <UnifiedHeader 
+          title="Configuration"
+          showBackButton={true}
+          onBack={() => navigate('/')}
+          showSettings={true}
+          showRulesButton={true}
+          variant="default"
+        />
 
         {/* Contenu principal stabilisé */}
         <div className="container mx-auto px-4 py-4 sm:py-8 max-w-4xl relative z-20">

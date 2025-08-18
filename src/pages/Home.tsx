@@ -5,8 +5,6 @@ import { motion } from 'framer-motion';
 import { Gamepad2, Users, Heart, Sparkles, BookOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import UnifiedHeader from '@/components/layout/UnifiedHeader';
-import { useUnifiedHeader } from '@/hooks/useUnifiedHeader';
 import PageShell from '@/components/layout/PageShell';
 import { MobileOptimizer } from '@/components/ui/mobile-optimizer';
 import SimplifiedHeroSection from '@/components/home/SimplifiedHeroSection';
@@ -55,9 +53,7 @@ const Home: React.FC = () => {
   return (
     <PageShell variant="default">
       <MobileOptimizer pageType="home" className="min-h-screen">
-          <UnifiedHeader 
-            {...useUnifiedHeader({ hideTitle: true })}
-          />
+          {/* Pas de header sur la page d'accueil */}
 
           <HomeLayout>
             <SimplifiedHeroSection />
