@@ -4,6 +4,7 @@ import { UnifiedPageLayout } from '@/components/ui/unified-page-layout';
 import { UnifiedCard } from '@/components/ui/unified-card';
 import { useSEO } from '@/hooks/useSEO';
 import PageShell from '@/components/layout/PageShell';
+import EnhancedContentLayout from '@/components/layout/EnhancedContentLayout';
 
 const TermsPage: React.FC = () => {
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ const TermsPage: React.FC = () => {
         onBack={() => navigate('/')}
         backgroundVariant="minimal"
       >
+        <EnhancedContentLayout adPlacement="legal" stickyAds>
         <UnifiedCard variant="light" padding="lg">
           <div className="prose prose-gray max-w-none space-y-6">
             <div className="text-sm text-gray-500 mb-6">
@@ -100,6 +102,7 @@ const TermsPage: React.FC = () => {
             </section>
           </div>
         </UnifiedCard>
+        </EnhancedContentLayout>
       </UnifiedPageLayout>
     </PageShell>
   );

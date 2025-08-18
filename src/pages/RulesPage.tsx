@@ -6,7 +6,7 @@ import UnifiedHeader from '@/components/layout/UnifiedHeader';
 import { useUnifiedHeader } from '@/hooks/useUnifiedHeader';
 import PageShell from '@/components/layout/PageShell';
 import { MobileOptimizer } from '@/components/ui/mobile-optimizer';
-import ContentLayout from '@/components/layout/ContentLayout';
+import EnhancedContentLayout from '@/components/layout/EnhancedContentLayout';
 import { useSEO } from '@/hooks/useSEO';
 
 const RulesPage: React.FC = () => {
@@ -31,12 +31,12 @@ const RulesPage: React.FC = () => {
         <UnifiedHeader {...useUnifiedHeader()} />
 
         <div className="p-4 pt-8 pb-20">
-          <ContentLayout>
+          <EnhancedContentLayout adPlacement="rules" stickyAds>
             <RulesTabs 
               activeTab={activeTab}
               onTabChange={setActiveTab}
             />
-          </ContentLayout>
+          </EnhancedContentLayout>
         </div>
       </MobileOptimizer>
     </PageShell>

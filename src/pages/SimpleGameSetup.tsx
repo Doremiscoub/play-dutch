@@ -10,7 +10,7 @@ import UnifiedHeader from '@/components/layout/UnifiedHeader';
 import { useUnifiedHeader } from '@/hooks/useUnifiedHeader';
 import PageShell from '@/components/layout/PageShell';
 import { MobileOptimizer } from '@/components/ui/mobile-optimizer';
-import AdSlot from '@/components/ads/AdSlot';
+import EnhancedAdSlot from '@/components/ads/EnhancedAdSlot';
 
 const SimpleGameSetup: React.FC = () => {
   const navigate = useNavigate();
@@ -58,7 +58,7 @@ const SimpleGameSetup: React.FC = () => {
 
           {/* Publicité setup */}
           <div className="w-full flex justify-center py-4 my-6">
-            <AdSlot placement="setup-inline" />
+            <EnhancedAdSlot placement="setup-inline" />
           </div>
 
           {/* Informations sur le jeu */}

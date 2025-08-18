@@ -11,7 +11,7 @@ import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { Card, CardContent } from '@/components/ui/card';
 import PageShell from '@/components/layout/PageShell';
-import ContentLayout from '@/components/layout/ContentLayout';
+import EnhancedContentLayout from '@/components/layout/EnhancedContentLayout';
 
 const HistoryPage: React.FC = () => {
   const navigate = useNavigate();
@@ -38,7 +38,7 @@ const HistoryPage: React.FC = () => {
       <UnifiedHeader {...useUnifiedHeader()} />
 
       <div className="p-4 pt-8 pb-20">
-        <ContentLayout>
+        <EnhancedContentLayout adPlacement="history" stickyAds>
           <div className="space-y-6">
             <UnifiedTabs
               value={activeTab}
@@ -108,7 +108,7 @@ const HistoryPage: React.FC = () => {
               )}
             </div>
           </div>
-        </ContentLayout>
+        </EnhancedContentLayout>
       </div>
     </PageShell>
   );
