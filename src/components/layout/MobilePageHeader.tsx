@@ -43,7 +43,8 @@ export const MobilePageHeader: React.FC<MobilePageHeaderProps> = ({
               variant="ghost"
               size="sm"
               onClick={onBack}
-              className="h-10 w-10 rounded-xl hover:bg-dutch-accent/10"
+              className="h-10 w-10 rounded-xl hover:bg-dutch-accent/10 transition-colors"
+              aria-label="Retour"
             >
               <ArrowLeft className="h-5 w-5" />
             </Button>
@@ -70,7 +71,8 @@ export const MobilePageHeader: React.FC<MobilePageHeaderProps> = ({
                 variant="ghost"
                 size="sm"
                 onClick={() => navigate('/rules')}
-                className="h-10 w-10 rounded-xl hover:bg-dutch-purple/10"
+                className="h-10 w-10 rounded-xl hover:bg-dutch-purple/10 transition-colors"
+                aria-label="Consulter les règles"
               >
                 <BookOpen className="h-4 w-4 text-dutch-purple" />
               </Button>

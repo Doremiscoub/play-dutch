@@ -59,7 +59,8 @@ export const MobileGameHeader: React.FC<MobileGameHeaderProps> = ({
             variant="ghost"
             size="sm"
             onClick={onBack}
-            className="h-10 w-10 rounded-xl hover:bg-dutch-accent/10"
+            className="h-10 w-10 rounded-xl hover:bg-dutch-accent/10 transition-colors"
+            aria-label="Retour"
           >
             <ArrowLeft className="h-5 w-5" />
           </Button>
@@ -117,7 +118,7 @@ export const MobileGameHeader: React.FC<MobileGameHeaderProps> = ({
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             animate={{ 
-              borderColor: ["hsl(var(--dutch-orange))/20%", "hsl(var(--dutch-orange))/40%", "hsl(var(--dutch-orange))/20%"]
+              borderColor: ["hsl(var(--dutch-orange))/20", "hsl(var(--dutch-orange))/40", "hsl(var(--dutch-orange))/20"]
             }}
             transition={{ duration: 2, repeat: Infinity }}
           >
