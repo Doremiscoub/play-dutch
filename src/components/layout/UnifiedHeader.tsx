@@ -6,6 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import GameSettings from '@/components/GameSettings';
 import { ModernTitle } from '@/components/ui/modern-title';
 import { useAdaptiveInterface } from '@/components/ui/adaptive-layout';
+import { MobileGameHeader } from './MobileGameHeader';
+import useIsMobile from '@/hooks/use-mobile';
 
 interface UnifiedHeaderProps {
   title: string;
@@ -34,6 +36,7 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
 }) => {
   const navigate = useNavigate();
   const [elapsedTime, setElapsedTime] = useState<string>('00:00');
+  const isMobileHook = useIsMobile();
   const { 
     isMobile, 
     isTablet, 
@@ -42,6 +45,19 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
     getAdaptiveTextSize, 
     getAdaptiveButtonSize 
   } = useAdaptiveInterface();
+
+  // Utilise le header mobile optimisé pour les parties en mode mobile
+  if (isMobileHook && variant === 'game') {
+    return (
+      <MobileGameHeader
+        title={title}
+        roundCount={roundCount}
+        scoreLimit={scoreLimit}
+        onBack={onBack}
+        gameStartTime={gameStartTime}
+      />
+    );
+  }
 
   // Chronomètre
   useEffect(() => {
