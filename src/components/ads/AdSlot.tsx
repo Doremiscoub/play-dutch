@@ -2,7 +2,18 @@ import React, { useEffect, useRef } from 'react';
 import { useAds } from '@/contexts/AdContext';
 
 interface AdSlotProps {
-  placement: 'homepage-inline' | 'game-sidebar-left' | 'game-sidebar-right' | 'game-banner-mobile';
+  placement: 
+    | 'homepage-inline' 
+    | 'game-sidebar-left' 
+    | 'game-sidebar-right' 
+    | 'game-banner-mobile'
+    | 'setup-inline'
+    | 'rules-sidebar'
+    | 'rules-inline'
+    | 'history-sidebar'
+    | 'history-inline'
+    | 'content-inline'
+    | 'content-sidebar';
   className?: string;
 }
 
@@ -39,6 +50,55 @@ const AdSlot: React.FC<AdSlotProps> = ({ placement, className = '' }) => {
       content: 'Bannière mobile',
       slotId: import.meta.env.VITE_ADSENSE_SLOT_GAME_MOBILE || '',
       format: 'horizontal'
+    },
+    'setup-inline': {
+      show: shouldShowAds,
+      dimensions: isMobile ? 'w-full h-[200px]' : 'w-full max-w-[728px] h-[90px] mx-auto',
+      content: 'Publicité configuration',
+      slotId: import.meta.env.VITE_ADSENSE_SLOT_SETUP || '',
+      format: 'auto'
+    },
+    'rules-sidebar': {
+      show: shouldShowAds && !isMobile,
+      dimensions: 'w-[300px] h-[600px]',
+      content: 'Publicité règles sidebar',
+      slotId: import.meta.env.VITE_ADSENSE_SLOT_RULES_SIDEBAR || '',
+      format: 'vertical'
+    },
+    'rules-inline': {
+      show: shouldShowAds,
+      dimensions: isMobile ? 'w-full h-[200px]' : 'w-full max-w-[728px] h-[90px] mx-auto',
+      content: 'Publicité règles inline',
+      slotId: import.meta.env.VITE_ADSENSE_SLOT_RULES_INLINE || '',
+      format: 'auto'
+    },
+    'history-sidebar': {
+      show: shouldShowAds && !isMobile,
+      dimensions: 'w-[300px] h-[600px]',
+      content: 'Publicité historique sidebar',
+      slotId: import.meta.env.VITE_ADSENSE_SLOT_HISTORY_SIDEBAR || '',
+      format: 'vertical'
+    },
+    'history-inline': {
+      show: shouldShowAds,
+      dimensions: isMobile ? 'w-full h-[200px]' : 'w-full max-w-[728px] h-[90px] mx-auto',
+      content: 'Publicité historique inline',
+      slotId: import.meta.env.VITE_ADSENSE_SLOT_HISTORY_INLINE || '',
+      format: 'auto'
+    },
+    'content-inline': {
+      show: shouldShowAds,
+      dimensions: isMobile ? 'w-full h-[200px]' : 'w-full max-w-[728px] h-[90px] mx-auto',
+      content: 'Publicité contenu inline',
+      slotId: import.meta.env.VITE_ADSENSE_SLOT_CONTENT_INLINE || '',
+      format: 'auto'
+    },
+    'content-sidebar': {
+      show: shouldShowAds && !isMobile,
+      dimensions: 'w-[300px] h-[600px]',
+      content: 'Publicité contenu sidebar',
+      slotId: import.meta.env.VITE_ADSENSE_SLOT_CONTENT_SIDEBAR || '',
+      format: 'vertical'
     }
   };
 

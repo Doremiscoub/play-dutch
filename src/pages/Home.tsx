@@ -11,7 +11,6 @@ import PageShell from '@/components/layout/PageShell';
 import { MobileOptimizer } from '@/components/ui/mobile-optimizer';
 import SimplifiedHeroSection from '@/components/home/SimplifiedHeroSection';
 import LazyHomeSections from '@/components/home/LazyHomeSections';
-import { AdProvider } from '@/contexts/AdContext';
 import HomeLayout from '@/components/layout/HomeLayout';
 
 const Home: React.FC = () => {
@@ -55,8 +54,7 @@ const Home: React.FC = () => {
 
   return (
     <PageShell variant="default">
-      <AdProvider>
-        <MobileOptimizer pageType="home" className="min-h-screen">
+      <MobileOptimizer pageType="home" className="min-h-screen">
           <UnifiedHeader 
             {...useUnifiedHeader({ hideTitle: true })}
           />
@@ -225,7 +223,6 @@ const Home: React.FC = () => {
             <LazyHomeSections navigate={navigate} />
           </HomeLayout>
         </MobileOptimizer>
-      </AdProvider>
     </PageShell>
   );
 };

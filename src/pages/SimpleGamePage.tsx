@@ -10,7 +10,6 @@ import { useUnifiedHeader } from '@/hooks/useUnifiedHeader';
 import AICommentator from '@/components/AICommentator';
 import { MobileOptimizer } from '@/components/ui/mobile-optimizer';
 import { toast } from 'sonner';
-import { AdProvider } from '@/contexts/AdContext';
 import GameLayout from '@/components/layout/GameLayout';
 
 const SimpleGamePage: React.FC = () => {
@@ -128,8 +127,7 @@ const SimpleGamePage: React.FC = () => {
 
   return (
     <PageShell variant="game">
-      <AdProvider>
-        <MobileOptimizer pageType="game" className="min-h-screen">
+      <MobileOptimizer pageType="game" className="min-h-screen">
           <UnifiedHeader 
             {...useUnifiedHeader({
               title: `Manche ${roundHistory.length + 1}`,
@@ -180,7 +178,6 @@ const SimpleGamePage: React.FC = () => {
             onAddRound={handleAddRound}
           />
         </MobileOptimizer>
-      </AdProvider>
     </PageShell>
   );
 };
