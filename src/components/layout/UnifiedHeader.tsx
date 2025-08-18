@@ -7,6 +7,8 @@ import GameSettings from '@/components/GameSettings';
 import { ModernTitle } from '@/components/ui/modern-title';
 import { useAdaptiveInterface } from '@/components/ui/adaptive-layout';
 import { MobileGameHeader } from './MobileGameHeader';
+import { MobilePageHeader } from './MobilePageHeader';
+import { MobileHomeHeader } from './MobileHomeHeader';
 import useIsMobile from '@/hooks/use-mobile';
 
 interface UnifiedHeaderProps {
@@ -46,15 +48,39 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
     getAdaptiveButtonSize 
   } = useAdaptiveInterface();
 
-  // Utilise le header mobile optimisé pour les parties en mode mobile
-  if (isMobileHook && variant === 'game') {
+  // Headers mobiles optimisés
+  if (isMobileHook) {
+    // Header spécifique pour les parties
+    if (variant === 'game') {
+      return (
+        <MobileGameHeader
+          title={title}
+          roundCount={roundCount}
+          scoreLimit={scoreLimit}
+          onBack={onBack}
+          gameStartTime={gameStartTime}
+        />
+      );
+    }
+
+    // Header pour la page d'accueil
+    if (title === 'Dutch - Carnet de scores' || title === 'Dutch') {
+      return (
+        <MobileHomeHeader
+          title="Dutch"
+          showSettings={showSettings}
+        />
+      );
+    }
+
+    // Header générique pour toutes les autres pages
     return (
-      <MobileGameHeader
+      <MobilePageHeader
         title={title}
-        roundCount={roundCount}
-        scoreLimit={scoreLimit}
-        onBack={onBack}
-        gameStartTime={gameStartTime}
+        onBack={showBackButton ? onBack : undefined}
+        showSettings={showSettings}
+        showRulesButton={showRulesButton}
+        variant={variant}
       />
     );
   }
