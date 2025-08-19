@@ -95,20 +95,24 @@ const AdminAdDiagnostics: React.FC = () => {
   }, []);
 
   const envVars = [
-    'VITE_ADSENSE_CLIENT_ID',
-    'VITE_ADSENSE_SLOT_HOMEPAGE',
-    'VITE_ADSENSE_SLOT_GAME_LEFT', 
-    'VITE_ADSENSE_SLOT_GAME_RIGHT',
-    'VITE_ADSENSE_SLOT_GAME_MOBILE',
-    'VITE_ADSENSE_SLOT_SETUP',
-    'VITE_ADSENSE_SLOT_RULES_SIDEBAR',
-    'VITE_ADSENSE_SLOT_RULES_INLINE',
-    'VITE_ADSENSE_SLOT_HISTORY_SIDEBAR',
-    'VITE_ADSENSE_SLOT_HISTORY_INLINE',
-    'VITE_ADSENSE_SLOT_CONTENT_INLINE',
-    'VITE_ADSENSE_SLOT_CONTENT_SIDEBAR',
-    'VITE_ADSENSE_SLOT_FAQ',
-    'VITE_ADSENSE_SLOT_LEGAL'
+    { name: 'VITE_ADSENSE_CLIENT_ID', required: true },
+    { name: 'VITE_ADSENSE_SLOT_HOMEPAGE', required: true },
+    { name: 'VITE_ADSENSE_SLOT_GAME_LEFT', required: true }, 
+    { name: 'VITE_ADSENSE_SLOT_GAME_RIGHT', required: true },
+    { name: 'VITE_ADSENSE_SLOT_GAME_MOBILE', required: true }
+  ];
+
+  // Hardcoded real slots using slot ID 7153963996
+  const hardcodedSlots = [
+    'setup-inline',
+    'rules-sidebar', 
+    'rules-inline',
+    'history-sidebar',
+    'history-inline',
+    'content-inline',
+    'content-sidebar',
+    'faq-inline',
+    'legal-inline'
   ];
 
   const currentPlacements = getCurrentRoutePlacements();
@@ -174,11 +178,11 @@ const AdminAdDiagnostics: React.FC = () => {
           <CardContent className="max-h-64 overflow-y-auto">
             <div className="space-y-1">
               {envVars.map(envVar => {
-                const value = import.meta.env[envVar];
+                const value = import.meta.env[envVar.name];
                 const isPlaceholder = !value || value.includes('PLACEHOLDER');
                 return (
-                  <div key={envVar} className="flex justify-between text-xs">
-                    <span className="truncate">{envVar.replace('VITE_ADSENSE_', '')}:</span>
+                  <div key={envVar.name} className="flex justify-between text-xs">
+                    <span className="truncate">{envVar.name.replace('VITE_ADSENSE_', '')}:</span>
                     <Badge 
                       variant={isPlaceholder ? "destructive" : "default"}
                       className="ml-2"
@@ -188,6 +192,15 @@ const AdminAdDiagnostics: React.FC = () => {
                   </div>
                 );
               })}
+              <div className="mt-2 pt-2 border-t">
+                <p className="text-xs text-muted-foreground mb-1">Hardcoded Slots (ID: 7153963996):</p>
+                {hardcodedSlots.map(slot => (
+                  <div key={slot} className="flex justify-between text-xs">
+                    <span className="truncate">{slot}:</span>
+                    <Badge variant="default" className="ml-2">REAL ID</Badge>
+                  </div>
+                ))}
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -242,17 +255,30 @@ const AdminAdDiagnostics: React.FC = () => {
         </CardHeader>
         <CardContent>
           <p className="text-sm text-muted-foreground mb-3">
-            The following environment variables still have placeholder values and need real AdSense slot IDs:
+            Environment variables with placeholder values that need real AdSense slot IDs:
           </p>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
             {envVars.filter(envVar => {
-              const value = import.meta.env[envVar];
+              const value = import.meta.env[envVar.name];
               return !value || value.includes('PLACEHOLDER');
             }).map(envVar => (
-              <Badge key={envVar} variant="destructive" className="text-xs">
-                {envVar.replace('VITE_ADSENSE_', '')}
+              <Badge key={envVar.name} variant="destructive" className="text-xs">
+                {envVar.name.replace('VITE_ADSENSE_', '')}
               </Badge>
             ))}
+          </div>
+          
+          <div className="mt-4">
+            <p className="text-sm text-green-600 mb-2">
+              ✅ Slots configured with real ID (7153963996):
+            </p>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+              {hardcodedSlots.map(slot => (
+                <Badge key={slot} variant="default" className="text-xs">
+                  {slot.toUpperCase()}
+                </Badge>
+              ))}
+            </div>
           </div>
         </CardContent>
       </Card>
