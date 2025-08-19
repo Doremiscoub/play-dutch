@@ -14,12 +14,33 @@ export function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T 
       // Vérifier si window est défini (SSR-safe)
       if (typeof window !== 'undefined') {
         const item = window.localStorage.getItem(key);
-        // Analyser l'élément stocké ou retourner la valeur initiale
-        return item ? JSON.parse(item) : initialValue;
+        if (item) {
+          const parsedItem = JSON.parse(item);
+          
+          // Security: Check for expiration if the item has an expires field
+          if (parsedItem && typeof parsedItem === 'object' && parsedItem.expires) {
+            if (new Date().getTime() > parsedItem.expires) {
+              window.localStorage.removeItem(key);
+              return initialValue;
+            }
+            return parsedItem.data || initialValue;
+          }
+          
+          return parsedItem;
+        }
+        return initialValue;
       }
       return initialValue;
     } catch (error) {
       console.error(`Erreur lors de la récupération de la clé localStorage "${key}":`, error);
+      // Security: Remove corrupted data
+      if (typeof window !== 'undefined') {
+        try {
+          window.localStorage.removeItem(key);
+        } catch (e) {
+          console.error('Could not remove corrupted localStorage item:', e);
+        }
+      }
       return initialValue;
     }
   });
