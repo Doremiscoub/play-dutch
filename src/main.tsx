@@ -71,9 +71,9 @@ root.render(
 
 // Performance monitoring pour production  
 if (import.meta.env.PROD) {
-  // Service Worker registration
+  // Service Worker registration with cache busting
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js').catch(() => {
+    navigator.serviceWorker.register('/sw.js?v=2').catch(() => {
       // Silently handle SW registration failures
     });
   }
