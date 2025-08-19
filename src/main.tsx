@@ -10,11 +10,15 @@ import App from './App.tsx'
 import './index.css'
 import './styles/theme.css'
 import { initializeSentry, SentryErrorBoundary } from './utils/sentryConfig'
+import { initWebVitals } from './utils/reportWebVitals'
 
 // Initialize Sentry as early as possible
 initializeSentry().catch(error => {
   console.error('Failed to initialize Sentry:', error);
 });
+
+// Initialize Web Vitals monitoring
+initWebVitals();
 
 // Configuration QueryClient optimisée pour production
 const queryClient = new QueryClient({

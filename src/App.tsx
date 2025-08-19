@@ -2,7 +2,7 @@
 /**
  * Composant principal de l'application avec système de routes optimisé
  */
-import React, { useEffect } from 'react';
+import React, { useEffect, Suspense } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate, useLocation } from 'react-router-dom';
 import { Toaster } from "sonner";
 import * as Sentry from '@sentry/react';
@@ -23,12 +23,16 @@ import TermsPage from './pages/TermsPage';
 import FAQPage from './pages/FAQPage';
 import GuideStrategy from './pages/GuideStrategy';
 
+// Lazy load admin components (dev only)
+const AdminAdDiagnosticsLazy = React.lazy(() => import('./pages/AdminAdDiagnostics'));
+
 // Composants
 import ProtectedRoute from './components/ProtectedRoute';
 import ProtectedGameRoute from './components/routing/ProtectedGameRoute';
 import RouteErrorBoundary from './components/error-handling/RouteErrorBoundary';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
 import AppLayout from './components/layout/AppLayout';
+import DevPanel from './components/dev/DevPanel';
 
 // Contexte
 import { SupabaseAuthProvider } from './context/SupabaseAuthContext';
@@ -102,6 +106,15 @@ const App: React.FC = () => {
               <Route path="faq" element={<FAQPage />} />
               <Route path="strategy" element={<GuideStrategy />} />
               
+              {/* Dev-only admin routes */}
+              {import.meta.env.DEV && (
+                <Route path="admin/ad-diagnostics" element={
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <AdminAdDiagnosticsLazy />
+                  </Suspense>
+                } />
+              )}
+              
               {/* Redirections SEO friendly */}
               <Route path="aide" element={<Navigate to="/faq" replace />} />
               <Route path="questions" element={<Navigate to="/faq" replace />} />
@@ -129,6 +142,9 @@ const App: React.FC = () => {
           />
           
           <PWAInstallPrompt />
+          
+          {/* Dev Panel - only in development */}
+          {import.meta.env.DEV && <DevPanel />}
         </Router>
         </AdProvider>
       </SupabaseAuthProvider>

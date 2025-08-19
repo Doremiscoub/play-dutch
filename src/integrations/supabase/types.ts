@@ -14,6 +14,27 @@ export type Database = {
   }
   public: {
     Tables: {
+      ad_events: {
+        Row: {
+          event: string
+          id: string
+          placement: string
+          ts: string | null
+        }
+        Insert: {
+          event: string
+          id?: string
+          placement: string
+          ts?: string | null
+        }
+        Update: {
+          event?: string
+          id?: string
+          placement?: string
+          ts?: string | null
+        }
+        Relationships: []
+      }
       games: {
         Row: {
           created_at: string | null
@@ -154,6 +175,36 @@ export type Database = {
           subscription_tier?: string | null
           updated_at?: string
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      web_vitals: {
+        Row: {
+          created_at: string | null
+          delta: number
+          id: string
+          name: string
+          t: string
+          user_id: string | null
+          value: number
+        }
+        Insert: {
+          created_at?: string | null
+          delta: number
+          id?: string
+          name: string
+          t: string
+          user_id?: string | null
+          value: number
+        }
+        Update: {
+          created_at?: string | null
+          delta?: number
+          id?: string
+          name?: string
+          t?: string
+          user_id?: string | null
+          value?: number
         }
         Relationships: []
       }

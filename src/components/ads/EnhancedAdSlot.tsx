@@ -1,5 +1,27 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useAds } from '@/contexts/AdContext';
+import { supabase } from '@/integrations/supabase/client';
+
+// Policy-safe ad event tracking (no PII, no creative inspection)
+const trackAdEvent = (placement: string, event: string) => {
+  if (import.meta.env.DEV) {
+    console.log(`Ad Event: ${placement} - ${event}`);
+    return;
+  }
+
+  if (import.meta.env.PROD) {
+    supabase
+      .from('ad_events')
+      .insert({
+        placement,
+        event,
+        ts: new Date().toISOString()
+      })
+      .then(({ error }) => {
+        if (error) console.error('Ad event tracking error:', error);
+      });
+  }
+};
 
 interface AdSlotProps {
   placement: 
@@ -177,6 +199,12 @@ const EnhancedAdSlot: React.FC<AdSlotProps> = ({
     }
   };
 
+  useEffect(() => {
+    if (config.show) {
+      trackAdEvent(placement, 'mounted');
+    }
+  }, []);
+
   // Initialisation de l'ad avec retry logic
   const initializeAd = async (retryCount = 0) => {
     if (!config.show || !config.slotId || !import.meta.env.PROD) return;
@@ -184,6 +212,7 @@ const EnhancedAdSlot: React.FC<AdSlotProps> = ({
     try {
       setIsLoading(true);
       setAdError(null);
+      trackAdEvent(placement, 'requested');
 
       await loadAdSenseScript();
 
@@ -194,6 +223,7 @@ const EnhancedAdSlot: React.FC<AdSlotProps> = ({
         try {
           ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({});
           setIsLoading(false);
+          trackAdEvent(placement, 'rendered');
           console.log(`✅ Ad initialized: ${placement}`);
         } catch (error) {
           console.error(`❌ Ad initialization failed: ${placement}`, error);
@@ -214,6 +244,7 @@ const EnhancedAdSlot: React.FC<AdSlotProps> = ({
 
     } catch (error) {
       console.error(`❌ Ad setup failed: ${placement}`, error);
+      trackAdEvent(placement, 'error');
       setAdError({
         code: 'SETUP_ERROR',
         message: 'Failed to setup ad',
