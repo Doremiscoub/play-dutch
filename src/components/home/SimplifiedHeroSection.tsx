@@ -61,7 +61,7 @@ const SimplifiedHeroSection: React.FC = () => {
               </span>
               <span className="block sm:inline">
                 <span className="bg-gradient-to-r from-trinity-orange-600 via-trinity-purple-600 to-trinity-blue-700 bg-clip-text text-transparent font-extrabold animate-gradient-x">
-                  on s'occupe des scores !
+                  {" "}on s'occupe des scores !
                 </span>
               </span>
             </div>
