@@ -54,11 +54,13 @@ const SimplifiedHeroSection: React.FC = () => {
               Sortez vos cartes, on s'occupe des scores !
             </div>
             
-            {/* Texte principal avec gradient */}
-            <div className="relative bg-gradient-to-r from-primary-600 via-accent-600 to-secondary-600 bg-clip-text text-transparent text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black leading-tight px-2 animate-gradient-x">
-              Sortez vos cartes, 
+            {/* Texte principal avec gradient visible */}
+            <div className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black leading-tight px-2">
+              <span className="bg-gradient-to-r from-trinity-blue-700 via-trinity-purple-600 to-trinity-orange-600 bg-clip-text text-transparent animate-gradient-x">
+                Sortez vos cartes, 
+              </span>
               <span className="block sm:inline">
-                <span className="bg-gradient-to-r from-accent-500 to-primary-500 bg-clip-text text-transparent font-extrabold">
+                <span className="bg-gradient-to-r from-trinity-orange-600 via-trinity-purple-600 to-trinity-blue-700 bg-clip-text text-transparent font-extrabold animate-gradient-x">
                   on s'occupe des scores !
                 </span>
               </span>
