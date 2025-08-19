@@ -25,6 +25,8 @@ import GuideStrategy from './pages/GuideStrategy';
 
 // Composants
 import ProtectedRoute from './components/ProtectedRoute';
+import ProtectedGameRoute from './components/routing/ProtectedGameRoute';
+import RouteErrorBoundary from './components/error-handling/RouteErrorBoundary';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
 import AppLayout from './components/layout/AppLayout';
 
@@ -75,9 +77,21 @@ const App: React.FC = () => {
               
               {/* Pages principales */}
               <Route index element={<Home />} />
-              <Route path="setup" element={<SimpleGameSetup />} />
+              <Route path="setup" element={
+                <RouteErrorBoundary routeName="setup">
+                  <ProtectedGameRoute requiresGame={false}>
+                    <SimpleGameSetup />
+                  </ProtectedGameRoute>
+                </RouteErrorBoundary>
+              } />
               
-              <Route path="game" element={<SimpleGamePage />} />
+              <Route path="game" element={
+                <RouteErrorBoundary routeName="game">
+                  <ProtectedGameRoute requiresGame={true}>
+                    <SimpleGamePage />
+                  </ProtectedGameRoute>
+                </RouteErrorBoundary>
+              } />
               <Route path="history" element={<History />} />
               <Route path="rules" element={<RulesPage />} />
               
