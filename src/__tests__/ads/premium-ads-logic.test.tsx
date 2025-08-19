@@ -46,7 +46,7 @@ describe('Premium vs Free Ads Logic', () => {
       })
     }));
 
-    render(<EnhancedAdSlot slotId="test" />);
+    render(<EnhancedAdSlot placement="homepage-inline" />);
     
     // Should render ad slot
     expect(screen.getByTestId('ad-slot')).toBeInTheDocument();

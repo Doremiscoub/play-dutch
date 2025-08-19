@@ -41,10 +41,10 @@ describe('Edge Function Subscription Mocking', () => {
 
   it('handles free tier subscription response', async () => {
     mockUseSubscription.mockReturnValue({
-      subscription: { status: 'inactive', tier: 'free' },
-      shouldShowAds: true,
-      loading: false,
-      error: null,
+      isPremium: false,
+      isLoading: false,
+      subscriptionTier: 'free',
+      subscriptionEnd: null,
       checkSubscription: vi.fn(),
       createCheckoutSession: vi.fn(),
       openCustomerPortal: vi.fn()
@@ -64,10 +64,10 @@ describe('Edge Function Subscription Mocking', () => {
 
   it('handles loading state gracefully', async () => {
     mockUseSubscription.mockReturnValue({
-      subscription: null,
-      shouldShowAds: true, // Default to showing ads during loading
-      loading: true,
-      error: null,
+      isPremium: false,
+      isLoading: true,
+      subscriptionTier: null,
+      subscriptionEnd: null,
       checkSubscription: vi.fn(),
       createCheckoutSession: vi.fn(),
       openCustomerPortal: vi.fn()
