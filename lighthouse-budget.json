@@ -1,0 +1,19 @@
+{
+  "budget": [
+    {
+      "path": "dist/assets/*.js",
+      "maximumFileSizeByte": 250000,
+      "maximumWarning": 200000
+    },
+    {
+      "path": "dist/assets/*.css", 
+      "maximumFileSizeByte": 50000
+    }
+  ],
+  "performance": {
+    "TTFB": 800,
+    "LCP": 2500,
+    "CLS": 0.1,
+    "FID": 100
+  }
+}
