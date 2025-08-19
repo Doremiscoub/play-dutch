@@ -48,9 +48,24 @@ const SimplifiedHeroSection: React.FC = () => {
           transition={{ delay: 0.5, duration: 0.5 }}
           className="space-y-4"
         >
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-gray-900 leading-tight px-2">
-            Sortez vos cartes, <span className="text-orange-500">on</span><br className="sm:hidden"/>
-            <span className="text-orange-500">s'occupe des scores !</span>
+          <h1 className="relative">
+            {/* Effet de glow en arrière-plan */}
+            <div className="absolute inset-0 bg-gradient-to-r from-primary-glow via-accent-glow to-primary-glow bg-clip-text text-transparent blur-lg opacity-40 text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black leading-tight px-2">
+              Sortez vos cartes, on s'occupe des scores !
+            </div>
+            
+            {/* Texte principal avec gradient */}
+            <div className="relative bg-gradient-to-r from-primary-600 via-accent-600 to-secondary-600 bg-clip-text text-transparent text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black leading-tight px-2 animate-gradient-x">
+              Sortez vos cartes, 
+              <span className="block sm:inline">
+                <span className="bg-gradient-to-r from-accent-500 to-primary-500 bg-clip-text text-transparent font-extrabold">
+                  on s'occupe des scores !
+                </span>
+              </span>
+            </div>
+            
+            {/* Effet de brillance qui passe */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 w-full h-full opacity-0 animate-shine pointer-events-none"></div>
           </h1>
           
           <p className="text-base sm:text-lg md:text-xl text-gray-600 font-medium max-w-full sm:max-w-2xl mx-auto leading-relaxed px-2">
