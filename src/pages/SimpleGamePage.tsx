@@ -31,7 +31,7 @@ const SimpleGamePage: React.FC = () => {
   const [showGameEndConfirmation, setShowGameEndConfirmation] = useState(false);
   const [scores, setScores] = useState<{ [playerId: string]: number }>({});
   const [dutchPlayerId, setDutchPlayerId] = useState<string | undefined>();
-  // gameStartTime now comes from useSecureGameState
+  // gameStartTime now comes from useSimpleGameState
 
   useEffect(() => {
     console.log('🎮 SimpleGamePage MOUNTED');
