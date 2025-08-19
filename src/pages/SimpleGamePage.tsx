@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSecureGameState } from '@/hooks/game/useSecureGameState';
+import { useSimpleGameState } from '@/hooks/useSimpleGameState';
 import ScoreBoard from '@/components/ScoreBoard';
 import NewRoundModal from '@/components/NewRoundModal';
 import PageShell from '@/components/layout/PageShell';
@@ -25,9 +25,8 @@ const SimpleGamePage: React.FC = () => {
     addRound,
     undoLastRound,
     resetGame,
-    loadFromStorage,
-    performManualIntegrityCheck
-  } = useSecureGameState();
+    loadFromStorage
+  } = useSimpleGameState();
   const [isScoreFormOpen, setIsScoreFormOpen] = useState(false);
   const [showGameEndConfirmation, setShowGameEndConfirmation] = useState(false);
   const [scores, setScores] = useState<{ [playerId: string]: number }>({});

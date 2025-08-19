@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { useSecureGameState } from '@/hooks/game/useSecureGameState';
+import { useSimpleGameState } from '@/hooks/useSimpleGameState';
 import { toast } from 'sonner';
 import { Card, CardContent } from '@/components/ui/card';
 import ModernGameSetup from '@/components/game-setup/ModernGameSetup';
@@ -14,7 +14,7 @@ import EnhancedAdSlot from '@/components/ads/EnhancedAdSlot';
 
 const SimpleGameSetup: React.FC = () => {
   const navigate = useNavigate();
-  const { createGame } = useSecureGameState();
+  const { createGame } = useSimpleGameState();
   const headerConfig = useUnifiedHeader();
 
   useEffect(() => {

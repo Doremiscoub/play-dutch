@@ -57,10 +57,19 @@
     <!-- Canonical URL -->
     <link rel="canonical" href="https://dutch-card-game.lovable.app" />
 
-    <!-- AdSense Meta Tag - Production -->
+    <!-- AdSense Meta Tag - Production Only -->
     <meta name="google-adsense-account" content="ca-pub-2046195502734056">
-    <!-- AdSense script loaded globally for production -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2046195502734056" crossorigin="anonymous"></script>
+    <!-- AdSense script loaded conditionally based on environment -->
+    <script>
+      // Only load AdSense in production environment
+      if (window.location.hostname !== 'localhost' && !window.location.hostname.includes('127.0.0.1')) {
+        const script = document.createElement('script');
+        script.async = true;
+        script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2046195502734056';
+        script.crossOrigin = 'anonymous';
+        document.head.appendChild(script);
+      }
+    </script>
     
     <!-- Script Lovable : pour activer la sélection IA -->
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
