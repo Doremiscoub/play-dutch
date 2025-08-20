@@ -73,7 +73,7 @@ root.render(
 if (import.meta.env.PROD) {
   // Service Worker registration with cache busting
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js?v=2').catch(() => {
+    navigator.serviceWorker.register('/sw.js?v=3').catch(() => {
       // Silently handle SW registration failures
     });
   }
