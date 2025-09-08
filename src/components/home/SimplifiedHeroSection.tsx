@@ -81,9 +81,18 @@ const SimplifiedHeroSection: React.FC = () => {
           <Button
             onClick={() => navigate('/setup')}
             size="xl"
-            className="bg-gradient-to-r from-trinity-blue-600 to-trinity-purple-600 hover:from-trinity-blue-700 hover:to-trinity-purple-700 text-white font-black px-8 sm:px-12 md:px-16 py-4 sm:py-6 md:py-8 rounded-full shadow-2xl hover:shadow-3xl transition-all duration-200 hover:scale-105 border-4 border-white/30 w-full max-w-xs sm:max-w-sm md:max-w-none md:w-auto text-lg sm:text-xl md:text-2xl"
+            className="relative group bg-gradient-to-br from-trinity-orange-500 via-trinity-orange-600 to-trinity-orange-700 hover:from-trinity-orange-600 hover:via-trinity-orange-700 hover:to-trinity-orange-800 text-white font-black px-8 sm:px-12 md:px-16 py-6 sm:py-8 md:py-10 rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-105 border-2 border-white/20 w-full max-w-xs sm:max-w-sm md:max-w-none md:w-auto text-xl sm:text-2xl md:text-3xl uppercase tracking-wider overflow-hidden"
           >
-            {isMobile ? 'JOUER' : '🎮 JOUER 🎯'}
+            {/* Animated background effect */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out"></div>
+            
+            {/* Button content */}
+            <span className="relative z-10 flex items-center justify-center gap-3">
+              🎮 {isMobile ? 'JOUER' : 'JOUER MAINTENANT'} 🎯
+            </span>
+            
+            {/* Glow effect */}
+            <div className="absolute -inset-1 bg-gradient-to-r from-trinity-orange-400 to-trinity-orange-600 rounded-2xl blur opacity-30 group-hover:opacity-60 transition-opacity duration-300"></div>
           </Button>
         </motion.div>
 
