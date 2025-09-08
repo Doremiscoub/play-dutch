@@ -48,29 +48,22 @@ const SimplifiedHeroSection: React.FC = () => {
           transition={{ delay: 0.5, duration: 0.5 }}
           className="space-y-4"
         >
-          <h1 className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-tight px-2">
-            {/* Background gradient effect */}
-            <div className="absolute inset-0 bg-gradient-to-r from-trinity-blue-600 via-trinity-purple-600 to-trinity-orange-500 bg-clip-text text-transparent blur-sm opacity-30" 
-                 aria-hidden="true">
-              Sortez vos cartes, on s'occupe des scores !
-            </div>
-            
-            {/* Main text with gradient */}
-            <span className="relative bg-gradient-to-r from-trinity-blue-700 via-trinity-purple-700 to-trinity-orange-600 bg-clip-text text-transparent drop-shadow-lg">
-              Sortez vos cartes, 
-              <span className="inline-block transform hover:scale-105 transition-transform duration-200 bg-gradient-to-r from-trinity-orange-500 to-trinity-orange-600 bg-clip-text">
-                on
+          <h1 className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-tight px-2 uppercase tracking-wide">
+            {/* Main text with sophisticated gradient and shadow */}
+            <span className="relative inline-block bg-gradient-to-br from-trinity-blue-600 via-trinity-purple-600 to-trinity-orange-500 bg-clip-text text-transparent filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]">
+              SORTEZ VOS CARTES, 
+              <span className="inline-block ml-2 px-3 py-1 bg-gradient-to-r from-trinity-orange-500 to-trinity-orange-600 text-white rounded-lg shadow-xl transform hover:scale-105 transition-all duration-300 font-extrabold">
+                🎯 ON
               </span>
               <br className="sm:hidden"/>
-              <span className="inline-block transform hover:scale-105 transition-transform duration-200 bg-gradient-to-r from-trinity-orange-500 to-trinity-orange-600 bg-clip-text">
-                s'occupe des scores !
+              <span className="inline-block mt-2 px-3 py-1 bg-gradient-to-r from-trinity-orange-500 to-trinity-orange-600 text-white rounded-lg shadow-xl transform hover:scale-105 transition-all duration-300 font-extrabold">
+                S'OCCUPE DES SCORES !
               </span>
             </span>
             
-            {/* Decorative sparkle effects */}
-            <div className="absolute -top-2 left-1/4 w-2 h-2 bg-trinity-orange-400 rounded-full animate-pulse opacity-60" aria-hidden="true"></div>
-            <div className="absolute -bottom-1 right-1/3 w-1.5 h-1.5 bg-trinity-blue-400 rounded-full animate-pulse delay-700 opacity-60" aria-hidden="true"></div>
-            <div className="absolute top-1/2 -right-2 w-1 h-1 bg-trinity-purple-400 rounded-full animate-pulse delay-1000 opacity-60" aria-hidden="true"></div>
+            {/* Decorative elements */}
+            <div className="absolute -top-4 -left-2 text-trinity-orange-400 text-2xl animate-bounce">🃏</div>
+            <div className="absolute -bottom-2 -right-4 text-trinity-blue-400 text-xl animate-pulse">⚡</div>
           </h1>
           
           <p className="text-base sm:text-lg md:text-xl text-gray-600 font-medium max-w-full sm:max-w-2xl mx-auto leading-relaxed px-2">
