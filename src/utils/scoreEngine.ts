@@ -278,7 +278,7 @@ export const validateRoundData = (
       typeof score === 'number' && 
       isFinite(score) && 
       score >= 0 && 
-      score <= 1000
+      score <= 500
     );
 
     if (!hasValidScores) {

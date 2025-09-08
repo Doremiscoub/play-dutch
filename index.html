@@ -4,10 +4,6 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
-    <!-- Security: Content Security Policy -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.gpteng.co https://pagead2.googlesyndication.com https://partner.googleadservices.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://*.supabase.co https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net; frame-src 'self' https://googleads.g.doubleclick.net; object-src 'none'; base-uri 'self';">
-    
     <title>Dutch Card Game - Jeu de cartes entre amis avec IA</title>
     <meta name="description" content="Application gratuite pour jeu de cartes Dutch avec IA Professeur Cartouche. Compagnon de jeu intelligent pour vos soirées entre amis. Hors-ligne, moderne et amusant !" />
     <meta name="keywords" content="dutch, jeu de cartes, application gratuite, score, soirée amis, cartes, jeu société, hors ligne, professeur cartouche, IA, compagnon de jeu" />
@@ -61,19 +57,10 @@
     <!-- Canonical URL -->
     <link rel="canonical" href="https://dutch-card-game.lovable.app" />
 
-    <!-- AdSense Meta Tag - Production Only -->
+    <!-- AdSense Meta Tag - Production -->
     <meta name="google-adsense-account" content="ca-pub-2046195502734056">
-    <!-- AdSense script loaded conditionally based on environment -->
-    <script>
-      // Only load AdSense in production environment
-      if (window.location.hostname !== 'localhost' && !window.location.hostname.includes('127.0.0.1')) {
-        const script = document.createElement('script');
-        script.async = true;
-        script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2046195502734056';
-        script.crossOrigin = 'anonymous';
-        document.head.appendChild(script);
-      }
-    </script>
+    <!-- AdSense script loaded globally for production -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2046195502734056" crossorigin="anonymous"></script>
     
     <!-- Script Lovable : pour activer la sélection IA -->
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>

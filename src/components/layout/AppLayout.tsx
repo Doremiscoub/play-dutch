@@ -2,7 +2,7 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import PageTransition from '@/components/ui/page-transition';
-import GlobalErrorBoundary from '@/components/error-handling/GlobalErrorBoundary';
+import EnhancedErrorBoundary from '@/components/ui/error-boundary-enhanced';
 import EnhancedLoading from '@/components/ui/enhanced-loading';
 import { useAppState } from '@/hooks/useAppState';
 import { toast } from 'sonner';
@@ -19,7 +19,7 @@ const AppLayout: React.FC = () => {
   }, [globalError, setGlobalError]);
 
   return (
-    <GlobalErrorBoundary level="global">
+    <EnhancedErrorBoundary>
       <div className="min-h-screen relative">
         {/* Global loading overlay */}
         {globalLoading && (
@@ -34,7 +34,7 @@ const AppLayout: React.FC = () => {
           <Outlet />
         </PageTransition>
       </div>
-    </GlobalErrorBoundary>
+    </EnhancedErrorBoundary>
   );
 };
 

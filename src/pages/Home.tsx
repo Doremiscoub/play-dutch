@@ -5,10 +5,13 @@ import { motion } from 'framer-motion';
 import { Gamepad2, Users, Heart, Sparkles, BookOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import UnifiedHeader from '@/components/layout/UnifiedHeader';
+import { useUnifiedHeader } from '@/hooks/useUnifiedHeader';
 import PageShell from '@/components/layout/PageShell';
 import { MobileOptimizer } from '@/components/ui/mobile-optimizer';
 import SimplifiedHeroSection from '@/components/home/SimplifiedHeroSection';
 import LazyHomeSections from '@/components/home/LazyHomeSections';
+import { AdProvider } from '@/contexts/AdContext';
 import HomeLayout from '@/components/layout/HomeLayout';
 
 const Home: React.FC = () => {
@@ -52,8 +55,11 @@ const Home: React.FC = () => {
 
   return (
     <PageShell variant="default">
-      <MobileOptimizer pageType="home" className="min-h-screen">
-          {/* Pas de header sur la page d'accueil */}
+      <AdProvider>
+        <MobileOptimizer pageType="home" className="min-h-screen">
+          <UnifiedHeader 
+            {...useUnifiedHeader({ hideTitle: true })}
+          />
 
           <HomeLayout>
             <SimplifiedHeroSection />
@@ -219,6 +225,7 @@ const Home: React.FC = () => {
             <LazyHomeSections navigate={navigate} />
           </HomeLayout>
         </MobileOptimizer>
+      </AdProvider>
     </PageShell>
   );
 };

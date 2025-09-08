@@ -6,42 +6,12 @@ interface StructuredDataProps {
   data: any;
 }
 
-// Security: Sanitize and validate structured data
-const sanitizeStructuredData = (data: any): any => {
-  if (typeof data !== 'object' || data === null) {
-    return {};
-  }
-  
-  const sanitized: any = {};
-  
-  // Only allow safe properties and sanitize strings
-  const allowedProps = ['name', 'description', 'url', 'applicationCategory', 'operatingSystem', 'offers', 'aggregateRating', 'author'];
-  
-  for (const [key, value] of Object.entries(data)) {
-    if (allowedProps.includes(key)) {
-      if (typeof value === 'string') {
-        // Remove potentially dangerous characters
-        sanitized[key] = value.replace(/<[^>]*>?/gm, '').substring(0, 500);
-      } else if (typeof value === 'object' && value !== null) {
-        sanitized[key] = sanitizeStructuredData(value);
-      } else if (typeof value === 'number' || typeof value === 'boolean') {
-        sanitized[key] = value;
-      }
-    }
-  }
-  
-  return sanitized;
-};
-
 export const StructuredData: React.FC<StructuredDataProps> = ({ type, data }) => {
   const generateSchema = () => {
-    // Security: Sanitize input data
-    const sanitizedData = sanitizeStructuredData(data);
-    
     const baseSchema = {
       '@context': 'https://schema.org',
       '@type': type,
-      ...sanitizedData
+      ...data
     };
 
     if (type === 'WebApplication') {
@@ -72,27 +42,11 @@ export const StructuredData: React.FC<StructuredDataProps> = ({ type, data }) =>
     return baseSchema;
   };
 
-  // Security: Validate JSON before rendering
-  const schemaData = generateSchema();
-  let safeJsonString = '';
-  
-  try {
-    safeJsonString = JSON.stringify(schemaData, null, 2);
-    // Additional security: ensure no script tags or dangerous content
-    if (safeJsonString.includes('<script') || safeJsonString.includes('javascript:')) {
-      console.warn('Potentially dangerous content detected in structured data');
-      return null;
-    }
-  } catch (error) {
-    console.error('Error serializing structured data:', error);
-    return null;
-  }
-
   return (
     <script
       type="application/ld+json"
       dangerouslySetInnerHTML={{
-        __html: safeJsonString
+        __html: JSON.stringify(generateSchema(), null, 2)
       }}
     />
   );

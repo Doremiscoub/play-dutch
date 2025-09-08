@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSimpleGameState } from '@/hooks/useSimpleGameState';
+import { useSecureGameState } from '@/hooks/game/useSecureGameState';
 import ScoreBoard from '@/components/ScoreBoard';
 import NewRoundModal from '@/components/NewRoundModal';
 import PageShell from '@/components/layout/PageShell';
@@ -10,6 +10,7 @@ import { useUnifiedHeader } from '@/hooks/useUnifiedHeader';
 import AICommentator from '@/components/AICommentator';
 import { MobileOptimizer } from '@/components/ui/mobile-optimizer';
 import { toast } from 'sonner';
+import { AdProvider } from '@/contexts/AdContext';
 import GameLayout from '@/components/layout/GameLayout';
 
 const SimpleGamePage: React.FC = () => {
@@ -25,13 +26,14 @@ const SimpleGamePage: React.FC = () => {
     addRound,
     undoLastRound,
     resetGame,
-    loadFromStorage
-  } = useSimpleGameState();
+    loadFromStorage,
+    performManualIntegrityCheck
+  } = useSecureGameState();
   const [isScoreFormOpen, setIsScoreFormOpen] = useState(false);
   const [showGameEndConfirmation, setShowGameEndConfirmation] = useState(false);
   const [scores, setScores] = useState<{ [playerId: string]: number }>({});
   const [dutchPlayerId, setDutchPlayerId] = useState<string | undefined>();
-  // gameStartTime now comes from useSimpleGameState
+  // gameStartTime now comes from useSecureGameState
 
   useEffect(() => {
     console.log('🎮 SimpleGamePage MOUNTED');
@@ -126,7 +128,8 @@ const SimpleGamePage: React.FC = () => {
 
   return (
     <PageShell variant="game">
-      <MobileOptimizer pageType="game" className="min-h-screen">
+      <AdProvider>
+        <MobileOptimizer pageType="game" className="min-h-screen">
           <UnifiedHeader 
             {...useUnifiedHeader({
               title: `Manche ${roundHistory.length + 1}`,
@@ -139,17 +142,17 @@ const SimpleGamePage: React.FC = () => {
             })}
           />
           
-          <GameLayout>
-            <div className="w-full max-w-7xl mx-auto px-4 py-6">
-              {/* Commentaires du Professeur Cartouche */}
-              <div className="mb-6">
-                <AICommentator 
-                  players={players}
-                  roundHistory={roundHistory}
-                  className="mx-auto max-w-2xl"
-                />
-              </div>
-              
+          {/* Commentaires du Professeur Cartouche */}
+          <div className="w-full max-w-7xl mx-auto px-4 py-6">
+            <div className="mb-6">
+              <AICommentator 
+                players={players}
+                roundHistory={roundHistory}
+                className="mx-auto max-w-2xl"
+              />
+            </div>
+            
+            <GameLayout>
               <ScoreBoard
                 players={players}
                 onAddRound={() => {}} // Non utilisé car on utilise openScoreForm
@@ -162,8 +165,8 @@ const SimpleGamePage: React.FC = () => {
                 scoreLimit={scoreLimit}
                 openScoreForm={openScoreForm}
               />
-            </div>
-          </GameLayout>
+            </GameLayout>
+          </div>
 
           {/* Modal pour ajouter une nouvelle manche */}
           <NewRoundModal
@@ -177,6 +180,7 @@ const SimpleGamePage: React.FC = () => {
             onAddRound={handleAddRound}
           />
         </MobileOptimizer>
+      </AdProvider>
     </PageShell>
   );
 };

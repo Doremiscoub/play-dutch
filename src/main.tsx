@@ -16,15 +16,6 @@ initializeSentry().catch(error => {
   console.error('Failed to initialize Sentry:', error);
 });
 
-// Initialize Web Vitals monitoring (defer to prevent blocking)
-setTimeout(() => {
-  import('./utils/reportWebVitals').then(({ initWebVitals }) => {
-    initWebVitals();
-  }).catch(error => {
-    console.warn('Failed to initialize Web Vitals:', error);
-  });
-}, 100);
-
 // Configuration QueryClient optimisée pour production
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -71,9 +62,9 @@ root.render(
 
 // Performance monitoring pour production  
 if (import.meta.env.PROD) {
-  // Service Worker registration with cache busting
+  // Service Worker registration
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js?v=3').catch(() => {
+    navigator.serviceWorker.register('/sw.js').catch(() => {
       // Silently handle SW registration failures
     });
   }

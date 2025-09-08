@@ -13,7 +13,6 @@ import { Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import PageShell from '@/components/layout/PageShell';
 import UnifiedHeader from '@/components/layout/UnifiedHeader';
-import EnhancedContentLayout from '@/components/layout/EnhancedContentLayout';
 
 const FAQPage: React.FC = () => {
   const navigate = useNavigate();
@@ -131,7 +130,7 @@ const FAQPage: React.FC = () => {
       />
 
       <div className="p-6 pt-8">
-        <EnhancedContentLayout adPlacement="faq" stickyAds>
+        <div className="max-w-4xl mx-auto">
           <UnifiedCard variant="light" padding="lg">
             {/* Search */}
             <div className="mb-8">
@@ -194,7 +193,7 @@ const FAQPage: React.FC = () => {
               </div>
             </div>
           </UnifiedCard>
-        </EnhancedContentLayout>
+        </div>
       </div>
     </PageShell>
   );

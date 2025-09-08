@@ -105,11 +105,6 @@ export default defineConfig(({ mode }) => ({
                 maxAgeSeconds: 60 * 60 * 24 * 30 // 30 days
               }
             }
-          },
-          {
-            // Prevent AdSense from being cached by service worker
-            urlPattern: /pagead2\.googlesyndication\.com/,
-            handler: 'NetworkOnly'
           }
         ]
       }
@@ -144,7 +139,6 @@ export default defineConfig(({ mode }) => ({
           ui: ['@radix-ui/react-dialog', '@radix-ui/react-alert-dialog'],
           animations: ['framer-motion'],
           charts: ['recharts'],
-          three: ['@react-three/fiber', '@react-three/drei', 'three'],
           utils: ['date-fns', 'clsx', 'tailwind-merge']
         }
       }

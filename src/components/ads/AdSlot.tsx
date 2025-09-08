@@ -2,18 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { useAds } from '@/contexts/AdContext';
 
 interface AdSlotProps {
-  placement: 
-    | 'homepage-inline' 
-    | 'game-sidebar-left' 
-    | 'game-sidebar-right' 
-    | 'game-banner-mobile'
-    | 'setup-inline'
-    | 'rules-sidebar'
-    | 'rules-inline'
-    | 'history-sidebar'
-    | 'history-inline'
-    | 'content-inline'
-    | 'content-sidebar';
+  placement: 'homepage-inline' | 'game-sidebar-left' | 'game-sidebar-right' | 'game-banner-mobile';
   className?: string;
 }
 
@@ -50,55 +39,6 @@ const AdSlot: React.FC<AdSlotProps> = ({ placement, className = '' }) => {
       content: 'Bannière mobile',
       slotId: import.meta.env.VITE_ADSENSE_SLOT_GAME_MOBILE || '',
       format: 'horizontal'
-    },
-    'setup-inline': {
-      show: shouldShowAds,
-      dimensions: isMobile ? 'w-full h-[200px]' : 'w-full max-w-[728px] h-[90px] mx-auto',
-      content: 'Publicité configuration',
-      slotId: '7153963996', // Real AdSense slot ID
-      format: 'auto'
-    },
-    'rules-sidebar': {
-      show: shouldShowAds && !isMobile,
-      dimensions: 'w-[300px] h-[600px]',
-      content: 'Publicité règles sidebar',
-      slotId: '7153963996', // Real AdSense slot ID
-      format: 'vertical'
-    },
-    'rules-inline': {
-      show: shouldShowAds,
-      dimensions: isMobile ? 'w-full h-[200px]' : 'w-full max-w-[728px] h-[90px] mx-auto',
-      content: 'Publicité règles inline',
-      slotId: '7153963996', // Real AdSense slot ID
-      format: 'auto'
-    },
-    'history-sidebar': {
-      show: shouldShowAds && !isMobile,
-      dimensions: 'w-[300px] h-[600px]',
-      content: 'Publicité historique sidebar',
-      slotId: '7153963996', // Real AdSense slot ID
-      format: 'vertical'
-    },
-    'history-inline': {
-      show: shouldShowAds,
-      dimensions: isMobile ? 'w-full h-[200px]' : 'w-full max-w-[728px] h-[90px] mx-auto',
-      content: 'Publicité historique inline',
-      slotId: '7153963996', // Real AdSense slot ID
-      format: 'auto'
-    },
-    'content-inline': {
-      show: shouldShowAds,
-      dimensions: isMobile ? 'w-full h-[200px]' : 'w-full max-w-[728px] h-[90px] mx-auto',
-      content: 'Publicité contenu inline',
-      slotId: '7153963996', // Real AdSense slot ID
-      format: 'auto'
-    },
-    'content-sidebar': {
-      show: shouldShowAds && !isMobile,
-      dimensions: 'w-[300px] h-[600px]',
-      content: 'Publicité contenu sidebar',
-      slotId: '7153963996', // Real AdSense slot ID
-      format: 'vertical'
     }
   };
 

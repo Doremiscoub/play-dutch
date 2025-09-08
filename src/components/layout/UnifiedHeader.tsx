@@ -6,8 +6,6 @@ import { useNavigate } from 'react-router-dom';
 import GameSettings from '@/components/GameSettings';
 import { ModernTitle } from '@/components/ui/modern-title';
 import { useAdaptiveInterface } from '@/components/ui/adaptive-layout';
-// Consolidated header - removed separate mobile components
-import useIsMobile from '@/hooks/use-mobile';
 
 interface UnifiedHeaderProps {
   title: string;
@@ -36,7 +34,6 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
 }) => {
   const navigate = useNavigate();
   const [elapsedTime, setElapsedTime] = useState<string>('00:00');
-  const isMobileHook = useIsMobile();
   const { 
     isMobile, 
     isTablet, 
@@ -45,80 +42,6 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
     getAdaptiveTextSize, 
     getAdaptiveButtonSize 
   } = useAdaptiveInterface();
-
-  // Unified mobile layout - consolidated from mobile components
-  if (isMobileHook) {
-    // No header on home page
-    if (title === 'Dutch - Carnet de scores' || title === 'Dutch') {
-      return null;
-    }
-
-    return (
-      <motion.header 
-        className="sticky top-0 z-50 w-full border-b border-white/20 bg-gradient-to-r from-background/95 via-background/90 to-background/95 backdrop-blur-md"
-        initial={{ y: -100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, ease: [0.23, 1, 0.320, 1] }}
-      >
-        <div className="flex items-center justify-between p-4">
-          <div className="flex items-center gap-3">
-            {showBackButton && onBack && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={onBack}
-                className="glass-button h-9 w-9 p-0"
-              >
-                <ArrowLeft className="h-4 w-4" />
-              </Button>
-            )}
-            
-            <div>
-              <h1 className="text-lg font-bold bg-gradient-to-r from-dutch-blue via-purple-600 to-pink-600 bg-clip-text text-transparent">
-                {!hideTitle && title}
-              </h1>
-              
-              {/* Game info for mobile */}
-              {variant === 'game' && (roundCount !== undefined || scoreLimit !== undefined || gameStartTime) && (
-                <div className="flex items-center gap-2 text-xs text-muted-foreground mt-1">
-                  {roundCount !== undefined && (
-                    <span className="px-2 py-1 rounded-full bg-primary/10 text-primary">
-                      Manche {roundCount}
-                    </span>
-                  )}
-                  {scoreLimit !== undefined && (
-                    <span className="px-2 py-1 rounded-full bg-orange-500/10 text-orange-500">
-                      Limite {scoreLimit}
-                    </span>
-                  )}
-                  {gameStartTime && (
-                    <span className="px-2 py-1 rounded-full bg-green-500/10 text-green-500">
-                      {Math.floor((Date.now() - gameStartTime.getTime()) / 60000)}min
-                    </span>
-                  )}
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2">
-            {showRulesButton && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => navigate('/rules')}
-                className="glass-button"
-              >
-                <BookOpen className="h-4 w-4" />
-              </Button>
-            )}
-            
-            {showSettings && <GameSettings />}
-          </div>
-        </div>
-      </motion.header>
-    );
-  }
 
   // Chronomètre
   useEffect(() => {

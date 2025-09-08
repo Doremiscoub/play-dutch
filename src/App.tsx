@@ -2,7 +2,7 @@
 /**
  * Composant principal de l'application avec système de routes optimisé
  */
-import React, { useEffect, Suspense } from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate, useLocation } from 'react-router-dom';
 import { Toaster } from "sonner";
 import * as Sentry from '@sentry/react';
@@ -23,21 +23,14 @@ import TermsPage from './pages/TermsPage';
 import FAQPage from './pages/FAQPage';
 import GuideStrategy from './pages/GuideStrategy';
 
-// Lazy load admin components (dev only)
-const AdminAdDiagnosticsLazy = React.lazy(() => import('./pages/AdminAdDiagnostics'));
-
 // Composants
 import ProtectedRoute from './components/ProtectedRoute';
-import ProtectedGameRoute from './components/routing/ProtectedGameRoute';
-import RouteErrorBoundary from './components/error-handling/RouteErrorBoundary';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
 import AppLayout from './components/layout/AppLayout';
-import DevPanel from './components/dev/DevPanel';
 
 // Contexte
 import { SupabaseAuthProvider } from './context/SupabaseAuthContext';
 import { UnifiedThemeProvider } from './components/ui/unified-theme-provider';
-import { AdProvider } from './contexts/AdContext';
 
 // Composant pour suivre les changements de route pour Sentry
 const RouteTracker = () => {
@@ -65,7 +58,6 @@ const App: React.FC = () => {
   return (
     <UnifiedThemeProvider>
       <SupabaseAuthProvider>
-        <AdProvider>
         <Router>
           {/* Fond animé global avec vagues et pastilles - visible sur toute l'app */}
           <div className="fixed inset-0 w-full h-full" style={{ zIndex: -10 }}>
@@ -81,21 +73,9 @@ const App: React.FC = () => {
               
               {/* Pages principales */}
               <Route index element={<Home />} />
-              <Route path="setup" element={
-                <RouteErrorBoundary routeName="setup">
-                  <ProtectedGameRoute requiresGame={false}>
-                    <SimpleGameSetup />
-                  </ProtectedGameRoute>
-                </RouteErrorBoundary>
-              } />
+              <Route path="setup" element={<SimpleGameSetup />} />
               
-              <Route path="game" element={
-                <RouteErrorBoundary routeName="game">
-                  <ProtectedGameRoute requiresGame={true}>
-                    <SimpleGamePage />
-                  </ProtectedGameRoute>
-                </RouteErrorBoundary>
-              } />
+              <Route path="game" element={<SimpleGamePage />} />
               <Route path="history" element={<History />} />
               <Route path="rules" element={<RulesPage />} />
               
@@ -105,15 +85,6 @@ const App: React.FC = () => {
               <Route path="terms" element={<TermsPage />} />
               <Route path="faq" element={<FAQPage />} />
               <Route path="strategy" element={<GuideStrategy />} />
-              
-              {/* Dev-only admin routes */}
-              {import.meta.env.DEV && (
-                <Route path="admin/ad-diagnostics" element={
-                  <Suspense fallback={<div>Loading...</div>}>
-                    <AdminAdDiagnosticsLazy />
-                  </Suspense>
-                } />
-              )}
               
               {/* Redirections SEO friendly */}
               <Route path="aide" element={<Navigate to="/faq" replace />} />
@@ -142,11 +113,7 @@ const App: React.FC = () => {
           />
           
           <PWAInstallPrompt />
-          
-          {/* Dev Panel - only in development */}
-          {import.meta.env.DEV && <DevPanel />}
         </Router>
-        </AdProvider>
       </SupabaseAuthProvider>
     </UnifiedThemeProvider>
   );

@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { useSimpleGameState } from '@/hooks/useSimpleGameState';
+import { useSecureGameState } from '@/hooks/game/useSecureGameState';
 import { toast } from 'sonner';
 import { Card, CardContent } from '@/components/ui/card';
 import ModernGameSetup from '@/components/game-setup/ModernGameSetup';
@@ -10,11 +10,10 @@ import UnifiedHeader from '@/components/layout/UnifiedHeader';
 import { useUnifiedHeader } from '@/hooks/useUnifiedHeader';
 import PageShell from '@/components/layout/PageShell';
 import { MobileOptimizer } from '@/components/ui/mobile-optimizer';
-import EnhancedAdSlot from '@/components/ads/EnhancedAdSlot';
 
 const SimpleGameSetup: React.FC = () => {
   const navigate = useNavigate();
-  const { createGame } = useSimpleGameState();
+  const { createGame } = useSecureGameState();
   const headerConfig = useUnifiedHeader();
 
   useEffect(() => {
@@ -44,14 +43,7 @@ const SimpleGameSetup: React.FC = () => {
   return (
     <PageShell variant="game">
       <MobileOptimizer pageType="setup" className="min-h-screen">
-        <UnifiedHeader 
-          title="Configuration"
-          showBackButton={true}
-          onBack={() => navigate('/')}
-          showSettings={true}
-          showRulesButton={true}
-          variant="default"
-        />
+        <UnifiedHeader {...headerConfig} />
 
         {/* Contenu principal stabilisé */}
         <div className="container mx-auto px-4 py-4 sm:py-8 max-w-4xl relative z-20">
@@ -62,11 +54,6 @@ const SimpleGameSetup: React.FC = () => {
         >
           {/* Configuration directe - wizard 3 étapes */}
           <ModernGameSetup onStartGame={handleStartGame} />
-
-          {/* Publicité setup */}
-          <div className="w-full flex justify-center py-4 my-6">
-            <EnhancedAdSlot placement="setup-inline" />
-          </div>
 
           {/* Informations sur le jeu */}
           <motion.div
