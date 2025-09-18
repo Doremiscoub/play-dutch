@@ -203,7 +203,7 @@ export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({ className = 
     setSettings(prev => ({
       ...prev,
       [section]: {
-        ...prev[section],
+        ...(prev[section] as Record<string, any>),
         [key]: value
       }
     }));
