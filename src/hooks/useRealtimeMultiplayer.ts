@@ -38,8 +38,8 @@ export const useRealtimeMultiplayer = () => {
   const [roomCode, setRoomCode] = useState<string>('');
   const [connectedPlayers, setConnectedPlayers] = useState<Player[]>([]);
   const [isHost, setIsHost] = useState(false);
-  const reconnectTimeoutRef = useRef<number>();
-  const heartbeatIntervalRef = useRef<number>();
+  const reconnectTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
+  const heartbeatIntervalRef = useRef<ReturnType<typeof setInterval>>();
 
   // URL WebSocket de l'edge function
   const WS_URL = 'wss://ngtvzjgvvabortrdugty.functions.supabase.co/realtime-multiplayer';

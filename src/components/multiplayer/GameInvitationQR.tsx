@@ -6,25 +6,20 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
 import { Input } from '@/components/ui/input';
 import { 
   QrCode, 
   Share2, 
   Copy, 
   Users, 
-  Timer,
   Smartphone,
   CheckCircle,
-  XCircle,
   RefreshCw
 } from 'lucide-react';
-import { useUnifiedGameState } from '@/hooks/game/useUnifiedGameState';
-import { useSupabaseAuth } from '@/context/SupabaseAuthContext';
 import { toast } from 'sonner';
 
 interface GameInvitationQRProps {
+  roomCode: string;
   className?: string;
 }
 
@@ -45,263 +40,134 @@ const QRCodeDisplay: React.FC<{ value: string; size?: number }> = ({ value, size
   );
 };
 
-export const GameInvitationQR: React.FC<GameInvitationQRProps> = ({ className = '' }) => {
-  const { isSignedIn, user } = useSupabaseAuth();
-  const { hasGame, currentGameId, players, syncStatus } = useUnifiedGameState();
-  
-  const [inviteUrl, setInviteUrl] = useState<string>('');
-  const [shareCode, setShareCode] = useState<string>('');
-  const [isGenerating, setIsGenerating] = useState(false);
+export const GameInvitationQR: React.FC<GameInvitationQRProps> = ({ 
+  roomCode,
+  className = '' 
+}) => {
+  const [gameUrl, setGameUrl] = useState('');
+  const [shortUrl, setShortUrl] = useState('');
+  const [copied, setCopied] = useState(false);
 
-  // Génération du lien d'invitation
   useEffect(() => {
-    if (hasGame && currentGameId && isSignedIn) {
-      const baseUrl = window.location.origin;
-      const gameUrl = `${baseUrl}/join/${currentGameId}`;
-      setInviteUrl(gameUrl);
+    const baseUrl = window.location.origin;
+    const fullUrl = `${baseUrl}/?join=${roomCode}`;
+    setGameUrl(fullUrl);
+    setShortUrl(`dutch.app/join/${roomCode}`); // URL courte simulée
+  }, [roomCode]);
+
+  const copyToClipboard = async (text: string, type: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      toast.success(`${type} copié!`);
       
-      // Code court pour partage manuel
-      setShareCode(currentGameId.substring(0, 8).toUpperCase());
-    } else {
-      setInviteUrl('');
-      setShareCode('');
-    }
-  }, [hasGame, currentGameId, isSignedIn]);
-
-  const handleCopyUrl = async () => {
-    if (!inviteUrl) return;
-    
-    try {
-      await navigator.clipboard.writeText(inviteUrl);
-      toast.success('Lien copié!');
+      setTimeout(() => setCopied(false), 2000);
     } catch (error) {
-      // Fallback pour navigateurs plus anciens
-      const textArea = document.createElement('textarea');
-      textArea.value = inviteUrl;
-      document.body.appendChild(textArea);
-      textArea.select();
-      document.execCommand('copy');
-      document.body.removeChild(textArea);
-      toast.success('Lien copié!');
-    }
-  };
-
-  const handleCopyCode = async () => {
-    if (!shareCode) return;
-    
-    try {
-      await navigator.clipboard.writeText(shareCode);
-      toast.success('Code copié!');
-    } catch (error) {
+      console.error('Failed to copy:', error);
       toast.error('Erreur lors de la copie');
     }
   };
 
-  const handleShare = async () => {
-    if (!inviteUrl) return;
-
+  const shareNative = async () => {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: 'Rejoindre ma partie Dutch',
-          text: `Rejoins ma partie de Dutch avec ${players.length} joueurs!`,
-          url: inviteUrl,
+          title: 'Rejoins ma partie Dutch!',
+          text: `Code de partie: ${roomCode}`,
+          url: gameUrl
         });
-        toast.success('Invitation partagée!');
       } catch (error) {
-        if (error.name !== 'AbortError') {
-          toast.error('Erreur lors du partage');
-        }
+        console.log('Share cancelled or failed');
       }
     } else {
-      // Fallback: copier le lien
-      await handleCopyUrl();
+      // Fallback - copier le lien
+      copyToClipboard(gameUrl, 'Lien');
     }
   };
-
-  const canCreateInvite = hasGame && isSignedIn && syncStatus === 'synced';
-
-  if (!hasGame) {
-    return (
-      <Card className={className}>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Users className="w-5 h-5" />
-            Multijoueur
-          </CardTitle>
-          <CardDescription>
-            Créez une partie pour inviter d'autres joueurs
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="text-center py-8">
-            <Users className="w-12 h-12 mx-auto mb-4 text-gray-400" />
-            <p className="text-gray-600 mb-4">
-              Aucune partie en cours
-            </p>
-            <Button variant="outline" onClick={() => window.location.href = '/setup'}>
-              Créer une partie
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-    );
-  }
-
-  if (!isSignedIn) {
-    return (
-      <Card className={className}>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Users className="w-5 h-5" />
-            Multijoueur
-          </CardTitle>
-          <CardDescription>
-            Connectez-vous pour partager votre partie
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="text-center py-8">
-            <Smartphone className="w-12 h-12 mx-auto mb-4 text-gray-400" />
-            <p className="text-gray-600 mb-4">
-              La connexion est requise pour le mode multijoueur
-            </p>
-            <Button variant="outline" onClick={() => window.location.href = '/sign-in'}>
-              Se connecter
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-    );
-  }
 
   return (
     <Card className={className}>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Users className="w-5 h-5" />
-          Inviter des joueurs
+          <QrCode className="w-5 h-5" />
+          Inviter des Joueurs
         </CardTitle>
         <CardDescription>
-          Partagez votre partie avec vos amis
+          Partagez ce code ou ce QR code pour inviter vos amis
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
-        
-        {/* État de synchronisation */}
-        <div className="flex items-center gap-2">
-          <Badge variant={syncStatus === 'synced' ? 'default' : 'secondary'}>
-            {syncStatus === 'synced' ? (
-              <>
-                <CheckCircle className="w-3 h-3 mr-1" />
-                Synchronisé
-              </>
-            ) : (
-              <>
-                <XCircle className="w-3 h-3 mr-1" />
-                {syncStatus === 'syncing' ? 'Synchronisation...' : 'Non synchronisé'}
-              </>
-            )}
-          </Badge>
-          {syncStatus === 'syncing' && (
-            <RefreshCw className="w-4 h-4 animate-spin text-blue-600" />
-          )}
+        {/* Code de la partie */}
+        <div className="text-center">
+          <div className="text-sm text-gray-600 mb-2">Code de la partie</div>
+          <div className="text-3xl font-mono font-bold bg-gray-100 rounded-lg py-4 px-6 inline-block">
+            {roomCode}
+          </div>
         </div>
 
-        {canCreateInvite ? (
-          <>
-            {/* QR Code */}
-            <div className="text-center">
-              <QRCodeDisplay value={inviteUrl} size={180} />
-              <p className="text-sm text-gray-600 mt-2">
-                Scannez pour rejoindre la partie
-              </p>
-            </div>
+        {/* QR Code */}
+        <div className="text-center">
+          <QRCodeDisplay value={gameUrl} size={180} />
+          <p className="text-xs text-gray-500 mt-2">
+            Scannez avec votre téléphone
+          </p>
+        </div>
 
-            <Separator />
-
-            {/* Lien de partage */}
-            <div className="space-y-3">
-              <label className="text-sm font-medium">Lien d'invitation</label>
-              <div className="flex gap-2">
-                <Input
-                  value={inviteUrl}
-                  readOnly
-                  className="font-mono text-sm"
-                />
-                <Button size="sm" variant="outline" onClick={handleCopyUrl}>
-                  <Copy className="w-4 h-4" />
-                </Button>
-              </div>
-            </div>
-
-            {/* Code court */}
-            <div className="space-y-3">
-              <label className="text-sm font-medium">Code de partie</label>
-              <div className="flex gap-2">
-                <Input
-                  value={shareCode}
-                  readOnly
-                  className="font-mono text-lg font-bold text-center"
-                />
-                <Button size="sm" variant="outline" onClick={handleCopyCode}>
-                  <Copy className="w-4 h-4" />
-                </Button>
-              </div>
-              <p className="text-xs text-gray-500">
-                Les autres joueurs peuvent saisir ce code pour rejoindre
-              </p>
-            </div>
-
-            <Separator />
-
-            {/* Actions de partage */}
-            <div className="flex gap-2">
-              <Button onClick={handleShare} className="flex-1">
-                <Share2 className="w-4 h-4 mr-2" />
-                Partager
-              </Button>
-              <Button variant="outline" onClick={handleCopyUrl}>
-                <Copy className="w-4 h-4 mr-2" />
-                Copier le lien
-              </Button>
-            </div>
-
-            {/* Informations sur la partie */}
-            <div className="bg-gray-50 p-3 rounded-lg">
-              <h4 className="font-medium mb-2">Informations de la partie</h4>
-              <div className="space-y-1 text-sm text-gray-600">
-                <div className="flex justify-between">
-                  <span>Joueurs:</span>
-                  <span>{players.length}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Mode:</span>
-                  <span>Temps réel</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Statut:</span>
-                  <Badge variant="outline" className="text-xs">
-                    En attente de joueurs
-                  </Badge>
-                </div>
-              </div>
-            </div>
-          </>
-        ) : (
-          <div className="text-center py-4">
-            <Timer className="w-8 h-8 mx-auto mb-2 text-gray-400" />
-            <p className="text-gray-600 mb-2">
-              {syncStatus === 'syncing' 
-                ? 'Synchronisation en cours...' 
-                : 'Partie non synchronisée'
-              }
-            </p>
-            <p className="text-sm text-gray-500">
-              La synchronisation est requise pour inviter des joueurs
-            </p>
+        {/* Lien de partage */}
+        <div className="space-y-2">
+          <label className="text-sm text-gray-600">Lien de partage</label>
+          <div className="flex gap-2">
+            <Input 
+              value={gameUrl}
+              readOnly
+              className="font-mono text-xs"
+            />
+            <Button 
+              onClick={() => copyToClipboard(gameUrl, 'Lien')}
+              size="sm"
+              variant="outline"
+            >
+              {copied ? (
+                <CheckCircle className="w-4 h-4 text-green-600" />
+              ) : (
+                <Copy className="w-4 h-4" />
+              )}
+            </Button>
           </div>
-        )}
+        </div>
+
+        {/* Boutons d'action */}
+        <div className="grid grid-cols-2 gap-3">
+          <Button 
+            onClick={() => copyToClipboard(roomCode, 'Code')}
+            variant="outline"
+            className="w-full"
+          >
+            <Copy className="w-4 h-4 mr-2" />
+            Copier le code
+          </Button>
+          
+          <Button 
+            onClick={shareNative}
+            className="w-full"
+          >
+            <Share2 className="w-4 h-4 mr-2" />
+            Partager
+          </Button>
+        </div>
+
+        {/* Instructions */}
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <h4 className="font-medium text-blue-900 mb-2 flex items-center gap-2">
+            <Smartphone className="w-4 h-4" />
+            Comment rejoindre
+          </h4>
+          <div className="text-sm text-blue-700 space-y-1">
+            <p>• Scannez le QR code avec votre téléphone</p>
+            <p>• Ou cliquez sur le lien partagé</p>
+            <p>• Ou entrez le code {roomCode} dans l'app</p>
+          </div>
+        </div>
       </CardContent>
     </Card>
   );
