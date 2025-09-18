@@ -1,7 +1,8 @@
 
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSecureGameState } from '@/hooks/game/useSecureGameState';
+import { useUnifiedGameState } from '@/hooks/game/useUnifiedGameState';
+import { GameSyncManager } from '@/components/sync/GameSyncManager';
 import ScoreBoard from '@/components/ScoreBoard';
 import NewRoundModal from '@/components/NewRoundModal';
 import PageShell from '@/components/layout/PageShell';
@@ -26,9 +27,12 @@ const SimpleGamePage: React.FC = () => {
     addRound,
     undoLastRound,
     resetGame,
-    loadFromStorage,
-    performManualIntegrityCheck
-  } = useSecureGameState();
+    syncStatus,
+    isConnected,
+    availableGames,
+    loadGameFromCloud,
+    migrateLocalToCloud
+  } = useUnifiedGameState();
   const [isScoreFormOpen, setIsScoreFormOpen] = useState(false);
   const [showGameEndConfirmation, setShowGameEndConfirmation] = useState(false);
   const [scores, setScores] = useState<{ [playerId: string]: number }>({});
@@ -39,15 +43,7 @@ const SimpleGamePage: React.FC = () => {
     console.log('🎮 SimpleGamePage MOUNTED');
     console.log('🎮 Current game state - hasGame:', hasGame, 'players:', players.length);
     
-    // Tentative de chargement uniquement si aucune partie n'est active
-    if (!hasGame) {
-      console.log('🔍 No active game, trying to load from storage...');
-      const loaded = loadFromStorage();
-      if (!loaded) {
-        console.log('⚠️ No saved game found, but NOT redirecting automatically');
-        // Pas de redirection automatique - l'utilisateur peut décider
-      }
-    }
+    // Plus besoin de charger manuellement - useUnifiedGameState gère tout
     
     return () => {
       console.log('🎮 SimpleGamePage UNMOUNTED');
@@ -141,6 +137,9 @@ const SimpleGamePage: React.FC = () => {
               onBack: () => navigate('/setup')
             })}
           />
+          
+          {/* Gestionnaire de synchronisation - simplifié */}
+          {/* <GameSyncManager /> */}
           
           {/* Commentaires du Professeur Cartouche */}
           <div className="w-full max-w-7xl mx-auto px-4 py-6">

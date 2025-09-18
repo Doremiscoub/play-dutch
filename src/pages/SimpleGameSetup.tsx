@@ -2,7 +2,8 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { useSecureGameState } from '@/hooks/game/useSecureGameState';
+import { useUnifiedGameState } from '@/hooks/game/useUnifiedGameState';
+import { GameSyncManager } from '@/components/sync/GameSyncManager';
 import { toast } from 'sonner';
 import { Card, CardContent } from '@/components/ui/card';
 import ModernGameSetup from '@/components/game-setup/ModernGameSetup';
@@ -13,7 +14,7 @@ import { MobileOptimizer } from '@/components/ui/mobile-optimizer';
 
 const SimpleGameSetup: React.FC = () => {
   const navigate = useNavigate();
-  const { createGame } = useSecureGameState();
+  const { createGame, availableGames, loadGameFromCloud, hasGame, resetGame } = useUnifiedGameState();
   const headerConfig = useUnifiedHeader();
 
   useEffect(() => {
@@ -23,7 +24,7 @@ const SimpleGameSetup: React.FC = () => {
     };
   }, []);
 
-  const handleStartGame = (playerNames: string[]) => {
+  const handleStartGame = async (playerNames: string[]) => {
     console.log('🎮 Starting game with players:', playerNames);
     
     if (playerNames.length < 2) {
@@ -31,7 +32,7 @@ const SimpleGameSetup: React.FC = () => {
       return;
     }
 
-    const success = createGame(playerNames);
+    const success = await createGame(playerNames);
     if (success) {
       console.log('✅ Game created successfully, navigating to /game');
       navigate('/game', { replace: true, state: { fromSetup: true } });
@@ -40,10 +41,25 @@ const SimpleGameSetup: React.FC = () => {
     }
   };
 
+  const handleLoadGame = async (gameId: string) => {
+    const success = await loadGameFromCloud(gameId);
+    if (success) {
+      navigate('/game', { replace: true });
+    }
+  };
+
+  const handleResetCurrentGame = () => {
+    resetGame();
+    toast.success('Partie réinitialisée');
+  };
+
   return (
     <PageShell variant="game">
       <MobileOptimizer pageType="setup" className="min-h-screen">
         <UnifiedHeader {...headerConfig} />
+        
+        {/* Gestionnaire de synchronisation - simplifié */}
+        {/* <GameSyncManager /> */}
 
         {/* Contenu principal stabilisé */}
         <div className="container mx-auto px-4 py-4 sm:py-8 max-w-4xl relative z-20">

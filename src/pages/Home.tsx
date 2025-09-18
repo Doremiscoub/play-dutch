@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSEO } from '@/hooks/useSEO';
+import { useTutorial } from '@/hooks/useTutorial';
+import { InteractiveTutorialV2 } from '@/components/tutorial/InteractiveTutorialV2';
+import { PWAInstallBanner } from '@/components/PWAInstallBanner';
 import { motion } from 'framer-motion';
 import { Gamepad2, Users, Heart, Sparkles, BookOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -16,6 +19,7 @@ import HomeLayout from '@/components/layout/HomeLayout';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
+  const { showTutorial, closeTutorial, isLoading } = useTutorial();
 
   // SEO optimisé
   const seoData = {
@@ -54,7 +58,8 @@ const Home: React.FC = () => {
   ];
 
   return (
-    <PageShell variant="default">
+    <>
+      <PageShell variant="default">
       <AdProvider>
         <MobileOptimizer pageType="home" className="min-h-screen">
           <UnifiedHeader 
@@ -227,7 +232,20 @@ const Home: React.FC = () => {
         </MobileOptimizer>
       </AdProvider>
     </PageShell>
-  );
+
+    {/* Tutorial interactif */}
+    {!isLoading && (
+      <Suspense fallback={null}>
+        <InteractiveTutorialV2 
+          isOpen={showTutorial} 
+          onClose={closeTutorial}
+        />
+      </Suspense>
+    )}
+
+    {/* Bannière d'installation PWA */}
+    <PWAInstallBanner />
+  </>);
 };
 
 export default Home;
