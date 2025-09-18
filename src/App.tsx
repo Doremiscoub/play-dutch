@@ -22,6 +22,8 @@ import PrivacyPage from './pages/PrivacyPage';
 import TermsPage from './pages/TermsPage';
 import FAQPage from './pages/FAQPage';
 import GuideStrategy from './pages/GuideStrategy';
+import MultiplayerPage from './pages/MultiplayerPage';
+import SettingsPage from './pages/SettingsPage';
 
 // Composants
 import ProtectedRoute from './components/ProtectedRoute';
@@ -76,11 +78,13 @@ const App: React.FC = () => {
               <Route path="setup" element={<SimpleGameSetup />} />
               
               <Route path="game" element={<SimpleGamePage />} />
+              <Route path="multiplayer" element={<MultiplayerPage />} />
               <Route path="history" element={<History />} />
               <Route path="rules" element={<RulesPage />} />
               
               {/* Pages SEO / Contenu */}
               <Route path="about" element={<AboutPage />} />
+              <Route path="settings" element={<SettingsPage />} />
               <Route path="privacy" element={<PrivacyPage />} />
               <Route path="terms" element={<TermsPage />} />
               <Route path="faq" element={<FAQPage />} />
