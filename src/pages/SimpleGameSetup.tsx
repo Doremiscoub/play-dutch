@@ -1,20 +1,25 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useUnifiedGameState } from '@/hooks/game/useUnifiedGameState';
+import { useTutorial } from '@/hooks/useTutorial';
+import { InteractiveTutorialV2 } from '@/components/tutorial/InteractiveTutorialV2';
 import { GameSyncManager } from '@/components/sync/GameSyncManager';
 import { toast } from 'sonner';
 import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import ModernGameSetup from '@/components/game-setup/ModernGameSetup';
 import UnifiedHeader from '@/components/layout/UnifiedHeader';
 import { useUnifiedHeader } from '@/hooks/useUnifiedHeader';
 import PageShell from '@/components/layout/PageShell';
 import { MobileOptimizer } from '@/components/ui/mobile-optimizer';
+import { HelpCircle } from 'lucide-react';
 
 const SimpleGameSetup: React.FC = () => {
   const navigate = useNavigate();
   const { createGame, availableGames, loadGameFromCloud, hasGame, resetGame } = useUnifiedGameState();
+  const { showTutorial, closeTutorial, startTutorial, isLoading } = useTutorial();
   const headerConfig = useUnifiedHeader();
 
   useEffect(() => {
@@ -80,7 +85,18 @@ const SimpleGameSetup: React.FC = () => {
           >
             <Card className="bg-gradient-to-r from-primary/5 to-secondary/5 border border-primary/20">
               <CardContent className="p-6">
-                <h3 className="text-lg font-bold text-neutral-800 mb-3">🎯 Rappel des règles Dutch</h3>
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-lg font-bold text-neutral-800">🎯 Rappel des règles Dutch</h3>
+                  <Button
+                    onClick={startTutorial}
+                    variant="outline"
+                    size="sm"
+                    className="text-xs hover:scale-105 transition-transform"
+                  >
+                    <HelpCircle className="h-3 w-3 mr-1" />
+                    Guide interactif
+                  </Button>
+                </div>
                 <div className="grid md:grid-cols-2 gap-4 text-sm text-neutral-700">
                   <div className="space-y-2">
                     <p><strong>• Objectif :</strong> Avoir le score le plus bas</p>
@@ -97,6 +113,16 @@ const SimpleGameSetup: React.FC = () => {
         </motion.div>
         </div>
       </MobileOptimizer>
+
+      {/* Tutorial interactif */}
+      {!isLoading && (
+        <Suspense fallback={null}>
+          <InteractiveTutorialV2 
+            isOpen={showTutorial} 
+            onClose={closeTutorial}
+          />
+        </Suspense>
+      )}
     </PageShell>
   );
 };

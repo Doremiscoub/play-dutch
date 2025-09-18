@@ -3,9 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useSEO } from '@/hooks/useSEO';
 import { useTutorial } from '@/hooks/useTutorial';
 import { InteractiveTutorialV2 } from '@/components/tutorial/InteractiveTutorialV2';
-import { PWAInstallBanner } from '@/components/PWAInstallBanner';
 import { motion } from 'framer-motion';
-import { Gamepad2, Users, Heart, Sparkles, BookOpen } from 'lucide-react';
+import { Gamepad2, Users, Heart, Sparkles, BookOpen, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import UnifiedHeader from '@/components/layout/UnifiedHeader';
@@ -19,7 +18,7 @@ import HomeLayout from '@/components/layout/HomeLayout';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
-  const { showTutorial, closeTutorial, isLoading } = useTutorial();
+  const { showTutorial, closeTutorial, startTutorial, isLoading } = useTutorial();
 
   // SEO optimisé
   const seoData = {
@@ -220,6 +219,21 @@ const Home: React.FC = () => {
                             Règles
                           </Button>
                         </motion.div>
+
+                        <motion.div
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                        >
+                          <Button
+                            onClick={startTutorial}
+                            variant="outline"
+                            size="lg"
+                            className="border-2 border-white/80 text-white bg-white/10 hover:bg-white hover:text-trinity-purple-700 font-semibold text-base px-6 py-3 rounded-2xl backdrop-blur-sm transition-all duration-300 min-w-[160px]"
+                          >
+                            <HelpCircle className="h-4 w-4 mr-2" />
+                            Guide interactif
+                          </Button>
+                        </motion.div>
                       </div>
                     </motion.div>
                   </CardContent>
@@ -242,9 +256,6 @@ const Home: React.FC = () => {
         />
       </Suspense>
     )}
-
-    {/* Bannière d'installation PWA */}
-    <PWAInstallBanner />
   </>);
 };
 
