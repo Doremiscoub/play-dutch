@@ -15,6 +15,7 @@ import SimplifiedHeroSection from '@/components/home/SimplifiedHeroSection';
 import LazyHomeSections from '@/components/home/LazyHomeSections';
 import { AdProvider } from '@/contexts/AdContext';
 import HomeLayout from '@/components/layout/HomeLayout';
+import PWAPromotionCard from '@/components/pwa/PWAPromotionCard';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -243,6 +244,14 @@ const Home: React.FC = () => {
 
             <LazyHomeSections navigate={navigate} />
           </HomeLayout>
+
+          {/* PWA Promotion Card */}
+          <div className="container mx-auto px-4 pb-6">
+            <PWAPromotionCard 
+              onInstall={() => console.log('PWA Install triggered')}
+              onDismiss={() => console.log('PWA Promo dismissed')}
+            />
+          </div>
         </MobileOptimizer>
       </AdProvider>
     </PageShell>
