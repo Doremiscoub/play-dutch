@@ -37,7 +37,25 @@ const SimpleGamePage: React.FC = () => {
   const [showGameEndConfirmation, setShowGameEndConfirmation] = useState(false);
   const [scores, setScores] = useState<{ [playerId: string]: number }>({});
   const [dutchPlayerId, setDutchPlayerId] = useState<string | undefined>();
-  // gameStartTime now comes from useSecureGameState
+  
+  // Configuration du header - DOIT être appelé avant tout return conditionnel
+  const headerConfig = useUnifiedHeader(
+    hasGame
+      ? {
+          title: `Manche ${roundHistory.length + 1}`,
+          variant: "game",
+          roundCount: roundHistory.length + 1,
+          scoreLimit: scoreLimit,
+          gameStartTime: gameStartTime || new Date(),
+          showRulesButton: true,
+          onBack: () => navigate('/setup')
+        }
+      : {
+          title: "Aucune partie en cours",
+          showBackButton: true,
+          onBack: () => navigate('/setup')
+        }
+  );
 
   useEffect(() => {
     console.log('🎮 SimpleGamePage MOUNTED');
@@ -68,10 +86,7 @@ const SimpleGamePage: React.FC = () => {
     return (
       <PageShell variant="game">
         <MobileOptimizer pageType="game" className="min-h-screen">
-          <UnifiedHeader 
-            title="Aucune partie en cours" 
-            showBackButton={true}
-          />
+          <UnifiedHeader {...headerConfig} />
           <div className="container mx-auto px-4 py-8 text-center">
           <h2 className="text-2xl font-bold mb-4">Aucune partie en cours</h2>
           <p className="mb-6">Vous devez d'abord créer une partie pour jouer.</p>
@@ -126,17 +141,7 @@ const SimpleGamePage: React.FC = () => {
     <PageShell variant="game">
       <AdProvider>
         <MobileOptimizer pageType="game" className="min-h-screen">
-          <UnifiedHeader 
-            {...useUnifiedHeader({
-              title: `Manche ${roundHistory.length + 1}`,
-              variant: "game",
-              roundCount: roundHistory.length + 1,
-              scoreLimit: scoreLimit,
-              gameStartTime: gameStartTime || new Date(),
-              showRulesButton: true,
-              onBack: () => navigate('/setup')
-            })}
-          />
+          <UnifiedHeader {...headerConfig} />
           
           {/* Gestionnaire de synchronisation - simplifié */}
           {/* <GameSyncManager /> */}
