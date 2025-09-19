@@ -13,6 +13,7 @@ import AnimatedBackground from './components/AnimatedBackground';
 import Home from './pages/Home';
 import SimpleGameSetup from './pages/SimpleGameSetup';
 import SimpleGamePage from './pages/SimpleGamePage';
+import JoinGamePage from './pages/JoinGamePage';
 import History from './pages/History';
 import RulesPage from './pages/RulesPage';
 import SignIn from './pages/SignIn';
@@ -78,6 +79,7 @@ const App: React.FC = () => {
               <Route path="setup" element={<SimpleGameSetup />} />
               
               <Route path="game" element={<SimpleGamePage />} />
+              <Route path="join/:gameId" element={<JoinGamePage />} />
               <Route path="multiplayer" element={<MultiplayerPage />} />
               <Route path="history" element={<History />} />
               <Route path="rules" element={<RulesPage />} />

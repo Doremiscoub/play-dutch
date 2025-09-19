@@ -247,7 +247,11 @@ export const MultiplayerLobby: React.FC<MultiplayerLobbyProps> = ({
                   animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
                 >
-                  <GameInvitationQR roomCode={roomCode} />
+                  <GameInvitationQR 
+                    gameId={roomCode} 
+                    gameName={`Partie ${roomCode}`}
+                    playersCount={connectedPlayers.length}
+                  />
                 </motion.div>
               )}
 
