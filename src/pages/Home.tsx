@@ -16,6 +16,7 @@ import LazyHomeSections from '@/components/home/LazyHomeSections';
 import { AdProvider } from '@/contexts/AdContext';
 import HomeLayout from '@/components/layout/HomeLayout';
 import PWAPromotionCard from '@/components/pwa/PWAPromotionCard';
+import { PWAInstallBannerV2 } from '@/components/pwa/PWAInstallBannerV2';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();

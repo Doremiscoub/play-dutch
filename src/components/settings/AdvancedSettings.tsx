@@ -33,6 +33,8 @@ import {
 import { toast } from 'sonner';
 import { useSupabaseAuth } from '@/context/SupabaseAuthContext';
 import { useUnifiedGameState } from '@/hooks/game/useUnifiedGameState';
+import { NotificationSystem } from '@/components/notifications/NotificationSystem';
+import { PWAInstallBannerV2 } from '@/components/pwa/PWAInstallBannerV2';
 
 interface AdvancedSettingsProps {
   className?: string;
@@ -306,13 +308,16 @@ export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({ className = 
         </CardContent>
       </Card>
 
-      {/* Apparence */}
+      {/* Apparence & Thèmes */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Palette className="w-5 h-5" />
             Apparence
           </CardTitle>
+          <CardDescription>
+            Personnalisez l'apparence de votre application
+          </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between">
@@ -537,10 +542,38 @@ export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({ className = 
         </CardContent>
       </Card>
 
-      {/* Notifications */}
+      {/* Notifications Push */}
+      <NotificationSystem className="mb-6" />
+
+      {/* Application Mobile PWA */}
       <Card>
         <CardHeader>
-          <CardTitle>Notifications</CardTitle>
+          <CardTitle className="flex items-center gap-2">
+            <Smartphone className="w-5 h-5" />
+            Application Mobile PWA
+          </CardTitle>
+          <CardDescription>
+            Installez Dutch comme une vraie application native
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <PWAInstallBannerV2 />
+          <div className="mt-4 p-4 bg-blue-50/50 rounded-lg border border-blue-200/30">
+            <h4 className="font-medium text-blue-900 mb-2">Avantages de l'installation PWA :</h4>
+            <ul className="text-sm text-blue-800 space-y-1">
+              <li>• Accès rapide depuis l'écran d'accueil</li>
+              <li>• Fonctionne même hors ligne</li>
+              <li>• Interface native optimisée</li>
+              <li>• Notifications push intégrées</li>
+            </ul>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Notifications classiques */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Préférences de Notifications</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between">
