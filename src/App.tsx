@@ -25,6 +25,7 @@ import FAQPage from './pages/FAQPage';
 import GuideStrategy from './pages/GuideStrategy';
 import MultiplayerPage from './pages/MultiplayerPage';
 import SettingsPage from './pages/SettingsPage';
+import DeveloperTools from './pages/DeveloperTools';
 
 // Composants
 import ProtectedRoute from './components/ProtectedRoute';
@@ -87,6 +88,7 @@ const App: React.FC = () => {
               {/* Pages SEO / Contenu */}
               <Route path="about" element={<AboutPage />} />
               <Route path="settings" element={<SettingsPage />} />
+              <Route path="dev-tools" element={<DeveloperTools />} />
               <Route path="privacy" element={<PrivacyPage />} />
               <Route path="terms" element={<TermsPage />} />
               <Route path="faq" element={<FAQPage />} />

@@ -28,13 +28,15 @@ import {
   RotateCcw,
   AlertTriangle,
   CheckCircle,
-  Info
+  Info,
+  Code2
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useSupabaseAuth } from '@/context/SupabaseAuthContext';
 import { useUnifiedGameState } from '@/hooks/game/useUnifiedGameState';
 import { NotificationSystem } from '@/components/notifications/NotificationSystem';
 import { PWAInstallBannerV2 } from '@/components/pwa/PWAInstallBannerV2';
+import { useNavigate } from 'react-router-dom';
 
 interface AdvancedSettingsProps {
   className?: string;
@@ -99,6 +101,7 @@ const DEFAULT_SETTINGS: AppSettings = {
 export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({ className = '' }) => {
   const { isSignedIn, user } = useSupabaseAuth();
   const { syncStatus, migrateLocalToCloud, availableGames } = useUnifiedGameState();
+  const navigate = useNavigate();
   const [settings, setSettings] = useState<AppSettings>(DEFAULT_SETTINGS);
   const [isDirty, setIsDirty] = useState(false);
   const [storageInfo, setStorageInfo] = useState<{
@@ -610,6 +613,34 @@ export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({ className = 
           </div>
         </CardContent>
       </Card>
+
+      {/* Outils de Développement (uniquement en mode dev) */}
+      {process.env.NODE_ENV === 'development' && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Code2 className="w-5 h-5" />
+              Outils de Développement
+            </CardTitle>
+            <CardDescription>
+              Outils pour analyser les performances et l'accessibilité
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button 
+              onClick={() => navigate('/dev-tools')} 
+              variant="outline" 
+              className="w-full"
+            >
+              <Code2 className="w-4 h-4 mr-2" />
+              Accéder aux outils de développement
+            </Button>
+            <p className="text-xs text-gray-600 mt-2">
+              Bundle analysis, accessibility checker, performance monitor
+            </p>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Confidentialité */}
       <Card>
