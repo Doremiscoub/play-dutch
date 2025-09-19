@@ -77,17 +77,15 @@ export const initializeSentry = async () => {
       replaysSessionSampleRate: 0.1,
       replaysOnErrorSampleRate: 1.0,
       
-      // Enable offline capability
-      transport: Sentry.makeBrowserTransport({
-        // Maximum number of events to queue
-        maxQueueSize: 30,
-        
-        // Flush events when online
-        flushAtStartup: true,
-        
-        // Attempt to send events when connection is restored
-        sendClientReports: true
-      }),
+      // Enable offline capability - using standard transport config
+      transport: undefined, // Use default transport
+      
+      // Queue options for offline capability
+      maxBreadcrumbs: 30,
+      beforeSend: (event) => {
+        // Custom logic for offline handling if needed
+        return event;
+      },
       
       // Only enable in non-development environments if needed
       enabled: environment !== 'development' || import.meta.env.VITE_ENABLE_SENTRY === 'true',

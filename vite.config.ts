@@ -66,6 +66,7 @@ export default defineConfig(({ mode }) => ({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+        maximumFileSizeToCacheInBytes: 3 * 1024 * 1024, // 3MB limit instead of 2MB
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
@@ -136,10 +137,12 @@ export default defineConfig(({ mode }) => ({
         manualChunks: {
           vendor: ['react', 'react-dom'],
           router: ['react-router-dom'],
-          ui: ['@radix-ui/react-dialog', '@radix-ui/react-alert-dialog'],
-          animations: ['framer-motion'],
+          ui: ['@radix-ui/react-dialog', '@radix-ui/react-alert-dialog', '@radix-ui/react-tabs', '@radix-ui/react-toast'],
+          animations: ['framer-motion', 'canvas-confetti'],
           charts: ['recharts'],
-          utils: ['date-fns', 'clsx', 'tailwind-merge']
+          utils: ['date-fns', 'clsx', 'tailwind-merge', 'zustand'],
+          sentry: ['@sentry/react', '@sentry/tracing'],
+          statistics: ['src/components/statistics/StatsOverview.tsx', 'src/components/statistics/PlayerTrends.tsx', 'src/components/statistics/PlayerRadar.tsx']
         }
       }
     }

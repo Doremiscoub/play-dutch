@@ -1,20 +1,21 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, Suspense, lazy } from 'react';
 import { motion } from 'framer-motion';
 import { Player } from '@/types';
 import { ArrowLeft, BarChart3, TrendingUp, Users, Activity, Zap, Award } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
 import useIsMobile from '@/hooks/use-mobile';
 import { LazyStatisticsSection, useVisibilityTracker } from './LazyStatisticsSection';
 import { useMobileLayout, useMobileAdaptation } from '@/hooks/useMobileAdaptation';
 
-// Import des composants avec lazy loading
-import { StatsOverview } from './StatsOverview';
-import { PlayerTrends } from './PlayerTrends';
-import { PlayerRadar } from './PlayerRadar';
-import { RoundHeatmap } from './RoundHeatmap';
-import { AdvancedStats } from './AdvancedStats';
-import { AchievementsBadges } from './AchievementsBadges';
+// Composants chargés de façon asynchrone pour éviter les conflits avec LazyStatisticsSection
+const StatsOverview = lazy(() => import('./StatsOverview').then(module => ({ default: module.StatsOverview })));
+const PlayerTrends = lazy(() => import('./PlayerTrends').then(module => ({ default: module.PlayerTrends })));
+const PlayerRadar = lazy(() => import('./PlayerRadar').then(module => ({ default: module.PlayerRadar })));
+const RoundHeatmap = lazy(() => import('./RoundHeatmap').then(module => ({ default: module.RoundHeatmap })));
+const AdvancedStats = lazy(() => import('./AdvancedStats').then(module => ({ default: module.AdvancedStats })));
+const AchievementsBadges = lazy(() => import('./AchievementsBadges').then(module => ({ default: module.AchievementsBadges })));
 interface OptimizedStatsDashboardProps {
   players: Player[];
   roundCount: number;
