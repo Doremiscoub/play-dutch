@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -27,7 +27,8 @@ import { Player, Game } from '@/types';
 import { format, isToday, isYesterday, isThisWeek, isThisMonth } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { useLocalStorage } from '@/hooks/use-local-storage';
-import { db } from '@/lib/database';
+import { STORAGE_KEYS } from '@/utils/storageKeys';
+import { toast } from 'sonner';
 
 interface GameHistoryEntry {
   id: string;
@@ -56,14 +57,29 @@ export const EnhancedGameHistory: React.FC<EnhancedGameHistoryProps> = ({
   onShareGame,
   className
 }) => {
-  const { gameHistory, deleteGame } = useGameHistory();
+  const { deleteGameFromHistory } = useGameHistory();
+  const [storedGames, setStoredGames] = useLocalStorage<Game[]>(STORAGE_KEYS.GAME_HISTORY, []);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFilter, setSelectedFilter] = useState<'all' | 'today' | 'week' | 'month'>('all');
   const [sortBy, setSortBy] = useState<'recent' | 'duration' | 'players'>('recent');
 
+  // Fonction pour supprimer une partie
+  const handleDeleteGame = async (gameId: string) => {
+    try {
+      const success = await deleteGameFromHistory(gameId);
+      if (success) {
+        // Mettre à jour l'état local
+        setStoredGames(prev => prev.filter(game => game.id !== gameId));
+      }
+    } catch (error) {
+      console.error('Error deleting game:', error);
+      toast.error('Erreur lors de la suppression');
+    }
+  };
+
   // Transformation des données avec enrichissement
   const enrichedHistory: GameHistoryEntry[] = useMemo(() => {
-    return gameHistory.map(game => {
+    return storedGames.map(game => {
       // Simuler les données de joueur pour la démo
       const simulatedPlayers: Player[] = game.players.map((p, index) => ({
         id: `${game.id}-player-${index}`,
@@ -83,9 +99,10 @@ export const EnhancedGameHistory: React.FC<EnhancedGameHistoryProps> = ({
       
       const averageScore = game.players.reduce((sum, p) => sum + p.score, 0) / game.players.length;
       const scoreSpread = Math.max(...game.players.map(p => p.score)) - Math.min(...game.players.map(p => p.score));
-      const closestGame = scoreSpread < (game.scoreLimit * 0.3); // Partie serrée si écart < 30% de la limite
+      const scoreLimit = 100;
+      const closestGame = scoreSpread < (scoreLimit * 0.3); // Partie serrée si écart < 30% de la limite
       
-      const completedAt = new Date(game.gameStartTime || Date.now());
+      const completedAt = new Date(game.date || Date.now());
       
       // Tags automatiques
       const tags = [];
@@ -102,7 +119,7 @@ export const EnhancedGameHistory: React.FC<EnhancedGameHistoryProps> = ({
         winner,
         totalRounds,
         duration,
-        scoreLimit: scoreLimit,
+        scoreLimit,
         completedAt,
         tags,
         memorable: closestGame || game.players.length >= 8,
@@ -289,7 +306,7 @@ export const EnhancedGameHistory: React.FC<EnhancedGameHistoryProps> = ({
                                 Partager
                               </DropdownMenuItem>
                               <DropdownMenuItem 
-                                onClick={() => deleteGameFromHistory(game.id)}
+                                onClick={() => handleDeleteGame(game.id)}
                                 className="text-red-600"
                               >
                                 <Trash2 className="w-4 h-4 mr-2" />
