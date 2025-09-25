@@ -35,6 +35,8 @@ import AppLayout from './components/layout/AppLayout';
 // Contexte
 import { SupabaseAuthProvider } from './context/SupabaseAuthContext';
 import { UnifiedThemeProvider } from './components/ui/unified-theme-provider';
+import { EnhancedAdProvider } from './contexts/EnhancedAdContext';
+import GDPRConsentBanner from './components/ads/GDPRConsentBanner';
 
 // Composant pour suivre les changements de route pour Sentry
 const RouteTracker = () => {
@@ -62,7 +64,8 @@ const App: React.FC = () => {
   return (
     <UnifiedThemeProvider>
       <SupabaseAuthProvider>
-        <Router>
+        <EnhancedAdProvider>
+          <Router>
           {/* Fond animé global avec vagues et pastilles - visible sur toute l'app */}
           <div className="fixed inset-0 w-full h-full" style={{ zIndex: -10 }}>
             <AnimatedBackground variant="subtle" />
@@ -121,7 +124,9 @@ const App: React.FC = () => {
           />
           
           <PWAInstallPrompt />
-        </Router>
+          <GDPRConsentBanner />
+          </Router>
+        </EnhancedAdProvider>
       </SupabaseAuthProvider>
     </UnifiedThemeProvider>
   );

@@ -13,7 +13,6 @@ import PageShell from '@/components/layout/PageShell';
 import { MobileOptimizer } from '@/components/ui/mobile-optimizer';
 import SimplifiedHeroSection from '@/components/home/SimplifiedHeroSection';
 import LazyHomeSections from '@/components/home/LazyHomeSections';
-import { AdProvider } from '@/contexts/AdContext';
 import HomeLayout from '@/components/layout/HomeLayout';
 import PWAPromotionCard from '@/components/pwa/PWAPromotionCard';
 import { PWAInstallBannerV2 } from '@/components/pwa/PWAInstallBannerV2';
@@ -61,7 +60,6 @@ const Home: React.FC = () => {
   return (
     <>
       <PageShell variant="default">
-      <AdProvider>
         <MobileOptimizer pageType="home" className="min-h-screen">
           <UnifiedHeader 
             {...useUnifiedHeader({ hideTitle: true })}
@@ -254,7 +252,6 @@ const Home: React.FC = () => {
             />
           </div>
         </MobileOptimizer>
-      </AdProvider>
     </PageShell>
 
     {/* Tutorial interactif */}

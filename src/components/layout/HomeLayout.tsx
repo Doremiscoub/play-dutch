@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import { motion } from 'framer-motion';
-import { useAds } from '@/contexts/AdContext';
-import AdSlot from '@/components/ads/AdSlot';
+import { useAds } from '@/contexts/EnhancedAdContext';
+import EnhancedAdSlot from '@/components/ads/EnhancedAdSlot';
 
 interface HomeLayoutProps {
   children: ReactNode;
@@ -29,8 +29,9 @@ const HomeLayout: React.FC<HomeLayoutProps> = ({ children }) => {
               className="py-8 my-8"
             >
               <div className="flex justify-center">
-                <AdSlot 
+                <EnhancedAdSlot 
                   placement="homepage-inline" 
+                  priority="high"
                   className="shadow-lg hover:shadow-xl transition-shadow duration-300"
                 />
               </div>

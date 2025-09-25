@@ -11,7 +11,6 @@ import { useUnifiedHeader } from '@/hooks/useUnifiedHeader';
 import AICommentator from '@/components/AICommentator';
 import { MobileOptimizer } from '@/components/ui/mobile-optimizer';
 import { toast } from 'sonner';
-import { AdProvider } from '@/contexts/AdContext';
 import GameLayout from '@/components/layout/GameLayout';
 import VideoAdOverlay from '@/components/ads/VideoAdOverlay';
 
@@ -145,7 +144,6 @@ const SimpleGamePage: React.FC = () => {
 
   return (
     <PageShell variant="game">
-      <AdProvider>
         <MobileOptimizer pageType="game" className="min-h-screen">
           <UnifiedHeader {...headerConfig} />
           
@@ -199,7 +197,6 @@ const SimpleGamePage: React.FC = () => {
             trigger={adTrigger}
           />
         </MobileOptimizer>
-      </AdProvider>
     </PageShell>
   );
 };

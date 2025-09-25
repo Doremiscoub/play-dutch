@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
-import { useAds } from '@/contexts/AdContext';
-import AdSlot from '@/components/ads/AdSlot';
+import { useAds } from '@/contexts/EnhancedAdContext';
+import EnhancedAdSlot from '@/components/ads/EnhancedAdSlot';
 import { cn } from '@/lib/utils';
 
 interface GameLayoutProps {
@@ -30,7 +30,7 @@ const GameLayout: React.FC<GameLayoutProps> = ({ children, className }) => {
       <aside className="flex flex-col justify-start items-center pt-4">
         {shouldShowAds && (
           <div className="sticky top-4">
-            <AdSlot placement="game-sidebar-left" />
+            <EnhancedAdSlot placement="game-sidebar-left" priority="medium" />
           </div>
         )}
       </aside>
@@ -44,7 +44,7 @@ const GameLayout: React.FC<GameLayoutProps> = ({ children, className }) => {
       <aside className="flex flex-col justify-start items-center pt-4">
         {shouldShowAds && (
           <div className="sticky top-4">
-            <AdSlot placement="game-sidebar-right" />
+            <EnhancedAdSlot placement="game-sidebar-right" priority="medium" />
           </div>
         )}
       </aside>
