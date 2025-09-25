@@ -31,7 +31,7 @@ const MobileNavigation: React.FC = () => {
     <motion.nav
       initial={{ y: 100 }}
       animate={{ y: 0 }}
-      className="fixed bottom-0 left-0 right-0 z-40 md:hidden"
+      className="mobile-navigation fixed bottom-0 left-0 right-0 md:hidden"
       style={{ bottom: mobileNavBottomOffset }}
     >
       <div className="glass-morphism border-t border-white/20 backdrop-blur-xl bg-white/10">

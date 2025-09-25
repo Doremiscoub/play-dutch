@@ -19,6 +19,8 @@ interface NewRoundModalProps {
   open: boolean;
 }
 
+import { useNavigationVisibility } from '@/hooks/useNavigationVisibility';
+
 const NewRoundModal: React.FC<NewRoundModalProps> = ({
   players,
   scores,
@@ -33,6 +35,15 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
   const firstInputRef = useRef<HTMLInputElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const isMobile = useIsMobile();
+  const { registerModal, unregisterModal } = useNavigationVisibility();
+
+  // Register modal when open
+  useEffect(() => {
+    if (open) {
+      registerModal();
+      return () => unregisterModal();
+    }
+  }, [open, registerModal, unregisterModal]);
 
   useEffect(() => {
     if (open && firstInputRef.current) {

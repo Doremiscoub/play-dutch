@@ -81,7 +81,7 @@ const VideoAdOverlay: React.FC<VideoAdOverlayProps> = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/95 backdrop-blur-sm z-[99999]"
+            className="video-ad-overlay fixed inset-0 bg-black/95 backdrop-blur-sm"
             onClick={handleClose}
           />
           

@@ -41,21 +41,32 @@ export const useUnifiedGameState = () => {
 
   const [availableGames, setAvailableGames] = useState<SupabaseGameData[]>([]);
 
-  // Synchronise l'état local avec l'état unifié
+  // Synchronise l'état local avec l'état unifié - CORRIGÉ pour éviter la boucle infinie
   useEffect(() => {
     if (!isSignedIn) {
-      // Mode hors ligne - utilise l'état local
-      setUnifiedState(prev => ({
-        ...prev,
-        players: localGameState.players,
-        roundHistory: localGameState.roundHistory,
-        scoreLimit: localGameState.scoreLimit,
-        gameStartTime: localGameState.gameStartTime,
-        isGameOver: localGameState.isGameOver,
-        syncStatus: 'local'
-      }));
+      // Mode hors ligne - utilise l'état local sans dépendance directe sur localGameState
+      setUnifiedState(prev => {
+        // Ne mettre à jour que si les données ont réellement changé
+        const hasChanges = 
+          prev.players.length !== localGameState.players.length ||
+          prev.roundHistory.length !== localGameState.roundHistory.length ||
+          prev.isGameOver !== localGameState.isGameOver;
+          
+        if (hasChanges) {
+          return {
+            ...prev,
+            players: localGameState.players,
+            roundHistory: localGameState.roundHistory,
+            scoreLimit: localGameState.scoreLimit,
+            gameStartTime: localGameState.gameStartTime,
+            isGameOver: localGameState.isGameOver,
+            syncStatus: 'local'
+          };
+        }
+        return prev;
+      });
     }
-  }, [isSignedIn, localGameState]);
+  }, [isSignedIn, localGameState.players.length, localGameState.roundHistory.length, localGameState.isGameOver]);
 
   // Charge les parties disponibles quand l'utilisateur se connecte
   useEffect(() => {

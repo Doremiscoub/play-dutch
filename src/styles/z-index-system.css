@@ -1,0 +1,79 @@
+/**
+ * Système de z-index centralisé pour Dutch
+ * Définit une hiérarchie claire pour éviter les conflits
+ */
+
+:root {
+  /* Z-index system - Base levels */
+  --z-base: 1;
+  --z-elevated: 10;
+  --z-sticky: 100;
+  --z-fixed: 1000;
+  --z-overlay: 10000;
+  --z-modal: 100000;
+  --z-toast: 1000000;
+  --z-tooltip: 10000000;
+}
+
+/* Navigation components */
+.mobile-navigation {
+  z-index: var(--z-fixed); /* 1000 */
+}
+
+.quick-action-menu {
+  z-index: calc(var(--z-fixed) + 10); /* 1010 */
+}
+
+.floating-action-buttons {
+  z-index: calc(var(--z-fixed) + 20); /* 1020 */
+}
+
+/* Game components */
+.game-header {
+  z-index: var(--z-sticky); /* 100 */
+}
+
+.score-board {
+  z-index: var(--z-base); /* 1 */
+}
+
+.ai-commentator {
+  z-index: var(--z-elevated); /* 10 */
+}
+
+/* Modals and overlays */
+.modal-backdrop {
+  z-index: var(--z-overlay); /* 10000 */
+}
+
+.modal-content {
+  z-index: calc(var(--z-modal) + 1); /* 100001 */
+}
+
+.video-ad-overlay {
+  z-index: calc(var(--z-modal) + 10); /* 100010 */
+}
+
+/* Utility classes */
+.z-base { z-index: var(--z-base); }
+.z-elevated { z-index: var(--z-elevated); }
+.z-sticky { z-index: var(--z-sticky); }
+.z-fixed { z-index: var(--z-fixed); }
+.z-overlay { z-index: var(--z-overlay); }
+.z-modal { z-index: var(--z-modal); }
+.z-toast { z-index: var(--z-toast); }
+.z-tooltip { z-index: var(--z-tooltip); }
+
+/* Component-specific z-index adjustments */
+.floating-buttons-hidden {
+  z-index: -1;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.modal-open .mobile-navigation,
+.modal-open .quick-action-menu {
+  z-index: -1;
+  opacity: 0.5;
+  pointer-events: none;
+}

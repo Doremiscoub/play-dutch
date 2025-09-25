@@ -3,8 +3,9 @@
 @import url('./styles/glass.css');
 @import url('./styles/legacy-glass.css');
 @import url('./styles/animations.css');
+@import url('./styles/enhanced-glassmorphism.css');
 @import url('./styles/enhanced-animations.css');
-@import url('./styles/transitions.css');
+@import url('./styles/z-index-system.css');
 @import url('./styles/vision-components.css');
 @import url('./styles/typography.css');
 @import url('./styles/design-system-classes.css');

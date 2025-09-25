@@ -62,7 +62,7 @@ const QuickActionMenu: React.FC = () => {
   ];
 
   return (
-    <div className="fixed bottom-20 right-4 z-50 md:bottom-4">
+    <div className="quick-action-menu fixed bottom-20 right-4 md:bottom-4">
       <AnimatePresence>
         {isOpen && (
           <motion.div

@@ -25,10 +25,9 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
   if (hideWhenModalOpen) return null;
   const buttonsContent = (
     <div 
-      className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 flex flex-col-reverse gap-2 sm:gap-4 pointer-events-none"
+      className={`floating-action-buttons fixed bottom-4 right-4 sm:bottom-6 sm:right-6 flex flex-col-reverse gap-2 sm:gap-4 pointer-events-none ${hideWhenModalOpen ? 'floating-buttons-hidden' : ''}`}
       style={{ 
         position: 'fixed', 
-        zIndex: 999999,
         bottom: 'env(safe-area-inset-bottom, 16px)',
         right: '16px'
       }}
