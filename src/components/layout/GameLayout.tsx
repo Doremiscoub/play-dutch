@@ -11,18 +11,11 @@ interface GameLayoutProps {
 const GameLayout: React.FC<GameLayoutProps> = ({ children, className }) => {
   const { shouldShowAds, isMobile } = useAds();
 
-  // Mobile : layout simple avec bannière optionnelle en haut
+  // Mobile : layout simple sans bannière statique (bannières contextuelles uniquement)
   if (isMobile) {
     return (
       <div className={cn('w-full', className)}>
-        {/* Bannière top mobile */}
-        {shouldShowAds && (
-          <div className="w-full flex justify-center py-2 mb-4">
-            <AdSlot placement="game-banner-mobile" />
-          </div>
-        )}
-        
-        {/* Contenu principal */}
+        {/* Contenu principal - pas de bannière statique */}
         <div className="w-full">
           {children}
         </div>

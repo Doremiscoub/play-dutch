@@ -11,6 +11,7 @@ import OtherPlayersRanking from './game/OtherPlayersRanking';
 import GameOverActionButtons from './game/GameOverActionButtons';
 import { ReceiptCard } from './ui/receipt-card';
 import { ModernTitle } from './ui/modern-title';
+import ContextualAdBanner from './ads/ContextualAdBanner';
 
 interface GameOverScreenProps {
   players: Player[];
@@ -135,6 +136,13 @@ const GameOverScreen: React.FC<GameOverScreenProps> = ({
             <OtherPlayersRanking players={players} />
           </ReceiptCard>
           
+          {/* Bannière contextuelle de fin de partie */}
+          <ContextualAdBanner 
+            placement="game-over"
+            showProbability={0.8}
+            autoHideDelay={20000}
+          />
+
           <GameOverActionButtons 
             onRestart={onRestart} 
             onContinueGame={handleContinueGame} 

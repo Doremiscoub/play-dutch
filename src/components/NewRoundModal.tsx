@@ -6,6 +6,7 @@ import { Button } from './ui/button';
 import { Minus, Plus, User, Zap } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from './ui/dialog';
 import useIsMobile from '@/hooks/use-mobile';
+import ContextualAdBanner from './ads/ContextualAdBanner';
 
 interface NewRoundModalProps {
   players: Player[];
@@ -92,6 +93,13 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
             Ajouter une manche
           </DialogTitle>
         </DialogHeader>
+
+        {/* Bannière contextuelle entre les rounds */}
+        <ContextualAdBanner 
+          placement="between-rounds"
+          showProbability={0.6}
+          autoHideDelay={12000}
+        />
 
         <form onSubmit={handleSubmit} className={`mt-4 ${isMobile ? 'space-y-3' : 'space-y-4'}`}>
           {players.map((player, index) => (
