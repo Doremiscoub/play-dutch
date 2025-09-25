@@ -4,6 +4,8 @@ import { Player } from '@/types';
 import GameModeHandler from '@/components/game/GameModeHandler';
 import ScoreBoard from '@/components/ScoreBoard';
 import IntelligentProfessorCartouche from '@/components/ai-commentator/IntelligentProfessorCartouche';
+import { useMobileAdaptation } from '@/hooks/useMobileAdaptation';
+import { cn } from '@/lib/utils';
 
 interface GameContentViewProps {
   gameMode: 'quick' | 'tournament';
@@ -36,6 +38,7 @@ const GameContentView: React.FC<GameContentViewProps> = ({
   onCancelEndGame,
   onOpenScoreForm
 }) => {
+  const { singleColumn } = useMobileAdaptation();
   return (
     <motion.div
       key="game-board"
@@ -50,19 +53,28 @@ const GameContentView: React.FC<GameContentViewProps> = ({
         onGameEnd={onGameEnd}
         onRestart={onRestart}
       >
-        <div className="min-h-screen bg-gradient-to-br from-trinity-blue-50 via-background to-trinity-purple-50 pb-32">
-          <div className="max-w-6xl mx-auto">
+        <div className={cn(
+          "bg-gradient-to-br from-trinity-blue-50 via-background to-trinity-purple-50",
+          singleColumn ? "min-h-[calc(100vh-8rem)] pb-4" : "min-h-screen pb-32"
+        )}>
+          <div className={cn(
+            "mx-auto",
+            singleColumn ? "w-full" : "max-w-6xl"
+          )}>
             {/* Professeur Cartouche - En haut et centré */}
             <motion.div
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="mb-8 px-4 pt-4"
+              className={cn(
+                singleColumn ? "mb-3 px-3 pt-2" : "mb-8 px-4 pt-4"
+              )}
             >
               <IntelligentProfessorCartouche 
                 players={players}
                 roundCount={roundHistory.length}
                 scoreLimit={scoreLimit}
+                className={singleColumn ? "mobile-compact" : ""}
               />
             </motion.div>
 

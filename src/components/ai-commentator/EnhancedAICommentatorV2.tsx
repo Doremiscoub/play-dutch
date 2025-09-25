@@ -8,6 +8,7 @@ import { useEnhancedAICommentator } from '@/hooks/useEnhancedAICommentator';
 import { Button } from '@/components/ui/button';
 import { Sparkles, Brain, Heart, Zap, RotateCcw, Settings, Clock } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useMobileAdaptation } from '@/hooks/useMobileAdaptation';
 
 interface EnhancedAICommentatorV2Props {
   players: Player[];
@@ -24,6 +25,7 @@ export default function EnhancedAICommentatorV2({
   recentEvent,
   className
 }: EnhancedAICommentatorV2Props) {
+  const { singleColumn } = useMobileAdaptation();
   const {
     currentComment,
     isGenerating,
@@ -90,15 +92,16 @@ export default function EnhancedAICommentatorV2({
   if (isGenerating || !currentComment) {
     return (
       <div className={cn(
-        "flex items-center justify-center p-6 bg-gradient-to-r from-blue-50 to-purple-50",
+        "flex items-center justify-center bg-gradient-to-r from-blue-50 to-purple-50",
         "border border-blue-200 rounded-xl",
+        singleColumn ? "p-3" : "p-6",
         className
       )}>
         <div className="flex items-center gap-3">
-          <ProfessorAvatar size="sm" animate mood="thinking" />
+          <ProfessorAvatar size={singleColumn ? "sm" : "sm"} animate mood="thinking" />
           <div className="flex items-center gap-2">
             <Clock className="w-4 h-4 animate-spin text-blue-500" />
-            <span className="text-sm text-gray-600">
+            <span className={cn("text-gray-600", singleColumn ? "text-xs" : "text-sm")}>
               {isGenerating ? "Le Professeur réfléchit..." : "Analyse en cours..."}
             </span>
           </div>
@@ -119,9 +122,9 @@ export default function EnhancedAICommentatorV2({
           className="relative"
         >
           {/* Avatar du Professeur avec effets */}
-          <div className="relative mb-4">
+          <div className={cn("relative", singleColumn ? "mb-2" : "mb-4")}>
             <ProfessorAvatar 
-              size="lg" 
+              size={singleColumn ? "md" : "lg"} 
               animate 
               mood={isTyping ? "thinking" : "happy"}
               showParticles={!isTyping}
@@ -147,9 +150,10 @@ export default function EnhancedAICommentatorV2({
           {/* Bulle de commentaire */}
           <motion.div
             className={cn(
-              "relative bg-white rounded-2xl shadow-xl p-6 border",
+              "relative bg-white rounded-2xl shadow-xl border",
               "bg-gradient-to-br from-white via-blue-50/30 to-purple-50/30",
-              "border-blue-200/50"
+              "border-blue-200/50",
+              singleColumn ? "p-4" : "p-6"
             )}
             animate={isTyping ? { 
               boxShadow: [
@@ -164,7 +168,10 @@ export default function EnhancedAICommentatorV2({
             
             {/* Texte du commentaire */}
             <div className="relative">
-              <p className="text-lg leading-relaxed text-gray-800 font-medium">
+              <p className={cn(
+                "leading-relaxed text-gray-800 font-medium",
+                singleColumn ? "text-sm" : "text-lg"
+              )}>
                 {displayedText}
                 {isTyping && (
                   <motion.span
