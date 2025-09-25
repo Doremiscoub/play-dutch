@@ -13,6 +13,7 @@ import { MobileOptimizer } from '@/components/ui/mobile-optimizer';
 import { toast } from 'sonner';
 import { AdProvider } from '@/contexts/AdContext';
 import GameLayout from '@/components/layout/GameLayout';
+import VideoAdOverlay from '@/components/ads/VideoAdOverlay';
 
 const SimpleGamePage: React.FC = () => {
   const navigate = useNavigate();
@@ -37,6 +38,8 @@ const SimpleGamePage: React.FC = () => {
   const [showGameEndConfirmation, setShowGameEndConfirmation] = useState(false);
   const [scores, setScores] = useState<{ [playerId: string]: number }>({});
   const [dutchPlayerId, setDutchPlayerId] = useState<string | undefined>();
+  const [showVideoAd, setShowVideoAd] = useState(false);
+  const [adTrigger, setAdTrigger] = useState<'round-added' | 'game-ended'>('round-added');
   
   // Configuration du header - DOIT être appelé avant tout return conditionnel
   const headerConfig = useUnifiedHeader(
@@ -122,9 +125,16 @@ const SimpleGamePage: React.FC = () => {
   };
 
   const handleConfirmEndGame = () => {
+    setAdTrigger('game-ended');
+    setShowVideoAd(true);
     resetGame();
     navigate('/setup');
     setShowGameEndConfirmation(false);
+  };
+
+  const handleVideoAdShown = () => {
+    setAdTrigger('round-added');
+    setShowVideoAd(true);
   };
 
   const handleCancelEndGame = () => {
@@ -168,6 +178,7 @@ const SimpleGamePage: React.FC = () => {
                 onCancelEndGame={handleCancelEndGame}
                 scoreLimit={scoreLimit}
                 openScoreForm={openScoreForm}
+                hideFloatingActionsWhenModalOpen={isScoreFormOpen}
               />
             </GameLayout>
           </div>
@@ -182,6 +193,14 @@ const SimpleGamePage: React.FC = () => {
             dutchPlayerId={dutchPlayerId}
             setDutchPlayerId={setDutchPlayerId}
             onAddRound={handleAddRound}
+            onVideoAdShown={handleVideoAdShown}
+          />
+
+          {/* Overlay de publicité vidéo */}
+          <VideoAdOverlay
+            isVisible={showVideoAd}
+            onClose={() => setShowVideoAd(false)}
+            trigger={adTrigger}
           />
         </MobileOptimizer>
       </AdProvider>

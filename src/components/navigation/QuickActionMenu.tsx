@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useTutorial } from '@/hooks/useTutorial';
+import { useNavigationVisibility } from '@/hooks/useNavigationVisibility';
 
 interface QuickAction {
   id: string;
@@ -18,6 +19,9 @@ const QuickActionMenu: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
   const { startTutorial } = useTutorial();
+  const { showQuickActions } = useNavigationVisibility();
+
+  if (!showQuickActions) return null;
 
   const quickActions: QuickAction[] = [
     {

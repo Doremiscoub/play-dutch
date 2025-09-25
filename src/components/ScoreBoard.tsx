@@ -20,7 +20,8 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
   onConfirmEndGame,
   onCancelEndGame,
   scoreLimit = 100,
-  openScoreForm
+  openScoreForm,
+  hideFloatingActionsWhenModalOpen = false
 }) => {
   console.log('ScoreBoard: Component rendered', { 
     playersCount: players?.length, 
@@ -100,6 +101,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
         onUndoLastRound={handleUndo}
         onEndGame={handleEndGame}
         canUndo={roundHistory.length > 0}
+        hideWhenModalOpen={hideFloatingActionsWhenModalOpen}
       />
     </div>
   );

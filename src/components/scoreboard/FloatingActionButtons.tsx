@@ -10,6 +10,7 @@ interface FloatingActionButtonsProps {
   onEndGame: () => void;
   canUndo: boolean;
   disabled?: boolean;
+  hideWhenModalOpen?: boolean;
 }
 
 const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
@@ -18,7 +19,10 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
   onEndGame,
   canUndo,
   disabled = false,
+  hideWhenModalOpen = false,
 }) => {
+  // Ne pas afficher les boutons si un modal est ouvert
+  if (hideWhenModalOpen) return null;
   const buttonsContent = (
     <div 
       className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 flex flex-col-reverse gap-2 sm:gap-4 pointer-events-none"

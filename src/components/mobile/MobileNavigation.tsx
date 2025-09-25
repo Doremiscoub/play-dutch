@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Home, Users, History, Settings, BookOpen } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useNavigationVisibility } from '@/hooks/useNavigationVisibility';
 
 interface NavItem {
   id: string;
@@ -22,12 +23,16 @@ const navItems: NavItem[] = [
 const MobileNavigation: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { showMobileNav, mobileNavBottomOffset } = useNavigationVisibility();
+
+  if (!showMobileNav) return null;
 
   return (
     <motion.nav
       initial={{ y: 100 }}
       animate={{ y: 0 }}
-      className="fixed bottom-0 left-0 right-0 z-50 md:hidden"
+      className="fixed bottom-0 left-0 right-0 z-40 md:hidden"
+      style={{ bottom: mobileNavBottomOffset }}
     >
       <div className="glass-morphism border-t border-white/20 backdrop-blur-xl bg-white/10">
         <div className="flex items-center justify-around px-2 py-2">
