@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Separator } from '@/components/ui/separator';
 import { AdvancedSettings } from '@/components/settings/AdvancedSettings';
 import { useSEO } from '@/hooks/useSEO';
+import { DESIGN_TOKENS } from '@/design';
 
 const SettingsPage: React.FC = () => {
   useSEO({
@@ -32,7 +33,7 @@ const SettingsPage: React.FC = () => {
         <Separator className="mb-8" />
 
         {/* Contenu principal */}
-        <Card className="glass-morphism border-white/20 backdrop-blur-md">
+        <Card variant="glassColored" className="border-white/20 backdrop-blur-md">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               ⚙️ Configuration avancée

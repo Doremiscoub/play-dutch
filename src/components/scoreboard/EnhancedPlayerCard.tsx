@@ -92,33 +92,45 @@ const EnhancedPlayerCard: React.FC<EnhancedPlayerCardProps> = ({
   }}>
       {/* Fond glassmorphique animé */}
       <div className="absolute inset-0 overflow-hidden rounded-3xl">
-        <motion.div className="absolute -right-12 -top-12 w-48 h-48 bg-gradient-to-br from-trinity-blue-200/20 via-trinity-purple-200/15 to-trinity-orange-200/20 rounded-full blur-3xl" animate={{
-        scale: [1, 1.3, 1],
-        opacity: [0.3, 0.7, 0.3],
-        rotate: [0, 180, 360]
-      }} transition={{
-        duration: 12,
-        repeat: Infinity,
-        ease: "easeInOut"
-      }} />
+        <motion.div 
+          className="absolute -right-12 -top-12 w-48 h-48 rounded-full blur-3xl" 
+          style={{ background: `linear-gradient(135deg, ${playerColors.background}20, ${playerColors.background}15, ${playerColors.background}20)` }}
+          animate={{
+            scale: [1, 1.3, 1],
+            opacity: [0.3, 0.7, 0.3],
+            rotate: [0, 180, 360]
+          }} 
+          transition={{
+            duration: 12,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }} 
+        />
       </div>
 
       {/* Badge de rang repositionné - déborde de la carte */}
-      <motion.div className={cn("absolute -top-4 -left-4 z-20", "w-20 h-20 rounded-full flex flex-col items-center justify-center", "text-white font-black shadow-2xl border-4 border-white/30", "bg-gradient-to-br backdrop-blur-sm", rank === 1 && "from-yellow-400 via-orange-500 to-red-500 shadow-orange-500/50", rank === 2 && "from-gray-300 via-gray-400 to-gray-500 shadow-gray-500/50", rank === 3 && "from-amber-600 via-orange-700 to-yellow-800 shadow-amber-600/50", rank > 3 && "from-trinity-blue-500 via-trinity-purple-500 to-trinity-blue-600 shadow-trinity-blue-500/50")} initial={{
-      scale: 0,
-      rotate: -180
-    }} animate={{
-      scale: 1,
-      rotate: 0
-    }} transition={{
-      delay: rank * 0.05 + 0.3,
-      type: "spring",
-      stiffness: 300,
-      damping: 20
-    }} whileHover={{
-      scale: 1.1,
-      rotate: 10
-    }}>
+      <motion.div 
+        className="absolute -top-4 -left-4 z-20 w-20 h-20 rounded-full flex flex-col items-center justify-center text-white font-black shadow-2xl border-4 border-white/30"
+        style={{ background: playerColors.badge, backdropFilter: 'blur(4px)' }}
+        initial={{
+          scale: 0,
+          rotate: -180
+        }} 
+        animate={{
+          scale: 1,
+          rotate: 0
+        }} 
+        transition={{
+          delay: rank * 0.05 + 0.3,
+          type: "spring",
+          stiffness: 300,
+          damping: 20
+        }} 
+        whileHover={{
+          scale: 1.1,
+          rotate: 10
+        }}
+      >
         <div className="text-2xl mb-1">
           {rank === 1 ? '🏆' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '🎯'}
         </div>
@@ -142,7 +154,9 @@ const EnhancedPlayerCard: React.FC<EnhancedPlayerCardProps> = ({
             type: "spring",
             stiffness: 300
           }}>
-              <div className="w-18 h-18 bg-gradient-to-br from-white/90 via-trinity-blue-50/80 to-trinity-purple-50/80 backdrop-blur-xl rounded-3xl border-2 border-white/50 shadow-xl flex items-center justify-center relative overflow-hidden">
+              <div className="w-18 h-18 rounded-3xl border-2 border-white/50 shadow-xl flex items-center justify-center relative overflow-hidden"
+                style={{ background: `linear-gradient(135deg, rgba(255,255,255,0.9), ${playerColors.background}80, ${playerColors.background}80)`, backdropFilter: 'blur(16px)' }}
+              >
                 <span className="text-4xl z-10 relative">{player.emoji || '😊'}</span>
                 
                 {/* Effet shimmer sur l'avatar */}
@@ -157,59 +171,95 @@ const EnhancedPlayerCard: React.FC<EnhancedPlayerCardProps> = ({
               </div>
               
               {/* Glow effect pour le gagnant */}
-              {isWinner && <motion.div className="absolute inset-0 bg-gradient-to-r from-yellow-400/40 via-orange-500/40 to-red-500/40 rounded-3xl blur-xl -z-10" animate={{
-              scale: [1, 1.1, 1],
-              opacity: [0.4, 0.7, 0.4]
-            }} transition={{
-              duration: 2,
-              repeat: Infinity
-            }} />}
+              {isWinner && <motion.div 
+                className="absolute inset-0 rounded-3xl blur-xl -z-10" 
+                style={{ background: `linear-gradient(to right, ${playerColors.background}40, ${playerColors.background}40)` }}
+                animate={{
+                  scale: [1, 1.1, 1],
+                  opacity: [0.4, 0.7, 0.4]
+                }} 
+                transition={{
+                  duration: 2,
+                  repeat: Infinity
+                }} 
+              />}
             </motion.div>
             
-            {/* Nom et statut avec animations */}
-            <div className="flex-1 min-w-0">
-              <motion.h3 className={cn("text-2xl font-black tracking-tight mb-1 leading-tight break-words hyphens-auto", isWinner && "bg-gradient-to-r from-yellow-600 via-orange-600 to-red-600 bg-clip-text text-transparent", isLastPlace && "text-red-600", !isWinner && !isLastPlace && "bg-gradient-to-r from-trinity-blue-700 to-trinity-purple-700 bg-clip-text text-transparent")} initial={{
-              opacity: 0,
-              x: -20
-            }} animate={{
-              opacity: 1,
-              x: 0
-            }} transition={{
-              delay: rank * 0.1
-            }}>
-                {player.name}
-              </motion.h3>
+              {/* Nom et statut avec animations */}
+              <div className="flex-1 min-w-0">
+                <motion.h3 
+                  className="text-2xl font-black tracking-tight mb-1 leading-tight break-words hyphens-auto" 
+                  style={
+                    isWinner 
+                      ? { background: DESIGN_TOKENS.gradients.kidsOrange, backgroundClip: 'text', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }
+                      : isLastPlace 
+                        ? { color: DESIGN_TOKENS.primitive.kids.pink[600] }
+                        : { background: DESIGN_TOKENS.gradients.trinity, backgroundClip: 'text', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }
+                  }
+                  initial={{
+                    opacity: 0,
+                    x: -20
+                  }} 
+                  animate={{
+                    opacity: 1,
+                    x: 0
+                  }} 
+                  transition={{
+                    delay: rank * 0.1
+                  }}
+                >
+                  {player.name}
+                </motion.h3>
               
               {/* Badge de statut amélioré */}
-              {hasPositiveTrend && <motion.div className="inline-flex items-center gap-2 bg-gradient-to-r from-green-100/80 to-emerald-100/80 backdrop-blur-sm px-3 py-1 rounded-full border border-green-300/50 shadow-sm" initial={{
-              scale: 0,
-              opacity: 0
-            }} animate={{
-              scale: 1,
-              opacity: 1
-            }} transition={{
-              delay: rank * 0.1 + 0.3,
-              type: "spring"
-            }} whileHover={{
-              scale: 1.05
-            }}>
-                  <TrendingDown className="h-3 w-3 text-green-600" />
-                  <span className="text-xs font-bold text-green-700">En progression ✨</span>
-                </motion.div>}
+              {hasPositiveTrend && <motion.div 
+                className="inline-flex items-center gap-2 backdrop-blur-sm px-3 py-1 rounded-full border shadow-sm" 
+                style={{
+                  background: `linear-gradient(to right, ${DESIGN_TOKENS.primitive.dutch.green[100]}80, ${DESIGN_TOKENS.primitive.dutch.green[50]}80)`,
+                  borderColor: `${DESIGN_TOKENS.primitive.dutch.green[300]}50`
+                }}
+                initial={{
+                  scale: 0,
+                  opacity: 0
+                }} 
+                animate={{
+                  scale: 1,
+                  opacity: 1
+                }} 
+                transition={{
+                  delay: rank * 0.1 + 0.3,
+                  type: "spring"
+                }} 
+                whileHover={{
+                  scale: 1.05
+                }}
+              >
+                <TrendingDown className="h-3 w-3" style={{ color: DESIGN_TOKENS.primitive.dutch.green[600] }} />
+                <span className="text-xs font-bold" style={{ color: DESIGN_TOKENS.primitive.dutch.green[700] }}>En progression ✨</span>
+              </motion.div>}
               
               {/* Badge pour dernière place */}
-              {isLastPlace && <motion.div className="inline-flex items-center gap-2 bg-gradient-to-r from-red-100/80 to-pink-100/80 backdrop-blur-sm px-3 py-1 rounded-full border border-red-300/50 shadow-sm" initial={{
-              scale: 0,
-              opacity: 0
-            }} animate={{
-              scale: 1,
-              opacity: 1
-            }} transition={{
-              delay: rank * 0.1 + 0.3,
-              type: "spring"
-            }}>
-                  <span className="text-xs font-bold text-red-700">Rattrape-toi ! 🔥</span>
-                </motion.div>}
+              {isLastPlace && <motion.div 
+                className="inline-flex items-center gap-2 backdrop-blur-sm px-3 py-1 rounded-full border shadow-sm" 
+                style={{
+                  background: `linear-gradient(to right, ${DESIGN_TOKENS.primitive.kids.pink[100]}80, ${DESIGN_TOKENS.primitive.kids.pink[50]}80)`,
+                  borderColor: `${DESIGN_TOKENS.primitive.kids.pink[300]}50`
+                }}
+                initial={{
+                  scale: 0,
+                  opacity: 0
+                }} 
+                animate={{
+                  scale: 1,
+                  opacity: 1
+                }} 
+                transition={{
+                  delay: rank * 0.1 + 0.3,
+                  type: "spring"
+                }}
+              >
+                <span className="text-xs font-bold" style={{ color: DESIGN_TOKENS.primitive.kids.pink[700] }}>Rattrape-toi ! 🔥</span>
+              </motion.div>}
             </div>
           </div>
 
@@ -224,21 +274,19 @@ const EnhancedPlayerCard: React.FC<EnhancedPlayerCardProps> = ({
           delay: rank * 0.1 + 0.2,
           type: "spring"
         }}>
-            <div className={cn(
-              "text-4xl font-black mb-1",
-              rank === 1 ? "text-yellow-600" :
-              rank === 2 ? "text-gray-600" :
-              rank === 3 ? "text-amber-700" :
-              "text-trinity-blue-700"
-            )}>
+            <div 
+              className="text-4xl font-black mb-1"
+              style={{ color: playerColors.text }}
+            >
               {player.totalScore}
             </div>
-            <div className="text-sm text-gray-500 font-medium">
+            <div className="text-sm font-medium" style={{ color: DESIGN_TOKENS.primitive.neutral[500] }}>
               📊 {player.rounds.length} manches
             </div>
             {isWinner && (
               <motion.div
-                className="text-xs font-bold text-yellow-700 flex items-center gap-1"
+                className="text-xs font-bold flex items-center gap-1"
+                style={{ color: DESIGN_TOKENS.primitive.dutch.orange[700] }}
                 animate={{ scale: [1, 1.1, 1] }}
                 transition={{ duration: 2, repeat: Infinity }}
               >
