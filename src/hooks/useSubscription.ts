@@ -20,10 +20,12 @@ export const useSubscription = () => {
 
   const checkSubscription = async () => {
     if (!user) {
+      // Pour les utilisateurs non-connectés : pas premium, pas de loading
+      // Cela permet aux ads de s'afficher correctement
       setSubscription({
         isPremium: false,
         isLoading: false,
-        subscriptionTier: null,
+        subscriptionTier: 'free',
         subscriptionEnd: null,
       });
       return;

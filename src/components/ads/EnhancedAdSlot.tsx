@@ -105,11 +105,6 @@ const EnhancedAdSlot: React.FC<EnhancedAdSlotProps> = ({
     return () => clearTimeout(timer);
   }, [isIntersecting, hasConsentedToAds, config.slotId, priority]);
 
-  // Ne pas afficher si pas d'autorisation ou pas de consentement
-  if (!config.show || !hasConsentedToAds) {
-    return null;
-  }
-
   // Placeholder pour développement ou erreur
   const renderPlaceholder = (status: string, icon?: React.ReactNode) => (
     <motion.div 
@@ -137,8 +132,8 @@ const EnhancedAdSlot: React.FC<EnhancedAdSlotProps> = ({
     </motion.div>
   );
 
-  // En développement, toujours montrer un placeholder
-  if (!import.meta.env.PROD) {
+  // En développement, montrer TestAdSlot si pas de consentement
+  if (!import.meta.env.PROD && !hasConsentedToAds) {
     return (
       <TestAdSlot 
         placement={placement}
@@ -149,9 +144,19 @@ const EnhancedAdSlot: React.FC<EnhancedAdSlotProps> = ({
     );
   }
 
-  // Return nothing if ads shouldn't be shown
+  // Conditions critiques pour affichage des ads
   if (!shouldShowAds) {
-    console.log('🚫 Ad slot masqué:', { placement, shouldShowAds, hasConsentedToAds });
+    console.log('🚫 Ad slot masqué - shouldShowAds:', { placement, shouldShowAds, hasConsentedToAds });
+    return null;
+  }
+
+  if (!hasConsentedToAds) {
+    console.log('🚫 Ad slot masqué - pas de consentement:', { placement, hasConsentedToAds });
+    return null;
+  }
+
+  if (!config.show) {
+    console.log('🚫 Ad slot masqué - config.show:', { placement, configShow: config.show });
     return null;
   }
 

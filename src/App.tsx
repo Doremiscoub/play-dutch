@@ -37,6 +37,7 @@ import { SupabaseAuthProvider } from './context/SupabaseAuthContext';
 import { UnifiedThemeProvider } from './components/ui/unified-theme-provider';
 import { EnhancedAdProvider } from './contexts/EnhancedAdContext';
 import GDPRConsentBanner from './components/ads/GDPRConsentBanner';
+import AdSenseProductionManager from './components/ads/AdSenseProductionManager';
 
 // Composant pour suivre les changements de route pour Sentry
 const RouteTracker = () => {
@@ -125,6 +126,7 @@ const App: React.FC = () => {
           
           <PWAInstallPrompt />
           <GDPRConsentBanner />
+          <AdSenseProductionManager />
           </Router>
         </EnhancedAdProvider>
       </SupabaseAuthProvider>

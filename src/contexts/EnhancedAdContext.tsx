@@ -106,7 +106,7 @@ export const EnhancedAdProvider: React.FC<EnhancedAdProviderProps> = ({ children
     }
   };
 
-  // Load AdSense script only when consent is given and ads should show
+  // Load AdSense script - optimisé pour la production
   useEffect(() => {
     console.log('🔄 AdSense Script Check:', { shouldShowAds, scriptExists: !!document.querySelector('script[src*="adsbygoogle"]') });
     
@@ -117,9 +117,24 @@ export const EnhancedAdProvider: React.FC<EnhancedAdProviderProps> = ({ children
       script.crossOrigin = 'anonymous';
       script.async = true;
       
+      // Optimisations pour la production
+      if (import.meta.env.PROD) {
+        // Le preload se fait directement via l'attribut
+        const linkElement = document.createElement('link');
+        linkElement.rel = 'preload';
+        linkElement.href = script.src;
+        linkElement.as = 'script';
+        document.head.appendChild(linkElement);
+      }
+      
       script.onload = () => {
         console.log('✅ AdSense script loaded with GDPR compliance');
         console.log('📊 AdSense API disponible:', !!(window as any).adsbygoogle);
+        
+        // Initialiser AdSense en production
+        if (import.meta.env.PROD) {
+          (window as any).adsbygoogle = (window as any).adsbygoogle || [];
+        }
       };
       
       script.onerror = () => {

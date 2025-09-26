@@ -18,6 +18,7 @@ import PWAPromotionCard from '@/components/pwa/PWAPromotionCard';
 import { PWAInstallBannerV2 } from '@/components/pwa/PWAInstallBannerV2';
 import { useAds } from '@/contexts/EnhancedAdContext';
 import EnhancedAdSlot from '@/components/ads/EnhancedAdSlot';
+import ProductionAdSlot from '@/components/ads/ProductionAdSlot';
 import AdSenseDebugPanel from '@/components/ads/AdSenseDebugPanel';
 import AdSenseForceTest from '@/components/ads/AdSenseForceTest';
 
@@ -72,6 +73,11 @@ const Home: React.FC = () => {
 
           <HomeLayout>
             <SimplifiedHeroSection />
+
+            {/* Ad optimisée après le hero */}
+            <section className="py-4">
+              <ProductionAdSlot placement="homepage-hero" priority="high" />
+            </section>
 
             {/* Section Features Colorée */}
             <section className="relative py-12 sm:py-20 px-2 sm:px-4 z-10">
@@ -248,12 +254,14 @@ const Home: React.FC = () => {
 
             <LazyHomeSections navigate={navigate} />
 
-            {/* Bannière publicitaire en bas */}
-            {shouldShowAds && (
-              <section className="mt-16">
+            {/* Bannière publicitaire finale */}
+            <section className="mt-16 mb-8">
+              {import.meta.env.PROD ? (
+                <ProductionAdSlot placement="stats-top" priority="low" />
+              ) : (
                 <EnhancedAdSlot placement="homepage-inline" priority="low" />
-              </section>
-            )}
+              )}
+            </section>
           </HomeLayout>
 
           {/* Debug panels pour le développement */}
