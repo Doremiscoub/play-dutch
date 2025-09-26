@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from 'react';
+import { DESIGN_TOKENS } from '@/design';
 
 interface AnimatedBackgroundProps {
   variant?: 'default' | 'subtle' | 'minimal';
@@ -69,7 +70,7 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
           size: isLargeDot ? 6 + Math.random() * 4 : 2 + Math.random() * 4,
           speedX: (Math.random() - 0.5) * 0.3,
           speedY: (Math.random() - 0.5) * 0.3,
-          color: `rgba(${color.r}, ${color.g}, ${color.b}, ${color.o * 1.2})`
+          color: `${DESIGN_TOKENS.primitive.kids.pink[400]}${Math.round(color.o * 255).toString(16).padStart(2, '0')}`
         });
       }
     };
@@ -117,7 +118,7 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       if (variant !== 'minimal') {
-        ctx.strokeStyle = 'rgba(218, 218, 218, 0.1)';
+        ctx.strokeStyle = `${DESIGN_TOKENS.primitive.neutral[300]}1A`;
         ctx.beginPath();
 
         for (let x = 0; x <= canvas.width; x += 24) {
@@ -138,7 +139,7 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
         
         drawWave(
           waveConfig.baselineHeight,
-          'rgba(193, 158, 255, 0.15)',
+          `${DESIGN_TOKENS.primitive.dutch.purple[300]}26`,
           18,
           currentPhase,
           'right',
@@ -147,7 +148,7 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
         
         drawWave(
           waveConfig.baselineHeight,
-          'rgba(255, 223, 117, 0.15)',
+          `${DESIGN_TOKENS.primitive.kids.lime[300]}26`,
           21,
           currentPhase,
           'left',

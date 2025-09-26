@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { DESIGN_TOKENS } from '@/design';
 
 interface GameObject {
   x: number;
@@ -102,25 +103,25 @@ const BrickBreaker: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     ctx.clearRect(0, 0, width, height);
     
     // Draw paddle
-    ctx.fillStyle = paddle.color || '#0ea5e9';
+    ctx.fillStyle = paddle.color || DESIGN_TOKENS.primitive.dutch.blue[500];
     ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+    ctx.strokeStyle = `${DESIGN_TOKENS.primitive.neutral[0]}50`;
     ctx.lineWidth = 2;
     ctx.strokeRect(paddle.x, paddle.y, paddle.width, paddle.height);
     
     // Draw ball
     ctx.beginPath();
     ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
-    ctx.fillStyle = ball.color || '#f97316';
+    ctx.fillStyle = ball.color || DESIGN_TOKENS.primitive.dutch.orange[500];
     ctx.fill();
     ctx.closePath();
     
     // Draw bricks
     bricks.forEach(brick => {
       if (!brick.broken) {
-        ctx.fillStyle = brick.color || '#8b5cf6';
+        ctx.fillStyle = brick.color || DESIGN_TOKENS.primitive.dutch.purple[500];
         ctx.fillRect(brick.x, brick.y, brick.width, brick.height);
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+        ctx.strokeStyle = `${DESIGN_TOKENS.primitive.neutral[0]}30`;
         ctx.lineWidth = 1;
         ctx.strokeRect(brick.x, brick.y, brick.width, brick.height);
       }
@@ -128,7 +129,7 @@ const BrickBreaker: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     
     // Draw score
     ctx.font = '16px Inter, sans-serif';
-    ctx.fillStyle = '#64748b';
+    ctx.fillStyle = DESIGN_TOKENS.primitive.neutral[600];
     ctx.textAlign = 'left';
     ctx.fillText(`Score: ${score}`, 10, 25);
     
