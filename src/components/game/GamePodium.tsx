@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Player } from '@/types';
 import { Star } from 'lucide-react';
 import PlayerRankBadge from './PlayerRankBadge';
+import { DESIGN_TOKENS } from '@/design';
 
 interface GamePodiumProps {
   players: Player[];
@@ -61,10 +62,10 @@ const GamePodium: React.FC<GamePodiumProps> = ({ players }) => {
               className={`w-16 ${height} bg-gradient-to-t rounded-t-lg shadow-md`}
               style={{
                 backgroundImage: order === 1
-                  ? 'linear-gradient(to top, #ffd700, #ffc700)'
+                  ? `linear-gradient(to top, ${DESIGN_TOKENS.primitive.kids.lime[500]}, ${DESIGN_TOKENS.primitive.kids.lime[400]})`
                   : order === 2
-                    ? 'linear-gradient(to top, #c0c0c0, #e0e0e0)'
-                    : 'linear-gradient(to top, #cd7f32, #dda15e)'
+                    ? `linear-gradient(to top, ${DESIGN_TOKENS.primitive.neutral[400]}, ${DESIGN_TOKENS.primitive.neutral[300]})`
+                    : `linear-gradient(to top, ${DESIGN_TOKENS.primitive.dutch.orange[500]}, ${DESIGN_TOKENS.primitive.dutch.orange[400]})`
               }}
               initial={{ scaleY: 0 }}
               animate={{ scaleY: 1 }}

@@ -52,25 +52,20 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
         ? Math.floor(15 * 1.3) 
         : Math.min(Math.floor(30 * 1.3), Math.floor(canvas.width * canvas.height / 30000));
       
-      const colors = [
-        { r: 193, g: 158, b: 255, o: variant === 'subtle' ? 0.30 : 0.35 },
-        { r: 255, g: 223, b: 117, o: variant === 'subtle' ? 0.30 : 0.35 },
-        { r: 137, g: 255, b: 210, o: variant === 'subtle' ? 0.25 : 0.30 },
-        { r: 126, g: 193, b: 255, o: variant === 'subtle' ? 0.25 : 0.30 }
-      ];
+      // Points noirs comme dans l'image de référence
+      const baseOpacity = variant === 'minimal' ? 0.4 : variant === 'subtle' ? 0.6 : 0.8;
 
       for (let i = 0; i < numDots; i++) {
-        const colorIndex = Math.floor(Math.random() * colors.length);
-        const color = colors[colorIndex];
-        const isLargeDot = Math.random() < 0.2;
+        const isLargeDot = Math.random() < 0.15;
+        const opacity = baseOpacity * (0.7 + Math.random() * 0.3);
         
         dots.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
-          size: isLargeDot ? 6 + Math.random() * 4 : 2 + Math.random() * 4,
-          speedX: (Math.random() - 0.5) * 0.3,
-          speedY: (Math.random() - 0.5) * 0.3,
-          color: `${DESIGN_TOKENS.primitive.kids.pink[400]}${Math.round(color.o * 255).toString(16).padStart(2, '0')}`
+          size: isLargeDot ? 8 + Math.random() * 6 : 3 + Math.random() * 4,
+          speedX: (Math.random() - 0.5) * 0.2,
+          speedY: (Math.random() - 0.5) * 0.2,
+          color: `${DESIGN_TOKENS.primitive.neutral[900]}${Math.round(opacity * 255).toString(16).padStart(2, '0')}`
         });
       }
     };
@@ -118,7 +113,9 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       if (variant !== 'minimal') {
-        ctx.strokeStyle = `${DESIGN_TOKENS.primitive.neutral[300]}1A`;
+        // Grille grise subtile comme dans l'image de référence
+        ctx.strokeStyle = `${DESIGN_TOKENS.primitive.neutral[400]}20`;
+        ctx.lineWidth = 1;
         ctx.beginPath();
 
         for (let x = 0; x <= canvas.width; x += 24) {
@@ -137,22 +134,14 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
       if (variant !== 'minimal') {
         const currentPhase = phaseRef.current;
         
+        // Vague noire unique comme dans l'image de référence
         drawWave(
           waveConfig.baselineHeight,
-          `${DESIGN_TOKENS.primitive.dutch.purple[300]}26`,
-          18,
-          currentPhase,
-          'right',
-          waveConfig.frequencyViolet
-        );
-        
-        drawWave(
-          waveConfig.baselineHeight,
-          `${DESIGN_TOKENS.primitive.kids.lime[300]}26`,
-          21,
+          DESIGN_TOKENS.primitive.neutral[900],
+          25,
           currentPhase,
           'left',
-          waveConfig.frequencyYellow
+          waveConfig.frequencyViolet
         );
         
         phaseRef.current += waveConfig.phaseIncrement;

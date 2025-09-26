@@ -16,6 +16,7 @@ import {
   Target, Award, Users, Clock, Zap, Activity
 } from 'lucide-react';
 import { Player } from '@/types';
+import { DESIGN_TOKENS } from '@/design';
 
 interface GameRecord {
   id: string;
@@ -46,7 +47,15 @@ interface AnalyticsData {
   timeOfDayStats: { hour: number; games: number }[];
 }
 
-const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#ff7300', '#00ff00', '#ff00ff'];
+// Couleurs du design system centralisé pour les graphiques
+const CHART_COLORS = [
+  DESIGN_TOKENS.primitive.dutch.blue[500],
+  DESIGN_TOKENS.primitive.dutch.purple[500], 
+  DESIGN_TOKENS.primitive.dutch.orange[500],
+  DESIGN_TOKENS.primitive.kids.lime[500],
+  DESIGN_TOKENS.primitive.kids.pink[400],
+  DESIGN_TOKENS.primitive.kids.turquoise[400]
+];
 
 export const GameAnalytics: React.FC<GameAnalyticsProps> = ({ 
   gameHistory, 
@@ -314,9 +323,9 @@ export const GameAnalytics: React.FC<GameAnalyticsProps> = ({
                 <Line 
                   type="monotone" 
                   dataKey="rounds" 
-                  stroke="#8884d8" 
+                  stroke={DESIGN_TOKENS.primitive.dutch.blue[500]} 
                   strokeWidth={2}
-                  dot={{ fill: '#8884d8' }}
+                  dot={{ fill: DESIGN_TOKENS.primitive.dutch.blue[500] }}
                 />
               </LineChart>
             </ResponsiveContainer>
@@ -335,7 +344,7 @@ export const GameAnalytics: React.FC<GameAnalyticsProps> = ({
                 <XAxis dataKey="range" />
                 <YAxis />
                 <Tooltip />
-                <Bar dataKey="count" fill="#82ca9d" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="count" fill={DESIGN_TOKENS.primitive.dutch.purple[500]} radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
@@ -361,7 +370,7 @@ export const GameAnalytics: React.FC<GameAnalyticsProps> = ({
                   nameKey="day"
                 >
                   {analytics.gamesByDay.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    <Cell key={`cell-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} />
                   ))}
                 </Pie>
                 <Tooltip />
@@ -385,8 +394,8 @@ export const GameAnalytics: React.FC<GameAnalyticsProps> = ({
                 <Area 
                   type="monotone" 
                   dataKey="games" 
-                  stroke="#ffc658" 
-                  fill="#ffc658"
+                  stroke={DESIGN_TOKENS.primitive.dutch.orange[500]} 
+                  fill={`${DESIGN_TOKENS.primitive.dutch.orange[500]}20`}
                   fillOpacity={0.6}
                 />
               </AreaChart>
@@ -417,8 +426,8 @@ export const GameAnalytics: React.FC<GameAnalyticsProps> = ({
               <PolarRadiusAxis angle={90} domain={[0, 100]} />
               <Radar 
                 dataKey="Taux de victoire" 
-                stroke="#8884d8" 
-                fill="#8884d8" 
+                stroke={DESIGN_TOKENS.primitive.dutch.blue[500]} 
+                fill={`${DESIGN_TOKENS.primitive.dutch.blue[500]}40`}
                 fillOpacity={0.6} 
               />
             </RadarChart>

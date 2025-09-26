@@ -8,6 +8,7 @@ import { useGLTF } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import { Group } from 'three';
 import useModelsAvailability from '@/hooks/useModelsAvailability';
+import { DESIGN_TOKENS } from '@/design';
 
 interface CartoucheAvatarProps {
   scale?: number;
@@ -44,7 +45,7 @@ export function CartoucheAvatar({
     return (
       <mesh position={position} rotation={rotation} scale={[scale * 0.5, scale * 0.5, scale * 0.5]}>
         <sphereGeometry args={[0.5, 16, 16]} /> {/* Forme de secours améliorée */}
-        <meshStandardMaterial color="hsl(var(--dutch-purple))" />
+        <meshStandardMaterial color={DESIGN_TOKENS.primitive.dutch.purple[500]} />
       </mesh>
     );
   }
@@ -78,7 +79,7 @@ export function CartoucheAvatar({
     return (
       <mesh position={position} rotation={rotation} scale={[scale * 0.5, scale * 0.5, scale * 0.5]}>
         <sphereGeometry args={[0.5, 16, 16]} />
-        <meshStandardMaterial color="hsl(var(--dutch-purple))" />
+        <meshStandardMaterial color={DESIGN_TOKENS.primitive.dutch.purple[500]} />
       </mesh>
     );
   }

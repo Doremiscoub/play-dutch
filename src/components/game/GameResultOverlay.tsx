@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Trophy, Home, RotateCcw, Play, Star } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import confetti from 'canvas-confetti';
+import { DESIGN_TOKENS } from '@/design';
 
 interface GameResultOverlayProps {
   players: Player[];
@@ -38,7 +39,11 @@ const GameResultOverlay: React.FC<GameResultOverlayProps> = ({
       const duration = 3000;
       const end = Date.now() + duration;
       
-      const colors = ['#0A84FF', '#8B5CF6', '#FF9F0A'];
+      const colors = [
+        DESIGN_TOKENS.primitive.dutch.blue[500], 
+        DESIGN_TOKENS.primitive.dutch.purple[500], 
+        DESIGN_TOKENS.primitive.dutch.orange[500]
+      ];
       
       (function frame() {
         confetti({
