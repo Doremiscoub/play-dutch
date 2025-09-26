@@ -19,6 +19,7 @@ import { PWAInstallBannerV2 } from '@/components/pwa/PWAInstallBannerV2';
 import { useAds } from '@/contexts/EnhancedAdContext';
 import EnhancedAdSlot from '@/components/ads/EnhancedAdSlot';
 import AdSenseDebugPanel from '@/components/ads/AdSenseDebugPanel';
+import AdSenseForceTest from '@/components/ads/AdSenseForceTest';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -255,8 +256,13 @@ const Home: React.FC = () => {
             )}
           </HomeLayout>
 
-          {/* Debug panel pour le développement */}
-          {!import.meta.env.PROD && <AdSenseDebugPanel />}
+          {/* Debug panels pour le développement */}
+          {!import.meta.env.PROD && (
+            <div className="fixed bottom-4 right-4 z-50 space-y-4">
+              <AdSenseDebugPanel />
+              <AdSenseForceTest />
+            </div>
+          )}
 
           {/* PWA Promotion Card */}
           <div className="container mx-auto px-4 pb-6">

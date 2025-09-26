@@ -61,17 +61,29 @@ export const EnhancedAdProvider: React.FC<EnhancedAdProviderProps> = ({ children
   // Only show ads if: not premium, not loading, and has consent
   const shouldShowAds = !isPremium && !isLoading && hasConsentedToAds;
 
-  // Debug logs pour diagnostic
+  // Debug logs pour diagnostic - plus détaillés
   React.useEffect(() => {
-    console.log('🎯 AdSense Debug État:', {
-      isPremium,
-      isLoading,
-      hasConsentedToAds,
-      shouldShowAds,
-      gdprConsent,
-      environment: import.meta.env.PROD ? 'production' : 'development'
+    console.log('🎯 AdSense Debug État complet:', {
+      isPremium: isPremium || false,
+      isLoading: isLoading || false,
+      hasConsentedToAds: hasConsentedToAds || false,
+      shouldShowAds: shouldShowAds || false,
+      gdprConsent: gdprConsent || null,
+      storedConsent: localStorage.getItem('dutch-gdpr-consent'),
+      environment: import.meta.env.PROD ? 'production' : 'development',
+      scriptExists: !!document.querySelector('script[src*="adsbygoogle"]'),
+      adSenseLoaded: !!(window as any).adsbygoogle
     });
   }, [isPremium, isLoading, hasConsentedToAds, shouldShowAds, gdprConsent]);
+
+  // Log initial state sur le montage du composant
+  React.useEffect(() => {
+    console.log('🚀 AdProvider initialisé - État initial:', {
+      stored: localStorage.getItem('dutch-gdpr-consent'),
+      isPremium: isPremium || false,
+      isLoading: isLoading || false
+    });
+  }, []);
 
   const updateConsent = (consent: Partial<GDPRConsent>) => {
     const newConsent: GDPRConsent = {
