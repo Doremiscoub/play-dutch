@@ -10,8 +10,9 @@ import { BundleAnalyzer } from '@/utils/performance/BundleAnalyzer';
 import { AccessibilityChecker } from '@/components/testing/AccessibilityChecker';
 import { 
   Wrench, Package, Eye, Zap, TestTube, 
-  Monitor, Smartphone, Activity 
+  Monitor, Smartphone, Activity, DollarSign
 } from 'lucide-react';
+import AdSenseTestPage from '@/pages/DevTools/AdSenseTestPage';
 
 const DeveloperTools: React.FC = () => {
   const navigate = useNavigate();
@@ -45,7 +46,7 @@ const DeveloperTools: React.FC = () => {
 
           {/* Onglets principaux */}
           <Tabs defaultValue="performance" className="w-full">
-            <TabsList className="grid w-full grid-cols-4">
+            <TabsList className="grid w-full grid-cols-5">
               <TabsTrigger value="performance" className="flex items-center gap-1">
                 <Zap className="h-4 w-4" />
                 <span className="hidden sm:inline">Performance</span>
@@ -61,6 +62,10 @@ const DeveloperTools: React.FC = () => {
               <TabsTrigger value="monitoring" className="flex items-center gap-1">
                 <Activity className="h-4 w-4" />
                 <span className="hidden sm:inline">Monitoring</span>
+              </TabsTrigger>
+              <TabsTrigger value="adsense" className="flex items-center gap-1">
+                <DollarSign className="h-4 w-4" />
+                <span className="hidden sm:inline">AdSense</span>
               </TabsTrigger>
             </TabsList>
 
@@ -210,6 +215,24 @@ const DeveloperTools: React.FC = () => {
                       <div className="text-xs text-orange-600">Temps de chargement +15% sur mobile</div>
                     </div>
                   </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            {/* Onglet AdSense */}
+            <TabsContent value="adsense" className="space-y-6">
+              <Card className="glass-morphism border-white/20">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <DollarSign className="h-5 w-5" />
+                    Tests Google AdSense
+                  </CardTitle>
+                  <CardDescription>
+                    Interface de test et diagnostic pour l'intégration AdSense
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <AdSenseTestPage />
                 </CardContent>
               </Card>
             </TabsContent>

@@ -16,10 +16,14 @@ import LazyHomeSections from '@/components/home/LazyHomeSections';
 import HomeLayout from '@/components/layout/HomeLayout';
 import PWAPromotionCard from '@/components/pwa/PWAPromotionCard';
 import { PWAInstallBannerV2 } from '@/components/pwa/PWAInstallBannerV2';
+import { useAds } from '@/contexts/EnhancedAdContext';
+import EnhancedAdSlot from '@/components/ads/EnhancedAdSlot';
+import AdSenseDebugPanel from '@/components/ads/AdSenseDebugPanel';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
   const { showTutorial, closeTutorial, startTutorial, isLoading } = useTutorial();
+  const { shouldShowAds } = useAds();
 
   // SEO optimisé
   const seoData = {
@@ -242,7 +246,17 @@ const Home: React.FC = () => {
             </section>
 
             <LazyHomeSections navigate={navigate} />
+
+            {/* Bannière publicitaire en bas */}
+            {shouldShowAds && (
+              <section className="mt-16">
+                <EnhancedAdSlot placement="homepage-inline" priority="low" />
+              </section>
+            )}
           </HomeLayout>
+
+          {/* Debug panel pour le développement */}
+          {!import.meta.env.PROD && <AdSenseDebugPanel />}
 
           {/* PWA Promotion Card */}
           <div className="container mx-auto px-4 pb-6">

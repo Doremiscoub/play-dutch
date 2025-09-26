@@ -61,6 +61,18 @@ export const EnhancedAdProvider: React.FC<EnhancedAdProviderProps> = ({ children
   // Only show ads if: not premium, not loading, and has consent
   const shouldShowAds = !isPremium && !isLoading && hasConsentedToAds;
 
+  // Debug logs pour diagnostic
+  React.useEffect(() => {
+    console.log('🎯 AdSense Debug État:', {
+      isPremium,
+      isLoading,
+      hasConsentedToAds,
+      shouldShowAds,
+      gdprConsent,
+      environment: import.meta.env.PROD ? 'production' : 'development'
+    });
+  }, [isPremium, isLoading, hasConsentedToAds, shouldShowAds, gdprConsent]);
+
   const updateConsent = (consent: Partial<GDPRConsent>) => {
     const newConsent: GDPRConsent = {
       analytics: consent.analytics ?? false,
@@ -84,7 +96,10 @@ export const EnhancedAdProvider: React.FC<EnhancedAdProviderProps> = ({ children
 
   // Load AdSense script only when consent is given and ads should show
   useEffect(() => {
+    console.log('🔄 AdSense Script Check:', { shouldShowAds, scriptExists: !!document.querySelector('script[src*="adsbygoogle"]') });
+    
     if (shouldShowAds && !document.querySelector('script[src*="adsbygoogle"]')) {
+      console.log('📡 Chargement du script AdSense...');
       const script = document.createElement('script');
       script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2046195502734056';
       script.crossOrigin = 'anonymous';
@@ -92,6 +107,7 @@ export const EnhancedAdProvider: React.FC<EnhancedAdProviderProps> = ({ children
       
       script.onload = () => {
         console.log('✅ AdSense script loaded with GDPR compliance');
+        console.log('📊 AdSense API disponible:', !!(window as any).adsbygoogle);
       };
       
       script.onerror = () => {
@@ -99,8 +115,14 @@ export const EnhancedAdProvider: React.FC<EnhancedAdProviderProps> = ({ children
       };
       
       document.head.appendChild(script);
+    } else if (!shouldShowAds) {
+      console.log('🚫 AdSense désactivé - Raison:', {
+        isPremium: isPremium ? 'Utilisateur premium' : 'OK',
+        isLoading: isLoading ? 'Chargement en cours' : 'OK',
+        hasConsent: hasConsentedToAds ? 'OK' : 'Pas de consentement'
+      });
     }
-  }, [shouldShowAds]);
+  }, [shouldShowAds, isPremium, isLoading, hasConsentedToAds]);
 
   const value: AdContextType = {
     isPremium,

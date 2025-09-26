@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useAds } from '@/contexts/EnhancedAdContext';
 import { AlertCircle, Wifi, WifiOff } from 'lucide-react';
 import { motion } from 'framer-motion';
+import TestAdSlot from './TestAdSlot';
 
 interface EnhancedAdSlotProps {
   placement: 'homepage-inline' | 'game-sidebar-left' | 'game-sidebar-right' | 'game-banner-mobile' | 'stats-rectangle';
@@ -136,9 +137,22 @@ const EnhancedAdSlot: React.FC<EnhancedAdSlotProps> = ({
     </motion.div>
   );
 
-  // Mode développement
+  // En développement, toujours montrer un placeholder
   if (!import.meta.env.PROD) {
-    return renderPlaceholder('Mode Développement');
+    return (
+      <TestAdSlot 
+        placement={placement}
+        width={config?.dimensions?.includes('w-[300px]') ? 300 : 728}
+        height={config?.dimensions?.includes('h-[600px]') ? 600 : 90}
+        className={className}
+      />
+    );
+  }
+
+  // Return nothing if ads shouldn't be shown
+  if (!shouldShowAds) {
+    console.log('🚫 Ad slot masqué:', { placement, shouldShowAds, hasConsentedToAds });
+    return null;
   }
 
   // Pas de slot ID configuré
