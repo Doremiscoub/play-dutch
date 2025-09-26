@@ -76,7 +76,6 @@ const GameAdSlot: React.FC<GameAdSlotProps> = ({
       if ((window as any).adsbygoogle) {
         ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({});
         setAdState('loaded');
-        console.log('✅ Game ad loaded:', { placement, slotId: config.slotId });
       } else {
         setAdState('error');
       }

@@ -86,8 +86,6 @@ const ProductionAdSlot: React.FC<ProductionAdSlotProps> = ({
       // Initialiser l'ad
       ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({});
       setAdLoaded(true);
-      
-      console.log('✅ Ad chargée:', { placement, slotId: config.slotId });
     } catch (error) {
       console.error('❌ Erreur AdSense:', error);
       setAdError(true);
