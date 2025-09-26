@@ -3,6 +3,7 @@ import { Minus, Plus } from 'lucide-react';
 import { UnifiedButton } from '@/components/ui/unified-button';
 import { UnifiedCard } from '@/components/ui/unified-card';
 import { MIN_PLAYERS, MAX_PLAYERS } from './types';
+import { DESIGN_TOKENS } from '@/design';
 interface PlayerCountStepProps {
   playerCount: number;
   onPlayerCountChange: (count: number) => void;
@@ -26,7 +27,7 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
   return <UnifiedCard variant="glass" padding="lg" className="text-center space-y-6 sm:space-y-8">
       <div>
         <h2 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-3" style={{
-        background: 'linear-gradient(135deg, hsl(var(--dutch-blue)), hsl(var(--dutch-purple)))',
+        background: DESIGN_TOKENS.gradients.trinity,
         backgroundClip: 'text',
         WebkitBackgroundClip: 'text',
         WebkitTextFillColor: 'transparent'
@@ -52,7 +53,7 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
 
         <div className="text-center flex-1 max-w-[140px] p-4">
           <div className="text-6xl sm:text-8xl font-bold mb-2 sm:mb-3 leading-none" style={{
-          background: 'linear-gradient(135deg, hsl(var(--dutch-blue)), hsl(var(--dutch-purple)))',
+          background: DESIGN_TOKENS.gradients.trinity,
           backgroundClip: 'text',
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent'

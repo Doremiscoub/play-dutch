@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Player } from '@/types';
 import { cn } from '@/lib/utils';
 import { ChevronDown, TrendingUp, TrendingDown, Award, Target } from 'lucide-react';
+import { DESIGN_TOKENS } from '@/design';
 
 
 interface EnhancedPlayerCardProps {
@@ -34,18 +35,44 @@ const EnhancedPlayerCard: React.FC<EnhancedPlayerCardProps> = ({
   // Tendance récente
   const recentRounds = player.rounds.slice(-3);
   const hasPositiveTrend = recentRounds.length >= 2 && recentRounds[recentRounds.length - 1].score < recentRounds[recentRounds.length - 2].score;
-  const getCardStyle = () => {
+  // Fonction pour récupérer les couleurs selon le rang
+  const getPlayerColors = (rank: number, totalPlayers: number) => {
+    const isWinner = rank === 1;
+    const isLastPlace = rank === totalPlayers;
+    
     if (isWinner) {
-      return "card-kids-orange shadow-glow-orange";
+      return {
+        background: DESIGN_TOKENS.gradients.kidsOrange,
+        shadow: 'shadow-glow-orange',
+        badge: DESIGN_TOKENS.gradients.kidsOrange,
+        text: DESIGN_TOKENS.primitive.dutch.orange[600]
+      };
     }
     if (isLastPlace) {
-      return "card-kids-pink shadow-glow-pink";
+      return {
+        background: DESIGN_TOKENS.gradients.kidsPink,
+        shadow: 'shadow-glow-pink', 
+        badge: DESIGN_TOKENS.gradients.kidsPink,
+        text: DESIGN_TOKENS.primitive.kids.pink[600]
+      };
     }
     if (rank <= 3) {
-      return "card-kids-lime shadow-glow-lime";
+      return {
+        background: DESIGN_TOKENS.gradients.kidsLime,
+        shadow: 'shadow-glow-lime',
+        badge: DESIGN_TOKENS.gradients.kidsLime,
+        text: DESIGN_TOKENS.primitive.kids.lime[600]
+      };
     }
-    return "card-kids-blue shadow-glow-blue";
+    return {
+      background: DESIGN_TOKENS.gradients.kidsBlue,
+      shadow: 'shadow-glow-blue',
+      badge: DESIGN_TOKENS.gradients.kidsBlue,
+      text: DESIGN_TOKENS.primitive.dutch.blue[600]
+    };
   };
+
+  const playerColors = getPlayerColors(rank, totalPlayers);
   const handleCardClick = () => {
     setIsExpanded(!isExpanded);
     onSelect(player);

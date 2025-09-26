@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { SetupPlayer } from './types';
 import SimpleEmojiSelector from './SimpleEmojiSelector';
+import { DESIGN_TOKENS } from '@/design';
 
 interface PlayerNamesStepProps {
   playerCount: number;
@@ -82,7 +83,12 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
   return (
     <UnifiedCard variant="glass" padding="lg" className="space-y-6">
       <div className="text-center">
-        <h2 className="text-trinity text-2xl font-bold mb-3">
+        <h2 className="text-2xl font-bold mb-3" style={{
+          background: DESIGN_TOKENS.gradients.trinity,
+          backgroundClip: 'text',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent'
+        }}>
           ✏️ Noms des joueurs
         </h2>
         <p className="text-neutral-700">

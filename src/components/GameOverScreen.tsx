@@ -12,6 +12,7 @@ import GameOverActionButtons from './game/GameOverActionButtons';
 import { ReceiptCard } from './ui/receipt-card';
 import { ModernTitle } from './ui/modern-title';
 import ContextualAdBanner from './ads/ContextualAdBanner';
+import { DESIGN_TOKENS } from '@/design';
 
 interface GameOverScreenProps {
   players: Player[];
@@ -36,20 +37,33 @@ const GameOverScreen: React.FC<GameOverScreenProps> = ({
   const triggerConfetti = () => {
     if (isConfettiTriggered) return;
     
+    // Utiliser les couleurs centralisées pour les confettis
+    const confettiColors = [
+      DESIGN_TOKENS.primitive.dutch.blue[500].replace('hsl(', '').replace(')', ''),
+      DESIGN_TOKENS.primitive.dutch.purple[500].replace('hsl(', '').replace(')', ''),
+      DESIGN_TOKENS.primitive.dutch.orange[500].replace('hsl(', '').replace(')', ''),
+      DESIGN_TOKENS.primitive.kids.lime[500].replace('hsl(', '').replace(')', ''),
+      DESIGN_TOKENS.primitive.kids.pink[400].replace('hsl(', '').replace(')', ''),
+      DESIGN_TOKENS.primitive.kids.turquoise[400].replace('hsl(', '').replace(')', '')
+    ].map(color => `hsl(${color})`);
+    
     confetti({
       particleCount: 200,
       spread: 100,
       origin: { y: 0.5, x: 0.5 },
-      colors: ['#1EAEDB', '#8B5CF6', '#F97316', '#10B981', '#FBBF24', '#FF6B6B', '#4CD4FF']
+      colors: confettiColors
     });
     
     setTimeout(() => {
+      const leftColors = confettiColors.slice(0, 3);
+      const rightColors = confettiColors.slice(3);
+      
       confetti({
         particleCount: 150,
         angle: 60,
         spread: 80,
         origin: { x: 0, y: 0.5 },
-        colors: ['#1EAEDB', '#8B5CF6', '#F97316', '#10B981']
+        colors: leftColors
       });
       
       confetti({
@@ -57,17 +71,23 @@ const GameOverScreen: React.FC<GameOverScreenProps> = ({
         angle: 120,
         spread: 80,
         origin: { x: 1, y: 0.5 },
-        colors: ['#FF6B6B', '#4CD4FF', '#FFD166', '#C5F277']
+        colors: rightColors
       });
     }, 700);
     
     setTimeout(() => {
+      const whiteColors = [
+        DESIGN_TOKENS.primitive.neutral[0],
+        DESIGN_TOKENS.primitive.glass.purple50.replace('hsl(', '').replace(')', ''),
+        DESIGN_TOKENS.primitive.glass.blue50.replace('hsl(', '').replace(')', '')
+      ].map(color => color.includes('hsl') ? color : `hsl(${color})`);
+      
       confetti({
         particleCount: 100,
         angle: 90,
         spread: 120,
         origin: { x: 0.5, y: 0.2 },
-        colors: ['#FFFFFF', '#E9D5FF', '#FDE68A', '#BFDBFE']
+        colors: whiteColors
       });
     }, 1400);
     
@@ -83,6 +103,16 @@ const GameOverScreen: React.FC<GameOverScreenProps> = ({
   };
 
   useEffect(() => {
+    // Définir les couleurs centralisées pour les confettis au début
+    const confettiColors = [
+      DESIGN_TOKENS.primitive.dutch.blue[500].replace('hsl(', '').replace(')', ''),
+      DESIGN_TOKENS.primitive.dutch.purple[500].replace('hsl(', '').replace(')', ''),
+      DESIGN_TOKENS.primitive.dutch.orange[500].replace('hsl(', '').replace(')', ''),
+      DESIGN_TOKENS.primitive.kids.lime[500].replace('hsl(', '').replace(')', ''),
+      DESIGN_TOKENS.primitive.kids.pink[400].replace('hsl(', '').replace(')', ''),
+      DESIGN_TOKENS.primitive.kids.turquoise[400].replace('hsl(', '').replace(')', '')
+    ].map(color => `hsl(${color})`);
+
     triggerConfetti();
     
     const confettiInterval = setInterval(() => {
@@ -90,7 +120,7 @@ const GameOverScreen: React.FC<GameOverScreenProps> = ({
         particleCount: 40,
         spread: 80,
         origin: { y: Math.random() * 0.3 + 0.2, x: Math.random() },
-        colors: ['#1EAEDB', '#8B5CF6', '#F97316', '#10B981', '#FFD166']
+        colors: confettiColors.slice(0, 4) // Utiliser les 4 premières couleurs
       });
     }, 3000);
     

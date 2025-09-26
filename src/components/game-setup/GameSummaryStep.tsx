@@ -7,6 +7,7 @@ import { useAdaptiveInterface } from '@/components/ui/adaptive-layout';
 import { UnifiedCard } from '@/components/ui/unified-card';
 import { Badge } from '@/components/ui/badge';
 import { SetupPlayer } from './types';
+import { DESIGN_TOKENS } from '@/design';
 
 interface GameSummaryStepProps {
   playerCount: number;
@@ -32,7 +33,7 @@ const GameSummaryStep: React.FC<GameSummaryStepProps> = ({
     <UnifiedCard variant="glass" padding="lg" className="space-y-6">
       <div className="text-center">
         <h2 className="text-2xl font-bold mb-3" style={{
-          background: 'linear-gradient(135deg, hsl(var(--dutch-blue)), hsl(var(--dutch-purple)))',
+          background: DESIGN_TOKENS.gradients.trinity,
           backgroundClip: 'text',
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent'
@@ -94,14 +95,14 @@ const GameSummaryStep: React.FC<GameSummaryStepProps> = ({
           <div className="grid grid-cols-2 gap-3">
             {validPlayers.map((player, index) => {
               const playerColors = [
-                'from-blue-400/20 to-blue-500/30 border-blue-400/40 text-blue-700',
-                'from-purple-400/20 to-purple-500/30 border-purple-400/40 text-purple-700',
-                'from-green-400/20 to-green-500/30 border-green-400/40 text-green-700',
-                'from-orange-400/20 to-orange-500/30 border-orange-400/40 text-orange-700',
-                'from-pink-400/20 to-pink-500/30 border-pink-400/40 text-pink-700',
-                'from-cyan-400/20 to-cyan-500/30 border-cyan-400/40 text-cyan-700'
+                DESIGN_TOKENS.primitive.dutch.blue[400],
+                DESIGN_TOKENS.primitive.dutch.purple[400], 
+                DESIGN_TOKENS.primitive.dutch.green[400],
+                DESIGN_TOKENS.primitive.dutch.orange[400],
+                DESIGN_TOKENS.primitive.kids.pink[400],
+                DESIGN_TOKENS.primitive.kids.turquoise[400]
               ];
-              const colorClass = playerColors[index % playerColors.length];
+              const playerColor = playerColors[index % playerColors.length];
               
               return (
                 <motion.div
@@ -117,13 +118,13 @@ const GameSummaryStep: React.FC<GameSummaryStepProps> = ({
                   whileHover={{ scale: 1.05 }}
                   className="transform-gpu"
                 >
-                  <div className={`
-                    bg-gradient-to-br ${colorClass}
-                    rounded-xl p-3 border-2 
-                    flex items-center justify-center gap-2
-                    transition-all duration-200
-                    hover:shadow-lg animate-fade-in
-                  `}>
+                  <div className="rounded-xl p-3 border-2 flex items-center justify-center gap-2 transition-all duration-200 hover:shadow-lg animate-fade-in"
+                    style={{
+                      background: `linear-gradient(135deg, ${playerColor}20, ${playerColor}30)`,
+                      borderColor: `${playerColor}40`,
+                      color: playerColor
+                    }}
+                  >
                     <span className="text-xl">{player.emoji}</span>
                     <span className="font-medium text-sm">{player.name}</span>
                   </div>
