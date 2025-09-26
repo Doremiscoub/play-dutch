@@ -17,10 +17,9 @@ import HomeLayout from '@/components/layout/HomeLayout';
 import PWAPromotionCard from '@/components/pwa/PWAPromotionCard';
 import { PWAInstallBannerV2 } from '@/components/pwa/PWAInstallBannerV2';
 import { useAds } from '@/contexts/EnhancedAdContext';
-import EnhancedAdSlot from '@/components/ads/EnhancedAdSlot';
 import ProductionAdSlot from '@/components/ads/ProductionAdSlot';
-import AdSenseDebugPanel from '@/components/ads/AdSenseDebugPanel';
-import AdSenseForceTest from '@/components/ads/AdSenseForceTest';
+import AdPerformanceTracker from '@/components/ads/AdPerformanceTracker';
+import AdSenseMetrics from '@/components/ads/AdSenseMetrics';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -256,21 +255,13 @@ const Home: React.FC = () => {
 
             {/* Bannière publicitaire finale */}
             <section className="mt-16 mb-8">
-              {import.meta.env.PROD ? (
-                <ProductionAdSlot placement="stats-top" priority="low" />
-              ) : (
-                <EnhancedAdSlot placement="homepage-inline" priority="low" />
-              )}
+              <ProductionAdSlot placement="stats-top" priority="low" />
             </section>
           </HomeLayout>
 
-          {/* Debug panels pour le développement */}
-          {!import.meta.env.PROD && (
-            <div className="fixed bottom-4 right-4 z-50 space-y-4">
-              <AdSenseDebugPanel />
-              <AdSenseForceTest />
-            </div>
-          )}
+          {/* Performance trackers invisibles */}
+          <AdPerformanceTracker />
+          <AdSenseMetrics />
 
           {/* PWA Promotion Card */}
           <div className="container mx-auto px-4 pb-6">

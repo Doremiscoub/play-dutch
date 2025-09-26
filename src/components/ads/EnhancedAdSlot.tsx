@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useAds } from '@/contexts/EnhancedAdContext';
 import { AlertCircle, Wifi, WifiOff } from 'lucide-react';
 import { motion } from 'framer-motion';
-import TestAdSlot from './TestAdSlot';
 
 interface EnhancedAdSlotProps {
   placement: 'homepage-inline' | 'game-sidebar-left' | 'game-sidebar-right' | 'game-banner-mobile' | 'stats-rectangle';
@@ -97,7 +96,6 @@ const EnhancedAdSlot: React.FC<EnhancedAdSlotProps> = ({
           setAdStatus('error');
         }
       } catch (error) {
-        console.error('AdSense error:', error);
         setAdStatus('blocked');
       }
     }, priority === 'high' ? 100 : priority === 'medium' ? 300 : 500);
@@ -132,31 +130,32 @@ const EnhancedAdSlot: React.FC<EnhancedAdSlotProps> = ({
     </motion.div>
   );
 
-  // En développement, montrer TestAdSlot si pas de consentement
+  // En développement, montrer placeholder simple
   if (!import.meta.env.PROD && !hasConsentedToAds) {
     return (
-      <TestAdSlot 
-        placement={placement}
-        width={config?.dimensions?.includes('w-[300px]') ? 300 : 728}
-        height={config?.dimensions?.includes('h-[600px]') ? 600 : 90}
-        className={className}
-      />
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className={`
+          ${config.dimensions} 
+          bg-gradient-to-br from-slate-50 to-slate-100 
+          dark:from-slate-800 dark:to-slate-900
+          rounded-lg border border-slate-200 dark:border-slate-700
+          flex flex-col items-center justify-center
+          text-slate-500 dark:text-slate-400
+          ${className}
+        `}
+      >
+        <div className="text-center space-y-2">
+          <p className="text-xs font-medium opacity-70">{config.content}</p>
+          <p className="text-xs opacity-50">Développement - {placement}</p>
+        </div>
+      </motion.div>
     );
   }
 
   // Conditions critiques pour affichage des ads
-  if (!shouldShowAds) {
-    console.log('🚫 Ad slot masqué - shouldShowAds:', { placement, shouldShowAds, hasConsentedToAds });
-    return null;
-  }
-
-  if (!hasConsentedToAds) {
-    console.log('🚫 Ad slot masqué - pas de consentement:', { placement, hasConsentedToAds });
-    return null;
-  }
-
-  if (!config.show) {
-    console.log('🚫 Ad slot masqué - config.show:', { placement, configShow: config.show });
+  if (!shouldShowAds || !hasConsentedToAds || !config.show) {
     return null;
   }
 

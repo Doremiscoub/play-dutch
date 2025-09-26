@@ -28,16 +28,15 @@ const AdSenseProductionManager: React.FC = () => {
           });
         }
 
-        console.log('🚀 AdSense Production Manager - Configured for optimal performance');
       } catch (error) {
-        console.error('❌ AdSense Production Manager - Error:', error);
+        // Silently handle errors in production
       }
     }
   }, [shouldShowAds, hasConsentedToAds]);
 
-  // Log de diagnostic en production
+  // Logs de diagnostic uniquement en développement
   useEffect(() => {
-    if (import.meta.env.PROD) {
+    if (!import.meta.env.PROD) {
       console.log('📊 AdSense Production Status:', {
         shouldShowAds,
         hasConsentedToAds,

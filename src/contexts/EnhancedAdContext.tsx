@@ -63,23 +63,18 @@ export const EnhancedAdProvider: React.FC<EnhancedAdProviderProps> = ({ children
 
   // Debug logs pour diagnostic - plus détaillés
   React.useEffect(() => {
-    console.log('🎯 AdSense Debug État complet:', {
+    console.log('🎯 AdSense État:', {
       isPremium: isPremium || false,
       isLoading: isLoading || false,
       hasConsentedToAds: hasConsentedToAds || false,
       shouldShowAds: shouldShowAds || false,
-      gdprConsent: gdprConsent || null,
-      storedConsent: localStorage.getItem('dutch-gdpr-consent'),
-      environment: import.meta.env.PROD ? 'production' : 'development',
-      scriptExists: !!document.querySelector('script[src*="adsbygoogle"]'),
-      adSenseLoaded: !!(window as any).adsbygoogle
+      environment: import.meta.env.PROD ? 'production' : 'development'
     });
-  }, [isPremium, isLoading, hasConsentedToAds, shouldShowAds, gdprConsent]);
+  }, [isPremium, isLoading, hasConsentedToAds, shouldShowAds]);
 
   // Log initial state sur le montage du composant
   React.useEffect(() => {
-    console.log('🚀 AdProvider initialisé - État initial:', {
-      stored: localStorage.getItem('dutch-gdpr-consent'),
+    console.log('🚀 AdProvider initialisé:', {
       isPremium: isPremium || false,
       isLoading: isLoading || false
     });
@@ -96,30 +91,24 @@ export const EnhancedAdProvider: React.FC<EnhancedAdProviderProps> = ({ children
     setGdprConsent(newConsent);
     localStorage.setItem('dutch-gdpr-consent', JSON.stringify(newConsent));
     
-    // If marketing consent is withdrawn, remove AdSense cookies
-    if (!newConsent.marketing && (window as any).gtag) {
-      (window as any).gtag('consent', 'update', {
-        'ad_storage': 'denied',
-        'ad_user_data': 'denied',
-        'ad_personalization': 'denied'
-      });
-    }
+      if ((window as any).gtag) {
+        (window as any).gtag('consent', 'update', {
+          'ad_storage': 'denied',
+          'ad_user_data': 'denied',
+          'ad_personalization': 'denied'
+        });
+      }
   };
 
-  // Load AdSense script - optimisé pour la production
+  // Load AdSense script - production optimized 
   useEffect(() => {
-    console.log('🔄 AdSense Script Check:', { shouldShowAds, scriptExists: !!document.querySelector('script[src*="adsbygoogle"]') });
-    
     if (shouldShowAds && !document.querySelector('script[src*="adsbygoogle"]')) {
-      console.log('📡 Chargement du script AdSense...');
       const script = document.createElement('script');
       script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2046195502734056';
       script.crossOrigin = 'anonymous';
       script.async = true;
       
-      // Optimisations pour la production
       if (import.meta.env.PROD) {
-        // Le preload se fait directement via l'attribut
         const linkElement = document.createElement('link');
         linkElement.rel = 'preload';
         linkElement.href = script.src;
@@ -128,26 +117,12 @@ export const EnhancedAdProvider: React.FC<EnhancedAdProviderProps> = ({ children
       }
       
       script.onload = () => {
-        console.log('✅ AdSense script loaded with GDPR compliance');
-        console.log('📊 AdSense API disponible:', !!(window as any).adsbygoogle);
-        
-        // Initialiser AdSense en production
         if (import.meta.env.PROD) {
           (window as any).adsbygoogle = (window as any).adsbygoogle || [];
         }
       };
       
-      script.onerror = () => {
-        console.error('❌ Failed to load AdSense script');
-      };
-      
       document.head.appendChild(script);
-    } else if (!shouldShowAds) {
-      console.log('🚫 AdSense désactivé - Raison:', {
-        isPremium: isPremium ? 'Utilisateur premium' : 'OK',
-        isLoading: isLoading ? 'Chargement en cours' : 'OK',
-        hasConsent: hasConsentedToAds ? 'OK' : 'Pas de consentement'
-      });
     }
   }, [shouldShowAds, isPremium, isLoading, hasConsentedToAds]);
 

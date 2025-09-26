@@ -15,23 +15,12 @@ const GDPRConsentBanner: React.FC = () => {
     functional: true
   });
 
-  // Debug log pour voir si la bannière devrait s'afficher
-  React.useEffect(() => {
-    console.log('🍪 GDPR Banner Check:', {
-      gdprConsent,
-      shouldShowBanner: !gdprConsent,
-      storedConsent: localStorage.getItem('dutch-gdpr-consent')
-    });
-  }, [gdprConsent]);
-
   // Don't show if consent already given
   if (gdprConsent) {
-    console.log('🍪 GDPR Banner masquée - consentement déjà donné:', gdprConsent);
     return null;
   }
 
   const handleAcceptAll = () => {
-    console.log('✅ GDPR - Accepter tout');
     updateConsent({
       analytics: true,
       marketing: true,
@@ -40,7 +29,6 @@ const GDPRConsentBanner: React.FC = () => {
   };
 
   const handleRejectAll = () => {
-    console.log('❌ GDPR - Refuser tout');
     updateConsent({
       analytics: false,
       marketing: false,
