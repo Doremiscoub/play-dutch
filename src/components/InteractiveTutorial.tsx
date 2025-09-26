@@ -6,6 +6,7 @@ import { BookOpen, ChevronLeft, ChevronRight, X, Play, Award, DollarSign, Users,
 import { motion, AnimatePresence } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
+import { DESIGN_TOKENS } from '@/design/tokens/centralized';
 
 interface InteractiveTutorialProps {
   onComplete: () => void;
@@ -87,28 +88,32 @@ const InteractiveTutorial: React.FC<InteractiveTutorialProps> = ({ onComplete })
             <motion.div
               animate={{ y: [0, -10, 0] }}
               transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-              className="w-14 h-20 bg-blue-500 rounded-lg relative flex items-center justify-center text-white font-bold"
+              className="w-14 h-20 rounded-lg relative flex items-center justify-center text-white font-bold"
+              style={{ backgroundColor: DESIGN_TOKENS.primitive.dutch.blue[500] }}
             >
               1
             </motion.div>
             <motion.div
               animate={{ y: [0, -10, 0] }}
               transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut", delay: 0.2 }}
-              className="w-14 h-20 bg-red-500 rounded-lg relative flex items-center justify-center text-white font-bold"
+              className="w-14 h-20 rounded-lg relative flex items-center justify-center text-white font-bold"
+              style={{ backgroundColor: DESIGN_TOKENS.primitive.kids.pink[500] }}
             >
               2
             </motion.div>
             <motion.div
               animate={{ y: [0, -10, 0] }}
               transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut", delay: 0.4 }}
-              className="w-14 h-20 bg-green-500 rounded-lg relative flex items-center justify-center text-white font-bold"
+              className="w-14 h-20 rounded-lg relative flex items-center justify-center text-white font-bold"
+              style={{ backgroundColor: DESIGN_TOKENS.primitive.kids.lime[500] }}
             >
               3
             </motion.div>
             <motion.div
               animate={{ y: [0, -10, 0] }}
               transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}
-              className="w-14 h-20 bg-yellow-500 rounded-lg relative flex items-center justify-center text-white font-bold"
+              className="w-14 h-20 rounded-lg relative flex items-center justify-center text-white font-bold"
+              style={{ backgroundColor: DESIGN_TOKENS.primitive.dutch.orange[500] }}
             >
               4
             </motion.div>
@@ -154,7 +159,7 @@ const InteractiveTutorial: React.FC<InteractiveTutorialProps> = ({ onComplete })
               <p className="text-sm">+1 point pour chaque carte que vous avez réussi à placer au centre.</p>
             </div>
             <div className="bg-white/70 p-3 rounded-xl border border-red-300">
-              <div className="text-center mb-2 font-medium text-red-500">Points négatifs</div>
+              <div className="text-center mb-2 font-medium" style={{ color: DESIGN_TOKENS.primitive.kids.pink[500] }}>Points négatifs</div>
               <p className="text-sm">-2 points pour chaque carte qui vous reste en main à la fin.</p>
             </div>
           </div>

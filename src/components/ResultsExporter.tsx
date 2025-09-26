@@ -10,6 +10,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { DESIGN_TOKENS } from '@/design/index';
 
 interface ResultsExporterProps {
   games: Game[];
@@ -161,7 +162,7 @@ const ResultsExporter: React.FC<ResultsExporterProps> = ({
       const heading = document.createElement('h1');
       heading.textContent = 'Résultats Dutch Blitz';
       heading.style.textAlign = 'center';
-      heading.style.color = '#1EAEDB';
+      heading.style.color = DESIGN_TOKENS.primitive.dutch.blue[500].replace('hsl(', '').replace(')', '');
       heading.style.margin = '20px 0';
       element.appendChild(heading);
       
@@ -169,7 +170,7 @@ const ResultsExporter: React.FC<ResultsExporterProps> = ({
       if (isGameActive && currentPlayers.length > 0) {
         const currentGameTitle = document.createElement('h2');
         currentGameTitle.textContent = 'Partie en cours';
-        currentGameTitle.style.color = '#8B5CF6';
+        currentGameTitle.style.color = DESIGN_TOKENS.primitive.dutch.purple[500].replace('hsl(', '').replace(')', '');
         currentGameTitle.style.marginTop = '30px';
         element.appendChild(currentGameTitle);
         
@@ -228,7 +229,7 @@ const ResultsExporter: React.FC<ResultsExporterProps> = ({
       if (includePastGames && games.length > 0) {
         const pastGamesTitle = document.createElement('h2');
         pastGamesTitle.textContent = 'Historique des parties';
-        pastGamesTitle.style.color = '#F97316';
+        pastGamesTitle.style.color = DESIGN_TOKENS.primitive.dutch.orange[500].replace('hsl(', '').replace(')', '');
         pastGamesTitle.style.marginTop = '30px';
         element.appendChild(pastGamesTitle);
         
@@ -280,7 +281,7 @@ const ResultsExporter: React.FC<ResultsExporterProps> = ({
             if (index < 5) { // Limit to 5 past games to keep PDF manageable
               const gameTitle = document.createElement('h3');
               gameTitle.textContent = `Partie du ${new Date(game.date).toLocaleDateString()} - Vainqueur: ${game.winner}`;
-              gameTitle.style.color = '#1EAEDB';
+              gameTitle.style.color = DESIGN_TOKENS.primitive.dutch.blue[500].replace('hsl(', '').replace(')', '');
               gameTitle.style.marginTop = '20px';
               element.appendChild(gameTitle);
               
@@ -333,7 +334,7 @@ const ResultsExporter: React.FC<ResultsExporterProps> = ({
       const footer = document.createElement('div');
       footer.style.marginTop = '30px';
       footer.style.textAlign = 'center';
-      footer.style.color = '#666';
+      footer.style.color = DESIGN_TOKENS.semantic.text.secondary;
       footer.style.fontSize = '12px';
       footer.textContent = `Généré le ${new Date().toLocaleDateString()} par Dutch Blitz Digital Buddy`;
       element.appendChild(footer);

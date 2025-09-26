@@ -10,6 +10,7 @@ import { useElevenLabs } from '@/hooks/use-eleven-labs';
 import { useSound } from '@/hooks/use-sound';
 import { cn } from '@/lib/utils';
 import { ModernTitle } from './ui/modern-title';
+import { DESIGN_TOKENS } from '@/design/tokens/centralized';
 
 interface AICommentatorProps {
   players: Player[];
@@ -185,7 +186,11 @@ const AICommentator: React.FC<AICommentatorProps> = ({
                 <motion.div
                   initial={{ opacity: 0, y: 5 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="relative p-4 sm:p-6 bg-gradient-to-br from-blue-50/80 via-purple-50/80 to-amber-50/80 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-blue-200/50 shadow-lg"
+                  className="relative p-4 sm:p-6 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-lg"
+                   style={{ 
+                     background: DESIGN_TOKENS.gradients.trinitySubtle,
+                     borderColor: DESIGN_TOKENS.semantic.border.subtle
+                   }}
                   whileHover={{ 
                     scale: 1.01,
                     boxShadow: "0 10px 30px rgba(59, 130, 246, 0.1)"

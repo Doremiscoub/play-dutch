@@ -539,9 +539,12 @@ const BadgeSystem: React.FC<BadgeSystemProps> = ({ players, games, currentGameId
                           <div className="flex items-center justify-between mb-1">
                             <span className="text-sm font-medium">{player.name}</span>
                             {earned ? (
-                              <span className="text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded-full">
-                                Débloqué
-                              </span>
+                               <span className="text-xs px-2 py-0.5 rounded-full" style={{ 
+        backgroundColor: '#10B981', 
+        color: '#065F46'
+                               }}>
+                                 Débloqué
+                               </span>
                             ) : (
                               <span className="text-xs text-muted-foreground">
                                 {Math.round(progress)}%

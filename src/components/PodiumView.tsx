@@ -350,7 +350,7 @@ const PodiumView: React.FC<PodiumViewProps> = ({ players, onClose, isMultiplayer
                       <div className="grid grid-cols-3 gap-3">
                         <Button 
                           className="text-white hover:opacity-90"
-                          style={{ backgroundColor: '#1DA1F2' }}
+                          style={{ backgroundColor: DESIGN_TOKENS.primitive.kids.turquoise[500] }}
                           onClick={() => handleShareOnSocial('twitter')}
                         >
                           <Twitter className="w-4 h-4 mr-2" />
@@ -359,7 +359,7 @@ const PodiumView: React.FC<PodiumViewProps> = ({ players, onClose, isMultiplayer
                         
                         <Button 
                           className="text-white hover:opacity-90"
-                          style={{ backgroundColor: '#4267B2' }}
+                          style={{ backgroundColor: DESIGN_TOKENS.primitive.dutch.blue[600] }}
                           onClick={() => handleShareOnSocial('facebook')}
                         >
                           <Facebook className="w-4 h-4 mr-2" />
@@ -459,19 +459,27 @@ const PodiumView: React.FC<PodiumViewProps> = ({ players, onClose, isMultiplayer
                             
                             <div className="flex justify-around mb-2">
                               {topPlayers.slice(0, 3).map((player, idx) => (
-                                <div key={player.id} className="text-center">
-                                  <div className={`w-8 h-8 rounded-full flex items-center justify-center mx-auto mb-1 ${
-                                    idx === 0 
-                                      ? "bg-gradient-to-r from-yellow-200 to-yellow-400 text-yellow-900" 
-                                      : idx === 1 
-                                        ? "bg-gradient-to-r from-gray-200 to-gray-400 text-gray-900"
-                                        : "bg-gradient-to-r from-orange-200 to-orange-400 text-orange-900"
-                                  }`}>
-                                    {idx + 1}
-                                  </div>
-                                  <p className="text-xs font-medium">{player.name}</p>
-                                  <p className="text-xs">{player.totalScore}</p>
-                                </div>
+                                 <div key={player.id} className="text-center">
+                                   <div className={`w-8 h-8 rounded-full flex items-center justify-center mx-auto mb-1 ${
+                                     idx === 0 
+                                        ? "text-white" 
+                                        : idx === 1 
+                                          ? "text-white"
+                                          : "text-white"
+                                    }`}
+                                    style={{ 
+                                      background: idx === 0 
+                                        ? DESIGN_TOKENS.gradients.kidsOrange 
+                                        : idx === 1 
+                                          ? DESIGN_TOKENS.gradients.trinity
+                                          : DESIGN_TOKENS.gradients.kidsBlue
+                                    }}
+                                   >
+                                     {idx + 1}
+                                   </div>
+                                   <p className="text-xs font-medium">{player.name}</p>
+                                   <p className="text-xs">{player.totalScore}</p>
+                                 </div>
                               ))}
                             </div>
                           </motion.div>
@@ -483,7 +491,8 @@ const PodiumView: React.FC<PodiumViewProps> = ({ players, onClose, isMultiplayer
                         
                         <div className="flex gap-2">
                           <Button 
-                            className="w-full bg-gradient-to-r from-[#833AB4] via-[#FD1D1D] to-[#FCAF45] text-white hover:opacity-90"
+                             className="w-full text-white hover:opacity-90"
+                             style={{ background: DESIGN_TOKENS.gradients.trinity }}
                             onClick={generateSocialReel}
                             disabled={isGeneratingReel}
                           >
