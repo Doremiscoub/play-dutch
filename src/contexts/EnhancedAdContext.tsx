@@ -61,24 +61,6 @@ export const EnhancedAdProvider: React.FC<EnhancedAdProviderProps> = ({ children
   // Only show ads if: not premium, not loading, and has consent
   const shouldShowAds = !isPremium && !isLoading && hasConsentedToAds;
 
-  // Debug logs pour diagnostic - plus détaillés
-  React.useEffect(() => {
-    console.log('🎯 AdSense État:', {
-      isPremium: isPremium || false,
-      isLoading: isLoading || false,
-      hasConsentedToAds: hasConsentedToAds || false,
-      shouldShowAds: shouldShowAds || false,
-      environment: import.meta.env.PROD ? 'production' : 'development'
-    });
-  }, [isPremium, isLoading, hasConsentedToAds, shouldShowAds]);
-
-  // Log initial state sur le montage du composant
-  React.useEffect(() => {
-    console.log('🚀 AdProvider initialisé:', {
-      isPremium: isPremium || false,
-      isLoading: isLoading || false
-    });
-  }, []);
 
   const updateConsent = (consent: Partial<GDPRConsent>) => {
     const newConsent: GDPRConsent = {
@@ -91,13 +73,15 @@ export const EnhancedAdProvider: React.FC<EnhancedAdProviderProps> = ({ children
     setGdprConsent(newConsent);
     localStorage.setItem('dutch-gdpr-consent', JSON.stringify(newConsent));
     
-      if ((window as any).gtag) {
-        (window as any).gtag('consent', 'update', {
-          'ad_storage': 'denied',
-          'ad_user_data': 'denied',
-          'ad_personalization': 'denied'
-        });
-      }
+    // Update GTAG consent based on actual user choices
+    if ((window as any).gtag) {
+      (window as any).gtag('consent', 'update', {
+        'ad_storage': newConsent.marketing ? 'granted' : 'denied',
+        'ad_user_data': newConsent.marketing ? 'granted' : 'denied',
+        'ad_personalization': newConsent.marketing ? 'granted' : 'denied',
+        'analytics_storage': newConsent.analytics ? 'granted' : 'denied'
+      });
+    }
   };
 
   // Load AdSense script - production optimized 

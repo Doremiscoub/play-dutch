@@ -17,35 +17,11 @@ const AdSenseProductionManager: React.FC = () => {
       try {
         // Configuration des paramètres AdSense globaux
         (window as any).adsbygoogle = (window as any).adsbygoogle || [];
-        
-        // Configuration de la politique de consentement
-        if ((window as any).gtag) {
-          (window as any).gtag('consent', 'update', {
-            'ad_storage': 'granted',
-            'ad_user_data': 'granted',
-            'ad_personalization': 'granted',
-            'analytics_storage': 'granted'
-          });
-        }
-
       } catch (error) {
         // Silently handle errors in production
       }
     }
   }, [shouldShowAds, hasConsentedToAds]);
-
-  // Logs de diagnostic uniquement en développement
-  useEffect(() => {
-    if (!import.meta.env.PROD) {
-      console.log('📊 AdSense Production Status:', {
-        shouldShowAds,
-        hasConsentedToAds,
-        isPremium,
-        adSenseLoaded: !!(window as any).adsbygoogle,
-        timestamp: new Date().toISOString()
-      });
-    }
-  }, [shouldShowAds, hasConsentedToAds, isPremium]);
 
   return null; // Ce composant ne rend rien
 };
