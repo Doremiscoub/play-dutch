@@ -143,9 +143,9 @@ const AICommentator: React.FC<AICommentatorProps> = ({
                     className="text-trinity-orange-600 font-extrabold"
                     animate={{
                       textShadow: [
-                        "0 0 0px rgba(251, 146, 60, 0)",
-                        "0 0 10px rgba(251, 146, 60, 0.5)",
-                        "0 0 0px rgba(251, 146, 60, 0)"
+                        "0 0 0px transparent",
+                        `0 0 10px ${DESIGN_TOKENS.primitive.dutch.orange[500]}`,
+                        "0 0 0px transparent"
                       ]
                     }}
                     transition={{
@@ -193,7 +193,7 @@ const AICommentator: React.FC<AICommentatorProps> = ({
                    }}
                   whileHover={{ 
                     scale: 1.01,
-                    boxShadow: "0 10px 30px rgba(59, 130, 246, 0.1)"
+                    boxShadow: `0 10px 30px ${DESIGN_TOKENS.primitive.dutch.blue[500]}50`
                   }}
                   transition={{ duration: 0.3 }}
                 >

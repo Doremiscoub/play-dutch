@@ -162,7 +162,7 @@ const ResultsExporter: React.FC<ResultsExporterProps> = ({
       const heading = document.createElement('h1');
       heading.textContent = 'Résultats Dutch Blitz';
       heading.style.textAlign = 'center';
-      heading.style.color = DESIGN_TOKENS.primitive.dutch.blue[500].replace('hsl(', '').replace(')', '');
+      heading.style.color = DESIGN_TOKENS.primitive.dutch.blue[500];
       heading.style.margin = '20px 0';
       element.appendChild(heading);
       
@@ -170,7 +170,7 @@ const ResultsExporter: React.FC<ResultsExporterProps> = ({
       if (isGameActive && currentPlayers.length > 0) {
         const currentGameTitle = document.createElement('h2');
         currentGameTitle.textContent = 'Partie en cours';
-        currentGameTitle.style.color = DESIGN_TOKENS.primitive.dutch.purple[500].replace('hsl(', '').replace(')', '');
+        currentGameTitle.style.color = DESIGN_TOKENS.primitive.dutch.purple[500];
         currentGameTitle.style.marginTop = '30px';
         element.appendChild(currentGameTitle);
         
@@ -185,9 +185,9 @@ const ResultsExporter: React.FC<ResultsExporterProps> = ({
         ['Joueur', 'Score', 'Meilleur tour', 'Pire tour', 'Tours Dutch', 'Score moyen'].forEach(text => {
           const th = document.createElement('th');
           th.textContent = text;
-          th.style.border = '1px solid #ddd';
+          th.style.border = `1px solid ${DESIGN_TOKENS.primitive.neutral[300]}`;
           th.style.padding = '12px';
-          th.style.backgroundColor = '#f3f4f6';
+          th.style.backgroundColor = DESIGN_TOKENS.primitive.neutral[100];
           headerRow.appendChild(th);
         });
         thead.appendChild(headerRow);
@@ -214,7 +214,7 @@ const ResultsExporter: React.FC<ResultsExporterProps> = ({
           ].forEach(text => {
             const td = document.createElement('td');
             td.textContent = String(text);
-            td.style.border = '1px solid #ddd';
+            td.style.border = `1px solid ${DESIGN_TOKENS.primitive.neutral[300]}`;
             td.style.padding = '12px';
             row.appendChild(td);
           });
@@ -229,7 +229,7 @@ const ResultsExporter: React.FC<ResultsExporterProps> = ({
       if (includePastGames && games.length > 0) {
         const pastGamesTitle = document.createElement('h2');
         pastGamesTitle.textContent = 'Historique des parties';
-        pastGamesTitle.style.color = DESIGN_TOKENS.primitive.dutch.orange[500].replace('hsl(', '').replace(')', '');
+        pastGamesTitle.style.color = DESIGN_TOKENS.primitive.dutch.orange[500];
         pastGamesTitle.style.marginTop = '30px';
         element.appendChild(pastGamesTitle);
         
@@ -244,9 +244,9 @@ const ResultsExporter: React.FC<ResultsExporterProps> = ({
         ['Date', 'Vainqueur', 'Manches', 'Joueurs'].forEach(text => {
           const th = document.createElement('th');
           th.textContent = text;
-          th.style.border = '1px solid #ddd';
+          th.style.border = `1px solid ${DESIGN_TOKENS.primitive.neutral[300]}`;
           th.style.padding = '12px';
-          th.style.backgroundColor = '#f3f4f6';
+          th.style.backgroundColor = DESIGN_TOKENS.primitive.neutral[100];
           headerRow.appendChild(th);
         });
         thead.appendChild(headerRow);

@@ -39,13 +39,13 @@ const GameOverScreen: React.FC<GameOverScreenProps> = ({
     
     // Utiliser les couleurs centralisées pour les confettis
     const confettiColors = [
-      DESIGN_TOKENS.primitive.dutch.blue[500].replace('hsl(', '').replace(')', ''),
-      DESIGN_TOKENS.primitive.dutch.purple[500].replace('hsl(', '').replace(')', ''),
-      DESIGN_TOKENS.primitive.dutch.orange[500].replace('hsl(', '').replace(')', ''),
-      DESIGN_TOKENS.primitive.kids.lime[500].replace('hsl(', '').replace(')', ''),
-      DESIGN_TOKENS.primitive.kids.pink[400].replace('hsl(', '').replace(')', ''),
-      DESIGN_TOKENS.primitive.kids.turquoise[400].replace('hsl(', '').replace(')', '')
-    ].map(color => `hsl(${color})`);
+      DESIGN_TOKENS.primitive.dutch.blue[500],
+      DESIGN_TOKENS.primitive.dutch.purple[500],
+      DESIGN_TOKENS.primitive.dutch.orange[500],
+      DESIGN_TOKENS.primitive.kids.lime[500],
+      DESIGN_TOKENS.primitive.kids.pink[400],
+      DESIGN_TOKENS.primitive.kids.turquoise[400]
+    ];
     
     confetti({
       particleCount: 200,

@@ -285,7 +285,7 @@ const PodiumView: React.FC<PodiumViewProps> = ({ players, onClose, isMultiplayer
                   initial={{ x: -20, opacity: 0 }}
                   animate={{ x: 0, opacity: 1 }}
                   transition={{ delay: index * 0.1 + 0.5, duration: 0.3 }}
-                  whileHover={{ y: -2, boxShadow: "0 6px 20px -5px rgba(0,0,0,0.1)" }}
+                  whileHover={{ y: -2, boxShadow: `0 6px 20px -5px ${DESIGN_TOKENS.primitive.neutral[900]}` }}
                 >
                   <div className="flex items-center gap-2">
                     <div className="w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center text-xs font-medium">
