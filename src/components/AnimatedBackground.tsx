@@ -134,33 +134,14 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
       if (variant !== 'minimal') {
         const currentPhase = phaseRef.current;
         
-        // Vagues colorées Trinity comme dans l'image de référence  
-        // Première vague : violet/bleu
-        const gradientPurple = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-        gradientPurple.addColorStop(0, `${DESIGN_TOKENS.primitive.dutch.purple[400]}66`);
-        gradientPurple.addColorStop(1, `${DESIGN_TOKENS.primitive.dutch.blue[500]}40`);
-        
+        // Vague subtile unique comme dans l'image de référence
         drawWave(
-          waveConfig.baselineHeight - 40,
-          gradientPurple,
-          30,
+          canvas.height * 0.95, // Plus bas pour être très discrète
+          `${DESIGN_TOKENS.primitive.neutral[600]}08`, // Opacité très faible (3%)
+          15, // Amplitude réduite
           currentPhase,
           'left',
           waveConfig.frequencyViolet
-        );
-        
-        // Deuxième vague : bleu/orange
-        const gradientBlue = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-        gradientBlue.addColorStop(0, `${DESIGN_TOKENS.primitive.dutch.blue[500]}50`);
-        gradientBlue.addColorStop(1, `${DESIGN_TOKENS.primitive.dutch.orange[500]}30`);
-        
-        drawWave(
-          waveConfig.baselineHeight,
-          gradientBlue,
-          25,
-          currentPhase * 1.2,
-          'right',
-          waveConfig.frequencyYellow
         );
         
         phaseRef.current += waveConfig.phaseIncrement;
