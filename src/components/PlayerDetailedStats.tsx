@@ -3,9 +3,9 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent } from '@/components/ui/card';
 import { Player } from '@/types';
-import { Trophy, Target, Flag, TrendingUp, Star, Gauge, Zap, Activity, Focus, Brain, Crosshair } from 'lucide-react';
+import { Trophy, Target, Flag, TrendingUp, Star, Gauge, Zap, Crosshair, Activity, Focus, Brain } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { DESIGN_TOKENS } from '@/design/tokens/centralized';
+import { Radar } from 'recharts';
 
 interface PlayerDetailedStatsProps {
   player: Player;
@@ -58,18 +58,18 @@ const PlayerDetailedStats: React.FC<PlayerDetailedStatsProps> = ({ player, class
       color: stats.improvementRate < 0 ? "text-dutch-green" : "text-dutch-orange"
     },
     {
-      icon: <Star className="h-4 w-4" style={{ color: DESIGN_TOKENS.primitive.dutch.purple[500] }} />,
+      icon: <Star className="h-4 w-4 text-purple-500" />,
       label: "Moyenne",
       value: stats.averageScore.toFixed(1),
       suffix: "points/manche",
-      color: `color: ${DESIGN_TOKENS.primitive.dutch.purple[500]}`
+      color: "text-purple-500"
     },
     {
-      icon: <Gauge className="h-4 w-4" style={{ color: DESIGN_TOKENS.primitive.dutch.blue[500] }} />,
+      icon: <Gauge className="h-4 w-4 text-blue-500" />,
       label: "Consistance",
       value: stats.consistencyScore.toFixed(1),
       suffix: "",
-      color: `color: ${DESIGN_TOKENS.primitive.dutch.blue[500]}`
+      color: "text-blue-500"
     },
     {
       icon: <Zap className="h-4 w-4 text-amber-500" />,

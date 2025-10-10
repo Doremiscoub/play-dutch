@@ -10,7 +10,6 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { DESIGN_TOKENS } from '@/design/index';
 
 interface ResultsExporterProps {
   games: Game[];
@@ -162,7 +161,7 @@ const ResultsExporter: React.FC<ResultsExporterProps> = ({
       const heading = document.createElement('h1');
       heading.textContent = 'Résultats Dutch Blitz';
       heading.style.textAlign = 'center';
-      heading.style.color = DESIGN_TOKENS.primitive.dutch.blue[500];
+      heading.style.color = '#1EAEDB';
       heading.style.margin = '20px 0';
       element.appendChild(heading);
       
@@ -170,7 +169,7 @@ const ResultsExporter: React.FC<ResultsExporterProps> = ({
       if (isGameActive && currentPlayers.length > 0) {
         const currentGameTitle = document.createElement('h2');
         currentGameTitle.textContent = 'Partie en cours';
-        currentGameTitle.style.color = DESIGN_TOKENS.primitive.dutch.purple[500];
+        currentGameTitle.style.color = '#8B5CF6';
         currentGameTitle.style.marginTop = '30px';
         element.appendChild(currentGameTitle);
         
@@ -185,9 +184,9 @@ const ResultsExporter: React.FC<ResultsExporterProps> = ({
         ['Joueur', 'Score', 'Meilleur tour', 'Pire tour', 'Tours Dutch', 'Score moyen'].forEach(text => {
           const th = document.createElement('th');
           th.textContent = text;
-          th.style.border = `1px solid ${DESIGN_TOKENS.primitive.neutral[300]}`;
+          th.style.border = '1px solid #ddd';
           th.style.padding = '12px';
-          th.style.backgroundColor = DESIGN_TOKENS.primitive.neutral[100];
+          th.style.backgroundColor = '#f3f4f6';
           headerRow.appendChild(th);
         });
         thead.appendChild(headerRow);
@@ -214,7 +213,7 @@ const ResultsExporter: React.FC<ResultsExporterProps> = ({
           ].forEach(text => {
             const td = document.createElement('td');
             td.textContent = String(text);
-            td.style.border = `1px solid ${DESIGN_TOKENS.primitive.neutral[300]}`;
+            td.style.border = '1px solid #ddd';
             td.style.padding = '12px';
             row.appendChild(td);
           });
@@ -229,7 +228,7 @@ const ResultsExporter: React.FC<ResultsExporterProps> = ({
       if (includePastGames && games.length > 0) {
         const pastGamesTitle = document.createElement('h2');
         pastGamesTitle.textContent = 'Historique des parties';
-        pastGamesTitle.style.color = DESIGN_TOKENS.primitive.dutch.orange[500];
+        pastGamesTitle.style.color = '#F97316';
         pastGamesTitle.style.marginTop = '30px';
         element.appendChild(pastGamesTitle);
         
@@ -244,9 +243,9 @@ const ResultsExporter: React.FC<ResultsExporterProps> = ({
         ['Date', 'Vainqueur', 'Manches', 'Joueurs'].forEach(text => {
           const th = document.createElement('th');
           th.textContent = text;
-          th.style.border = `1px solid ${DESIGN_TOKENS.primitive.neutral[300]}`;
+          th.style.border = '1px solid #ddd';
           th.style.padding = '12px';
-          th.style.backgroundColor = DESIGN_TOKENS.primitive.neutral[100];
+          th.style.backgroundColor = '#f3f4f6';
           headerRow.appendChild(th);
         });
         thead.appendChild(headerRow);
@@ -281,7 +280,7 @@ const ResultsExporter: React.FC<ResultsExporterProps> = ({
             if (index < 5) { // Limit to 5 past games to keep PDF manageable
               const gameTitle = document.createElement('h3');
               gameTitle.textContent = `Partie du ${new Date(game.date).toLocaleDateString()} - Vainqueur: ${game.winner}`;
-              gameTitle.style.color = DESIGN_TOKENS.primitive.dutch.blue[500].replace('hsl(', '').replace(')', '');
+              gameTitle.style.color = '#1EAEDB';
               gameTitle.style.marginTop = '20px';
               element.appendChild(gameTitle);
               
@@ -334,7 +333,7 @@ const ResultsExporter: React.FC<ResultsExporterProps> = ({
       const footer = document.createElement('div');
       footer.style.marginTop = '30px';
       footer.style.textAlign = 'center';
-      footer.style.color = DESIGN_TOKENS.semantic.text.secondary;
+      footer.style.color = '#666';
       footer.style.fontSize = '12px';
       footer.textContent = `Généré le ${new Date().toLocaleDateString()} par Dutch Blitz Digital Buddy`;
       element.appendChild(footer);

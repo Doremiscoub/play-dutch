@@ -285,19 +285,19 @@ export const AchievementSystem: React.FC<AchievementSystemProps> = ({
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
             <div className="text-center">
-              <div className="text-2xl font-bold text-dutch-blue">{playerStats.totalGames}</div>
+              <div className="text-2xl font-bold text-blue-600">{playerStats.totalGames}</div>
               <div className="text-sm text-gray-600">Parties jouées</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-dutch-green">{playerStats.wins}</div>
+              <div className="text-2xl font-bold text-green-600">{playerStats.wins}</div>
               <div className="text-sm text-gray-600">Victoires</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-dutch-purple">{playerStats.winStreak}</div>
+              <div className="text-2xl font-bold text-purple-600">{playerStats.winStreak}</div>
               <div className="text-sm text-gray-600">Meilleure série</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-dutch-orange">{unlockedAchievements.length}</div>
+              <div className="text-2xl font-bold text-orange-600">{unlockedAchievements.length}</div>
               <div className="text-sm text-gray-600">Achievements</div>
             </div>
           </div>

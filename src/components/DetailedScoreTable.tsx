@@ -1,11 +1,9 @@
 
 import React from 'react';
 import { Player } from '@/types';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Trophy, TrendingDown } from 'lucide-react';
-import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
-import { DESIGN_TOKENS } from '@/design';
+import { Trophy, TrendingDown } from 'lucide-react';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
 interface DetailedScoreTableProps {
   players: Player[];
@@ -29,12 +27,12 @@ const DetailedScoreTable: React.FC<DetailedScoreTableProps> = ({ players, roundH
     return players[maxIndex]?.id || null;
   };
 
-  // Fonction pour déterminer la classe de style selon le score - centralisée
-  const getScoreClass = (score: number): React.CSSProperties => {
-    if (score <= 0) return { color: DESIGN_TOKENS.primitive.dutch.green[600], fontWeight: '600' };
-    if (score <= 15) return { color: DESIGN_TOKENS.primitive.neutral[700] };
-    if (score <= 25) return { color: DESIGN_TOKENS.primitive.kids.pink[500] };
-    return { color: DESIGN_TOKENS.primitive.kids.pink[700], fontWeight: '600' };
+  // Fonction pour déterminer la classe de style selon le score
+  const getScoreClass = (score: number): string => {
+    if (score <= 0) return 'text-green-600 font-semibold';
+    if (score <= 15) return 'text-gray-700';
+    if (score <= 25) return 'text-red-500';
+    return 'text-red-800 font-semibold';
   };
 
   return (
@@ -48,17 +46,14 @@ const DetailedScoreTable: React.FC<DetailedScoreTableProps> = ({ players, roundH
         <div className="sticky left-0 z-10 float-left bg-white/95">
           {/* Table pour la colonne fixe du joueur */}
           <Table className="w-auto bg-white/95 rounded-l-xl overflow-hidden border shadow-lg">
-            <TableHeader style={{ backgroundColor: `${DESIGN_TOKENS.primitive.dutch.blue[500]}10` }}>
+            <TableHeader className="bg-dutch-blue/10">
               <TableRow>
-                <TableHead className="whitespace-nowrap font-semibold" style={{ color: DESIGN_TOKENS.primitive.dutch.blue[500] }}>Joueur</TableHead>
+                <TableHead className="whitespace-nowrap font-semibold text-dutch-blue">Joueur</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {players.map((player) => (
-                <TableRow 
-                  key={`${player.id}-fixed`} 
-                  className="hover:bg-opacity-5 transition-colors"
-                >
+                <TableRow key={`${player.id}-fixed`} className="hover:bg-dutch-blue/5">
                   <TableCell className="font-medium whitespace-nowrap">{player.name}</TableCell>
                 </TableRow>
               ))}
@@ -69,14 +64,10 @@ const DetailedScoreTable: React.FC<DetailedScoreTableProps> = ({ players, roundH
         <div className="overflow-x-auto ml-[80px]"> {/* Réduit l'espacement entre les colonnes */}
           {/* Table pour les scores défilants */}
           <Table className="w-auto bg-white/95 rounded-r-xl overflow-hidden border shadow-lg">
-            <TableHeader style={{ backgroundColor: `${DESIGN_TOKENS.primitive.dutch.blue[500]}10` }}>
+            <TableHeader className="bg-dutch-blue/10">
               <TableRow>
                 {roundHistory.map((_, index) => (
-                  <TableHead 
-                    key={index} 
-                    className="text-center whitespace-nowrap font-medium"
-                    style={{ color: `${DESIGN_TOKENS.primitive.dutch.blue[500]}CC` }}
-                  >
+                  <TableHead key={index} className="text-center whitespace-nowrap font-medium text-dutch-blue/80">
                     Manche {index + 1}
                   </TableHead>
                 ))}
@@ -84,10 +75,7 @@ const DetailedScoreTable: React.FC<DetailedScoreTableProps> = ({ players, roundH
             </TableHeader>
             <TableBody>
               {players.map((player) => (
-                <TableRow 
-                  key={`${player.id}-scrollable`} 
-                  className="hover:bg-opacity-5 transition-colors"
-                >
+                <TableRow key={`${player.id}-scrollable`} className="hover:bg-dutch-blue/5">
                   {roundHistory.map((round, roundIndex) => {
                     const playerIndex = players.findIndex(p => p.id === player.id);
                     const score = round.scores[playerIndex];
@@ -102,24 +90,22 @@ const DetailedScoreTable: React.FC<DetailedScoreTableProps> = ({ players, roundH
                       >
                         <div className="relative flex items-center justify-center">
                           {isDutch && (
-                            <span 
-                              className="absolute -top-1 -left-1 text-xs"
-                              style={{ color: DESIGN_TOKENS.primitive.dutch.purple[500] }}
-                            >
+                            <span className="absolute -top-1 -left-1 text-xs text-dutch-purple">
                               D
                             </span>
                           )}
-                          <span 
-                            className="font-medium"
-                            style={{...getScoreClass(score), ...(isDutch ? { color: DESIGN_TOKENS.primitive.dutch.purple[500] } : {})}}
-                          >
+                          <span className={`
+                            font-medium 
+                            ${getScoreClass(score)}
+                            ${isDutch ? 'text-dutch-purple' : ''}
+                          `}>
                             {score}
                           </span>
                           {isBestInRound && (
-                            <Trophy className="ml-1 h-3 w-3" style={{ color: DESIGN_TOKENS.primitive.dutch.green[600] }} />
+                            <Trophy className="ml-1 h-3 w-3 text-green-600" />
                           )}
                           {isWorstInRound && (
-                            <TrendingDown className="ml-1 h-3 w-3" style={{ color: DESIGN_TOKENS.primitive.kids.pink[500] }} />
+                            <TrendingDown className="ml-1 h-3 w-3 text-red-500" />
                           )}
                         </div>
                       </TableCell>

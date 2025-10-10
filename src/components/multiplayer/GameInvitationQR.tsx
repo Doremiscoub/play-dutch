@@ -6,7 +6,6 @@ import { Badge } from '@/components/ui/badge';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Copy, Users, Share2, CheckCircle } from 'lucide-react';
 import { toast } from 'sonner';
-import { DESIGN_TOKENS } from '@/design';
 
 interface GameInvitationQRProps {
   gameId: string;
@@ -105,8 +104,8 @@ export const GameInvitationQR: React.FC<GameInvitationQRProps> = ({
               size={180}
               level="M"
               includeMargin
-              fgColor={DESIGN_TOKENS.primitive.neutral[900]}
-              bgColor={DESIGN_TOKENS.primitive.neutral[50]}
+              fgColor="#1a1a1a"
+              bgColor="#ffffff"
             />
           </div>
         </motion.div>

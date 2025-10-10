@@ -50,7 +50,7 @@ const SimplifiedHeroSection: React.FC = () => {
         >
           <h1 className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-tight px-2 uppercase tracking-wide">
             {/* Main text with sophisticated gradient and shadow */}
-            <span className="relative inline-block bg-gradient-to-br from-trinity-blue-600 via-trinity-purple-600 to-trinity-orange-500 bg-clip-text text-transparent drop-shadow-md">
+            <span className="relative inline-block bg-gradient-to-br from-trinity-blue-600 via-trinity-purple-600 to-trinity-orange-500 bg-clip-text text-transparent filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]">
               SORTEZ VOS CARTES, 
               <span className="inline-block ml-2 px-3 py-1 bg-gradient-to-r from-trinity-orange-500 to-trinity-orange-600 text-white rounded-lg shadow-xl transform hover:scale-105 transition-all duration-300 font-extrabold">
                 🎯 ON

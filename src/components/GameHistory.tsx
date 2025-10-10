@@ -6,7 +6,6 @@ import { Trophy, Calendar, Users, Clock, Award } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
-import { DESIGN_TOKENS } from '@/design';
 
 interface GameHistoryProps {
   games: Game[];
@@ -27,11 +26,8 @@ const GameHistory: React.FC<GameHistoryProps> = ({ games, limit }) => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <div 
-              className="w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-4"
-              style={{ backgroundColor: `${DESIGN_TOKENS.primitive.dutch.blue[500]}10` }}
-            >
-              <Trophy className="h-7 w-7" style={{ color: `${DESIGN_TOKENS.primitive.dutch.blue[500]}80` }} />
+            <div className="w-16 h-16 mx-auto rounded-full bg-dutch-blue/10 flex items-center justify-center mb-4">
+              <Trophy className="h-7 w-7 text-dutch-blue/50" />
             </div>
             <p className="text-gray-500">Aucune partie terminée pour le moment.</p>
             <p className="text-sm text-gray-400 mt-2">
@@ -58,7 +54,7 @@ const GameHistory: React.FC<GameHistoryProps> = ({ games, limit }) => {
               <div className="flex justify-between items-start">
                 <div>
                   <CardTitle className="text-lg font-semibold flex items-center gap-2">
-                    <Trophy className="h-5 w-5" style={{ color: DESIGN_TOKENS.primitive.dutch.orange[500] }} />
+                    <Trophy className="h-5 w-5 text-dutch-orange" />
                     {game.winner} a gagné!
                   </CardTitle>
                   <CardDescription className="mt-1">
@@ -79,13 +75,7 @@ const GameHistory: React.FC<GameHistoryProps> = ({ games, limit }) => {
                   </CardDescription>
                 </div>
                 {game.isMultiplayer && (
-                  <span 
-                    className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium"
-                    style={{
-                      backgroundColor: `${DESIGN_TOKENS.primitive.dutch.purple[500]}10`,
-                      color: DESIGN_TOKENS.primitive.dutch.purple[500]
-                    }}
-                  >
+                  <span className="inline-flex items-center rounded-full bg-dutch-purple/10 px-2.5 py-0.5 text-xs font-medium text-dutch-purple">
                     Multijoueur
                   </span>
                 )}
@@ -97,31 +87,24 @@ const GameHistory: React.FC<GameHistoryProps> = ({ games, limit }) => {
                   <div key={playerIndex} className="flex items-center justify-between group">
                     <div className="flex items-center gap-2">
                       <motion.span 
-                        className="flex items-center justify-center h-6 w-6 rounded-full text-xs font-medium transition-transform"
-                        style={
+                        className={`flex items-center justify-center h-6 w-6 rounded-full ${
                           playerIndex === 0 
-                            ? { backgroundColor: DESIGN_TOKENS.primitive.dutch.orange[500], color: 'white' }
+                            ? 'bg-dutch-orange text-white' 
                             : playerIndex === 1 
-                              ? { backgroundColor: DESIGN_TOKENS.primitive.dutch.blue[500], color: 'white' }
+                              ? 'bg-dutch-blue text-white'
                               : playerIndex === 2
-                                ? { backgroundColor: DESIGN_TOKENS.primitive.dutch.purple[500], color: 'white' }
-                                : { backgroundColor: DESIGN_TOKENS.primitive.neutral[200], color: DESIGN_TOKENS.primitive.neutral[700] }
-                        }
+                                ? 'bg-dutch-purple text-white'
+                                : 'bg-gray-200 text-gray-700'
+                          } text-xs font-medium transition-transform`}
                         whileHover={{ scale: 1.1 }}
                       >
                         {playerIndex + 1}
                       </motion.span>
-                      <span 
-                        className="font-medium transition-colors"
-                      >
+                      <span className="font-medium group-hover:text-dutch-blue transition-colors">
                         {player.name}
                         {player.isDutch && (
                           <motion.span 
-                            className="ml-2 inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium"
-                            style={{
-                              backgroundColor: `${DESIGN_TOKENS.primitive.kids.pink[500]}10`,
-                              color: DESIGN_TOKENS.primitive.kids.pink[500]
-                            }}
+                            className="ml-2 inline-flex items-center rounded-full bg-dutch-red/10 px-2.5 py-0.5 text-xs font-medium text-dutch-red"
                             initial={{ opacity: 0.8 }}
                             whileHover={{ opacity: 1, scale: 1.05 }}
                           >

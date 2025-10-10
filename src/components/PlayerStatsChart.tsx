@@ -7,7 +7,6 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, ResponsiveContainer, BarC
 import { Award, Zap, TrendingUp, AlertTriangle, Activity } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
-import { DESIGN_TOKENS } from '@/design';
 
 interface PlayerStatsChartProps {
   players: Player[];
@@ -74,20 +73,21 @@ const PlayerStatsChart: React.FC<PlayerStatsChartProps> = ({ players, className 
   const scoreData = prepareScoreData();
   const distributionData = prepareDistributionData();
   
-  // Générer une couleur unique pour chaque joueur via le système centralisé
-  const playerColorsFromTokens = [
-    DESIGN_TOKENS.primitive.dutch.blue[500],
-    DESIGN_TOKENS.primitive.dutch.orange[500], 
-    DESIGN_TOKENS.primitive.dutch.purple[500],
-    DESIGN_TOKENS.primitive.kids.pink[500],
-    DESIGN_TOKENS.primitive.dutch.green[500],
-    DESIGN_TOKENS.primitive.kids.lime[500],
-    DESIGN_TOKENS.primitive.kids.turquoise[500],
-    DESIGN_TOKENS.primitive.neutral[600]
-  ];
+  // Générer une couleur unique pour chaque joueur
+  const playerColors = {
+    'player1': '#1EAEDB', // dutch-blue
+    'player2': '#F97316', // dutch-orange
+    'player3': '#8B5CF6', // dutch-purple
+    'player4': '#D946EF', // dutch-pink
+    'player5': '#10B981', // dutch-green
+    'player6': '#FBBF24', // dutch-yellow
+    'player7': '#EF4444', // dutch-red
+    'player8': '#0EA5E9' // sky-blue
+  };
   
   const getPlayerColor = (index: number): string => {
-    return playerColorsFromTokens[index % playerColorsFromTokens.length];
+    const colors = Object.values(playerColors);
+    return colors[index % colors.length];
   };
   
   const noDataAvailable = !players.length || !players[0].rounds.length;
@@ -105,27 +105,17 @@ const PlayerStatsChart: React.FC<PlayerStatsChartProps> = ({ players, className 
     <div className={cn("space-y-6", className)}>
       <div>
         <div className="flex items-center mb-3">
-          <Activity className="h-5 w-5 mr-2" style={{ color: DESIGN_TOKENS.primitive.dutch.blue[500] }} />
-          <h3 className="text-lg font-bold" style={{ color: DESIGN_TOKENS.primitive.dutch.purple[500] }}>Évolution des points</h3>
+          <Activity className="h-5 w-5 text-dutch-blue mr-2" />
+          <h3 className="text-lg font-bold text-dutch-purple">Évolution des points</h3>
         </div>
         
         {noDataAvailable ? (
-          <div className="h-64 flex items-center justify-center rounded-xl border overflow-hidden"
-            style={{
-              background: `${DESIGN_TOKENS.primitive.neutral[0]}60`,
-              borderColor: `${DESIGN_TOKENS.primitive.neutral[0]}30`
-            }}
-          >
-            <p style={{ color: DESIGN_TOKENS.primitive.neutral[500] }}>Aucune donnée disponible</p>
+          <div className="h-64 flex items-center justify-center bg-white/60 rounded-xl border border-white/30">
+            <p className="text-gray-500">Aucune donnée disponible</p>
           </div>
         ) : (
           <motion.div 
-            className="rounded-xl border shadow-sm p-4 h-64"
-            style={{
-              background: `${DESIGN_TOKENS.primitive.neutral[0]}80`,
-              backdropFilter: 'blur(4px)',
-              borderColor: `${DESIGN_TOKENS.primitive.neutral[0]}30`
-            }}
+            className="bg-white/80 backdrop-blur-sm rounded-xl border border-white/30 shadow-sm p-4 h-64"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
@@ -146,9 +136,9 @@ const PlayerStatsChart: React.FC<PlayerStatsChartProps> = ({ players, className 
                       </React.Fragment>
                     ))}
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke={DESIGN_TOKENS.primitive.neutral[100]} />
-                  <XAxis dataKey="name" stroke={DESIGN_TOKENS.primitive.neutral[500]} fontSize={12} />
-                  <YAxis stroke={DESIGN_TOKENS.primitive.neutral[500]} fontSize={12} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                  <XAxis dataKey="name" stroke="#888" fontSize={12} />
+                  <YAxis stroke="#888" fontSize={12} />
                   <ChartTooltip content={<ChartTooltipContent />} />
                   
                   {players.map((player, index) => (
@@ -181,8 +171,8 @@ const PlayerStatsChart: React.FC<PlayerStatsChartProps> = ({ players, className 
       
       <div>
         <div className="flex items-center mb-3">
-          <TrendingUp className="h-5 w-5 mr-2" style={{ color: DESIGN_TOKENS.primitive.dutch.orange[500] }} />
-          <h3 className="text-lg font-bold" style={{ color: DESIGN_TOKENS.primitive.dutch.purple[500] }}>Répartition des scores</h3>
+          <TrendingUp className="h-5 w-5 text-dutch-orange mr-2" />
+          <h3 className="text-lg font-bold text-dutch-purple">Répartition des scores</h3>
         </div>
         
         {noDataAvailable ? (
@@ -203,16 +193,16 @@ const PlayerStatsChart: React.FC<PlayerStatsChartProps> = ({ players, className 
                   margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
                   barSize={20}
                 >
-                  <CartesianGrid strokeDasharray="3 3" stroke={DESIGN_TOKENS.primitive.neutral[100]} />
-                  <XAxis dataKey="name" stroke={DESIGN_TOKENS.primitive.neutral[500]} fontSize={12} />
-                  <YAxis stroke={DESIGN_TOKENS.primitive.neutral[500]} fontSize={12} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                  <XAxis dataKey="name" stroke="#888" fontSize={12} />
+                  <YAxis stroke="#888" fontSize={12} />
                   <ChartTooltip content={<ChartTooltipContent />} />
                   
-                  <Bar dataKey="0-5" stackId="a" name="0-5 pts" fill={DESIGN_TOKENS.primitive.dutch.green[400]} radius={[4, 4, 0, 0]} />
-                  <Bar dataKey="6-10" stackId="a" name="6-10 pts" fill={DESIGN_TOKENS.primitive.kids.turquoise[400]} radius={[4, 4, 0, 0]} />
-                  <Bar dataKey="11-15" stackId="a" name="11-15 pts" fill={DESIGN_TOKENS.primitive.dutch.blue[400]} radius={[4, 4, 0, 0]} />
-                  <Bar dataKey="16-20" stackId="a" name="16-20 pts" fill={DESIGN_TOKENS.primitive.dutch.purple[400]} radius={[4, 4, 0, 0]} />
-                  <Bar dataKey="21+" stackId="a" name="21+ pts" fill={DESIGN_TOKENS.primitive.kids.pink[400]} radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="0-5" stackId="a" name="0-5 pts" fill="#4ade80" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="6-10" stackId="a" name="6-10 pts" fill="#2dd4bf" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="11-15" stackId="a" name="11-15 pts" fill="#818cf8" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="16-20" stackId="a" name="16-20 pts" fill="#c084fc" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="21+" stackId="a" name="21+ pts" fill="#f472b6" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </ChartContainer>
@@ -222,33 +212,21 @@ const PlayerStatsChart: React.FC<PlayerStatsChartProps> = ({ players, className 
       
       <div className="grid grid-cols-2 gap-4">
         <motion.div 
-          className="rounded-xl border shadow-sm p-4"
-          style={{
-            background: `${DESIGN_TOKENS.primitive.neutral[0]}80`,
-            backdropFilter: 'blur(4px)',
-            borderColor: `${DESIGN_TOKENS.primitive.neutral[0]}30`
-          }}
+          className="bg-white/80 backdrop-blur-sm rounded-xl border border-white/30 shadow-sm p-4"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
           <div className="flex items-center mb-2">
-            <Zap className="h-4 w-4 mr-2" style={{ color: DESIGN_TOKENS.primitive.dutch.orange[500] }} />
+            <Zap className="h-4 w-4 text-dutch-orange mr-2" />
             <h3 className="font-semibold">Dutch League</h3>
           </div>
           
           <div className="space-y-2 mt-3">
             {players.map((player, index) => (
               <div key={player.id} className="flex items-center justify-between">
-                <span className="text-sm" style={{ color: DESIGN_TOKENS.primitive.neutral[700] }}>{player.name}</span>
-                <Badge 
-                  variant="outline" 
-                  className="border-none"
-                  style={{
-                    backgroundColor: `${DESIGN_TOKENS.primitive.dutch.orange[500]}10`,
-                    color: DESIGN_TOKENS.primitive.dutch.orange[500]
-                  }}
-                >
+                <span className="text-sm text-gray-700">{player.name}</span>
+                <Badge variant="outline" className="bg-dutch-orange/10 text-dutch-orange border-none">
                   {player.stats?.dutchCount || 0}
                 </Badge>
               </div>
@@ -257,33 +235,21 @@ const PlayerStatsChart: React.FC<PlayerStatsChartProps> = ({ players, className 
         </motion.div>
         
         <motion.div 
-          className="rounded-xl border shadow-sm p-4"
-          style={{
-            background: `${DESIGN_TOKENS.primitive.neutral[0]}80`,
-            backdropFilter: 'blur(4px)',
-            borderColor: `${DESIGN_TOKENS.primitive.neutral[0]}30`
-          }}
+          className="bg-white/80 backdrop-blur-sm rounded-xl border border-white/30 shadow-sm p-4"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
         >
           <div className="flex items-center mb-2">
-            <Award className="h-4 w-4 mr-2" style={{ color: DESIGN_TOKENS.primitive.dutch.green[500] }} />
+            <Award className="h-4 w-4 text-dutch-green mr-2" />
             <h3 className="font-semibold">Top Performances</h3>
           </div>
           
           <div className="space-y-2 mt-3">
             {players.map((player, index) => (
               <div key={player.id} className="flex items-center justify-between">
-                <span className="text-sm" style={{ color: DESIGN_TOKENS.primitive.neutral[700] }}>{player.name}</span>
-                <Badge 
-                  variant="outline" 
-                  className="border-none"
-                  style={{
-                    backgroundColor: `${DESIGN_TOKENS.primitive.dutch.green[500]}10`,
-                    color: DESIGN_TOKENS.primitive.dutch.green[500]
-                  }}
-                >
+                <span className="text-sm text-gray-700">{player.name}</span>
+                <Badge variant="outline" className="bg-dutch-green/10 text-dutch-green border-none">
                   {player.stats?.bestRound !== null ? player.stats?.bestRound : '-'}
                 </Badge>
               </div>

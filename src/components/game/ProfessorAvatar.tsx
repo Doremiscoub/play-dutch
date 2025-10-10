@@ -5,7 +5,6 @@ import { cn } from '@/lib/utils';
 import { ProfessorAvatarProps, MoodAnimations, SizeClasses } from './ProfessorAvatarTypes';
 import ProfessorAvatarParticles from './ProfessorAvatarParticles';
 import ProfessorAvatarImage from './ProfessorAvatarImage';
-import { DESIGN_TOKENS } from '@/design';
 
 const sizeClasses: SizeClasses = {
   sm: 'w-16 h-16',
@@ -121,7 +120,7 @@ export default function ProfessorAvatar({
         whileHover={{ 
           scale: 1.1,
           y: -4,
-          boxShadow: `0 8px 32px ${DESIGN_TOKENS.primitive.neutral[900]}50`,
+          boxShadow: "0 8px 32px rgba(31, 38, 135, 0.3)",
           transition: { 
             duration: 0.4,
             type: "spring",

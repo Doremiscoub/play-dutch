@@ -3,7 +3,6 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Player } from '@/types';
 import PlayerRankBadge from './PlayerRankBadge';
-import { DESIGN_TOKENS } from '@/design';
 
 interface OtherPlayersRankingProps {
   players: Player[];
@@ -33,7 +32,7 @@ const OtherPlayersRanking: React.FC<OtherPlayersRankingProps> = ({ players }) =>
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: index * 0.1 }}
-            whileHover={{ scale: 1.01, backgroundColor: DESIGN_TOKENS.primitive.neutral[50] + 'E6' }}
+            whileHover={{ scale: 1.01, backgroundColor: "rgba(249, 250, 251, 0.9)" }}
           >
             <PlayerRankBadge position={index + 4} size="sm" />
             

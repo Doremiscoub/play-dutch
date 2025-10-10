@@ -12,7 +12,6 @@ import { Label } from '@/components/ui/label';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useLocalStorage } from '@/hooks/use-local-storage';
-import { DESIGN_TOKENS } from '@/design';
 
 interface CustomTheme {
   id: string;
@@ -31,10 +30,10 @@ const AdvancedThemeSelector = () => {
   
   const [editingTheme, setEditingTheme] = useState<CustomTheme | null>(null);
   const [themeName, setThemeName] = useState('');
-  const [primaryColor, setPrimaryColor] = useState<string>(DESIGN_TOKENS.primitive.dutch.blue[500]);
-  const [secondaryColor, setSecondaryColor] = useState<string>(DESIGN_TOKENS.primitive.dutch.purple[500]);
-  const [accentColor, setAccentColor] = useState<string>(DESIGN_TOKENS.primitive.dutch.orange[500]);
-  const [backgroundColor, setBackgroundColor] = useState<string>(DESIGN_TOKENS.semantic.surface.primary);
+  const [primaryColor, setPrimaryColor] = useState('hsl(var(--dutch-blue))');
+  const [secondaryColor, setSecondaryColor] = useState('hsl(var(--dutch-purple))');
+  const [accentColor, setAccentColor] = useState('hsl(var(--dutch-orange))');
+  const [backgroundColor, setBackgroundColor] = useState('hsl(var(--background))');
   const [editingColorType, setEditingColorType] = useState<'primary' | 'secondary' | 'accent' | 'background'>('primary');
   
   // Convert theme config to proper format for display
@@ -53,17 +52,17 @@ const AdvancedThemeSelector = () => {
 
   const startCreatingTheme = () => {
     setThemeName('New Theme');
-    setPrimaryColor(DESIGN_TOKENS.primitive.dutch.blue[500]);
-    setSecondaryColor(DESIGN_TOKENS.primitive.dutch.purple[500]);
-    setAccentColor(DESIGN_TOKENS.primitive.dutch.orange[500]);
-    setBackgroundColor(DESIGN_TOKENS.semantic.surface.primary);
+    setPrimaryColor('hsl(var(--dutch-blue))');
+    setSecondaryColor('hsl(var(--dutch-purple))');
+    setAccentColor('hsl(var(--dutch-orange))');
+    setBackgroundColor('hsl(var(--background))');
     setEditingTheme({
       id: `custom-${Date.now()}`,
       name: 'New Theme',
-      primary: DESIGN_TOKENS.primitive.dutch.blue[500],
-      secondary: DESIGN_TOKENS.primitive.dutch.purple[500],
-      accent: DESIGN_TOKENS.primitive.dutch.orange[500],
-      background: DESIGN_TOKENS.semantic.surface.primary,
+      primary: 'hsl(var(--dutch-blue))',
+      secondary: 'hsl(var(--dutch-purple))',
+      accent: 'hsl(var(--dutch-orange))',
+      background: 'hsl(var(--background))',
       isCustom: true
     });
   };

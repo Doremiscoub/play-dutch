@@ -376,15 +376,6 @@ body {
   transition: all 0.3s ease;
 }
 
-/* Glass Toast Styling for centralized design */
-.glass-toast {
-  border-radius: 16px !important;
-  background: var(--glass-light) !important;
-  backdrop-filter: blur(8px) !important;
-  border: 1px solid var(--glass-border-light) !important;
-  box-shadow: var(--shadow-glass) !important;
-}
-
 .skip-links:focus-within {
   top: 0;
 }

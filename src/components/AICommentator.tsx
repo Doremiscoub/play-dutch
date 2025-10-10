@@ -10,7 +10,6 @@ import { useElevenLabs } from '@/hooks/use-eleven-labs';
 import { useSound } from '@/hooks/use-sound';
 import { cn } from '@/lib/utils';
 import { ModernTitle } from './ui/modern-title';
-import { DESIGN_TOKENS } from '@/design/tokens/centralized';
 
 interface AICommentatorProps {
   players: Player[];
@@ -143,9 +142,9 @@ const AICommentator: React.FC<AICommentatorProps> = ({
                     className="text-trinity-orange-600 font-extrabold"
                     animate={{
                       textShadow: [
-                        "0 0 0px transparent",
-                        `0 0 10px ${DESIGN_TOKENS.primitive.dutch.orange[500]}`,
-                        "0 0 0px transparent"
+                        "0 0 0px rgba(251, 146, 60, 0)",
+                        "0 0 10px rgba(251, 146, 60, 0.5)",
+                        "0 0 0px rgba(251, 146, 60, 0)"
                       ]
                     }}
                     transition={{
@@ -186,14 +185,10 @@ const AICommentator: React.FC<AICommentatorProps> = ({
                 <motion.div
                   initial={{ opacity: 0, y: 5 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="relative p-4 sm:p-6 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-lg"
-                   style={{ 
-                     background: DESIGN_TOKENS.gradients.trinitySubtle,
-                     borderColor: DESIGN_TOKENS.semantic.border.subtle
-                   }}
+                  className="relative p-4 sm:p-6 bg-gradient-to-br from-blue-50/80 via-purple-50/80 to-amber-50/80 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-blue-200/50 shadow-lg"
                   whileHover={{ 
                     scale: 1.01,
-                    boxShadow: `0 10px 30px ${DESIGN_TOKENS.primitive.dutch.blue[500]}50`
+                    boxShadow: "0 10px 30px rgba(59, 130, 246, 0.1)"
                   }}
                   transition={{ duration: 0.3 }}
                 >

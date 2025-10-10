@@ -1,5 +1,4 @@
 import React, { useRef, useEffect } from 'react';
-import { DESIGN_TOKENS } from '@/design';
 
 interface AnimatedBackgroundProps {
   variant?: 'default' | 'subtle' | 'minimal';
@@ -52,20 +51,25 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
         ? Math.floor(15 * 1.3) 
         : Math.min(Math.floor(30 * 1.3), Math.floor(canvas.width * canvas.height / 30000));
       
-      // Points noirs comme dans l'image de référence
-      const baseOpacity = variant === 'minimal' ? 0.4 : variant === 'subtle' ? 0.6 : 0.8;
+      const colors = [
+        { r: 193, g: 158, b: 255, o: variant === 'subtle' ? 0.30 : 0.35 },
+        { r: 255, g: 223, b: 117, o: variant === 'subtle' ? 0.30 : 0.35 },
+        { r: 137, g: 255, b: 210, o: variant === 'subtle' ? 0.25 : 0.30 },
+        { r: 126, g: 193, b: 255, o: variant === 'subtle' ? 0.25 : 0.30 }
+      ];
 
       for (let i = 0; i < numDots; i++) {
-        const isLargeDot = Math.random() < 0.15;
-        const opacity = baseOpacity * (0.7 + Math.random() * 0.3);
+        const colorIndex = Math.floor(Math.random() * colors.length);
+        const color = colors[colorIndex];
+        const isLargeDot = Math.random() < 0.2;
         
         dots.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
-          size: isLargeDot ? 8 + Math.random() * 6 : 3 + Math.random() * 4,
-          speedX: (Math.random() - 0.5) * 0.2,
-          speedY: (Math.random() - 0.5) * 0.2,
-          color: `${DESIGN_TOKENS.primitive.neutral[900]}${Math.round(opacity * 255).toString(16).padStart(2, '0')}`
+          size: isLargeDot ? 6 + Math.random() * 4 : 2 + Math.random() * 4,
+          speedX: (Math.random() - 0.5) * 0.3,
+          speedY: (Math.random() - 0.5) * 0.3,
+          color: `rgba(${color.r}, ${color.g}, ${color.b}, ${color.o * 1.2})`
         });
       }
     };
@@ -74,7 +78,7 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
 
     const drawWave = (
       baseY: number,
-      color: string | CanvasGradient,
+      color: string,
       amplitude: number,
       phase: number,
       direction: 'left' | 'right' = 'left',
@@ -113,9 +117,7 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       if (variant !== 'minimal') {
-        // Grille grise subtile comme dans l'image de référence
-        ctx.strokeStyle = `${DESIGN_TOKENS.primitive.neutral[400]}20`;
-        ctx.lineWidth = 1;
+        ctx.strokeStyle = 'rgba(218, 218, 218, 0.1)';
         ctx.beginPath();
 
         for (let x = 0; x <= canvas.width; x += 24) {
@@ -134,14 +136,22 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
       if (variant !== 'minimal') {
         const currentPhase = phaseRef.current;
         
-        // Vague subtile unique comme dans l'image de référence
         drawWave(
-          canvas.height * 0.95, // Plus bas pour être très discrète
-          `${DESIGN_TOKENS.primitive.neutral[600]}08`, // Opacité très faible (3%)
-          15, // Amplitude réduite
+          waveConfig.baselineHeight,
+          'rgba(193, 158, 255, 0.15)',
+          18,
+          currentPhase,
+          'right',
+          waveConfig.frequencyViolet
+        );
+        
+        drawWave(
+          waveConfig.baselineHeight,
+          'rgba(255, 223, 117, 0.15)',
+          21,
           currentPhase,
           'left',
-          waveConfig.frequencyViolet
+          waveConfig.frequencyYellow
         );
         
         phaseRef.current += waveConfig.phaseIncrement;

@@ -1,6 +1,5 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { DESIGN_TOKENS } from '@/design';
 
 interface ProgressIndicatorProps {
   currentStep: number;
@@ -29,10 +28,10 @@ const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({ currentStep, tota
               animate={{
                 scale: step === currentStep ? 1.1 : 1,
                 boxShadow: step === currentStep 
-                  ? `0 8px 25px ${DESIGN_TOKENS.primitive.dutch.blue[500]}66, 0 15px 35px ${DESIGN_TOKENS.primitive.dutch.purple[500]}40` 
+                  ? '0 8px 25px rgba(59, 130, 246, 0.4), 0 15px 35px rgba(147, 51, 234, 0.25)' 
                   : step < currentStep
-                  ? `0 4px 15px ${DESIGN_TOKENS.primitive.dutch.green[500]}50`
-                  : `0 2px 8px ${DESIGN_TOKENS.primitive.neutral[900]}14`
+                  ? '0 4px 15px rgba(34, 197, 94, 0.3)'
+                  : '0 2px 8px rgba(0, 0, 0, 0.08)'
               }}
               transition={{ duration: 0.3 }}
             >
