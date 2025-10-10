@@ -274,9 +274,9 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
                         whileHover={{ scale: 1.05, y: -2 }}
                         animate={{ 
                           boxShadow: [
-                            "0 4px 6px rgba(0, 0, 0, 0.1)",
-                            "0 4px 20px rgba(251, 146, 60, 0.3)",
-                            "0 4px 6px rgba(0, 0, 0, 0.1)"
+                            "0 4px 6px hsl(var(--neutral-900) / 0.1)",
+                            "0 4px 20px hsl(var(--dutch-orange) / 0.3)",
+                            "0 4px 6px hsl(var(--neutral-900) / 0.1)"
                           ]
                         }}
                         transition={{ 

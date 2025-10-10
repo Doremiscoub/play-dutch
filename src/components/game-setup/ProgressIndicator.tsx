@@ -28,10 +28,10 @@ const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({ currentStep, tota
               animate={{
                 scale: step === currentStep ? 1.1 : 1,
                 boxShadow: step === currentStep 
-                  ? '0 8px 25px rgba(59, 130, 246, 0.4), 0 15px 35px rgba(147, 51, 234, 0.25)' 
+                  ? '0 8px 25px hsl(var(--dutch-blue) / 0.4), 0 15px 35px hsl(var(--dutch-purple) / 0.25)' 
                   : step < currentStep
-                  ? '0 4px 15px rgba(34, 197, 94, 0.3)'
-                  : '0 2px 8px rgba(0, 0, 0, 0.08)'
+                  ? '0 4px 15px hsl(var(--success) / 0.3)'
+                  : '0 2px 8px hsl(var(--neutral-900) / 0.08)'
               }}
               transition={{ duration: 0.3 }}
             >

@@ -120,7 +120,7 @@ export default function ProfessorAvatar({
         whileHover={{ 
           scale: 1.1,
           y: -4,
-          boxShadow: "0 8px 32px rgba(31, 38, 135, 0.3)",
+          boxShadow: "0 8px 32px hsl(var(--dutch-blue) / 0.3)",
           transition: { 
             duration: 0.4,
             type: "spring",

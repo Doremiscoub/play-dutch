@@ -154,8 +154,8 @@ const EnhancedPlayerCard: React.FC<EnhancedPlayerCardProps> = ({
             type: "spring",
             stiffness: 300
           }}>
-              <div className="w-18 h-18 rounded-3xl border-2 border-white/50 shadow-xl flex items-center justify-center relative overflow-hidden"
-                style={{ background: `linear-gradient(135deg, rgba(255,255,255,0.9), ${playerColors.background}80, ${playerColors.background}80)`, backdropFilter: 'blur(16px)' }}
+              <div className="w-18 h-18 rounded-3xl border-2 border-white/50 shadow-xl flex items-center justify-center relative overflow-hidden bg-gradient-to-br from-white/90 to-white/70 backdrop-blur-xl"
+                style={{ backgroundColor: playerColors.background }}
               >
                 <span className="text-4xl z-10 relative">{player.emoji || '😊'}</span>
                 
@@ -331,7 +331,7 @@ const EnhancedPlayerCard: React.FC<EnhancedPlayerCardProps> = ({
           scale: 1.05,
           y: -2
         }} animate={{
-          boxShadow: ["0 4px 6px rgba(0, 0, 0, 0.1)", "0 4px 20px rgba(251, 146, 60, 0.3)", "0 4px 6px rgba(0, 0, 0, 0.1)"]
+          boxShadow: ["0 4px 6px hsl(var(--neutral-900) / 0.1)", "0 4px 20px hsl(var(--dutch-orange) / 0.3)", "0 4px 6px hsl(var(--neutral-900) / 0.1)"]
         }} transition={{
           duration: 2,
           repeat: Infinity,

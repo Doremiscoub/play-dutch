@@ -32,7 +32,7 @@ const OtherPlayersRanking: React.FC<OtherPlayersRankingProps> = ({ players }) =>
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: index * 0.1 }}
-            whileHover={{ scale: 1.01, backgroundColor: "rgba(249, 250, 251, 0.9)" }}
+            whileHover={{ scale: 1.01, backgroundColor: "hsl(var(--neutral-50) / 0.9)" }}
           >
             <PlayerRankBadge position={index + 4} size="sm" />
             

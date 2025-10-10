@@ -52,16 +52,23 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
         : Math.min(Math.floor(30 * 1.3), Math.floor(canvas.width * canvas.height / 30000));
       
       const colors = [
-        { r: 193, g: 158, b: 255, o: variant === 'subtle' ? 0.30 : 0.35 },
-        { r: 255, g: 223, b: 117, o: variant === 'subtle' ? 0.30 : 0.35 },
-        { r: 137, g: 255, b: 210, o: variant === 'subtle' ? 0.25 : 0.30 },
-        { r: 126, g: 193, b: 255, o: variant === 'subtle' ? 0.25 : 0.30 }
+        '#C19EFF', // dutch-purple-300 (lavande)
+        '#FFDF75', // dutch-orange-300 (jaune doré)
+        '#89FFD2', // kids-mint-500
+        '#60A5FA', // dutch-blue-400
       ];
+      
+      const baseOpacity = variant === 'subtle' ? 0.30 : 0.35;
 
       for (let i = 0; i < numDots; i++) {
         const colorIndex = Math.floor(Math.random() * colors.length);
-        const color = colors[colorIndex];
+        const hexColor = colors[colorIndex];
         const isLargeDot = Math.random() < 0.2;
+        
+        // Convertir HEX en RGBA avec opacité
+        const r = parseInt(hexColor.slice(1, 3), 16);
+        const g = parseInt(hexColor.slice(3, 5), 16);
+        const b = parseInt(hexColor.slice(5, 7), 16);
         
         dots.push({
           x: Math.random() * canvas.width,
@@ -69,7 +76,7 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
           size: isLargeDot ? 6 + Math.random() * 4 : 2 + Math.random() * 4,
           speedX: (Math.random() - 0.5) * 0.3,
           speedY: (Math.random() - 0.5) * 0.3,
-          color: `rgba(${color.r}, ${color.g}, ${color.b}, ${color.o * 1.2})`
+          color: `rgba(${r}, ${g}, ${b}, ${baseOpacity * 1.2})`
         });
       }
     };
@@ -117,7 +124,8 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       if (variant !== 'minimal') {
-        ctx.strokeStyle = 'rgba(218, 218, 218, 0.1)';
+        // Utiliser neutral-300 avec opacité pour la grille
+        ctx.strokeStyle = 'rgba(209, 213, 219, 0.1)'; // neutral-300
         ctx.beginPath();
 
         for (let x = 0; x <= canvas.width; x += 24) {
@@ -136,18 +144,20 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
       if (variant !== 'minimal') {
         const currentPhase = phaseRef.current;
         
+        // Vague 1: dutch-purple-300 (lavande)
         drawWave(
           waveConfig.baselineHeight,
-          'rgba(193, 158, 255, 0.15)',
+          'rgba(193, 158, 255, 0.15)', // dutch-purple-300
           18,
           currentPhase,
           'right',
           waveConfig.frequencyViolet
         );
         
+        // Vague 2: dutch-orange-300 (jaune doré)
         drawWave(
           waveConfig.baselineHeight,
-          'rgba(255, 223, 117, 0.15)',
+          'rgba(255, 223, 117, 0.15)', // dutch-orange-300
           21,
           currentPhase,
           'left',

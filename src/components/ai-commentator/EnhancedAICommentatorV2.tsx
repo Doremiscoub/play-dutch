@@ -157,9 +157,9 @@ export default function EnhancedAICommentatorV2({
             )}
             animate={isTyping ? { 
               boxShadow: [
-                "0 10px 30px rgba(59, 130, 246, 0.1)",
-                "0 10px 30px rgba(147, 51, 234, 0.2)",
-                "0 10px 30px rgba(59, 130, 246, 0.1)"
+                "0 10px 30px hsl(var(--dutch-blue) / 0.1)",
+                "0 10px 30px hsl(var(--dutch-purple) / 0.2)",
+                "0 10px 30px hsl(var(--dutch-blue) / 0.1)"
               ]
             } : {}}
             transition={{ duration: 2, repeat: isTyping ? Infinity : 0 }}

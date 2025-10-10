@@ -72,7 +72,7 @@ const GlobalFooter: React.FC<GlobalFooterProps> = ({
                 className="inline-flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-trinity-blue-100/80 to-trinity-purple-100/80 hover:from-trinity-blue-200/80 hover:to-trinity-purple-200/80 rounded-lg border border-trinity-blue-200/60 text-trinity-blue-700 font-bold text-sm transition-all duration-300 shadow-sm hover:shadow-md"
                 whileHover={{ 
                   scale: 1.05,
-                  boxShadow: "0 4px 20px rgba(59, 130, 246, 0.2)"
+                  boxShadow: "0 4px 20px hsl(var(--dutch-blue) / 0.2)"
                 }}
                 whileTap={{ scale: 0.98 }}
               >

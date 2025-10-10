@@ -1,24 +1,26 @@
 
+
 /**
  * Configuration des composants d'interface utilisateur - Style VisionOS
  */
 import { COLORS } from './colors';
+import { DESIGN_COLORS } from '@/design/tokens/colors';
 
 export const GLASS = {
   light: {
-    background: 'rgba(255, 255, 255, 0.7)',
+    background: DESIGN_COLORS.semantic.overlay.medium,
     backdropFilter: 'blur(10px)',
-    border: '1px solid rgba(255, 255, 255, 0.7)',
+    border: `1px solid ${DESIGN_COLORS.semantic.glass.border}`,
   },
   medium: {
-    background: 'rgba(255, 255, 255, 0.6)',
+    background: DESIGN_COLORS.semantic.overlay.subtle,
     backdropFilter: 'blur(15px)',
-    border: '1px solid rgba(255, 255, 255, 0.5)',
+    border: `1px solid ${DESIGN_COLORS.semantic.glass.border}`,
   },
   heavy: {
-    background: 'rgba(255, 255, 255, 0.5)',
+    background: DESIGN_COLORS.semantic.overlay.subtle,
     backdropFilter: 'blur(20px)',
-    border: '1px solid rgba(255, 255, 255, 0.3)',
+    border: `1px solid ${DESIGN_COLORS.semantic.glass.border}`,
   },
   dark: {
     background: 'rgba(30, 30, 30, 0.7)',
