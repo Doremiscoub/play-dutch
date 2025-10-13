@@ -9,6 +9,7 @@ import UnifiedHeader from '@/components/layout/UnifiedHeader';
 import ScoreBoardContentLazy from './scoreboard/ScoreBoardContent.lazy';
 import ScoreBoardTabsMemo from './scoreboard/ScoreBoardTabs.memo';
 import { useScoreBoardLogic } from './scoreboard/ScoreBoardHooks';
+import { logger } from '@/utils/logger';
 
 const ScoreBoard: React.FC<ScoreBoardProps> = ({
   players,
@@ -23,7 +24,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
   openScoreForm,
   hideFloatingActionsWhenModalOpen = false
 }) => {
-  console.log('ScoreBoard: Component rendered', { 
+  logger.debug('ScoreBoard: Component rendered', { 
     playersCount: players?.length, 
     roundHistoryLength: roundHistory?.length,
     scoreLimit,
@@ -34,7 +35,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
 
   // Vérification de sécurité des props
   if (!players || players.length === 0) {
-    console.warn('ScoreBoard: No players provided');
+    logger.warn('ScoreBoard: No players provided');
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center lg-card lg-tint-accent-60 rounded-xl p-8 lg-elevation-03 animate-lg-reveal">

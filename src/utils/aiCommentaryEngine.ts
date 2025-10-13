@@ -55,6 +55,16 @@ class AICommentaryEngine {
   }
 
   private saveMemory(): void {
+    // Limiter la mémoire à 50 parties max pour éviter la croissance infinie
+    if (this.memory.gameHistory.length > 50) {
+      this.memory.gameHistory = this.memory.gameHistory.slice(-50);
+    }
+    
+    // Limiter les événements notables
+    if (this.memory.notableEvents.length > 100) {
+      this.memory.notableEvents = this.memory.notableEvents.slice(-100);
+    }
+    
     localStorage.setItem('professor_cartouche_memory', JSON.stringify(this.memory));
   }
 

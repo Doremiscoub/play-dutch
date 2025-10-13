@@ -13,6 +13,11 @@ import { MobileOptimizer } from '@/components/ui/mobile-optimizer';
 import { toast } from 'sonner';
 import GameLayout from '@/components/layout/GameLayout';
 import VideoAdOverlay from '@/components/ads/VideoAdOverlay';
+import GameErrorFallback from '@/components/errors/GameErrorFallback';
+import { logger } from '@/utils/logger';
+import * as Sentry from '@sentry/react';
+
+const { ErrorBoundary } = Sentry;
 
 const SimpleGamePage: React.FC = () => {
   const navigate = useNavigate();
@@ -59,10 +64,10 @@ const SimpleGamePage: React.FC = () => {
   );
 
   useEffect(() => {
-    console.log('🎮 SimpleGamePage MOUNTED - Optimized version');
+    logger.debug('🎮 SimpleGamePage MOUNTED - Optimized version');
     
     return () => {
-      console.log('🎮 SimpleGamePage UNMOUNTED');
+      logger.debug('🎮 SimpleGamePage UNMOUNTED');
     };
   }, []);
 
@@ -74,13 +79,13 @@ const SimpleGamePage: React.FC = () => {
         initialScores[player.id] = 0;
       });
       setScores(initialScores);
-      console.log('🎯 Scores initialized for', players.length, 'players');
+      logger.debug('🎯 Scores initialized for', players.length, 'players');
     }
   }, [players.length]);
 
   // Guard: si pas de partie, afficher un message sans redirection automatique
   if (!hasGame) {
-    console.log('🚫 No game available, showing setup prompt');
+    logger.debug('🚫 No game available, showing setup prompt');
     return (
       <PageShell variant="game">
         <MobileOptimizer pageType="game" className="min-h-screen">
@@ -140,43 +145,48 @@ const SimpleGamePage: React.FC = () => {
     setIsScoreFormOpen(true);
   };
 
-  console.log('🎮 SimpleGamePage rendering with', players.length, 'players');
+  logger.debug('🎮 SimpleGamePage rendering with', players.length, 'players');
 
   return (
-    <PageShell variant="game">
+    <ErrorBoundary fallback={<GameErrorFallback error={new Error('GamePage Error')} resetErrorBoundary={() => window.location.reload()} />}>
+      <PageShell variant="game">
         <MobileOptimizer pageType="game" className="min-h-screen">
           <UnifiedHeader {...headerConfig} />
           
           {/* Conteneur principal centré et unifié */}
           <div className="w-full max-w-6xl mx-auto px-4 py-4 min-h-[calc(100vh-12rem)]">
             {/* Professeur Cartouche aligné avec le reste */}
-            <div className="mb-4">
-              <IntelligentProfessorCartouche 
-                players={players}
-                roundCount={roundHistory.length}
-                scoreLimit={scoreLimit}
-                className="w-full"
-              />
-            </div>
-            
-            {/* GameLayout avec ScoreBoard */}
-            <GameLayout>
-              <div className="pb-28">
-                <ScoreBoard
+            <ErrorBoundary fallback={<div className="p-4 bg-red-50 rounded-lg">Erreur du commentateur</div>}>
+              <div className="mb-4">
+                <IntelligentProfessorCartouche 
                   players={players}
-                  onAddRound={() => {}}
-                  onUndoLastRound={undoLastRound}
-                  onEndGame={handleEndGame}
-                  roundHistory={roundHistory}
-                  showGameEndConfirmation={showGameEndConfirmation}
-                  onConfirmEndGame={handleConfirmEndGame}
-                  onCancelEndGame={handleCancelEndGame}
+                  roundCount={roundHistory.length}
                   scoreLimit={scoreLimit}
-                  openScoreForm={openScoreForm}
-                  hideFloatingActionsWhenModalOpen={isScoreFormOpen}
+                  className="w-full"
                 />
               </div>
-            </GameLayout>
+            </ErrorBoundary>
+            
+            {/* GameLayout avec ScoreBoard */}
+            <ErrorBoundary fallback={<div className="p-4 bg-red-50 rounded-lg">Erreur du tableau</div>}>
+              <GameLayout>
+                <div className="pb-28">
+                  <ScoreBoard
+                    players={players}
+                    onAddRound={() => {}}
+                    onUndoLastRound={undoLastRound}
+                    onEndGame={handleEndGame}
+                    roundHistory={roundHistory}
+                    showGameEndConfirmation={showGameEndConfirmation}
+                    onConfirmEndGame={handleConfirmEndGame}
+                    onCancelEndGame={handleCancelEndGame}
+                    scoreLimit={scoreLimit}
+                    openScoreForm={openScoreForm}
+                    hideFloatingActionsWhenModalOpen={isScoreFormOpen}
+                  />
+                </div>
+              </GameLayout>
+            </ErrorBoundary>
           </div>
 
           {/* Modal pour ajouter une nouvelle manche */}
@@ -199,7 +209,8 @@ const SimpleGamePage: React.FC = () => {
             trigger={adTrigger}
           />
         </MobileOptimizer>
-    </PageShell>
+      </PageShell>
+    </ErrorBoundary>
   );
 };
 

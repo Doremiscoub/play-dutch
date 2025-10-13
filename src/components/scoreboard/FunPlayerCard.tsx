@@ -150,15 +150,9 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
       type: "spring"
     }}>
           <div className="bg-gradient-to-r from-yellow-400 to-orange-400 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-1">
-            <motion.span animate={{
-          rotate: 360
-        }} transition={{
-          duration: 3,
-          repeat: Infinity,
-          ease: "linear"
-        }}>
+            <span className="inline-block animate-spin" style={{ animationDuration: '3s' }}>
               👑
-            </motion.span>
+            </span>
             WINNER
           </div>
         </motion.div>}
@@ -230,15 +224,9 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
             stiffness: 400,
             damping: 15
           }}>
-              <motion.span animate={isWinner ? {
-              scale: 1.1
-            } : {}} transition={{
-              duration: 2,
-              repeat: isWinner ? Infinity : 0,
-              repeatType: "reverse"
-            }}>
+              <span className={isWinner ? "inline-block animate-pulse" : ""}>
                 {isWinner && '👑 '}{player.name}
-              </motion.span>
+              </span>
             </motion.h3>
             <div className="flex items-center gap-2 text-sm text-gray-600 mb-2">
               <span>🎯 {player.rounds.length} manches</span>
@@ -427,14 +415,9 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
                   <div className="flex items-center justify-center gap-2 text-yellow-700 font-bold text-sm">
                     <Trophy className="h-4 w-4" />
                     🎉 Champion de la partie !
-                    <motion.span animate={{
-                rotate: 360
-              }} transition={{
-                duration: 2,
-                repeat: Infinity
-              }}>
+                    <span className="inline-block animate-spin" style={{ animationDuration: '2s' }}>
                       ⭐
-                    </motion.span>
+                    </span>
                   </div>
                 </motion.div>}
             </motion.div>}

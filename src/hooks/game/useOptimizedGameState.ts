@@ -13,6 +13,7 @@ import {
   auditScoreIntegrity 
 } from '@/utils/scoreEngine';
 import { updateAllPlayersStats } from '@/utils/playerStatsCalculator';
+import { logger } from '@/utils/logger';
 
 const avatarColors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD', '#98D8C8'];
 const emojis = ['🎲', '🃏', '🎯', '⭐', '🔥', '💎', '🎪', '🚀', '🎨', '🎭'];
@@ -82,7 +83,7 @@ class OptimizedGameStateManager {
     const audit = auditScoreIntegrity(this.state.players);
     
     if (!audit.isValid && audit.corrections.length > 0) {
-      console.warn('🔧 Auto-correcting integrity issues:', audit.errors);
+      logger.warn('🔧 Auto-correcting integrity issues:', audit.errors);
       const { fixedPlayers } = validateAndFixPlayers(this.state.players);
       this.setState({ 
         players: updateAllPlayersStats(fixedPlayers),
@@ -158,7 +159,7 @@ class OptimizedGameStateManager {
       // Auto-fix on load
       const { fixedPlayers, hasErrors } = validateAndFixPlayers(restoredState.players);
       if (hasErrors) {
-        console.log('🔧 Fixed integrity issues during load');
+        logger.debug('🔧 Fixed integrity issues during load');
         restoredState.players = updateAllPlayersStats(fixedPlayers);
       }
 
@@ -182,7 +183,7 @@ class OptimizedGameStateManager {
         try {
           const parsed = JSON.parse(legacyData);
           if (parsed.players && parsed.players.length > 0) {
-            console.log(`🔄 Migrating from ${legacyKey}`);
+            logger.debug(`🔄 Migrating from ${legacyKey}`);
             
             const migratedState = {
               ...parsed,
@@ -197,7 +198,7 @@ class OptimizedGameStateManager {
             return;
           }
         } catch (error) {
-          console.error(`Migration from ${legacyKey} failed:`, error);
+          logger.error(`Migration from ${legacyKey} failed:`, error);
           localStorage.removeItem(legacyKey);
         }
       }
