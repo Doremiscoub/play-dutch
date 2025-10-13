@@ -17,9 +17,14 @@ const ContextualAdBanner: React.FC<ContextualAdBannerProps> = ({
   autoHideDelay = 15000, // 15s par défaut
   onDismiss
 }) => {
-  const { shouldShowAds, isMobile } = useAds();
+  const { shouldShowAds, isMobile, hasConsentedToAds } = useAds();
   const [isVisible, setIsVisible] = useState(false);
   const [shouldShow, setShouldShow] = useState(false);
+
+  // Ne rien afficher si les conditions ne sont pas remplies
+  if (!shouldShowAds || !hasConsentedToAds || !import.meta.env.PROD) {
+    return null;
+  }
 
   useEffect(() => {
     // Détermine si la bannière doit s'afficher selon la probabilité
