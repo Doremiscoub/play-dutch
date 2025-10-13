@@ -8,6 +8,7 @@ import { toast } from 'sonner';
 import * as Sentry from '@sentry/react';
 import { addBreadcrumb } from '../utils/sentryConfig';
 import { useNavigate } from 'react-router-dom';
+import { logger } from '../utils/logger';
 
 export interface ErrorOptions {
   notify: boolean;       // Afficher un toast
@@ -48,9 +49,9 @@ export function useErrorHandler() {
     
     // Journalisation
     if (opts.log) {
-      console.error('Dutch Error:', displayMessage, errorObj);
+      logger.error('Dutch Error:', displayMessage, errorObj);
       if (opts.context) {
-        console.error('Contexte:', opts.context);
+        logger.error('Contexte:', opts.context);
       }
     }
     
@@ -86,7 +87,7 @@ export function useErrorHandler() {
           }
         });
       } catch (reportingError) {
-        console.error('Erreur lors du signalement de l\'erreur:', reportingError);
+        logger.error('Erreur lors du signalement de l\'erreur:', reportingError);
       }
     }
     

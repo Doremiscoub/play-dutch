@@ -58,6 +58,7 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
           variant="trinity"
           size="xl"
           className="relative group px-3 sm:px-6 py-2.5 sm:py-3 h-11 sm:h-14 rounded-full lg-elevation-04 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden min-w-[44px]"
+          aria-label="Ajouter une nouvelle manche"
         >
           {/* Arrière-plan semi-transparent pour améliorer la lisibilité */}
           <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 via-purple-500/15 to-orange-500/20 rounded-full" />
@@ -113,6 +114,7 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
                 ? 'bg-gradient-to-br from-orange-600/95 via-orange-500/90 to-red-600/85 border-orange-200/70 hover:border-orange-100/90 shadow-lg shadow-orange-600/25 hover:shadow-xl hover:shadow-orange-600/35'
                 : 'bg-gray-600/85 border-gray-300/60 opacity-70 cursor-not-allowed'
             }`}
+            aria-label="Annuler la dernière manche"
             title="Annuler la dernière manche"
           >
             {/* Fond blanc pour améliorer la visibilité */}
@@ -163,6 +165,7 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
             onClick={onEndGame}
             disabled={disabled}
             className="relative h-11 w-11 sm:h-12 sm:w-12 min-w-[44px] min-h-[44px] rounded-2xl bg-gradient-to-br from-purple-500/80 via-purple-400/70 to-blue-500/60 border-2 border-purple-300/50 hover:border-purple-200/70 shadow-lg shadow-purple-500/20 hover:shadow-xl hover:shadow-purple-500/30 transition-all duration-200 group overflow-hidden backdrop-blur-xl"
+            aria-label="Terminer la partie en cours"
             title="Terminer la partie"
           >
             {/* Effet de brillance au survol */}

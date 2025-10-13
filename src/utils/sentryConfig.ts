@@ -2,6 +2,7 @@
 import * as Sentry from '@sentry/react';
 import { BrowserTracing } from '@sentry/tracing';
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from './logger';
 
 // Cache for the Sentry DSN
 let sentryDsn: string | null = null;
@@ -30,7 +31,7 @@ export const fetchSentryDsn = async (): Promise<string | null> => {
     });
 
     if (response.error) {
-      console.error('Error fetching Sentry DSN:', response.error);
+      logger.error('Error fetching Sentry DSN:', response.error);
       return null;
     }
 
@@ -43,7 +44,7 @@ export const fetchSentryDsn = async (): Promise<string | null> => {
     
     return sentryDsn;
   } catch (error) {
-    console.error('Failed to fetch Sentry DSN:', error);
+    logger.error('Failed to fetch Sentry DSN:', error);
     return null;
   }
 };
@@ -56,7 +57,7 @@ export const initializeSentry = async () => {
     const dsn = await fetchSentryDsn();
     
     if (!dsn) {
-      console.warn('Sentry initialization skipped: No DSN available');
+      logger.warn('Sentry initialization skipped: No DSN available');
       return false;
     }
 
@@ -101,12 +102,12 @@ export const initializeSentry = async () => {
     
     // For development only - notify that Sentry is initialized
     if (environment === 'development') {
-      console.info('🔍 Sentry monitoring initialized successfully');
+      logger.info('🔍 Sentry monitoring initialized successfully');
     }
     
     return true;
   } catch (error) {
-    console.error('Failed to initialize Sentry:', error);
+    logger.error('Failed to initialize Sentry:', error);
     return false;
   }
 };
@@ -127,7 +128,7 @@ export const addBreadcrumb = (
       level: 'info'
     });
   } catch (error) {
-    console.error('Failed to add Sentry breadcrumb:', error);
+    logger.error('Failed to add Sentry breadcrumb:', error);
   }
 };
 
