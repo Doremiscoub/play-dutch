@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, Heart, Zap, Star, Flame, Award } from 'lucide-react';
+import { useMobileAdaptation } from '@/hooks/useMobileAdaptation';
 
 interface ProfessorAvatarParticlesProps {
   showParticles: boolean;
@@ -38,11 +39,14 @@ const particleColors = [
 ];
 
 export default function ProfessorAvatarParticles({ showParticles }: ProfessorAvatarParticlesProps) {
+  const { singleColumn } = useMobileAdaptation();
   const [particles, setParticles] = useState<Particle[]>([]);
 
   useEffect(() => {
     if (showParticles) {
-      const newParticles = Array.from({ length: 12 }, (_, i) => ({
+      // Réduire à 6 particules sur mobile pour les performances
+      const particleCount = singleColumn ? 6 : 12;
+      const newParticles = Array.from({ length: particleCount }, (_, i) => ({
         id: i,
         x: Math.random() * 120 - 10, // Étendu au-delà des limites
         y: Math.random() * 120 - 10,

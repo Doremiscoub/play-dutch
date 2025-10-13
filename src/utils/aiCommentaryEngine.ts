@@ -149,21 +149,29 @@ class AICommentaryEngine {
         "Ah ! {playerCount} valeureux combattants s'apprêtent à danser le tango du Dutch ! Que le spectacle commence !",
         "Parfait ! J'ai apporté mon carnet de notes... et mon popcorn ! Cette partie s'annonce épicée !",
         "Mesdames et messieurs, bienvenue dans l'arène ! Objectif : {scoreLimit} points. Que les stratégies les plus retorses l'emportent !",
-        "Tiens, tiens... {playerCount} joueurs pleins d'espoir ! L'un d'eux va bientôt découvrir que l'espoir, c'est comme un bon vin : ça peut vite tourner au vinaigre !"
+        "Tiens, tiens... {playerCount} joueurs pleins d'espoir ! L'un d'eux va bientôt découvrir que l'espoir, c'est comme un bon vin : ça peut vite tourner au vinaigre !",
+        "Place au spectacle ! {playerCount} gladiateurs du Dutch font leur entrée ! Qui repartira couvert de gloire, qui repartira... couvert de honte ?",
+        "Bien le bonjour ! {playerCount} têtes brûlées prêtes à s'affronter ! Je sens que mes neurones vont s'amuser ce soir !",
+        "Oyez oyez ! Le tournoi du Dutch ouvre ses portes avec {playerCount} concurrents ! Que les dieux de la stratégie vous soient favorables !"
       ],
       
       endgame_pressure: [
         "L'étau se resserre ! {leadingPlayer} sent la pression monter... C'est le moment où les champions révèlent leur vraie nature !",
         "Attention, nous approchons du dénouement ! {leadingPlayer} a {gap} points d'avance, mais dans le Dutch, tout peut basculer en un claquement de doigts !",
         "Le suspense est à son comble ! {strugglingPlayer}, c'est maintenant ou jamais pour votre remontada légendaire !",
-        "Nous entrons dans la zone rouge ! {leadingPlayer}, attention aux excès de confiance... l'histoire du Dutch est pavée de chutes spectaculaires !"
+        "Nous entrons dans la zone rouge ! {leadingPlayer}, attention aux excès de confiance... l'histoire du Dutch est pavée de chutes spectaculaires !",
+        "La ligne d'arrivée approche ! {leadingPlayer} peut presque toucher la victoire... mais {strugglingPlayer} n'a pas dit son dernier mot !",
+        "Tension maximale ! Chaque carte compte maintenant... {leadingPlayer}, gardez vos nerfs d'acier !",
+        "On entre dans le money time ! {gap} points séparent les extrêmes... Un Dutch maintenant et TOUT change !"
       ],
 
       gap_analysis: [
-        "Aïe aïe aïe ! {gap} points d'écart... {strugglingPlayer}, il va falloir sortir la artillerie lourde !",
+        "Aïe aïe aïe ! {gap} points d'écart... {strugglingPlayer}, il va falloir sortir l'artillerie lourde !",
         "Regardez-moi cet écart béant ! {gap} points... {leadingPlayer} creuse sa tranchée tandis que {strugglingPlayer} cherche encore sa pelle !",
         "Houston, nous avons un problème ! {strugglingPlayer} accuse {gap} points de retard... Il est temps de passer en mode kamikaze !",
-        "Mes chers spectateurs, nous assistons à un véritable carnage ! {gap} points d'écart... C'est David contre Goliath, mais David a oublié sa fronde !"
+        "Mes chers spectateurs, nous assistons à un véritable carnage ! {gap} points d'écart... C'est David contre Goliath, mais David a oublié sa fronde !",
+        "Sapristi ! {gap} points de différence ! {leadingPlayer} trace sa route comme un TGV pendant que {strugglingPlayer} pédale sur un tricycle !",
+        "On appelle ça comment déjà ? Ah oui, une DÉROUTE ! {gap} points d'écart, {strugglingPlayer} va avoir besoin d'un miracle !"
       ],
 
       tension_build: [
@@ -177,7 +185,10 @@ class AICommentaryEngine {
         "DUTCH ! {focusPlayer} vient de faire le grand saut ! Magnifique plongeon dans l'abîme !",
         "Et voilà ! {focusPlayer} nous offre un Dutch de toute beauté ! C'est du grand art !",
         "Bravo {focusPlayer} ! Ce Dutch était si parfait qu'on aurait dit une chorégraphie !",
-        "DUTCH ATTACK ! {focusPlayer} vient de transformer l'espoir en désespoir en une fraction de seconde !"
+        "DUTCH ATTACK ! {focusPlayer} vient de transformer l'espoir en désespoir en une fraction de seconde !",
+        "BOUM ! Dutch atomique de {focusPlayer} ! Les autres joueurs peuvent aller se rhabiller !",
+        "Mesdames et messieurs, {focusPlayer} vient de rentrer dans la légende avec ce Dutch magistral ! Standing ovation !",
+        "INCROYABLE ! {focusPlayer} vient de pulvériser la concurrence avec ce Dutch de feu ! Chapeau l'artiste !"
       ],
 
       poor_performance: [
@@ -236,10 +247,10 @@ class AICommentaryEngine {
     comment = comment.replace('{gap}', context.gap?.toString() || '?');
     comment = comment.replace('{scoreLimit}', '500'); // Utiliser la vraie limite si disponible
     
-    // Ajout de touches personnelles basées sur les profils
+    // Ajout de touches personnelles basées sur les profils - augmenté à 50%
     if (context.focus && this.memory.playerProfiles[context.focus]) {
       const profile = this.memory.playerProfiles[context.focus];
-      if (profile.runningGags.length > 0 && Math.random() < 0.3) {
+      if (profile.runningGags.length > 0 && Math.random() < 0.5) {
         comment += ` ${profile.runningGags[Math.floor(Math.random() * profile.runningGags.length)]}`;
       }
     }
@@ -293,10 +304,26 @@ class AICommentaryEngine {
       const hasRecentDutch = player.rounds.some(r => r.isDutch);
       if (hasRecentDutch) {
         profile.dutchCount++;
-        // Ajouter des running gags basés sur les Dutch
+        // Ajouter des running gags basés sur les Dutch - plus variés
         if (profile.dutchCount > 3 && !profile.runningGags.includes("Le roi du Dutch !")) {
           profile.runningGags.push("Le roi du Dutch !");
         }
+        if (profile.dutchCount > 5 && !profile.runningGags.includes("La légende vivante du Dutch !")) {
+          profile.runningGags.push("La légende vivante du Dutch !");
+        }
+        if (profile.dutchCount > 8 && !profile.runningGags.includes("Le maître incontesté !")) {
+          profile.runningGags.push("Le maître incontesté !");
+        }
+      }
+      
+      // Ajouter des running gags pour les performances constantes
+      if (profile.averageScore < 5 && !profile.runningGags.includes("L'as de la précision !")) {
+        profile.runningGags.push("L'as de la précision !");
+      }
+      
+      // Ajouter des running gags pour les comebacks
+      if (profile.comebackCount > 2 && !profile.runningGags.includes("Le comeback kid !")) {
+        profile.runningGags.push("Le comeback kid !");
       }
     });
 

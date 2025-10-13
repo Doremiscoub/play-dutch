@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import { logger } from '@/utils/logger';
 
 interface ProfessorAvatarImageProps {
   isHovered: boolean;
@@ -12,13 +13,13 @@ export default function ProfessorAvatarImage({ isHovered }: ProfessorAvatarImage
   const [isLoading, setIsLoading] = useState(true);
 
   const handleError = () => {
-    console.log("❌ Image du professeur non trouvée, utilisation du fallback emoji");
+    logger.warn("❌ Image du professeur non trouvée, utilisation du fallback emoji");
     setImageError(true);
     setIsLoading(false);
   };
 
   const handleLoad = () => {
-    console.log("✅ Image du professeur chargée avec succès");
+    logger.info("✅ Image du professeur chargée avec succès");
     setIsLoading(false);
   };
 

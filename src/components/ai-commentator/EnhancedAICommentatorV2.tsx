@@ -18,7 +18,7 @@ interface EnhancedAICommentatorV2Props {
   className?: string;
 }
 
-export default function EnhancedAICommentatorV2({
+const EnhancedAICommentatorV2 = React.memo(function EnhancedAICommentatorV2({
   players,
   roundCount,
   scoreLimit,
@@ -65,18 +65,25 @@ export default function EnhancedAICommentatorV2({
     
     let currentIndex = 0;
     const words = currentComment.comment.split(' ');
+    let timeoutId: NodeJS.Timeout;
     
     const typeNextWord = () => {
       if (currentIndex < words.length) {
         setDisplayedText(prev => prev + (currentIndex > 0 ? ' ' : '') + words[currentIndex]);
         currentIndex++;
-        setTimeout(typeNextWord, 60 + Math.random() * 30); // Vitesse accélérée (était 100+50)
+        timeoutId = setTimeout(typeNextWord, 60 + Math.random() * 30);
       } else {
         setIsTyping(false);
       }
     };
 
     typeNextWord();
+
+    // Cleanup function pour éviter les race conditions
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      setIsTyping(false);
+    };
   }, [currentComment, reducedAnimations]);
 
   const handlePersonalityChange = (newPersonality: AIPersonality) => {
@@ -138,20 +145,24 @@ export default function EnhancedAICommentatorV2({
               className="mx-auto"
             />
             
-            {/* Indicateur de personnalité */}
-            <motion.div
+            {/* Indicateur de personnalité - agrandi et plus visible */}
+            <motion.button
+              onClick={() => setShowPersonalitySelector(!showPersonalitySelector)}
               className={cn(
-                "absolute -top-2 -right-2 w-8 h-8 rounded-full",
-                "bg-white shadow-lg flex items-center justify-center",
-                "border-2 border-gray-200"
+                "absolute -top-2 -right-2 w-10 h-10 rounded-full",
+                "bg-white shadow-xl flex items-center justify-center cursor-pointer",
+                "border-2 border-gray-300 hover:border-gray-400 transition-colors",
+                "hover:shadow-2xl"
               )}
-              whileHover={{ scale: 1.1 }}
+              whileHover={{ scale: 1.15 }}
               whileTap={{ scale: 0.95 }}
+              title={`Mode ${personalityIcons[personality].label}`}
+              aria-label={`Changer la personnalité (actuellement ${personalityIcons[personality].label})`}
             >
               {React.createElement(personalityIcons[personality].icon, {
-                className: cn("w-4 h-4", personalityIcons[personality].color)
+                className: cn("w-5 h-5", personalityIcons[personality].color)
               })}
-            </motion.div>
+            </motion.button>
           </div>
 
           {/* Bulle de commentaire */}
@@ -189,11 +200,18 @@ export default function EnhancedAICommentatorV2({
                 )}
               </p>
               
-              {/* Badge de personnalité */}
+              {/* Badge de personnalité - plus visible et interactif */}
               <div className="flex items-center justify-between mt-4">
-                <div className="flex items-center gap-2">
-                  <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">
-                    Mode {personalityIcons[personality].label}
+                <button
+                  onClick={() => setShowPersonalitySelector(!showPersonalitySelector)}
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gradient-to-r from-blue-50 to-purple-50 hover:from-blue-100 hover:to-purple-100 transition-colors cursor-pointer border border-gray-200"
+                  aria-label="Voir les personnalités disponibles"
+                >
+                  {React.createElement(personalityIcons[personality].icon, {
+                    className: cn("w-4 h-4", personalityIcons[personality].color)
+                  })}
+                  <span className="text-xs font-semibold text-gray-700 uppercase tracking-wide">
+                    {personalityIcons[personality].label}
                   </span>
                   {isMemoryActive && (
                     <motion.div
@@ -203,6 +221,9 @@ export default function EnhancedAICommentatorV2({
                       title="Mémoire active"
                     />
                   )}
+                </button>
+                
+                <div className="flex items-center gap-2">
                   <span className="text-xs text-gray-400">
                     {commentHistory.length} commentaires
                   </span>
@@ -287,4 +308,6 @@ export default function EnhancedAICommentatorV2({
       </AnimatePresence>
     </div>
   );
-}
+});
+
+export default EnhancedAICommentatorV2;
