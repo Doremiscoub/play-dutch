@@ -23,16 +23,25 @@ const GameLayout: React.FC<GameLayoutProps> = ({ children, className }) => {
     );
   }
 
-  // Desktop : layout avec sidebars pour le contenu de jeu uniquement
+  // Desktop sans ads : layout simple pleine largeur
+  if (!shouldShowAds) {
+    return (
+      <div className={cn('w-full max-w-6xl mx-auto', className)}>
+        <main className="w-full">
+          {children}
+        </main>
+      </div>
+    );
+  }
+
+  // Desktop avec ads : layout avec sidebars pour le contenu de jeu uniquement
   return (
     <div className={cn('w-full grid grid-cols-[250px_1fr_250px] gap-6 min-h-[80vh]', className)}>
       {/* Sidebar gauche */}
       <aside className="flex flex-col justify-start items-center pt-4">
-        {shouldShowAds && (
-          <div className="sticky top-4">
-            <EnhancedAdSlot placement="game-sidebar-left" priority="medium" />
-          </div>
-        )}
+        <div className="sticky top-4">
+          <EnhancedAdSlot placement="game-sidebar-left" priority="medium" />
+        </div>
       </aside>
       
       {/* Contenu central */}
@@ -42,11 +51,9 @@ const GameLayout: React.FC<GameLayoutProps> = ({ children, className }) => {
       
       {/* Sidebar droite */}
       <aside className="flex flex-col justify-start items-center pt-4">
-        {shouldShowAds && (
-          <div className="sticky top-4">
-            <EnhancedAdSlot placement="game-sidebar-right" priority="medium" />
-          </div>
-        )}
+        <div className="sticky top-4">
+          <EnhancedAdSlot placement="game-sidebar-right" priority="medium" />
+        </div>
       </aside>
     </div>
   );

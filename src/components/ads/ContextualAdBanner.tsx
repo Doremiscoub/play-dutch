@@ -21,11 +21,6 @@ const ContextualAdBanner: React.FC<ContextualAdBannerProps> = ({
   const [isVisible, setIsVisible] = useState(false);
   const [shouldShow, setShouldShow] = useState(false);
 
-  // Ne rien afficher si les conditions ne sont pas remplies
-  if (!shouldShowAds || !hasConsentedToAds || !import.meta.env.PROD) {
-    return null;
-  }
-
   useEffect(() => {
     // Détermine si la bannière doit s'afficher selon la probabilité
     const shouldDisplay = Math.random() < showProbability;
@@ -59,7 +54,10 @@ const ContextualAdBanner: React.FC<ContextualAdBannerProps> = ({
     }, 300); // Délai pour l'animation de sortie
   };
 
-  if (!shouldShow) return null;
+  // Ne rien afficher si les conditions ne sont pas remplies (après les hooks)
+  if (!shouldShowAds || !hasConsentedToAds || !import.meta.env.PROD || !shouldShow) {
+    return null;
+  }
 
   return (
     <AnimatePresence>

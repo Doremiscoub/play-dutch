@@ -75,9 +75,11 @@ const Home: React.FC = () => {
             <SimplifiedHeroSection />
 
             {/* Ad optimisée après le hero */}
-            <section className="py-4">
-              <ProductionAdSlot placement="homepage-hero" priority="high" />
-            </section>
+            {shouldShowAds && (
+              <section className="py-4">
+                <ProductionAdSlot placement="homepage-hero" priority="high" />
+              </section>
+            )}
 
             {/* Section Features Colorée */}
             <section className="relative py-12 sm:py-20 px-2 sm:px-4 z-10">
@@ -268,9 +270,11 @@ const Home: React.FC = () => {
             <LazyHomeSections navigate={navigate} />
 
             {/* Bannière publicitaire finale */}
-            <section className="mt-16 mb-8">
-              <ProductionAdSlot placement="stats-top" priority="low" />
-            </section>
+            {shouldShowAds && (
+              <section className="mt-16 mb-8">
+                <ProductionAdSlot placement="stats-top" priority="low" />
+              </section>
+            )}
           </HomeLayout>
 
           {/* Performance trackers invisibles */}
