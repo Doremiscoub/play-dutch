@@ -85,65 +85,18 @@ const GameAdSlot: React.FC<GameAdSlotProps> = ({
     }
   };
 
-  // Ne pas afficher si conditions non remplies
-  if (!shouldShowAds || !hasConsentedToAds) {
+  // Ne rien afficher si conditions non remplies - pas de placeholder
+  if (!shouldShowAds || !hasConsentedToAds || !import.meta.env.PROD) {
     return null;
   }
 
-  // Placeholder pour le développement
-  if (!import.meta.env.PROD) {
-    return (
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className={`
-          ${config.dimensions} mx-auto
-          bg-gradient-to-br from-game-primary/10 to-game-secondary/10
-          border-2 border-game-primary/20 rounded-xl
-          flex flex-col items-center justify-center
-          ${className}
-        `}
-      >
-        <div className="text-center space-y-3">
-          <motion.div
-            animate={{ rotate: [0, 5, -5, 0] }}
-            transition={{ duration: 2, repeat: Infinity }}
-          >
-            {config.icon}
-          </motion.div>
-          <div>
-            <p className="text-sm font-semibold text-game-text">{config.message}</p>
-            <p className="text-xs text-game-text/60 mt-1">Ad Slot - {placement}</p>
-          </div>
-        </div>
-      </motion.div>
-    );
+  // En cas d'erreur, ne rien afficher
+  if (adState === 'error') {
+    return null;
   }
 
   return (
-    <motion.div
-      ref={adRef}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className={`${config.dimensions} mx-auto relative ${className}`}
-    >
-      {/* Loading indicator */}
-      {adState === 'loading' && isVisible && (
-        <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-900 rounded-lg">
-          <div className="text-center">
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-              className="mx-auto mb-2"
-            >
-              {config.icon}
-            </motion.div>
-            <p className="text-xs text-slate-500">{config.message}</p>
-          </div>
-        </div>
-      )}
-      
-      {/* Ad container */}
+    <div ref={adRef} className={`${config.dimensions} mx-auto ${className}`}>
       <ins
         className="adsbygoogle"
         style={{ display: 'block', textAlign: 'center' }}
@@ -153,7 +106,7 @@ const GameAdSlot: React.FC<GameAdSlotProps> = ({
         data-ad-sizes={config.sizes}
         data-full-width-responsive="true"
       />
-    </motion.div>
+    </div>
   );
 };
 

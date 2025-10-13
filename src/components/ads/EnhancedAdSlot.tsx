@@ -103,79 +103,19 @@ const EnhancedAdSlot: React.FC<EnhancedAdSlotProps> = ({
     return () => clearTimeout(timer);
   }, [isIntersecting, hasConsentedToAds, config.slotId, priority]);
 
-  // Placeholder pour développement ou erreur
-  const renderPlaceholder = (status: string, icon?: React.ReactNode) => (
-    <motion.div 
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      className={`
-        ${config.dimensions} 
-        bg-gradient-to-br from-slate-50 to-slate-100 
-        dark:from-slate-800 dark:to-slate-900
-        rounded-lg border border-slate-200 dark:border-slate-700
-        flex flex-col items-center justify-center
-        text-slate-500 dark:text-slate-400
-        ${className}
-      `}
-    >
-      <div className="text-center space-y-3">
-        <div className="flex justify-center">
-          {icon || <div className="w-8 h-8 bg-slate-300 dark:bg-slate-600 rounded mx-auto opacity-50" />}
-        </div>
-        <div>
-          <p className="text-xs font-medium opacity-70">{config.content}</p>
-          <p className="text-xs opacity-50 mt-1">{status}</p>
-        </div>
-      </div>
-    </motion.div>
-  );
-
-  // En développement, montrer placeholder simple
-  if (!import.meta.env.PROD && !hasConsentedToAds) {
-    return (
-      <motion.div 
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className={`
-          ${config.dimensions} 
-          bg-gradient-to-br from-slate-50 to-slate-100 
-          dark:from-slate-800 dark:to-slate-900
-          rounded-lg border border-slate-200 dark:border-slate-700
-          flex flex-col items-center justify-center
-          text-slate-500 dark:text-slate-400
-          ${className}
-        `}
-      >
-        <div className="text-center space-y-2">
-          <p className="text-xs font-medium opacity-70">{config.content}</p>
-          <p className="text-xs opacity-50">Développement - {placement}</p>
-        </div>
-      </motion.div>
-    );
-  }
-
-  // Conditions critiques pour affichage des ads
-  if (!shouldShowAds || !hasConsentedToAds || !config.show) {
+  // Ne jamais afficher de placeholder - retourner null si on ne peut pas montrer la vraie pub
+  if (!shouldShowAds || !hasConsentedToAds || !config.show || !config.slotId || !import.meta.env.PROD) {
     return null;
   }
 
-  // Pas de slot ID configuré
-  if (!config.slotId) {
-    return renderPlaceholder('Configuration manquante', <AlertCircle className="w-6 h-6 text-amber-500" />);
+  // En cas d'erreur, ne rien afficher pour garder l'UI propre
+  if (adStatus === 'error' || adStatus === 'blocked') {
+    return null;
   }
 
-  // États d'erreur
-  if (adStatus === 'error') {
-    return renderPlaceholder('Erreur de chargement', <WifiOff className="w-6 h-6 text-red-500" />);
-  }
-
-  if (adStatus === 'blocked') {
-    return renderPlaceholder('Bloqueur de publicité détecté', <AlertCircle className="w-6 h-6 text-orange-500" />);
-  }
-
-  // Annonce en cours de chargement
-  if (adStatus === 'loading' && isIntersecting) {
-    return renderPlaceholder('Chargement...', <Wifi className="w-6 h-6 text-blue-500 animate-pulse" />);
+  // Pendant le chargement, ne rien afficher
+  if (adStatus === 'loading') {
+    return null;
   }
 
   // Annonce prête - attendre la visibilité

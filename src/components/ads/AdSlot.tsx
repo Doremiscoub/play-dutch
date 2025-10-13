@@ -69,29 +69,9 @@ const AdSlot: React.FC<AdSlotProps> = ({ placement, className = '' }) => {
     }
   }, [config.show, config.slotId]);
 
-  if (!config.show) {
+  // Ne rien afficher si conditions non remplies - pas de placeholder
+  if (!config.show || !config.slotId || !import.meta.env.PROD) {
     return null;
-  }
-
-  // Mode développement : afficher placeholder
-  if (!import.meta.env.PROD || !config.slotId) {
-    return (
-      <div className={`
-        ${config.dimensions} 
-        bg-gradient-to-br from-slate-100 to-slate-200 
-        dark:from-slate-800 dark:to-slate-900
-        rounded-lg border border-slate-300 dark:border-slate-700
-        flex flex-col items-center justify-center
-        text-slate-500 dark:text-slate-400
-        ${className}
-      `}>
-        <div className="text-center space-y-2">
-          <div className="w-8 h-8 bg-slate-300 dark:bg-slate-600 rounded mx-auto opacity-50" />
-          <p className="text-xs font-medium opacity-70">{config.content}</p>
-          <p className="text-xs opacity-50">AdSense Preview</p>
-        </div>
-      </div>
-    );
   }
 
   // Mode production : afficher vraie ad

@@ -92,37 +92,13 @@ const ProductionAdSlot: React.FC<ProductionAdSlotProps> = ({
     }
   };
 
-  // Ne pas afficher si conditions non remplies
-  if (!shouldShowAds || !hasConsentedToAds) {
+  // Ne rien afficher si conditions non remplies ou erreur - pas de placeholder
+  if (!shouldShowAds || !hasConsentedToAds || adError || !import.meta.env.PROD) {
     return null;
   }
 
-  // Placeholder d'erreur
-  if (adError) {
-    return (
-      <div className={`${config.dimensions} mx-auto flex items-center justify-center bg-slate-100 dark:bg-slate-800 rounded-lg ${className}`}>
-        <div className="text-center text-slate-500">
-          <AlertTriangle className="h-6 w-6 mx-auto mb-2" />
-          <p className="text-xs">Publicité indisponible</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <motion.div
-      ref={adRef}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className={`${config.dimensions} mx-auto ${className}`}
-    >
-      {/* Indicateur de visibilité en dev */}
-      {!import.meta.env.PROD && (
-        <div className="absolute top-0 right-0 z-10 bg-green-500 text-white text-xs px-2 py-1 rounded-bl">
-          {isVisible ? <Eye className="h-3 w-3" /> : <EyeOff className="h-3 w-3" />}
-        </div>
-      )}
-      
+    <div ref={adRef} className={`${config.dimensions} mx-auto ${className}`}>
       <ins
         className="adsbygoogle"
         style={config.style}
@@ -132,7 +108,7 @@ const ProductionAdSlot: React.FC<ProductionAdSlotProps> = ({
         data-ad-sizes={config.sizes}
         data-full-width-responsive="true"
       />
-    </motion.div>
+    </div>
   );
 };
 
