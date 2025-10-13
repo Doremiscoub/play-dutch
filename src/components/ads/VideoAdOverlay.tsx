@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Volume2, VolumeX, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useAds } from '@/contexts/AdContext';
+import { useAds } from '@/contexts/EnhancedAdContext';
 
 interface VideoAdOverlayProps {
   isVisible: boolean;
@@ -15,12 +15,17 @@ const VideoAdOverlay: React.FC<VideoAdOverlayProps> = ({
   onClose, 
   trigger = 'round-added' 
 }) => {
-  const { shouldShowAds } = useAds();
+  const { shouldShowAds, hasConsentedToAds } = useAds();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
   const [countdown, setCountdown] = useState(5);
   const [canSkip, setCanSkip] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
+
+  // Ne rien afficher si les conditions ne sont pas remplies
+  if (!isVisible || !shouldShowAds || !hasConsentedToAds || !import.meta.env.PROD) {
+    return null;
+  }
 
   useEffect(() => {
     if (isVisible && shouldShowAds) {
@@ -69,8 +74,6 @@ const VideoAdOverlay: React.FC<VideoAdOverlayProps> = ({
     setIsLoading(true);
     setTimeout(() => setIsLoading(false), 1500);
   };
-
-  if (!shouldShowAds || !isVisible) return null;
 
   return (
     <AnimatePresence>

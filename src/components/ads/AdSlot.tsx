@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { useAds } from '@/contexts/AdContext';
+import { useAds } from '@/contexts/EnhancedAdContext';
 
 interface AdSlotProps {
   placement: 'homepage-inline' | 'game-sidebar-left' | 'game-sidebar-right' | 'game-banner-mobile';

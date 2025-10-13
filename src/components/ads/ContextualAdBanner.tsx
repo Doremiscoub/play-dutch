@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
-import { useAds } from '@/contexts/AdContext';
+import { useAds } from '@/contexts/EnhancedAdContext';
 import AdSlot from './AdSlot';
 
 interface ContextualAdBannerProps {
