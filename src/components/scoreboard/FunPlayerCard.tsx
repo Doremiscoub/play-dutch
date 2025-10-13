@@ -110,23 +110,23 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
     setIsExpanded(!isExpanded);
     onSelect(player);
   };
-  return <motion.div className={cn("relative rounded-2xl backdrop-blur-xl border-2 transition-all duration-300 cursor-pointer overflow-visible group", `bg-gradient-to-br ${theme.gradient}`, theme.border, isSelected || isExpanded ? `ring-4 ring-purple-400/40 scale-[1.02] z-10 ${theme.glow}` : `hover:scale-[1.01] hover:-translate-y-1 ${theme.glow}`)} onClick={handleCardClick} initial={{
+  return <motion.div className={cn("relative rounded-2xl backdrop-blur-xl border-2 transition-all duration-200 cursor-pointer overflow-visible group", `bg-gradient-to-br ${theme.gradient}`, theme.border, isSelected || isExpanded ? `ring-4 ring-purple-400/40 scale-[1.01] z-10 ${theme.glow}` : `hover:scale-[1.005] hover:-translate-y-0.5 ${theme.glow}`)} onClick={handleCardClick} initial={{
     opacity: 0,
-    y: 20,
-    scale: 0.95
+    y: 10,
+    scale: 0.98
   }} animate={{
     opacity: 1,
     y: 0,
     scale: 1
   }} transition={{
-    duration: 0.2,
-    delay: rank * 0.03,
+    duration: 0.15,
+    delay: rank * 0.02,
     type: "spring",
-    stiffness: 400
+    stiffness: 300
   }} whileHover={{
-    y: -3
+    y: -2
   }} whileTap={{
-    scale: 0.98
+    scale: 0.99
   }} layout>
       {/* Effet de brillance subtle */}
       <motion.div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -skew-x-12" initial={{

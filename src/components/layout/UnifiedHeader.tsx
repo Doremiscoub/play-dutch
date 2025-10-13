@@ -97,8 +97,8 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
               <div className="absolute inset-0 bg-gradient-to-r from-trinity-blue-500/20 via-trinity-purple-500/20 to-trinity-orange-500/20 rounded-2xl blur-xl"></div>
               
                 {/* Conteneur unifié pour tout le header */}
-                <div className={`relative bg-white/90 backdrop-blur-xl rounded-2xl border border-white/60 shadow-xl w-full ${
-                  isMobile ? 'px-1 py-1.5 space-y-1 mx-1' : 'px-6 py-4 space-y-3'
+                <div className={`relative bg-white/90 backdrop-blur-xl rounded-2xl border border-white/60 shadow-xl w-full max-w-6xl mx-auto ${
+                  isMobile ? 'px-1 py-1.5 space-y-1' : 'px-6 py-4 space-y-3'
                 }`}>
                 {/* Ligne principale avec boutons et titre */}
                 <div className="relative flex items-center justify-between min-h-[44px] w-full">

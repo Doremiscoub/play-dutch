@@ -25,30 +25,31 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
   if (hideWhenModalOpen) return null;
   const buttonsContent = (
     <div 
-      className={`floating-action-buttons fixed bottom-4 right-4 sm:bottom-6 sm:right-6 flex flex-col-reverse gap-2 sm:gap-4 pointer-events-none ${hideWhenModalOpen ? 'floating-buttons-hidden' : ''}`}
+      className={`floating-action-buttons fixed right-4 sm:right-6 flex flex-col-reverse gap-2 sm:gap-3 pointer-events-none ${hideWhenModalOpen ? 'floating-buttons-hidden' : ''}`}
       style={{ 
         position: 'fixed', 
-        bottom: 'env(safe-area-inset-bottom, 16px)',
-        right: '16px'
+        bottom: 'max(env(safe-area-inset-bottom, 20px), 80px)',
+        right: '16px',
+        zIndex: 40
       }}
     >
       {/* Bouton principal - Ajouter une manche (en bas, centré) */}
       <motion.div
-        initial={{ opacity: 0, scale: 0.8, y: 60 }}
+        initial={{ opacity: 0, scale: 0.9, y: 30 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ 
-          duration: 0.8, 
+          duration: 0.4, 
           type: "spring", 
-          stiffness: 100, 
+          stiffness: 200, 
           damping: 15,
-          delay: 0.2 
+          delay: 0.1 
         }}
         whileHover={{ 
-          scale: 1.05, 
-          y: -4,
-          transition: { duration: 0.2, ease: "easeOut" }
+          scale: 1.03, 
+          y: -2,
+          transition: { duration: 0.15 }
         }}
-        whileTap={{ scale: 0.98 }}
+        whileTap={{ scale: 0.97 }}
         className="pointer-events-auto"
       >
         <Button
@@ -56,7 +57,7 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
           disabled={disabled}
           variant="trinity"
           size="xl"
-          className="relative group px-4 sm:px-8 py-3 sm:py-4 h-12 sm:h-16 rounded-full lg-elevation-04 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden"
+          className="relative group px-3 sm:px-6 py-2.5 sm:py-3 h-11 sm:h-14 rounded-full lg-elevation-04 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden min-w-[44px]"
         >
           {/* Arrière-plan semi-transparent pour améliorer la lisibilité */}
           <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 via-purple-500/15 to-orange-500/20 rounded-full" />
@@ -86,20 +87,20 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
       <div className="flex flex-col gap-2 sm:gap-3 items-end" style={{ marginRight: '0px' }}>
         {/* Bouton Annuler */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.6, x: 40 }}
+          initial={{ opacity: 0, scale: 0.8, x: 20 }}
           animate={{ opacity: 1, scale: 1, x: 0 }}
           transition={{ 
-            duration: 0.6, 
-            delay: 0.1, 
+            duration: 0.3, 
+            delay: 0.05, 
             type: "spring", 
-            stiffness: 120,
+            stiffness: 150,
             damping: 12 
           }}
           whileHover={{ 
-            scale: 1.08, 
-            transition: { duration: 0.15 }
+            scale: 1.05, 
+            transition: { duration: 0.1 }
           }}
-          whileTap={{ scale: 0.95 }}
+          whileTap={{ scale: 0.96 }}
           className="pointer-events-auto"
         >
           <Button
@@ -107,9 +108,9 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
             size="icon-lg"
             onClick={onUndoLastRound}
             disabled={!canUndo || disabled}
-            className={`relative h-10 w-10 sm:h-14 sm:w-14 rounded-2xl transition-all duration-300 group overflow-hidden backdrop-blur-xl border-2 ${
+            className={`relative h-11 w-11 sm:h-12 sm:w-12 min-w-[44px] min-h-[44px] rounded-2xl transition-all duration-200 group overflow-hidden backdrop-blur-xl border-2 ${
               canUndo && !disabled
-                ? 'bg-gradient-to-br from-orange-600/95 via-orange-500/90 to-red-600/85 border-orange-200/70 hover:border-orange-100/90 shadow-xl shadow-orange-600/30 hover:shadow-2xl hover:shadow-orange-600/40 hover:scale-105'
+                ? 'bg-gradient-to-br from-orange-600/95 via-orange-500/90 to-red-600/85 border-orange-200/70 hover:border-orange-100/90 shadow-lg shadow-orange-600/25 hover:shadow-xl hover:shadow-orange-600/35'
                 : 'bg-gray-600/85 border-gray-300/60 opacity-70 cursor-not-allowed'
             }`}
             title="Annuler la dernière manche"
@@ -140,20 +141,20 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
 
         {/* Bouton Terminer */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.6, x: 40 }}
+          initial={{ opacity: 0, scale: 0.8, x: 20 }}
           animate={{ opacity: 1, scale: 1, x: 0 }}
           transition={{ 
-            duration: 0.6, 
-            delay: 0.05, 
+            duration: 0.3, 
+            delay: 0.02, 
             type: "spring", 
-            stiffness: 120,
+            stiffness: 150,
             damping: 12 
           }}
           whileHover={{ 
-            scale: 1.08, 
-            transition: { duration: 0.15 }
+            scale: 1.05, 
+            transition: { duration: 0.1 }
           }}
-          whileTap={{ scale: 0.95 }}
+          whileTap={{ scale: 0.96 }}
           className="pointer-events-auto"
         >
           <Button
@@ -161,7 +162,7 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
             size="icon-lg"
             onClick={onEndGame}
             disabled={disabled}
-            className="relative h-10 w-10 sm:h-14 sm:w-14 rounded-2xl bg-gradient-to-br from-purple-500/80 via-purple-400/70 to-blue-500/60 border-2 border-purple-300/50 hover:border-purple-200/70 shadow-lg shadow-purple-500/20 hover:shadow-xl hover:shadow-purple-500/30 transition-all duration-300 group overflow-hidden backdrop-blur-xl hover:scale-105"
+            className="relative h-11 w-11 sm:h-12 sm:w-12 min-w-[44px] min-h-[44px] rounded-2xl bg-gradient-to-br from-purple-500/80 via-purple-400/70 to-blue-500/60 border-2 border-purple-300/50 hover:border-purple-200/70 shadow-lg shadow-purple-500/20 hover:shadow-xl hover:shadow-purple-500/30 transition-all duration-200 group overflow-hidden backdrop-blur-xl"
             title="Terminer la partie"
           >
             {/* Effet de brillance au survol */}

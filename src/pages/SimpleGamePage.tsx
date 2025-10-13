@@ -8,7 +8,7 @@ import NewRoundModal from '@/components/NewRoundModal';
 import PageShell from '@/components/layout/PageShell';
 import UnifiedHeader from '@/components/layout/UnifiedHeader';
 import { useUnifiedHeader } from '@/hooks/useUnifiedHeader';
-import AICommentator from '@/components/AICommentator';
+import IntelligentProfessorCartouche from '@/components/ai-commentator/IntelligentProfessorCartouche';
 import { MobileOptimizer } from '@/components/ui/mobile-optimizer';
 import { toast } from 'sonner';
 import GameLayout from '@/components/layout/GameLayout';
@@ -147,33 +147,35 @@ const SimpleGamePage: React.FC = () => {
         <MobileOptimizer pageType="game" className="min-h-screen">
           <UnifiedHeader {...headerConfig} />
           
-          {/* Gestionnaire de synchronisation - simplifié */}
-          {/* <GameSyncManager /> */}
-          
-          {/* Commentaires du Professeur Cartouche */}
-          <div className="w-full max-w-7xl mx-auto px-4 py-6">
-            <div className="mb-6">
-              <AICommentator 
+          {/* Conteneur principal centré et unifié */}
+          <div className="w-full max-w-6xl mx-auto px-4 py-4 min-h-[calc(100vh-12rem)]">
+            {/* Professeur Cartouche aligné avec le reste */}
+            <div className="mb-4">
+              <IntelligentProfessorCartouche 
                 players={players}
-                roundHistory={roundHistory}
-                className="mx-auto max-w-2xl"
+                roundCount={roundHistory.length}
+                scoreLimit={scoreLimit}
+                className="w-full"
               />
             </div>
             
+            {/* GameLayout avec ScoreBoard */}
             <GameLayout>
-              <ScoreBoard
-                players={players}
-                onAddRound={() => {}} // Non utilisé car on utilise openScoreForm
-                onUndoLastRound={undoLastRound}
-                onEndGame={handleEndGame}
-                roundHistory={roundHistory}
-                showGameEndConfirmation={showGameEndConfirmation}
-                onConfirmEndGame={handleConfirmEndGame}
-                onCancelEndGame={handleCancelEndGame}
-                scoreLimit={scoreLimit}
-                openScoreForm={openScoreForm}
-                hideFloatingActionsWhenModalOpen={isScoreFormOpen}
-              />
+              <div className="pb-28">
+                <ScoreBoard
+                  players={players}
+                  onAddRound={() => {}}
+                  onUndoLastRound={undoLastRound}
+                  onEndGame={handleEndGame}
+                  roundHistory={roundHistory}
+                  showGameEndConfirmation={showGameEndConfirmation}
+                  onConfirmEndGame={handleConfirmEndGame}
+                  onCancelEndGame={handleCancelEndGame}
+                  scoreLimit={scoreLimit}
+                  openScoreForm={openScoreForm}
+                  hideFloatingActionsWhenModalOpen={isScoreFormOpen}
+                />
+              </div>
             </GameLayout>
           </div>
 

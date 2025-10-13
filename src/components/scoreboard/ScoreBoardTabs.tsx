@@ -14,24 +14,24 @@ const ScoreBoardTabs: React.FC<ScoreBoardTabsProps> = ({
   onViewChange
 }) => {
   return (
-    <div className="flex justify-center mb-4 md:mb-8 px-2 md:px-4">
+    <div className="flex justify-center mb-3 md:mb-6 px-2 md:px-4">
       <motion.div 
-        className="bg-gradient-to-r from-purple-400/20 via-pink-400/20 to-orange-400/20 backdrop-blur-xl border border-purple-300/30 rounded-2xl md:rounded-3xl p-2 md:p-4 shadow-xl w-full max-w-md md:max-w-none"
-        initial={{ opacity: 0, y: 20 }}
+        className="bg-gradient-to-r from-purple-400/20 via-pink-400/20 to-orange-400/20 backdrop-blur-xl border border-purple-300/30 rounded-2xl p-1.5 md:p-2 shadow-xl w-full max-w-md md:max-w-none"
+        initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.3 }}
       >
-        <div className="flex gap-1 md:gap-3">
+        <div className="flex gap-0.5 md:gap-2">
           <motion.button
             className={cn(
-              "flex items-center gap-1 md:gap-3 px-3 md:px-8 py-2 md:py-4 rounded-xl md:rounded-2xl font-bold transition-all duration-300 min-w-0 md:min-w-[140px] justify-center relative overflow-hidden flex-1 text-sm md:text-base",
+              "flex items-center gap-1 md:gap-2 px-2 md:px-6 py-1.5 md:py-3 rounded-xl font-bold transition-all duration-200 min-w-0 md:min-w-[120px] justify-center relative overflow-hidden flex-1 text-sm md:text-base",
               currentView === 'list' 
-                ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-xl transform scale-105 md:scale-110" 
-                : "text-purple-700 hover:bg-gradient-to-r hover:from-purple-400/30 hover:to-pink-400/30 hover:scale-105"
+                ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg scale-105" 
+                : "text-purple-700 hover:bg-gradient-to-r hover:from-purple-400/30 hover:to-pink-400/30 hover:scale-102"
             )}
             onClick={() => onViewChange('list')}
-            whileHover={{ y: -3, rotate: 1 }}
-            whileTap={{ scale: 0.95 }}
+            whileHover={{ y: -2 }}
+            whileTap={{ scale: 0.96 }}
           >
             {currentView === 'list' && (
               <motion.div
@@ -42,9 +42,9 @@ const ScoreBoardTabs: React.FC<ScoreBoardTabsProps> = ({
               />
             )}
             <motion.span
-              className="text-xl md:text-2xl relative z-10"
-              animate={{ rotate: currentView === 'list' ? [0, -15, 15, 0] : 0 }}
-              transition={{ duration: 0.6 }}
+              className="text-lg md:text-xl relative z-10"
+              animate={{ scale: currentView === 'list' ? 1.1 : 1 }}
+              transition={{ duration: 0.2 }}
             >
               🏆
             </motion.span>
@@ -54,14 +54,14 @@ const ScoreBoardTabs: React.FC<ScoreBoardTabsProps> = ({
           
           <motion.button
             className={cn(
-              "flex items-center gap-1 md:gap-3 px-3 md:px-8 py-2 md:py-4 rounded-xl md:rounded-2xl font-bold transition-all duration-300 min-w-0 md:min-w-[140px] justify-center relative overflow-hidden flex-1 text-sm md:text-base",
+              "flex items-center gap-1 md:gap-2 px-2 md:px-6 py-1.5 md:py-3 rounded-xl font-bold transition-all duration-200 min-w-0 md:min-w-[120px] justify-center relative overflow-hidden flex-1 text-sm md:text-base",
               currentView === 'table' 
-                ? "bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-xl transform scale-105 md:scale-110" 
-                : "text-orange-700 hover:bg-gradient-to-r hover:from-orange-400/30 hover:to-red-400/30 hover:scale-105"
+                ? "bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-lg scale-105" 
+                : "text-orange-700 hover:bg-gradient-to-r hover:from-orange-400/30 hover:to-red-400/30 hover:scale-102"
             )}
             onClick={() => onViewChange('table')}
-            whileHover={{ y: -3, rotate: -1 }}
-            whileTap={{ scale: 0.95 }}
+            whileHover={{ y: -2 }}
+            whileTap={{ scale: 0.96 }}
           >
             {currentView === 'table' && (
               <motion.div
@@ -72,9 +72,9 @@ const ScoreBoardTabs: React.FC<ScoreBoardTabsProps> = ({
               />
             )}
             <motion.span
-              className="text-xl md:text-2xl relative z-10"
-              animate={{ rotate: currentView === 'table' ? [0, -15, 15, 0] : 0 }}
-              transition={{ duration: 0.6 }}
+              className="text-lg md:text-xl relative z-10"
+              animate={{ scale: currentView === 'table' ? 1.1 : 1 }}
+              transition={{ duration: 0.2 }}
             >
               📊
             </motion.span>
@@ -84,14 +84,14 @@ const ScoreBoardTabs: React.FC<ScoreBoardTabsProps> = ({
           
           <motion.button
             className={cn(
-              "flex items-center gap-1 md:gap-3 px-3 md:px-8 py-2 md:py-4 rounded-xl md:rounded-2xl font-bold transition-all duration-300 min-w-0 md:min-w-[140px] justify-center relative overflow-hidden flex-1 text-sm md:text-base",
+              "flex items-center gap-1 md:gap-2 px-2 md:px-6 py-1.5 md:py-3 rounded-xl font-bold transition-all duration-200 min-w-0 md:min-w-[120px] justify-center relative overflow-hidden flex-1 text-sm md:text-base",
               currentView === 'stats' 
-                ? "bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow-xl transform scale-105 md:scale-110" 
-                : "text-cyan-700 hover:bg-gradient-to-r hover:from-cyan-400/30 hover:to-blue-400/30 hover:scale-105"
+                ? "bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow-lg scale-105" 
+                : "text-cyan-700 hover:bg-gradient-to-r hover:from-cyan-400/30 hover:to-blue-400/30 hover:scale-102"
             )}
             onClick={() => onViewChange('stats')}
-            whileHover={{ y: -3, rotate: 1 }}
-            whileTap={{ scale: 0.95 }}
+            whileHover={{ y: -2 }}
+            whileTap={{ scale: 0.96 }}
           >
             {currentView === 'stats' && (
               <motion.div
@@ -102,9 +102,9 @@ const ScoreBoardTabs: React.FC<ScoreBoardTabsProps> = ({
               />
             )}
             <motion.span
-              className="text-xl md:text-2xl relative z-10"
-              animate={{ rotate: currentView === 'stats' ? [0, -15, 15, 0] : 0 }}
-              transition={{ duration: 0.6 }}
+              className="text-lg md:text-xl relative z-10"
+              animate={{ scale: currentView === 'stats' ? 1.1 : 1 }}
+              transition={{ duration: 0.2 }}
             >
               📈
             </motion.span>

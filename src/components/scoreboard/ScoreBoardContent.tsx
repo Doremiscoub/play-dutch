@@ -67,11 +67,11 @@ const ScoreBoardContent: React.FC<ScoreBoardContentProps> = ({
       {currentView === 'list' ? (
         <motion.div
           key="list-view"
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          transition={{ duration: 0.3 }}
-          className="space-y-4"
+          exit={{ opacity: 0, y: -15 }}
+          transition={{ duration: 0.25 }}
+          className="space-y-3"
         >
           {playersToDisplay.map((player, index) => (
             <FunPlayerCard
