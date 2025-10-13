@@ -1,7 +1,8 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Player } from '@/types';
 import { AIComment, AIPersonality, AICommentContext } from '@/types/ai-commentator';
 import { aiCommentaryEngine } from '@/utils/aiCommentaryEngine';
+import { optimizedAICommentaryEngine } from '@/utils/aiCommentaryEngineOptimized';
 
 interface UseEnhancedAICommentatorProps {
   players: Player[];
@@ -36,30 +37,29 @@ export function useEnhancedAICommentator({
   const [commentHistory, setCommentHistory] = useState<AIComment[]>([]);
   const [lastGenerationTime, setLastGenerationTime] = useState(0);
 
-  // Génération intelligente de commentaire
+  // Génération intelligente de commentaire avec debouncing
   const generateComment = useCallback(async (event?: string) => {
     if (players.length === 0 || isGenerating) return;
-
-    // Éviter la génération trop fréquente
-    const now = Date.now();
-    if (now - lastGenerationTime < 3000) return;
 
     setIsGenerating(true);
     
     try {
-      // Simulation d'un petit délai pour l'effet "thinking"
-      await new Promise(resolve => setTimeout(resolve, 500 + Math.random() * 1000));
+      // Simulation d'un petit délai pour l'effet "thinking" (réduit)
+      await new Promise(resolve => setTimeout(resolve, 300 + Math.random() * 400));
       
-      const comment = aiCommentaryEngine.generateIntelligentComment(
+      // Utiliser l'engine optimisé avec debouncing
+      const comment = optimizedAICommentaryEngine.generateIntelligentCommentDebounced(
         players,
         roundCount,
         scoreLimit,
         event
       );
 
-      setCurrentComment(comment);
-      setCommentHistory(prev => [...prev.slice(-9), comment]); // Garder 10 derniers
-      setLastGenerationTime(now);
+      if (comment) {
+        setCurrentComment(comment);
+        setCommentHistory(prev => [...prev.slice(-9), comment]); // Garder 10 derniers
+        setLastGenerationTime(Date.now());
+      }
       
     } catch (error) {
       console.error('Erreur lors de la génération du commentaire:', error);
@@ -82,12 +82,12 @@ export function useEnhancedAICommentator({
     } finally {
       setIsGenerating(false);
     }
-  }, [players, roundCount, scoreLimit, personality, isGenerating, lastGenerationTime]);
+  }, [players, roundCount, scoreLimit, personality, isGenerating]);
 
   // Mettre à jour la personnalité
   const setPersonality = useCallback((newPersonality: AIPersonality) => {
     setPersonalityState(newPersonality);
-    aiCommentaryEngine.setPersonality(newPersonality);
+    optimizedAICommentaryEngine.setPersonality(newPersonality);
     
     // Regénérer un commentaire avec la nouvelle personnalité
     generateComment('personality_change');
@@ -95,13 +95,13 @@ export function useEnhancedAICommentator({
 
   // Obtenir la mémoire d'un joueur
   const getPlayerMemory = useCallback((playerName: string) => {
-    return aiCommentaryEngine.getPlayerStats(playerName);
+    return optimizedAICommentaryEngine.getPlayerStats(playerName);
   }, []);
 
   // Nettoyer l'historique
   const clearHistory = useCallback(() => {
     setCommentHistory([]);
-    aiCommentaryEngine.clearMemory();
+    optimizedAICommentaryEngine.clearMemory();
   }, []);
 
   // Génération automatique lors des changements
@@ -130,7 +130,7 @@ export function useEnhancedAICommentator({
 
   // Détecter si la mémoire est active
   const isMemoryActive = players.some(player => 
-    aiCommentaryEngine.getPlayerStats(player.name) !== null
+    optimizedAICommentaryEngine.getPlayerStats(player.name) !== null
   );
 
   return {

@@ -4,10 +4,10 @@ import { motion } from 'framer-motion';
 import { ScoreBoardProps } from '@/types';
 import EndGameConfirmationDialog from './scoreboard/EndGameConfirmationDialog';
 
-import FloatingActionButtons from './scoreboard/FloatingActionButtons';
+import FloatingActionButtonsMemo from './scoreboard/FloatingActionButtons.memo';
 import UnifiedHeader from '@/components/layout/UnifiedHeader';
-import ScoreBoardContent from './scoreboard/ScoreBoardContent';
-import ScoreBoardTabs from './scoreboard/ScoreBoardTabs';
+import ScoreBoardContentLazy from './scoreboard/ScoreBoardContent.lazy';
+import ScoreBoardTabsMemo from './scoreboard/ScoreBoardTabs.memo';
 import { useScoreBoardLogic } from './scoreboard/ScoreBoardHooks';
 
 const ScoreBoard: React.FC<ScoreBoardProps> = ({
@@ -69,14 +69,14 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
     <div className="max-w-6xl mx-auto">
       {/* Contenu principal */}
       <div className="space-y-6">
-        {/* Toggle des vues avec 3 options */}
-        <ScoreBoardTabs
+        {/* Toggle des vues avec 3 options - Version mémoïsée */}
+        <ScoreBoardTabsMemo
           currentView={currentView}
           onViewChange={handleViewChange}
         />
 
-        {/* Contenu principal */}
-        <ScoreBoardContent
+        {/* Contenu principal - Version avec lazy loading */}
+        <ScoreBoardContentLazy
           currentView={currentView}
           sortedPlayers={sortedPlayers}
           players={players}
@@ -95,8 +95,8 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
         onCancel={onCancelEndGame}
       />
 
-      {/* Floating Action Buttons */}
-      <FloatingActionButtons
+      {/* Floating Action Buttons - Version mémoïsée */}
+      <FloatingActionButtonsMemo
         onAddRound={handleAddRound}
         onUndoLastRound={handleUndo}
         onEndGame={handleEndGame}

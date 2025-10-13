@@ -22,6 +22,7 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
   scoreLimit = 100
 }) => {
   const isMobile = useIsMobile();
+  const [isExpanded, setIsExpanded] = useState(false);
   
   // Utiliser la version mobile optimisée sur mobile
   if (isMobile) {
@@ -37,7 +38,7 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
     );
   }
   
-  const [isExpanded, setIsExpanded] = useState(false);
+  // Desktop uniquement à partir d'ici
   const isWinner = rank === 1;
   const isLastPlace = rank === totalPlayers;
   const avgScore = player.rounds.length > 0 ? Math.round(player.totalScore / player.rounds.length * 10) / 10 : 0;
@@ -176,46 +177,17 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
                 theme.glow
               )}
               whileHover={{
-                scale: 1.15,
-                rotateY: 20,
-                boxShadow: `0 20px 40px ${theme.accent}50`
+                scale: 1.08
               }}
               transition={{
-                type: "spring",
-                stiffness: 400,
-                damping: 15
+                duration: 0.15
               }}
             >
               {/* Themed background overlay */}
               <div className={cn("absolute inset-0 rounded-3xl", `bg-gradient-to-tr ${theme.gradient}`)} />
               
-              {/* Pulsing outer glow with theme colors */}
-              <motion.div 
-                className={cn("absolute inset-0 rounded-3xl blur-sm", `bg-gradient-to-r ${theme.rankGlow}`)}
-                animate={{ 
-                  scale: [1, 1.1, 1],
-                  opacity: [0.4, 0.7, 0.4]
-                }}
-                transition={{ 
-                  duration: 3,
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
-              />
-              
-              {/* Animated color orbs for extra playfulness */}
-              <motion.div 
-                className="absolute top-1 right-1 w-3 h-3 rounded-full bg-gradient-to-r from-yellow-400 to-orange-400"
-                animate={{ 
-                  scale: [1, 1.4, 1],
-                  opacity: [0.7, 1, 0.7]
-                }}
-                transition={{ 
-                  duration: 2,
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
-              />
+              {/* Static glow - pas d'animation infinie */}
+              <div className={cn("absolute inset-0 rounded-3xl blur-sm opacity-50", `bg-gradient-to-r ${theme.rankGlow}`)} />
               
               {/* Winner crown overlay */}
               {isWinner && (
@@ -235,12 +207,9 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
               <span className="relative z-10 drop-shadow-lg">{rank}</span>
             </motion.div>
             
-            <motion.div className="w-14 h-14 rounded-xl bg-white/80 backdrop-blur-sm border-2 border-white/60 shadow-lg flex items-center justify-center relative overflow-hidden" whileHover={{
-            scale: 1.05,
-            rotate: 3
-          }}>
+            <div className="w-14 h-14 rounded-xl bg-white/80 backdrop-blur-sm border-2 border-white/60 shadow-lg flex items-center justify-center relative overflow-hidden transition-transform duration-150 hover:scale-105">
               <span className="text-2xl">{player.emoji || '🎮'}</span>
-            </motion.div>
+            </div>
           </div>
 
           {/* Nom et score */}

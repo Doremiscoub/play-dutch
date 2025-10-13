@@ -25,7 +25,7 @@ export default function EnhancedAICommentatorV2({
   recentEvent,
   className
 }: EnhancedAICommentatorV2Props) {
-  const { singleColumn } = useMobileAdaptation();
+  const { singleColumn, reducedAnimations } = useMobileAdaptation();
   const {
     currentComment,
     isGenerating,
@@ -49,9 +49,16 @@ export default function EnhancedAICommentatorV2({
   const [showPersonalitySelector, setShowPersonalitySelector] = useState(false);
   const [showMemoryStats, setShowMemoryStats] = useState(false);
 
-  // Animation de frappe de texte
+  // Animation de frappe de texte (désactivée sur mobile si reducedAnimations)
   useEffect(() => {
     if (!currentComment?.comment) return;
+
+    // Si animations réduites, afficher directement le texte
+    if (reducedAnimations) {
+      setDisplayedText(currentComment.comment);
+      setIsTyping(false);
+      return;
+    }
 
     setIsTyping(true);
     setDisplayedText('');
@@ -63,14 +70,14 @@ export default function EnhancedAICommentatorV2({
       if (currentIndex < words.length) {
         setDisplayedText(prev => prev + (currentIndex > 0 ? ' ' : '') + words[currentIndex]);
         currentIndex++;
-        setTimeout(typeNextWord, 100 + Math.random() * 50); // Vitesse variable
+        setTimeout(typeNextWord, 60 + Math.random() * 30); // Vitesse accélérée (était 100+50)
       } else {
         setIsTyping(false);
       }
     };
 
     typeNextWord();
-  }, [currentComment]);
+  }, [currentComment, reducedAnimations]);
 
   const handlePersonalityChange = (newPersonality: AIPersonality) => {
     setPersonality(newPersonality);
@@ -155,14 +162,14 @@ export default function EnhancedAICommentatorV2({
               "border-blue-200/50",
               singleColumn ? "p-4" : "p-6"
             )}
-            animate={isTyping ? { 
+            animate={!reducedAnimations && isTyping ? { 
               boxShadow: [
                 "0 10px 30px hsl(var(--dutch-blue) / 0.1)",
                 "0 10px 30px hsl(var(--dutch-purple) / 0.2)",
                 "0 10px 30px hsl(var(--dutch-blue) / 0.1)"
               ]
             } : {}}
-            transition={{ duration: 2, repeat: isTyping ? Infinity : 0 }}
+            transition={{ duration: 2, repeat: isTyping && !reducedAnimations ? Infinity : 0 }}
           >
             <CommentPointer className="absolute -left-4 top-6" />
             
