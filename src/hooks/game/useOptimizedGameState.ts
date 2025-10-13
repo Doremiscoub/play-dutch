@@ -109,7 +109,7 @@ class OptimizedGameStateManager {
       try {
         listener();
       } catch (error) {
-        console.error('Error in game state listener:', error);
+        logger.error('Error in game state listener:', error);
       }
     });
   }
@@ -130,7 +130,7 @@ class OptimizedGameStateManager {
       localStorage.setItem(GAME_KEY, JSON.stringify(dataToSave));
       return true;
     } catch (error) {
-      console.error('❌ Save failed:', error);
+      logger.error('❌ Save failed:', error);
       return false;
     }
   }
@@ -167,7 +167,7 @@ class OptimizedGameStateManager {
       this.notifyListeners();
       return true;
     } catch (error) {
-      console.error('❌ Load failed:', error);
+      logger.error('❌ Load failed:', error);
       localStorage.removeItem(GAME_KEY);
       return false;
     }

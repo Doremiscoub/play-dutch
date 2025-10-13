@@ -26,7 +26,6 @@ class OptimizedAICommentaryEngine {
     
     // Éviter les générations trop fréquentes
     if (now - this.lastGenerationTime < this.MIN_GENERATION_INTERVAL) {
-      console.log('⏱️ Génération de commentaire ignorée (debounce)');
       return null;
     }
     
@@ -71,7 +70,6 @@ class OptimizedAICommentaryEngine {
   private performSave(): void {
     this.lastSaveTime = Date.now();
     // La sauvegarde est déjà faite dans aiCommentaryEngine
-    console.log('💾 Mémoire AI sauvegardée (throttled)');
   }
 
   /**
