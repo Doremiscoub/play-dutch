@@ -11,7 +11,8 @@ import OtherPlayersRanking from './game/OtherPlayersRanking';
 import GameOverActionButtons from './game/GameOverActionButtons';
 import { ReceiptCard } from './ui/receipt-card';
 import { ModernTitle } from './ui/modern-title';
-import ContextualAdBanner from './ads/ContextualAdBanner';
+import ProductionAdSlot from './ads/ProductionAdSlot';
+import { useAds } from '@/contexts/EnhancedAdContext';
 import { DESIGN_TOKENS } from '@/design';
 
 interface GameOverScreenProps {
@@ -28,6 +29,7 @@ const GameOverScreen: React.FC<GameOverScreenProps> = ({
   currentScoreLimit = 100
 }) => {
   const [isConfettiTriggered, setIsConfettiTriggered] = useState<boolean>(false);
+  const { shouldShowAds } = useAds();
 
   // Sort players by score (lowest = best)
   const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
@@ -166,12 +168,15 @@ const GameOverScreen: React.FC<GameOverScreenProps> = ({
             <OtherPlayersRanking players={players} />
           </ReceiptCard>
           
-          {/* Bannière contextuelle de fin de partie */}
-          <ContextualAdBanner 
-            placement="game-over"
-            showProbability={0.8}
-            autoHideDelay={20000}
-          />
+          {/* Bannière de fin de partie */}
+          {shouldShowAds && (
+            <div className="my-4">
+              <ProductionAdSlot 
+                placement="game-end"
+                priority="medium"
+              />
+            </div>
+          )}
 
           <GameOverActionButtons 
             onRestart={onRestart} 
