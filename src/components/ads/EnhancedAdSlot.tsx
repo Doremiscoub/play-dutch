@@ -19,7 +19,22 @@ const EnhancedAdSlot: React.FC<EnhancedAdSlotProps> = ({
   const [adStatus, setAdStatus] = useState<'loading' | 'loaded' | 'error' | 'blocked'>('loading');
   const [isIntersecting, setIsIntersecting] = useState(false);
 
-  // Configuration avancée par placement avec formats adaptatifs
+  /**
+   * Configuration avancée par placement avec formats adaptatifs
+   * 
+   * NOTE IMPORTANTE SUR LES SLOT IDs:
+   * Les slot IDs sont hardcodés pour des raisons de sécurité et de performance :
+   * - Évite les appels réseau inutiles en dev/staging
+   * - Empêche les modifications accidentelles via .env
+   * - Garantit la correspondance exacte avec les slots AdSense configurés
+   * 
+   * Correspondance placement → slot ID Google AdSense:
+   * - homepage-inline: 7625232120 (Bannière 728x90)
+   * - game-sidebar-left: 8112000059 (Skyscraper 300x600)
+   * - game-sidebar-right: 8421933386 (Skyscraper 300x600)
+   * - game-banner-mobile: 9453001886 (Mobile 320x50)
+   * - stats-rectangle: 7625232120 (Rectangle 336x280)
+   */
   const adConfig = {
     'homepage-inline': {
       show: shouldShowAds && !isMobile,
