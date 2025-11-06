@@ -33,7 +33,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useSupabaseAuth } from '@/context/SupabaseAuthContext';
-import { useUnifiedGameState } from '@/hooks/game/useUnifiedGameState';
+import { useGameState } from '@/hooks/game/unified/useGameState';
 import { NotificationSystem } from '@/components/notifications/NotificationSystem';
 import { PWAInstallBannerV2 } from '@/components/pwa/PWAInstallBannerV2';
 import { useNavigate } from 'react-router-dom';
@@ -100,7 +100,7 @@ const DEFAULT_SETTINGS: AppSettings = {
 
 export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({ className = '' }) => {
   const { isSignedIn, user } = useSupabaseAuth();
-  const { syncStatus, migrateLocalToCloud, availableGames } = useUnifiedGameState();
+  const { syncStatus, migrateLocalToCloud, availableGames } = useGameState();
   const navigate = useNavigate();
   const [settings, setSettings] = useState<AppSettings>(DEFAULT_SETTINGS);
   const [isDirty, setIsDirty] = useState(false);

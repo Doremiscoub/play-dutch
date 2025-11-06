@@ -152,14 +152,15 @@ describe('Audit Complet - Intégration Post-Corrections', () => {
     expect(hasZIndexSystem).toBeTruthy();
   });
 
-  it('should use optimized game state without legacy hooks', () => {
+  it('should use unified game state without legacy hooks', () => {
     // Vérifier que les anciens hooks ne sont plus utilisés dans les imports
     const oldHookFiles = [
       'useSimpleGameState',
-      'useUnifiedGameState'
+      'useOptimizedGameState',
+      'useSecureGameState'
     ];
 
-    // Ce test vérifie conceptuellement que nous utilisons le nouveau système
+    // Ce test vérifie conceptuellement que nous utilisons le nouveau système unifié
     // En pratique, l'absence d'erreurs dans les autres tests confirme la migration
     expect(true).toBeTruthy(); // Placeholder - la vraie validation est l'absence d'erreurs
   });

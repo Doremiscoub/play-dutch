@@ -2,7 +2,7 @@
 import React, { useEffect, Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { useUnifiedGameState } from '@/hooks/game/useUnifiedGameState';
+import { useGameState } from '@/hooks/game/unified/useGameState';
 import { useTutorial } from '@/hooks/useTutorial';
 import { InteractiveTutorialV2 } from '@/components/tutorial/InteractiveTutorialV2';
 import { GameSyncManager } from '@/components/sync/GameSyncManager';
@@ -18,7 +18,7 @@ import { HelpCircle } from 'lucide-react';
 
 const SimpleGameSetup: React.FC = () => {
   const navigate = useNavigate();
-  const { createGame, availableGames, loadGameFromCloud, hasGame, resetGame } = useUnifiedGameState();
+  const { createGame, availableGames, loadGameFromCloud, hasGame, resetGame } = useGameState();
   const { showTutorial, closeTutorial, startTutorial, isLoading } = useTutorial();
   const headerConfig = useUnifiedHeader();
 

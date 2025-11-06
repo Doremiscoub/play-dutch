@@ -5,7 +5,7 @@ import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Cloud, CloudOff, Wifi, WifiOff } from 'lucide-react';
-import { useUnifiedGameState } from '@/hooks/game/useUnifiedGameState';
+import { useGameState } from '@/hooks/game/unified/useGameState';
 import { useSupabaseAuth } from '@/context/SupabaseAuthContext';
 
 interface GameSyncManagerProps {
@@ -14,7 +14,7 @@ interface GameSyncManagerProps {
 
 export const GameSyncManager: React.FC<GameSyncManagerProps> = ({ className = '' }) => {
   const { isSignedIn } = useSupabaseAuth();
-  const { syncStatus, lastSync } = useUnifiedGameState();
+  const { syncStatus, lastSync } = useGameState();
 
   const getSyncStatusColor = () => {
     switch (syncStatus) {
