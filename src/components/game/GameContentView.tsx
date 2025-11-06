@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Player } from '@/types';
 import GameModeHandler from '@/components/game/GameModeHandler';
-import ScoreBoard from '@/components/ScoreBoard';
+import ScoreBoard from '@/features/scoreboard/ScoreBoard';
 import IntelligentProfessorCartouche from '@/components/ai-commentator/IntelligentProfessorCartouche';
 import { useMobileAdaptation } from '@/hooks/useMobileAdaptation';
 import { cn } from '@/lib/utils';

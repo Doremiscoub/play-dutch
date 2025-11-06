@@ -2,7 +2,7 @@
 import React, { useState, useMemo } from 'react';
 import { Player } from '@/types';
 import ErrorBoundary from './ErrorBoundary';
-import ScoreBoard from './ScoreBoard';
+import ScoreBoard from '@/features/scoreboard/ScoreBoard';
 import NewRoundScoreForm from './NewRoundScoreForm';
 import GameResultOverlay from './game/GameResultOverlay';
 import { safeUpdateAllPlayersStats } from '@/utils/safePlayerStatsCalculator';

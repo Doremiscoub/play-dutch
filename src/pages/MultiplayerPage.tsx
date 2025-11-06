@@ -22,7 +22,7 @@ import { MultiplayerLobby } from '@/components/multiplayer/MultiplayerLobby';
 import UnifiedHeader from '@/components/layout/UnifiedHeader';
 import { useUnifiedHeader } from '@/hooks/useUnifiedHeader';
 import PageShell from '@/components/layout/PageShell';
-import ScoreBoard from '@/components/ScoreBoard';
+import ScoreBoard from '@/features/scoreboard/ScoreBoard';
 import NewRoundModal from '@/components/NewRoundModal';
 import IntelligentProfessorCartouche from '@/components/ai-commentator/IntelligentProfessorCartouche';
 import { MobileOptimizer } from '@/components/ui/mobile-optimizer';
