@@ -2,7 +2,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render } from '@testing-library/react';
 import { screen } from '@testing-library/dom';
-import ProfessorAvatar from '../../components/game/ProfessorAvatar';
+import { ProfessorAvatar } from '@/features/ai-commentator';
 
 describe('UI: Professor Avatar', () => {
   it('should render avatar image when loading succeeds', () => {

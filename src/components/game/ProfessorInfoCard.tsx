@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Brain, Lightbulb, Star, Award, Info, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import ProfessorAvatar from './ProfessorAvatar';
+import { ProfessorAvatar } from '@/features/ai-commentator';
 
 interface ProfessorInfoCardProps {
   isOpen: boolean;

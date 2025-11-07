@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Player } from '@/types';
-import { AIComment, AIPersonality, AICommentContext } from '@/types/ai-commentator';
-import { aiCommentaryEngine } from '@/utils/aiCommentaryEngine';
-import { optimizedAICommentaryEngine } from '@/utils/aiCommentaryEngineOptimized';
+import { AIComment, AIPersonality, AICommentContext } from '@/features/ai-commentator/types';
+import { aiCommentaryEngine } from '@/features/ai-commentator/engine/commentaryEngine';
+import { optimizedAICommentaryEngine } from '@/features/ai-commentator/engine/optimizedEngine';
 
 interface UseEnhancedAICommentatorProps {
   players: Player[];

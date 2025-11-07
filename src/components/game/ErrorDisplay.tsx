@@ -2,7 +2,7 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import ProfessorAvatar from './ProfessorAvatar';
+import { ProfessorAvatar } from '@/features/ai-commentator';
 
 interface ErrorDisplayProps {
   error: string;

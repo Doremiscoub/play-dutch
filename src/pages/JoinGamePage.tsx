@@ -10,7 +10,7 @@ import { Users, Clock, Trophy, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import PageShell from '@/components/layout/PageShell';
 import UnifiedHeader from '@/components/layout/UnifiedHeader';
-import ProfessorAvatar from '@/components/game/ProfessorAvatar';
+import { ProfessorAvatar } from '@/features/ai-commentator';
 
 interface GameInfo {
   id: string;
