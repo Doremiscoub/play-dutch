@@ -6,7 +6,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Player } from '@/types';
 import IntelligentProfessorCartouche from '@/components/ai-commentator/IntelligentProfessorCartouche';
-import PlayerStatsCard from './PlayerStatsCard';
+import PlayerStatsCard from '@/features/scoreboard/components/PlayerStatsCard';
 
 interface DesktopSidePanelProps {
   showAICommentator: boolean;
