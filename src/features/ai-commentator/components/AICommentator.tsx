@@ -114,7 +114,7 @@ export default function AICommentator({
   }
 
   return (
-    <div className={cn("relative", className)}>
+    <div className={cn("relative overflow-hidden", className)}>
       <AnimatePresence>
         <motion.div
           initial={{ opacity: 0, y: 20, scale: 0.9 }}
@@ -126,29 +126,36 @@ export default function AICommentator({
             singleColumn ? "flex-row gap-3" : "flex-col items-center gap-4"
           )}
         >
-          {/* Avatar - Taille réduite sur mobile, pas de particules infinies */}
-          <div className="relative">
-            <ProfessorAvatar 
-              size={singleColumn ? "sm" : "md"} 
-              animate={!singleColumn}
-              mood={isTyping ? "thinking" : "happy"}
-              showParticles={!singleColumn && !isTyping}
-              className={singleColumn ? "" : "mx-auto"}
-            />
+          {/* Avatar avec dimensions fixes pour éviter débordement */}
+          <div className={cn(
+            "relative flex-shrink-0",
+            singleColumn ? "w-16 h-16" : "w-20 h-20"
+          )}>
+            <div className="relative w-full h-full overflow-hidden rounded-full">
+              <ProfessorAvatar 
+                size={singleColumn ? "sm" : "md"} 
+                animate={!singleColumn}
+                mood={isTyping ? "thinking" : "happy"}
+                showParticles={false}
+                className="w-full h-full"
+              />
+            </div>
             
-            {/* Personality Indicator */}
+            {/* Personality Badge - Inside le conteneur pour éviter débordement */}
             <motion.button
               onClick={() => setShowPersonalitySelector(!showPersonalitySelector)}
               className={cn(
-                "absolute -top-2 -right-2 w-10 h-10 rounded-full bg-white shadow-xl flex items-center justify-center cursor-pointer",
-                "border-2 border-gray-300 hover:border-gray-400 transition-colors hover:shadow-2xl"
+                "absolute bottom-0 right-0 z-10",
+                singleColumn ? "w-6 h-6" : "w-8 h-8",
+                "rounded-full bg-white shadow-lg flex items-center justify-center",
+                "border-2 border-gray-300 hover:border-gray-400 transition-colors"
               )}
-              whileHover={{ scale: 1.15 }}
+              whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
               title={`Mode ${personalityIcons[personality].label}`}
             >
               {React.createElement(personalityIcons[personality].icon, {
-                className: cn("w-5 h-5", personalityIcons[personality].color)
+                className: cn(singleColumn ? "w-3 h-3" : "w-4 h-4", personalityIcons[personality].color)
               })}
             </motion.button>
           </div>
@@ -156,14 +163,18 @@ export default function AICommentator({
           {/* Comment Bubble */}
           <motion.div
             className={cn(
-              "relative bg-white rounded-2xl shadow-xl border bg-gradient-to-br from-white via-blue-50/30 to-purple-50/30 border-blue-200/50",
+              "relative bg-white rounded-2xl shadow-xl border bg-gradient-to-br from-white via-blue-50/30 to-purple-50/30 border-blue-200/50 overflow-hidden",
               singleColumn ? "flex-1 p-3" : "w-full p-5"
             )}
           >
-            <CommentPointer className="absolute -left-4 top-6" />
+            {/* CommentPointer masqué sur mobile pour éviter débordement */}
+            {!singleColumn && <CommentPointer className="absolute -left-4 top-6" />}
             
             <div className="relative">
-              <p className={cn("leading-relaxed text-gray-800 font-medium", singleColumn ? "text-sm" : "text-lg")}>
+              <p className={cn(
+                "leading-relaxed text-gray-800 font-medium break-words",
+                singleColumn ? "text-sm" : "text-lg"
+              )}>
                 {displayedText}
                 {isTyping && (
                   <motion.span
@@ -219,7 +230,11 @@ export default function AICommentator({
                 initial={{ opacity: 0, y: -10, scale: 0.95 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                className={cn("absolute top-full mt-2 left-1/2 transform -translate-x-1/2 bg-white rounded-xl shadow-xl border border-gray-200 p-4 z-50 min-w-64")}
+                className={cn(
+                  "absolute top-full mt-2 left-1/2 transform -translate-x-1/2",
+                  "bg-white rounded-xl shadow-xl border border-gray-200 p-4 z-50",
+                  "min-w-64 max-w-[90vw]"
+                )}
               >
                 <h4 className="text-sm font-semibold text-gray-700 mb-3">Personnalité du Professeur</h4>
                 <div className="grid grid-cols-2 gap-2">
