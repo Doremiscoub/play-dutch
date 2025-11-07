@@ -97,13 +97,21 @@ export const useGameState = () => {
     resetGame,
     loadFromStorage,
 
-    // Compatibilité avec l'ancien système (pour ne pas casser les pages existantes)
+    // ⚠️ DEPRECATED: Compatibilité avec l'ancien système de sync (non implémenté)
+    // Ces propriétés retournent des valeurs par défaut et seront supprimées dans v2.0
+    /** @deprecated Sync not implemented - always returns 'local' */
     syncStatus: 'local' as 'local' | 'synced' | 'syncing' | 'error',
+    /** @deprecated Sync not implemented - always returns false */
     isConnected: false,
+    /** @deprecated Sync not implemented - always returns false */
     canSync: false,
+    /** @deprecated Sync not implemented - always returns empty array */
     availableGames: [],
+    /** @deprecated Sync not implemented - no-op function */
     loadAvailableGames: () => Promise.resolve(),
+    /** @deprecated Sync not implemented - always returns false */
     loadGameFromCloud: (_gameId?: string) => Promise.resolve(false),
+    /** @deprecated Sync not implemented - always returns false */
     migrateLocalToCloud: () => Promise.resolve(false)
   };
 };

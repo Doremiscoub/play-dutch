@@ -4,9 +4,10 @@
  */
 import { Player, RoundHistoryEntry } from '@/types';
 import { logger } from '@/utils/logger';
+import { STORAGE_KEYS } from '@/utils/storageKeys';
 
-export const UNIFIED_GAME_KEY = 'dutch_unified_game';
-const LEGACY_KEYS = ['dutch_simple_game', 'dutch_secure_game', 'dutch_optimized_game_v2'];
+export const UNIFIED_GAME_KEY = STORAGE_KEYS.UNIFIED_GAME;
+const LEGACY_KEYS = STORAGE_KEYS.LEGACY_UNIFIED_KEYS;
 
 export interface StoredGameData {
   players: Player[];

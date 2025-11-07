@@ -1,10 +1,22 @@
 
+import { logger } from '@/utils/logger';
+
 /**
  * Constantes pour les clés localStorage
  * Centralise toutes les clés utilisées dans l'application
  */
 export const STORAGE_KEYS = {
-  // Jeu en cours
+  // Système unifié (nouveau)
+  UNIFIED_GAME: 'dutch_unified_game',
+  
+  // Anciens systèmes unifiés (migration automatique)
+  LEGACY_UNIFIED_KEYS: [
+    'dutch_simple_game',
+    'dutch_secure_game',
+    'dutch_optimized_game_v2'
+  ],
+  
+  // Jeu en cours (legacy)
   CURRENT_GAME: 'current_dutch_game',
   GAME_ACTIVE: 'dutch_game_active',
   
@@ -45,5 +57,5 @@ export const cleanupLegacyStorage = () => {
     }
   });
   
-  console.log('Legacy storage keys cleaned up');
+  logger.debug('🧹 Legacy storage keys cleaned up');
 };
