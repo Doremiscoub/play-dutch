@@ -8,7 +8,7 @@ import NewRoundModal from '@/components/NewRoundModal';
 import PageShell from '@/components/layout/PageShell';
 import UnifiedHeader from '@/components/layout/UnifiedHeader';
 import { useUnifiedHeader } from '@/hooks/useUnifiedHeader';
-import IntelligentProfessorCartouche from '@/components/ai-commentator/IntelligentProfessorCartouche';
+import { AICommentator } from '@/features/ai-commentator';
 import { MobileOptimizer } from '@/components/ui/mobile-optimizer';
 import { toast } from 'sonner';
 import GameLayout from '@/components/layout/GameLayout';
@@ -158,7 +158,7 @@ const SimpleGamePage: React.FC = () => {
             {/* Professeur Cartouche aligné avec le reste */}
             <ErrorBoundary fallback={<div className="p-4 bg-red-50 rounded-lg">Erreur du commentateur</div>}>
               <div className="mb-4">
-                <IntelligentProfessorCartouche 
+                <AICommentator 
                   players={players}
                   roundCount={roundHistory.length}
                   scoreLimit={scoreLimit}

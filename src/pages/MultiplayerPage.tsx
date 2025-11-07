@@ -24,7 +24,7 @@ import { useUnifiedHeader } from '@/hooks/useUnifiedHeader';
 import PageShell from '@/components/layout/PageShell';
 import ScoreBoard from '@/features/scoreboard/ScoreBoard';
 import NewRoundModal from '@/components/NewRoundModal';
-import IntelligentProfessorCartouche from '@/components/ai-commentator/IntelligentProfessorCartouche';
+import { AICommentator } from '@/features/ai-commentator';
 import { MobileOptimizer } from '@/components/ui/mobile-optimizer';
 import GameLayout from '@/components/layout/GameLayout';
 import { toast } from 'sonner';
@@ -178,7 +178,7 @@ const MultiplayerPage: React.FC = () => {
               {/* Commentaires du Professeur Cartouche */}
               {gameState && (
                 <div className="mb-6">
-                  <IntelligentProfessorCartouche 
+                  <AICommentator 
                     players={gameState.players}
                     roundCount={(gameState.roundHistory || []).length}
                     scoreLimit={gameState.scoreLimit || 100}

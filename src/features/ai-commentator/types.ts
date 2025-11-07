@@ -1,3 +1,6 @@
+/**
+ * Types centralisés pour l'AI Commentator
+ */
 
 export type AICommentType = 
   | 'game_start'
@@ -16,7 +19,7 @@ export type AIPersonality = 'humorous' | 'analytical' | 'encouraging' | 'sarcast
 export interface AICommentContext {
   type: AICommentType;
   intensity: 'low' | 'medium' | 'high';
-  focus: string | null; // Nom du joueur en focus
+  focus: string | null;
   gamePhase?: 'early' | 'mid' | 'end';
   leadingPlayer?: string;
   strugglingPlayer?: string;
@@ -41,4 +44,14 @@ export interface AICommentatorState {
   commentHistory: AIComment[];
   personality: AIPersonality;
   isActive: boolean;
+}
+
+export type ProfessorMood = 'happy' | 'excited' | 'thinking' | 'surprised' | 'neutral';
+
+export interface ProfessorAvatarProps {
+  className?: string;
+  size?: 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
+  animate?: boolean;
+  mood?: ProfessorMood;
+  showParticles?: boolean;
 }

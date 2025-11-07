@@ -1,16 +1,21 @@
+/**
+ * AI Commentator - Composant principal consolidé
+ */
+
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Player } from '@/types';
-import { AIPersonality } from '@/types/ai-commentator';
-import ProfessorAvatar from '@/components/game/ProfessorAvatar';
+import { AIPersonality } from '../types';
+import ProfessorAvatar from './professor/ProfessorAvatar';
+import CommentBubble from './CommentBubble';
 import CommentPointer from './CommentPointer';
-import { useEnhancedAICommentator } from '@/hooks/useEnhancedAICommentator';
+import { useAICommentator } from '../hooks/useAICommentator';
 import { Button } from '@/components/ui/button';
 import { Sparkles, Brain, Heart, Zap, RotateCcw, Settings, Clock } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useMobileAdaptation } from '@/hooks/useMobileAdaptation';
 
-interface EnhancedAICommentatorV2Props {
+interface AICommentatorProps {
   players: Player[];
   roundCount: number;
   scoreLimit: number;
@@ -18,13 +23,13 @@ interface EnhancedAICommentatorV2Props {
   className?: string;
 }
 
-const EnhancedAICommentatorV2 = React.memo(function EnhancedAICommentatorV2({
+export default function AICommentator({
   players,
   roundCount,
   scoreLimit,
   recentEvent,
   className
-}: EnhancedAICommentatorV2Props) {
+}: AICommentatorProps) {
   const { singleColumn, reducedAnimations } = useMobileAdaptation();
   const {
     currentComment,
@@ -33,27 +38,25 @@ const EnhancedAICommentatorV2 = React.memo(function EnhancedAICommentatorV2({
     setPersonality,
     generateComment,
     clearHistory,
-    getPlayerMemory,
     commentHistory,
     isMemoryActive
-  } = useEnhancedAICommentator({
-    players,
-    roundCount,
-    scoreLimit,
-    autoGenerate: true,
-    refreshInterval: 15000
-  });
+  } = useAICommentator({ players, roundCount, scoreLimit, autoGenerate: true, refreshInterval: 15000 });
 
   const [displayedText, setDisplayedText] = useState<string>('');
   const [isTyping, setIsTyping] = useState(false);
   const [showPersonalitySelector, setShowPersonalitySelector] = useState(false);
-  const [showMemoryStats, setShowMemoryStats] = useState(false);
 
-  // Animation de frappe de texte (désactivée sur mobile si reducedAnimations)
+  const personalityIcons = {
+    humorous: { icon: Sparkles, color: 'text-yellow-500', label: 'Humoristique' },
+    analytical: { icon: Brain, color: 'text-blue-500', label: 'Analytique' },
+    encouraging: { icon: Heart, color: 'text-green-500', label: 'Encourageant' },
+    sarcastic: { icon: Zap, color: 'text-purple-500', label: 'Sarcastique' }
+  };
+
+  // Typing animation
   useEffect(() => {
     if (!currentComment?.comment) return;
 
-    // Si animations réduites, afficher directement le texte
     if (reducedAnimations) {
       setDisplayedText(currentComment.comment);
       setIsTyping(false);
@@ -78,8 +81,6 @@ const EnhancedAICommentatorV2 = React.memo(function EnhancedAICommentatorV2({
     };
 
     typeNextWord();
-
-    // Cleanup function pour éviter les race conditions
     return () => {
       if (timeoutId) clearTimeout(timeoutId);
       setIsTyping(false);
@@ -91,23 +92,11 @@ const EnhancedAICommentatorV2 = React.memo(function EnhancedAICommentatorV2({
     setShowPersonalitySelector(false);
   };
 
-  const handleManualRefresh = () => {
-    generateComment('manual_refresh');
-  };
-
-  const personalityIcons = {
-    humorous: { icon: Sparkles, color: 'text-yellow-500', label: 'Humoristique' },
-    analytical: { icon: Brain, color: 'text-blue-500', label: 'Analytique' },
-    encouraging: { icon: Heart, color: 'text-green-500', label: 'Encourageant' },
-    sarcastic: { icon: Zap, color: 'text-purple-500', label: 'Sarcastique' }
-  };
-
-  // État de chargement ou génération
+  // Loading state
   if (isGenerating || !currentComment) {
     return (
       <div className={cn(
-        "flex items-center justify-center bg-gradient-to-r from-blue-50 to-purple-50",
-        "border border-blue-200 rounded-xl",
+        "flex items-center justify-center bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-xl",
         singleColumn ? "p-3" : "p-6",
         className
       )}>
@@ -124,7 +113,6 @@ const EnhancedAICommentatorV2 = React.memo(function EnhancedAICommentatorV2({
     );
   }
 
-
   return (
     <div className={cn("relative", className)}>
       <AnimatePresence>
@@ -135,7 +123,7 @@ const EnhancedAICommentatorV2 = React.memo(function EnhancedAICommentatorV2({
           transition={{ duration: 0.5, ease: "easeOut" }}
           className="relative"
         >
-          {/* Avatar du Professeur avec effets */}
+          {/* Avatar */}
           <div className={cn("relative", singleColumn ? "mb-2" : "mb-4")}>
             <ProfessorAvatar 
               size={singleColumn ? "md" : "lg"} 
@@ -145,19 +133,16 @@ const EnhancedAICommentatorV2 = React.memo(function EnhancedAICommentatorV2({
               className="mx-auto"
             />
             
-            {/* Indicateur de personnalité - agrandi et plus visible */}
+            {/* Personality Indicator */}
             <motion.button
               onClick={() => setShowPersonalitySelector(!showPersonalitySelector)}
               className={cn(
-                "absolute -top-2 -right-2 w-10 h-10 rounded-full",
-                "bg-white shadow-xl flex items-center justify-center cursor-pointer",
-                "border-2 border-gray-300 hover:border-gray-400 transition-colors",
-                "hover:shadow-2xl"
+                "absolute -top-2 -right-2 w-10 h-10 rounded-full bg-white shadow-xl flex items-center justify-center cursor-pointer",
+                "border-2 border-gray-300 hover:border-gray-400 transition-colors hover:shadow-2xl"
               )}
               whileHover={{ scale: 1.15 }}
               whileTap={{ scale: 0.95 }}
               title={`Mode ${personalityIcons[personality].label}`}
-              aria-label={`Changer la personnalité (actuellement ${personalityIcons[personality].label})`}
             >
               {React.createElement(personalityIcons[personality].icon, {
                 className: cn("w-5 h-5", personalityIcons[personality].color)
@@ -165,31 +150,17 @@ const EnhancedAICommentatorV2 = React.memo(function EnhancedAICommentatorV2({
             </motion.button>
           </div>
 
-          {/* Bulle de commentaire */}
+          {/* Comment Bubble */}
           <motion.div
             className={cn(
-              "relative bg-white rounded-2xl shadow-xl border",
-              "bg-gradient-to-br from-white via-blue-50/30 to-purple-50/30",
-              "border-blue-200/50",
+              "relative bg-white rounded-2xl shadow-xl border bg-gradient-to-br from-white via-blue-50/30 to-purple-50/30 border-blue-200/50",
               singleColumn ? "p-4" : "p-6"
             )}
-            animate={!reducedAnimations && isTyping ? { 
-              boxShadow: [
-                "0 10px 30px hsl(var(--dutch-blue) / 0.1)",
-                "0 10px 30px hsl(var(--dutch-purple) / 0.2)",
-                "0 10px 30px hsl(var(--dutch-blue) / 0.1)"
-              ]
-            } : {}}
-            transition={{ duration: 2, repeat: isTyping && !reducedAnimations ? Infinity : 0 }}
           >
             <CommentPointer className="absolute -left-4 top-6" />
             
-            {/* Texte du commentaire */}
             <div className="relative">
-              <p className={cn(
-                "leading-relaxed text-gray-800 font-medium",
-                singleColumn ? "text-sm" : "text-lg"
-              )}>
+              <p className={cn("leading-relaxed text-gray-800 font-medium", singleColumn ? "text-sm" : "text-lg")}>
                 {displayedText}
                 {isTyping && (
                   <motion.span
@@ -200,12 +171,11 @@ const EnhancedAICommentatorV2 = React.memo(function EnhancedAICommentatorV2({
                 )}
               </p>
               
-              {/* Badge de personnalité - plus visible et interactif */}
+              {/* Controls */}
               <div className="flex items-center justify-between mt-4">
                 <button
                   onClick={() => setShowPersonalitySelector(!showPersonalitySelector)}
                   className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gradient-to-r from-blue-50 to-purple-50 hover:from-blue-100 hover:to-purple-100 transition-colors cursor-pointer border border-gray-200"
-                  aria-label="Voir les personnalités disponibles"
                 >
                   {React.createElement(personalityIcons[personality].icon, {
                     className: cn("w-4 h-4", personalityIcons[personality].color)
@@ -224,27 +194,14 @@ const EnhancedAICommentatorV2 = React.memo(function EnhancedAICommentatorV2({
                 </button>
                 
                 <div className="flex items-center gap-2">
-                  <span className="text-xs text-gray-400">
-                    {commentHistory.length} commentaires
-                  </span>
+                  <span className="text-xs text-gray-400">{commentHistory.length} commentaires</span>
                 </div>
                 
                 <div className="flex items-center gap-1">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={handleManualRefresh}
-                    disabled={isGenerating}
-                    className="text-gray-500 hover:text-blue-600 p-1 h-auto"
-                  >
+                  <Button variant="ghost" size="sm" onClick={() => generateComment('manual_refresh')} disabled={isGenerating} className="text-gray-500 hover:text-blue-600 p-1 h-auto">
                     <RotateCcw className={cn("w-3 h-3", isGenerating && "animate-spin")} />
                   </Button>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setShowPersonalitySelector(!showPersonalitySelector)}
-                    className="text-gray-500 hover:text-purple-600 p-1 h-auto"
-                  >
+                  <Button variant="ghost" size="sm" onClick={() => setShowPersonalitySelector(!showPersonalitySelector)} className="text-gray-500 hover:text-purple-600 p-1 h-auto">
                     <Settings className="w-3 h-3" />
                   </Button>
                 </div>
@@ -252,22 +209,16 @@ const EnhancedAICommentatorV2 = React.memo(function EnhancedAICommentatorV2({
             </div>
           </motion.div>
 
-          {/* Sélecteur de personnalité */}
+          {/* Personality Selector */}
           <AnimatePresence>
             {showPersonalitySelector && (
               <motion.div
                 initial={{ opacity: 0, y: -10, scale: 0.95 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                className={cn(
-                  "absolute top-full mt-2 left-1/2 transform -translate-x-1/2",
-                  "bg-white rounded-xl shadow-xl border border-gray-200 p-4 z-50",
-                  "min-w-64"
-                )}
+                className={cn("absolute top-full mt-2 left-1/2 transform -translate-x-1/2 bg-white rounded-xl shadow-xl border border-gray-200 p-4 z-50 min-w-64")}
               >
-                <h4 className="text-sm font-semibold text-gray-700 mb-3">
-                  Personnalité du Professeur
-                </h4>
+                <h4 className="text-sm font-semibold text-gray-700 mb-3">Personnalité du Professeur</h4>
                 <div className="grid grid-cols-2 gap-2">
                   {Object.entries(personalityIcons).map(([key, config]) => (
                     <Button
@@ -277,24 +228,18 @@ const EnhancedAICommentatorV2 = React.memo(function EnhancedAICommentatorV2({
                       onClick={() => handlePersonalityChange(key as AIPersonality)}
                       className="flex items-center gap-2 justify-start"
                     >
-                      {React.createElement(config.icon, {
-                        className: cn("w-4 h-4", config.color)
-                      })}
+                      {React.createElement(config.icon, { className: cn("w-4 h-4", config.color) })}
                       <span className="text-xs">{config.label}</span>
                     </Button>
                   ))}
                 </div>
                 
-                {/* Bouton pour nettoyer la mémoire */}
                 {isMemoryActive && (
                   <div className="mt-3 pt-3 border-t border-gray-200">
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => {
-                        clearHistory();
-                        setShowPersonalitySelector(false);
-                      }}
+                      onClick={() => { clearHistory(); setShowPersonalitySelector(false); }}
                       className="w-full text-xs text-red-600 hover:text-red-700"
                     >
                       Effacer la mémoire du Professeur
@@ -308,6 +253,4 @@ const EnhancedAICommentatorV2 = React.memo(function EnhancedAICommentatorV2({
       </AnimatePresence>
     </div>
   );
-});
-
-export default EnhancedAICommentatorV2;
+}

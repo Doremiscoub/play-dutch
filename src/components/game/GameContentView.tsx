@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Player } from '@/types';
 import GameModeHandler from '@/components/game/GameModeHandler';
 import ScoreBoard from '@/features/scoreboard/ScoreBoard';
-import IntelligentProfessorCartouche from '@/components/ai-commentator/IntelligentProfessorCartouche';
+import { AICommentator } from '@/features/ai-commentator';
 import { useMobileAdaptation } from '@/hooks/useMobileAdaptation';
 import { cn } from '@/lib/utils';
 
@@ -70,7 +70,7 @@ const GameContentView: React.FC<GameContentViewProps> = ({
                 singleColumn ? "mb-3 px-3 pt-2" : "mb-8 px-4 pt-4"
               )}
             >
-              <IntelligentProfessorCartouche 
+              <AICommentator 
                 players={players}
                 roundCount={roundHistory.length}
                 scoreLimit={scoreLimit}

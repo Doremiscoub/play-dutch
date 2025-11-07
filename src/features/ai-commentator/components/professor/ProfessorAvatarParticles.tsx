@@ -1,12 +1,11 @@
+/**
+ * Particles animées pour le Professor Avatar
+ */
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, Heart, Zap, Star, Flame, Award } from 'lucide-react';
 import { useMobileAdaptation } from '@/hooks/useMobileAdaptation';
-
-interface ProfessorAvatarParticlesProps {
-  showParticles: boolean;
-}
 
 interface Particle {
   id: number;
@@ -18,48 +17,30 @@ interface Particle {
   size: number;
 }
 
-const particleIcons = {
-  sparkle: Sparkles,
-  heart: Heart,
-  zap: Zap,
-  star: Star,
-  flame: Flame,
-  award: Award
-};
+const particleIcons = { sparkle: Sparkles, heart: Heart, zap: Zap, star: Star, flame: Flame, award: Award };
+const particleColors = ['text-dutch-blue', 'text-dutch-purple', 'text-dutch-orange', 'text-yellow-400', 'text-pink-400', 'text-green-400', 'text-red-400', 'text-cyan-400'];
 
-const particleColors = [
-  'text-dutch-blue',
-  'text-dutch-purple',
-  'text-dutch-orange',
-  'text-yellow-400',
-  'text-pink-400',
-  'text-green-400',
-  'text-red-400',
-  'text-cyan-400'
-];
-
-export default function ProfessorAvatarParticles({ showParticles }: ProfessorAvatarParticlesProps) {
+export default function ProfessorAvatarParticles({ showParticles }: { showParticles: boolean }) {
   const { singleColumn } = useMobileAdaptation();
   const [particles, setParticles] = useState<Particle[]>([]);
 
   useEffect(() => {
     if (showParticles) {
-      // Réduire à 6 particules sur mobile pour les performances
       const particleCount = singleColumn ? 6 : 12;
       const newParticles = Array.from({ length: particleCount }, (_, i) => ({
         id: i,
-        x: Math.random() * 120 - 10, // Étendu au-delà des limites
+        x: Math.random() * 120 - 10,
         y: Math.random() * 120 - 10,
         delay: Math.random() * 3,
         icon: Object.keys(particleIcons)[Math.floor(Math.random() * Object.keys(particleIcons).length)] as keyof typeof particleIcons,
         color: particleColors[Math.floor(Math.random() * particleColors.length)],
-        size: 3 + Math.random() * 2 // Taille variable entre 3 et 5
+        size: 3 + Math.random() * 2
       }));
       setParticles(newParticles);
     } else {
       setParticles([]);
     }
-  }, [showParticles]);
+  }, [showParticles, singleColumn]);
 
   if (!showParticles) return null;
 
@@ -72,17 +53,8 @@ export default function ProfessorAvatarParticles({ showParticles }: ProfessorAva
           <motion.div
             key={particle.id}
             className="absolute pointer-events-none z-10"
-            style={{
-              left: `${particle.x}%`,
-              top: `${particle.y}%`,
-            }}
-            initial={{ 
-              opacity: 0, 
-              scale: 0,
-              rotate: 0,
-              x: 0,
-              y: 0
-            }}
+            style={{ left: `${particle.x}%`, top: `${particle.y}%` }}
+            initial={{ opacity: 0, scale: 0, rotate: 0, x: 0, y: 0 }}
             animate={{ 
               opacity: [0, 1, 0.8, 0],
               scale: [0, 1.2, 1, 0.8],
@@ -90,21 +62,11 @@ export default function ProfessorAvatarParticles({ showParticles }: ProfessorAva
               x: [0, Math.random() * 40 - 20, Math.random() * 60 - 30],
               rotate: [0, 180, 360, 540]
             }}
-            transition={{
-              duration: 4,
-              repeat: Infinity,
-              delay: particle.delay,
-              ease: "easeOut",
-              times: [0, 0.2, 0.7, 1]
-            }}
+            transition={{ duration: 4, repeat: Infinity, delay: particle.delay, ease: "easeOut", times: [0, 0.2, 0.7, 1] }}
           >
             <IconComponent 
               className={`${particle.color} drop-shadow-lg`}
-              style={{ 
-                width: `${particle.size * 4}px`, 
-                height: `${particle.size * 4}px`,
-                filter: 'drop-shadow(0 0 4px currentColor)'
-              }}
+              style={{ width: `${particle.size * 4}px`, height: `${particle.size * 4}px`, filter: 'drop-shadow(0 0 4px currentColor)' }}
             />
           </motion.div>
         );

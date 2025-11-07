@@ -1,21 +1,19 @@
-import { Player } from '@/types';
-import { AICommentType, AIPersonality, AICommentContext, AIComment } from '@/types/ai-commentator';
-import { aiCommentaryEngine } from './aiCommentaryEngine';
-
 /**
- * Version optimisée de l'AI Commentary Engine avec debouncing et throttling
+ * Wrapper optimisé avec debouncing et throttling
  */
+
+import { Player } from '@/types';
+import { AIPersonality, AIComment } from '../types';
+import { aiCommentaryEngine } from './commentaryEngine';
+
 class OptimizedAICommentaryEngine {
   private lastGenerationTime = 0;
   private lastSaveTime = 0;
   private pendingSave: NodeJS.Timeout | null = null;
   
-  private readonly MIN_GENERATION_INTERVAL = 2000; // 2s minimum entre générations
-  private readonly SAVE_THROTTLE = 5000; // Sauvegarder max toutes les 5s
+  private readonly MIN_GENERATION_INTERVAL = 2000;
+  private readonly SAVE_THROTTLE = 5000;
 
-  /**
-   * Génère un commentaire avec debouncing
-   */
   public generateIntelligentCommentDebounced(
     players: Player[], 
     roundCount: number, 
@@ -24,29 +22,17 @@ class OptimizedAICommentaryEngine {
   ): AIComment | null {
     const now = Date.now();
     
-    // Éviter les générations trop fréquentes
     if (now - this.lastGenerationTime < this.MIN_GENERATION_INTERVAL) {
       return null;
     }
     
     this.lastGenerationTime = now;
-    
-    const comment = aiCommentaryEngine.generateIntelligentComment(
-      players,
-      roundCount,
-      scoreLimit,
-      recentEvent
-    );
-    
-    // Throttle les sauvegardes
+    const comment = aiCommentaryEngine.generateIntelligentComment(players, roundCount, scoreLimit, recentEvent);
     this.throttledSave();
     
     return comment;
   }
 
-  /**
-   * Sauvegarde throttlée pour éviter les écritures trop fréquentes
-   */
   private throttledSave(): void {
     if (this.pendingSave) {
       clearTimeout(this.pendingSave);
@@ -56,10 +42,8 @@ class OptimizedAICommentaryEngine {
     const timeSinceLastSave = now - this.lastSaveTime;
     
     if (timeSinceLastSave >= this.SAVE_THROTTLE) {
-      // Sauvegarder immédiatement
       this.performSave();
     } else {
-      // Planifier une sauvegarde
       const delay = this.SAVE_THROTTLE - timeSinceLastSave;
       this.pendingSave = setTimeout(() => {
         this.performSave();
@@ -69,12 +53,8 @@ class OptimizedAICommentaryEngine {
 
   private performSave(): void {
     this.lastSaveTime = Date.now();
-    // La sauvegarde est déjà faite dans aiCommentaryEngine
   }
 
-  /**
-   * Wrapper pour les autres méthodes de l'engine
-   */
   public setPersonality(personality: AIPersonality): void {
     aiCommentaryEngine.setPersonality(personality);
   }
