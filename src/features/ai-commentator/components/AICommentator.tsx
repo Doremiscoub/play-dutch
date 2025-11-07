@@ -120,17 +120,20 @@ export default function AICommentator({
           initial={{ opacity: 0, y: 20, scale: 0.9 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: -20, scale: 0.9 }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-          className="relative"
+          transition={{ duration: 0.3, ease: "easeOut" }}
+          className={cn(
+            "flex items-start",
+            singleColumn ? "flex-row gap-3" : "flex-col items-center gap-4"
+          )}
         >
-          {/* Avatar */}
-          <div className={cn("relative", singleColumn ? "mb-2" : "mb-4")}>
+          {/* Avatar - Taille réduite sur mobile, pas de particules infinies */}
+          <div className="relative">
             <ProfessorAvatar 
-              size={singleColumn ? "md" : "lg"} 
-              animate 
+              size={singleColumn ? "sm" : "md"} 
+              animate={!singleColumn}
               mood={isTyping ? "thinking" : "happy"}
-              showParticles={!isTyping}
-              className="mx-auto"
+              showParticles={!singleColumn && !isTyping}
+              className={singleColumn ? "" : "mx-auto"}
             />
             
             {/* Personality Indicator */}
@@ -154,7 +157,7 @@ export default function AICommentator({
           <motion.div
             className={cn(
               "relative bg-white rounded-2xl shadow-xl border bg-gradient-to-br from-white via-blue-50/30 to-purple-50/30 border-blue-200/50",
-              singleColumn ? "p-4" : "p-6"
+              singleColumn ? "flex-1 p-3" : "w-full p-5"
             )}
           >
             <CommentPointer className="absolute -left-4 top-6" />

@@ -7,10 +7,13 @@ import TournamentProgress from '@/components/tournament/TournamentProgress';
 import NewRoundScoreForm from '@/components/NewRoundScoreForm';
 import UnifiedHeader from '@/components/layout/UnifiedHeader';
 import TournamentResultsView from './TournamentResultsView';
-import GameContentView from './GameContentView';
+import ScoreBoard from '@/features/scoreboard/ScoreBoard';
+import { AICommentator } from '@/features/ai-commentator';
 import { useGameTopBarProps } from './GameTopBarLogic';
 import { useGameRoundHandler } from './GameRoundHandler';
 import { useNavigate } from 'react-router-dom';
+import { useMobileAdaptation } from '@/hooks/useMobileAdaptation';
+import { cn } from '@/lib/utils';
 
 interface GamePageContainerProps {
   players: Player[];
@@ -113,21 +116,45 @@ const GamePageContainer: React.FC<GamePageContainerProps> = ({
             />
           </motion.div>
         ) : (
-          <GameContentView
-            gameMode={gameMode}
-            players={players}
-            roundHistory={roundHistory}
-            scoreLimit={scoreLimit}
-            onGameEnd={onRequestEndGame}
-            onRestart={onRestart}
-            onAddRound={handleAddNewRound}
-            onUndoLastRound={onUndoLastRound}
-            onRequestEndGame={onRequestEndGame}
-            showGameEndConfirmation={showGameEndConfirmation}
-            onConfirmEndGame={onConfirmEndGame}
-            onCancelEndGame={onCancelEndGame}
-            onOpenScoreForm={onOpenScoreForm}
-          />
+          <motion.div
+            key="game-board"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className={gameMode === 'tournament' ? "pt-4" : ""}
+          >
+            <div className="bg-gradient-to-br from-trinity-blue-50 via-background to-trinity-purple-50 min-h-screen pb-32">
+              <div className="mx-auto max-w-6xl px-4">
+                {/* Professeur Cartouche */}
+                <motion.div
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="mb-8 pt-4"
+                >
+                  <AICommentator 
+                    players={players}
+                    roundCount={roundHistory.length}
+                    scoreLimit={scoreLimit}
+                  />
+                </motion.div>
+
+                {/* ScoreBoard */}
+                <ScoreBoard
+                  players={players}
+                  roundHistory={roundHistory}
+                  onAddRound={handleAddNewRound}
+                  onUndoLastRound={onUndoLastRound}
+                  onEndGame={onRequestEndGame}
+                  showGameEndConfirmation={showGameEndConfirmation}
+                  onConfirmEndGame={onConfirmEndGame}
+                  onCancelEndGame={onCancelEndGame}
+                  scoreLimit={scoreLimit}
+                  openScoreForm={onOpenScoreForm}
+                />
+              </div>
+            </div>
+          </motion.div>
         )}
       </AnimatePresence>
 

@@ -47,63 +47,39 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
   const recentRounds = player.rounds.slice(-3);
   const hasPositiveTrend = recentRounds.length >= 2 && recentRounds[recentRounds.length - 1].score < recentRounds[recentRounds.length - 2].score;
 
-  // Système de couleurs unifié par rang
+  // Système de couleurs simplifié par rang
   const getRankTheme = () => {
     const themes = {
       1: {
-        gradient: "from-amber-500/25 via-yellow-400/20 to-orange-500/15",
-        border: "border-amber-400/60",
-        glow: "shadow-lg shadow-amber-500/30",
-        text: "text-amber-700",
-        accent: "bg-amber-500",
-        lightBg: "bg-amber-50/80",
-        rankGlow: "from-amber-400/50 to-yellow-400/50"
+        gradient: "from-amber-100 to-yellow-100",
+        border: "border-amber-300",
+        text: "text-amber-700"
       },
       2: {
-        gradient: "from-blue-500/25 via-cyan-400/20 to-indigo-500/15",
-        border: "border-blue-400/60",
-        glow: "shadow-lg shadow-blue-500/30",
-        text: "text-blue-700",
-        accent: "bg-blue-500",
-        lightBg: "bg-blue-50/80",
-        rankGlow: "from-blue-400/50 to-cyan-400/50"
+        gradient: "from-blue-100 to-cyan-100",
+        border: "border-blue-300",
+        text: "text-blue-700"
       },
       3: {
-        gradient: "from-emerald-500/25 via-green-400/20 to-teal-500/15",
-        border: "border-emerald-400/60",
-        glow: "shadow-lg shadow-emerald-500/30",
-        text: "text-emerald-700",
-        accent: "bg-emerald-500",
-        lightBg: "bg-emerald-50/80",
-        rankGlow: "from-emerald-400/50 to-green-400/50"
+        gradient: "from-green-100 to-emerald-100",
+        border: "border-green-300",
+        text: "text-emerald-700"
       },
       4: {
-        gradient: "from-purple-500/25 via-violet-400/20 to-indigo-500/15",
-        border: "border-purple-400/60",
-        glow: "shadow-lg shadow-purple-500/30",
-        text: "text-purple-700",
-        accent: "bg-purple-500",
-        lightBg: "bg-purple-50/80",
-        rankGlow: "from-purple-400/50 to-violet-400/50"
+        gradient: "from-purple-100 to-violet-100",
+        border: "border-purple-300",
+        text: "text-purple-700"
       },
       5: {
-        gradient: "from-rose-500/25 via-pink-400/20 to-red-500/15",
-        border: "border-rose-400/60",
-        glow: "shadow-lg shadow-rose-500/30",
-        text: "text-rose-700",
-        accent: "bg-rose-500",
-        lightBg: "bg-rose-50/80",
-        rankGlow: "from-rose-400/50 to-pink-400/50"
+        gradient: "from-rose-100 to-pink-100",
+        border: "border-rose-300",
+        text: "text-rose-700"
       }
     };
     return themes[rank as keyof typeof themes] || {
-      gradient: "from-slate-500/25 via-gray-400/20 to-zinc-500/15",
-      border: "border-slate-400/60",
-      glow: "shadow-lg shadow-slate-500/30",
-      text: "text-slate-700",
-      accent: "bg-slate-500",
-      lightBg: "bg-slate-50/80",
-      rankGlow: "from-slate-400/50 to-gray-400/50"
+      gradient: "from-slate-100 to-gray-100",
+      border: "border-slate-300",
+      text: "text-slate-700"
     };
   };
   const theme = getRankTheme();
@@ -111,32 +87,26 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
     setIsExpanded(!isExpanded);
     onSelect(player);
   };
-  return <motion.div className={cn("relative rounded-2xl backdrop-blur-xl border-2 transition-all duration-200 cursor-pointer overflow-visible group", `bg-gradient-to-br ${theme.gradient}`, theme.border, isSelected || isExpanded ? `ring-4 ring-purple-400/40 scale-[1.01] z-10 ${theme.glow}` : `hover:scale-[1.005] hover:-translate-y-0.5 ${theme.glow}`)} onClick={handleCardClick} initial={{
+  return <motion.div className={cn(
+    "relative rounded-2xl border-2 transition-all duration-200 cursor-pointer overflow-hidden",
+    `bg-gradient-to-br ${theme.gradient}`,
+    theme.border,
+    "shadow-lg",
+    isSelected || isExpanded ? "ring-2 ring-purple-400/60 scale-[1.01] z-10" : "hover:scale-[1.005] hover:-translate-y-1"
+  )} onClick={handleCardClick} initial={{
     opacity: 0,
-    y: 10,
-    scale: 0.98
+    y: 10
   }} animate={{
     opacity: 1,
-    y: 0,
-    scale: 1
+    y: 0
   }} transition={{
-    duration: 0.15,
-    delay: rank * 0.02,
-    type: "spring",
-    stiffness: 300
+    duration: 0.2,
+    delay: rank * 0.02
   }} whileHover={{
     y: -2
   }} whileTap={{
     scale: 0.99
   }} layout>
-      {/* Effet de brillance subtle */}
-      <motion.div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -skew-x-12" initial={{
-      x: '-100%'
-    }} whileHover={{
-      x: '200%'
-    }} transition={{
-      duration: 0.6
-    }} />
 
       {/* Badge gagnant flottant */}
       {isWinner && <motion.div className="absolute -top-2 -right-2 z-[100]" initial={{
@@ -165,40 +135,29 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
           <div className="flex items-center gap-3">
             <motion.div 
               className={cn(
-                "relative w-16 h-16 rounded-3xl backdrop-blur-md border-3 border-white/50",
-                "flex items-center justify-center text-white font-black text-2xl z-20",
+                "relative w-12 h-12 rounded-2xl border-2 border-white/60",
+                "flex items-center justify-center font-black text-xl",
                 `bg-gradient-to-br ${theme.gradient}`,
-                theme.glow
+                theme.text
               )}
-              whileHover={{
-                scale: 1.08
-              }}
-              transition={{
-                duration: 0.15
-              }}
+              whileHover={{ scale: 1.05 }}
+              transition={{ duration: 0.15 }}
             >
-              {/* Themed background overlay */}
-              <div className={cn("absolute inset-0 rounded-3xl", `bg-gradient-to-tr ${theme.gradient}`)} />
-              
-              {/* Static glow - pas d'animation infinie */}
-              <div className={cn("absolute inset-0 rounded-3xl blur-sm opacity-50", `bg-gradient-to-r ${theme.rankGlow}`)} />
-              
-              {/* Winner crown overlay */}
               {isWinner && (
                 <motion.div 
-                  className="absolute -top-3 -right-3 w-8 h-8 rounded-full 
+                  className="absolute -top-2 -right-2 w-6 h-6 rounded-full 
                              bg-gradient-to-r from-amber-400 to-yellow-500
-                             border-3 border-white shadow-xl
-                             flex items-center justify-center text-sm"
-                  initial={{ scale: 0, rotate: -180 }}
-                  animate={{ scale: 1, rotate: 0 }}
-                  transition={{ delay: 0.3, type: "spring" }}
+                             border-2 border-white shadow-lg
+                             flex items-center justify-center text-xs"
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.2, type: "spring" }}
                 >
                   👑
                 </motion.div>
               )}
               
-              <span className="relative z-10 drop-shadow-lg">{rank}</span>
+              <span className="relative z-10">{rank}</span>
             </motion.div>
             
             <div className="w-14 h-14 rounded-xl bg-white/80 backdrop-blur-sm border-2 border-white/60 shadow-lg flex items-center justify-center relative overflow-hidden transition-transform duration-150 hover:scale-105">
@@ -236,10 +195,9 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
             {/* Bouton d'expansion minimaliste */}
             <motion.button className={cn(
               "group/btn mt-1 px-2 py-1.5 rounded-lg text-xs font-medium cursor-pointer",
-              "border border-white/30 backdrop-blur-sm",
-              "hover:border-white/50 hover:bg-white/10 active:scale-95",
+              "border border-white/30 backdrop-blur-sm bg-white/50",
+              "hover:border-white/50 hover:bg-white/60 active:scale-95",
               "transition-all duration-200 flex items-center gap-1.5",
-              theme.lightBg,
               theme.text
             )} whileHover={{
               scale: 1.02
@@ -285,59 +243,15 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
         }} whileHover={{
           scale: 1.05
         }}>
-              {/* Container glassmorphism */}
-              <motion.div className={cn("relative px-4 py-3 rounded-xl backdrop-blur-md border overflow-hidden", theme.lightBg, theme.border, "shadow-glass-md")} whileHover={{
-            boxShadow: "0 8px 32px rgba(0,0,0,0.1)",
-            y: -2
-          }}>
-                {/* Effet de brillance */}
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                
-                {/* Layout 2 colonnes */}
-                <div className="flex gap-3 items-center">
-                  {/* Colonne 1: Moyenne + Points restants */}
-                  <div className="flex flex-col gap-2 text-xs">
-                    {/* Moyenne avec icône */}
-                    <div className="flex items-center gap-1">
-                      <span className="opacity-60">📊</span>
-                      <span className="font-medium opacity-80">
-                        {avgScore} moy
-                      </span>
-                    </div>
-                    
-                    {/* Points restants */}
-                    {scoreLimit && (
-                      <div className="text-center">
-                        <div className="w-12 bg-white/20 rounded-full h-1 mb-1">
-                          <motion.div className={cn("h-1 rounded-full", theme.accent)} initial={{
-                        width: 0
-                      }} animate={{
-                        width: `${Math.min(player.totalScore / scoreLimit * 100, 100)}%`
-                      }} transition={{
-                        delay: 0.5,
-                        duration: 0.8
-                      }} />
-                        </div>
-                        <div className="opacity-60">
-                          {Math.max(0, scoreLimit - player.totalScore)} restant
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                  
-                  {/* Colonne 2: Score principal (toute la hauteur) */}
-                  <div className="flex items-center justify-center h-full">
-                    <motion.div className={cn("text-3xl font-black leading-none", theme.text)} whileHover={{
-                  scale: 1.1
-                }} transition={{
-                  type: "spring",
-                  stiffness: 400
-                }}>
-                      {player.totalScore}
-                    </motion.div>
-                  </div>
+              {/* Score principal simplifié */}
+              <div className="text-right">
+                <div className={cn("text-3xl font-black", theme.text)}>
+                  {player.totalScore}
                 </div>
-              </motion.div>
+                <div className="text-xs text-gray-600 mt-1">
+                  📊 {avgScore} moy
+                </div>
+              </div>
             </motion.div>
         </div>
 
@@ -384,23 +298,15 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
                 </div>
               </div>
 
-              {/* Stats détaillées */}
-              <div className="grid grid-cols-2 gap-3">
-                <div className={cn("p-3 rounded-xl border", theme.lightBg, theme.border)}>
-                  <div className="flex items-center gap-2 mb-1">
-                    <Star className="h-3 w-3" />
-                    <span className="text-xs text-gray-600">Meilleur</span>
-                  </div>
-                  <div className={cn("font-bold", theme.text)}>{bestRound}</div>
+              {/* Stats détaillées simplifiées */}
+              <div className="grid grid-cols-2 gap-2">
+                <div className="p-2 rounded-lg bg-white/50">
+                  <div className="text-xs text-gray-600">Meilleur</div>
+                  <div className={cn("font-bold text-sm", theme.text)}>{bestRound}</div>
                 </div>
-                <div className={cn("p-3 rounded-xl border", theme.lightBg, theme.border)}>
-                  <div className="flex items-center gap-2 mb-1">
-                    <TrendingUp className="h-3 w-3" />
-                    <span className="text-xs text-gray-600">Tendance</span>
-                  </div>
-                  <div className={cn("font-bold", theme.text)}>
-                    {hasPositiveTrend ? '📈 ↗️' : '📊 →'}
-                  </div>
+                <div className="p-2 rounded-lg bg-white/50">
+                  <div className="text-xs text-gray-600">Tendance</div>
+                  <div className="text-sm">{hasPositiveTrend ? '📈' : '📊'}</div>
                 </div>
               </div>
 

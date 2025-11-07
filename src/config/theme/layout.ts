@@ -1,4 +1,3 @@
-
 /**
  * Configuration du layout - Espacement, bordures et ombres
  */
@@ -19,6 +18,41 @@ export const SPACING = {
   20: '5rem',
   24: '6rem',
   32: '8rem',
+};
+
+/**
+ * Système d'espacement unifié pour le jeu
+ */
+export const GAME_LAYOUT = {
+  // Spacing système unifié
+  spacing: {
+    mobile: {
+      container: 'px-4 py-4',    // Mobile container
+      section: 'mb-4',            // Entre sections
+      card: 'p-3',                // Cards
+      inline: 'gap-2'             // Inline elements
+    },
+    desktop: {
+      container: 'px-6 py-8',
+      section: 'mb-6',
+      card: 'p-6',
+      inline: 'gap-4'
+    }
+  },
+  
+  // Glassmorphism unifié
+  glass: {
+    light: 'bg-white/80 backdrop-blur-md border border-white/50',
+    medium: 'bg-white/60 backdrop-blur-lg border border-white/40',
+    strong: 'bg-white/90 backdrop-blur-xl border border-white/60'
+  },
+  
+  // Shadows unifiés
+  shadows: {
+    card: 'shadow-lg shadow-gray-200/50',
+    float: 'shadow-xl shadow-gray-300/60',
+    glow: 'shadow-2xl shadow-purple-500/20'
+  }
 };
 
 export const BORDERS = {

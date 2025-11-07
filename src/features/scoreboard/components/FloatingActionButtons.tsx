@@ -28,9 +28,9 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
       className={`floating-action-buttons fixed right-4 sm:right-6 flex flex-col-reverse gap-2 sm:gap-3 pointer-events-none ${hideWhenModalOpen ? 'floating-buttons-hidden' : ''}`}
       style={{ 
         position: 'fixed', 
-        bottom: 'max(env(safe-area-inset-bottom, 20px), 80px)',
+        bottom: 'max(env(safe-area-inset-bottom, 20px), 100px)',
         right: '16px',
-        zIndex: 40
+        zIndex: 50
       }}
     >
       {/* Bouton principal - Ajouter une manche (en bas, centré) */}

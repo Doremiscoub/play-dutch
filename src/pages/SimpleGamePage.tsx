@@ -2,16 +2,12 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGameState } from '@/hooks/game/unified/useGameState';
-import { GameSyncManager } from '@/components/sync/GameSyncManager';
 import ScoreBoard from '@/features/scoreboard/ScoreBoard';
 import NewRoundModal from '@/components/NewRoundModal';
-import PageShell from '@/components/layout/PageShell';
-import UnifiedHeader from '@/components/layout/UnifiedHeader';
 import { useUnifiedHeader } from '@/hooks/useUnifiedHeader';
 import { AICommentator } from '@/features/ai-commentator';
-import { MobileOptimizer } from '@/components/ui/mobile-optimizer';
 import { toast } from 'sonner';
-import GameLayout from '@/components/layout/GameLayout';
+import GamePageLayout from '@/components/layout/GamePageLayout';
 import VideoAdOverlay from '@/components/ads/VideoAdOverlay';
 import GameErrorFallback from '@/components/errors/GameErrorFallback';
 import { logger } from '@/utils/logger';
@@ -87,21 +83,22 @@ const SimpleGamePage: React.FC = () => {
   if (!hasGame) {
     logger.debug('🚫 No game available, showing setup prompt');
     return (
-      <PageShell variant="game">
-        <MobileOptimizer pageType="game" className="min-h-screen">
-          <UnifiedHeader {...headerConfig} />
-          <div className="container mx-auto px-4 py-8 text-center">
-          <h2 className="text-2xl font-bold mb-4">Aucune partie en cours</h2>
-          <p className="mb-6">Vous devez d'abord créer une partie pour jouer.</p>
+      <GamePageLayout variant="game" headerConfig={headerConfig}>
+        <div className="flex flex-col items-center justify-center min-h-[60vh] p-8">
+          <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">
+            Aucune partie en cours
+          </h2>
+          <p className="text-gray-600 mb-6 text-center">
+            Vous devez d'abord créer une partie pour jouer.
+          </p>
           <button 
             onClick={() => navigate('/setup')}
             className="bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors"
           >
             Créer une partie
           </button>
-          </div>
-        </MobileOptimizer>
-      </PageShell>
+        </div>
+      </GamePageLayout>
     );
   }
 
@@ -149,67 +146,54 @@ const SimpleGamePage: React.FC = () => {
 
   return (
     <ErrorBoundary fallback={<GameErrorFallback error={new Error('GamePage Error')} resetErrorBoundary={() => window.location.reload()} />}>
-      <PageShell variant="game">
-        <MobileOptimizer pageType="game" className="min-h-screen">
-          <UnifiedHeader {...headerConfig} />
-          
-          {/* Conteneur principal centré et unifié */}
-          <div className="w-full max-w-6xl mx-auto px-4 py-4 min-h-[calc(100vh-12rem)]">
-            {/* Professeur Cartouche aligné avec le reste */}
-            <ErrorBoundary fallback={<div className="p-4 bg-red-50 rounded-lg">Erreur du commentateur</div>}>
-              <div className="mb-4">
-                <AICommentator 
-                  players={players}
-                  roundCount={roundHistory.length}
-                  scoreLimit={scoreLimit}
-                  className="w-full"
-                />
-              </div>
-            </ErrorBoundary>
-            
-            {/* GameLayout avec ScoreBoard */}
-            <ErrorBoundary fallback={<div className="p-4 bg-red-50 rounded-lg">Erreur du tableau</div>}>
-              <GameLayout>
-                <div className="pb-28">
-                  <ScoreBoard
-                    players={players}
-                    onAddRound={() => {}}
-                    onUndoLastRound={undoLastRound}
-                    onEndGame={handleEndGame}
-                    roundHistory={roundHistory}
-                    showGameEndConfirmation={showGameEndConfirmation}
-                    onConfirmEndGame={handleConfirmEndGame}
-                    onCancelEndGame={handleCancelEndGame}
-                    scoreLimit={scoreLimit}
-                    openScoreForm={openScoreForm}
-                    hideFloatingActionsWhenModalOpen={isScoreFormOpen}
-                  />
-                </div>
-              </GameLayout>
-            </ErrorBoundary>
-          </div>
-
-          {/* Modal pour ajouter une nouvelle manche */}
-          <NewRoundModal
-            open={isScoreFormOpen}
-            onClose={() => setIsScoreFormOpen(false)}
+      <GamePageLayout variant="game" headerConfig={headerConfig}>
+        {/* Professeur Cartouche - En haut */}
+        <ErrorBoundary fallback={<div className="p-4 bg-red-50 rounded-lg">Erreur du commentateur</div>}>
+          <AICommentator 
             players={players}
-            scores={scores}
-            setScores={setScores}
-            dutchPlayerId={dutchPlayerId}
-            setDutchPlayerId={setDutchPlayerId}
-            onAddRound={handleAddRound}
-            onVideoAdShown={handleVideoAdShown}
+            roundCount={roundHistory.length}
+            scoreLimit={scoreLimit}
+            className="mb-6"
           />
+        </ErrorBoundary>
+        
+        {/* ScoreBoard */}
+        <ErrorBoundary fallback={<div className="p-4 bg-red-50 rounded-lg">Erreur du tableau</div>}>
+          <ScoreBoard
+            players={players}
+            onAddRound={() => {}}
+            onUndoLastRound={undoLastRound}
+            onEndGame={handleEndGame}
+            roundHistory={roundHistory}
+            showGameEndConfirmation={showGameEndConfirmation}
+            onConfirmEndGame={handleConfirmEndGame}
+            onCancelEndGame={handleCancelEndGame}
+            scoreLimit={scoreLimit}
+            openScoreForm={openScoreForm}
+            hideFloatingActionsWhenModalOpen={isScoreFormOpen}
+          />
+        </ErrorBoundary>
+      </GamePageLayout>
 
-          {/* Overlay de publicité vidéo */}
-          <VideoAdOverlay
-            isVisible={showVideoAd}
-            onClose={() => setShowVideoAd(false)}
-            trigger={adTrigger}
-          />
-        </MobileOptimizer>
-      </PageShell>
+      {/* Modal pour ajouter une nouvelle manche */}
+      <NewRoundModal
+        open={isScoreFormOpen}
+        onClose={() => setIsScoreFormOpen(false)}
+        players={players}
+        scores={scores}
+        setScores={setScores}
+        dutchPlayerId={dutchPlayerId}
+        setDutchPlayerId={setDutchPlayerId}
+        onAddRound={handleAddRound}
+        onVideoAdShown={handleVideoAdShown}
+      />
+
+      {/* Overlay de publicité vidéo */}
+      <VideoAdOverlay
+        isVisible={showVideoAd}
+        onClose={() => setShowVideoAd(false)}
+        trigger={adTrigger}
+      />
     </ErrorBoundary>
   );
 };

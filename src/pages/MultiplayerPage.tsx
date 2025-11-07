@@ -26,7 +26,7 @@ import ScoreBoard from '@/features/scoreboard/ScoreBoard';
 import NewRoundModal from '@/components/NewRoundModal';
 import { AICommentator } from '@/features/ai-commentator';
 import { MobileOptimizer } from '@/components/ui/mobile-optimizer';
-import GameLayout from '@/components/layout/GameLayout';
+import GamePageLayout from '@/components/layout/GamePageLayout';
 import { toast } from 'sonner';
 
 const MultiplayerPage: React.FC = () => {
@@ -189,20 +189,18 @@ const MultiplayerPage: React.FC = () => {
 
               {/* Tableau de scores */}
               {gameState && (
-                <GameLayout>
-                  <ScoreBoard
-                    players={gameState.players}
-                    onAddRound={() => {}} // Pas utilisé
-                    onUndoLastRound={handleUndoLastRound}
-                    onEndGame={handleBackToLobby}
-                    roundHistory={gameState.roundHistory || []}
-                    showGameEndConfirmation={false}
-                    onConfirmEndGame={handleBackToLobby}
-                    onCancelEndGame={() => {}}
-                    scoreLimit={gameState.scoreLimit}
-                    openScoreForm={openScoreForm}
-                  />
-                </GameLayout>
+                <ScoreBoard
+                  players={gameState.players}
+                  onAddRound={() => {}} // Pas utilisé
+                  onUndoLastRound={handleUndoLastRound}
+                  onEndGame={handleBackToLobby}
+                  roundHistory={gameState.roundHistory || []}
+                  showGameEndConfirmation={false}
+                  onConfirmEndGame={handleBackToLobby}
+                  onCancelEndGame={() => {}}
+                  scoreLimit={gameState.scoreLimit}
+                  openScoreForm={openScoreForm}
+                />
               )}
 
               {/* Modal pour ajouter une nouvelle manche */}
