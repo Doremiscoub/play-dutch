@@ -7,13 +7,34 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instanciate createClient with right options
+  // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: "12.2.3 (519615d)"
   }
   public: {
     Tables: {
+      ad_events: {
+        Row: {
+          event: string
+          id: string
+          placement: string
+          ts: string | null
+        }
+        Insert: {
+          event: string
+          id?: string
+          placement: string
+          ts?: string | null
+        }
+        Update: {
+          event?: string
+          id?: string
+          placement?: string
+          ts?: string | null
+        }
+        Relationships: []
+      }
       games: {
         Row: {
           created_at: string | null
@@ -131,7 +152,7 @@ export type Database = {
           subscription_end: string | null
           subscription_tier: string | null
           updated_at: string
-          user_id: string | null
+          user_id: string
         }
         Insert: {
           created_at?: string
@@ -142,7 +163,7 @@ export type Database = {
           subscription_end?: string | null
           subscription_tier?: string | null
           updated_at?: string
-          user_id?: string | null
+          user_id: string
         }
         Update: {
           created_at?: string
@@ -153,7 +174,61 @@ export type Database = {
           subscription_end?: string | null
           subscription_tier?: string | null
           updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string | null
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      web_vitals: {
+        Row: {
+          created_at: string | null
+          delta: number
+          id: string
+          name: string
+          t: string
+          user_id: string | null
+          value: number
+        }
+        Insert: {
+          created_at?: string | null
+          delta: number
+          id?: string
+          name: string
+          t: string
           user_id?: string | null
+          value: number
+        }
+        Update: {
+          created_at?: string | null
+          delta?: number
+          id?: string
+          name?: string
+          t?: string
+          user_id?: string | null
+          value?: number
         }
         Relationships: []
       }
@@ -162,10 +237,16 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "moderator" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -292,6 +373,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "moderator", "user"],
+    },
   },
 } as const
