@@ -13,7 +13,7 @@ const ReceiptCard = React.forwardRef<HTMLDivElement, ReceiptCardProps>(
       <div
         ref={ref}
         className={cn(
-          "relative bg-white shadow-md",
+          "relative glass-elevated",
           "before:absolute before:top-0 before:left-0 before:right-0 before:h-4 before:bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMCA0Ij48cGF0aCBkPSJNMCwyaDIwYzAsMCwwLDIsLTEwLDJTMCwyLDAsMiIgZmlsbD0iI2ZmZiIvPjwvc3ZnPg==')]",
           "after:absolute after:bottom-0 after:left-0 after:right-0 after:h-4 after:bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMCA0Ij48cGF0aCBkPSJNMCwyaDIwYzAsMCwwLDIsLTEwLDJTMCwyLDAsMiIgZmlsbD0iI2ZmZiIvPjwvc3ZnPg==')]",
           className

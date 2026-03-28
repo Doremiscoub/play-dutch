@@ -15,7 +15,7 @@ const ScoreBoardTabs: React.FC<ScoreBoardTabsProps> = ({
   return (
     <div className="flex justify-center mb-3 md:mb-6 px-2 md:px-4">
       <motion.div
-        className="bg-white border border-gray-200 rounded-2xl p-2 shadow-sm w-full max-w-md md:max-w-none"
+        className="glass-elevated rounded-2xl p-2 w-full max-w-md md:max-w-none"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.2 }}

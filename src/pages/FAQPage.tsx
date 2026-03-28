@@ -193,7 +193,7 @@ const FAQPage: React.FC = () => {
       />
 
       <PageContainer size="md">
-          <UnifiedCard variant="light" padding="lg">
+          <UnifiedCard variant="glass" padding="lg">
             {/* Search */}
             <div className="mb-8">
               <div className="relative">
@@ -220,12 +220,12 @@ const FAQPage: React.FC = () => {
                       <AccordionItem
                         key={index}
                         value={`${categoryIndex}-${index}`}
-                        className="border rounded-lg px-4 bg-white rounded-xl border border-border shadow-sm"
+                        className="border rounded-lg px-4 glass-surface"
                       >
                         <AccordionTrigger className="text-left hover:no-underline">
                           <span className="font-medium">{faq.question}</span>
                         </AccordionTrigger>
-                        <AccordionContent className="text-gray-600 leading-relaxed pb-4">
+                        <AccordionContent className="text-muted-foreground leading-relaxed pb-4">
                           {faq.answer}
                         </AccordionContent>
                       </AccordionItem>
@@ -236,7 +236,7 @@ const FAQPage: React.FC = () => {
 
               {filteredFAQs.length === 0 && searchTerm && (
                 <div className="text-center py-8">
-                  <p className="text-gray-500">
+                  <p className="text-muted-foreground">
                     Aucune question trouvée pour "{searchTerm}"
                   </p>
                 </div>
@@ -244,13 +244,13 @@ const FAQPage: React.FC = () => {
             </div>
 
             {/* Contact Section */}
-            <div className="mt-12 p-6 bg-gradient-to-r from-dutch-blue/5 to-dutch-purple/5 rounded-lg border bg-white rounded-xl border border-border shadow-sm">
+            <div className="mt-12 p-6 bg-gradient-to-r from-dutch-blue/5 to-dutch-purple/5 rounded-lg glass-surface">
               <h3 className="text-xl font-bold mb-2">Une question non résolue ?</h3>
-              <p className="text-gray-600 mb-4">
+              <p className="text-muted-foreground mb-4">
                 Si vous ne trouvez pas la réponse à votre question, n'hésitez pas à nous contacter.
                 Nous sommes là pour vous aider !
               </p>
-              <div className="text-sm text-gray-500">
+              <div className="text-sm text-muted-foreground">
                 Vous pouvez nous joindre via les paramètres de l'application.
               </div>
             </div>

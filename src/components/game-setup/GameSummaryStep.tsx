@@ -34,7 +34,7 @@ const GameSummaryStep: React.FC<GameSummaryStepProps> = ({
   const validPlayers = players.filter(p => p.name && p.name.trim().length > 0);
 
   return (
-    <Card className="p-6 space-y-6">
+    <Card variant="glass" className="p-6 space-y-6">
       <div className="text-center">
         <h2 className="text-xl sm:text-2xl font-display font-bold text-foreground mb-2">
           Récapitulatif
@@ -47,7 +47,7 @@ const GameSummaryStep: React.FC<GameSummaryStepProps> = ({
       {/* Configuration summary */}
       <div className="space-y-4">
         {/* Player count */}
-        <div className="border border-gray-200 bg-white rounded-xl p-4">
+        <div className="glass-surface rounded-xl p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
@@ -71,7 +71,7 @@ const GameSummaryStep: React.FC<GameSummaryStepProps> = ({
         </div>
 
         {/* Player list */}
-        <div className="border border-gray-200 bg-white rounded-xl p-4">
+        <div className="glass-surface rounded-xl p-4">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center">
@@ -115,7 +115,7 @@ const GameSummaryStep: React.FC<GameSummaryStepProps> = ({
       </div>
 
       {/* Rules reminder */}
-      <div className="bg-gray-50 border border-gray-200 rounded-xl p-4">
+      <div className="glass-surface rounded-xl p-4">
         <h3 className="font-semibold text-foreground mb-2">
           Rappel des règles
         </h3>
@@ -147,10 +147,10 @@ const GameSummaryStep: React.FC<GameSummaryStepProps> = ({
         </Button>
 
         <Button
-          variant="default"
+          variant="trinity"
           size="lg"
           onClick={onStartGame}
-          className="flex-[2] font-semibold"
+          className="flex-[2] font-semibold neon-blue"
         >
           Commencer la partie
         </Button>
