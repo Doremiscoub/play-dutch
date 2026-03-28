@@ -61,7 +61,7 @@ export const initializePlayers = (): Player[] | null => {
     
     logger.info(`Initialisation de ${playerNames.length} joueurs:`, playerNames);
     
-    const playerColors = ['#8B5CF6', '#F97316', '#1EAEDB', '#10B981'];
+    const playerColors = ['#E63946', '#2563EB', '#16A34A', '#F59E0B', '#8B5CF6', '#EC4899', '#0EA5E9', '#F97316'];
     
     const newPlayers: Player[] = playerNames.map((name, index) => ({
       id: uuidv4(),

@@ -11,8 +11,7 @@ import OtherPlayersRanking from './game/OtherPlayersRanking';
 import GameOverActionButtons from './game/GameOverActionButtons';
 import { ReceiptCard } from './ui/receipt-card';
 import { ModernTitle } from './ui/modern-title';
-import ProductionAdSlot from './ads/ProductionAdSlot';
-import { useAds } from '@/contexts/EnhancedAdContext';
+import { useH5GameAds } from '@/hooks/useH5GameAds';
 import { logger } from '@/utils/logger';
 
 const CONFETTI_COLORS = [
@@ -38,7 +37,7 @@ const GameOverScreen: React.FC<GameOverScreenProps> = ({
   currentScoreLimit = 100
 }) => {
   const [isConfettiTriggered, setIsConfettiTriggered] = useState<boolean>(false);
-  const { shouldShowAds } = useAds();
+  const { showInterstitial } = useH5GameAds();
 
   // Sort players by score (lowest = best)
   const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
@@ -111,6 +110,9 @@ const GameOverScreen: React.FC<GameOverScreenProps> = ({
       position: 'top-center',
     });
 
+    // Show interstitial ad at game over — natural break
+    showInterstitial('game-over-screen');
+
     return () => clearInterval(confettiInterval);
   }, [winner.name]);
 
@@ -146,16 +148,6 @@ const GameOverScreen: React.FC<GameOverScreenProps> = ({
             <GamePodium players={players} />
             <OtherPlayersRanking players={players} />
           </ReceiptCard>
-
-          {/* Bannière de fin de partie */}
-          {shouldShowAds && (
-            <div className="my-4">
-              <ProductionAdSlot
-                placement="game-end"
-                priority="medium"
-              />
-            </div>
-          )}
 
           <GameOverActionButtons
             onRestart={onRestart}

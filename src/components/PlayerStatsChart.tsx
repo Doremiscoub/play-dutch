@@ -75,14 +75,14 @@ const PlayerStatsChart: React.FC<PlayerStatsChartProps> = ({ players, className 
   
   // Générer une couleur unique pour chaque joueur
   const playerColors = {
-    'player1': '#1EAEDB', // dutch-blue
-    'player2': '#F97316', // dutch-orange
-    'player3': '#8B5CF6', // dutch-purple
-    'player4': '#D946EF', // dutch-pink
-    'player5': '#10B981', // dutch-green
-    'player6': '#FBBF24', // dutch-yellow
-    'player7': '#EF4444', // dutch-red
-    'player8': '#0EA5E9' // sky-blue
+    'player1': '#E63946', // vivid red
+    'player2': '#2563EB', // vivid blue
+    'player3': '#16A34A', // vivid green
+    'player4': '#F59E0B', // amber
+    'player5': '#8B5CF6', // purple
+    'player6': '#EC4899', // pink
+    'player7': '#0EA5E9', // sky blue
+    'player8': '#F97316', // orange
   };
   
   const getPlayerColor = (index: number): string => {
@@ -110,12 +110,12 @@ const PlayerStatsChart: React.FC<PlayerStatsChartProps> = ({ players, className 
         </div>
         
         {noDataAvailable ? (
-          <div className="h-64 flex items-center justify-center bg-white/60 rounded-xl border border-white/30">
+          <div className="h-64 flex items-center justify-center bg-white rounded-xl border border-border">
             <p className="text-gray-500">Aucune donnée disponible</p>
           </div>
         ) : (
-          <motion.div 
-            className="bg-white/80 backdrop-blur-sm rounded-xl border border-white/30 shadow-sm p-4 h-64"
+          <motion.div
+            className="bg-white rounded-xl border border-border shadow-sm p-4 h-64"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
@@ -176,12 +176,12 @@ const PlayerStatsChart: React.FC<PlayerStatsChartProps> = ({ players, className 
         </div>
         
         {noDataAvailable ? (
-          <div className="h-64 flex items-center justify-center bg-white/60 rounded-xl border border-white/30">
+          <div className="h-64 flex items-center justify-center bg-white rounded-xl border border-border">
             <p className="text-gray-500">Aucune donnée disponible</p>
           </div>
         ) : (
-          <motion.div 
-            className="bg-white/80 backdrop-blur-sm rounded-xl border border-white/30 shadow-sm p-4 h-64"
+          <motion.div
+            className="bg-white rounded-xl border border-border shadow-sm p-4 h-64"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
@@ -212,7 +212,7 @@ const PlayerStatsChart: React.FC<PlayerStatsChartProps> = ({ players, className 
       
       <div className="grid grid-cols-2 gap-4">
         <motion.div 
-          className="bg-white/80 backdrop-blur-sm rounded-xl border border-white/30 shadow-sm p-4"
+          className="bg-white rounded-xl border border-border shadow-sm p-4"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
@@ -235,7 +235,7 @@ const PlayerStatsChart: React.FC<PlayerStatsChartProps> = ({ players, className 
         </motion.div>
         
         <motion.div 
-          className="bg-white/80 backdrop-blur-sm rounded-xl border border-white/30 shadow-sm p-4"
+          className="bg-white rounded-xl border border-border shadow-sm p-4"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}

@@ -120,6 +120,17 @@ const EnhancedAdSlot: React.FC<EnhancedAdSlotProps> = ({
     return () => clearTimeout(timer);
   }, [isIntersecting, hasConsentedToAds, config.slotId, priority, adStatus]);
 
+  // Hide ad container if it doesn't load within 5 seconds
+  useEffect(() => {
+    if (adStatus !== 'loading') return;
+    const timer = setTimeout(() => {
+      if (adStatus === 'loading') {
+        setAdStatus('error');
+      }
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, [adStatus]);
+
   // Don't render in dev or without consent
   if (!shouldShowAds || !hasConsentedToAds || !config.show || !config.slotId || !import.meta.env.PROD) {
     return null;

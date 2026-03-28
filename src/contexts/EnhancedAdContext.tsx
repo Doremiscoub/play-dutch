@@ -84,20 +84,43 @@ export const EnhancedAdProvider: React.FC<EnhancedAdProviderProps> = ({ children
     }
   };
 
-  // Load AdSense script when consent is given (production only).
-  // We load based on hasConsentedToAds alone (not shouldShowAds) so the script
-  // is ready immediately when ad components render.
+  // Load H5 Games Ad Placement API script (production only).
+  // Uses adBreak/adConfig API designed for HTML5 games.
   useEffect(() => {
     if (!import.meta.env.PROD || !hasConsentedToAds) return;
-    if (document.querySelector('script[src*="adsbygoogle"]')) return;
+    if (document.querySelector('script[src*="pagead2.googlesyndication.com"]')) return;
+
+    // Define adBreak/adConfig stubs before script loads
+    (window as any).adsbygoogle = (window as any).adsbygoogle || [];
+    let adBreakReady = false;
+
+    // The H5 Games Ads API uses a different initialization pattern
+    (window as any).adBreak = (window as any).adBreak || function(o: any) {
+      // Queue calls until the real API loads
+      ((window as any).__adBreakQueue = (window as any).__adBreakQueue || []).push(o);
+    };
+    (window as any).adConfig = (window as any).adConfig || function(o: any) {
+      ((window as any).__adConfigQueue = (window as any).__adConfigQueue || []).push(o);
+    };
 
     const script = document.createElement('script');
     script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2046195502734056';
     script.crossOrigin = 'anonymous';
     script.async = true;
+    script.setAttribute('data-ad-frequency-hint', '120s');
 
     script.onload = () => {
-      (window as any).adsbygoogle = (window as any).adsbygoogle || [];
+      // Configure H5 Games Ads
+      if (typeof (window as any).adConfig === 'function') {
+        (window as any).adConfig({
+          preloadAdBreaks: 'on',
+          sound: 'on',
+          onReady: () => {
+            adBreakReady = true;
+            console.log('[H5Ads] Ad Placement API ready');
+          },
+        });
+      }
     };
 
     document.head.appendChild(script);
