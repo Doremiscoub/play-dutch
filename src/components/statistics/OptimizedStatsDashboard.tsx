@@ -186,7 +186,7 @@ export const OptimizedStatsDashboard: React.FC<OptimizedStatsDashboardProps> = (
           }} className="space-y-4 md:space-y-6">
                   {/* Mini-header de section */}
                   <div className="flex items-center gap-3 md:gap-4">
-                     <motion.div className="p-2 md:p-3 bg-gradient-to-r from-trinity-blue-500/30 via-trinity-purple-500/30 to-trinity-orange-500/30 backdrop-blur-xl rounded-xl md:rounded-2xl border border-white/30 shadow-lg" whileHover={{
+                     <motion.div className="p-2 md:p-3 bg-gradient-to-r from-trinity-blue-500/30 via-trinity-purple-500/30 to-trinity-orange-500/30 rounded-xl md:rounded-2xl border border-border shadow-sm" whileHover={{
                 scale: 1.05,
                 rotate: 3
               }} transition={{

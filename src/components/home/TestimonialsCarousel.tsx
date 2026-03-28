@@ -118,7 +118,7 @@ export const TestimonialsCarousel: React.FC = () => {
             transition={{ duration: 0.5 }}
             className="absolute inset-0"
           >
-            <Card className="bg-white/70 backdrop-blur-xl border border-white/50 h-full shadow-lg hover:shadow-xl transition-all duration-300">
+            <Card className="bg-white border border-border h-full shadow-sm hover:shadow-xl transition-all duration-300">
               <CardContent className="p-8 text-center h-full flex flex-col justify-center">
                 <motion.div
                   initial={{ scale: 0 }}

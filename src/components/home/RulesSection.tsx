@@ -48,7 +48,7 @@ const RulesSection: React.FC = () => {
             viewport={{ once: true }}
             className="space-y-8"
           >
-            <Card className="bg-white/90 backdrop-blur-xl border-0 shadow-xl overflow-hidden">
+            <Card className="bg-white border border-border shadow-md overflow-hidden">
               <CardContent className="p-8">
                 <div className="flex items-center gap-4 mb-6">
                   <div className="bg-gradient-to-br from-trinity-orange-500 to-trinity-purple-500 rounded-2xl p-3 text-white">
@@ -98,7 +98,7 @@ const RulesSection: React.FC = () => {
               transition={{ duration: 0.8, delay: 0.4 }}
               viewport={{ once: true }}
             >
-              <Card className="bg-gradient-to-br from-trinity-orange-600 to-trinity-purple-600 backdrop-blur-xl border-0 shadow-xl overflow-hidden relative">
+              <Card className="bg-gradient-to-br from-trinity-orange-600 to-trinity-purple-600 border-0 shadow-md overflow-hidden relative">
                 {/* Overlay pour améliorer le contraste */}
                 <div className="absolute inset-0 bg-black/20" />
                 
@@ -137,7 +137,7 @@ const RulesSection: React.FC = () => {
             viewport={{ once: true }}
             className="relative"
           >
-            <Card className="bg-white/90 backdrop-blur-xl border-0 shadow-xl overflow-hidden">
+            <Card className="bg-white border border-border shadow-md overflow-hidden">
               <CardContent className="p-8">
                 <h3 className="text-2xl font-black text-gray-900 mb-6 text-center">
                   🃏 Exemple de manche

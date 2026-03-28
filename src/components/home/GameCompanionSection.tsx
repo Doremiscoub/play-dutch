@@ -65,7 +65,7 @@ const GameCompanionSection: React.FC = () => {
               whileHover={{ y: -10, scale: 1.02 }}
               className="group"
             >
-              <Card className="h-full bg-white/90 backdrop-blur-xl border-0 shadow-xl hover:shadow-3xl transition-all duration-300 overflow-hidden">
+              <Card className="h-full bg-white border border-border shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden">
                 <CardContent className="p-8 flex items-start gap-6">
                   <motion.div
                     className={`bg-gradient-to-br ${benefit.gradient} rounded-2xl p-4 text-white shadow-lg group-hover:shadow-xl transition-shadow duration-300 flex-shrink-0`}
@@ -96,7 +96,7 @@ const GameCompanionSection: React.FC = () => {
           viewport={{ once: true }}
           className="relative"
         >
-          <Card className="bg-gradient-to-br from-trinity-purple-600 via-trinity-blue-600 to-trinity-orange-600 backdrop-blur-xl border-0 shadow-3xl overflow-hidden">
+          <Card className="bg-gradient-to-br from-trinity-purple-600 via-trinity-blue-600 to-trinity-orange-600 border-0 shadow-lg overflow-hidden">
             {/* Overlay pour améliorer le contraste */}
             <div className="absolute inset-0 bg-black/20" />
             

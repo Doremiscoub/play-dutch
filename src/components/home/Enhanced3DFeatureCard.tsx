@@ -74,7 +74,7 @@ export const Enhanced3DFeatureCard: React.FC<Enhanced3DFeatureCardProps> = ({
       )}
     >
       <motion.div
-        className="relative h-full bg-white/70 backdrop-blur-xl border border-white/50 rounded-3xl p-4 sm:p-6 md:p-8 shadow-lg transition-all duration-300 group-hover:shadow-xl group-hover:bg-white/80"
+        className="relative h-full bg-white border border-border rounded-3xl p-4 sm:p-6 md:p-8 shadow-sm transition-all duration-300 group-hover:shadow-md"
         animate={prefersReducedMotion ? {} : {
           scale: isHovered ? 1.05 : 1,
         }}

@@ -39,7 +39,7 @@ const ProfessorInfoCard: React.FC<ProfessorInfoCardProps> = ({ isOpen, onClose }
           onClick={onClose}
         >
           <motion.div
-            className="relative max-w-2xl w-full bg-gradient-to-br from-white/95 to-gray-50/95 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/50 overflow-hidden"
+            className="relative max-w-2xl w-full bg-white rounded-3xl shadow-2xl border border-border overflow-hidden"
             initial={{ scale: 0.8, opacity: 0, y: 50 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.8, opacity: 0, y: 50 }}
@@ -57,7 +57,7 @@ const ProfessorInfoCard: React.FC<ProfessorInfoCardProps> = ({ isOpen, onClose }
               variant="ghost"
               size="icon"
               onClick={onClose}
-              className="absolute top-4 right-4 z-10 bg-white/80 hover:bg-white/90 rounded-full"
+              className="absolute top-4 right-4 z-10 bg-white hover:bg-white rounded-full"
             >
               <X className="h-5 w-5" />
             </Button>
@@ -100,7 +100,7 @@ const ProfessorInfoCard: React.FC<ProfessorInfoCardProps> = ({ isOpen, onClose }
 
             {/* Tabs */}
             <div className="px-8 mb-6">
-              <div className="flex bg-white/50 backdrop-blur-sm rounded-2xl p-1.5 border border-white/60">
+              <div className="flex bg-gray-100 rounded-2xl p-1.5 border border-border">
                 {(Object.keys(professorData) as Array<keyof typeof professorData>).map((tab, index) => (
                   <motion.button
                     key={tab}
@@ -108,7 +108,7 @@ const ProfessorInfoCard: React.FC<ProfessorInfoCardProps> = ({ isOpen, onClose }
                     className={`flex-1 px-4 py-3 rounded-xl font-semibold text-sm transition-all duration-300 ${
                       activeTab === tab
                         ? 'bg-gradient-to-r from-dutch-blue to-dutch-purple text-white shadow-lg'
-                        : 'text-gray-600 hover:text-gray-800 hover:bg-white/50'
+                        : 'text-gray-600 hover:text-gray-800 hover:bg-gray-50'
                     }`}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
@@ -136,7 +136,7 @@ const ProfessorInfoCard: React.FC<ProfessorInfoCardProps> = ({ isOpen, onClose }
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
                   transition={{ duration: 0.3 }}
-                  className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-white/60"
+                  className="bg-gray-50 rounded-2xl p-6 border border-border"
                 >
                   <p className="text-gray-700 leading-relaxed text-lg">
                     {professorData[activeTab].content}
@@ -155,7 +155,7 @@ const ProfessorInfoCard: React.FC<ProfessorInfoCardProps> = ({ isOpen, onClose }
                 ].map((stat, index) => (
                   <motion.div
                     key={stat.label}
-                    className="text-center p-4 bg-gradient-to-br from-white/80 to-gray-50/80 backdrop-blur-sm rounded-xl border border-white/50"
+                    className="text-center p-4 bg-gray-50 rounded-xl border border-border"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.8 + index * 0.1 }}

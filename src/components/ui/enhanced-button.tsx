@@ -14,8 +14,8 @@ const enhancedButtonVariants = cva(
         primary: "bg-gradient-to-r from-dutch-blue to-dutch-purple text-white hover:opacity-90 shadow-md hover:shadow-lg",
         secondary: "bg-dutch-purple text-white hover:bg-dutch-purple/90 shadow-md hover:shadow-lg",
         accent: "bg-dutch-orange text-white hover:bg-dutch-orange/90 shadow-md hover:shadow-lg",
-        ghost: "bg-white/70 backdrop-blur-xl border border-white/50 text-gray-800 hover:bg-white/80",
-        glass: "bg-white/60 backdrop-blur-xl border border-white/40 text-gray-800 hover:bg-white/75 shadow-sm hover:shadow-md",
+        ghost: "bg-white border border-border text-gray-800 hover:bg-gray-50",
+        glass: "bg-white border border-border text-gray-800 hover:bg-gray-50 shadow-sm hover:shadow-md",
         
         // Gaming variants - NEW
         legendary: "bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 text-yellow-900 shadow-lg hover:shadow-xl border-2 border-yellow-300 font-bold tracking-wide",
@@ -26,8 +26,8 @@ const enhancedButtonVariants = cva(
         water: "bg-gradient-to-r from-blue-400 via-blue-500 to-cyan-500 text-white shadow-lg hover:shadow-xl border-2 border-blue-300 font-bold",
         
         // Special effects
-        rainbow: "bg-gradient-to-r from-red-500 via-yellow-500 via-green-500 via-blue-500 to-purple-500 text-white shadow-lg hover:shadow-xl border-2 border-white/30 font-bold",
-        holographic: "bg-gradient-to-r from-purple-400 via-pink-400 via-blue-400 to-cyan-400 text-white shadow-lg hover:shadow-xl border-2 border-white/50 font-bold",
+        rainbow: "bg-gradient-to-r from-red-500 via-yellow-500 via-green-500 via-blue-500 to-purple-500 text-white shadow-lg hover:shadow-xl border-2 border-border font-bold",
+        holographic: "bg-gradient-to-r from-purple-400 via-pink-400 via-blue-400 to-cyan-400 text-white shadow-lg hover:shadow-xl border-2 border-border font-bold",
       },
       size: {
         sm: "h-9 px-3 text-sm rounded-2xl",

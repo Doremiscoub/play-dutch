@@ -146,7 +146,7 @@ export const AnimatedStats: React.FC = () => {
             viewport={{ once: true }}
             whileHover={{ scale: 1.05, y: -5 }}
           >
-            <Card className="bg-white/70 backdrop-blur-xl border border-white/50 shadow-lg hover:shadow-xl transition-all duration-300">
+            <Card className="bg-white border border-border shadow-sm hover:shadow-md transition-all duration-300">
               <CardContent className="p-6 text-center">
                 <motion.div
                   initial={{ scale: 0 }}

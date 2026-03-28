@@ -92,7 +92,7 @@ export const InteractiveTimeline: React.FC = () => {
             transition={{ duration: 0.3 }}
             className="absolute inset-0"
           >
-            <Card className="bg-white/70 backdrop-blur-xl border border-white/50 shadow-xl h-full">
+            <Card className="bg-white border border-border shadow-md h-full">
               <CardContent className="p-8 text-center h-full flex flex-col justify-center">
                 <motion.div
                   initial={{ scale: 0.8 }}

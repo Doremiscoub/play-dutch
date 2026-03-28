@@ -12,7 +12,7 @@ const IntroductionTab = () => {
       transition={{ duration: 0.6 }}
     >
       {/* Objectif principal */}
-      <Card className="bg-white/80 backdrop-blur-xl border-0 shadow-xl overflow-hidden">
+      <Card className="bg-white border border-border shadow-md overflow-hidden">
         <CardContent className="p-8">
           <div className="flex items-center gap-4 mb-6">
             <div className="bg-gradient-to-br from-trinity-blue-500 to-trinity-purple-500 rounded-2xl p-4 text-white">
@@ -36,7 +36,7 @@ const IntroductionTab = () => {
       </Card>
 
       {/* Participants */}
-      <Card className="bg-white/80 backdrop-blur-xl border-0 shadow-xl overflow-hidden">
+      <Card className="bg-white border border-border shadow-md overflow-hidden">
         <CardContent className="p-8">
           <div className="flex items-center gap-4 mb-6">
             <div className="bg-gradient-to-br from-trinity-orange-500 to-trinity-purple-500 rounded-2xl p-4 text-white">
@@ -72,11 +72,11 @@ const IntroductionTab = () => {
       </Card>
       
       {/* Message du Professeur Cartouche */}
-      <Card className="bg-gradient-to-br from-trinity-orange-500 to-trinity-purple-500 backdrop-blur-xl border-0 shadow-xl overflow-hidden relative">
+      <Card className="bg-gradient-to-br from-trinity-orange-500 to-trinity-purple-500 border-0 shadow-md overflow-hidden relative">
         <div className="absolute inset-0 bg-black/10" />
         <CardContent className="relative z-10 p-8">
           <div className="flex items-start gap-6">
-            <div className="bg-white/20 backdrop-blur-sm p-4 rounded-2xl border border-white/30">
+            <div className="bg-white/20 p-4 rounded-2xl border border-white/30">
               <MessageCircle className="h-8 w-8 text-white" />
             </div>
             <div className="flex-1">

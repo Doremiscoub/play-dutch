@@ -12,7 +12,7 @@ const GameplayTab = () => {
       transition={{ duration: 0.6 }}
     >
       {/* Tour de jeu */}
-      <Card className="bg-white/80 backdrop-blur-xl border-0 shadow-xl overflow-hidden">
+      <Card className="bg-white border border-border shadow-md overflow-hidden">
         <CardContent className="p-8">
           <div className="flex items-center gap-4 mb-6">
             <div className="bg-gradient-to-br from-trinity-blue-500 to-trinity-purple-500 rounded-2xl p-4 text-white">
@@ -28,14 +28,14 @@ const GameplayTab = () => {
               <h3 className="text-xl font-black text-gray-800 mb-4">🎯 Actions possibles à votre tour (sens horaire)</h3>
               
               <div className="space-y-4">
-                <div className="bg-white/80 rounded-xl p-4 border-l-4 border-trinity-blue-500">
+                <div className="bg-white rounded-xl p-4 border-l-4 border-trinity-blue-500">
                   <h4 className="font-black text-gray-800 mb-2">1️⃣ Piocher ou prendre la défausse</h4>
                   <p className="text-gray-700 font-semibold">
                     Soit vous piochez une carte de la pile, soit vous prenez la carte du dessus de la défausse.
                   </p>
                 </div>
                 
-                <div className="bg-white/80 rounded-xl p-4 border-l-4 border-trinity-purple-500">
+                <div className="bg-white rounded-xl p-4 border-l-4 border-trinity-purple-500">
                   <h4 className="font-black text-gray-800 mb-2">2️⃣ Choisir votre action</h4>
                   <div className="space-y-2 ml-4">
                     <p className="text-gray-700 font-semibold">
@@ -50,7 +50,7 @@ const GameplayTab = () => {
                   </div>
                 </div>
                 
-                <div className="bg-white/80 rounded-xl p-4 border-l-4 border-trinity-orange-500">
+                <div className="bg-white rounded-xl p-4 border-l-4 border-trinity-orange-500">
                   <h4 className="font-black text-gray-800 mb-2">3️⃣ Fin de tour spéciale</h4>
                   <p className="text-gray-700 font-semibold">
                     Si vous pensez avoir le plus petit total, vous pouvez "sonner" la fin - tous les autres jouent encore une fois !
@@ -63,7 +63,7 @@ const GameplayTab = () => {
       </Card>
 
       {/* Fin de manche */}
-      <Card className="bg-white/80 backdrop-blur-xl border-0 shadow-xl overflow-hidden">
+      <Card className="bg-white border border-border shadow-md overflow-hidden">
         <CardContent className="p-8">
           <div className="flex items-center gap-4 mb-6">
             <div className="bg-gradient-to-br from-trinity-orange-500 to-trinity-purple-500 rounded-2xl p-4 text-white">
@@ -76,7 +76,7 @@ const GameplayTab = () => {
           
           <div className="bg-gradient-to-r from-trinity-orange-50 to-trinity-purple-50 rounded-2xl p-6 border-2 border-trinity-orange-200">
             <div className="space-y-4">
-              <div className="bg-white/80 rounded-xl p-4">
+              <div className="bg-white rounded-xl p-4">
                 <h4 className="font-black text-gray-800 mb-2">📊 Décompte des points</h4>
                 <div className="space-y-2">
                   <p className="text-gray-700 font-semibold">• Toutes les cartes sont révélées</p>
@@ -97,7 +97,7 @@ const GameplayTab = () => {
       </Card>
 
       {/* Fin de partie */}
-      <Card className="bg-white/80 backdrop-blur-xl border-0 shadow-xl overflow-hidden">
+      <Card className="bg-white border border-border shadow-md overflow-hidden">
         <CardContent className="p-8">
           <div className="flex items-center gap-4 mb-6">
             <div className="bg-gradient-to-br from-trinity-purple-500 to-trinity-blue-500 rounded-2xl p-4 text-white">
@@ -110,14 +110,14 @@ const GameplayTab = () => {
           
           <div className="bg-gradient-to-r from-trinity-purple-50 to-trinity-blue-50 rounded-2xl p-6 border-2 border-trinity-purple-200">
             <div className="space-y-4">
-              <div className="bg-white/80 rounded-xl p-4">
+              <div className="bg-white rounded-xl p-4">
                 <h4 className="font-black text-gray-800 mb-2">🎯 Condition de fin</h4>
                 <p className="text-gray-700 font-semibold">
                   On joue autant de manches que nécessaire jusqu'à ce qu'un joueur atteigne ou dépasse la <strong>limite fixée</strong> (ex: 100 pts).
                 </p>
               </div>
               
-              <div className="bg-white/80 rounded-xl p-4">
+              <div className="bg-white rounded-xl p-4">
                 <h4 className="font-black text-gray-800 mb-2">🏆 Vainqueur final</h4>
                 <p className="text-gray-700 font-semibold">
                   Le gagnant est celui avec le <span className="text-trinity-purple-600 font-black">plus petit score cumulé</span> à la fin !

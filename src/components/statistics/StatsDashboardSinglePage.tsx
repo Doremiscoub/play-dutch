@@ -214,7 +214,7 @@ export const StatsDashboardSinglePage: React.FC<StatsDashboardSinglePageProps> =
               {/* Mini-header de section */}
               <div className="flex items-center gap-4">
                 <motion.div
-                  className="p-3 bg-gradient-to-r from-primary/20 via-secondary/20 to-accent/20 backdrop-blur-xl rounded-2xl border border-white/30 shadow-lg"
+                  className="p-3 bg-gradient-to-r from-primary/20 via-secondary/20 to-accent/20 rounded-2xl border border-border shadow-sm"
                   whileHover={{ scale: 1.05, rotate: 3 }}
                   transition={{ type: "spring", stiffness: 400, damping: 10 }}
                 >

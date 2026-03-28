@@ -87,7 +87,7 @@ const HowItWorksSection: React.FC = () => {
                 </div>
               )}
 
-              <Card className="relative z-10 h-full bg-white/90 backdrop-blur-xl border-0 shadow-xl hover:shadow-3xl transition-all duration-300 overflow-hidden">
+              <Card className="relative z-10 h-full bg-white border border-border shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden">
                 {/* Badge numéro */}
                 <div className={`absolute -top-4 -right-4 w-12 h-12 bg-gradient-to-br ${step.gradient} rounded-full flex items-center justify-center text-white font-black text-xl shadow-lg`}>
                   {step.number}
