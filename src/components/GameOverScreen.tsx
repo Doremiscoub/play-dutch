@@ -13,8 +13,16 @@ import { ReceiptCard } from './ui/receipt-card';
 import { ModernTitle } from './ui/modern-title';
 import ProductionAdSlot from './ads/ProductionAdSlot';
 import { useAds } from '@/contexts/EnhancedAdContext';
-import { DESIGN_TOKENS } from '@/design';
 import { logger } from '@/utils/logger';
+
+const CONFETTI_COLORS = [
+  '#3B82F6', // blue
+  '#8B5CF6', // purple
+  '#F97316', // orange
+  '#22C55E', // green
+  '#EC4899', // pink
+  '#14B8A6', // teal
+];
 
 interface GameOverScreenProps {
   players: Player[];
@@ -23,8 +31,8 @@ interface GameOverScreenProps {
   currentScoreLimit: number;
 }
 
-const GameOverScreen: React.FC<GameOverScreenProps> = ({ 
-  players, 
+const GameOverScreen: React.FC<GameOverScreenProps> = ({
+  players,
   onRestart,
   onContinueGame,
   currentScoreLimit = 100
@@ -35,67 +43,48 @@ const GameOverScreen: React.FC<GameOverScreenProps> = ({
   // Sort players by score (lowest = best)
   const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
   const winner = sortedPlayers[0];
-  
+
   // Trigger confetti for the winner
   const triggerConfetti = () => {
     if (isConfettiTriggered) return;
-    
-    // Utiliser les couleurs centralisées pour les confettis
-    const confettiColors = [
-      DESIGN_TOKENS.primitive.dutch.blue[500].replace('hsl(', '').replace(')', ''),
-      DESIGN_TOKENS.primitive.dutch.purple[500].replace('hsl(', '').replace(')', ''),
-      DESIGN_TOKENS.primitive.dutch.orange[500].replace('hsl(', '').replace(')', ''),
-      DESIGN_TOKENS.primitive.kids.lime[500].replace('hsl(', '').replace(')', ''),
-      DESIGN_TOKENS.primitive.kids.pink[400].replace('hsl(', '').replace(')', ''),
-      DESIGN_TOKENS.primitive.kids.turquoise[400].replace('hsl(', '').replace(')', '')
-    ].map(color => `hsl(${color})`);
-    
+
     confetti({
       particleCount: 200,
       spread: 100,
       origin: { y: 0.5, x: 0.5 },
-      colors: confettiColors
+      colors: CONFETTI_COLORS
     });
-    
+
     setTimeout(() => {
-      const leftColors = confettiColors.slice(0, 3);
-      const rightColors = confettiColors.slice(3);
-      
       confetti({
         particleCount: 150,
         angle: 60,
         spread: 80,
         origin: { x: 0, y: 0.5 },
-        colors: leftColors
+        colors: CONFETTI_COLORS.slice(0, 3)
       });
-      
+
       confetti({
         particleCount: 150,
         angle: 120,
         spread: 80,
         origin: { x: 1, y: 0.5 },
-        colors: rightColors
+        colors: CONFETTI_COLORS.slice(3)
       });
     }, 700);
-    
+
     setTimeout(() => {
-      const whiteColors = [
-        DESIGN_TOKENS.primitive.neutral[0],
-        DESIGN_TOKENS.primitive.glass.purple50.replace('hsl(', '').replace(')', ''),
-        DESIGN_TOKENS.primitive.glass.blue50.replace('hsl(', '').replace(')', '')
-      ].map(color => color.includes('hsl') ? color : `hsl(${color})`);
-      
       confetti({
         particleCount: 100,
         angle: 90,
         spread: 120,
         origin: { x: 0.5, y: 0.2 },
-        colors: whiteColors
+        colors: ['#ffffff', '#E0E7FF', '#DBEAFE']
       });
     }, 1400);
-    
+
     setIsConfettiTriggered(true);
-    
+
     try {
       const audio = new Audio('/sounds/victory.mp3');
       audio.volume = 0.6;
@@ -106,32 +95,22 @@ const GameOverScreen: React.FC<GameOverScreenProps> = ({
   };
 
   useEffect(() => {
-    // Définir les couleurs centralisées pour les confettis au début
-    const confettiColors = [
-      DESIGN_TOKENS.primitive.dutch.blue[500].replace('hsl(', '').replace(')', ''),
-      DESIGN_TOKENS.primitive.dutch.purple[500].replace('hsl(', '').replace(')', ''),
-      DESIGN_TOKENS.primitive.dutch.orange[500].replace('hsl(', '').replace(')', ''),
-      DESIGN_TOKENS.primitive.kids.lime[500].replace('hsl(', '').replace(')', ''),
-      DESIGN_TOKENS.primitive.kids.pink[400].replace('hsl(', '').replace(')', ''),
-      DESIGN_TOKENS.primitive.kids.turquoise[400].replace('hsl(', '').replace(')', '')
-    ].map(color => `hsl(${color})`);
-
     triggerConfetti();
-    
+
     const confettiInterval = setInterval(() => {
       confetti({
         particleCount: 40,
         spread: 80,
         origin: { y: Math.random() * 0.3 + 0.2, x: Math.random() },
-        colors: confettiColors.slice(0, 4) // Utiliser les 4 premières couleurs
+        colors: CONFETTI_COLORS.slice(0, 4)
       });
     }, 3000);
-    
+
     toast.success(`🎉 ${winner.name} remporte la partie !`, {
       duration: 5000,
       position: 'top-center',
     });
-    
+
     return () => clearInterval(confettiInterval);
   }, [winner.name]);
 
@@ -143,14 +122,13 @@ const GameOverScreen: React.FC<GameOverScreenProps> = ({
   return (
     <div className="min-h-screen relative overflow-hidden">
       {/* Header géré par GamePageContainer via UnifiedTopBar */}
-      
+
       <div className="p-4 flex flex-col items-center justify-center relative pt-16">
         {/* Animated festive background */}
         <div className="absolute inset-0 -z-10">
           <AnimatedBackground />
-          <div className="absolute inset-0 bg-gradient-to-br from-purple-500/15 via-transparent to-orange-500/15"></div>
         </div>
-        
+
         {/* Main content */}
         <div className="w-full max-w-xl mx-auto z-10 mt-8">
           <motion.div
@@ -162,26 +140,26 @@ const GameOverScreen: React.FC<GameOverScreenProps> = ({
               🎉 Victoire ! 🎉
             </ModernTitle>
           </motion.div>
-          
+
           <ReceiptCard className="w-full mb-6 p-6">
             <GameOverHeader winner={winner} />
             <GamePodium players={players} />
             <OtherPlayersRanking players={players} />
           </ReceiptCard>
-          
+
           {/* Bannière de fin de partie */}
           {shouldShowAds && (
             <div className="my-4">
-              <ProductionAdSlot 
+              <ProductionAdSlot
                 placement="game-end"
                 priority="medium"
               />
             </div>
           )}
 
-          <GameOverActionButtons 
-            onRestart={onRestart} 
-            onContinueGame={handleContinueGame} 
+          <GameOverActionButtons
+            onRestart={onRestart}
+            onContinueGame={handleContinueGame}
           />
         </div>
       </div>

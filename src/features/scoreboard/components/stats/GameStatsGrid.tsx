@@ -69,7 +69,7 @@ const GameStatsGrid: React.FC<GameStatsGridProps> = ({ stats }) => {
         />
       </div>
       
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t border-white/30">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t border-border">
         <StatItem 
           icon={<TrendingUp className="h-4 w-4" />}
           label="Meilleure manche" 
@@ -113,9 +113,8 @@ const StatItem: React.FC<{
   badgeColor: string;
   subLabel?: string;
 }> = ({ icon, label, value, badgeColor, subLabel }) => (
-  <motion.div 
-    className="bg-white/60 backdrop-blur-sm rounded-xl p-3 hover:bg-white/80 transition-all"
-    whileHover={{ scale: 1.02 }}
+  <motion.div
+    className="bg-white border border-border rounded-xl p-3 hover:bg-gray-50 transition-all"
   >
     <div className="flex items-center gap-2 mb-1">
       <div className={`w-6 h-6 rounded-full ${badgeColor} flex items-center justify-center text-white`}>
@@ -124,7 +123,7 @@ const StatItem: React.FC<{
       <span className="text-xs text-gray-600 font-medium">{label}</span>
     </div>
     <div className="flex items-baseline gap-1">
-      <span className="text-lg font-bold bg-gradient-to-br from-dutch-blue to-dutch-purple bg-clip-text text-transparent">
+      <span className="text-lg font-bold text-foreground">
         {value}
       </span>
       {subLabel && (

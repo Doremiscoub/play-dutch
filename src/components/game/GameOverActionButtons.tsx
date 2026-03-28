@@ -1,6 +1,5 @@
 
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { RotateCcw, Plus } from 'lucide-react';
 
@@ -14,9 +13,9 @@ const GameOverActionButtons: React.FC<GameOverActionButtonsProps> = ({
   onContinueGame
 }) => {
   const [selectedLimit, setSelectedLimit] = useState<number>(50);
-  
+
   const limits = [25, 50, 100];
-  
+
   return (
     <div className="mt-8 space-y-4">
       <div>
@@ -27,10 +26,10 @@ const GameOverActionButtons: React.FC<GameOverActionButtonsProps> = ({
               key={limit}
               variant={selectedLimit === limit ? "default" : "outline"}
               size="sm"
-              className={`rounded-full transition-all ${
-                selectedLimit === limit 
-                  ? "bg-gradient-to-r from-dutch-blue to-dutch-purple text-white shadow-md" 
-                  : "bg-white/70 backdrop-blur-sm border border-white/50"
+              className={`rounded-full transition-colors ${
+                selectedLimit === limit
+                  ? "bg-dutch-blue text-white"
+                  : "bg-white border border-gray-200"
               }`}
               onClick={() => setSelectedLimit(limit)}
             >
@@ -38,34 +37,24 @@ const GameOverActionButtons: React.FC<GameOverActionButtonsProps> = ({
             </Button>
           ))}
         </div>
-        
-        <motion.div
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-        >
-          <Button
-            className="w-full bg-gradient-to-r from-dutch-blue to-dutch-purple text-white shadow-lg hover:shadow-xl transition-all rounded-2xl py-3"
-            onClick={() => onContinueGame(selectedLimit)}
-          >
-            <Plus className="mr-2 h-5 w-5" />
-            Continuer (+{selectedLimit} points)
-          </Button>
-        </motion.div>
-      </div>
-      
-      <motion.div
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
-      >
+
         <Button
-          variant="outline"
-          className="w-full bg-white/70 backdrop-blur-sm border border-white/50 rounded-2xl py-3"
-          onClick={onRestart}
+          className="w-full bg-dutch-blue text-white hover:bg-dutch-blue/90 transition-colors rounded-2xl py-3"
+          onClick={() => onContinueGame(selectedLimit)}
         >
-          <RotateCcw className="mr-2 h-5 w-5" />
-          Nouvelle partie
+          <Plus className="mr-2 h-5 w-5" />
+          Continuer (+{selectedLimit} points)
         </Button>
-      </motion.div>
+      </div>
+
+      <Button
+        variant="outline"
+        className="w-full bg-white border border-gray-200 rounded-2xl py-3"
+        onClick={onRestart}
+      >
+        <RotateCcw className="mr-2 h-5 w-5" />
+        Nouvelle partie
+      </Button>
     </div>
   );
 };

@@ -130,7 +130,7 @@ export const StatsDashboardSinglePage: React.FC<StatsDashboardSinglePageProps> =
               onClick={onBack}
               variant="ghost"
               size="sm"
-              className="glass-button h-12 w-12 rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20 hover:bg-white/20 transition-all duration-300 hover:scale-105"
+              className="h-12 w-12 rounded-2xl bg-white border border-border shadow-sm hover:bg-gray-50 transition-all duration-300 hover:scale-105"
             >
               <ArrowLeft className="h-5 w-5 text-primary" />
             </Button>
@@ -161,7 +161,7 @@ export const StatsDashboardSinglePage: React.FC<StatsDashboardSinglePageProps> =
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="glass-card bg-white/70 backdrop-blur-xl rounded-3xl p-6 border border-white/50 shadow-xl"
+            className="bg-white rounded-3xl p-6 border border-border shadow-sm"
           >
             <div className="flex flex-wrap items-center gap-3">
               <span className="text-sm font-semibold text-foreground flex items-center gap-2">
@@ -175,7 +175,7 @@ export const StatsDashboardSinglePage: React.FC<StatsDashboardSinglePageProps> =
                 className={`rounded-2xl font-medium transition-all duration-300 ${
                   !selectedPlayer 
                     ? 'bg-gradient-to-r from-primary to-secondary text-white shadow-lg hover:shadow-xl transform hover:scale-105' 
-                    : 'glass-button bg-white/50 hover:bg-white/70 text-foreground border border-white/30'
+                    : 'bg-white hover:bg-gray-50 text-foreground border border-border'
                 }`}
               >
                 Tous les joueurs
@@ -189,7 +189,7 @@ export const StatsDashboardSinglePage: React.FC<StatsDashboardSinglePageProps> =
                   className={`rounded-2xl font-medium transition-all duration-300 flex items-center gap-2 ${
                     selectedPlayer?.id === player.id 
                       ? 'bg-gradient-to-r from-primary to-secondary text-white shadow-lg hover:shadow-xl transform hover:scale-105' 
-                      : 'glass-button bg-white/50 hover:bg-white/70 text-foreground border border-white/30'
+                      : 'bg-white hover:bg-gray-50 text-foreground border border-border'
                   }`}
                 >
                   <span className="text-base">{player.emoji || '😊'}</span>
@@ -235,7 +235,7 @@ export const StatsDashboardSinglePage: React.FC<StatsDashboardSinglePageProps> =
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.3 + index * 0.1 }}
-                className="glass-card bg-white/40 backdrop-blur-xl rounded-3xl border border-white/50 shadow-xl overflow-hidden"
+                className="bg-white rounded-3xl border border-border shadow-sm overflow-hidden"
               >
                 <div className="p-6 sm:p-8">
                   {section.component}

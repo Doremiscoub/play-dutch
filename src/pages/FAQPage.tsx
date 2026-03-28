@@ -139,7 +139,7 @@ const FAQPage: React.FC = () => {
                   placeholder="Rechercher dans les questions..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 glass-input"
+                  className="pl-10"
                 />
               </div>
             </div>
@@ -157,7 +157,7 @@ const FAQPage: React.FC = () => {
                       <AccordionItem
                         key={index}
                         value={`${categoryIndex}-${index}`}
-                        className="border rounded-lg px-4 vision-card"
+                        className="border rounded-lg px-4 bg-white rounded-xl border border-border shadow-sm"
                       >
                         <AccordionTrigger className="text-left hover:no-underline">
                           <span className="font-medium">{faq.question}</span>
@@ -181,7 +181,7 @@ const FAQPage: React.FC = () => {
             </div>
 
             {/* Contact Section */}
-            <div className="mt-12 p-6 bg-gradient-to-r from-dutch-blue/5 to-dutch-purple/5 rounded-lg border vision-card">
+            <div className="mt-12 p-6 bg-gradient-to-r from-dutch-blue/5 to-dutch-purple/5 rounded-lg border bg-white rounded-xl border border-border shadow-sm">
               <h3 className="text-xl font-bold mb-2">Une question non résolue ?</h3>
               <p className="text-gray-600 mb-4">
                 Si vous ne trouvez pas la réponse à votre question, n'hésitez pas à nous contacter.

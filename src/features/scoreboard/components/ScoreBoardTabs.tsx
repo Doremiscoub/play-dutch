@@ -14,8 +14,8 @@ const ScoreBoardTabs: React.FC<ScoreBoardTabsProps> = ({
 }) => {
   return (
     <div className="flex justify-center mb-3 md:mb-6 px-2 md:px-4">
-      <motion.div 
-        className="bg-white/80 backdrop-blur-md border border-gray-200 rounded-2xl p-2 shadow-lg w-full max-w-md md:max-w-none"
+      <motion.div
+        className="bg-white border border-gray-200 rounded-2xl p-2 shadow-sm w-full max-w-md md:max-w-none"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.2 }}
@@ -29,7 +29,6 @@ const ScoreBoardTabs: React.FC<ScoreBoardTabsProps> = ({
                 : "text-purple-700 hover:bg-purple-50"
             )}
             onClick={() => onViewChange('list')}
-            whileHover={{ y: -1 }}
             whileTap={{ scale: 0.98 }}
             role="tab"
             aria-selected={currentView === 'list'}
@@ -47,7 +46,6 @@ const ScoreBoardTabs: React.FC<ScoreBoardTabsProps> = ({
                 : "text-orange-700 hover:bg-orange-50"
             )}
             onClick={() => onViewChange('table')}
-            whileHover={{ y: -1 }}
             whileTap={{ scale: 0.98 }}
             role="tab"
             aria-selected={currentView === 'table'}
@@ -65,7 +63,6 @@ const ScoreBoardTabs: React.FC<ScoreBoardTabsProps> = ({
                 : "text-cyan-700 hover:bg-cyan-50"
             )}
             onClick={() => onViewChange('stats')}
-            whileHover={{ y: -1 }}
             whileTap={{ scale: 0.98 }}
             role="tab"
             aria-selected={currentView === 'stats'}

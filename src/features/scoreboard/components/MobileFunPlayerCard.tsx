@@ -32,29 +32,29 @@ const MobileFunPlayerCard: React.FC<MobileFunPlayerCardProps> = ({
   const getRankTheme = () => {
     const themes = {
       1: {
-        gradient: "from-amber-400/20 to-yellow-400/10",
-        border: "border-amber-400/40",
+        bg: "bg-amber-50",
+        border: "border-amber-200",
         text: "text-amber-700",
         accent: "bg-amber-500",
         badge: "bg-amber-100"
       },
       2: {
-        gradient: "from-blue-400/20 to-cyan-400/10",
-        border: "border-blue-400/40",
+        bg: "bg-blue-50",
+        border: "border-blue-200",
         text: "text-blue-700",
         accent: "bg-blue-500",
         badge: "bg-blue-100"
       },
       3: {
-        gradient: "from-emerald-400/20 to-green-400/10",
-        border: "border-emerald-400/40",
+        bg: "bg-emerald-50",
+        border: "border-emerald-200",
         text: "text-emerald-700",
         accent: "bg-emerald-500",
         badge: "bg-emerald-100"
       },
       default: {
-        gradient: "from-slate-400/20 to-gray-400/10",
-        border: "border-slate-400/40",
+        bg: "bg-slate-50",
+        border: "border-slate-200",
         text: "text-slate-700",
         accent: "bg-slate-500",
         badge: "bg-slate-100"
@@ -62,7 +62,7 @@ const MobileFunPlayerCard: React.FC<MobileFunPlayerCardProps> = ({
     };
     return themes[rank as keyof typeof themes] || themes.default;
   };
-  
+
   const theme = getRankTheme();
 
   const handleCardClick = () => {
@@ -71,12 +71,12 @@ const MobileFunPlayerCard: React.FC<MobileFunPlayerCardProps> = ({
   };
 
   return (
-    <motion.div 
+    <motion.div
       className={cn(
-        "relative rounded-xl backdrop-blur-sm border transition-all duration-200 cursor-pointer",
-        `bg-gradient-to-r ${theme.gradient}`,
+        "relative rounded-xl border transition-all duration-200 cursor-pointer",
+        theme.bg,
         theme.border,
-        isSelected || isExpanded ? "ring-2 ring-purple-400/30 scale-[1.01]" : "hover:scale-[1.005]"
+        isSelected || isExpanded ? "ring-2 ring-purple-300 scale-[1.01]" : "hover:shadow-sm"
       )}
       onClick={handleCardClick}
       initial={{ opacity: 0, y: 10 }}
@@ -86,13 +86,13 @@ const MobileFunPlayerCard: React.FC<MobileFunPlayerCardProps> = ({
     >
       {/* Badge gagnant compact */}
       {isWinner && (
-        <motion.div 
+        <motion.div
           className="absolute -top-1 -right-1 z-10"
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ delay: 0.2, type: "spring" }}
         >
-          <div className="bg-gradient-to-r from-yellow-400 to-orange-400 text-white px-2 py-0.5 rounded-full text-xs font-bold flex items-center gap-1">
+          <div className="bg-amber-500 text-white px-2 py-0.5 rounded-full text-xs font-bold flex items-center gap-1">
             👑
           </div>
         </motion.div>
@@ -103,24 +103,21 @@ const MobileFunPlayerCard: React.FC<MobileFunPlayerCardProps> = ({
         <div className="flex items-center gap-3">
           {/* Rang et Avatar compacts */}
           <div className="flex items-center gap-2 flex-shrink-0">
-            <motion.div 
+            <div
               className={cn(
-                "w-8 h-8 rounded-xl flex items-center justify-center text-white font-bold text-sm",
-                `bg-gradient-to-br ${theme.gradient}`,
+                "w-8 h-8 rounded-xl flex items-center justify-center font-bold text-sm",
+                theme.bg,
                 theme.border,
+                theme.text,
                 "border"
               )}
-              whileHover={{ scale: 1.1 }}
             >
               {rank}
-            </motion.div>
-            
-            <motion.div 
-              className="w-8 h-8 rounded-lg bg-white/80 flex items-center justify-center text-lg"
-              whileHover={{ scale: 1.1 }}
-            >
+            </div>
+
+            <div className="w-8 h-8 rounded-lg bg-white border border-border flex items-center justify-center text-lg">
               {player.emoji || '🎮'}
-            </motion.div>
+            </div>
           </div>
 
           {/* Nom et infos principales */}
@@ -128,7 +125,7 @@ const MobileFunPlayerCard: React.FC<MobileFunPlayerCardProps> = ({
             <h3 className={cn("font-bold text-base leading-tight break-words hyphens-auto", theme.text)}>
               {player.name}
             </h3>
-            <div className="flex items-center gap-2 text-xs text-gray-600">
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
               <span>🎯 {player.rounds.length}</span>
               {dutchCount > 0 && <span className="text-orange-600">🏆 {dutchCount}</span>}
             </div>
@@ -136,13 +133,10 @@ const MobileFunPlayerCard: React.FC<MobileFunPlayerCardProps> = ({
 
           {/* Score principal compact */}
           <div className="flex flex-col items-end flex-shrink-0">
-            <motion.div 
-              className={cn("text-xl font-bold", theme.text)}
-              whileHover={{ scale: 1.05 }}
-            >
+            <div className={cn("text-xl font-bold", theme.text)}>
               {player.totalScore}
-            </motion.div>
-            <div className="text-xs text-gray-500">
+            </div>
+            <div className="text-xs text-muted-foreground">
               {avgScore} moy
             </div>
           </div>
@@ -153,7 +147,7 @@ const MobileFunPlayerCard: React.FC<MobileFunPlayerCardProps> = ({
             transition={{ duration: 0.2 }}
             className="flex-shrink-0"
           >
-            <ChevronDown className="w-4 h-4 text-gray-400" />
+            <ChevronDown className="w-4 h-4 text-muted-foreground" />
           </motion.div>
         </div>
 
@@ -165,17 +159,17 @@ const MobileFunPlayerCard: React.FC<MobileFunPlayerCardProps> = ({
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.2 }}
-              className="overflow-hidden border-t border-white/20 pt-3 mt-3"
+              className="overflow-hidden border-t border-border pt-3 mt-3"
             >
               {/* Progression vers la limite */}
               {scoreLimit && (
                 <div className="mb-3">
-                  <div className="flex justify-between text-xs text-gray-600 mb-1">
+                  <div className="flex justify-between text-xs text-muted-foreground mb-1">
                     <span>Progression</span>
                     <span>{Math.max(0, scoreLimit - player.totalScore)} restant</span>
                   </div>
-                  <div className="w-full bg-white/20 rounded-full h-2">
-                    <motion.div 
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <motion.div
                       className={cn("h-2 rounded-full", theme.accent)}
                       initial={{ width: 0 }}
                       animate={{ width: `${Math.min(player.totalScore / scoreLimit * 100, 100)}%` }}
@@ -187,7 +181,7 @@ const MobileFunPlayerCard: React.FC<MobileFunPlayerCardProps> = ({
 
               {/* Dernières manches - Layout horizontal compact */}
               <div className="mb-3">
-                <h4 className="text-xs font-medium text-gray-600 mb-2">Dernières manches</h4>
+                <h4 className="text-xs font-medium text-muted-foreground mb-2">Dernières manches</h4>
                 <div className="flex gap-1">
                   {recentRounds.map((round, index) => {
                     const getScoreColor = (score: number) => {
@@ -196,9 +190,9 @@ const MobileFunPlayerCard: React.FC<MobileFunPlayerCardProps> = ({
                       if (score <= 15) return 'bg-yellow-100 text-yellow-700';
                       return 'bg-red-100 text-red-700';
                     };
-                    
+
                     return (
-                      <motion.div 
+                      <motion.div
                         key={index}
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
@@ -216,11 +210,11 @@ const MobileFunPlayerCard: React.FC<MobileFunPlayerCardProps> = ({
               {/* Stats compactes - Grid 2 colonnes */}
               <div className="grid grid-cols-2 gap-2">
                 <div className={cn("p-2 rounded-lg text-center", theme.badge)}>
-                  <div className="text-xs text-gray-600">Meilleur</div>
+                  <div className="text-xs text-muted-foreground">Meilleur</div>
                   <div className={cn("font-bold text-sm", theme.text)}>{bestRound}</div>
                 </div>
                 <div className={cn("p-2 rounded-lg text-center", theme.badge)}>
-                  <div className="text-xs text-gray-600">Tendance</div>
+                  <div className="text-xs text-muted-foreground">Tendance</div>
                   <div className="text-sm">
                     {recentRounds.length >= 2 && recentRounds[recentRounds.length - 1].score < recentRounds[recentRounds.length - 2].score ? '📈' : '📊'}
                   </div>
@@ -229,12 +223,12 @@ const MobileFunPlayerCard: React.FC<MobileFunPlayerCardProps> = ({
 
               {/* Badge champion compact */}
               {isWinner && (
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="mt-3 p-2 bg-gradient-to-r from-yellow-100 to-orange-100 border border-yellow-300 rounded-lg text-center"
+                  className="mt-3 p-2 bg-amber-50 border border-amber-200 rounded-lg text-center"
                 >
-                  <div className="flex items-center justify-center gap-1 text-yellow-700 font-medium text-xs">
+                  <div className="flex items-center justify-center gap-1 text-amber-700 font-medium text-xs">
                     <Trophy className="h-3 w-3" />
                     Champion !
                     ⭐

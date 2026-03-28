@@ -101,7 +101,7 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className={`glass-modal ${isMobile ? 'sm:max-w-[95vw] max-h-[85vh]' : 'sm:max-w-lg'}`}>
+      <DialogContent className={`bg-white rounded-xl border border-border shadow-lg ${isMobile ? 'sm:max-w-[95vw] max-h-[85vh]' : 'sm:max-w-lg'}`}>
         <DialogHeader>
           <DialogTitle className={`font-semibold text-gray-800 ${isMobile ? 'text-lg' : 'text-xl'}`}>
             Ajouter une manche
@@ -112,7 +112,7 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
           {players.map((player, index) => (
             <motion.div
               key={player.id}
-              className={`vision-card ${isMobile ? 'p-3' : 'p-4'}`}
+              className={`bg-white rounded-xl border border-border shadow-sm ${isMobile ? 'p-3' : 'p-4'}`}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.05, duration: 0.3 }}
@@ -149,7 +149,7 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
                         handleScoreChange(player.id, e.target.value);
                       }
                     }}
-                    className={`px-2 text-center glass-input text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-dutch-blue/20 transition-all ${
+                    className={`px-2 text-center rounded-lg border border-border bg-white text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-dutch-blue/20 transition-all ${
                       isMobile ? 'w-20 h-12 text-lg touch-target' : 'w-16 h-10'
                     }`}
                     placeholder="0"

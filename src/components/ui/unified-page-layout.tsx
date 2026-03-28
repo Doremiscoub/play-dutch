@@ -23,14 +23,14 @@ export const UnifiedPageLayout: React.FC<UnifiedPageLayoutProps> = ({
 }) => {
   const backgroundClasses = {
     minimal: 'bg-gray-50',
-    subtle: 'bg-gradient-to-br from-gray-50 to-white',
-    default: 'bg-gradient-to-br from-blue-50 via-white to-purple-50'
+    subtle: 'bg-gray-50/50',
+    default: 'bg-gray-50'
   };
 
   return (
     <div className={cn('min-h-screen', backgroundClasses[backgroundVariant])}>
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-white/50">
+      <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-border">
         <div className="container mx-auto px-4 py-4 flex items-center gap-4">
           {showBackButton && (
             <Button
