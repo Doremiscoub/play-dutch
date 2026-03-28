@@ -7,7 +7,7 @@ import NewRoundModal from '@/components/NewRoundModal';
 import { useUnifiedHeader } from '@/hooks/useUnifiedHeader';
 import { AICommentator } from '@/features/ai-commentator';
 import GamePageLayout from '@/components/layout/GamePageLayout';
-import VideoAdOverlay from '@/components/ads/VideoAdOverlay';
+import { useH5GameAds } from '@/hooks/useH5GameAds';
 import GameErrorFallback from '@/components/errors/GameErrorFallback';
 import { logger } from '@/utils/logger';
 import * as Sentry from '@sentry/react';
@@ -36,8 +36,7 @@ const SimpleGamePage: React.FC = () => {
   const [showGameEndConfirmation, setShowGameEndConfirmation] = useState(false);
   const [scores, setScores] = useState<{ [playerId: string]: number }>({});
   const [dutchPlayerId, setDutchPlayerId] = useState<string | undefined>();
-  const [showVideoAd, setShowVideoAd] = useState(false);
-  const [adTrigger, setAdTrigger] = useState<'round-added' | 'game-ended'>('round-added');
+  const { showInterstitial, trackRound } = useH5GameAds();
   
   // Configuration du header - DOIT être appelé avant tout return conditionnel
   const headerConfig = useUnifiedHeader(
@@ -106,7 +105,12 @@ const SimpleGamePage: React.FC = () => {
     const scoresArray = players.map(player => scores[player.id] || 0);
     addRound(scoresArray, dutchPlayerId);
     setIsScoreFormOpen(false);
-    
+
+    // Show ad every ~4 rounds at natural break
+    if (trackRound()) {
+      showInterstitial('round-complete');
+    }
+
     // Réinitialiser les scores
     const initialScores: { [playerId: string]: number } = {};
     players.forEach(player => {
@@ -121,16 +125,21 @@ const SimpleGamePage: React.FC = () => {
   };
 
   const handleConfirmEndGame = () => {
-    setAdTrigger('game-ended');
-    setShowVideoAd(true);
-    resetGame();
-    navigate('/setup');
+    // Show interstitial at game end — natural break point
+    showInterstitial('game-over', {
+      onAfterAd: () => {
+        resetGame();
+        navigate('/setup');
+      },
+      onAdBreakDone: (info) => {
+        // If ad didn't show (not ready, capped, etc.), proceed anyway
+        if (info.breakStatus !== 'viewed') {
+          resetGame();
+          navigate('/setup');
+        }
+      },
+    });
     setShowGameEndConfirmation(false);
-  };
-
-  const handleVideoAdShown = () => {
-    setAdTrigger('round-added');
-    setShowVideoAd(true);
   };
 
   const handleCancelEndGame = () => {
@@ -184,14 +193,6 @@ const SimpleGamePage: React.FC = () => {
         dutchPlayerId={dutchPlayerId}
         setDutchPlayerId={setDutchPlayerId}
         onAddRound={handleAddRound}
-        onVideoAdShown={handleVideoAdShown}
-      />
-
-      {/* Overlay de publicité vidéo */}
-      <VideoAdOverlay
-        isVisible={showVideoAd}
-        onClose={() => setShowVideoAd(false)}
-        trigger={adTrigger}
       />
     </ErrorBoundary>
   );

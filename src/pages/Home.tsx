@@ -15,16 +15,11 @@ import SimplifiedHeroSection from '@/components/home/SimplifiedHeroSection';
 import LazyHomeSections from '@/components/home/LazyHomeSections';
 import HomeLayout from '@/components/layout/HomeLayout';
 import PWAPromotionCard from '@/components/pwa/PWAPromotionCard';
-import { useAds } from '@/contexts/EnhancedAdContext';
-import ProductionAdSlot from '@/components/ads/ProductionAdSlot';
-import AdPerformanceTracker from '@/components/ads/AdPerformanceTracker';
-import AdSenseMetrics from '@/components/ads/AdSenseMetrics';
 import { logger } from '@/utils/logger';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
   const { showTutorial, closeTutorial, startTutorial: _startTutorial, isLoading } = useTutorial();
-  const { shouldShowAds } = useAds();
 
   const seoData = {
     title: 'Dutch Card Game - Application compagnon gratuite pour jeu de cartes avec IA',
@@ -74,12 +69,6 @@ const Home: React.FC = () => {
 
           <HomeLayout>
             <SimplifiedHeroSection />
-
-            {shouldShowAds && (
-              <section className="py-4">
-                <ProductionAdSlot placement="homepage-hero" priority="high" />
-              </section>
-            )}
 
             {/* Features Section */}
             <section className="py-16 sm:py-20 px-4 sm:px-6">
@@ -267,15 +256,7 @@ const Home: React.FC = () => {
 
             <LazyHomeSections navigate={navigate} />
 
-            {shouldShowAds && (
-              <section className="mt-12 mb-8">
-                <ProductionAdSlot placement="stats-top" priority="low" />
-              </section>
-            )}
           </HomeLayout>
-
-          <AdPerformanceTracker />
-          <AdSenseMetrics />
 
           <div className="container mx-auto px-4 pb-6">
             <PWAPromotionCard

@@ -13,7 +13,6 @@ interface NewRoundModalProps {
   dutchPlayerId?: string;
   onClose: () => void;
   onAddRound: () => void;
-  onVideoAdShown?: () => void;
   setScores: React.Dispatch<React.SetStateAction<{ [playerId: string]: number }>>;
   setDutchPlayerId: React.Dispatch<React.SetStateAction<string | undefined>>;
   open: boolean;
@@ -27,7 +26,6 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
   dutchPlayerId,
   onClose,
   onAddRound,
-  onVideoAdShown,
   setScores,
   setDutchPlayerId,
   open
@@ -82,8 +80,6 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
     setIsSubmitting(true);
     onClose();
     onAddRound();
-    // Déclencher la pub vidéo après validation
-    onVideoAdShown?.();
   };
 
   const validateNumberInput = (input: string): boolean => {
