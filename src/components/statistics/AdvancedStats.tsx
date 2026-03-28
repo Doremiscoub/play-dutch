@@ -102,7 +102,7 @@ export const AdvancedStats: React.FC<AdvancedStatsProps> = ({
         dutchCount: stats?.dutchCount || 0,
         winProbability: calculateWinProbability(player, players)
       };
-    }).filter(Boolean);
+    }).filter((item): item is NonNullable<typeof item> => item !== null);
   };
 
   // Calculer le momentum
@@ -366,7 +366,7 @@ export const AdvancedStats: React.FC<AdvancedStatsProps> = ({
                       />
                       <ChartTooltip content={<ChartTooltipContent />} />
                       <Scatter data={performanceData} fill="hsl(var(--primary))">
-                        {performanceData.map((entry, index) => (
+                        {performanceData.map((_entry, index) => (
                           <Cell key={`cell-${index}`} fill={`hsl(${index * 60}, 70%, 50%)`} />
                         ))}
                       </Scatter>

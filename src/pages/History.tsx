@@ -65,7 +65,7 @@ const History: React.FC = () => {
     }
   ];
 
-  const simulatedPlayers: Player[] = [
+  const _simulatedPlayers: Player[] = [
     {
       id: 'current-user',
       name: user?.email?.split('@')[0] || 'Joueur',
@@ -76,17 +76,17 @@ const History: React.FC = () => {
     }
   ];
 
-  const simulatedRoundHistory: RoundHistoryEntry[] = [
+  const _simulatedRoundHistory: RoundHistoryEntry[] = [
     { scores: [15, 20, 10], dutchPlayerId: 'player-1' },
     { scores: [0, 25, 15], dutchPlayerId: 'current-user' },
     { scores: [10, 30, 20], dutchPlayerId: undefined }
   ];
 
-  const handleReplayGame = (gameId: string) => {
+  const handleReplayGame = (_gameId: string) => {
     toast.info('Fonctionnalité bientôt disponible !');
   };
 
-  const handleShareGame = (gameId: string) => {
+  const handleShareGame = (_gameId: string) => {
     toast.info('Partage des parties bientôt disponible !');
   };
 

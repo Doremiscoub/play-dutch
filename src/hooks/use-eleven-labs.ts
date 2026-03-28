@@ -1,5 +1,5 @@
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { useLocalStorage } from './use-local-storage';
 
 interface ElevenLabsConfig {

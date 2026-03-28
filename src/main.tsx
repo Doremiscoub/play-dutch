@@ -10,6 +10,7 @@ import App from './App.tsx'
 import './index.css'
 import './styles/theme.css'
 import { initializeSentry, SentryErrorBoundary } from './utils/sentryConfig'
+import { logger } from '@/utils/logger';
 
 // Initialize Sentry as early as possible
 initializeSentry().catch(error => {
@@ -73,7 +74,7 @@ if (import.meta.env.PROD) {
   window.addEventListener('load', () => {
     const perfData = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
     if (perfData) {
-      console.log('Dutch Card Game - Performance:', {
+      logger.debug('Dutch Card Game - Performance:', {
         pageLoadTime: Math.round(perfData.loadEventEnd - perfData.loadEventStart),
         domReady: Math.round(perfData.domContentLoadedEventEnd - perfData.domContentLoadedEventStart),
         totalTime: Math.round(perfData.loadEventEnd - perfData.fetchStart)

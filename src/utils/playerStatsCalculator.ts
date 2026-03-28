@@ -2,7 +2,6 @@
  * Utilitaires pour le calcul des statistiques des joueurs
  */
 import { Player, PlayerStatistics } from '@/types';
-import { isGameOver } from './gameUtils';
 
 /**
  * Calcule les statistiques complètes pour un joueur

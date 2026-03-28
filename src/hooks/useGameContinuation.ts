@@ -6,6 +6,7 @@ import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { cleanupGameState } from '@/utils/gameUtils';
+import { logger } from '@/utils/logger';
 
 export const useGameContinuation = (
   setShowGameOver: (show: boolean) => void,
@@ -17,22 +18,22 @@ export const useGameContinuation = (
   
   // Demande de fin de partie
   const handleRequestEndGame = useCallback(() => {
-    console.log('useGameContinuation: handleRequestEndGame called');
+    logger.debug('useGameContinuation: handleRequestEndGame called');
     setShowGameEndConfirmation(true);
   }, []);
   
   // Annulation de la fin de partie
   const handleCancelEndGame = useCallback(() => {
-    console.log('useGameContinuation: handleCancelEndGame called');
+    logger.debug('useGameContinuation: handleCancelEndGame called');
     setShowGameEndConfirmation(false);
   }, []);
   
   // Continuer avec une nouvelle limite
   const handleContinueGame = useCallback((newLimit: number) => {
-    console.log('useGameContinuation: handleContinueGame called with new limit:', newLimit);
+    logger.debug('useGameContinuation: handleContinueGame called with new limit:', newLimit);
     setScoreLimit(prevLimit => {
       const updatedLimit = prevLimit + newLimit;
-      console.log('useGameContinuation: Score limit updated from', prevLimit, 'to', updatedLimit);
+      logger.debug('useGameContinuation: Score limit updated from', prevLimit, 'to', updatedLimit);
       return updatedLimit;
     });
     setShowGameOver(false);
@@ -41,17 +42,17 @@ export const useGameContinuation = (
   
   // Redémarrer avec une nouvelle partie
   const handleRestart = useCallback(() => {
-    console.log('useGameContinuation: handleRestart called');
+    logger.debug('useGameContinuation: handleRestart called');
     try {
       // Nettoyage complet avec logs
-      console.log('useGameContinuation: Cleaning up game state');
+      logger.debug('useGameContinuation: Cleaning up game state');
       cleanupGameState();
       
       // Flag pour forcer une nouvelle partie
-      console.log('useGameContinuation: Setting new game flag');
+      logger.debug('useGameContinuation: Setting new game flag');
       localStorage.setItem('dutch_new_game_requested', 'true');
       
-      console.log('useGameContinuation: Navigating to game setup');
+      logger.debug('useGameContinuation: Navigating to game setup');
       navigate('/setup');
       
       return true;

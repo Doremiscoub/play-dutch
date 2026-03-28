@@ -1,7 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useAds } from '@/contexts/EnhancedAdContext';
-import { AlertTriangle, Eye, EyeOff } from 'lucide-react';
-import { motion } from 'framer-motion';
 
 interface ProductionAdSlotProps {
   placement: 'homepage-hero' | 'homepage-footer' | 'game-end' | 'stats-top';
@@ -18,7 +16,7 @@ const ProductionAdSlot: React.FC<ProductionAdSlotProps> = ({
   const adRef = useRef<HTMLDivElement>(null);
   const [adLoaded, setAdLoaded] = useState(false);
   const [adError, setAdError] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
+  const [_isVisible, setIsVisible] = useState(false);
 
   // Configuration optimisée pour la production
   const adConfigs = {

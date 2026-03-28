@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Player } from '@/types';
 import { Button } from '@/components/ui/button';
-import { Plus, Home, Share2, ArrowRight } from 'lucide-react';
+import { Plus, Home, ArrowRight } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { useNavigate } from 'react-router-dom';
 import AnimatedBackground from './AnimatedBackground';

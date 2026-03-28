@@ -2,7 +2,6 @@
 import React from 'react';
 import { useTheme } from '@/hooks/use-theme';
 import { Check } from 'lucide-react';
-import { motion } from 'framer-motion';
 
 const ColorThemeSelector: React.FC = () => {
   const { currentTheme } = useTheme();

@@ -5,6 +5,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { Player, RoundHistoryEntry } from '@/types';
 import { toast } from 'sonner';
 import { useSupabaseAuth } from '@/context/SupabaseAuthContext';
+import { logger } from '@/utils/logger';
 
 interface GameState {
   gameId: string;
@@ -36,7 +37,7 @@ export const useRealtimeMultiplayer = () => {
   const [isConnecting, setIsConnecting] = useState(false);
   const [gameState, setGameState] = useState<GameState | null>(null);
   const [roomCode, setRoomCode] = useState<string>('');
-  const [connectedPlayers, setConnectedPlayers] = useState<Player[]>([]);
+  const [_connectedPlayers, setConnectedPlayers] = useState<Player[]>([]);
   const [isHost, setIsHost] = useState(false);
   const reconnectTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
   const heartbeatIntervalRef = useRef<ReturnType<typeof setInterval>>();
@@ -48,13 +49,13 @@ export const useRealtimeMultiplayer = () => {
     if (!isSignedIn || isConnecting) return;
 
     setIsConnecting(true);
-    console.log('🔌 Connecting to WebSocket:', WS_URL);
+    logger.debug('🔌 Connecting to WebSocket:', WS_URL);
 
     try {
       const ws = new WebSocket(WS_URL);
 
       ws.onopen = () => {
-        console.log('✅ WebSocket connected');
+        logger.debug('✅ WebSocket connected');
         setSocket(ws);
         setIsConnected(true);
         setIsConnecting(false);
@@ -70,7 +71,7 @@ export const useRealtimeMultiplayer = () => {
       ws.onmessage = (event) => {
         try {
           const message: RealtimeMessage = JSON.parse(event.data);
-          console.log('📨 Received message:', message);
+          logger.debug('📨 Received message:', message);
           handleMessage(message);
         } catch (error) {
           console.error('Error parsing message:', error);
@@ -78,7 +79,7 @@ export const useRealtimeMultiplayer = () => {
       };
 
       ws.onclose = (event) => {
-        console.log('🔌 WebSocket closed:', event.code, event.reason);
+        logger.debug('🔌 WebSocket closed:', event.code, event.reason);
         setSocket(null);
         setIsConnected(false);
         setIsConnecting(false);
@@ -90,7 +91,7 @@ export const useRealtimeMultiplayer = () => {
 
         // Reconnexion automatique si ce n'est pas une fermeture intentionnelle
         if (event.code !== 1000 && isSignedIn) {
-          console.log('🔄 Attempting to reconnect in 3 seconds...');
+          logger.debug('🔄 Attempting to reconnect in 3 seconds...');
           reconnectTimeoutRef.current = setTimeout(() => {
             connectWebSocket();
           }, 3000);
@@ -113,11 +114,11 @@ export const useRealtimeMultiplayer = () => {
   const handleMessage = (message: RealtimeMessage) => {
     switch (message.type) {
       case 'connected':
-        console.log('✅ Client connected with ID:', message.clientId);
+        logger.debug('✅ Client connected with ID:', message.clientId);
         break;
 
       case 'game_created':
-        console.log('🎮 Game created:', message.gameId);
+        logger.debug('🎮 Game created:', message.gameId);
         setGameState(message.gameState!);
         setRoomCode(message.roomCode || message.gameId!);
         setIsHost(true);
@@ -125,7 +126,7 @@ export const useRealtimeMultiplayer = () => {
         break;
 
       case 'game_joined':
-        console.log('🎯 Joined game:', message.gameId);
+        logger.debug('🎯 Joined game:', message.gameId);
         setGameState(message.gameState!);
         setRoomCode(message.gameId!);
         setIsHost(false);
@@ -133,7 +134,7 @@ export const useRealtimeMultiplayer = () => {
         break;
 
       case 'player_joined':
-        console.log('👥 Player joined:', message.player);
+        logger.debug('👥 Player joined:', message.player);
         if (message.gameState) {
           setGameState(message.gameState);
           setConnectedPlayers(message.gameState.players);
@@ -142,7 +143,7 @@ export const useRealtimeMultiplayer = () => {
         break;
 
       case 'round_added':
-        console.log('➕ Round added:', message.round);
+        logger.debug('➕ Round added:', message.round);
         if (message.gameState) {
           setGameState(message.gameState);
         }
@@ -150,7 +151,7 @@ export const useRealtimeMultiplayer = () => {
         break;
 
       case 'round_undone':
-        console.log('↩️ Round undone');
+        logger.debug('↩️ Round undone');
         if (message.gameState) {
           setGameState(message.gameState);
         }
@@ -158,7 +159,7 @@ export const useRealtimeMultiplayer = () => {
         break;
 
       case 'player_disconnected':
-        console.log('👋 Player disconnected:', message.player);
+        logger.debug('👋 Player disconnected:', message.player);
         toast.warning(`${message.player?.name} s'est déconnecté`);
         break;
 
@@ -172,7 +173,7 @@ export const useRealtimeMultiplayer = () => {
         break;
 
       default:
-        console.log('Unknown message type:', message.type);
+        logger.debug('Unknown message type:', message.type);
     }
   };
 

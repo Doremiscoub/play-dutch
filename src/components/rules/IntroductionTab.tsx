@@ -1,5 +1,4 @@
 
-import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Target, Users, MessageCircle } from 'lucide-react';
 import { motion } from 'framer-motion';

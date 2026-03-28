@@ -1,11 +1,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Trash2, Edit3, Check, X } from 'lucide-react';
+import { Edit3, Check, X } from 'lucide-react';
 import { UnifiedButton } from '@/components/ui/unified-button';
 import { UnifiedCard } from '@/components/ui/unified-card';
 import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
 import { SetupPlayer } from './types';
 import SimpleEmojiSelector from './SimpleEmojiSelector';
 import { DESIGN_TOKENS } from '@/design';

@@ -2,7 +2,6 @@
  * Composant d'analytics et métriques avancées pour Dutch
  */
 import React, { useMemo } from 'react';
-import { motion } from 'framer-motion';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
@@ -12,7 +11,7 @@ import {
   RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar
 } from 'recharts';
 import { 
-  TrendingUp, TrendingDown, BarChart3, PieChart as PieChartIcon,
+  TrendingUp, TrendingDown, BarChart3, PieChart as _PieChartIcon,
   Target, Award, Users, Clock, Zap, Activity
 } from 'lucide-react';
 import { Player } from '@/types';
@@ -80,7 +79,7 @@ export const GameAnalytics: React.FC<GameAnalyticsProps> = ({
     const scoreDistributionMap = new Map<string, number>();
     const timeOfDayMap = new Map<number, number>();
 
-    gameHistory.forEach((game, index) => {
+    gameHistory.forEach((game, _index) => {
       totalRounds += game.totalRounds;
       if (game.duration) totalDuration += game.duration;
 
@@ -360,7 +359,7 @@ export const GameAnalytics: React.FC<GameAnalyticsProps> = ({
                   dataKey="games"
                   nameKey="day"
                 >
-                  {analytics.gamesByDay.map((entry, index) => (
+                  {analytics.gamesByDay.map((_entry, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>

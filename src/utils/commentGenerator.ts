@@ -166,7 +166,7 @@ const getLeaderboardComment = (players: Player[]): Comment => {
 };
 
 // Fonction pour générer un titre façon presse sportive
-const getHeadlineComment = (players: Player[], roundHistory: { scores: number[], dutchPlayerId?: string }[]): Comment => {
+const getHeadlineComment = (players: Player[], _roundHistory: { scores: number[], dutchPlayerId?: string }[]): Comment => {
   const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
   const leader = sortedPlayers[0];
   const loser = sortedPlayers[sortedPlayers.length - 1];
@@ -224,7 +224,7 @@ const getHeadlineComment = (players: Player[], roundHistory: { scores: number[],
 };
 
 // Fonction pour générer un commentaire sur les tendances
-const getTrendComment = (players: Player[], roundHistory: { scores: number[], dutchPlayerId?: string }[]): Comment => {
+const getTrendComment = (players: Player[], _roundHistory: { scores: number[], dutchPlayerId?: string }[]): Comment => {
   // Analyser les tendances plus finement
   for (const player of players) {
     if (player.rounds.length < 3) continue;
@@ -356,7 +356,7 @@ const newGameComments: Comment[] = [
 ];
 
 // Commentaires d'information sur l'état du jeu
-const getInfoComment = (players: Player[], roundHistory: { scores: number[], dutchPlayerId?: string }[]): string => {
+const getInfoComment = (players: Player[], _roundHistory: { scores: number[], dutchPlayerId?: string }[]): string => {
   if (players.length === 0) return "Préparez-vous pour une aventure mémorable ! Le Dutch n'attend que vous !";
 
   const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
@@ -386,7 +386,7 @@ const getInfoComment = (players: Player[], roundHistory: { scores: number[], dut
 };
 
 // Commentaires aléatoires drôles enrichis
-const randomJokeComments: Comment[] = [
+const _randomJokeComments: Comment[] = [
   { 
     comment: "Si les cartes parlaient, elles vous diraient probablement de réviser vos stratégies... Mais bon, qui écoute les cartes ?", 
     type: 'joke' 

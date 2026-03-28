@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Gamepad2, Star, Zap } from 'lucide-react';
+import { Star, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAdaptiveInterface } from '@/components/ui/adaptive-layout';
 

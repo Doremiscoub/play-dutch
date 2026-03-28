@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useAds } from '@/contexts/EnhancedAdContext';
 import { Trophy, Star, Zap } from 'lucide-react';
-import { motion } from 'framer-motion';
 
 interface GameAdSlotProps {
   placement: 'game-end' | 'stats-page' | 'history-top';

@@ -96,7 +96,7 @@ class AICommentaryEngine {
   }
 
   private selectCommentStrategy(context: AICommentContext, players: Player[], recentEvent?: string): AIComment {
-    const templates = COMMENT_TEMPLATES[context.type] || COMMENT_TEMPLATES.general;
+    const templates = COMMENT_TEMPLATES[context.type as keyof typeof COMMENT_TEMPLATES] || COMMENT_TEMPLATES.general;
     const selectedTemplate = this.selectBestTemplate(templates, context);
     const comment = this.personalizeComment(selectedTemplate, context, players, recentEvent);
     

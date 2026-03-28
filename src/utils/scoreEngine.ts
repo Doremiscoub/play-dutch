@@ -4,6 +4,7 @@
  */
 import { Player } from '@/types';
 import { toast } from 'sonner';
+import { logger } from '@/utils/logger';
 
 /**
  * Valide la cohérence des données de joueur
@@ -144,7 +145,7 @@ export const addRoundToPlayers = (
       return { success: false, updatedPlayers: players, error: 'Erreur de cohérence des scores' };
     }
 
-    console.log('✅ ScoreEngine: Round added successfully');
+    logger.debug('✅ ScoreEngine: Round added successfully');
     return { success: true, updatedPlayers: finalCheck.fixedPlayers };
 
   } catch (error) {
@@ -198,7 +199,7 @@ export const removeLastRoundFromPlayers = (players: Player[]): { success: boolea
       return { success: false, updatedPlayers: players, error: 'Erreur de cohérence des scores' };
     }
 
-    console.log('✅ ScoreEngine: Last round removed successfully');
+    logger.debug('✅ ScoreEngine: Last round removed successfully');
     return { success: true, updatedPlayers: finalCheck.fixedPlayers };
 
   } catch (error) {

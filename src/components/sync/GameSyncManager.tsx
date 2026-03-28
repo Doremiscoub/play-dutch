@@ -2,7 +2,7 @@
  * Composant de gestion de la synchronisation des parties - Version simplifiée
  */
 import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Cloud, CloudOff, Wifi, WifiOff } from 'lucide-react';
 import { useGameState } from '@/hooks/game/unified/useGameState';

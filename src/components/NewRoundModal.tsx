@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Player } from '@/types';
 import { motion } from 'framer-motion';
 import { Button } from './ui/button';
-import { Minus, Plus, User, Zap } from 'lucide-react';
+import { Minus, Plus, Zap } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from './ui/dialog';
 import useIsMobile from '@/hooks/use-mobile';
 

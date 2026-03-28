@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Share2, 
   Users, 
@@ -14,6 +13,7 @@ import { Badge } from '@/components/ui/badge';
 import { GameInvitationQR } from './GameInvitationQR';
 import { useSupabaseAuth } from '@/context/SupabaseAuthContext';
 import { toast } from 'sonner';
+import { logger } from '@/utils/logger';
 
 interface ShareGameButtonProps {
   gameId: string;
@@ -58,7 +58,7 @@ export const ShareGameButton: React.FC<ShareGameButtonProps> = ({
         return;
       } catch (error) {
         // L'utilisateur a annulé ou erreur, passer au dialog
-        console.log('Native share cancelled or failed');
+        logger.debug('Native share cancelled or failed');
       }
     }
 

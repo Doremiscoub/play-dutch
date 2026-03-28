@@ -21,7 +21,7 @@ export default function dynamic<T extends object>(
     return importFn().catch(error => {
       console.error('Error loading dynamic component:', error);
       // Retourner un composant vide si le chargement échoue
-      return { default: ((props: T) => null) as ComponentType<T> };
+      return { default: ((_props: T) => null) as ComponentType<T> };
     });
   });
   

@@ -7,11 +7,12 @@ import { Player } from '@/types';
 import { toast } from 'sonner';
 import { updateAllPlayersStats } from '@/utils/playerStatsCalculator';
 import { isGameOver } from '@/utils/gameUtils';
-import { 
-  addRoundToPlayers, 
+import {
+  addRoundToPlayers,
   removeLastRoundFromPlayers,
-  validateRoundData 
+  validateRoundData
 } from '@/utils/scoreEngine';
+import { logger } from '@/utils/logger';
 // Removed validateFormData import - using scoreEngine validation instead
 
 /**
@@ -31,7 +32,7 @@ export const useSecureRoundManagement = (scoreLimit: number, soundEnabled: boole
     updatedPlayers: Player[];
     isGameOver: boolean;
   } | null => {
-    console.log('🔒 Secure addRound called:', { 
+    logger.debug('🔒 Secure addRound called:', { 
       playersCount: players?.length, 
       scores, 
       dutchPlayerId 
@@ -73,7 +74,7 @@ export const useSecureRoundManagement = (scoreLimit: number, soundEnabled: boole
         }
       }
       
-      console.log('✅ Secure round added successfully');
+      logger.debug('✅ Secure round added successfully');
       toast.success('Manche ajoutée !');
       
       return {
@@ -92,7 +93,7 @@ export const useSecureRoundManagement = (scoreLimit: number, soundEnabled: boole
    * Annule le dernier round de façon sécurisée
    */
   const undoLastRound = useCallback((players: Player[], soundEnabled: boolean): Player[] => {
-    console.log('🔒 Secure undoLastRound called:', { 
+    logger.debug('🔒 Secure undoLastRound called:', { 
       playersCount: players?.length,
       roundHistoryLength: roundHistory.length 
     });
@@ -129,7 +130,7 @@ export const useSecureRoundManagement = (scoreLimit: number, soundEnabled: boole
         }
       }
       
-      console.log('✅ Secure undo completed successfully');
+      logger.debug('✅ Secure undo completed successfully');
       toast.success('Dernière manche annulée !');
       
       return playersWithStats;
@@ -145,7 +146,7 @@ export const useSecureRoundManagement = (scoreLimit: number, soundEnabled: boole
    * Synchronise l'historique avec un état externe (pour compatibilité)
    */
   const syncRoundHistory = useCallback((externalHistory: { scores: number[], dutchPlayerId?: string }[]) => {
-    console.log('🔄 Syncing round history:', { 
+    logger.debug('🔄 Syncing round history:', { 
       currentLength: roundHistory.length, 
       newLength: externalHistory.length 
     });
@@ -156,7 +157,7 @@ export const useSecureRoundManagement = (scoreLimit: number, soundEnabled: boole
    * Validation complète de l'état des rounds
    */
   const validateRoundHistoryIntegrity = useCallback(() => {
-    console.log('🔍 Validating round history integrity...');
+    logger.debug('🔍 Validating round history integrity...');
     
     let isValid = true;
     const errors: string[] = [];
@@ -181,7 +182,7 @@ export const useSecureRoundManagement = (scoreLimit: number, soundEnabled: boole
     if (!isValid) {
       console.warn('⚠️ Round history integrity issues:', errors);
     } else {
-      console.log('✅ Round history integrity validated');
+      logger.debug('✅ Round history integrity validated');
     }
 
     return { isValid, errors };

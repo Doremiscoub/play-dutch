@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from 'react';
+import { logger } from '@/utils/logger';
 
 interface AnimatedBackgroundProps {
   variant?: 'default' | 'subtle' | 'minimal';
@@ -116,7 +117,7 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
         fpsRef.current.count = 0;
         fpsRef.current.lastTime = now;
         // Désactivé en production
-        // console.log(`Wave Animation FPS: ${fpsRef.current.value}, Phase: ${phaseRef.current.toFixed(2)}`);
+        // logger.debug(`Wave Animation FPS: ${fpsRef.current.value}, Phase: ${phaseRef.current.toFixed(2)}`);
       }
     };
 

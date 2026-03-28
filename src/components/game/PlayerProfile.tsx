@@ -1,5 +1,4 @@
 
-import React from 'react';
 import { Target, Sparkles, Flame, Zap, Trophy, Cpu } from 'lucide-react';
 import { Player } from '@/types';
 

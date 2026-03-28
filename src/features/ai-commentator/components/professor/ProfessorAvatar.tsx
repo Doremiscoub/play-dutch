@@ -3,7 +3,7 @@
  * Intègre avatar, effets, glow et image en un seul fichier
  */
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { ProfessorAvatarProps, ProfessorMood } from '../../types';

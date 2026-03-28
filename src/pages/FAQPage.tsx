@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { UnifiedPageLayout } from '@/components/ui/unified-page-layout';
 import { UnifiedCard } from '@/components/ui/unified-card';
 import { useSEO } from '@/hooks/useSEO';
 import {

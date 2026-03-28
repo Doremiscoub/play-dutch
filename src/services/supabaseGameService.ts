@@ -5,6 +5,7 @@
 import { supabase } from '@/integrations/supabase/client';
 import { Player, RoundHistoryEntry } from '@/types';
 import { toast } from 'sonner';
+import { logger } from '@/utils/logger';
 
 export interface SupabaseGameData {
   id: string;
@@ -25,11 +26,11 @@ export class SupabaseGameService {
    */
   static async saveCurrentGame(gameData: SupabaseGameData): Promise<boolean> {
     try {
-      console.log('💾 Saving game to Supabase:', gameData.id);
+      logger.debug('💾 Saving game to Supabase:', gameData.id);
       
       // 1. Sauvegarder/mettre à jour la partie principale
       const { data: { user } } = await supabase.auth.getUser();
-      const { data: gameRecord, error: gameError } = await supabase
+      const { data: _gameRecord, error: gameError } = await supabase
         .from('games')
         .upsert({
           id: gameData.id,
@@ -39,7 +40,7 @@ export class SupabaseGameService {
           players_count: gameData.players.length,
           status: gameData.status,
           updated_at: new Date().toISOString()
-        })
+        } as any)
         .select()
         .single();
 
@@ -66,11 +67,11 @@ export class SupabaseGameService {
 
       const { error: playersError } = await supabase
         .from('players')
-        .insert(playersToInsert);
+        .insert(playersToInsert as any);
 
       if (playersError) throw playersError;
 
-      console.log('✅ Game saved successfully to Supabase');
+      logger.debug('✅ Game saved successfully to Supabase');
       return true;
       
     } catch (error) {
@@ -85,7 +86,7 @@ export class SupabaseGameService {
    */
   static async loadGame(gameId: string): Promise<SupabaseGameData | null> {
     try {
-      console.log('📂 Loading game from Supabase:', gameId);
+      logger.debug('📂 Loading game from Supabase:', gameId);
 
       // 1. Charger la partie principale
       const { data: gameRecord, error: gameError } = await supabase
@@ -128,7 +129,7 @@ export class SupabaseGameService {
         lastUpdated: gameRecord.updated_at ? new Date(gameRecord.updated_at) : new Date()
       };
 
-      console.log('✅ Game loaded successfully from Supabase');
+      logger.debug('✅ Game loaded successfully from Supabase');
       return gameData;
       
     } catch (error) {
@@ -187,7 +188,7 @@ export class SupabaseGameService {
 
       if (error) throw error;
 
-      console.log('✅ Game deleted from Supabase:', gameId);
+      logger.debug('✅ Game deleted from Supabase:', gameId);
       return true;
       
     } catch (error) {
@@ -218,7 +219,7 @@ export class SupabaseGameService {
       const success = await this.saveCurrentGame(migratedGame);
       
       if (success) {
-        console.log('✅ Local game migrated to Supabase:', gameId);
+        logger.debug('✅ Local game migrated to Supabase:', gameId);
         toast.success('Partie migrée vers le cloud!');
         return gameId;
       }

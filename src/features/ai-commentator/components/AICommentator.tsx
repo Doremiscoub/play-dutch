@@ -7,7 +7,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Player } from '@/types';
 import { AIPersonality } from '../types';
 import ProfessorAvatar from './professor/ProfessorAvatar';
-import CommentBubble from './CommentBubble';
 import CommentPointer from './CommentPointer';
 import { useAICommentator } from '../hooks/useAICommentator';
 import { Button } from '@/components/ui/button';

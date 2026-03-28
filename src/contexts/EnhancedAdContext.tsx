@@ -49,7 +49,7 @@ export const EnhancedAdProvider: React.FC<EnhancedAdProviderProps> = ({ children
   });
 
   // Ad Performance Tracking
-  const [adPerformance, setAdPerformance] = useState({
+  const [adPerformance, _setAdPerformance] = useState({
     impressions: 0,
     clicks: 0,
     revenue: 0

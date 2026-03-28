@@ -104,7 +104,7 @@ export const PlayerRadar: React.FC<PlayerRadarProps> = ({
 
   // Combiner toutes les données
   const combinedData = radarData.map((item, i) => {
-    const combined = {
+    const combined: Record<string, string | number> = {
       ...item
     };
     playersData.forEach(({
@@ -120,11 +120,11 @@ export const PlayerRadar: React.FC<PlayerRadarProps> = ({
   const getMostBalanced = () => {
     if (!playersData.length) return null;
     return playersData.reduce((best, current) => {
-      const currentVariance = Object.values(current.metrics).reduce((acc, val, i, arr) => {
+      const currentVariance = Object.values(current.metrics).reduce((acc, val, _i, arr) => {
         const mean = arr.reduce((a, b) => a + b, 0) / arr.length;
         return acc + Math.pow(val - mean, 2);
       }, 0) / 6;
-      const bestVariance = Object.values(best.metrics).reduce((acc, val, i, arr) => {
+      const bestVariance = Object.values(best.metrics).reduce((acc, val, _i, arr) => {
         const mean = arr.reduce((a, b) => a + b, 0) / arr.length;
         return acc + Math.pow(val - mean, 2);
       }, 0) / 6;
@@ -192,7 +192,7 @@ export const PlayerRadar: React.FC<PlayerRadarProps> = ({
                     {playersData.map(({
                     player,
                     color
-                  }, index) => <Radar key={player.id} name={player.name} dataKey={player.name} stroke={color} fill={color} fillOpacity={0.1} strokeWidth={2} dot={{
+                  }, _index) => <Radar key={player.id} name={player.name} dataKey={player.name} stroke={color} fill={color} fillOpacity={0.1} strokeWidth={2} dot={{
                     r: 4,
                     fill: color
                   }} />)}

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Player } from '@/types';
 import { ArrowLeft, BarChart3, TrendingUp, Users, Activity, Zap, Award } from 'lucide-react';
-import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { StatsOverview } from './StatsOverview';
 import { PlayerTrends } from './PlayerTrends';

@@ -15,12 +15,12 @@ import SimplifiedHeroSection from '@/components/home/SimplifiedHeroSection';
 import LazyHomeSections from '@/components/home/LazyHomeSections';
 import HomeLayout from '@/components/layout/HomeLayout';
 import PWAPromotionCard from '@/components/pwa/PWAPromotionCard';
-import { PWAInstallBannerV2 } from '@/components/pwa/PWAInstallBannerV2';
 import { useAds } from '@/contexts/EnhancedAdContext';
 import ProductionAdSlot from '@/components/ads/ProductionAdSlot';
 import AdPerformanceTracker from '@/components/ads/AdPerformanceTracker';
 import AdSenseMetrics from '@/components/ads/AdSenseMetrics';
 import { DESIGN_TOKENS } from '@/design';
+import { logger } from '@/utils/logger';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -284,8 +284,8 @@ const Home: React.FC = () => {
           {/* PWA Promotion Card */}
           <div className="container mx-auto px-4 pb-6">
             <PWAPromotionCard 
-              onInstall={() => console.log('PWA Install triggered')}
-              onDismiss={() => console.log('PWA Promo dismissed')}
+              onInstall={() => logger.debug('PWA Install triggered')}
+              onDismiss={() => logger.debug('PWA Promo dismissed')}
             />
           </div>
         </MobileOptimizer>

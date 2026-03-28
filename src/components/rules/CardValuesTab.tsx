@@ -1,4 +1,3 @@
-import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Star, Crown, Zap } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -13,7 +12,7 @@ const CardValuesTab = () => {
     { name: 'Valet', symbol: 'J', points: 10, color: 'text-orange-600', bgColor: 'from-orange-400 to-orange-500', description: '+ Pouvoir Échanger' },
   ];
 
-  const numberCards = [
+  const _numberCards = [
     { range: '2 → 10', description: 'Valeur faciale de la carte' }
   ];
 

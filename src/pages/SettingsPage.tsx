@@ -4,7 +4,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Separator } from '@/components/ui/separator';
 import { AdvancedSettings } from '@/components/settings/AdvancedSettings';
 import { useSEO } from '@/hooks/useSEO';
-import { DESIGN_TOKENS } from '@/design';
 
 const SettingsPage: React.FC = () => {
   useSEO({

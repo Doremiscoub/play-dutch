@@ -38,7 +38,7 @@ export function createComponentVariants<T extends Record<string, any>>(
 
 // ========== VARIANTS BUTTON + LIQUID GLASS APPLE ==========
 export const createButtonVariants = () => {
-  const tokens = DESIGN_TOKENS.component.button;
+  const _tokens = DESIGN_TOKENS.component.button;
   
   return {
     // ===== LIQUID GLASS APPLE VARIANTS =====
@@ -249,7 +249,7 @@ export const createCardVariants = () => {
 
 // ========== VARIANTS BADGE ==========
 export const createBadgeVariants = () => {
-  const tokens = DESIGN_TOKENS.component.badge;
+  const _tokens = DESIGN_TOKENS.component.badge;
   
   return {
     default: "badge-default",

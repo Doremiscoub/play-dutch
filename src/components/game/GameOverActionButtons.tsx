@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { RotateCcw, ArrowRight, Plus } from 'lucide-react';
+import { RotateCcw, Plus } from 'lucide-react';
 
 interface GameOverActionButtonsProps {
   onRestart: () => void;

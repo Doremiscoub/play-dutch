@@ -2,7 +2,6 @@
  * Bulle de commentaire pour l'AI Commentator
  */
 
-import React from 'react';
 import { motion } from 'framer-motion';
 import { MessageCircle } from 'lucide-react';
 

@@ -29,7 +29,7 @@ const PlayerBadges: React.FC<PlayerBadgesProps> = ({ player, compact = false, cl
     </TooltipProvider>
   ) : null;
 
-  const dutchCountBadge = player.stats?.dutchCount > 0 ? (
+  const dutchCountBadge = (player.stats?.dutchCount ?? 0) > 0 ? (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
@@ -45,7 +45,7 @@ const PlayerBadges: React.FC<PlayerBadgesProps> = ({ player, compact = false, cl
     </TooltipProvider>
   ) : null;
 
-  const winStreakBadge = player.stats?.winStreak > 0 ? (
+  const winStreakBadge = (player.stats?.winStreak ?? 0) > 0 ? (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
@@ -61,7 +61,7 @@ const PlayerBadges: React.FC<PlayerBadgesProps> = ({ player, compact = false, cl
     </TooltipProvider>
   ) : null;
 
-  const improvementRateBadge = player.stats?.improvementRate > 0 ? (
+  const improvementRateBadge = (player.stats?.improvementRate ?? 0) > 0 ? (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
@@ -77,7 +77,7 @@ const PlayerBadges: React.FC<PlayerBadgesProps> = ({ player, compact = false, cl
     </TooltipProvider>
   ) : null;
 
-  const declineRateBadge = player.stats?.improvementRate < 0 ? (
+  const declineRateBadge = (player.stats?.improvementRate ?? 0) < 0 ? (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
@@ -93,7 +93,7 @@ const PlayerBadges: React.FC<PlayerBadgesProps> = ({ player, compact = false, cl
     </TooltipProvider>
   ) : null;
 
-  const consistencyBadge = player.stats?.consistencyScore > 0 ? (
+  const consistencyBadge = (player.stats?.consistencyScore ?? 0) > 0 ? (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
@@ -109,7 +109,7 @@ const PlayerBadges: React.FC<PlayerBadgesProps> = ({ player, compact = false, cl
     </TooltipProvider>
   ) : null;
 
-  const averageScoreBadge = player.stats?.averageScore > 0 ? (
+  const averageScoreBadge = (player.stats?.averageScore ?? 0) > 0 ? (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>

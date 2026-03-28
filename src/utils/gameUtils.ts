@@ -3,7 +3,8 @@
  * Utilitaires pour la gestion des parties
  */
 import { v4 as uuidv4 } from 'uuid';
-import { Player, Game, PlayerStatistics } from '@/types';
+import { Player, Game } from '@/types';
+import { logger } from '@/utils/logger';
 
 // Liste des couleurs disponibles pour les avatars
 const avatarColors = ['#8B5CF6', '#F97316', '#1EAEDB', '#10B981', '#EC4899', '#6366F1'];
@@ -67,7 +68,7 @@ export const cleanupGameState = () => {
     }
   }
   
-  console.info("État du jeu complètement nettoyé");
+  logger.info("État du jeu complètement nettoyé");
 };
 
 /**

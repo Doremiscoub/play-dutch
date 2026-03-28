@@ -8,7 +8,7 @@ export function usePersistentStorage<T>(
   storeName: 'ongoingGames' | 'gameHistory' | 'userPreferences' = 'userPreferences'
 ): [T, (value: T | ((prevValue: T) => T)) => Promise<void>] {
   const [storedValue, setStoredValue] = useState<T>(initialValue);
-  const [isLoading, setIsLoading] = useState(true);
+  const [_isLoading, setIsLoading] = useState(true);
 
   // Chargement initial
   useEffect(() => {

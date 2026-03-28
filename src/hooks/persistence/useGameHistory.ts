@@ -7,10 +7,11 @@ import { calculateGameDuration } from '@/utils/gameUtils';
 import { STORAGE_KEYS } from '@/utils/storageKeys';
 import { getStorageProvider, cleanupCurrentGame } from '@/utils/persistence/storageHelpers';
 import { toast } from 'sonner';
+import { logger } from '@/utils/logger';
 
 export const useGameHistory = () => {
   const saveGameToHistory = useCallback(async (players: Player[], gameStartTime: Date | null) => {
-    console.log('useGameHistory: saveGameToHistory called');
+    logger.debug('useGameHistory: saveGameToHistory called');
     
     try {
       if (!players || players.length === 0) {
@@ -38,13 +39,13 @@ export const useGameHistory = () => {
       
       if (hasIndexedDB) {
         await db.gameHistory.add(game);
-        console.log('useGameHistory: Game saved to IndexedDB history');
+        logger.debug('useGameHistory: Game saved to IndexedDB history');
       } else {
         // Fallback vers localStorage
         const games = JSON.parse(localStorage.getItem(STORAGE_KEYS.GAME_HISTORY) || '[]');
         games.push(game);
         localStorage.setItem(STORAGE_KEYS.GAME_HISTORY, JSON.stringify(games));
-        console.log('useGameHistory: Game saved to localStorage history');
+        logger.debug('useGameHistory: Game saved to localStorage history');
       }
 
       toast.success('Partie sauvegardée dans l\'historique');

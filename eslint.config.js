@@ -23,7 +23,28 @@ export default tseslint.config(
         "warn",
         { allowConstantExport: true },
       ],
-      "@typescript-eslint/no-unused-vars": "off",
+
+      // Catch unused variables, but allow _ prefix for intentionally unused
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        {
+          argsIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+          caughtErrorsIgnorePattern: "^_",
+        },
+      ],
+
+      // Prevent console.log in production (allow warn/error for legitimate use)
+      "no-console": ["warn", { allow: ["warn", "error"] }],
+
+      // Prevent debugger statements
+      "no-debugger": "error",
+
+      // Enforce type-safe equality
+      eqeqeq: ["error", "always", { null: "ignore" }],
+
+      // Prevent explicit any (warn to start, can escalate to error later)
+      "@typescript-eslint/no-explicit-any": "warn",
     },
   }
 );

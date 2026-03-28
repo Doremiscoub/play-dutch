@@ -99,7 +99,7 @@ const DEFAULT_SETTINGS: AppSettings = {
 };
 
 export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({ className = '' }) => {
-  const { isSignedIn, user } = useSupabaseAuth();
+  const { isSignedIn, user: _user } = useSupabaseAuth();
   const { syncStatus, migrateLocalToCloud, availableGames } = useGameState();
   const navigate = useNavigate();
   const [settings, setSettings] = useState<AppSettings>(DEFAULT_SETTINGS);

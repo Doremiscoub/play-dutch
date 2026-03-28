@@ -28,7 +28,6 @@ import SettingsPage from './pages/SettingsPage';
 import DeveloperTools from './pages/DeveloperTools';
 
 // Composants
-import ProtectedRoute from './components/ProtectedRoute';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
 import AppLayout from './components/layout/AppLayout';
 

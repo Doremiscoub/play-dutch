@@ -496,7 +496,7 @@ const ResultsExporter: React.FC<ResultsExporterProps> = ({
                           </tr>
                         </thead>
                         <tbody>
-                          {currentPlayers.slice(0, 3).map((player, index) => (
+                          {currentPlayers.slice(0, 3).map((player, _index) => (
                             <tr key={player.id} className="border-t">
                               <td className="p-2 text-xs">{player.name}</td>
                               <td className="p-2 text-xs">{player.totalScore}</td>

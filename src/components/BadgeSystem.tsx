@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Medal, Trophy, Award, Crown, Star, Sparkles, Flame, Target, Rocket, Heart, Zap, Gift } from 'lucide-react';
+import { Medal, Trophy, Crown, Star, Sparkles, Flame, Target, Rocket, Heart, Zap, Gift } from 'lucide-react';
 import { Player, Game } from '@/types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
@@ -131,7 +131,7 @@ const BadgeSystem: React.FC<BadgeSystemProps> = ({ players, games, currentGameId
       color: 'hsl(var(--dutch-blue))',
       rarity: 'epic',
       category: 'performance',
-      condition: (player, games) => {
+      condition: (_player, games) => {
         // This is complex to determine without round-by-round position info
         // For simplicity, we'll just use a placeholder implementation
         const progress = Math.min(games.length * 20, 100); // Just as an example
@@ -449,7 +449,7 @@ const BadgeSystem: React.FC<BadgeSystemProps> = ({ players, games, currentGameId
                             {badges
                               .filter(badge => !getPlayerBadges(player).includes(badge))
                               .map((badge) => {
-                                const { earned, progress } = getBadgeProgress(player, badge);
+                                const { earned: _earned, progress } = getBadgeProgress(player, badge);
                                 return (
                                   <div 
                                     key={badge.id} 

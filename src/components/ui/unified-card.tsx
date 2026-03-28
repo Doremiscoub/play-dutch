@@ -1,7 +1,7 @@
 
 import * as React from "react"
 import { cn } from "@/lib/utils"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./card"
+import { Card } from "./card"
 
 type UnifiedCardVariant = "light" | "glass" | "elevated" | "subtle";
 type UnifiedCardPadding = "sm" | "md" | "lg" | "xl";

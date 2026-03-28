@@ -14,6 +14,7 @@ import { ModernTitle } from './ui/modern-title';
 import ProductionAdSlot from './ads/ProductionAdSlot';
 import { useAds } from '@/contexts/EnhancedAdContext';
 import { DESIGN_TOKENS } from '@/design';
+import { logger } from '@/utils/logger';
 
 interface GameOverScreenProps {
   players: Player[];
@@ -100,7 +101,7 @@ const GameOverScreen: React.FC<GameOverScreenProps> = ({
       audio.volume = 0.6;
       audio.play();
     } catch (error) {
-      console.log('Sound not available');
+      logger.debug('Sound not available');
     }
   };
 

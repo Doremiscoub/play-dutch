@@ -5,7 +5,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { 
   Users, 
@@ -26,8 +25,8 @@ import ScoreBoard from '@/features/scoreboard/ScoreBoard';
 import NewRoundModal from '@/components/NewRoundModal';
 import { AICommentator } from '@/features/ai-commentator';
 import { MobileOptimizer } from '@/components/ui/mobile-optimizer';
-import GamePageLayout from '@/components/layout/GamePageLayout';
 import { toast } from 'sonner';
+import { logger } from '@/utils/logger';
 
 const MultiplayerPage: React.FC = () => {
   const navigate = useNavigate();
@@ -58,7 +57,7 @@ const MultiplayerPage: React.FC = () => {
 
   // Basculer en mode jeu quand une partie démarre
   const handleGameStart = (newGameState: any) => {
-    console.log('🎮 Starting multiplayer game:', newGameState);
+    logger.debug('🎮 Starting multiplayer game:', newGameState);
     setGameMode('game');
     
     // Initialiser les scores

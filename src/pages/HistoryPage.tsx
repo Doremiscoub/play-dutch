@@ -29,7 +29,7 @@ const HistoryPage: React.FC = () => {
     { value: "mine", label: "Mes parties" }
   ];
 
-  const handleBack = () => {
+  const _handleBack = () => {
     navigate('/');
   };
 

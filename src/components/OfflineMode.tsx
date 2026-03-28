@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { WifiOff, Database, Wifi, Info, CheckCircle, XCircle } from 'lucide-react';
+import { WifiOff, Database, Wifi, Info } from 'lucide-react';
 import { toast } from 'sonner';
 import { useLocalStorage } from '@/hooks/use-local-storage';
 

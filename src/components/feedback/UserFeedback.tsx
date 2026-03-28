@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
+import { logger } from '@/utils/logger';
 
 interface UserFeedbackProps {
   isOpen: boolean;
@@ -31,7 +32,7 @@ const UserFeedback: React.FC<UserFeedbackProps> = ({ isOpen, onClose }) => {
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       // Dans une vraie app, on enverrait à un service de feedback
-      console.log('Feedback envoyé:', { rating, feedback });
+      logger.debug('Feedback envoyé:', { rating, feedback });
       
       toast.success('Merci pour votre retour !', {
         description: 'Vos commentaires nous aident à améliorer Dutch'

@@ -24,7 +24,7 @@ interface GameInfo {
 const JoinGamePage: React.FC = () => {
   const { gameId } = useParams<{ gameId: string }>();
   const navigate = useNavigate();
-  const { isSignedIn, user } = useSupabaseAuth();
+  const { isSignedIn, user: _user } = useSupabaseAuth();
   const [gameInfo, setGameInfo] = useState<GameInfo | null>(null);
   const [loading, setLoading] = useState(true);
   const [joining, setJoining] = useState(false);

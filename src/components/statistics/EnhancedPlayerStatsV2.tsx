@@ -481,7 +481,7 @@ export const EnhancedPlayerStatsV2: React.FC<EnhancedStatsProps> = ({
                 </tr>
               </thead>
               <tbody>
-                {analytics.map((player, index) => (
+                {analytics.map((player, _index) => (
                   <tr key={player.playerId} className="border-b hover:bg-gray-50">
                     <td className="p-2">
                       <div className="font-medium">{player.playerName}</div>

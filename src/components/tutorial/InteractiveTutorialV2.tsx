@@ -2,7 +2,7 @@
  * Tutorial interactif moderne pour Dutch
  * Guide pas à pas pour les nouveaux utilisateurs
  */
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -271,7 +271,7 @@ export const InteractiveTutorialV2: React.FC<InteractiveTutorialV2Props> = ({
   className = ''
 }) => {
   const [currentStep, setCurrentStep] = useState(1);
-  const [completedSteps, setCompletedSteps] = useState<number[]>([]);
+  const [_completedSteps, setCompletedSteps] = useState<number[]>([]);
   const [isCompleted, setIsCompleted] = useState(false);
 
   const totalSteps = TUTORIAL_STEPS.length;

@@ -238,7 +238,7 @@ export const RoundHeatmap: React.FC<RoundHeatmapProps> = ({
                 <div className="grid grid-cols-1 gap-2">
                   <div className="flex items-center gap-2 mb-4">
                     <div className="w-16 text-xs font-medium text-muted-foreground">Manche</div>
-                    {players.map((player, index) => (
+                    {players.map((player, _index) => (
                       <div key={player.id} className="flex-1 min-w-0">
                         <div className="flex items-center gap-1 justify-center">
                           <span className="text-sm">{player.emoji || '😊'}</span>

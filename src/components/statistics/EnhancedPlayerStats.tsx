@@ -2,9 +2,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Player } from '@/types';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, ResponsiveContainer, BarChart, Bar, LineChart, Line } from 'recharts';
+import { XAxis, YAxis, CartesianGrid, ResponsiveContainer, LineChart, Line } from 'recharts';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
-import { TrendingUp, Award, Zap, Target, Activity, Brain } from 'lucide-react';
+import { TrendingUp, Activity } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 interface EnhancedPlayerStatsProps {

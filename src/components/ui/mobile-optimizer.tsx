@@ -1,6 +1,5 @@
 
 import React, { useEffect } from 'react';
-import { useDeviceDetect } from '@/hooks/use-mobile';
 import { AdaptiveLayout, useAdaptiveInterface } from './adaptive-layout';
 import { cn } from '@/lib/utils';
 

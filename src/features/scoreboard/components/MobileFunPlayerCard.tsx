@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Player } from '@/types';
 import { cn } from '@/lib/utils';
-import { Trophy, TrendingUp, Star, Zap, ChevronDown } from 'lucide-react';
+import { Trophy, ChevronDown } from 'lucide-react';
 
 interface MobileFunPlayerCardProps {
   player: Player;

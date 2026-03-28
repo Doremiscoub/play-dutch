@@ -67,7 +67,7 @@ export const GameInvitationQR: React.FC<GameInvitationQRProps> = ({
     }
   };
 
-  const handleJoinClick = () => {
+  const _handleJoinClick = () => {
     if (onJoinGame) {
       onJoinGame(gameId);
     }

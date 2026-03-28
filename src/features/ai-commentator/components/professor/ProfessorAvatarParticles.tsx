@@ -2,7 +2,7 @@
  * Particles animées pour le Professor Avatar
  */
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, Heart, Zap, Star, Flame, Award } from 'lucide-react';
 import { useMobileAdaptation } from '@/hooks/useMobileAdaptation';

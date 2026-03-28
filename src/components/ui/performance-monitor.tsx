@@ -1,5 +1,6 @@
 
 import React, { useEffect } from 'react';
+import { logger } from '@/utils/logger';
 
 interface PerformanceMonitorProps {
   enableAnalytics?: boolean;
@@ -22,7 +23,7 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
           const lastEntry = entries[entries.length - 1];
           
           if (logPerformance) {
-            console.log('LCP:', lastEntry.startTime);
+            logger.debug('LCP:', lastEntry.startTime);
           }
           
           // Analyser la performance
@@ -44,7 +45,7 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
               const fid = eventEntry.processingStart - entry.startTime;
               
               if (logPerformance) {
-                console.log('FID:', fid);
+                logger.debug('FID:', fid);
               }
               
               if (fid > 100) {
@@ -68,7 +69,7 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
               clsValue += layoutShiftEntry.value;
               
               if (logPerformance) {
-                console.log('CLS:', clsValue);
+                logger.debug('CLS:', clsValue);
               }
               
               if (clsValue > 0.1) {

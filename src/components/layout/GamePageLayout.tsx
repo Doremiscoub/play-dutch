@@ -9,7 +9,7 @@ import UnifiedHeader from './UnifiedHeader';
 import type { UnifiedHeaderConfig } from '@/hooks/useUnifiedHeader';
 
 // Placeholder pour les emplacements publicitaires
-const AdPlaceholder: React.FC<{ position: 'left' | 'right' }> = ({ position }) => (
+const AdPlaceholder: React.FC<{ position: 'left' | 'right' }> = ({ position: _position }) => (
   <div className="w-[250px] h-[600px] rounded-xl border-2 border-dashed border-gray-300 bg-gray-50/50 flex flex-col items-center justify-center p-4 text-center">
     <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center mb-3">
       <span className="text-3xl">📢</span>

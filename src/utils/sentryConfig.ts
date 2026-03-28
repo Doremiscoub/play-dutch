@@ -83,10 +83,6 @@ export const initializeSentry = async () => {
       
       // Queue options for offline capability
       maxBreadcrumbs: 30,
-      beforeSend: (event) => {
-        // Custom logic for offline handling if needed
-        return event;
-      },
       
       // Only enable in non-development environments if needed
       enabled: environment !== 'development' || import.meta.env.VITE_ENABLE_SENTRY === 'true',

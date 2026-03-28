@@ -9,11 +9,11 @@ import {
   CardDescription
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { motion, AnimatePresence } from "framer-motion";
-import { Share2, Copy, Clock, Users, Play, ArrowLeft, QrCode, MapPin, AlertCircle, Wifi, WifiOff, RefreshCw } from "lucide-react";
+import { Share2, Copy, Clock, Users, Play, ArrowLeft, MapPin, AlertCircle, Wifi, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 import { 
   getGameSession, 
@@ -25,8 +25,9 @@ import {
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import MultiplayerStats from './MultiplayerStats';
 import { useUser } from '@clerk/clerk-react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import PullToRefresh from './PullToRefresh';
+import { logger } from '@/utils/logger';
 
 interface MultiplayerLobbyProps {
   gameId: string;
@@ -47,7 +48,7 @@ const MultiplayerLobby: React.FC<MultiplayerLobbyProps> = ({
   const [isHost, setIsHost] = useState<boolean>(false);
   const [refreshingPlayers, setRefreshingPlayers] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<'dashboard' | 'online'>(mode);
-  const [autoReconnectEnabled, setAutoReconnectEnabled] = useState<boolean>(true);
+  const [autoReconnectEnabled, _setAutoReconnectEnabled] = useState<boolean>(true);
   const [connectionLost, setConnectionLost] = useState<boolean>(false);
   const { user } = useUser();
   
@@ -104,7 +105,7 @@ const MultiplayerLobby: React.FC<MultiplayerLobbyProps> = ({
       
       // Try to reconnect every 5 seconds
       reconnectIntervalRef.current = window.setInterval(() => {
-        console.log("Tentative de reconnexion...");
+        logger.debug("Tentative de reconnexion...");
         if (gameId && user) {
           const success = updatePlayerActivity(gameId, user.id);
           if (success) {

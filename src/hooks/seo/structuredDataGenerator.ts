@@ -1,7 +1,7 @@
 
 import { StructuredDataProps } from './types';
 
-export const generateStructuredData = ({ title, description, url, image, breadcrumbs, faqItems, gameInfo }: StructuredDataProps) => {
+export const generateStructuredData = ({ title: _title, description, url, image, breadcrumbs, faqItems, gameInfo }: StructuredDataProps) => {
   const baseData: any = {
     '@context': 'https://schema.org',
     '@graph': [

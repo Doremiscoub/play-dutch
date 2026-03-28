@@ -1,5 +1,6 @@
 
 import React, { useEffect } from 'react';
+import { logger } from '@/utils/logger';
 
 interface GameProtectionProps {
   children: React.ReactNode;
@@ -8,7 +9,7 @@ interface GameProtectionProps {
 const GameProtection: React.FC<GameProtectionProps> = ({ children }) => {
   
   useEffect(() => {
-    console.log('GameProtection: Setting up game protection');
+    logger.debug('GameProtection: Setting up game protection');
     
     // Marquer que nous sommes dans le jeu
     localStorage.setItem('dutch_game_active', 'true');
@@ -28,7 +29,7 @@ const GameProtection: React.FC<GameProtectionProps> = ({ children }) => {
     const handlePopState = (event: PopStateEvent) => {
       const gameActive = localStorage.getItem('dutch_game_active');
       if (gameActive === 'true') {
-        console.log('GameProtection: Preventing navigation from game');
+        logger.debug('GameProtection: Preventing navigation from game');
         event.preventDefault();
         window.history.pushState(null, '', '/game');
       }

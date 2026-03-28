@@ -2,7 +2,7 @@
 import React from 'react';
 import { Game } from '@/types';
 import { Card, CardHeader, CardContent, CardTitle, CardDescription } from '@/components/ui/card';
-import { Trophy, Calendar, Users, Clock, Award } from 'lucide-react';
+import { Trophy, Calendar, Users, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';

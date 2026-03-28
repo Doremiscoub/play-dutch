@@ -1,5 +1,5 @@
 
-import { useState, useCallback } from 'react';
+import { useCallback } from 'react';
 import { useLocalStorage } from './use-local-storage';
 import { Player } from '@/types';
 import { toast } from 'sonner';

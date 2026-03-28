@@ -1,5 +1,5 @@
 
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { UnifiedBackground } from '@/components/ui/unified-background';
 import GlobalFooter from './GlobalFooter';
 

@@ -5,7 +5,6 @@ import { Edit, Users, Target } from 'lucide-react';
 import { UnifiedButton } from '@/components/ui/unified-button';
 import { useAdaptiveInterface } from '@/components/ui/adaptive-layout';
 import { UnifiedCard } from '@/components/ui/unified-card';
-import { Badge } from '@/components/ui/badge';
 import { SetupPlayer } from './types';
 import { DESIGN_TOKENS } from '@/design';
 

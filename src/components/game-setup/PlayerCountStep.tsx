@@ -1,5 +1,4 @@
 import React from 'react';
-import { Minus, Plus } from 'lucide-react';
 import { UnifiedButton } from '@/components/ui/unified-button';
 import { UnifiedCard } from '@/components/ui/unified-card';
 import { MIN_PLAYERS, MAX_PLAYERS } from './types';

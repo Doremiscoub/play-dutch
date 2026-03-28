@@ -34,7 +34,7 @@ const achievementDefinitions: AchievementCheck[] = [
       category: 'gameplay',
       rarity: 'common'
     },
-    check: (player, gameHistory) => gameHistory.length >= 1
+    check: (_player, gameHistory) => gameHistory.length >= 1
   },
   {
     id: 'perfect_round',
@@ -70,7 +70,7 @@ const achievementDefinitions: AchievementCheck[] = [
       category: 'gameplay',
       rarity: 'legendary'
     },
-    check: (player, gameHistory) => {
+    check: (_player, _gameHistory) => {
       // Logic to check if player came back from last place
       return false; // Simplified for now
     }

@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { BrowserRouter } from 'react-router-dom';
 import AppLayout from '@/components/layout/AppLayout';
@@ -22,7 +22,7 @@ vi.mock('sonner', () => ({
 }));
 
 describe('AppLayout Component', () => {
-  const AppLayoutWrapper = ({ children }: { children?: React.ReactNode }) => (
+  const AppLayoutWrapper = ({ children: _children }: { children?: React.ReactNode }) => (
     <BrowserRouter>
       <AppLayout />
     </BrowserRouter>

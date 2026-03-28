@@ -1,7 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useAds } from '@/contexts/EnhancedAdContext';
-import { AlertCircle, Wifi, WifiOff } from 'lucide-react';
-import { motion } from 'framer-motion';
 
 interface EnhancedAdSlotProps {
   placement: 'homepage-inline' | 'game-sidebar-left' | 'game-sidebar-right' | 'game-banner-mobile' | 'stats-rectangle';
