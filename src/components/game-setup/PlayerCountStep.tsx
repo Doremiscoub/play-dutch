@@ -1,5 +1,4 @@
 import React from 'react';
-import { Minus, Plus } from 'lucide-react';
 import { UnifiedButton } from '@/components/ui/unified-button';
 import { UnifiedCard } from '@/components/ui/unified-card';
 import { MIN_PLAYERS, MAX_PLAYERS } from './types';
@@ -32,7 +31,7 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
         WebkitBackgroundClip: 'text',
         WebkitTextFillColor: 'transparent'
       }}>
-          🎮 Combien de joueurs ?
+          Combien de joueurs ?
         </h2>
         <p className="text-neutral-600 text-base sm:text-lg px-2">
           Choisissez le nombre de participants pour votre partie de Dutch
@@ -41,12 +40,13 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
 
       {/* Sélecteur de nombre de joueurs */}
       <div className="flex items-center justify-center gap-6 sm:gap-8 px-4">
-        <UnifiedButton 
-          variant="secondary" 
-          size="lg" 
-          onClick={decrementCount} 
-          disabled={playerCount <= MIN_PLAYERS} 
-          className="w-16 h-16 sm:w-18 sm:h-18 rounded-2xl text-white font-bold text-2xl sm:text-3xl touch-target min-h-[64px] shadow-lg hover:shadow-xl transition-all"
+        <UnifiedButton
+          variant="secondary"
+          size="lg"
+          onClick={decrementCount}
+          disabled={playerCount <= MIN_PLAYERS}
+          className="w-16 h-16 sm:w-[4.5rem] sm:h-[4.5rem] rounded-2xl text-white font-bold text-2xl sm:text-3xl touch-target min-h-[64px] shadow-lg hover:shadow-xl transition-all"
+          aria-label="Retirer un joueur"
         >
           -
         </UnifiedButton>
@@ -65,12 +65,13 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
           </div>
         </div>
 
-        <UnifiedButton 
-          variant="secondary" 
-          size="lg" 
-          onClick={incrementCount} 
-          disabled={playerCount >= MAX_PLAYERS} 
-          className="w-16 h-16 sm:w-18 sm:h-18 rounded-2xl text-white font-bold text-2xl sm:text-3xl touch-target min-h-[64px] shadow-lg hover:shadow-xl transition-all"
+        <UnifiedButton
+          variant="secondary"
+          size="lg"
+          onClick={incrementCount}
+          disabled={playerCount >= MAX_PLAYERS}
+          className="w-16 h-16 sm:w-[4.5rem] sm:h-[4.5rem] rounded-2xl text-white font-bold text-2xl sm:text-3xl touch-target min-h-[64px] shadow-lg hover:shadow-xl transition-all"
+          aria-label="Ajouter un joueur"
         >
           +
         </UnifiedButton>
@@ -82,18 +83,19 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
       {/* Informations utiles */}
       <div className="bg-gradient-to-r from-primary/5 to-secondary/5 rounded-xl p-3 sm:p-4 mx-2">
         <p className="text-xs sm:text-sm text-neutral-600">
-          <strong>💡 Conseil :</strong> Le Dutch est plus amusant avec 3-4 joueurs pour des parties équilibrées
+          <strong>Conseil :</strong> Le Dutch est plus amusant avec 3-4 joueurs pour des parties équilibrées
         </p>
       </div>
 
       {/* Bouton suivant */}
-      <UnifiedButton 
-        variant="primary" 
-        size="lg" 
-        onClick={onNext} 
+      <UnifiedButton
+        variant="primary"
+        size="lg"
+        onClick={onNext}
         className="w-full py-3 sm:py-4 text-base sm:text-lg font-bold touch-target min-h-[48px]"
+        aria-label={`Continuer avec ${playerCount} ${playerCount === 1 ? 'joueur' : 'joueurs'}`}
       >
-        Continuer avec {playerCount} {playerCount === 1 ? 'joueur' : 'joueurs'} 🚀
+        Continuer avec {playerCount} {playerCount === 1 ? 'joueur' : 'joueurs'}
       </UnifiedButton>
     </UnifiedCard>;
 };

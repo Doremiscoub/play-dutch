@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, Settings, BookOpen, Clock, Target, Zap } from 'lucide-react';
+import { ArrowLeft, BookOpen, Clock, Target, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import GameSettings from '@/components/GameSettings';
-import { ModernTitle } from '@/components/ui/modern-title';
 import { useAdaptiveInterface } from '@/components/ui/adaptive-layout';
 import { cn } from '@/lib/utils';
 

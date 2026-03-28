@@ -1,4 +1,3 @@
-import React from 'react';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 import { CheckCircle, AlertCircle, Info, XCircle } from 'lucide-react';

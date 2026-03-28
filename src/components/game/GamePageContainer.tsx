@@ -12,8 +12,7 @@ import { AICommentator } from '@/features/ai-commentator';
 import { useGameTopBarProps } from './GameTopBarLogic';
 import { useGameRoundHandler } from './GameRoundHandler';
 import { useNavigate } from 'react-router-dom';
-import { useMobileAdaptation } from '@/hooks/useMobileAdaptation';
-import { cn } from '@/lib/utils';
+import { logger } from '@/utils/logger';
 
 interface GamePageContainerProps {
   players: Player[];
@@ -61,7 +60,7 @@ const GamePageContainer: React.FC<GamePageContainerProps> = ({
   onBackToSetup
 }) => {
   const navigate = useNavigate();
-  console.log('GamePageContainer: Rendering with gameMode:', gameMode);
+  logger.debug('GamePageContainer: Rendering with gameMode:', gameMode);
 
   const { handleAddNewRound } = useGameRoundHandler({ onAddRound, onCloseScoreForm });
 

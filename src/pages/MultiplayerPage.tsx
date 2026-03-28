@@ -5,8 +5,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { 
   Users, 
   Wifi, 
@@ -26,8 +26,8 @@ import ScoreBoard from '@/features/scoreboard/ScoreBoard';
 import NewRoundModal from '@/components/NewRoundModal';
 import { AICommentator } from '@/features/ai-commentator';
 import { MobileOptimizer } from '@/components/ui/mobile-optimizer';
-import GamePageLayout from '@/components/layout/GamePageLayout';
 import { toast } from 'sonner';
+import { logger } from '@/utils/logger';
 
 const MultiplayerPage: React.FC = () => {
   const navigate = useNavigate();
@@ -48,17 +48,9 @@ const MultiplayerPage: React.FC = () => {
   const [scores, setScores] = useState<{ [playerId: string]: number }>({});
   const [dutchPlayerId, setDutchPlayerId] = useState<string | undefined>();
 
-  // Redirection si pas connecté
-  useEffect(() => {
-    if (!isSignedIn) {
-      toast.error('Connexion requise pour le mode multijoueur');
-      navigate('/sign-in');
-    }
-  }, [isSignedIn, navigate]);
-
   // Basculer en mode jeu quand une partie démarre
   const handleGameStart = (newGameState: any) => {
-    console.log('🎮 Starting multiplayer game:', newGameState);
+    logger.debug('🎮 Starting multiplayer game:', newGameState);
     setGameMode('game');
     
     // Initialiser les scores
@@ -106,7 +98,39 @@ const MultiplayerPage: React.FC = () => {
   };
 
   if (!isSignedIn) {
-    return null; // Redirection handled in useEffect
+    return (
+      <PageShell variant="default">
+        <MobileOptimizer pageType="game" className="min-h-screen">
+          <div className="flex items-center justify-center min-h-[70vh] px-4">
+            <Card className="w-full max-w-sm text-center">
+              <CardHeader>
+                <CardTitle className="text-xl">Connexion requise</CardTitle>
+                <CardDescription>
+                  Vous devez être connecté pour accéder au mode multijoueur.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="flex flex-col gap-3">
+                <Button
+                  onClick={() => navigate('/sign-in')}
+                  className="w-full"
+                  aria-label="Se connecter pour accéder au multijoueur"
+                >
+                  Se connecter
+                </Button>
+                <Button
+                  onClick={() => navigate('/')}
+                  variant="outline"
+                  className="w-full"
+                  aria-label="Retourner à l'accueil"
+                >
+                  Retour
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        </MobileOptimizer>
+      </PageShell>
+    );
   }
 
   return (

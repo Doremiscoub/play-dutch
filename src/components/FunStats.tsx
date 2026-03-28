@@ -85,7 +85,7 @@ const FunStats: React.FC<FunStatsProps> = ({ players }) => {
 
   if (!stats) return null;
 
-  const StatCard = ({ icon: Icon, title, value, color }) => (
+  const StatCard = ({ icon: Icon, title, value, color }: { icon: React.ElementType; title: string; value: string | number; color: string }) => (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}

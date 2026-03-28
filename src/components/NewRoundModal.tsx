@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Player } from '@/types';
 import { motion } from 'framer-motion';
 import { Button } from './ui/button';
-import { Minus, Plus, User, Zap } from 'lucide-react';
+import { Minus, Plus, Zap } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from './ui/dialog';
 import useIsMobile from '@/hooks/use-mobile';
 
@@ -135,6 +135,7 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
                     onClick={() => adjustScore(player.id, -1)}
                     className={`rounded-full lg-popover lg-tint-primary-50 lg-hover-state ${isMobile ? 'w-10 h-10 min-h-[40px] touch-target' : 'w-8 h-8'}`}
                     disabled={isSubmitting}
+                    aria-label={`Diminuer le score de ${player.name}`}
                   >
                     <Minus className={`${isMobile ? 'h-4 w-4' : 'h-3 w-3'}`} />
                   </Button>
@@ -162,6 +163,7 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
                     onClick={() => adjustScore(player.id, 1)}
                     className={`rounded-full lg-popover lg-tint-primary-50 lg-hover-state ${isMobile ? 'w-10 h-10 min-h-[40px] touch-target' : 'w-8 h-8'}`}
                     disabled={isSubmitting}
+                    aria-label={`Augmenter le score de ${player.name}`}
                   >
                     <Plus className={`${isMobile ? 'h-4 w-4' : 'h-3 w-3'}`} />
                   </Button>
@@ -179,6 +181,8 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
                     }`}
                     onClick={() => handleDutchToggle(player.id)}
                     disabled={isSubmitting}
+                    aria-label={`${dutchPlayerId === player.id ? 'Retirer' : 'Marquer'} Dutch pour ${player.name}`}
+                    aria-pressed={dutchPlayerId === player.id}
                   >
                     <Zap className={`${isMobile ? 'h-3 w-3 mr-1' : 'h-3 w-3 mr-1'}`} />
                     {isMobile ? 'D' : 'Dutch'}

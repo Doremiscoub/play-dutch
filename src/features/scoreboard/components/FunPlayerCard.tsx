@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Player } from '@/types';
 import { cn } from '@/lib/utils';
-import { Trophy, TrendingUp, Star, Zap } from 'lucide-react';
+import { Trophy } from 'lucide-react';
 import useIsMobile from '@/hooks/use-mobile';
 import MobileFunPlayerCard from './MobileFunPlayerCard';
 interface FunPlayerCardProps {
@@ -40,7 +40,7 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
   
   // Desktop uniquement à partir d'ici
   const isWinner = rank === 1;
-  const isLastPlace = rank === totalPlayers;
+  const _isLastPlace = rank === totalPlayers;
   const avgScore = player.rounds.length > 0 ? Math.round(player.totalScore / player.rounds.length * 10) / 10 : 0;
   const bestRound = player.rounds.length > 0 ? Math.min(...player.rounds.map(r => r.score)) : 0;
   const dutchCount = player.rounds.filter(r => r.isDutch).length;

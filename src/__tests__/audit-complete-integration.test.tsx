@@ -154,7 +154,7 @@ describe('Audit Complet - Intégration Post-Corrections', () => {
 
   it('should use unified game state without legacy hooks', () => {
     // Vérifier que les anciens hooks ne sont plus utilisés dans les imports
-    const oldHookFiles = [
+    const _oldHookFiles = [
       'useSimpleGameState',
       'useOptimizedGameState',
       'useSecureGameState'

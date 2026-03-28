@@ -1,5 +1,6 @@
 
 import { toast } from 'sonner';
+import { logger } from '@/utils/logger';
 
 // Flag to prevent duplicate error notifications
 let validationErrorShown = false;
@@ -21,7 +22,7 @@ export const validateScores = (scores: { [key: string]: number }, playerIds: str
   try {
     // Check if validation has already been done recently
     if (validationErrorShown) {
-      console.info("Une validation d'erreur a déjà été affichée, pas de nouvelle notification");
+      logger.info("Une validation d'erreur a déjà été affichée, pas de nouvelle notification");
       return false;
     }
     

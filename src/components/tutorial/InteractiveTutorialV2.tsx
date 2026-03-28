@@ -270,12 +270,25 @@ export const InteractiveTutorialV2: React.FC<InteractiveTutorialV2Props> = ({
   onClose,
   className = ''
 }) => {
-  const [currentStep, setCurrentStep] = useState(1);
-  const [completedSteps, setCompletedSteps] = useState<number[]>([]);
+  const [currentStep, setCurrentStep] = useState(() => {
+    const saved = localStorage.getItem('dutch_tutorial_step');
+    if (saved) {
+      const parsed = parseInt(saved, 10);
+      if (parsed >= 1 && parsed <= TUTORIAL_STEPS.length) {
+        return parsed;
+      }
+    }
+    return 1;
+  });
+  const [_completedSteps, setCompletedSteps] = useState<number[]>([]);
   const [isCompleted, setIsCompleted] = useState(false);
 
   const totalSteps = TUTORIAL_STEPS.length;
   const progress = (currentStep / totalSteps) * 100;
+
+  useEffect(() => {
+    localStorage.setItem('dutch_tutorial_step', String(currentStep));
+  }, [currentStep]);
   const currentStepData = TUTORIAL_STEPS.find(step => step.id === currentStep);
 
   const handleNext = () => {

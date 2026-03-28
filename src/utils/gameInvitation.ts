@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as _uuidv4 } from 'uuid';
 import { toast } from 'sonner';
 
 // Store active game sessions with improved typing

@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { Share2, Copy, Users, RefreshCw, ChevronRight, Link as LinkIcon, QrCode, Loader2, MapPin, Info } from "lucide-react";
+import { Users, Link as LinkIcon, Loader2, MapPin, Info } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { 
@@ -43,12 +43,12 @@ const GameInvitation: React.FC<GameInvitationProps> = ({
   const [gameId, setGameId] = useState<string>("");
   const [gameLink, setGameLink] = useState<string>("");
   const [joinCode, setJoinCode] = useState<string>("");
-  const [players, setPlayers] = useState<{id: string; name: string; online: boolean}[]>([]);
+  const [_players, setPlayers] = useState<{id: string; name: string; online: boolean}[]>([]);
   const [isCreatingGame, setIsCreatingGame] = useState(false);
   const [isJoiningGame, setIsJoiningGame] = useState(false);
   const [gameCreated, setGameCreated] = useState(false);
   const [showJoinSheet, setShowJoinSheet] = useState(false);
-  const [refreshingPlayers, setRefreshingPlayers] = useState(false);
+  const [_refreshingPlayers, setRefreshingPlayers] = useState(false);
   const [isPublic, setIsPublic] = useState(false);
   const [publicGames, setPublicGames] = useState<{id: string; hostName: string; playerCount: number}[]>([]);
   const [showLobby, setShowLobby] = useState(false);
@@ -145,14 +145,14 @@ const GameInvitation: React.FC<GameInvitationProps> = ({
     }
   };
   
-  const handleShareInvitation = async () => {
+  const _handleShareInvitation = async () => {
     const success = await shareGameInvitation(gameId, userName);
     if (!success) {
       handleCopyLink();
     }
   };
   
-  const refreshPlayerList = () => {
+  const _refreshPlayerList = () => {
     if (gameId) {
       setRefreshingPlayers(true);
       const currentPlayers = getGamePlayers(gameId);

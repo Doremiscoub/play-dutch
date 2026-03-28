@@ -3,6 +3,7 @@
  * Remplace ScoreFormValidator avec une validation plus stricte
  */
 import { toast } from 'sonner';
+import { logger } from '@/utils/logger';
 
 // Flag pour éviter les notifications en double
 let validationErrorShown = false;
@@ -34,7 +35,7 @@ export const validateScores = (
   try {
     // Protection contre les validations répétées
     if (validationErrorShown) {
-      console.info('🛡️ Validation cooldown active, skipping');
+      logger.info('🛡️ Validation cooldown active, skipping');
       return null;
     }
 
@@ -122,7 +123,7 @@ export const validateScores = (
       return null;
     }
 
-    console.log('✅ Scores validation successful:', {
+    logger.debug('✅ Scores validation successful:', {
       scores: numericScores,
       dutchPlayerId,
       dutchPlayerIndex

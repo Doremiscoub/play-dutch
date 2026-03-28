@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -181,7 +181,7 @@ export const BundleAnalyzer: React.FC = () => {
             <div>
               <h3 className="font-semibold mb-3">Plus gros chunks</h3>
               <div className="space-y-2">
-                {stats.largestChunks.map((chunk, index) => (
+                {stats.largestChunks.map((chunk, _index) => (
                   <div key={chunk.name} className="flex items-center justify-between p-3 glass-card rounded-lg">
                     <div className="flex items-center gap-3">
                       {getChunkIcon(chunk.type)}

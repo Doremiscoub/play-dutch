@@ -188,8 +188,8 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
       {/* End Game Confirmation */}
       <EndGameConfirmationDialog
         isOpen={showGameEndConfirmation}
-        onConfirm={onConfirmEndGame}
-        onCancel={onCancelEndGame}
+        onConfirm={onConfirmEndGame ?? (() => {})}
+        onCancel={onCancelEndGame ?? (() => {})}
       />
 
       {/* Floating Action Buttons */}

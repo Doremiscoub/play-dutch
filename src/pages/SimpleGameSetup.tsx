@@ -5,7 +5,6 @@ import { motion } from 'framer-motion';
 import { useGameState } from '@/hooks/game/unified/useGameState';
 import { useTutorial } from '@/hooks/useTutorial';
 import { InteractiveTutorialV2 } from '@/components/tutorial/InteractiveTutorialV2';
-import { GameSyncManager } from '@/components/sync/GameSyncManager';
 import { toast } from 'sonner';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -15,22 +14,23 @@ import { useUnifiedHeader } from '@/hooks/useUnifiedHeader';
 import PageShell from '@/components/layout/PageShell';
 import { MobileOptimizer } from '@/components/ui/mobile-optimizer';
 import { HelpCircle } from 'lucide-react';
+import { logger } from '@/utils/logger';
 
 const SimpleGameSetup: React.FC = () => {
   const navigate = useNavigate();
-  const { createGame, availableGames, loadGameFromCloud, hasGame, resetGame } = useGameState();
+  const { createGame, availableGames: _availableGames, loadGameFromCloud, hasGame: _hasGame, resetGame } = useGameState();
   const { showTutorial, closeTutorial, startTutorial, isLoading } = useTutorial();
   const headerConfig = useUnifiedHeader();
 
   useEffect(() => {
-    console.log('🔧 SimpleGameSetup MOUNTED');
+    logger.debug('🔧 SimpleGameSetup MOUNTED');
     return () => {
-      console.log('🔧 SimpleGameSetup UNMOUNTED');
+      logger.debug('🔧 SimpleGameSetup UNMOUNTED');
     };
   }, []);
 
   const handleStartGame = async (playerNames: string[]) => {
-    console.log('🎮 Starting game with players:', playerNames);
+    logger.debug('🎮 Starting game with players:', playerNames);
     
     if (playerNames.length < 2) {
       toast.error('Il faut au moins 2 joueurs pour démarrer une partie');
@@ -39,21 +39,21 @@ const SimpleGameSetup: React.FC = () => {
 
     const success = await createGame(playerNames);
     if (success) {
-      console.log('✅ Game created successfully, navigating to /game');
+      logger.debug('✅ Game created successfully, navigating to /game');
       navigate('/game', { replace: true, state: { fromSetup: true } });
     } else {
       toast.error('Erreur lors de la création de la partie');
     }
   };
 
-  const handleLoadGame = async (gameId: string) => {
-    const success = await loadGameFromCloud(gameId);
+  const _handleLoadGame = async (_gameId: string) => {
+    const success = await loadGameFromCloud();
     if (success) {
       navigate('/game', { replace: true });
     }
   };
 
-  const handleResetCurrentGame = () => {
+  const _handleResetCurrentGame = () => {
     resetGame();
     toast.success('Partie réinitialisée');
   };
@@ -86,7 +86,7 @@ const SimpleGameSetup: React.FC = () => {
             <Card className="bg-gradient-to-r from-primary/5 to-secondary/5 border border-primary/20">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-lg font-bold text-neutral-800">🎯 Rappel des règles Dutch</h3>
+                  <h3 className="text-lg font-bold text-neutral-800">Rappel des règles Dutch</h3>
                   <Button
                     onClick={startTutorial}
                     variant="outline"

@@ -5,7 +5,6 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Player } from '@/types';
 import { Trophy, Target, Flag, TrendingUp, Star, Gauge, Zap, Crosshair, Activity, Focus, Brain } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Radar } from 'recharts';
 
 interface PlayerDetailedStatsProps {
   player: Player;
@@ -81,7 +80,7 @@ const PlayerDetailedStats: React.FC<PlayerDetailedStatsProps> = ({ player, class
   ];
 
   // Données pour le graphique radar des stats "FIFA"
-  const radarData = [
+  const _radarData = [
     { subject: 'Régularité', A: regularity, fullMark: 100 },
     { subject: 'Prise de risque', A: riskTaking, fullMark: 100 },
     { subject: 'Momentum', A: momentum, fullMark: 100 },

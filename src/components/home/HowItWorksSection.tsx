@@ -53,13 +53,13 @@ const HowItWorksSection: React.FC = () => {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-black bg-gradient-to-r from-trinity-blue-600 via-trinity-purple-600 to-trinity-orange-600 bg-clip-text text-transparent mb-6 leading-tight py-2">
-            🚀 Comment ça marche ? 🚀
+            Comment ça marche ?
           </h2>
           <p className="text-xl text-neutral-700 font-bold max-w-3xl mx-auto mb-4">
             Sortez vos cartes Dutch et lancez l'application compagnon !
           </p>
           <p className="text-lg text-neutral-600 font-semibold max-w-3xl mx-auto">
-            🃏 Cartes physiques + 📱 Application = ✨ Expérience parfaite
+            Cartes physiques + Application = Expérience parfaite
           </p>
         </motion.div>
 

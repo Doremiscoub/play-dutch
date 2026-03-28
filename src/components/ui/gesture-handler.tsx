@@ -40,8 +40,8 @@ export const GestureHandler: React.FC<GestureHandlerProps> = ({
   const initialTouchDistance = useRef<number>(0);
 
   // Gestion du swipe
-  const handlePanEnd = useCallback((event: any, info: PanInfo) => {
-    const { offset, velocity } = info;
+  const handlePanEnd = useCallback((_event: any, info: PanInfo) => {
+    const { offset, velocity: _velocity } = info;
     const { x, y } = offset;
     
     // Détecter la direction du swipe

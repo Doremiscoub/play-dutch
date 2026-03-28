@@ -38,14 +38,31 @@ class AICommentaryEngine {
   private currentPersonality: AIPersonality = 'humorous';
   private commentHistory: string[] = [];
   private readonly MAX_MEMORY_SIZE = 50;
+  private readonly MAX_COMMENT_HISTORY = 20;
 
   constructor() {
     this.memory = this.loadMemory();
   }
 
   private loadMemory(): GameMemory {
+    const defaultMemory: GameMemory = { playerProfiles: {}, notableEvents: [] };
     const stored = localStorage.getItem('professor_cartouche_memory');
-    return stored ? JSON.parse(stored) : { playerProfiles: {}, notableEvents: [] };
+    if (!stored) return defaultMemory;
+
+    try {
+      const parsed = JSON.parse(stored);
+      if (
+        parsed &&
+        typeof parsed === 'object' &&
+        typeof parsed.playerProfiles === 'object' &&
+        Array.isArray(parsed.notableEvents)
+      ) {
+        return parsed as GameMemory;
+      }
+      return defaultMemory;
+    } catch {
+      return defaultMemory;
+    }
   }
 
   private saveMemory(): void {
@@ -61,6 +78,9 @@ class AICommentaryEngine {
     
     this.updatePlayerProfiles(players);
     this.commentHistory.push(comment.comment);
+    if (this.commentHistory.length > this.MAX_COMMENT_HISTORY) {
+      this.commentHistory = this.commentHistory.slice(-this.MAX_COMMENT_HISTORY);
+    }
     
     return comment;
   }
@@ -96,7 +116,7 @@ class AICommentaryEngine {
   }
 
   private selectCommentStrategy(context: AICommentContext, players: Player[], recentEvent?: string): AIComment {
-    const templates = COMMENT_TEMPLATES[context.type] || COMMENT_TEMPLATES.general;
+    const templates = COMMENT_TEMPLATES[context.type as keyof typeof COMMENT_TEMPLATES] || COMMENT_TEMPLATES.general;
     const selectedTemplate = this.selectBestTemplate(templates, context);
     const comment = this.personalizeComment(selectedTemplate, context, players, recentEvent);
     
@@ -165,8 +185,8 @@ class AICommentaryEngine {
         this.memory.playerProfiles[player.name] = {
           name: player.name,
           playStyle: 'consistent',
-          bestScore: player.totalScore,
-          worstScore: player.totalScore,
+          bestScore: Infinity,
+          worstScore: -Infinity,
           averageScore: player.totalScore,
           dutchCount: player.rounds.filter(r => r.isDutch).length,
           comebackCount: 0,

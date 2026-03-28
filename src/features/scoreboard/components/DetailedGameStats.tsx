@@ -2,8 +2,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Player } from '@/types';
-import { BarChart3, TrendingUp, Trophy, Target, Award } from 'lucide-react';
-import GameStatsGrid from './stats/GameStatsGrid';
+import { BarChart3, Trophy, Award } from 'lucide-react';
 
 interface DetailedGameStatsProps {
   players: Player[];

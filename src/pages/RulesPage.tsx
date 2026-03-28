@@ -19,7 +19,7 @@ const RulesPage: React.FC = () => {
     keywords: 'règles du dutch, dutch game rules, jeu de cartes dutch, comment jouer au dutch, valeur cartes dutch, pouvoirs cartes, stratégie dutch, guide complet dutch',
   });
 
-  const handleBack = () => {
+  const _handleBack = () => {
     // Always return to home page
     navigate('/');
   };

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { UnifiedPageLayout } from '@/components/ui/unified-page-layout';
 import { UnifiedCard } from '@/components/ui/unified-card';
 import { useSEO } from '@/hooks/useSEO';
 import {
@@ -12,6 +11,7 @@ import {
 import { Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import PageShell from '@/components/layout/PageShell';
+import PageContainer from '@/components/layout/PageContainer';
 import UnifiedHeader from '@/components/layout/UnifiedHeader';
 
 const FAQPage: React.FC = () => {
@@ -129,8 +129,7 @@ const FAQPage: React.FC = () => {
         showSettings={true}
       />
 
-      <div className="p-6 pt-8">
-        <div className="max-w-4xl mx-auto">
+      <PageContainer size="md">
           <UnifiedCard variant="light" padding="lg">
             {/* Search */}
             <div className="mb-8">
@@ -193,8 +192,7 @@ const FAQPage: React.FC = () => {
               </div>
             </div>
           </UnifiedCard>
-        </div>
-      </div>
+      </PageContainer>
     </PageShell>
   );
 };

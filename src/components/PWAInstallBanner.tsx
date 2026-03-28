@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { X, Download, Smartphone } from 'lucide-react';
+import { logger } from '@/utils/logger';
 
 interface PWAInstallBannerProps {
   className?: string;
@@ -50,7 +51,7 @@ export const PWAInstallBanner: React.FC<PWAInstallBannerProps> = ({ className = 
       const { outcome } = await deferredPrompt.userChoice;
       
       if (outcome === 'accepted') {
-        console.log('PWA installée');
+        logger.debug('PWA installée');
       }
       
       setDeferredPrompt(null);

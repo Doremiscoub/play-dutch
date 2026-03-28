@@ -1,6 +1,6 @@
 import { Player } from '@/types';
 import { v4 as uuidv4 } from 'uuid';
-import { toast } from 'sonner';
+import { logger } from '@/utils/logger';
 
 // Flags pour éviter les notifications multiples
 let errorNotificationShown = false;
@@ -12,7 +12,7 @@ let verificationErrorShown = false;
 export const resetNotificationFlags = () => {
   errorNotificationShown = false;
   verificationErrorShown = false;
-  console.info("Flags de notification réinitialisés");
+  logger.info("Flags de notification réinitialisés");
 };
 
 /**
@@ -21,13 +21,13 @@ export const resetNotificationFlags = () => {
  */
 export const initializePlayers = (): Player[] | null => {
   try {
-    console.info("Tentative d'initialisation des joueurs...");
+    logger.info("Tentative d'initialisation des joueurs...");
     
     // Reset notification flag when explicitly initializing
     errorNotificationShown = false;
     
     const playerSetup = localStorage.getItem('dutch_player_setup');
-    console.info("Configuration trouvée dans localStorage:", playerSetup);
+    logger.info("Configuration trouvée dans localStorage:", playerSetup);
     
     if (!playerSetup) {
       console.error('Aucune configuration de joueurs trouvée dans localStorage');
@@ -59,7 +59,7 @@ export const initializePlayers = (): Player[] | null => {
       return null;
     }
     
-    console.info(`Initialisation de ${playerNames.length} joueurs:`, playerNames);
+    logger.info(`Initialisation de ${playerNames.length} joueurs:`, playerNames);
     
     const playerColors = ['#8B5CF6', '#F97316', '#1EAEDB', '#10B981'];
     
@@ -91,7 +91,7 @@ export const initializePlayers = (): Player[] | null => {
 export const clearPlayerSetup = () => {
   try {
     localStorage.removeItem('dutch_player_setup');
-    console.info('Configuration des joueurs nettoyée');
+    logger.info('Configuration des joueurs nettoyée');
     // Reset notification flag when clearing setup
     errorNotificationShown = false;
     verificationErrorShown = false;
@@ -106,7 +106,7 @@ export const clearPlayerSetup = () => {
  */
 export const verifyPlayerSetup = (): boolean => {
   try {
-    console.info("Vérification de la configuration des joueurs...");
+    logger.info("Vérification de la configuration des joueurs...");
     
     // Réinitialiser le flag de vérification
     verificationErrorShown = false;
@@ -131,7 +131,7 @@ export const verifyPlayerSetup = (): boolean => {
       return false;
     }
     
-    console.info('Vérification: Configuration de joueurs valide avec', playerNames.length, 'joueurs');
+    logger.info('Vérification: Configuration de joueurs valide avec', playerNames.length, 'joueurs');
     return true;
   } catch (error) {
     console.error('Erreur lors de la vérification de la configuration:', error);

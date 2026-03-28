@@ -1,7 +1,7 @@
 
 import React, { ReactNode, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { useMediaQuery, useDeviceDetect } from '@/hooks/use-mobile';
+import { useDeviceDetect } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
 
 interface AdaptiveLayoutProps {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { Heart, Github, Mail, ExternalLink, BookOpen, Trophy, Settings, Info } from 'lucide-react';
+import { Heart, Mail, ExternalLink, BookOpen, Trophy, Settings, Info } from 'lucide-react';
 
 const FooterSection: React.FC = () => {
   const navigate = useNavigate();

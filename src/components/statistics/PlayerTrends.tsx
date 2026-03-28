@@ -4,7 +4,7 @@ import { Player } from '@/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, AreaChart, Area } from 'recharts';
-import { TrendingUp, TrendingDown, Activity, Target, Zap } from 'lucide-react';
+import { TrendingUp, TrendingDown, Activity, Target } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 interface PlayerTrendsProps {

@@ -6,7 +6,6 @@ import ScoreBoard from '@/features/scoreboard/ScoreBoard';
 import NewRoundModal from '@/components/NewRoundModal';
 import { useUnifiedHeader } from '@/hooks/useUnifiedHeader';
 import { AICommentator } from '@/features/ai-commentator';
-import { toast } from 'sonner';
 import GamePageLayout from '@/components/layout/GamePageLayout';
 import VideoAdOverlay from '@/components/ads/VideoAdOverlay';
 import GameErrorFallback from '@/components/errors/GameErrorFallback';

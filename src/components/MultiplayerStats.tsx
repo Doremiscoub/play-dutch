@@ -10,7 +10,7 @@ import {
   getGamePlayerStats 
 } from '@/utils/gameInvitation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { TrendingUp, Award, Zap, AlertTriangle, Activity, Crown, Medal, Star, Heart } from 'lucide-react';
+import { TrendingUp, Award, Zap, AlertTriangle, Activity, Crown, Medal, Star } from 'lucide-react';
 import PlayerBadges from './PlayerBadges';
 
 interface MultiplayerStatsProps {

@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Player } from '@/types';
 import { Button } from '@/components/ui/button';
-import { Trophy, Home, RotateCcw, Play, Star } from 'lucide-react';
+import { Trophy, Home, RotateCcw, Play } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import confetti from 'canvas-confetti';
 

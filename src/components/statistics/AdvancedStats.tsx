@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Player } from '@/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -24,11 +24,42 @@ export const AdvancedStats: React.FC<AdvancedStatsProps> = ({
 }) => {
   const filteredPlayers = selectedPlayer ? [selectedPlayer] : players;
 
+  // Calculer le momentum
+  const calculateMomentum = (scores: number[]): number => {
+    if (scores.length < 2) return 0;
+
+    const recent = scores.slice(-3);
+    const previous = scores.slice(-6, -3);
+
+    if (previous.length === 0) return 0;
+
+    const recentAvg = recent.length > 0 ? recent.reduce((a, b) => a + b, 0) / recent.length : 0;
+    const previousAvg = previous.length > 0 ? previous.reduce((a, b) => a + b, 0) / previous.length : 0;
+
+    const result = (previousAvg - recentAvg);
+    return isNaN(result) ? 0 : Math.round(result * 10) / 10; // Positif = amélioration
+  };
+
+  // Calculer la probabilité de victoire
+  const calculateWinProbability = (player: Player, allPlayers: Player[]): number => {
+    if (allPlayers.length < 2) return 100;
+
+    const sorted = [...allPlayers].sort((a, b) => a.totalScore - b.totalScore);
+    const playerRank = sorted.findIndex(p => p.id === player.id) + 1;
+    const totalPlayers = allPlayers.length;
+
+    // Formule simple basée sur la position et l'écart
+    const rankFactor = (totalPlayers - playerRank + 1) / totalPlayers;
+    const scoreFactor = player.stats?.improvementRate || 0;
+
+    return Math.min(100, Math.max(0, Math.round(rankFactor * 80 + scoreFactor * 20)));
+  };
+
   // Calculer les statistiques avancées
-  const calculateAdvancedStats = () => {
+  const advancedStats = useMemo(() => {
     return filteredPlayers.map(player => {
       const scores = player.rounds.map(r => r.score);
-      if (!scores.length) return null;
+      if (scores.length === 0) return null;
 
       const stats = player.stats;
       const totalScore = player.totalScore;
@@ -36,41 +67,45 @@ export const AdvancedStats: React.FC<AdvancedStatsProps> = ({
 
       // Métriques de performance
       const mean = scores.reduce((a, b) => a + b, 0) / roundCount;
-      const variance = scores.reduce((acc, score) => acc + Math.pow(score - mean, 2), 0) / roundCount;
+      const variance = roundCount > 0
+        ? scores.reduce((acc, score) => acc + Math.pow(score - mean, 2), 0) / roundCount
+        : 0;
       const standardDeviation = Math.sqrt(variance);
-      
+
       // Coefficient de variation (consistance relative)
       const coefficientOfVariation = mean > 0 ? (standardDeviation / mean) * 100 : 0;
 
       // Analyse des séquences
       const streaks = [];
-      let currentStreak = { type: scores[0] === 0 ? 'good' : 'normal', length: 1, start: 0 };
-      
+      let currentStreak = { type: scores[0] <= 5 ? 'good' : 'normal', length: 1, start: 0 };
+
       for (let i = 1; i < scores.length; i++) {
         const isGoodRound = scores[i] <= 5;
         const prevGoodRound = scores[i-1] <= 5;
-        
+
         if (isGoodRound === prevGoodRound) {
           currentStreak.length++;
         } else {
           streaks.push(currentStreak);
-          currentStreak = { 
-            type: isGoodRound ? 'good' : 'normal', 
-            length: 1, 
-            start: i 
+          currentStreak = {
+            type: isGoodRound ? 'good' : 'normal',
+            length: 1,
+            start: i
           };
         }
       }
       streaks.push(currentStreak);
 
-      const bestStreak = streaks.filter(s => s.type === 'good').reduce((best, current) => 
+      const bestStreak = streaks.filter(s => s.type === 'good').reduce((best, current) =>
         current.length > best.length ? current : best, { length: 0 });
 
-      // Prédictions et tendances
+      // Prédictions et tendances - use available rounds (up to 3)
       const recentPerformance = scores.slice(-3);
-      const recentAvg = recentPerformance.reduce((a, b) => a + b, 0) / recentPerformance.length;
+      const recentAvg = recentPerformance.length > 0
+        ? recentPerformance.reduce((a, b) => a + b, 0) / recentPerformance.length
+        : 0;
       const trend = stats?.improvementRate || 0;
-      
+
       // Prédiction simple pour la prochaine manche
       const predictedNext = Math.max(0, Math.round(recentAvg + trend));
 
@@ -102,43 +137,11 @@ export const AdvancedStats: React.FC<AdvancedStatsProps> = ({
         dutchCount: stats?.dutchCount || 0,
         winProbability: calculateWinProbability(player, players)
       };
-    }).filter(Boolean);
-  };
-
-  // Calculer le momentum
-  const calculateMomentum = (scores: number[]): number => {
-    if (scores.length < 3) return 0;
-    
-    const recent = scores.slice(-3);
-    const previous = scores.slice(-6, -3);
-    
-    if (previous.length === 0) return 0;
-    
-    const recentAvg = recent.reduce((a, b) => a + b, 0) / recent.length;
-    const previousAvg = previous.reduce((a, b) => a + b, 0) / previous.length;
-    
-    return Math.round((previousAvg - recentAvg) * 10) / 10; // Positif = amélioration
-  };
-
-  // Calculer la probabilité de victoire
-  const calculateWinProbability = (player: Player, allPlayers: Player[]): number => {
-    if (allPlayers.length < 2) return 100;
-    
-    const sorted = allPlayers.sort((a, b) => a.totalScore - b.totalScore);
-    const playerRank = sorted.findIndex(p => p.id === player.id) + 1;
-    const totalPlayers = allPlayers.length;
-    
-    // Formule simple basée sur la position et l'écart
-    const rankFactor = (totalPlayers - playerRank + 1) / totalPlayers;
-    const scoreFactor = player.stats?.improvementRate || 0;
-    
-    return Math.min(100, Math.max(0, Math.round((rankFactor * 80 + scoreFactor * 20))));
-  };
+    }).filter((item): item is NonNullable<typeof item> => item !== null);
+  }, [filteredPlayers, players]);
 
   // Préparer les données pour les graphiques
-  const prepareDistributionData = () => {
-    const advancedStats = calculateAdvancedStats();
-    
+  const distributionData = useMemo(() => {
     return advancedStats.map(stat => ({
       name: stat.player.name,
       perfect: stat.scoreDistribution.perfect,
@@ -147,11 +150,9 @@ export const AdvancedStats: React.FC<AdvancedStatsProps> = ({
       average: stat.scoreDistribution.average,
       poor: stat.scoreDistribution.poor
     }));
-  };
+  }, [advancedStats]);
 
-  const preparePerformanceData = () => {
-    const advancedStats = calculateAdvancedStats();
-    
+  const performanceData = useMemo(() => {
     return advancedStats.map(stat => ({
       name: stat.player.name,
       consistency: 100 - stat.coefficientOfVariation,
@@ -159,11 +160,7 @@ export const AdvancedStats: React.FC<AdvancedStatsProps> = ({
       momentum: Math.max(0, 50 + stat.momentum * 10),
       prediction: Math.max(0, 100 - stat.predictedNext * 3)
     }));
-  };
-
-  const advancedStats = calculateAdvancedStats();
-  const distributionData = prepareDistributionData();
-  const performanceData = preparePerformanceData();
+  }, [advancedStats]);
 
   const config = {
     perfect: { label: 'Parfait (0)', color: '#22c55e' },
@@ -366,7 +363,7 @@ export const AdvancedStats: React.FC<AdvancedStatsProps> = ({
                       />
                       <ChartTooltip content={<ChartTooltipContent />} />
                       <Scatter data={performanceData} fill="hsl(var(--primary))">
-                        {performanceData.map((entry, index) => (
+                        {performanceData.map((_entry, index) => (
                           <Cell key={`cell-${index}`} fill={`hsl(${index * 60}, 70%, 50%)`} />
                         ))}
                       </Scatter>

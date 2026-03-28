@@ -3,6 +3,7 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { logger } from '@/utils/logger';
 
 interface PageTransitionProps {
   children: React.ReactNode;
@@ -15,7 +16,7 @@ const PageTransition: React.FC<PageTransitionProps> = ({ children }) => {
   // Désactiver les transitions pour les routes critiques
   const disableTransition = location.pathname === '/setup';
 
-  console.log('🔄 PageTransition render for path:', location.pathname);
+  logger.debug('🔄 PageTransition render for path:', location.pathname);
 
   const pageVariants = {
     initial: {
@@ -59,8 +60,8 @@ const PageTransition: React.FC<PageTransitionProps> = ({ children }) => {
         variants={pageVariants}
         transition={pageTransition}
         className="min-h-screen relative z-10"
-        onAnimationStart={() => console.log('🎭 Animation started for:', location.pathname)}
-        onAnimationComplete={() => console.log('🎭 Animation completed for:', location.pathname)}
+        onAnimationStart={() => logger.debug('🎭 Animation started for:', location.pathname)}
+        onAnimationComplete={() => logger.debug('🎭 Animation completed for:', location.pathname)}
       >
         {children}
       </motion.div>

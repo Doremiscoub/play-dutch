@@ -2,7 +2,6 @@
  * Flèche animée pointant vers la bulle de commentaire
  */
 
-import React from 'react';
 import { motion } from 'framer-motion';
 
 export default function CommentPointer({ className = '' }: { className?: string }) {

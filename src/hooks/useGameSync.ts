@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useSupabaseAuth } from '@/context/SupabaseAuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { logger } from '@/utils/logger';
 
 interface SyncStatus {
   isOnline: boolean;
@@ -103,7 +104,7 @@ export const useGameSync = () => {
       case 'round_add':
         // Pour l'instant, on stocke les rounds dans les métadonnées du jeu
         // ou dans une structure personnalisée
-        console.log('Round data to sync:', change.data);
+        logger.debug('Round data to sync:', change.data);
         break;
       default:
         console.warn('Type de changement non reconnu:', change.type);

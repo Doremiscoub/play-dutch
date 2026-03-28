@@ -2,6 +2,7 @@
 import { db, isIndexedDBAvailable } from '@/lib/database';
 import { STORAGE_KEYS } from '@/utils/storageKeys';
 import { toast } from 'sonner';
+import { logger } from '@/utils/logger';
 
 export const getStorageProvider = async () => {
   const hasIndexedDB = await isIndexedDBAvailable();
@@ -21,7 +22,7 @@ export const emergencySave = (gameData: any) => {
       timestamp: new Date().toISOString()
     };
     localStorage.setItem(STORAGE_KEYS.EMERGENCY_SAVE, JSON.stringify(emergencyData));
-    console.log('Emergency save completed');
+    logger.debug('Emergency save completed');
     toast.warning('Sauvegarde d\'urgence effectuée');
     return true;
   } catch (error) {

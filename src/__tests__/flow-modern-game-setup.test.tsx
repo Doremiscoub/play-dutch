@@ -2,7 +2,6 @@
  * Test de stabilité pour le wizard ModernGameSetup
  * Vérifie que le wizard reste visible et fonctionnel après navigation Home → Setup
  */
-import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';

@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Player } from '@/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Trophy, Target, Award, TrendingUp, Users, Zap, BarChart3, Star, Timer, Flame, Activity, Crown, Medal } from 'lucide-react';
+import { Trophy, Target, Users, Zap, BarChart3, Star, Timer, Flame, Activity, Crown, Medal } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useMobileLayout, useMobileAdaptation } from '@/hooks/useMobileAdaptation';
 interface StatsOverviewProps {

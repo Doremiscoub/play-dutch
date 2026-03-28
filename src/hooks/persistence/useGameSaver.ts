@@ -5,6 +5,7 @@ import { Player } from '@/types';
 import { db, OngoingGame } from '@/lib/database';
 import { STORAGE_KEYS } from '@/utils/storageKeys';
 import { getStorageProvider, emergencySave } from '@/utils/persistence/storageHelpers';
+import { logger } from '@/utils/logger';
 
 export const useGameSaver = () => {
   const { user, isSignedIn } = useAuth();
@@ -16,7 +17,7 @@ export const useGameSaver = () => {
     scoreLimit: number;
     gameStartTime: Date | null;
   }, retryCount = 0) => {
-    console.log('useGameSaver: saveGameState called with', {
+    logger.debug('useGameSaver: saveGameState called with', {
       playersCount: gameState.players?.length,
       roundsCount: gameState.roundHistory?.length,
       isGameOver: gameState.isGameOver,
@@ -41,7 +42,7 @@ export const useGameSaver = () => {
       };
 
       if (hasIndexedDB) {
-        console.log('useGameSaver: Saving to IndexedDB');
+        logger.debug('useGameSaver: Saving to IndexedDB');
         try {
           await db.transaction('rw', db.ongoingGames, async () => {
             // Efface l'ancienne partie si elle existe
@@ -56,7 +57,7 @@ export const useGameSaver = () => {
             // Sauvegarde la nouvelle
             await db.ongoingGames.add(gameData);
           });
-          console.log('useGameSaver: IndexedDB save successful');
+          logger.debug('useGameSaver: IndexedDB save successful');
           
           // Sauvegarde de backup en localStorage
           localStorage.setItem(STORAGE_KEYS.CURRENT_GAME, JSON.stringify(gameData));
@@ -66,7 +67,7 @@ export const useGameSaver = () => {
           localStorage.setItem(STORAGE_KEYS.CURRENT_GAME, JSON.stringify(gameData));
         }
       } else {
-        console.log('useGameSaver: Saving to localStorage');
+        logger.debug('useGameSaver: Saving to localStorage');
         localStorage.setItem(STORAGE_KEYS.CURRENT_GAME, JSON.stringify(gameData));
       }
       
@@ -76,7 +77,7 @@ export const useGameSaver = () => {
       
       // Retry logic
       if (retryCount < 2) {
-        console.log(`useGameSaver: Retrying save (attempt ${retryCount + 1})`);
+        logger.debug(`useGameSaver: Retrying save (attempt ${retryCount + 1})`);
         await new Promise(resolve => setTimeout(resolve, 1000));
         return saveGameState(gameState, retryCount + 1);
       }

@@ -7,7 +7,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { getScoreColorClass } from '@/utils/gameUtils';
 import { PlayerComment } from './game/PlayerComment';
 import { PlayerProfile } from './game/PlayerProfile';
-import { getScoreCardContainerClass, getPositionBadgeClass } from './game/scoreCardStyles';
+import { getPositionBadgeClass } from './game/scoreCardStyles';
 import { cn } from '@/lib/utils';
 
 interface PlayerScoreCardProps {
@@ -39,11 +39,21 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
   return (
     <motion.div
       className={cn(
-        "relative rounded-3xl backdrop-blur-xl border shadow-lg transition-all duration-300 cursor-pointer overflow-hidden",
+        "group relative rounded-3xl backdrop-blur-xl border shadow-lg transition-all duration-300 cursor-pointer overflow-hidden",
         "bg-white/80 border-white/50 hover:bg-white/90 hover:shadow-xl",
         isExpanded ? "ring-2 ring-dutch-blue/20 shadow-xl" : "hover:scale-[1.01]"
       )}
       onClick={toggleExpansion}
+      onKeyDown={(e: React.KeyboardEvent) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggleExpansion();
+        }
+      }}
+      role="button"
+      tabIndex={0}
+      aria-expanded={isExpanded}
+      aria-label={`Scores de ${player.name}`}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
@@ -95,7 +105,7 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
             
             <ChevronDown 
               className={cn(
-                "h-6 w-6 text-gray-400 transition-transform duration-300",
+                "h-6 w-6 text-gray-500 transition-transform duration-300",
                 isExpanded ? "rotate-180" : ""
               )}
             />

@@ -1,5 +1,4 @@
 
-import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { PlayCircle, RefreshCw, Trophy } from 'lucide-react';
 import { motion } from 'framer-motion';

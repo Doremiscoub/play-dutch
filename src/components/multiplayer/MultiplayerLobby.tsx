@@ -2,13 +2,12 @@
  * Composant pour créer et rejoindre des parties multijoueur
  */
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
 import { 
   Users, 
   Wifi, 
@@ -258,7 +257,7 @@ export const MultiplayerLobby: React.FC<MultiplayerLobbyProps> = ({
               <div className="space-y-2">
                 <h4 className="font-medium">Joueurs connectés:</h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  {connectedPlayers.map((player, index) => (
+                  {connectedPlayers.map((player, _index) => (
                     <div
                       key={player.id}
                       className="flex items-center gap-2 p-2 bg-gray-50 rounded-lg"

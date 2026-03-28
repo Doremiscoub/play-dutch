@@ -8,6 +8,7 @@ import AdPerformanceMonitor from '@/components/ads/AdPerformanceMonitor';
 import GDPRConsentBanner from '@/components/ads/GDPRConsentBanner';
 import { useAds } from '@/contexts/EnhancedAdContext';
 import { Settings, TestTube, Monitor, Shield, AlertTriangle } from 'lucide-react';
+import { logger } from '@/utils/logger';
 
 const AdSenseTestPage: React.FC = () => {
   const { shouldShowAds, hasConsentedToAds, isPremium, updateConsent } = useAds();
@@ -21,7 +22,7 @@ const AdSenseTestPage: React.FC = () => {
 
   const simulatePremium = () => {
     // Dans une vraie implémentation, ceci modifierait l'état de l'abonnement
-    console.log('🔥 Simulation mode premium (non implémenté dans ce test)');
+    logger.debug('🔥 Simulation mode premium (non implémenté dans ce test)');
   };
 
   const testAdSlots = [

@@ -2,6 +2,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useSupabaseAuth } from '@/context/SupabaseAuthContext';
+import { logger } from '@/utils/logger';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -10,7 +11,7 @@ interface ProtectedRouteProps {
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const { isLoaded, isOfflineMode, isSignedIn } = useSupabaseAuth();
   
-  console.info('🔐 ProtectedRoute:', { isLoaded, isOfflineMode, isSignedIn });
+  logger.info('🔐 ProtectedRoute:', { isLoaded, isOfflineMode, isSignedIn });
   
   // Si l'authentification n'est pas encore chargée et nous ne sommes pas en mode hors ligne,
   // afficher un loader

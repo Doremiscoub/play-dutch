@@ -16,7 +16,7 @@ export const useAuthActions = () => {
   const signIn = async (email: string, password: string): Promise<AuthResult> => {
     setLoading(true);
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
+      const { data: _data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });

@@ -17,7 +17,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onSwitchToSignIn }) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const navigate = useNavigate();
+  const _navigate = useNavigate();
   const { signUp, loading } = useAuthActions();
 
   const handleSubmit = async (e: React.FormEvent) => {

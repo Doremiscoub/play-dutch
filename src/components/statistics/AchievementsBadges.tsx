@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Player } from '@/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Trophy, Crown, Target, Zap, Flame, Star, Award, Medal, TrendingUp, TrendingDown, Activity, Crosshair, Timer, Heart, Shield, Sparkles, Gauge, Brain, Focus } from 'lucide-react';
+import { Trophy, Crown, Target, Zap, Flame, Star, Award, Medal, TrendingUp, Activity, Crosshair, Timer, Heart, Shield, Sparkles, Gauge, Brain, Focus } from 'lucide-react';
 interface AchievementsBadgesProps {
   players: Player[];
   roundHistory: {

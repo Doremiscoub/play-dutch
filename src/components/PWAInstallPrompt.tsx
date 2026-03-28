@@ -1,9 +1,10 @@
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Download } from 'lucide-react';
 import { isRunningAsPWA } from '@/utils/pwaUtils';
 import { addBreadcrumb } from '@/utils/sentryConfig';
+import { logger } from '@/utils/logger';
 
 let deferredPrompt: any = null;
 
@@ -40,7 +41,7 @@ const PWAInstallPrompt = () => {
     const { outcome } = await deferredPrompt.userChoice;
     
     if (outcome === 'accepted') {
-      console.log('PWA installée avec succès');
+      logger.debug('PWA installée avec succès');
       addBreadcrumb('pwa', 'PWA installation accepted');
       setShowInstallButton(false);
     } else {

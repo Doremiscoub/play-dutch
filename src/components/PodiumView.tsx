@@ -1,8 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence, useAnimation } from 'framer-motion';
+import React, { useState, useRef } from 'react';
+import { motion, useAnimation } from 'framer-motion';
 import { Player } from '@/types';
-import { Trophy, Medal, Award, Share2, Copy, X, Twitter, Facebook, Camera, Download, Instagram, Video, Film, Youtube } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
+import { Trophy, Medal, Award, Share2, Copy, X, Twitter, Facebook, Camera, Download, Instagram, Video, Film } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogTrigger, DialogClose } from '@/components/ui/dialog';
@@ -22,9 +21,7 @@ export interface PodiumViewProps {
 const PodiumView: React.FC<PodiumViewProps> = ({ players, onClose, isMultiplayer = false }) => {
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const [isCapturing, setIsCapturing] = useState(false);
-  const [reelMode, setReelMode] = useState<'image' | 'animated'>('image');
   const [activeTab, setActiveTab] = useState('share');
-  const confettiCanvasRef = useRef<HTMLCanvasElement>(null);
   const reelPreviewRef = useRef<HTMLDivElement>(null);
   const [isGeneratingReel, setIsGeneratingReel] = useState(false);
   const animationControls = useAnimation();

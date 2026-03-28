@@ -104,7 +104,7 @@ const RulesSection: React.FC = () => {
                 
                 <CardContent className="relative z-10 p-8 text-center">
                   <h3 className="text-2xl font-black mb-4 text-white">
-                    🎯 Envie d'en savoir plus ?
+                    Envie d'en savoir plus ?
                   </h3>
                   <p className="text-lg font-bold mb-6 text-white/90">
                     Consultez le guide complet avec exemples et stratégies !
@@ -117,7 +117,7 @@ const RulesSection: React.FC = () => {
                       onClick={() => navigate('/rules')}
                       variant="outline"
                       size="lg"
-                      className="border-4 border-white text-white bg-transparent hover:bg-white hover:text-trinity-purple-700 font-black text-lg px-8 py-4"
+                      className="group border-4 border-white text-white bg-transparent hover:bg-white hover:text-trinity-purple-700 font-black text-lg px-8 py-4"
                     >
                       <BookOpen className="h-5 w-5 mr-3" />
                       Règles complètes

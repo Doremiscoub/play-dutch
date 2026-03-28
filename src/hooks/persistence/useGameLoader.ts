@@ -5,16 +5,17 @@ import { db } from '@/lib/database';
 import { STORAGE_KEYS } from '@/utils/storageKeys';
 import { getStorageProvider } from '@/utils/persistence/storageHelpers';
 import { toast } from 'sonner';
+import { logger } from '@/utils/logger';
 
 export const useGameLoader = () => {
   const { user, isSignedIn } = useAuth();
 
   const loadGameState = useCallback(async () => {
-    console.log('useGameLoader: loadGameState called');
+    logger.debug('useGameLoader: loadGameState called');
     
     try {
       const { hasIndexedDB } = await getStorageProvider();
-      console.log('useGameLoader: IndexedDB available:', hasIndexedDB);
+      logger.debug('useGameLoader: IndexedDB available:', hasIndexedDB);
       
       if (hasIndexedDB) {
         let query = db.ongoingGames.orderBy('lastUpdated');
@@ -25,7 +26,7 @@ export const useGameLoader = () => {
         }
         
         const currentGame = await query.last();
-        console.log('useGameLoader: Loaded game from IndexedDB:', !!currentGame);
+        logger.debug('useGameLoader: Loaded game from IndexedDB:', !!currentGame);
         
         if (currentGame) {
           return {
@@ -38,16 +39,16 @@ export const useGameLoader = () => {
         }
       } else {
         // Fallback vers localStorage
-        console.log('useGameLoader: Using localStorage fallback');
+        logger.debug('useGameLoader: Using localStorage fallback');
         const savedGame = localStorage.getItem(STORAGE_KEYS.CURRENT_GAME);
         if (savedGame) {
           const parsed = JSON.parse(savedGame);
-          console.log('useGameLoader: Loaded game from localStorage:', !!parsed);
+          logger.debug('useGameLoader: Loaded game from localStorage:', !!parsed);
           return parsed;
         }
       }
       
-      console.log('useGameLoader: No saved game found');
+      logger.debug('useGameLoader: No saved game found');
       return null;
     } catch (error) {
       console.error('useGameLoader: Erreur lors du chargement de la partie :', error);
@@ -61,7 +62,7 @@ export const useGameLoader = () => {
       const emergencyData = localStorage.getItem(STORAGE_KEYS.EMERGENCY_SAVE);
       if (emergencyData) {
         const parsed = JSON.parse(emergencyData);
-        console.log('useGameLoader: Emergency save recovered');
+        logger.debug('useGameLoader: Emergency save recovered');
         localStorage.removeItem(STORAGE_KEYS.EMERGENCY_SAVE);
         toast.success('Sauvegarde d\'urgence récupérée');
         return parsed;

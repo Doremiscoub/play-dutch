@@ -7,6 +7,7 @@ import { useSEO } from '@/hooks/useSEO';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { Heart, Users, Smartphone, Zap } from 'lucide-react';
 import PageShell from '@/components/layout/PageShell';
+import PageContainer from '@/components/layout/PageContainer';
 import UnifiedHeader from '@/components/layout/UnifiedHeader';
 
 const AboutPage: React.FC = () => {
@@ -37,8 +38,7 @@ const AboutPage: React.FC = () => {
         showSettings={true}
       />
 
-      <div className="p-8 pt-4">
-        <div className="max-w-4xl mx-auto space-y-8">
+      <PageContainer size="md" className="space-y-8">
           {/* Introduction */}
           <Card className="vision-card">
             <CardContent className="p-8">
@@ -60,8 +60,8 @@ const AboutPage: React.FC = () => {
             <Card className="vision-card">
               <CardContent className="p-8">
                 <div className="text-center space-y-3">
-                  <div className="w-12 h-12 mx-auto rounded-full bg-blue-500/10 flex items-center justify-center">
-                    <Smartphone className="w-6 h-6 text-blue-500" />
+                  <div className="w-12 h-12 mx-auto rounded-full bg-dutch-blue/10 flex items-center justify-center">
+                    <Smartphone className="w-6 h-6 text-dutch-blue" />
                   </div>
                   <h3 className="text-lg font-semibold">100% Web</h3>
                   <p className="text-sm text-gray-600">
@@ -74,8 +74,8 @@ const AboutPage: React.FC = () => {
             <Card className="vision-card">
               <CardContent className="p-8">
                 <div className="text-center space-y-3">
-                  <div className="w-12 h-12 mx-auto rounded-full bg-purple-500/10 flex items-center justify-center">
-                    <Users className="w-6 h-6 text-purple-500" />
+                  <div className="w-12 h-12 mx-auto rounded-full bg-dutch-purple/10 flex items-center justify-center">
+                    <Users className="w-6 h-6 text-dutch-purple" />
                   </div>
                   <h3 className="text-lg font-semibold">Multijoueur</h3>
                   <p className="text-sm text-gray-600">
@@ -88,8 +88,8 @@ const AboutPage: React.FC = () => {
             <Card className="vision-card">
               <CardContent className="p-8">
                 <div className="text-center space-y-3">
-                  <div className="w-12 h-12 mx-auto rounded-full bg-orange-500/10 flex items-center justify-center">
-                    <Zap className="w-6 h-6 text-orange-500" />
+                  <div className="w-12 h-12 mx-auto rounded-full bg-dutch-orange/10 flex items-center justify-center">
+                    <Zap className="w-6 h-6 text-dutch-orange" />
                   </div>
                   <h3 className="text-lg font-semibold">IA Intégrée</h3>
                   <p className="text-sm text-gray-600">
@@ -102,8 +102,8 @@ const AboutPage: React.FC = () => {
             <Card className="vision-card">
               <CardContent className="p-8">
                 <div className="text-center space-y-3">
-                  <div className="w-12 h-12 mx-auto rounded-full bg-green-500/10 flex items-center justify-center">
-                    <Heart className="w-6 h-6 text-green-500" />
+                  <div className="w-12 h-12 mx-auto rounded-full bg-dutch-green/10 flex items-center justify-center">
+                    <Heart className="w-6 h-6 text-dutch-green" />
                   </div>
                   <h3 className="text-lg font-semibold">Gratuit</h3>
                   <p className="text-sm text-gray-600">
@@ -135,7 +135,7 @@ const AboutPage: React.FC = () => {
 
           {/* Call to action */}
           <div className="text-center">
-            <Button 
+            <Button
               variant="default"
               size="lg"
               onClick={() => navigate('/setup')}
@@ -144,8 +144,7 @@ const AboutPage: React.FC = () => {
               Commencer une partie
             </Button>
           </div>
-        </div>
-      </div>
+      </PageContainer>
     </PageShell>
   );
 };

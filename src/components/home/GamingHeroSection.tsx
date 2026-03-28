@@ -178,14 +178,14 @@ const GamingHeroSection: React.FC = () => {
             <Button
               onClick={() => navigate('/setup')}
               size="xl"
-              className="relative z-10 bg-gradient-to-r from-blue-600 via-purple-600 to-orange-500 hover:from-orange-500 hover:via-purple-500 hover:to-blue-600 text-white font-black text-lg sm:text-xl px-8 sm:px-12 py-6 sm:py-8 shadow-2xl border-4 border-white rounded-2xl transition-all duration-300 hover:scale-105 w-auto max-w-full"
+              className="group relative z-10 bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange hover:from-dutch-orange hover:via-dutch-purple hover:to-dutch-blue text-white font-black text-lg sm:text-xl px-8 sm:px-12 py-6 sm:py-8 shadow-2xl border-4 border-white rounded-2xl transition-all duration-300 hover:scale-105 w-auto max-w-full"
             >
               <motion.div
                 className="flex items-center justify-center gap-2 sm:gap-4 text-center whitespace-nowrap overflow-hidden"
                 whileHover={{ x: 5 }}
               >
                 <Gamepad2 className="h-6 w-6 sm:h-8 sm:w-8 group-hover:animate-bounce flex-shrink-0" />
-                <span className="whitespace-nowrap">{isMobile ? 'JOUER' : '🚀 JOUER ! 🎯'}</span>
+                <span className="whitespace-nowrap">{isMobile ? 'JOUER' : 'JOUER !'}</span>
                 <ArrowRight className="h-5 w-5 sm:h-6 sm:w-6 group-hover:translate-x-2 transition-transform flex-shrink-0" />
               </motion.div>
             </Button>

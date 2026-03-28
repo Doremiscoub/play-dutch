@@ -24,7 +24,7 @@ interface GameInfo {
 const JoinGamePage: React.FC = () => {
   const { gameId } = useParams<{ gameId: string }>();
   const navigate = useNavigate();
-  const { isSignedIn, user } = useSupabaseAuth();
+  const { isSignedIn, user: _user } = useSupabaseAuth();
   const [gameInfo, setGameInfo] = useState<GameInfo | null>(null);
   const [loading, setLoading] = useState(true);
   const [joining, setJoining] = useState(false);
@@ -102,6 +102,37 @@ const JoinGamePage: React.FC = () => {
   const handleCreateOwnGame = () => {
     navigate('/setup');
   };
+
+  if (!isSignedIn) {
+    return (
+      <PageShell variant="default">
+        <UnifiedHeader
+          title="Rejoindre une partie"
+          showBackButton
+          onBack={() => navigate('/')}
+        />
+        <div className="flex items-center justify-center min-h-[50vh] px-4">
+          <Card className="w-full max-w-sm text-center">
+            <CardHeader>
+              <CardTitle className="text-xl">Connexion requise</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-muted-foreground">
+                Connectez-vous pour rejoindre cette partie.
+              </p>
+              <Button
+                onClick={() => navigate(`/sign-in?redirect=${encodeURIComponent(window.location.pathname)}`)}
+                className="w-full"
+                aria-label="Se connecter pour rejoindre la partie"
+              >
+                Se connecter
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </PageShell>
+    );
+  }
 
   if (loading) {
     return (

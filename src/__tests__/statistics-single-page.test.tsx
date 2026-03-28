@@ -1,4 +1,3 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { StatsDashboardSinglePage } from '@/components/statistics/StatsDashboardSinglePage';
 import { Player } from '@/types';

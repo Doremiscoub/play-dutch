@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Separator } from '@/components/ui/separator';
 import { AdvancedSettings } from '@/components/settings/AdvancedSettings';
 import { useSEO } from '@/hooks/useSEO';
-import { DESIGN_TOKENS } from '@/design';
+import PageContainer from '@/components/layout/PageContainer';
 
 const SettingsPage: React.FC = () => {
   useSEO({
@@ -14,7 +14,7 @@ const SettingsPage: React.FC = () => {
   });
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
+    <PageContainer size="md">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -36,7 +36,7 @@ const SettingsPage: React.FC = () => {
         <Card variant="glassColored" className="border-white/20 backdrop-blur-md">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              ⚙️ Configuration avancée
+              Configuration avancée
             </CardTitle>
             <CardDescription>
               Gérez tous les aspects de votre application Dutch
@@ -59,7 +59,7 @@ const SettingsPage: React.FC = () => {
           </p>
         </motion.div>
       </motion.div>
-    </div>
+    </PageContainer>
   );
 };
 

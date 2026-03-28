@@ -121,7 +121,7 @@ export const GameBadge: React.FC<GameBadgeProps> = ({
   children,
   ...props
 }) => {
-  const IconComponent = typeof icon === 'string' ? iconMap[icon] : null;
+  const IconComponent = typeof icon === 'string' ? iconMap[icon as keyof typeof iconMap] : null;
   const isLegendary = type === 'legendary' || type === 'mythic';
   const shouldAnimate = animated && (effect !== 'none' || isLegendary);
   

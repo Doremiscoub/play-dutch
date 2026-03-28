@@ -3,8 +3,8 @@ import React from 'react';
 import { Player } from '@/types';
 import { motion } from 'framer-motion';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, ResponsiveContainer, BarChart, Bar, Tooltip } from 'recharts';
-import { Award, Zap, TrendingUp, AlertTriangle, Activity } from 'lucide-react';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, ResponsiveContainer, BarChart, Bar } from 'recharts';
+import { Award, Zap, TrendingUp, Activity } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 
@@ -223,7 +223,7 @@ const PlayerStatsChart: React.FC<PlayerStatsChartProps> = ({ players, className 
           </div>
           
           <div className="space-y-2 mt-3">
-            {players.map((player, index) => (
+            {players.map((player, _index) => (
               <div key={player.id} className="flex items-center justify-between">
                 <span className="text-sm text-gray-700">{player.name}</span>
                 <Badge variant="outline" className="bg-dutch-orange/10 text-dutch-orange border-none">
@@ -246,7 +246,7 @@ const PlayerStatsChart: React.FC<PlayerStatsChartProps> = ({ players, className 
           </div>
           
           <div className="space-y-2 mt-3">
-            {players.map((player, index) => (
+            {players.map((player, _index) => (
               <div key={player.id} className="flex items-center justify-between">
                 <span className="text-sm text-gray-700">{player.name}</span>
                 <Badge variant="outline" className="bg-dutch-green/10 text-dutch-green border-none">

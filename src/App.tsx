@@ -2,33 +2,34 @@
 /**
  * Composant principal de l'application avec système de routes optimisé
  */
-import React, { useEffect } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate, useLocation } from 'react-router-dom';
 import { Toaster } from "sonner";
 import * as Sentry from '@sentry/react';
 import { addBreadcrumb } from './utils/sentryConfig';
 import AnimatedBackground from './components/AnimatedBackground';
 
-// Pages
-import Home from './pages/Home';
-import SimpleGameSetup from './pages/SimpleGameSetup';
-import SimpleGamePage from './pages/SimpleGamePage';
-import JoinGamePage from './pages/JoinGamePage';
-import History from './pages/History';
-import RulesPage from './pages/RulesPage';
+// Auth pages (eager - need fast load)
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
-import AboutPage from './pages/AboutPage';
-import PrivacyPage from './pages/PrivacyPage';
-import TermsPage from './pages/TermsPage';
-import FAQPage from './pages/FAQPage';
-import GuideStrategy from './pages/GuideStrategy';
-import MultiplayerPage from './pages/MultiplayerPage';
-import SettingsPage from './pages/SettingsPage';
-import DeveloperTools from './pages/DeveloperTools';
+
+// Lazy-loaded pages
+const Home = React.lazy(() => import('./pages/Home'));
+const SimpleGameSetup = React.lazy(() => import('./pages/SimpleGameSetup'));
+const SimpleGamePage = React.lazy(() => import('./pages/SimpleGamePage'));
+const JoinGamePage = React.lazy(() => import('./pages/JoinGamePage'));
+const History = React.lazy(() => import('./pages/History'));
+const RulesPage = React.lazy(() => import('./pages/RulesPage'));
+const AboutPage = React.lazy(() => import('./pages/AboutPage'));
+const PrivacyPage = React.lazy(() => import('./pages/PrivacyPage'));
+const TermsPage = React.lazy(() => import('./pages/TermsPage'));
+const FAQPage = React.lazy(() => import('./pages/FAQPage'));
+const GuideStrategy = React.lazy(() => import('./pages/GuideStrategy'));
+const MultiplayerPage = React.lazy(() => import('./pages/MultiplayerPage'));
+const SettingsPage = React.lazy(() => import('./pages/SettingsPage'));
+const DeveloperTools = React.lazy(() => import('./pages/DeveloperTools'));
 
 // Composants
-import ProtectedRoute from './components/ProtectedRoute';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
 import AppLayout from './components/layout/AppLayout';
 
@@ -72,6 +73,7 @@ const App: React.FC = () => {
           </div>
           
           <RouteTracker />
+          <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-dutch-blue"></div></div>}>
           <Routes>
             <Route path="/" element={<AppLayout />}>
               {/* Pages d'authentification */}
@@ -107,7 +109,8 @@ const App: React.FC = () => {
               <Route path="*" element={<Navigate to="/" replace />} />
             </Route>
           </Routes>
-          
+          </Suspense>
+
           {/* Configuration globale du système de toast */}
           <Toaster 
             position="top-center" 

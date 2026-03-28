@@ -1,10 +1,8 @@
-import React, { useState, useMemo, useCallback, Suspense, lazy } from 'react';
+import React, { useState, useMemo, useCallback, lazy } from 'react';
 import { motion } from 'framer-motion';
 import { Player } from '@/types';
-import { ArrowLeft, BarChart3, TrendingUp, Users, Activity, Zap, Award } from 'lucide-react';
-import { Card } from '@/components/ui/card';
+import { BarChart3, TrendingUp, Users, Activity, Zap, Award } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Skeleton } from '@/components/ui/skeleton';
 import useIsMobile from '@/hooks/use-mobile';
 import { LazyStatisticsSection, useVisibilityTracker } from './LazyStatisticsSection';
 import { useMobileLayout, useMobileAdaptation } from '@/hooks/useMobileAdaptation';
@@ -174,7 +172,7 @@ export const OptimizedStatsDashboard: React.FC<OptimizedStatsDashboardProps> = (
         {/* Sections empilées avec lazy loading */}
         <div className="space-y-8 md:space-y-12">
           {sections.sort((a, b) => a.priority - b.priority).map((section, index) => {
-          const isVisible = visibleSections.has(section.id);
+          const _isVisible = visibleSections.has(section.id);
           const shouldRender = true; // Always render sections on mobile and desktop to avoid lazy-load issues inside scroll containers
           return <motion.section key={section.id} ref={createSectionRef(section.id)} data-testid={`stats-section-${section.id}`} initial={{
             opacity: 0,

@@ -17,7 +17,7 @@ interface AdMetrics {
 }
 
 const AdPerformanceMonitor: React.FC = () => {
-  const { shouldShowAds, hasConsentedToAds, adPerformance } = useAds();
+  const { shouldShowAds, hasConsentedToAds, adPerformance: _adPerformance } = useAds();
   const [metrics, setMetrics] = useState<AdMetrics>({
     impressions: 0,
     clicks: 0,

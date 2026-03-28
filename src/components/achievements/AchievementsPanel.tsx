@@ -6,7 +6,7 @@ import { AchievementCard } from './AchievementCard';
 import { GameBadge } from '@/components/ui/game-badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
-import { Trophy, Star, Award, Filter } from 'lucide-react';
+import { Trophy, Star, Award } from 'lucide-react';
 
 interface AchievementsPanelProps {
   achievements: Achievement[];
@@ -26,7 +26,7 @@ export const AchievementsPanel: React.FC<AchievementsPanelProps> = ({
 
   const unlockedCount = achievements.filter(a => a.unlocked).length;
   const completionRate = (unlockedCount / achievements.length) * 100;
-  const nextLevelXP = (level) * 1000;
+  const _nextLevelXP = (level) * 1000;
   const currentLevelProgress = ((totalXP % 1000) / 1000) * 100;
 
   const filteredAchievements = achievements.filter(achievement => {

@@ -25,7 +25,7 @@ interface LazyHomeSectionsProps {
   navigate: (path: string) => void;
 }
 
-const LazyHomeSections: React.FC<LazyHomeSectionsProps> = ({ navigate }) => {
+const LazyHomeSections: React.FC<LazyHomeSectionsProps> = ({ navigate: _navigate }) => {
   return (
     <>
       <Suspense fallback={<LoadingSpinner />}>

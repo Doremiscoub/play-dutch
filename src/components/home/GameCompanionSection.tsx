@@ -49,7 +49,7 @@ const GameCompanionSection: React.FC = () => {
           </p>
           <div className="max-w-3xl mx-auto bg-gradient-to-r from-trinity-blue-100 to-trinity-purple-100 rounded-2xl p-8 border-2 border-trinity-blue-200">
             <p className="text-lg text-neutral-800 font-bold leading-relaxed">
-              💡 <strong>Le concept :</strong> Gardez vos cartes Dutch physiques et laissez l'application s'occuper intelligemment des calculs, statistiques et commentaires du Professeur Cartouche !
+              <strong>Le concept :</strong> Gardez vos cartes Dutch physiques et laissez l'application s'occuper intelligemment des calculs, statistiques et commentaires du Professeur Cartouche !
             </p>
           </div>
         </motion.div>

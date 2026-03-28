@@ -49,7 +49,7 @@ export const EnhancedAdProvider: React.FC<EnhancedAdProviderProps> = ({ children
   });
 
   // Ad Performance Tracking
-  const [adPerformance, setAdPerformance] = useState({
+  const [adPerformance, _setAdPerformance] = useState({
     impressions: 0,
     clicks: 0,
     revenue: 0
@@ -84,31 +84,24 @@ export const EnhancedAdProvider: React.FC<EnhancedAdProviderProps> = ({ children
     }
   };
 
-  // Load AdSense script - production optimized 
+  // Load AdSense script when consent is given (production only).
+  // We load based on hasConsentedToAds alone (not shouldShowAds) so the script
+  // is ready immediately when ad components render.
   useEffect(() => {
-    if (shouldShowAds && !document.querySelector('script[src*="adsbygoogle"]')) {
-      const script = document.createElement('script');
-      script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2046195502734056';
-      script.crossOrigin = 'anonymous';
-      script.async = true;
-      
-      if (import.meta.env.PROD) {
-        const linkElement = document.createElement('link');
-        linkElement.rel = 'preload';
-        linkElement.href = script.src;
-        linkElement.as = 'script';
-        document.head.appendChild(linkElement);
-      }
-      
-      script.onload = () => {
-        if (import.meta.env.PROD) {
-          (window as any).adsbygoogle = (window as any).adsbygoogle || [];
-        }
-      };
-      
-      document.head.appendChild(script);
-    }
-  }, [shouldShowAds, isPremium, isLoading, hasConsentedToAds]);
+    if (!import.meta.env.PROD || !hasConsentedToAds) return;
+    if (document.querySelector('script[src*="adsbygoogle"]')) return;
+
+    const script = document.createElement('script');
+    script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2046195502734056';
+    script.crossOrigin = 'anonymous';
+    script.async = true;
+
+    script.onload = () => {
+      (window as any).adsbygoogle = (window as any).adsbygoogle || [];
+    };
+
+    document.head.appendChild(script);
+  }, [hasConsentedToAds]);
 
   const value: AdContextType = {
     isPremium,

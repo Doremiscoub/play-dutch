@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Users, Zap, Heart, Sparkles } from 'lucide-react';
+import { Users, Heart, Sparkles } from 'lucide-react';
 import { Enhanced3DFeatureCard } from '@/components/home/Enhanced3DFeatureCard';
 
 const features = [
