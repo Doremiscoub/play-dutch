@@ -28,23 +28,6 @@ const buttonVariants = cva(
           "bg-accent text-accent-foreground hover:bg-[hsl(25,95%,46%)] shadow-sm",
         success:
           "bg-[hsl(142,71%,45%)] text-white hover:bg-[hsl(142,71%,38%)] shadow-sm",
-
-        // Legacy compat aliases — map to clean variants
-        kidsPrimary: "bg-gradient-to-r from-[hsl(221,83%,53%)] to-[hsl(258,90%,66%)] text-white hover:from-[hsl(221,83%,46%)] hover:to-[hsl(258,90%,58%)] shadow-sm",
-        kidsSecondary: "bg-[hsl(258,90%,66%)] text-white hover:bg-[hsl(258,90%,58%)] shadow-sm",
-        kidsTertiary: "bg-accent text-accent-foreground hover:bg-[hsl(25,95%,46%)] shadow-sm",
-        glass: "bg-white/85 backdrop-blur-md border border-black/[0.06] text-foreground hover:bg-white shadow-sm",
-        glassColored: "bg-white/85 backdrop-blur-md border border-black/[0.06] text-foreground hover:bg-white shadow-sm",
-        fun: "bg-gradient-to-r from-[hsl(221,83%,53%)] via-[hsl(258,90%,66%)] to-[hsl(25,95%,53%)] text-white shadow-sm",
-        gaming: "bg-gradient-to-r from-[hsl(221,83%,53%)] to-[hsl(258,90%,66%)] text-white font-bold uppercase tracking-wide shadow-sm",
-        liquidHeader: "bg-white/85 backdrop-blur-md border border-black/[0.06] text-foreground hover:bg-white shadow-sm",
-        liquidCard: "bg-white/85 backdrop-blur-md border border-black/[0.06] text-foreground hover:bg-white shadow-sm",
-        liquidSheet: "bg-white/85 backdrop-blur-md border border-black/[0.06] text-foreground hover:bg-white shadow-sm",
-        liquidPopover: "bg-white/85 backdrop-blur-md border border-black/[0.06] text-foreground hover:bg-white shadow-sm",
-        "dutch-primary": "bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm",
-        "dutch-glass": "bg-white/85 backdrop-blur-md border border-black/[0.06] text-foreground hover:bg-white shadow-sm",
-        gradient: "bg-gradient-to-r from-[hsl(221,83%,53%)] to-[hsl(258,90%,66%)] text-white hover:from-[hsl(221,83%,46%)] hover:to-[hsl(258,90%,58%)] shadow-sm",
-        "vision-glass": "bg-white/85 backdrop-blur-md border border-black/[0.06] text-foreground hover:bg-white shadow-sm",
       },
       size: {
         default: "h-10 px-4 py-2 rounded-lg",

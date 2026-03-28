@@ -10,24 +10,7 @@ const cardVariants = cva(
       variant: {
         default: "border-border shadow-sm",
         elevated: "border-border/50 shadow-md hover:shadow-lg",
-        glass: "bg-white/85 backdrop-blur-md border-white/60 shadow-sm",
         ghost: "border-transparent shadow-none bg-transparent",
-
-        // Legacy compat — all map to clean variants
-        liquidHeader: "border-border/50 shadow-sm",
-        liquidCard: "border-border/50 shadow-md",
-        liquidSheet: "border-border/50 shadow-md",
-        liquidPopover: "border-border/50 shadow-md",
-        glassColored: "bg-white/85 backdrop-blur-md border-white/60 shadow-sm",
-        kidsBlue: "border-blue-200 bg-blue-50/50",
-        kidsPurple: "border-purple-200 bg-purple-50/50",
-        kidsOrange: "border-orange-200 bg-orange-50/50",
-        kidsPink: "border-pink-200 bg-pink-50/50",
-        kidsLime: "border-green-200 bg-green-50/50",
-        kidsTurquoise: "border-teal-200 bg-teal-50/50",
-        gaming: "border-border/50 shadow-md",
-        fun: "border-border/50 shadow-md",
-        elevated2: "border-border/50 shadow-lg",
         subtle: "border-border/40 bg-muted/30",
       }
     },

@@ -83,7 +83,7 @@ const AuthStatus: React.FC<AuthStatusProps> = ({ isMenuOpen, onCloseMenu }) => {
           <Link to="/signin">
             <Button
               size="sm"
-              variant="dutch-glass"
+              variant="outline"
               className="px-3 py-1 text-xs rounded-full"
             >
               Connexion
@@ -92,7 +92,7 @@ const AuthStatus: React.FC<AuthStatusProps> = ({ isMenuOpen, onCloseMenu }) => {
           <Link to="/signup">
             <Button
               size="sm"
-              variant="dutch-glass"
+              variant="outline"
               className="px-3 py-1 text-xs rounded-full"
             >
               Inscription

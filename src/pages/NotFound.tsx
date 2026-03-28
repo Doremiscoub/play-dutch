@@ -35,7 +35,7 @@ const NotFound: React.FC = () => {
             </p>
             <Link to="/">
               <Button 
-                variant="dutch-primary"
+                variant="default"
                 size="lg" 
                 className="rounded-xl shadow-md hover:shadow-lg"
               >

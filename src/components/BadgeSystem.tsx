@@ -347,7 +347,7 @@ const BadgeSystem: React.FC<BadgeSystemProps> = ({ players, games, currentGameId
   };
   
   return (
-    <Card variant="glassColored" className="border border-glass-border-light backdrop-blur-md rounded-3xl shadow-md">
+    <Card className="border border-border rounded-2xl shadow-sm">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Medal className="h-5 w-5 text-trinity-orange-600" />
