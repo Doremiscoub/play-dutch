@@ -218,7 +218,7 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
       {/* Informations */}
       <div className="bg-gradient-to-r from-primary/5 to-secondary/5 rounded-xl p-4">
         <p className="text-sm text-neutral-700">
-          <strong>💡 Astuce :</strong> Utilisez des noms courts et facilement reconnaissables pour une meilleure expérience de jeu
+          <strong>Astuce :</strong> Utilisez des noms courts et facilement reconnaissables pour une meilleure expérience de jeu
         </p>
       </div>
 
@@ -240,7 +240,7 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
           disabled={!canProceed}
           className="flex-[2] font-bold min-h-[48px] touch-target"
         >
-          {canProceed ? 'Créer la partie 🎯' : 'Complétez les noms'}
+          {canProceed ? 'Créer la partie' : 'Complétez les noms'}
         </UnifiedButton>
       </div>
     </UnifiedCard>

@@ -21,9 +21,7 @@ export interface PodiumViewProps {
 const PodiumView: React.FC<PodiumViewProps> = ({ players, onClose, isMultiplayer = false }) => {
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const [isCapturing, setIsCapturing] = useState(false);
-  const [_reelMode, _setReelMode] = useState<'image' | 'animated'>('image');
   const [activeTab, setActiveTab] = useState('share');
-  const _confettiCanvasRef = useRef<HTMLCanvasElement>(null);
   const reelPreviewRef = useRef<HTMLDivElement>(null);
   const [isGeneratingReel, setIsGeneratingReel] = useState(false);
   const animationControls = useAnimation();

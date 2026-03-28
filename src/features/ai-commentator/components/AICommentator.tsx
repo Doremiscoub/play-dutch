@@ -248,9 +248,10 @@ export default function AICommentator({
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -10, scale: 0.95 }}
                 className={cn(
-                  "absolute top-full mt-2 left-1/2 transform -translate-x-1/2",
-                  "bg-white rounded-xl shadow-xl border border-gray-200 p-4 z-50",
-                  "min-w-64 max-w-[90vw]"
+                  "absolute top-full mt-2 z-50",
+                  "left-0 right-0 sm:left-1/2 sm:right-auto sm:transform sm:-translate-x-1/2",
+                  "bg-white rounded-xl shadow-xl border border-gray-200 p-3 sm:p-4",
+                  "sm:min-w-64 max-w-[95vw] sm:max-w-[90vw] mx-auto"
                 )}
               >
                 <h4 className="text-sm font-semibold text-gray-700 mb-3">Personnalité du Professeur</h4>

@@ -97,10 +97,10 @@ const Home: React.FC = () => {
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent'
                   }}>
-                    🌟 Votre Compagnon de Jeu Idéal 🌟
+                    Votre Compagnon de Jeu Idéal
                   </h2>
                   <p className="text-xl text-neutral-700 font-bold max-w-3xl mx-auto">
-                    🃏 Sortez vos cartes Dutch physiques et laissez l'application s'occuper du reste ! 📱✨
+                    Sortez vos cartes Dutch physiques et laissez l'application s'occuper du reste !
                   </p>
                 </motion.div>
 
@@ -211,8 +211,8 @@ const Home: React.FC = () => {
                           Prêt à accompagner votre première partie ?
                         </h2>
                         <p className="text-lg md:text-xl font-semibold text-white/90 max-w-2xl mx-auto leading-relaxed">
-                          🃏 Sortez vos cartes Dutch et lancez l'application compagnon !<br/>
-                          C'est gratuit, intelligent et sans inscription ! 🚀✨
+                          Sortez vos cartes Dutch et lancez l'application compagnon !<br/>
+                          C'est gratuit, intelligent et sans inscription !
                         </p>
                       </div>
                       

@@ -393,7 +393,7 @@ export const useRealtimeMultiplayer = () => {
   }, [isConnected, user, sendRaw]);
 
   const addRound = useCallback(async (scores: number[], dutchPlayerId?: string) => {
-    if (!isConnected && messageQueueRef.current.length === 0 && !socketRef.current) {
+    if (!isConnected && !socketRef.current) {
       toast.error('Partie non active');
       return false;
     }
@@ -418,7 +418,7 @@ export const useRealtimeMultiplayer = () => {
   }, [isConnected, gameState, sendThrottled]);
 
   const undoRound = useCallback(async () => {
-    if (!isConnected && messageQueueRef.current.length === 0 && !socketRef.current) {
+    if (!isConnected && !socketRef.current) {
       toast.error('Partie non active');
       return false;
     }

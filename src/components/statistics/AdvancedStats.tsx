@@ -138,7 +138,7 @@ export const AdvancedStats: React.FC<AdvancedStatsProps> = ({
         winProbability: calculateWinProbability(player, players)
       };
     }).filter((item): item is NonNullable<typeof item> => item !== null);
-  }, [players]);
+  }, [filteredPlayers, players]);
 
   // Préparer les données pour les graphiques
   const distributionData = useMemo(() => {

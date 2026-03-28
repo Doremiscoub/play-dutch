@@ -31,13 +31,14 @@ export const useGameContinuation = (
   // Continuer avec une nouvelle limite
   const handleContinueGame = useCallback((newLimit: number) => {
     logger.debug('useGameContinuation: handleContinueGame called with new limit:', newLimit);
+    let updatedLimit = scoreLimit;
     setScoreLimit(prevLimit => {
-      const updatedLimit = prevLimit + newLimit;
+      updatedLimit = prevLimit + newLimit;
       logger.debug('useGameContinuation: Score limit updated from', prevLimit, 'to', updatedLimit);
       return updatedLimit;
     });
     setShowGameOver(false);
-    toast.success(`La partie continue ! Nouvelle limite: ${scoreLimit + newLimit} points`);
+    toast.success(`La partie continue ! Nouvelle limite: ${updatedLimit} points`);
   }, [scoreLimit, setScoreLimit, setShowGameOver]);
   
   // Redémarrer avec une nouvelle partie

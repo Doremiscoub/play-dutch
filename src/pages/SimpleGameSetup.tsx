@@ -86,7 +86,7 @@ const SimpleGameSetup: React.FC = () => {
             <Card className="bg-gradient-to-r from-primary/5 to-secondary/5 border border-primary/20">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-lg font-bold text-neutral-800">🎯 Rappel des règles Dutch</h3>
+                  <h3 className="text-lg font-bold text-neutral-800">Rappel des règles Dutch</h3>
                   <Button
                     onClick={startTutorial}
                     variant="outline"

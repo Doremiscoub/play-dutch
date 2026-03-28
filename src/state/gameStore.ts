@@ -172,4 +172,8 @@ export const useGameStore = create<GameStore>()((set, get) => ({
 }));
 
 // Load persisted game state on module initialization
-useGameStore.getState().loadFromStorage();
+try {
+  useGameStore.getState().loadFromStorage();
+} catch (error) {
+  logger.debug('Failed to load game state from storage:', error);
+}

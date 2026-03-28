@@ -37,7 +37,7 @@ const GameSummaryStep: React.FC<GameSummaryStepProps> = ({
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent'
         }}>
-          🎯 Récapitulatif
+          Récapitulatif
         </h2>
         <p className="text-neutral-700">
           Vérifiez les paramètres de votre partie avant de commencer
@@ -175,7 +175,7 @@ const GameSummaryStep: React.FC<GameSummaryStepProps> = ({
           onClick={onStartGame}
           className="flex-[2] font-bold text-sm sm:text-lg px-4 py-2 min-w-0 leading-tight"
         >
-          <span className="whitespace-nowrap">{isMobile ? 'Jouer' : '🚀 Commencer la partie !'}</span>
+          <span className="whitespace-nowrap">{isMobile ? 'Jouer' : 'Commencer la partie !'}</span>
         </UnifiedButton>
       </div>
     </UnifiedCard>

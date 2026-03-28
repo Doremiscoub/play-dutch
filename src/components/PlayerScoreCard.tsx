@@ -39,7 +39,7 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
   return (
     <motion.div
       className={cn(
-        "relative rounded-3xl backdrop-blur-xl border shadow-lg transition-all duration-300 cursor-pointer overflow-hidden",
+        "group relative rounded-3xl backdrop-blur-xl border shadow-lg transition-all duration-300 cursor-pointer overflow-hidden",
         "bg-white/80 border-white/50 hover:bg-white/90 hover:shadow-xl",
         isExpanded ? "ring-2 ring-dutch-blue/20 shadow-xl" : "hover:scale-[1.01]"
       )}
@@ -105,7 +105,7 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
             
             <ChevronDown 
               className={cn(
-                "h-6 w-6 text-gray-400 transition-transform duration-300",
+                "h-6 w-6 text-gray-500 transition-transform duration-300",
                 isExpanded ? "rotate-180" : ""
               )}
             />

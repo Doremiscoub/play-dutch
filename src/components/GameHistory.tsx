@@ -30,7 +30,7 @@ const GameHistory: React.FC<GameHistoryProps> = ({ games, limit }) => {
               <Trophy className="h-7 w-7 text-dutch-blue/50" />
             </div>
             <p className="text-gray-500">Aucune partie terminée pour le moment.</p>
-            <p className="text-sm text-gray-400 mt-2">
+            <p className="text-sm text-gray-500 mt-2">
               Commencez une nouvelle partie pour voir votre historique ici.
             </p>
           </motion.div>

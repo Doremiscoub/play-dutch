@@ -38,6 +38,7 @@ class AICommentaryEngine {
   private currentPersonality: AIPersonality = 'humorous';
   private commentHistory: string[] = [];
   private readonly MAX_MEMORY_SIZE = 50;
+  private readonly MAX_COMMENT_HISTORY = 20;
 
   constructor() {
     this.memory = this.loadMemory();
@@ -77,6 +78,9 @@ class AICommentaryEngine {
     
     this.updatePlayerProfiles(players);
     this.commentHistory.push(comment.comment);
+    if (this.commentHistory.length > this.MAX_COMMENT_HISTORY) {
+      this.commentHistory = this.commentHistory.slice(-this.MAX_COMMENT_HISTORY);
+    }
     
     return comment;
   }

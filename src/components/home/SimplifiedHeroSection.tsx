@@ -37,7 +37,7 @@ const SimplifiedHeroSection: React.FC = () => {
           className="flex justify-center"
         >
           <div className="inline-flex items-center gap-2 bg-white/80 text-trinity-blue-700 px-4 sm:px-6 py-2 sm:py-3 rounded-full font-bold text-xs sm:text-sm border-2 border-trinity-blue-200 backdrop-blur-sm w-full sm:w-auto max-w-xs sm:max-w-none justify-center">
-            📱 Application Compagnon
+            Application Compagnon
           </div>
         </motion.div>
 
@@ -53,7 +53,7 @@ const SimplifiedHeroSection: React.FC = () => {
             <span className="relative inline-block bg-gradient-to-br from-trinity-blue-600 via-trinity-purple-600 to-trinity-orange-500 bg-clip-text text-transparent filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]">
               SORTEZ VOS CARTES, 
               <span className="inline-block ml-2 px-3 py-1 bg-gradient-to-r from-trinity-orange-500 to-trinity-orange-600 text-white rounded-lg shadow-xl transform hover:scale-105 transition-all duration-300 font-extrabold">
-                🎯 ON
+                ON
               </span>
               <br className="sm:hidden"/>
               <span className="inline-block mt-2 px-3 py-1 bg-gradient-to-r from-trinity-orange-500 to-trinity-orange-600 text-white rounded-lg shadow-xl transform hover:scale-105 transition-all duration-300 font-extrabold">
@@ -62,12 +62,12 @@ const SimplifiedHeroSection: React.FC = () => {
             </span>
             
             {/* Decorative elements */}
-            <div className="absolute -top-4 -left-2 text-trinity-orange-400 text-2xl animate-bounce">🃏</div>
-            <div className="absolute -bottom-2 -right-4 text-trinity-blue-400 text-xl animate-pulse">⚡</div>
+            <div className="absolute -top-4 -left-2 text-trinity-orange-400 text-2xl animate-bounce" aria-hidden="true">🃏</div>
+            <div className="absolute -bottom-2 -right-4 text-trinity-blue-400 text-xl animate-pulse" aria-hidden="true">⚡</div>
           </h1>
           
           <p className="text-base sm:text-lg md:text-xl text-gray-600 font-medium max-w-full sm:max-w-2xl mx-auto leading-relaxed px-2">
-            🃏 Votre smartphone devient votre carnet de scores intelligent
+            Votre smartphone devient votre carnet de scores intelligent
           </p>
         </motion.div>
 

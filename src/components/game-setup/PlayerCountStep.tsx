@@ -31,7 +31,7 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
         WebkitBackgroundClip: 'text',
         WebkitTextFillColor: 'transparent'
       }}>
-          🎮 Combien de joueurs ?
+          Combien de joueurs ?
         </h2>
         <p className="text-neutral-600 text-base sm:text-lg px-2">
           Choisissez le nombre de participants pour votre partie de Dutch
@@ -45,7 +45,7 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
           size="lg"
           onClick={decrementCount}
           disabled={playerCount <= MIN_PLAYERS}
-          className="w-16 h-16 sm:w-18 sm:h-18 rounded-2xl text-white font-bold text-2xl sm:text-3xl touch-target min-h-[64px] shadow-lg hover:shadow-xl transition-all"
+          className="w-16 h-16 sm:w-[4.5rem] sm:h-[4.5rem] rounded-2xl text-white font-bold text-2xl sm:text-3xl touch-target min-h-[64px] shadow-lg hover:shadow-xl transition-all"
           aria-label="Retirer un joueur"
         >
           -
@@ -70,7 +70,7 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
           size="lg"
           onClick={incrementCount}
           disabled={playerCount >= MAX_PLAYERS}
-          className="w-16 h-16 sm:w-18 sm:h-18 rounded-2xl text-white font-bold text-2xl sm:text-3xl touch-target min-h-[64px] shadow-lg hover:shadow-xl transition-all"
+          className="w-16 h-16 sm:w-[4.5rem] sm:h-[4.5rem] rounded-2xl text-white font-bold text-2xl sm:text-3xl touch-target min-h-[64px] shadow-lg hover:shadow-xl transition-all"
           aria-label="Ajouter un joueur"
         >
           +
@@ -83,7 +83,7 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
       {/* Informations utiles */}
       <div className="bg-gradient-to-r from-primary/5 to-secondary/5 rounded-xl p-3 sm:p-4 mx-2">
         <p className="text-xs sm:text-sm text-neutral-600">
-          <strong>💡 Conseil :</strong> Le Dutch est plus amusant avec 3-4 joueurs pour des parties équilibrées
+          <strong>Conseil :</strong> Le Dutch est plus amusant avec 3-4 joueurs pour des parties équilibrées
         </p>
       </div>
 
@@ -95,7 +95,7 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
         className="w-full py-3 sm:py-4 text-base sm:text-lg font-bold touch-target min-h-[48px]"
         aria-label={`Continuer avec ${playerCount} ${playerCount === 1 ? 'joueur' : 'joueurs'}`}
       >
-        Continuer avec {playerCount} {playerCount === 1 ? 'joueur' : 'joueurs'} 🚀
+        Continuer avec {playerCount} {playerCount === 1 ? 'joueur' : 'joueurs'}
       </UnifiedButton>
     </UnifiedCard>;
 };
