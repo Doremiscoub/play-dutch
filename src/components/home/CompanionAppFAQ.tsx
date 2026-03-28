@@ -66,7 +66,7 @@ const CompanionAppFAQ: React.FC = () => {
           transition={{ duration: 0.6, delay: 0.2 }}
           viewport={{ once: true }}
         >
-          <Card className="bg-white/90 backdrop-blur-xl border-0 shadow-xl">
+          <Card className="bg-white border border-border shadow-md">
             <CardContent className="p-8">
               <Accordion type="single" collapsible className="space-y-4">
                 {faqItems.map((item, index) => (

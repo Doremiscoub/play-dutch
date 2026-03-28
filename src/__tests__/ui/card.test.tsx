@@ -15,19 +15,19 @@ describe('Card Components', () => {
     it('renders with glass variant', () => {
       render(<Card variant="glass" data-testid="card">Glass Card</Card>);
       const card = screen.getByTestId('card');
-      expect(card).toHaveClass('glass-card', 'border-white/30');
+      expect(card).toHaveClass('bg-white/85', 'backdrop-blur-md', 'border-white/60');
     });
 
     it('renders with elevated variant', () => {
       render(<Card variant="elevated" data-testid="card">Elevated Card</Card>);
       const card = screen.getByTestId('card');
-      expect(card).toHaveClass('bg-white', 'shadow-lg', 'border-gray-200');
+      expect(card).toHaveClass('shadow-md');
     });
 
     it('renders with subtle variant', () => {
       render(<Card variant="subtle" data-testid="card">Subtle Card</Card>);
       const card = screen.getByTestId('card');
-      expect(card).toHaveClass('bg-gray-50/80', 'border-gray-200/50');
+      expect(card).toHaveClass('bg-muted/30');
     });
 
     it('applies custom className', () => {

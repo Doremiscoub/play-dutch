@@ -75,16 +75,16 @@ export const UI_CONFIG = {
   }
 };
 
-// Styles communs réutilisables - Style VisionOS
+// Styles communs réutilisables - V2 Clean
 export const COMMON_STYLES = {
-  mainButton: "rounded-2xl bg-white/70 backdrop-blur-xl border border-white/50 shadow-sm hover:bg-white/80 transition-all hover:-translate-y-0.5 active:translate-y-0.5 py-3 px-6 font-medium",
-  cardBase: "rounded-3xl bg-white/70 backdrop-blur-xl border border-white/50 shadow-sm p-5",
-  cardWithHover: "rounded-3xl bg-white/70 backdrop-blur-xl border border-white/50 shadow-sm p-5 transition-all hover:shadow-md hover:-translate-y-0.5 hover:bg-white/80",
-  iconButtonBase: 'rounded-full h-12 w-12 flex items-center justify-center bg-white/70 backdrop-blur-xl border border-white/50 shadow-sm hover:bg-white/80 transition-all hover:-translate-y-0.5 active:translate-y-0.5',
-  inputBase: "rounded-xl bg-white/70 backdrop-blur-xl border border-white/50 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-dutch-blue/20 transition-all",
+  mainButton: "rounded-xl bg-white border border-border shadow-sm hover:bg-accent/10 transition-all hover:-translate-y-0.5 active:translate-y-0.5 py-3 px-6 font-medium",
+  cardBase: "rounded-xl bg-white border border-border shadow-sm p-5",
+  cardWithHover: "rounded-xl bg-white border border-border shadow-sm p-5 transition-all hover:shadow-md hover:-translate-y-0.5",
+  iconButtonBase: 'rounded-full h-12 w-12 flex items-center justify-center bg-white border border-border shadow-sm hover:bg-accent/10 transition-all hover:-translate-y-0.5 active:translate-y-0.5',
+  inputBase: "rounded-xl bg-white border border-border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all",
   headingGradient: "bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent font-medium",
-  pageBackground: "min-h-screen w-full bg-gradient-to-b from-gray-50 to-white",
-  backgroundGrid: "bg-grid bg-opacity-10 bg-size-24",
+  pageBackground: "min-h-screen w-full bg-gradient-to-b from-slate-50 to-white",
+  backgroundGrid: "",
 };
 
 // Configuration pour le commentateur IA

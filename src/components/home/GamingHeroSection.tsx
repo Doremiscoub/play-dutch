@@ -19,7 +19,7 @@ const GamingHeroSection: React.FC = () => {
         {[...Array(2)].map((_, i) => (
           <motion.div
             key={`card-${i}`}
-            className="absolute w-16 h-22 bg-gradient-to-br from-white/80 to-white/60 rounded-lg border-2 border-white/40 shadow-lg backdrop-blur-sm"
+            className="absolute w-16 h-22 bg-white rounded-lg border-2 border-border shadow-lg"
             style={{
               left: `${20 + i * 60}%`,
               top: `${20 + i * 15}%`,
@@ -45,7 +45,7 @@ const GamingHeroSection: React.FC = () => {
         
         {/* Jeton vibrant (réduit) */}
         <motion.div
-          className="absolute w-12 h-12 rounded-full bg-gradient-to-br from-trinity-orange-400 to-trinity-orange-600 border-3 border-white/60 shadow-xl"
+          className="absolute w-12 h-12 rounded-full bg-gradient-to-br from-trinity-orange-400 to-trinity-orange-600 border-3 border-border shadow-xl"
           style={{
             right: '15%',
             top: '35%',
@@ -107,7 +107,7 @@ const GamingHeroSection: React.FC = () => {
           transition={{ delay: 0.4 }}
           className="mb-4"
         >
-          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-trinity-blue-500 to-trinity-purple-500 text-white px-6 py-3 rounded-full font-black text-sm shadow-lg border-2 border-white/40">
+          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-trinity-blue-500 to-trinity-purple-500 text-white px-6 py-3 rounded-full font-black text-sm shadow-lg border-2 border-border">
             📱 Application Compagnon
           </div>
         </motion.div>
@@ -198,11 +198,11 @@ const GamingHeroSection: React.FC = () => {
             transition={{ duration: 0.6, delay: 1 }}
             className="flex justify-center items-center gap-8 flex-wrap"
           >
-            <div className="flex items-center gap-3 bg-white/95 backdrop-blur-xl rounded-full px-8 py-4 border-3 border-trinity-orange-300 shadow-lg">
+            <div className="flex items-center gap-3 bg-white rounded-full px-8 py-4 border-3 border-trinity-orange-300 shadow-lg">
               <Star className="h-6 w-6 text-trinity-orange-600" />
               <span className="text-neutral-800 font-black text-lg">2,500+ joueurs</span>
             </div>
-            <div className="flex items-center gap-3 bg-white/95 backdrop-blur-xl rounded-full px-8 py-4 border-3 border-trinity-purple-300 shadow-lg">
+            <div className="flex items-center gap-3 bg-white rounded-full px-8 py-4 border-3 border-trinity-purple-300 shadow-lg">
               <Zap className="h-6 w-6 text-trinity-purple-600" />
               <span className="text-neutral-800 font-black text-lg">100% gratuit</span>
             </div>

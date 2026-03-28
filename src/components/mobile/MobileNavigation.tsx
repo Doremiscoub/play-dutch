@@ -1,6 +1,5 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { Home, Users, History, Settings, BookOpen } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useNavigationVisibility } from '@/hooks/useNavigationVisibility';
@@ -14,61 +13,56 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { id: 'home', icon: Home, label: 'Accueil', path: '/' },
-  { id: 'multiplayer', icon: Users, label: 'Multijoueur', path: '/multiplayer' },
+  { id: 'multiplayer', icon: Users, label: 'Multi', path: '/multiplayer' },
   { id: 'history', icon: History, label: 'Historique', path: '/history' },
   { id: 'rules', icon: BookOpen, label: 'Règles', path: '/rules' },
-  { id: 'settings', icon: Settings, label: 'Paramètres', path: '/settings' }
+  { id: 'settings', icon: Settings, label: 'Réglages', path: '/settings' }
 ];
 
 const MobileNavigation: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { showMobileNav, mobileNavBottomOffset } = useNavigationVisibility();
+  const { showMobileNav } = useNavigationVisibility();
 
   if (!showMobileNav) return null;
 
   return (
-    <motion.nav
-      initial={{ y: 100 }}
-      animate={{ y: 0 }}
-      className="mobile-navigation fixed bottom-0 left-0 right-0 md:hidden"
-      style={{ bottom: mobileNavBottomOffset }}
-    >
-      <div className="glass-morphism border-t border-white/20 backdrop-blur-xl bg-white/10">
-        <div className="flex items-center justify-around px-2 py-2">
+    <nav className="fixed bottom-0 left-0 right-0 md:hidden z-50">
+      <div className="bg-white/95 backdrop-blur-md border-t border-border shadow-[0_-1px_3px_rgba(0,0,0,0.05)]">
+        {/* Safe area bottom for iOS */}
+        <div className="flex items-center justify-around px-1 pt-1.5 pb-[max(0.375rem,env(safe-area-inset-bottom))]">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = location.pathname === item.path;
-            
+
             return (
-              <motion.button
+              <button
                 key={item.id}
                 onClick={() => navigate(item.path)}
                 className={cn(
-                  'flex flex-col items-center justify-center p-2 rounded-xl',
-                  'min-w-[60px] transition-all duration-200',
+                  'flex flex-col items-center justify-center py-1.5 px-2 rounded-lg min-w-[56px]',
+                  'transition-colors duration-150',
                   isActive
-                    ? 'text-primary bg-primary/10'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-white/5'
+                    ? 'text-primary'
+                    : 'text-muted-foreground active:text-foreground'
                 )}
-                whileTap={{ scale: 0.95 }}
               >
-                <Icon className={cn('w-5 h-5 mb-1', isActive && 'text-primary')} />
-                <span className="text-xs font-medium">{item.label}</span>
-                
+                <Icon className={cn('w-5 h-5', isActive && 'text-primary')} />
+                <span className={cn(
+                  'text-[10px] mt-0.5 leading-tight',
+                  isActive ? 'font-semibold' : 'font-medium'
+                )}>
+                  {item.label}
+                </span>
                 {isActive && (
-                  <motion.div
-                    layoutId="activeIndicator"
-                    className="absolute -top-0.5 left-1/2 w-1 h-1 bg-primary rounded-full"
-                    style={{ x: '-50%' }}
-                  />
+                  <div className="w-4 h-0.5 bg-primary rounded-full mt-0.5" />
                 )}
-              </motion.button>
+              </button>
             );
           })}
         </div>
       </div>
-    </motion.nav>
+    </nav>
   );
 };
 

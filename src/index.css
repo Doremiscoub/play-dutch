@@ -1,133 +1,57 @@
 @import url('./styles/base.css');
 @import url('./styles/theme.css');
-@import url('./styles/glass.css');
-@import url('./styles/legacy-glass.css');
 @import url('./styles/animations.css');
-@import url('./styles/enhanced-glassmorphism.css');
-@import url('./styles/enhanced-animations.css');
 @import url('./styles/z-index-system.css');
-@import url('./styles/vision-components.css');
-@import url('./styles/typography.css');
-@import url('./styles/design-system-classes.css');
 @import url('./styles/mobile-optimizations.css');
-@import url('./styles/mobile-width-optimization.css');
 
-/* Mobile-first optimizations */
-@media (max-width: 380px) {
-  .container {
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
-  
-  /* Ensure minimum touch targets */
-  button, [role="button"], input, select, textarea {
-    min-height: 44px;
-  }
-  
-  /* Prevent zoom on focus for iOS */
-  input, select, textarea {
-    font-size: 16px;
-  }
-}
+/* ============================================================
+   PLAYDUTCH V2 — SINGLE SOURCE OF TRUTH
+   Design tokens, utilities, and component classes
+   ============================================================ */
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* ── CSS VARIABLES ─────────────────────────────────────────── */
 
-/* Variables CSS unifiées selon la nomenclature Dutch */
 :root {
-  /* === SHADCN UI BASE TOKENS === */
+  /* === SHADCN SEMANTIC TOKENS === */
   --background: 0 0% 100%;
-  --foreground: 222 84% 5%;
+  --foreground: 222 47% 11%;
   --card: 0 0% 100%;
-  --card-foreground: 222 84% 5%;
+  --card-foreground: 222 47% 11%;
   --popover: 0 0% 100%;
-  --popover-foreground: 222 84% 5%;
+  --popover-foreground: 222 47% 11%;
   --primary: 221 83% 53%;
-  --primary-foreground: 210 40% 98%;
-  --secondary: 258 90% 66%;
-  --secondary-foreground: 210 40% 98%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 210 40% 96%;
+  --secondary-foreground: 222 47% 11%;
   --muted: 210 40% 96%;
   --muted-foreground: 215 16% 47%;
   --accent: 25 95% 53%;
-  --accent-foreground: 210 40% 98%;
+  --accent-foreground: 0 0% 100%;
   --destructive: 0 84% 60%;
-  --destructive-foreground: 210 40% 98%;
+  --destructive-foreground: 0 0% 100%;
   --border: 214 32% 91%;
   --input: 214 32% 91%;
   --ring: 221 83% 53%;
-  --radius: 1.5rem;
-  
-  /* === DUTCH TRINITY - COULEURS PRIMAIRES === */
-  --dutch-blue: 221 83% 53%;      /* Bleu iOS moderne #0A84FF */
-  --dutch-purple: 258 90% 66%;    /* Violet gaming #8B5CF6 */
-  --dutch-orange: 25 95% 53%;     /* Orange énergique #FF9F0A */
-  --dutch-green: 142 71% 45%;     /* Vert success #30D158 */
-  --dutch-red: 0 84% 60%;         /* Rouge erreur #FF453A */
-  
-  /* === VARIATIONS TRINITY === */
-  /* Bleu - Variations sémantiques */
-  --trinity-blue-50: 221 100% 97%;
-  --trinity-blue-500: 221 83% 53%;
-  --trinity-blue-900: 221 90% 15%;
-  
-  /* Violet - Variations gaming */
-  --trinity-purple-50: 258 100% 97%;
-  --trinity-purple-500: 258 90% 66%;
-  --trinity-purple-900: 258 95% 18%;
-  
-  /* Orange - Variations énergie */
-  --trinity-orange-50: 25 100% 97%;
-  --trinity-orange-100: 25 95% 90%;
-  --trinity-orange-500: 25 95% 53%;
-  --trinity-orange-600: 25 85% 45%;
-  --trinity-orange-900: 25 100% 15%;
-  
-  /* Vert - Variations success */
-  --trinity-green-50: 142 100% 97%;
-  --trinity-green-100: 142 85% 90%;
-  --trinity-green-500: 142 71% 45%;
-  --trinity-green-600: 142 71% 40%;
-  --trinity-green-700: 142 71% 35%;
-  --trinity-green-900: 142 85% 15%;
-  
-  /* Rouge - Variations erreur */
-  --trinity-red-50: 0 100% 97%;
-  --trinity-red-100: 0 95% 90%;
-  --trinity-red-500: 0 84% 60%;
-  --trinity-red-600: 0 84% 55%;
-  --trinity-red-700: 0 84% 50%;
-  --trinity-red-900: 0 85% 15%;
-  
-  /* === GLASSMORPHISME VISIONOS === */
-  --glass-ultra-light: rgba(255, 255, 255, 0.9);
-  --glass-light: rgba(255, 255, 255, 0.8);
-  --glass-medium: rgba(255, 255, 255, 0.7);
-  --glass-heavy: rgba(255, 255, 255, 0.6);
-  --glass-dark: rgba(255, 255, 255, 0.5);
-  
-  /* Bordures glassmorphisme */
-  --glass-border-light: rgba(255, 255, 255, 0.6);
-  --glass-border-medium: rgba(255, 255, 255, 0.4);
-  --glass-border-heavy: rgba(255, 255, 255, 0.2);
-  
-  /* === OMBRES SYSTÈME === */
-  --shadow-glass: 0 8px 32px rgba(31, 38, 135, 0.15);
-  --shadow-glass-lg: 0 16px 50px rgba(31, 38, 135, 0.2);
-  --shadow-trinity: 0 10px 30px hsla(var(--dutch-blue), 0.1), 0 20px 50px hsla(var(--dutch-purple), 0.1);
-  
-  /* === GRADIENTS DUTCH === */
-  --gradient-trinity: linear-gradient(135deg, hsl(var(--dutch-blue)), hsl(var(--dutch-purple)), hsl(var(--dutch-orange)));
-  --gradient-glass: linear-gradient(135deg, var(--glass-light), var(--glass-medium));
-  --gradient-gaming: linear-gradient(135deg, hsl(var(--dutch-purple)), hsl(var(--dutch-blue)));
-  
-  /* === SEMANTIC COLORS === */
-  --success: var(--dutch-green);
+  --radius: 0.75rem;
+
+  /* === DUTCH BRAND COLORS === */
+  --dutch-blue: 221 83% 53%;
+  --dutch-purple: 258 90% 66%;
+  --dutch-orange: 25 95% 53%;
+  --dutch-green: 142 71% 45%;
+  --dutch-red: 0 84% 60%;
+
+  /* === SEMANTIC STATES === */
+  --success: 142 71% 45%;
   --warning: 45 95% 53%;
-  --error: 0 85% 60%;
-  --info: var(--dutch-blue);
-  
-  /* === SIDEBAR TOKENS === */
+  --error: 0 84% 60%;
+  --info: 221 83% 53%;
+
+  /* === TYPOGRAPHY === */
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+
+  /* === SIDEBAR (shadcn) === */
   --sidebar-background: 0 0% 98%;
   --sidebar-foreground: 240 5% 26%;
   --sidebar-primary: 240 6% 10%;
@@ -136,58 +60,29 @@
   --sidebar-accent-foreground: 240 6% 10%;
   --sidebar-border: 220 13% 91%;
   --sidebar-ring: 221 83% 53%;
-  
-  /* === TYPOGRAPHY SCALE === */
-  --font-display: 'Space Grotesk', 'Inter', -apple-system, system-ui, sans-serif;
-  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-  --font-gaming: 'Orbitron', 'Space Grotesk', system-ui, sans-serif;
-  
-  /* === SPACING HARMONY === */
-  --space-section: 6rem;
-  --space-component: 3rem;
-  --space-element: 1.5rem;
-  --space-micro: 0.75rem;
 }
 
 .dark {
-  /* === MODE SOMBRE DUTCH === */
-  --background: 222 84% 5%;
+  --background: 222 47% 6%;
   --foreground: 210 40% 98%;
-  --card: 222 84% 5%;
+  --card: 222 47% 8%;
   --card-foreground: 210 40% 98%;
-  --popover: 222 84% 5%;
+  --popover: 222 47% 8%;
   --popover-foreground: 210 40% 98%;
   --primary: 221 83% 60%;
-  --primary-foreground: 222 84% 5%;
+  --primary-foreground: 0 0% 100%;
   --secondary: 217 33% 18%;
   --secondary-foreground: 210 40% 98%;
   --muted: 217 33% 18%;
   --muted-foreground: 215 20% 65%;
-  --accent: 217 33% 18%;
-  --accent-foreground: 210 40% 98%;
+  --accent: 25 95% 58%;
+  --accent-foreground: 0 0% 100%;
   --destructive: 0 63% 31%;
   --destructive-foreground: 210 40% 98%;
   --border: 217 33% 18%;
   --input: 217 33% 18%;
-  --ring: 224 76% 94%;
-  
-  /* === GLASSMORPHISME SOMBRE === */
-  --glass-ultra-light: rgba(30, 30, 30, 0.9);
-  --glass-light: rgba(30, 30, 30, 0.8);
-  --glass-medium: rgba(30, 30, 30, 0.7);
-  --glass-heavy: rgba(30, 30, 30, 0.6);
-  --glass-dark: rgba(30, 30, 30, 0.5);
-  
-  /* Bordures sombres */
-  --glass-border-light: rgba(255, 255, 255, 0.2);
-  --glass-border-medium: rgba(255, 255, 255, 0.1);
-  --glass-border-heavy: rgba(255, 255, 255, 0.05);
-  
-  /* Ombres mode sombre */
-  --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.3);
-  --shadow-glass-lg: 0 16px 50px rgba(0, 0, 0, 0.4);
-  
-  /* === SIDEBAR SOMBRE === */
+  --ring: 221 83% 60%;
+
   --sidebar-background: 240 6% 10%;
   --sidebar-foreground: 240 5% 96%;
   --sidebar-primary: 224 76% 94%;
@@ -198,6 +93,8 @@
   --sidebar-ring: 221 83% 60%;
 }
 
+/* ── GLOBAL STYLES ─────────────────────────────────────────── */
+
 * {
   border-color: hsl(var(--border));
 }
@@ -205,169 +102,227 @@
 body {
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
+  font-family: var(--font-body);
   font-feature-settings: "rlig" 1, "calt" 1;
-}
-
-/* Amélioration de la performance de rendu des polices */
-* {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Support des polices variables */
-@supports (font-variation-settings: normal) {
-  body {
-    font-family: 'SF Pro Text Variable', 'SF Pro Display Variable', system-ui, sans-serif;
-  }
+/* ── UTILITY CLASSES ───────────────────────────────────────── */
+
+/* Display font */
+.text-display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
 }
 
-/* ========== TRINITY CLASSES CRITICAL FIX ========== */
-/* Classes critiques manquantes qui causent l'invisibilité */
-.text-trinity {
-  color: hsl(var(--foreground));
-  font-weight: 800;
+/* Trinity gradient text */
+.text-gradient-trinity {
+  background: linear-gradient(135deg, hsl(var(--dutch-blue)), hsl(var(--dutch-purple)), hsl(var(--dutch-orange)));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-.btn-glass-trinity {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.8);
-  color: hsl(var(--foreground));
+/* Trinity gradient background */
+.bg-gradient-trinity {
+  background: linear-gradient(135deg, hsl(var(--dutch-blue)), hsl(var(--dutch-purple)), hsl(var(--dutch-orange)));
+}
+
+/* ── COMPONENT CLASSES ─────────────────────────────────────── */
+
+/* Primary button */
+.btn-primary {
+  background: hsl(var(--dutch-blue));
+  color: white;
+  font-weight: 600;
+  border-radius: var(--radius);
   transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+.btn-primary:hover {
+  background: hsl(221, 83%, 46%);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+  transform: translateY(-1px);
+}
+.btn-primary:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
-.btn-glass-trinity:hover {
-  background: rgba(255, 255, 255, 0.8);
-  border-color: rgba(255, 255, 255, 0.9);
+/* Trinity gradient button */
+.btn-trinity {
+  background: linear-gradient(135deg, hsl(var(--dutch-blue)), hsl(var(--dutch-purple)));
+  color: white;
+  font-weight: 600;
+  border-radius: var(--radius);
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px hsla(var(--dutch-blue), 0.25);
+}
+.btn-trinity:hover {
+  box-shadow: 0 4px 16px hsla(var(--dutch-blue), 0.35);
   transform: translateY(-1px);
 }
 
-/* ========== KIDS BUTTONS COLORÉS ========== */
-.btn-kids-primary {
-  background: linear-gradient(135deg, hsl(221, 83%, 53%), hsl(258, 90%, 66%), hsl(25, 95%, 53%));
-  backdrop-filter: blur(10px);
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3), 0 0 20px rgba(147, 51, 234, 0.2);
+/* Glass card (used sparingly for overlays) */
+.card-glass {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: var(--radius);
 }
 
-.btn-kids-blue {
-  background: linear-gradient(135deg, hsl(221, 85%, 72%), hsl(221, 83%, 53%));
-  backdrop-filter: blur(10px);
-  border: 2px solid rgba(59, 130, 246, 0.4);
-  box-shadow: 0 8px 32px rgba(59, 130, 246, 0.4);
+/* Legacy compatibility classes (referenced by existing components) */
+.btn-glass-trinity {
+  background: linear-gradient(135deg, hsl(var(--dutch-blue)), hsl(var(--dutch-purple)));
+  color: white;
+  font-weight: 600;
+  border-radius: var(--radius);
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px hsla(var(--dutch-blue), 0.25);
+}
+.btn-glass-trinity:hover {
+  box-shadow: 0 4px 16px hsla(var(--dutch-blue), 0.35);
+  transform: translateY(-1px);
 }
 
-.btn-kids-purple {
-  background: linear-gradient(135deg, hsl(258, 85%, 75%), hsl(258, 90%, 66%));
-  backdrop-filter: blur(10px);
-  border: 2px solid rgba(147, 51, 234, 0.4);
-  box-shadow: 0 8px 32px rgba(147, 51, 234, 0.4);
+.btn-glass {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: var(--radius);
+  transition: all 0.2s ease;
 }
-
-.btn-kids-orange {
-  background: linear-gradient(135deg, hsl(25, 85%, 72%), hsl(25, 95%, 53%));
-  backdrop-filter: blur(10px);
-  border: 2px solid rgba(249, 115, 22, 0.4);
-  box-shadow: 0 8px 32px rgba(249, 115, 22, 0.4);
-}
-
-.btn-kids-lime {
-  background: linear-gradient(135deg, hsl(84, 75%, 65%), hsl(84, 75%, 45%));
-  backdrop-filter: blur(10px);
-  border: 2px solid rgba(132, 204, 22, 0.4);
-  box-shadow: 0 8px 32px rgba(132, 204, 22, 0.4);
-}
-
-.btn-kids-gaming {
-  background: linear-gradient(135deg, hsl(326, 75%, 60%), hsl(84, 75%, 45%), hsl(174, 70%, 45%));
-  backdrop-filter: blur(10px);
-  border: 2px solid rgba(236, 72, 153, 0.4);
-  box-shadow: 0 8px 32px rgba(236, 72, 153, 0.3), 0 0 20px rgba(132, 204, 22, 0.2);
-}
-
-.btn-kids-fun {
-  background: linear-gradient(135deg, hsl(326, 75%, 60%), hsl(84, 75%, 45%), hsl(174, 70%, 45%));
-  backdrop-filter: blur(10px);
-  border: 2px solid rgba(236, 72, 153, 0.4);
-  box-shadow: 0 8px 32px rgba(236, 72, 153, 0.3), 0 0 40px rgba(20, 184, 166, 0.2);
+.btn-glass:hover {
+  background: rgba(255, 255, 255, 0.95);
+  transform: translateY(-1px);
 }
 
 .btn-glass-colored {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(147, 51, 234, 0.3));
-  backdrop-filter: blur(15px);
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 8px 32px rgba(59, 130, 246, 0.2);
+  background: linear-gradient(135deg, hsla(var(--dutch-blue), 0.15), hsla(var(--dutch-purple), 0.15));
+  backdrop-filter: blur(12px);
+  border: 1px solid hsla(var(--dutch-blue), 0.2);
+  border-radius: var(--radius);
+  color: hsl(var(--foreground));
+  transition: all 0.2s ease;
+}
+.btn-glass-colored:hover {
+  background: linear-gradient(135deg, hsla(var(--dutch-blue), 0.25), hsla(var(--dutch-purple), 0.25));
 }
 
-/* ========== KIDS CARDS COLORÉES ========== */
-.card-kids-blue {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(59, 130, 246, 0.5));
-  backdrop-filter: blur(15px);
-  border: 2px solid rgba(59, 130, 246, 0.4);
-  box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3);
+/* Kids button legacy classes (kept for backward compat, simplified) */
+.btn-kids-primary {
+  background: linear-gradient(135deg, hsl(var(--dutch-blue)), hsl(var(--dutch-purple)));
+  color: white;
+  font-weight: 600;
+  border: none;
+  box-shadow: 0 2px 8px hsla(var(--dutch-blue), 0.3);
 }
 
-.card-kids-purple {
-  background: linear-gradient(135deg, rgba(147, 51, 234, 0.3), rgba(147, 51, 234, 0.5));
-  backdrop-filter: blur(15px);
-  border: 2px solid rgba(147, 51, 234, 0.4);
-  box-shadow: 0 8px 32px rgba(147, 51, 234, 0.3);
+.btn-kids-blue {
+  background: hsl(var(--dutch-blue));
+  color: white;
+  font-weight: 600;
+  border: none;
+  box-shadow: 0 2px 8px hsla(var(--dutch-blue), 0.3);
 }
 
-.card-kids-orange {
-  background: linear-gradient(135deg, rgba(249, 115, 22, 0.3), rgba(249, 115, 22, 0.5));
-  backdrop-filter: blur(15px);
-  border: 2px solid rgba(249, 115, 22, 0.4);
-  box-shadow: 0 8px 32px rgba(249, 115, 22, 0.3);
+.btn-kids-purple {
+  background: hsl(var(--dutch-purple));
+  color: white;
+  font-weight: 600;
+  border: none;
+  box-shadow: 0 2px 8px hsla(var(--dutch-purple), 0.3);
 }
 
-.card-kids-pink {
-  background: linear-gradient(135deg, rgba(236, 72, 153, 0.3), rgba(236, 72, 153, 0.5));
-  backdrop-filter: blur(15px);
-  border: 2px solid rgba(236, 72, 153, 0.4);
-  box-shadow: 0 8px 32px rgba(236, 72, 153, 0.3);
+.btn-kids-orange {
+  background: hsl(var(--dutch-orange));
+  color: white;
+  font-weight: 600;
+  border: none;
+  box-shadow: 0 2px 8px hsla(var(--dutch-orange), 0.3);
 }
 
-.card-kids-lime {
-  background: linear-gradient(135deg, rgba(132, 204, 22, 0.3), rgba(132, 204, 22, 0.5));
-  backdrop-filter: blur(15px);
-  border: 2px solid rgba(132, 204, 22, 0.4);
-  box-shadow: 0 8px 32px rgba(132, 204, 22, 0.3);
+.btn-kids-lime {
+  background: hsl(142, 71%, 45%);
+  color: white;
+  font-weight: 600;
+  border: none;
 }
 
-.card-kids-turquoise {
-  background: linear-gradient(135deg, rgba(20, 184, 166, 0.3), rgba(20, 184, 166, 0.5));
-  backdrop-filter: blur(15px);
-  border: 2px solid rgba(20, 184, 166, 0.4);
-  box-shadow: 0 8px 32px rgba(20, 184, 166, 0.3);
+.btn-kids-gaming {
+  background: linear-gradient(135deg, hsl(var(--dutch-blue)), hsl(var(--dutch-purple)));
+  color: white;
+  font-weight: 700;
+  border: none;
 }
 
-.card-glass-colored {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(147, 51, 234, 0.2));
-  backdrop-filter: blur(15px);
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 8px 32px rgba(59, 130, 246, 0.2);
+.btn-kids-fun {
+  background: linear-gradient(135deg, hsl(var(--dutch-blue)), hsl(var(--dutch-purple)), hsl(var(--dutch-orange)));
+  color: white;
+  font-weight: 700;
+  border: none;
 }
 
-/* ========== SHADOW EFFECTS COLORÉS ========== */
-.shadow-glow-blue {
-  box-shadow: 0 0 20px rgba(59, 130, 246, 0.6), 0 0 40px rgba(59, 130, 246, 0.3);
+/* Kids card legacy classes */
+.card-kids-blue { background: hsla(var(--dutch-blue), 0.08); border: 1px solid hsla(var(--dutch-blue), 0.15); }
+.card-kids-purple { background: hsla(var(--dutch-purple), 0.08); border: 1px solid hsla(var(--dutch-purple), 0.15); }
+.card-kids-orange { background: hsla(var(--dutch-orange), 0.08); border: 1px solid hsla(var(--dutch-orange), 0.15); }
+.card-kids-pink { background: hsla(326, 80%, 50%, 0.08); border: 1px solid hsla(326, 80%, 50%, 0.15); }
+.card-kids-lime { background: hsla(142, 71%, 45%, 0.08); border: 1px solid hsla(142, 71%, 45%, 0.15); }
+.card-kids-turquoise { background: hsla(174, 70%, 45%, 0.08); border: 1px solid hsla(174, 70%, 45%, 0.15); }
+.card-glass-colored { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(8px); border: 1px solid rgba(0, 0, 0, 0.06); }
+
+/* Glow shadows (simplified, less aggressive) */
+.shadow-glow-blue { box-shadow: 0 4px 16px hsla(var(--dutch-blue), 0.25); }
+.shadow-glow-purple { box-shadow: 0 4px 16px hsla(var(--dutch-purple), 0.25); }
+.shadow-glow-orange { box-shadow: 0 4px 16px hsla(var(--dutch-orange), 0.25); }
+.shadow-glow-rainbow { box-shadow: 0 4px 16px hsla(var(--dutch-blue), 0.15), 0 4px 16px hsla(var(--dutch-purple), 0.15); }
+.shadow-glow-lime { box-shadow: 0 4px 16px hsla(142, 71%, 45%, 0.25); }
+
+/* ── LIQUID GLASS LEGACY COMPAT ────────────────────────────── */
+/* Minimal stubs so existing components don't break */
+
+.lg-header, .lg-toolbar, .lg-card, .lg-sheet, .lg-overlay, .lg-popover { /* no-op, handled by component styles */ }
+.lg-ultrathin, .lg-thin, .lg-regular, .lg-thick { /* no-op */ }
+.lg-tint-primary-50, .lg-tint-primary-70, .lg-tint-secondary-70, .lg-tint-accent-60 { /* no-op */ }
+.lg-opacity-30, .lg-opacity-40, .lg-opacity-50, .lg-opacity-60, .lg-opacity-70, .lg-opacity-80 { /* no-op */ }
+.lg-elevation-01, .lg-elevation-02, .lg-elevation-03, .lg-elevation-04 { /* no-op */ }
+.lg-hover-state { transition: all 0.2s ease; }
+
+/* ── GLASS MORPHISM (kept minimal) ─────────────────────────── */
+
+.glass-morphism {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
-.shadow-glow-purple {
-  box-shadow: 0 0 20px rgba(147, 51, 234, 0.6), 0 0 40px rgba(147, 51, 234, 0.3);
+.glass-light { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(8px); }
+.glass-medium { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); }
+.glass-heavy { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(16px); }
+
+/* ── ACCESSIBILITY ─────────────────────────────────────────── */
+
+/* Mobile touch targets */
+@media (max-width: 380px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  button, [role="button"], input, select, textarea {
+    min-height: 44px;
+  }
+  input, select, textarea {
+    font-size: 16px;
+  }
 }
 
-.shadow-glow-orange {
-  box-shadow: 0 0 20px rgba(249, 115, 22, 0.6), 0 0 40px rgba(249, 115, 22, 0.3);
-}
-
-.shadow-glow-rainbow {
-  box-shadow: 0 0 20px rgba(236, 72, 153, 0.4), 0 0 40px rgba(132, 204, 22, 0.3), 0 0 60px rgba(20, 184, 166, 0.2);
-}
-
-/* Skip links pour l'accessibilité */
+/* Skip links */
 .skip-links {
   position: fixed;
   top: -100px;
@@ -375,53 +330,44 @@ body {
   z-index: 9999;
   transition: all 0.3s ease;
 }
-
-.skip-links:focus-within {
-  top: 0;
-}
-
+.skip-links:focus-within { top: 0; }
 .skip-links a {
   position: absolute;
   transform: translateY(-100%);
   transition: transform 0.3s ease;
-  text-decoration: none;
-  border-radius: 0 0 8px 0;
-  font-weight: 500;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
-
 .skip-links a:focus {
   transform: translateY(0);
   outline: 2px solid white;
   outline-offset: 2px;
 }
 
-/* Navigation au clavier */
+/* Keyboard navigation */
 .keyboard-nav *:focus,
 .keyboard-focus {
-  outline: 2px solid #0066cc !important;
+  outline: 2px solid hsl(var(--dutch-blue)) !important;
   outline-offset: 2px;
-  box-shadow: 0 0 0 4px rgba(0, 102, 204, 0.2);
+  box-shadow: 0 0 0 4px hsla(var(--dutch-blue), 0.2);
 }
 
-/* Réduction de mouvement */
-.reduce-motion *,
-.reduce-motion *::before,
-.reduce-motion *::after {
-  animation-duration: 0.01ms !important;
-  animation-iteration-count: 1 !important;
-  transition-duration: 0.01ms !important;
-  scroll-behavior: auto !important;
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
-/* Améliorer le contraste pour les éléments interactifs */
+/* High contrast */
 @media (prefers-contrast: high) {
   button, .button, a {
     border: 2px solid currentColor;
   }
 }
 
-/* Styles pour les lecteurs d'écran */
+/* Screen reader only */
 .sr-only {
   position: absolute;
   width: 1px;
@@ -432,27 +378,4 @@ body {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
-}
-
-.sr-only:focus,
-.sr-only:active {
-  position: static;
-  width: auto;
-  height: auto;
-  padding: inherit;
-  margin: inherit;
-  overflow: visible;
-  clip: auto;
-  white-space: normal;
-}
-
-.focus\:not-sr-only:focus {
-  position: static !important;
-  width: auto !important;
-  height: auto !important;
-  padding: inherit !important;
-  margin: inherit !important;
-  overflow: visible !important;
-  clip: auto !important;
-  white-space: normal !important;
 }

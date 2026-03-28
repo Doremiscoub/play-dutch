@@ -23,7 +23,7 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
 }) => {
   const isMobile = useIsMobile();
   const [isExpanded, setIsExpanded] = useState(false);
-  
+
   // Utiliser la version mobile optimisée sur mobile
   if (isMobile) {
     return (
@@ -37,7 +37,7 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
       />
     );
   }
-  
+
   // Desktop uniquement à partir d'ici
   const isWinner = rank === 1;
   const _isLastPlace = rank === totalPlayers;
@@ -51,34 +51,34 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
   const getRankTheme = () => {
     const themes = {
       1: {
-        gradient: "from-amber-100 to-yellow-100",
-        border: "border-amber-300",
+        bg: "bg-amber-50",
+        border: "border-amber-200",
         text: "text-amber-700"
       },
       2: {
-        gradient: "from-blue-100 to-cyan-100",
-        border: "border-blue-300",
+        bg: "bg-blue-50",
+        border: "border-blue-200",
         text: "text-blue-700"
       },
       3: {
-        gradient: "from-green-100 to-emerald-100",
-        border: "border-green-300",
+        bg: "bg-green-50",
+        border: "border-green-200",
         text: "text-emerald-700"
       },
       4: {
-        gradient: "from-purple-100 to-violet-100",
-        border: "border-purple-300",
+        bg: "bg-purple-50",
+        border: "border-purple-200",
         text: "text-purple-700"
       },
       5: {
-        gradient: "from-rose-100 to-pink-100",
-        border: "border-rose-300",
+        bg: "bg-rose-50",
+        border: "border-rose-200",
         text: "text-rose-700"
       }
     };
     return themes[rank as keyof typeof themes] || {
-      gradient: "from-slate-100 to-gray-100",
-      border: "border-slate-300",
+      bg: "bg-slate-50",
+      border: "border-slate-200",
       text: "text-slate-700"
     };
   };
@@ -89,10 +89,10 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
   };
   return <motion.div className={cn(
     "relative rounded-2xl border-2 transition-all duration-200 cursor-pointer overflow-hidden",
-    `bg-gradient-to-br ${theme.gradient}`,
+    theme.bg,
     theme.border,
-    "shadow-lg",
-    isSelected || isExpanded ? "ring-2 ring-purple-400/60 scale-[1.01] z-10" : "hover:scale-[1.005] hover:-translate-y-1"
+    "shadow-sm",
+    isSelected || isExpanded ? "ring-2 ring-purple-300 scale-[1.01] z-10" : "hover:shadow-md hover:-translate-y-0.5"
   )} onClick={handleCardClick} initial={{
     opacity: 0,
     y: 10
@@ -102,8 +102,6 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
   }} transition={{
     duration: 0.2,
     delay: rank * 0.02
-  }} whileHover={{
-    y: -2
   }} whileTap={{
     scale: 0.99
   }} layout>
@@ -119,8 +117,8 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
       delay: 0.3,
       type: "spring"
     }}>
-          <div className="bg-gradient-to-r from-yellow-400 to-orange-400 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-1">
-            <span className="inline-block animate-spin" style={{ animationDuration: '3s' }}>
+          <div className="bg-amber-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-sm flex items-center gap-1">
+            <span>
               👑
             </span>
             WINNER
@@ -133,21 +131,19 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
         <div className="flex items-center gap-6 mb-2 px-2">
           {/* Avatar & Rang */}
           <div className="flex items-center gap-3">
-            <motion.div 
+            <div
               className={cn(
-                "relative w-12 h-12 rounded-2xl border-2 border-white/60",
+                "relative w-12 h-12 rounded-2xl border-2 border-border",
                 "flex items-center justify-center font-black text-xl",
-                `bg-gradient-to-br ${theme.gradient}`,
+                theme.bg,
                 theme.text
               )}
-              whileHover={{ scale: 1.05 }}
-              transition={{ duration: 0.15 }}
             >
               {isWinner && (
-                <motion.div 
-                  className="absolute -top-2 -right-2 w-6 h-6 rounded-full 
-                             bg-gradient-to-r from-amber-400 to-yellow-500
-                             border-2 border-white shadow-lg
+                <motion.div
+                  className="absolute -top-2 -right-2 w-6 h-6 rounded-full
+                             bg-amber-500
+                             border-2 border-white shadow-sm
                              flex items-center justify-center text-xs"
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
@@ -156,67 +152,48 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
                   👑
                 </motion.div>
               )}
-              
+
               <span className="relative z-10">{rank}</span>
-            </motion.div>
-            
-            <div className="w-14 h-14 rounded-xl bg-white/80 backdrop-blur-sm border-2 border-white/60 shadow-lg flex items-center justify-center relative overflow-hidden transition-transform duration-150 hover:scale-105">
+            </div>
+
+            <div className="w-14 h-14 rounded-xl bg-white border-2 border-border shadow-sm flex items-center justify-center relative overflow-hidden">
               <span className="text-2xl">{player.emoji || '🎮'}</span>
             </div>
           </div>
 
           {/* Nom et score */}
           <div className="flex-1 min-w-0">
-            <motion.h3 className={cn("text-2xl font-black leading-tight break-words hyphens-auto bg-gradient-to-r from-current via-current to-current bg-clip-text", "drop-shadow-lg tracking-wide", theme.text)} initial={{
-            opacity: 0,
-            x: -10,
-            scale: 0.9
-          }} animate={{
-            opacity: 1,
-            x: 0,
-            scale: 1
-          }} whileHover={{
-            scale: 1.05,
-            x: 3
-          }} transition={{
-            type: "spring",
-            stiffness: 400,
-            damping: 15
-          }}>
+            <h3 className={cn("text-2xl font-black leading-tight break-words hyphens-auto tracking-wide", theme.text)}>
               <span className={isWinner ? "inline-block animate-pulse" : ""}>
                 {isWinner && '👑 '}{player.name}
               </span>
-            </motion.h3>
-            <div className="flex items-center gap-2 text-sm text-gray-600 mb-2">
+            </h3>
+            <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
               <span>🎯 {player.rounds.length} manches</span>
               {dutchCount > 0 && <span className="text-orange-600">🏆 {dutchCount}</span>}
             </div>
-            
+
             {/* Bouton d'expansion minimaliste */}
-            <motion.button className={cn(
+            <button className={cn(
               "group/btn mt-1 px-2 py-1.5 rounded-lg text-xs font-medium cursor-pointer",
-              "border border-white/30 backdrop-blur-sm bg-white/50",
-              "hover:border-white/50 hover:bg-white/60 active:scale-95",
+              "border border-border bg-white",
+              "hover:bg-gray-50 active:scale-95",
               "transition-all duration-200 flex items-center gap-1.5",
               theme.text
-            )} whileHover={{
-              scale: 1.02
-            }} whileTap={{
-              scale: 0.98
-            }}>
+            )}>
               <motion.div
                 animate={isExpanded ? { rotate: 180 } : { rotate: 0 }}
                 transition={{ duration: 0.15, ease: "easeOut" }}
                 className="w-3 h-3 flex items-center justify-center"
               >
-                <svg 
-                  width="12" 
-                  height="12" 
-                  viewBox="0 0 24 24" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  strokeWidth="2.5" 
-                  strokeLinecap="round" 
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
                   strokeLinejoin="round"
                   className="opacity-70 group-hover/btn:opacity-90"
                 >
@@ -226,7 +203,7 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
               <span className="opacity-80 group-hover/btn:opacity-100">
                 {isExpanded ? 'Réduire' : 'Détails'}
               </span>
-            </motion.button>
+            </button>
           </div>
 
             {/* Score principal amélioré - Layout 2 colonnes */}
@@ -240,15 +217,13 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
           delay: 0.2,
           type: "spring",
           stiffness: 300
-        }} whileHover={{
-          scale: 1.05
         }}>
               {/* Score principal simplifié */}
               <div className="text-right">
                 <div className={cn("text-3xl font-black", theme.text)}>
                   {player.totalScore}
                 </div>
-                <div className="text-xs text-gray-600 mt-1">
+                <div className="text-xs text-muted-foreground mt-1">
                   📊 {avgScore} moy
                 </div>
               </div>
@@ -268,7 +243,7 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
           height: 0
         }} transition={{
           duration: 0.2
-        }} className="overflow-hidden border-t border-white/20 pt-3">
+        }} className="overflow-hidden border-t border-border pt-3">
               {/* Dernières manches */}
               <div className="mb-4">
                 <h4 className={cn("text-sm font-bold mb-2", theme.text)}>
@@ -300,12 +275,12 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
 
               {/* Stats détaillées simplifiées */}
               <div className="grid grid-cols-2 gap-2">
-                <div className="p-2 rounded-lg bg-white/50">
-                  <div className="text-xs text-gray-600">Meilleur</div>
+                <div className="p-2 rounded-lg bg-white">
+                  <div className="text-xs text-muted-foreground">Meilleur</div>
                   <div className={cn("font-bold text-sm", theme.text)}>{bestRound}</div>
                 </div>
-                <div className="p-2 rounded-lg bg-white/50">
-                  <div className="text-xs text-gray-600">Tendance</div>
+                <div className="p-2 rounded-lg bg-white">
+                  <div className="text-xs text-muted-foreground">Tendance</div>
                   <div className="text-sm">{hasPositiveTrend ? '📈' : '📊'}</div>
                 </div>
               </div>
@@ -317,11 +292,11 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
           }} animate={{
             opacity: 1,
             scale: 1
-          }} className="mt-3 p-3 bg-gradient-to-r from-yellow-100 to-orange-100 border border-yellow-300 rounded-xl text-center">
-                  <div className="flex items-center justify-center gap-2 text-yellow-700 font-bold text-sm">
+          }} className="mt-3 p-3 bg-amber-50 border border-amber-200 rounded-xl text-center">
+                  <div className="flex items-center justify-center gap-2 text-amber-700 font-bold text-sm">
                     <Trophy className="h-4 w-4" />
                     🎉 Champion de la partie !
-                    <span className="inline-block animate-spin" style={{ animationDuration: '2s' }}>
+                    <span>
                       ⭐
                     </span>
                   </div>

@@ -20,7 +20,7 @@ describe('Button Component', () => {
   it('renders with glass variant', () => {
     render(<Button variant="glass">Glass Button</Button>);
     const button = screen.getByRole('button', { name: /glass button/i });
-    expect(button).toHaveClass('bg-white/70', 'backdrop-blur-xl', 'border-white/50');
+    expect(button).toHaveClass('bg-white/85', 'backdrop-blur-md');
   });
 
   it('handles different sizes correctly', () => {

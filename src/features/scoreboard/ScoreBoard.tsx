@@ -53,9 +53,9 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({
     logger.warn('ScoreBoard: No players provided');
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center lg-card lg-tint-accent-60 rounded-xl p-8 lg-elevation-03 animate-lg-reveal">
-          <p className="text-white text-lg font-bold">Aucun joueur trouvé</p>
-          <p className="text-white/80 text-sm mt-2">Créez une nouvelle partie pour commencer</p>
+        <div className="bg-white rounded-xl border border-border shadow-sm p-8 text-center">
+          <p className="text-foreground text-lg font-bold">Aucun joueur trouvé</p>
+          <p className="text-muted-foreground text-sm mt-2">Créez une nouvelle partie pour commencer</p>
         </div>
       </div>
     );

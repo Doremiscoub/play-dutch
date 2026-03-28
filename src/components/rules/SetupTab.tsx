@@ -12,7 +12,7 @@ const SetupTab = () => {
       transition={{ duration: 0.6 }}
     >
       {/* Distribution des cartes */}
-      <Card className="bg-white/80 backdrop-blur-xl border-0 shadow-xl overflow-hidden">
+      <Card className="bg-white border border-border shadow-md overflow-hidden">
         <CardContent className="p-8">
           <div className="flex items-center gap-4 mb-6">
             <div className="bg-gradient-to-br from-trinity-purple-500 to-trinity-blue-500 rounded-2xl p-4 text-white">
@@ -43,7 +43,7 @@ const SetupTab = () => {
       </Card>
 
       {/* Placement des cartes */}
-      <Card className="bg-white/80 backdrop-blur-xl border-0 shadow-xl overflow-hidden">
+      <Card className="bg-white border border-border shadow-md overflow-hidden">
         <CardContent className="p-8">
           <div className="flex items-center gap-4 mb-6">
             <div className="bg-gradient-to-br from-trinity-orange-500 to-trinity-purple-500 rounded-2xl p-4 text-white">
@@ -69,7 +69,7 @@ const SetupTab = () => {
               </p>
             </div>
             
-            <div className="bg-white/80 rounded-xl p-4">
+            <div className="bg-white rounded-xl p-4">
               <h4 className="font-black text-gray-800 mb-2">💡 Astuce de placement :</h4>
               <p className="text-gray-700 font-semibold">
                 Gardez toujours le même ordre pour vos cartes ! Cela vous aidera à mémoriser leur position pendant la partie.
@@ -80,7 +80,7 @@ const SetupTab = () => {
       </Card>
 
       {/* Début de partie */}
-      <Card className="bg-white/80 backdrop-blur-xl border-0 shadow-xl overflow-hidden">
+      <Card className="bg-white border border-border shadow-md overflow-hidden">
         <CardContent className="p-8">
           <div className="flex items-center gap-4 mb-6">
             <div className="bg-gradient-to-br from-trinity-blue-500 to-trinity-orange-500 rounded-2xl p-4 text-white">

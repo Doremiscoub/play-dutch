@@ -10,7 +10,6 @@ import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import html2canvas from 'html2canvas';
 import { ReceiptCard } from '@/components/ui/receipt-card';
-import { DESIGN_TOKENS } from '@/design';
 
 export interface PodiumViewProps {
   players: Player[];
@@ -161,25 +160,14 @@ const PodiumView: React.FC<PodiumViewProps> = ({ players, onClose, isMultiplayer
       <ReceiptCard className="w-full max-w-xl bg-white p-8 mx-auto">
         <div className="text-center mb-8">
           <div className="flex justify-between items-center mb-4">
-            <Badge variant="outline" className="text-dutch-purple" style={{
-              backgroundColor: `${DESIGN_TOKENS.primitive.dutch.purple[500]}10`,
-              color: DESIGN_TOKENS.primitive.dutch.purple[500]
-            }}>
+            <Badge variant="outline" className="text-dutch-purple bg-purple-50">
               {isMultiplayer ? 'Partie multijoueur' : 'Partie locale'}
             </Badge>
-            <Badge variant="outline" className="text-dutch-blue" style={{
-              backgroundColor: `${DESIGN_TOKENS.primitive.dutch.blue[500]}10`,
-              color: DESIGN_TOKENS.primitive.dutch.blue[500]
-            }}>
+            <Badge variant="outline" className="text-dutch-blue bg-blue-50">
               {new Date().toLocaleDateString()}
             </Badge>
           </div>
-          <h2 className="text-2xl font-bold mb-2" style={{
-            background: DESIGN_TOKENS.gradients.trinity,
-            backgroundClip: 'text',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent'
-          }}>
+          <h2 className="text-2xl font-bold mb-2 bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange bg-clip-text text-transparent">
             Résultats de la partie
           </h2>
           <p className="text-gray-600">
@@ -300,7 +288,7 @@ const PodiumView: React.FC<PodiumViewProps> = ({ players, onClose, isMultiplayer
           <motion.div 
             className="mt-8 rounded-xl p-4 border border-white/50 text-center"
             style={{
-              background: `linear-gradient(to right, ${DESIGN_TOKENS.primitive.dutch.blue[500]}20, ${DESIGN_TOKENS.primitive.dutch.purple[500]}20)`
+              background: 'linear-gradient(to right, rgba(59,130,246,0.12), rgba(139,92,246,0.12))'
             }}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -314,8 +302,8 @@ const PodiumView: React.FC<PodiumViewProps> = ({ players, onClose, isMultiplayer
                   variant="outline" 
                   className="text-dutch-blue border-white/50 bg-white/50 hover:bg-white/80"
                   style={{
-                    color: DESIGN_TOKENS.primitive.dutch.blue[500],
-                    borderColor: `${DESIGN_TOKENS.primitive.dutch.blue[500]}20`
+                    color: 'hsl(221, 83%, 53%)',
+                    borderColor: 'hsl(221, 83%, 53%, 0.12)'
                   }}
                 >
                   <Share2 className="w-4 h-4 mr-2" />
@@ -325,9 +313,7 @@ const PodiumView: React.FC<PodiumViewProps> = ({ players, onClose, isMultiplayer
               <DialogContent className="rounded-2xl bg-white/90 backdrop-blur-md border border-white/50 shadow-lg">
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
-                    <h3 className="text-lg font-bold" style={{
-                      color: DESIGN_TOKENS.primitive.dutch.blue[500]
-                    }}>
+                    <h3 className="text-lg font-bold text-dutch-blue">
                       Partager les résultats
                     </h3>
                     <DialogClose asChild>
@@ -365,7 +351,7 @@ const PodiumView: React.FC<PodiumViewProps> = ({ players, onClose, isMultiplayer
                         
                         <Button 
                           className="text-white hover:opacity-90"
-                          style={{ background: DESIGN_TOKENS.gradients.kidsFun }}
+                          style={{ background: 'linear-gradient(135deg, #f472b6, #a3e635, #2dd4bf)' }}
                           onClick={() => handleShareOnSocial('instagram')}
                         >
                           <Instagram className="w-4 h-4 mr-2" />

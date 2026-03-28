@@ -11,7 +11,7 @@ const FloatingElements: React.FC = () => {
       {[...Array(6)].map((_, i) => (
         <motion.div
           key={i}
-          className="absolute w-24 h-24 rounded-full bg-gradient-to-br from-dutch-blue/20 to-dutch-purple/20 backdrop-blur-xl"
+          className="absolute w-24 h-24 rounded-full bg-gradient-to-br from-dutch-blue/20 to-dutch-purple/20"
           initial={{ 
             x: Math.random() * (typeof window !== 'undefined' ? window.innerWidth : 1920),
             y: Math.random() * (typeof window !== 'undefined' ? window.innerHeight : 1080),

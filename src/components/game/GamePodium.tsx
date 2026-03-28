@@ -12,21 +12,27 @@ interface GamePodiumProps {
 const GamePodium: React.FC<GamePodiumProps> = ({ players }) => {
   // Sort players by score (lowest = best)
   const sortedPlayers = [...players].sort((a, b) => a.totalScore - b.totalScore);
-  
+
   // Get top 3 players or fewer if we don't have 3
   const topPlayers = sortedPlayers.slice(0, Math.min(3, sortedPlayers.length));
-  
+
   // Create a map of positions for the podium
   const positions = [
     { order: 1, player: topPlayers[0], height: 'h-24', delay: 0.3 },
     { order: 2, player: topPlayers[1], height: 'h-16', delay: 0.1 },
     { order: 3, player: topPlayers[2], height: 'h-12', delay: 0.2 },
-  ].filter(pos => pos.player); // Filter out undefined players
-  
+  ].filter(pos => pos.player);
+
+  const podiumStyle = (order: number): string => {
+    if (order === 1) return 'bg-gradient-to-t from-amber-400 to-yellow-300';
+    if (order === 2) return 'bg-gradient-to-t from-gray-300 to-gray-200';
+    return 'bg-gradient-to-t from-amber-700 to-amber-500';
+  };
+
   return (
     <div className="my-8">
       <h3 className="text-lg font-medium text-gray-700 mb-6 text-center">Podium</h3>
-      
+
       <div className="flex items-end justify-center gap-1 h-32">
         {positions.map(({ order, player, height, delay }) => (
           <motion.div
@@ -34,14 +40,10 @@ const GamePodium: React.FC<GamePodiumProps> = ({ players }) => {
             className="flex flex-col items-center"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: delay, type: "spring", stiffness: 300, damping: 24 }}
+            transition={{ delay, duration: 0.4, ease: 'easeOut' }}
           >
-            {/* Joueur */}
-            <motion.div
-              className="w-20 mb-2 text-center"
-              whileHover={{ y: -5 }}
-              transition={{ type: "spring", stiffness: 300, damping: 10 }}
-            >
+            {/* Player info */}
+            <div className="w-20 mb-2 text-center">
               <div className="flex justify-center mb-1">
                 <PlayerRankBadge position={order} size="md" />
               </div>
@@ -54,18 +56,11 @@ const GamePodium: React.FC<GamePodiumProps> = ({ players }) => {
                   {player.totalScore}
                 </p>
               </div>
-            </motion.div>
-            
-            {/* Podium */}
+            </div>
+
+            {/* Podium block */}
             <motion.div
-              className={`w-16 ${height} bg-gradient-to-t rounded-t-lg shadow-md`}
-              style={{
-                backgroundImage: order === 1
-                  ? 'linear-gradient(to top, #ffd700, #ffc700)'
-                  : order === 2
-                    ? 'linear-gradient(to top, #c0c0c0, #e0e0e0)'
-                    : 'linear-gradient(to top, #cd7f32, #dda15e)'
-              }}
+              className={`w-16 ${height} ${podiumStyle(order)} rounded-t-lg shadow-md`}
               initial={{ scaleY: 0 }}
               animate={{ scaleY: 1 }}
               transition={{ delay: delay + 0.3, duration: 0.5 }}

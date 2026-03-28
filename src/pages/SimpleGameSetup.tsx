@@ -1,7 +1,6 @@
 
 import React, { useEffect, Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { useGameState } from '@/hooks/game/unified/useGameState';
 import { useTutorial } from '@/hooks/useTutorial';
 import { InteractiveTutorialV2 } from '@/components/tutorial/InteractiveTutorialV2';
@@ -23,15 +22,15 @@ const SimpleGameSetup: React.FC = () => {
   const headerConfig = useUnifiedHeader();
 
   useEffect(() => {
-    logger.debug('🔧 SimpleGameSetup MOUNTED');
+    logger.debug('SimpleGameSetup MOUNTED');
     return () => {
-      logger.debug('🔧 SimpleGameSetup UNMOUNTED');
+      logger.debug('SimpleGameSetup UNMOUNTED');
     };
   }, []);
 
   const handleStartGame = async (playerNames: string[]) => {
-    logger.debug('🎮 Starting game with players:', playerNames);
-    
+    logger.debug('Starting game with players:', playerNames);
+
     if (playerNames.length < 2) {
       toast.error('Il faut au moins 2 joueurs pour démarrer une partie');
       return;
@@ -39,7 +38,7 @@ const SimpleGameSetup: React.FC = () => {
 
     const success = await createGame(playerNames);
     if (success) {
-      logger.debug('✅ Game created successfully, navigating to /game');
+      logger.debug('Game created successfully, navigating to /game');
       navigate('/game', { replace: true, state: { fromSetup: true } });
     } else {
       toast.error('Erreur lors de la création de la partie');
@@ -62,63 +61,45 @@ const SimpleGameSetup: React.FC = () => {
     <PageShell variant="game">
       <MobileOptimizer pageType="setup" className="min-h-screen">
         <UnifiedHeader {...headerConfig} />
-        
-        {/* Gestionnaire de synchronisation - simplifié */}
-        {/* <GameSyncManager /> */}
 
-        {/* Contenu principal stabilisé */}
-        <div className="container mx-auto px-4 py-4 sm:py-8 max-w-4xl relative z-20">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          {/* Configuration directe - wizard 3 étapes */}
+        <div className="container mx-auto px-4 py-6 sm:py-10 max-w-4xl relative z-20 animate-in fade-in duration-300">
           <ModernGameSetup onStartGame={handleStartGame} />
 
-          {/* Informations sur le jeu */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.6 }}
-            className="mt-8"
-          >
-            <Card className="bg-gradient-to-r from-primary/5 to-secondary/5 border border-primary/20">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-lg font-bold text-neutral-800">Rappel des règles Dutch</h3>
-                  <Button
-                    onClick={startTutorial}
-                    variant="outline"
-                    size="sm"
-                    className="text-xs hover:scale-105 transition-transform"
-                  >
-                    <HelpCircle className="h-3 w-3 mr-1" />
-                    Guide interactif
-                  </Button>
+          <Card className="mt-8 bg-blue-50 border border-blue-100">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-display font-semibold text-neutral-800">
+                  Rappel des règles Dutch
+                </h3>
+                <Button
+                  onClick={startTutorial}
+                  variant="outline"
+                  size="sm"
+                  className="text-xs"
+                >
+                  <HelpCircle className="h-3 w-3 mr-1" />
+                  Guide interactif
+                </Button>
+              </div>
+              <div className="grid md:grid-cols-2 gap-4 text-sm text-neutral-600">
+                <div className="space-y-2">
+                  <p><strong>Objectif :</strong> Avoir le score le plus bas</p>
+                  <p><strong>Dutch :</strong> Joueur avec le score le plus bas de la manche</p>
                 </div>
-                <div className="grid md:grid-cols-2 gap-4 text-sm text-neutral-700">
-                  <div className="space-y-2">
-                    <p><strong>• Objectif :</strong> Avoir le score le plus bas</p>
-                    <p><strong>• Dutch :</strong> Joueur avec le score le plus bas de la manche</p>
-                  </div>
-                  <div className="space-y-2">
-                    <p><strong>• Fin de partie :</strong> Premier à atteindre 100 points</p>
-                    <p><strong>• Gagnant :</strong> Score total le plus bas</p>
-                  </div>
+                <div className="space-y-2">
+                  <p><strong>Fin de partie :</strong> Premier à atteindre 100 points</p>
+                  <p><strong>Gagnant :</strong> Score total le plus bas</p>
                 </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-        </motion.div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </MobileOptimizer>
 
-      {/* Tutorial interactif */}
       {!isLoading && (
         <Suspense fallback={null}>
-          <InteractiveTutorialV2 
-            isOpen={showTutorial} 
+          <InteractiveTutorialV2
+            isOpen={showTutorial}
             onClose={closeTutorial}
           />
         </Suspense>

@@ -105,7 +105,7 @@ const FooterSection: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="bg-gradient-to-r from-gray-800/50 to-gray-700/50 backdrop-blur-xl rounded-2xl p-8 mb-12 border border-gray-600"
+          className="bg-gradient-to-r from-gray-800 to-gray-700 rounded-2xl p-8 mb-12 border border-gray-600"
         >
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             {[

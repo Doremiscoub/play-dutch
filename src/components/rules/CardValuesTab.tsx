@@ -24,7 +24,7 @@ const CardValuesTab = () => {
       transition={{ duration: 0.6 }}
     >
       {/* Cartes spéciales */}
-      <Card className="bg-white/80 backdrop-blur-xl border-0 shadow-xl overflow-hidden">
+      <Card className="bg-white border border-border shadow-md overflow-hidden">
         <CardContent className="p-8">
           <div className="flex items-center gap-4 mb-6">
             <div className="bg-gradient-to-br from-trinity-purple-500 to-trinity-blue-500 rounded-2xl p-4 text-white">
@@ -64,7 +64,7 @@ const CardValuesTab = () => {
       </Card>
 
       {/* Cartes numériques */}
-      <Card className="bg-white/80 backdrop-blur-xl border-0 shadow-xl overflow-hidden">
+      <Card className="bg-white border border-border shadow-md overflow-hidden">
         <CardContent className="p-8">
           <div className="flex items-center gap-4 mb-6">
             <div className="bg-gradient-to-br from-trinity-orange-500 to-trinity-purple-500 rounded-2xl p-4 text-white">
@@ -88,7 +88,7 @@ const CardValuesTab = () => {
               <p className="text-xl font-bold text-gray-700">
                 Valeur = <span className="text-trinity-orange-600">Chiffre inscrit sur la carte</span>
               </p>
-              <div className="mt-4 bg-white/80 rounded-xl p-4">
+              <div className="mt-4 bg-white rounded-xl p-4">
                 <p className="text-gray-600 font-semibold">
                   Exemple : Un 7 de cœur = 7 points, un 3 de pique = 3 points
                 </p>
@@ -99,11 +99,11 @@ const CardValuesTab = () => {
       </Card>
 
       {/* Point important */}
-      <Card className="bg-gradient-to-br from-trinity-blue-600 to-trinity-purple-600 backdrop-blur-xl border-0 shadow-xl overflow-hidden relative">
+      <Card className="bg-gradient-to-br from-trinity-blue-600 to-trinity-purple-600 border-0 shadow-md overflow-hidden relative">
         <div className="absolute inset-0 bg-black/10" />
         <CardContent className="relative z-10 p-8">
           <div className="flex items-start gap-6">
-            <div className="bg-white/20 backdrop-blur-sm p-4 rounded-2xl border border-white/30">
+            <div className="bg-white/20 p-4 rounded-2xl border border-white/30">
               <Zap className="h-8 w-8 text-white" />
             </div>
             <div className="flex-1">

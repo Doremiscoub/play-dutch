@@ -19,47 +19,48 @@ import { useAds } from '@/contexts/EnhancedAdContext';
 import ProductionAdSlot from '@/components/ads/ProductionAdSlot';
 import AdPerformanceTracker from '@/components/ads/AdPerformanceTracker';
 import AdSenseMetrics from '@/components/ads/AdSenseMetrics';
-import { DESIGN_TOKENS } from '@/design';
 import { logger } from '@/utils/logger';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
-  const { showTutorial, closeTutorial, startTutorial, isLoading } = useTutorial();
+  const { showTutorial, closeTutorial, startTutorial: _startTutorial, isLoading } = useTutorial();
   const { shouldShowAds } = useAds();
 
-  // SEO optimisé
   const seoData = {
     title: 'Dutch Card Game - Application compagnon gratuite pour jeu de cartes avec IA',
-    description: 'Application compagnon pour vos parties de cartes Dutch réelles. Calculez automatiquement les scores, consultez les statistiques et amusez-vous avec le Professeur Cartouche ! Fonctionne hors-ligne, gratuit et sans inscription.',
-    keywords: 'dutch, application compagnon, cartes physiques, calculateur scores, professeur cartouche, IA commentateur, hors ligne, gratuit, soirée entre amis, compagnon de jeu'
+    description: 'Application compagnon pour vos parties de cartes Dutch réelles. Calculez automatiquement les scores, consultez les statistiques et amusez-vous avec le Professeur Cartouche !',
+    keywords: 'dutch, application compagnon, cartes physiques, calculateur scores, professeur cartouche, hors ligne, gratuit'
   };
-
   useSEO(seoData);
 
   const features = [
     {
-      icon: <div className="text-2xl">🃏</div>,
+      icon: <div className="text-xl">🃏</div>,
       title: "Compagnon de cartes",
       description: "Sortez vos cartes Dutch, on gère les scores !",
-      gradient: DESIGN_TOKENS.gradients.kidsOrange
+      color: "text-orange-600",
+      bg: "bg-orange-50",
     },
     {
-      icon: <Users className="h-6 w-6" />,
+      icon: <Users className="h-5 w-5" />,
       title: "2 à 10 joueurs",
       description: "Parfait pour vos tablées entre amis",
-      gradient: DESIGN_TOKENS.gradients.kidsBlue
+      color: "text-blue-600",
+      bg: "bg-blue-50",
     },
     {
-      icon: <Heart className="h-6 w-6" />,
+      icon: <Heart className="h-5 w-5" />,
       title: "100% hors-ligne",
       description: "Fonctionne sans internet ni inscription",
-      gradient: DESIGN_TOKENS.gradients.kidsPurple
+      color: "text-purple-600",
+      bg: "bg-purple-50",
     },
     {
-      icon: <Sparkles className="h-6 w-6" />,
+      icon: <Sparkles className="h-5 w-5" />,
       title: "IA Professeur Cartouche",
       description: "Commentaires intelligents en temps réel",
-      gradient: DESIGN_TOKENS.gradients.trinity
+      color: "text-green-600",
+      bg: "bg-green-50",
     }
   ];
 
@@ -67,83 +68,55 @@ const Home: React.FC = () => {
     <>
       <PageShell variant="default">
         <MobileOptimizer pageType="home" className="min-h-screen">
-          <UnifiedHeader 
+          <UnifiedHeader
             {...useUnifiedHeader({ hideTitle: true })}
           />
 
           <HomeLayout>
             <SimplifiedHeroSection />
 
-            {/* Ad optimisée après le hero */}
             {shouldShowAds && (
               <section className="py-4">
                 <ProductionAdSlot placement="homepage-hero" priority="high" />
               </section>
             )}
 
-            {/* Section Features Colorée */}
-            <section className="relative py-12 sm:py-20 px-2 sm:px-4 z-10">
-              <div className="w-full max-w-6xl mx-auto px-2 sm:px-4">
+            {/* Features Section */}
+            <section className="py-16 sm:py-20 px-4 sm:px-6">
+              <div className="w-full max-w-5xl mx-auto">
                 <motion.div
-                  initial={{ opacity: 0, y: 50 }}
+                  initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8 }}
+                  transition={{ duration: 0.5 }}
                   viewport={{ once: true }}
-                  className="text-center mb-16"
+                  className="text-center mb-12"
                 >
-                  <h2 className="text-4xl md:text-5xl font-black mb-6 leading-tight py-2" style={{
-                    background: DESIGN_TOKENS.gradients.trinity,
-                    backgroundClip: 'text',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent'
-                  }}>
-                    Votre Compagnon de Jeu Idéal
+                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold font-display mb-3 text-foreground">
+                    Votre compagnon de jeu idéal
                   </h2>
-                  <p className="text-xl text-neutral-700 font-bold max-w-3xl mx-auto">
-                    Sortez vos cartes Dutch physiques et laissez l'application s'occuper du reste !
+                  <p className="text-muted-foreground text-base sm:text-lg max-w-xl mx-auto">
+                    Sortez vos cartes Dutch et laissez l'application s'occuper du reste
                   </p>
                 </motion.div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 w-full">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
                   {features.map((feature, index) => (
                     <motion.div
                       key={index}
-                      initial={{ opacity: 0, y: 50, scale: 0.9 }}
-                      whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                      transition={{ duration: 0.6, delay: index * 0.15 }}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.4, delay: index * 0.1 }}
                       viewport={{ once: true }}
-                      whileHover={{ y: -10, scale: 1.05 }}
-                      className="group"
                     >
-                      <Card className="h-full bg-white/90 backdrop-blur-xl border-0 shadow-2xl hover:shadow-3xl transition-all duration-300 overflow-hidden relative">
-                        {/* Gradient de fond animé */}
-                        <motion.div
-                          className="absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity duration-300"
-                          style={{ background: feature.gradient }}
-                          animate={{
-                            scale: [1, 1.1, 1],
-                          }}
-                          transition={{
-                            duration: 4,
-                            repeat: Infinity,
-                            ease: "easeInOut",
-                            delay: index * 0.5
-                          }}
-                        />
-                        
-                        <CardContent className="relative z-10 p-4 sm:p-6 lg:p-8 text-center">
-                          <motion.div
-                            className="rounded-2xl w-20 h-20 flex items-center justify-center mx-auto mb-6 text-white shadow-lg group-hover:shadow-xl transition-shadow duration-300"
-                            style={{ background: feature.gradient }}
-                            whileHover={{ rotate: 360, scale: 1.2 }}
-                            transition={{ duration: 0.6 }}
-                          >
+                      <Card className="h-full hover:shadow-md transition-shadow duration-200">
+                        <CardContent className="p-5 sm:p-6 text-center">
+                          <div className={`${feature.bg} ${feature.color} rounded-xl w-12 h-12 flex items-center justify-center mx-auto mb-4`}>
                             {feature.icon}
-                          </motion.div>
-                          <h3 className="font-black text-xl text-gray-900 mb-3">
+                          </div>
+                          <h3 className="font-semibold text-foreground mb-1.5">
                             {feature.title}
                           </h3>
-                          <p className="text-gray-600 font-semibold">
+                          <p className="text-sm text-muted-foreground leading-relaxed">
                             {feature.description}
                           </p>
                         </CardContent>
@@ -154,101 +127,42 @@ const Home: React.FC = () => {
               </div>
             </section>
 
-            {/* CTA Final Ultra-Coloré */}
-            <section className="relative py-12 sm:py-20 px-2 sm:px-4 z-10">
+            {/* CTA Section */}
+            <section className="py-12 sm:py-16 px-4 sm:px-6">
               <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.8 }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
                 viewport={{ once: true }}
-                className="w-full max-w-4xl mx-auto px-2 sm:px-4"
+                className="w-full max-w-3xl mx-auto"
               >
-                <Card className="overflow-hidden relative" style={{
-                  background: DESIGN_TOKENS.gradients.trinity,
-                  backdropFilter: 'blur(16px)',
-                  border: '0',
-                  boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-                  color: 'white'
-                }}>
-                  {/* Overlay pour améliorer le contraste */}
-                  <div className="absolute inset-0 bg-black/20" />
-                  
-                  {/* Effets de particules dans le fond - réduits pour la lisibilité */}
-                  <div className="absolute inset-0 overflow-hidden">
-                    {[...Array(4)].map((_, i) => (
-                      <motion.div
-                        key={i}
-                        className="absolute w-2 h-2 bg-white/15 rounded-full"
-                        style={{
-                          left: `${Math.random() * 100}%`,
-                          top: `${Math.random() * 100}%`,
-                        }}
-                        animate={{
-                          y: [-20, 20, -20],
-                          opacity: [0.1, 0.3, 0.1],
-                          scale: [1, 1.2, 1]
-                        }}
-                        transition={{
-                          duration: 4 + i * 0.5,
-                          repeat: Infinity,
-                          ease: "easeInOut",
-                          delay: i * 0.5
-                        }}
-                      />
-                    ))}
-                  </div>
-                  
-                  <CardContent className="relative z-10 p-6 sm:p-8 lg:p-12 text-center">
-                    <motion.div
-                      initial={{ opacity: 0, y: 30 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.6 }}
-                      viewport={{ once: true }}
-                      className="space-y-8"
-                    >
-                      <div className="space-y-4">
-                        <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-white leading-tight">
-                          Prêt à accompagner votre première partie ?
-                        </h2>
-                        <p className="text-lg md:text-xl font-semibold text-white/90 max-w-2xl mx-auto leading-relaxed">
-                          Sortez vos cartes Dutch et lancez l'application compagnon !<br/>
-                          C'est gratuit, intelligent et sans inscription !
-                        </p>
-                      </div>
-                      
-                      <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
-                        <motion.div
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                        >
-                          <Button
-                            onClick={() => navigate('/setup')}
-                            size="xl"
-                            aria-label="Lancer une nouvelle partie"
-                            className="bg-white text-trinity-purple-900 hover:bg-trinity-purple-700 hover:text-white font-black text-lg px-8 py-4 shadow-xl rounded-2xl border-2 border-trinity-purple-200 transition-all duration-300 min-w-[200px]"
-                          >
-                            <Gamepad2 className="h-5 w-5 mr-2" />
-                            Nouvelle partie
-                          </Button>
-                        </motion.div>
-
-                        <motion.div
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                        >
-                          <Button
-                            onClick={() => navigate('/rules')}
-                            variant="outline"
-                            size="lg"
-                            aria-label="Voir les règles du jeu"
-                            className="border-2 border-white/80 text-white bg-white/10 hover:bg-white hover:text-trinity-purple-700 font-semibold text-base px-6 py-3 rounded-2xl backdrop-blur-sm transition-all duration-300 min-w-[140px]"
-                          >
-                            <BookOpen className="h-4 w-4 mr-2" />
-                            Voir les règles
-                          </Button>
-                        </motion.div>
-                      </div>
-                    </motion.div>
+                <Card className="overflow-hidden border-0 bg-gradient-to-br from-[hsl(221,83%,53%)] via-[hsl(258,90%,60%)] to-[hsl(258,90%,50%)] text-white shadow-lg">
+                  <CardContent className="p-8 sm:p-10 text-center">
+                    <h2 className="text-2xl sm:text-3xl font-bold font-display mb-3">
+                      Prêt à jouer ?
+                    </h2>
+                    <p className="text-white/80 text-base sm:text-lg mb-8 max-w-lg mx-auto">
+                      Sortez vos cartes Dutch et lancez l'application. C'est gratuit, intelligent et sans inscription.
+                    </p>
+                    <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                      <Button
+                        onClick={() => navigate('/setup')}
+                        size="xl"
+                        className="bg-white text-[hsl(258,90%,50%)] hover:bg-white/90 font-bold rounded-xl"
+                      >
+                        <Gamepad2 className="h-5 w-5" />
+                        Nouvelle partie
+                      </Button>
+                      <Button
+                        onClick={() => navigate('/rules')}
+                        variant="outline"
+                        size="lg"
+                        className="border-white/40 text-white bg-white/10 hover:bg-white/20 rounded-xl"
+                      >
+                        <BookOpen className="h-4 w-4" />
+                        Voir les règles
+                      </Button>
+                    </div>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -256,38 +170,35 @@ const Home: React.FC = () => {
 
             <LazyHomeSections navigate={navigate} />
 
-            {/* Bannière publicitaire finale */}
             {shouldShowAds && (
-              <section className="mt-16 mb-8">
+              <section className="mt-12 mb-8">
                 <ProductionAdSlot placement="stats-top" priority="low" />
               </section>
             )}
           </HomeLayout>
 
-          {/* Performance trackers invisibles */}
           <AdPerformanceTracker />
           <AdSenseMetrics />
 
-          {/* PWA Promotion Card */}
           <div className="container mx-auto px-4 pb-6">
-            <PWAPromotionCard 
+            <PWAPromotionCard
               onInstall={() => logger.debug('PWA Install triggered')}
               onDismiss={() => logger.debug('PWA Promo dismissed')}
             />
           </div>
         </MobileOptimizer>
-    </PageShell>
+      </PageShell>
 
-    {/* Tutorial interactif */}
-    {!isLoading && (
-      <Suspense fallback={null}>
-        <InteractiveTutorialV2 
-          isOpen={showTutorial} 
-          onClose={closeTutorial}
-        />
-      </Suspense>
-    )}
-  </>);
+      {!isLoading && (
+        <Suspense fallback={null}>
+          <InteractiveTutorialV2
+            isOpen={showTutorial}
+            onClose={closeTutorial}
+          />
+        </Suspense>
+      )}
+    </>
+  );
 };
 
 export default Home;

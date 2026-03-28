@@ -39,8 +39,8 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
   return (
     <motion.div
       className={cn(
-        "group relative rounded-3xl backdrop-blur-xl border shadow-lg transition-all duration-300 cursor-pointer overflow-hidden",
-        "bg-white/80 border-white/50 hover:bg-white/90 hover:shadow-xl",
+        "group relative rounded-xl border shadow-lg transition-all duration-300 cursor-pointer overflow-hidden",
+        "bg-white border-border hover:shadow-md",
         isExpanded ? "ring-2 ring-dutch-blue/20 shadow-xl" : "hover:scale-[1.01]"
       )}
       onClick={toggleExpansion}
@@ -57,20 +57,12 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      whileHover={{ y: -2 }}
     >
-      {/* Cercles décoratifs en arrière-plan */}
-      <div className="absolute inset-0 overflow-hidden rounded-3xl">
-        <div className="absolute -right-10 -top-10 w-40 h-40 bg-gradient-to-br from-dutch-purple/10 to-transparent rounded-full blur-2xl transform rotate-45 group-hover:scale-150 transition-transform duration-700" />
-        <div className="absolute -left-10 -bottom-10 w-40 h-40 bg-gradient-to-br from-dutch-blue/10 to-transparent rounded-full blur-2xl transform -rotate-45 group-hover:scale-150 transition-transform duration-700" />
-      </div>
-
       <div className="relative z-10 p-4">
         <div className="flex items-center gap-4">
           {/* Position Badge */}
           <motion.div
             className={getPositionBadgeClass(position)}
-            whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
             {position}
@@ -79,8 +71,8 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
           {/* Player emoji and name */}
           <div className="flex items-center gap-3 flex-1 min-w-0">
             <span className="text-2xl">{player.emoji || '😊'}</span>
-            <motion.h3 
-              className="text-xl font-bold bg-gradient-to-r from-dutch-purple to-dutch-blue bg-clip-text text-transparent truncate"
+            <motion.h3
+              className="text-xl font-bold text-foreground truncate"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
             >
@@ -90,14 +82,13 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
           
           {/* Score total */}
           <div className="flex items-center gap-2">
-            <motion.div 
+            <motion.div
               className={cn(
                 "px-4 py-2 rounded-xl font-bold text-2xl",
                 isNearThreshold ? "bg-dutch-orange/20 text-dutch-orange" :
                 isWinner ? "bg-dutch-purple/20 text-dutch-purple" :
                 "bg-gray-100"
               )}
-              whileHover={{ scale: 1.05 }}
               transition={{ type: "spring", stiffness: 400, damping: 10 }}
             >
               {player.totalScore}
@@ -156,7 +147,6 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: idx * 0.05 }}
-                        whileHover={{ scale: 1.1 }}
                       >
                         {round.score}
                       </motion.div>

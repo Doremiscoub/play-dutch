@@ -46,7 +46,7 @@ const ProfessorCartoucheSection: React.FC = () => {
                 }}
               />
               
-              <Card className="relative z-10 bg-white/90 backdrop-blur-xl border-0 shadow-3xl overflow-hidden">
+              <Card className="relative z-10 bg-white border border-border shadow-lg overflow-hidden">
                 <CardContent className="p-8">
                   <img 
                     src="/lovable-uploads/0532ef39-c77c-4480-8d74-7af7665596ee.png"
@@ -101,7 +101,7 @@ const ProfessorCartoucheSection: React.FC = () => {
                 whileHover={{ scale: 1.02, x: 10 }}
                 className="group"
               >
-                <Card className="bg-white/80 backdrop-blur-xl border-0 shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden">
+                <Card className="bg-white border border-border shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden">
                   <CardContent className="p-6 flex items-start gap-4">
                     <div className={`bg-gradient-to-br ${feature.gradient} rounded-2xl p-3 text-white shadow-lg group-hover:shadow-xl transition-shadow duration-300`}>
                       {feature.icon}

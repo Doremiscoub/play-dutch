@@ -1,13 +1,15 @@
 import React from 'react';
-import { UnifiedButton } from '@/components/ui/unified-button';
-import { UnifiedCard } from '@/components/ui/unified-card';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Minus, Plus } from 'lucide-react';
 import { MIN_PLAYERS, MAX_PLAYERS } from './types';
-import { DESIGN_TOKENS } from '@/design';
+
 interface PlayerCountStepProps {
   playerCount: number;
   onPlayerCountChange: (count: number) => void;
   onNext: () => void;
 }
+
 const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
   playerCount,
   onPlayerCountChange,
@@ -18,85 +20,77 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
       onPlayerCountChange(playerCount + 1);
     }
   };
+
   const decrementCount = () => {
     if (playerCount > MIN_PLAYERS) {
       onPlayerCountChange(playerCount - 1);
     }
   };
-  return <UnifiedCard variant="glass" padding="lg" className="text-center space-y-6 sm:space-y-8">
+
+  return (
+    <Card className="p-6 text-center space-y-6">
       <div>
-        <h2 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-3" style={{
-        background: DESIGN_TOKENS.gradients.trinity,
-        backgroundClip: 'text',
-        WebkitBackgroundClip: 'text',
-        WebkitTextFillColor: 'transparent'
-      }}>
+        <h2 className="text-xl sm:text-2xl font-display font-bold text-gray-900 mb-2">
           Combien de joueurs ?
         </h2>
-        <p className="text-neutral-600 text-base sm:text-lg px-2">
+        <p className="text-gray-500 text-base sm:text-lg">
           Choisissez le nombre de participants pour votre partie de Dutch
         </p>
       </div>
 
-      {/* Sélecteur de nombre de joueurs */}
+      {/* Player count selector */}
       <div className="flex items-center justify-center gap-6 sm:gap-8 px-4">
-        <UnifiedButton
-          variant="secondary"
-          size="lg"
+        <Button
+          variant="outline"
+          size="icon-lg"
           onClick={decrementCount}
           disabled={playerCount <= MIN_PLAYERS}
-          className="w-16 h-16 sm:w-[4.5rem] sm:h-[4.5rem] rounded-2xl text-white font-bold text-2xl sm:text-3xl touch-target min-h-[64px] shadow-lg hover:shadow-xl transition-all"
+          className="w-14 h-14 sm:w-16 sm:h-16 rounded-xl text-lg font-bold"
           aria-label="Retirer un joueur"
         >
-          -
-        </UnifiedButton>
+          <Minus className="h-5 w-5" />
+        </Button>
 
-        <div className="text-center flex-1 max-w-[140px] p-4">
-          <div className="text-6xl sm:text-8xl font-bold mb-2 sm:mb-3 leading-none" style={{
-          background: DESIGN_TOKENS.gradients.trinity,
-          backgroundClip: 'text',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent'
-        }}>
+        <div className="text-center flex-1 max-w-[140px] py-4">
+          <div className="text-6xl sm:text-7xl font-display font-bold text-blue-600 mb-1 leading-none">
             {playerCount}
           </div>
-          <div className="text-sm sm:text-base text-neutral-600 font-medium">
+          <div className="text-sm sm:text-base text-gray-500 font-medium">
             {playerCount === 1 ? 'joueur' : 'joueurs'}
           </div>
         </div>
 
-        <UnifiedButton
-          variant="secondary"
-          size="lg"
+        <Button
+          variant="outline"
+          size="icon-lg"
           onClick={incrementCount}
           disabled={playerCount >= MAX_PLAYERS}
-          className="w-16 h-16 sm:w-[4.5rem] sm:h-[4.5rem] rounded-2xl text-white font-bold text-2xl sm:text-3xl touch-target min-h-[64px] shadow-lg hover:shadow-xl transition-all"
+          className="w-14 h-14 sm:w-16 sm:h-16 rounded-xl text-lg font-bold"
           aria-label="Ajouter un joueur"
         >
-          +
-        </UnifiedButton>
+          <Plus className="h-5 w-5" />
+        </Button>
       </div>
 
-      {/* Boutons rapides */}
-      
-
-      {/* Informations utiles */}
-      <div className="bg-gradient-to-r from-primary/5 to-secondary/5 rounded-xl p-3 sm:p-4 mx-2">
-        <p className="text-xs sm:text-sm text-neutral-600">
+      {/* Tip */}
+      <div className="bg-blue-50 rounded-xl p-4 mx-2">
+        <p className="text-sm text-blue-700">
           <strong>Conseil :</strong> Le Dutch est plus amusant avec 3-4 joueurs pour des parties équilibrées
         </p>
       </div>
 
-      {/* Bouton suivant */}
-      <UnifiedButton
-        variant="primary"
+      {/* Next button */}
+      <Button
+        variant="default"
         size="lg"
         onClick={onNext}
-        className="w-full py-3 sm:py-4 text-base sm:text-lg font-bold touch-target min-h-[48px]"
+        className="w-full py-3 sm:py-4 text-base sm:text-lg font-semibold"
         aria-label={`Continuer avec ${playerCount} ${playerCount === 1 ? 'joueur' : 'joueurs'}`}
       >
         Continuer avec {playerCount} {playerCount === 1 ? 'joueur' : 'joueurs'}
-      </UnifiedButton>
-    </UnifiedCard>;
+      </Button>
+    </Card>
+  );
 };
+
 export default PlayerCountStep;

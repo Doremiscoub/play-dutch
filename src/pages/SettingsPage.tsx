@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { AdvancedSettings } from '@/components/settings/AdvancedSettings';
@@ -15,11 +14,7 @@ const SettingsPage: React.FC = () => {
 
   return (
     <PageContainer size="md">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
+      <div>
         {/* En-tête */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-foreground mb-2">
@@ -33,7 +28,7 @@ const SettingsPage: React.FC = () => {
         <Separator className="mb-8" />
 
         {/* Contenu principal */}
-        <Card variant="glassColored" className="border-white/20 backdrop-blur-md">
+        <Card className="border border-border">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               Configuration avancée
@@ -48,17 +43,12 @@ const SettingsPage: React.FC = () => {
         </Card>
 
         {/* Informations supplémentaires */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
-          className="mt-8 text-center text-sm text-muted-foreground"
-        >
+        <div className="mt-8 text-center text-sm text-muted-foreground">
           <p>
             Vos paramètres sont automatiquement sauvegardés localement et synchronisés si vous êtes connecté.
           </p>
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
     </PageContainer>
   );
 };

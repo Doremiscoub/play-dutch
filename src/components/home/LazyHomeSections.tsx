@@ -14,7 +14,7 @@ const LoadingSpinner: React.FC = () => (
     <motion.div
       animate={{ rotate: 360 }}
       transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-      className="text-trinity-blue-500"
+      className="text-primary"
     >
       <Loader2 className="h-8 w-8" />
     </motion.div>

@@ -24,10 +24,10 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
   // Ne pas afficher les boutons si un modal est ouvert
   if (hideWhenModalOpen) return null;
   const buttonsContent = (
-    <div 
+    <div
       className={`floating-action-buttons fixed right-4 sm:right-6 flex flex-col-reverse gap-2 sm:gap-3 pointer-events-none ${hideWhenModalOpen ? 'floating-buttons-hidden' : ''}`}
-      style={{ 
-        position: 'fixed', 
+      style={{
+        position: 'fixed',
         bottom: 'max(env(safe-area-inset-bottom, 20px), 100px)',
         right: '16px',
         zIndex: 50
@@ -37,17 +37,12 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
       <motion.div
         initial={{ opacity: 0, scale: 0.9, y: 30 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ 
-          duration: 0.4, 
-          type: "spring", 
-          stiffness: 200, 
+        transition={{
+          duration: 0.4,
+          type: "spring",
+          stiffness: 200,
           damping: 15,
-          delay: 0.1 
-        }}
-        whileHover={{ 
-          scale: 1.03, 
-          y: -2,
-          transition: { duration: 0.15 }
+          delay: 0.1
         }}
         whileTap={{ scale: 0.97 }}
         className="pointer-events-auto"
@@ -57,30 +52,21 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
           disabled={disabled}
           variant="trinity"
           size="xl"
-          className="relative group px-3 sm:px-6 py-2.5 sm:py-3 h-11 sm:h-14 rounded-full lg-elevation-04 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden min-w-[44px]"
+          className="relative group px-3 sm:px-6 py-2.5 sm:py-3 h-11 sm:h-14 rounded-full shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden min-w-[44px] hover:shadow-xl"
           aria-label="Ajouter une nouvelle manche"
         >
-          {/* Arrière-plan semi-transparent pour améliorer la lisibilité */}
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 via-purple-500/15 to-orange-500/20 rounded-full" />
-          
-          {/* Effet de brillance au survol */}
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent translate-x-[-100%] group-hover:translate-x-[200%] transition-transform duration-1000 ease-out" />
-          
-          {/* Contenu du bouton avec contraste amélioré */}
+          {/* Contenu du bouton */}
           <div className="relative z-10 flex items-center gap-2 sm:gap-3">
-            <div className="p-1 sm:p-1.5 rounded-full bg-white/30 backdrop-blur-sm">
-              <Plus className="h-4 w-4 sm:h-5 sm:w-5 text-white stroke-[3] drop-shadow-lg" />
+            <div className="p-1 sm:p-1.5 rounded-full bg-white/20">
+              <Plus className="h-4 w-4 sm:h-5 sm:w-5 text-white stroke-[3]" />
             </div>
-            <span className="font-bold text-white whitespace-nowrap tracking-wide text-sm sm:text-lg drop-shadow-lg hidden xs:inline">
+            <span className="font-bold text-white whitespace-nowrap tracking-wide text-sm sm:text-lg hidden xs:inline">
               Ajouter une manche
             </span>
-            <span className="font-bold text-white text-sm drop-shadow-lg xs:hidden">
+            <span className="font-bold text-white text-sm xs:hidden">
               Ajouter
             </span>
           </div>
-          
-          {/* Ombre colorée dynamique */}
-          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-400/30 via-purple-400/30 to-orange-400/30 blur-xl -z-10 group-hover:scale-110 transition-transform duration-300" />
         </Button>
       </motion.div>
 
@@ -90,16 +76,12 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
         <motion.div
           initial={{ opacity: 0, scale: 0.8, x: 20 }}
           animate={{ opacity: 1, scale: 1, x: 0 }}
-          transition={{ 
-            duration: 0.3, 
-            delay: 0.05, 
-            type: "spring", 
+          transition={{
+            duration: 0.3,
+            delay: 0.05,
+            type: "spring",
             stiffness: 150,
-            damping: 12 
-          }}
-          whileHover={{ 
-            scale: 1.05, 
-            transition: { duration: 0.1 }
+            damping: 12
           }}
           whileTap={{ scale: 0.96 }}
           className="pointer-events-auto"
@@ -109,33 +91,17 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
             size="icon-lg"
             onClick={onUndoLastRound}
             disabled={!canUndo || disabled}
-            className={`relative h-11 w-11 sm:h-12 sm:w-12 min-w-[44px] min-h-[44px] rounded-2xl transition-all duration-200 group overflow-hidden backdrop-blur-xl border-2 ${
+            className={`relative h-11 w-11 sm:h-12 sm:w-12 min-w-[44px] min-h-[44px] rounded-2xl transition-all duration-200 group overflow-hidden border-2 ${
               canUndo && !disabled
-                ? 'bg-gradient-to-br from-orange-600/95 via-orange-500/90 to-red-600/85 border-orange-200/70 hover:border-orange-100/90 shadow-lg shadow-orange-600/25 hover:shadow-xl hover:shadow-orange-600/35'
-                : 'bg-gray-600/85 border-gray-300/60 opacity-70 cursor-not-allowed'
+                ? 'bg-orange-500 border-orange-300 hover:bg-orange-600 shadow-md hover:shadow-lg'
+                : 'bg-gray-400 border-gray-300 opacity-70 cursor-not-allowed'
             }`}
             aria-label="Annuler la dernière manche"
             title="Annuler la dernière manche"
           >
-            {/* Fond blanc pour améliorer la visibilité */}
-            <div className="absolute inset-0 bg-white/10 rounded-2xl" />
-            
-            {/* Effet de brillance au survol */}
-            {canUndo && !disabled && (
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent translate-x-[-100%] group-hover:translate-x-[200%] transition-transform duration-700 ease-out rounded-2xl" />
-            )}
-            
-            {/* Particules flottantes pour bouton actif */}
-            {canUndo && !disabled && (
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <div className="absolute top-2 left-2 w-1 h-1 bg-white/70 rounded-full animate-ping" />
-                <div className="absolute bottom-3 right-2 w-1.5 h-1.5 bg-orange-100/90 rounded-full animate-pulse" />
-              </div>
-            )}
-            
-            <RotateCcw className={`relative z-10 h-4 w-4 sm:h-5 sm:w-5 transition-all duration-300 stroke-[2.5] ${
-              canUndo && !disabled 
-                ? 'text-white drop-shadow-lg group-hover:-rotate-12 group-hover:scale-110' 
+            <RotateCcw className={`relative z-10 h-4 w-4 sm:h-5 sm:w-5 transition-all duration-200 stroke-[2.5] ${
+              canUndo && !disabled
+                ? 'text-white'
                 : 'text-white/80'
             }`} />
           </Button>
@@ -145,16 +111,12 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
         <motion.div
           initial={{ opacity: 0, scale: 0.8, x: 20 }}
           animate={{ opacity: 1, scale: 1, x: 0 }}
-          transition={{ 
-            duration: 0.3, 
-            delay: 0.02, 
-            type: "spring", 
+          transition={{
+            duration: 0.3,
+            delay: 0.02,
+            type: "spring",
             stiffness: 150,
-            damping: 12 
-          }}
-          whileHover={{ 
-            scale: 1.05, 
-            transition: { duration: 0.1 }
+            damping: 12
           }}
           whileTap={{ scale: 0.96 }}
           className="pointer-events-auto"
@@ -164,20 +126,11 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
             size="icon-lg"
             onClick={onEndGame}
             disabled={disabled}
-            className="relative h-11 w-11 sm:h-12 sm:w-12 min-w-[44px] min-h-[44px] rounded-2xl bg-gradient-to-br from-purple-500/80 via-purple-400/70 to-blue-500/60 border-2 border-purple-300/50 hover:border-purple-200/70 shadow-lg shadow-purple-500/20 hover:shadow-xl hover:shadow-purple-500/30 transition-all duration-200 group overflow-hidden backdrop-blur-xl"
+            className="relative h-11 w-11 sm:h-12 sm:w-12 min-w-[44px] min-h-[44px] rounded-2xl bg-purple-500 border-2 border-purple-300 hover:bg-purple-600 shadow-md hover:shadow-lg transition-all duration-200 group overflow-hidden"
             aria-label="Terminer la partie en cours"
             title="Terminer la partie"
           >
-            {/* Effet de brillance au survol */}
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[200%] transition-transform duration-700 ease-out rounded-2xl" />
-            
-            {/* Particules flottantes */}
-            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <div className="absolute top-2 right-2 w-1 h-1 bg-white/60 rounded-full animate-ping" />
-              <div className="absolute bottom-2 left-3 w-1.5 h-1.5 bg-purple-200/80 rounded-full animate-pulse" />
-            </div>
-            
-            <Flag className="relative z-10 h-4 w-4 sm:h-5 sm:w-5 text-white drop-shadow-lg group-hover:scale-110 group-hover:rotate-12 transition-all duration-300" />
+            <Flag className="relative z-10 h-4 w-4 sm:h-5 sm:w-5 text-white transition-all duration-200" />
           </Button>
         </motion.div>
       </div>
@@ -185,7 +138,7 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
   );
 
   // Use createPortal to render directly in document.body
-  return typeof document !== 'undefined' 
+  return typeof document !== 'undefined'
     ? createPortal(buttonsContent, document.body)
     : null;
 };

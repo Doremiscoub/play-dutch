@@ -48,7 +48,7 @@ export const PWAPromotionCard: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className="text-center p-3 rounded-lg glass-card"
+              className="text-center p-3 rounded-lg bg-white border border-border shadow-sm"
             >
               <div className="flex justify-center mb-2 text-primary">
                 {feature.icon}

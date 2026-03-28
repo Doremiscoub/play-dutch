@@ -5,21 +5,21 @@ import { cn } from '@/lib/utils';
 import { VariantProps, cva } from 'class-variance-authority';
 
 const gameCardVariants = cva(
-  "rounded-3xl transition-all duration-300 border shadow-sm relative overflow-hidden",
+  "rounded-xl transition-all duration-200 border shadow-sm relative overflow-hidden",
   {
     variants: {
       variant: {
-        glass: "bg-white/70 backdrop-blur-xl border-white/50 hover:bg-white/80 hover:shadow-md",
-        solid: "bg-white border-gray-200 hover:shadow-md",
-        gradient: "bg-gradient-to-br from-white/80 to-white/60 backdrop-blur-xl border-white/40 hover:from-white/90 hover:to-white/70",
+        glass: "bg-white border-border hover:shadow-md",
+        solid: "bg-white border-border hover:shadow-md",
+        gradient: "bg-white border-border hover:shadow-md",
       },
       interactive: {
-        true: "hover:-translate-y-1 cursor-pointer group",
+        true: "hover:-translate-y-0.5 cursor-pointer group",
         false: "",
       },
       padding: {
         sm: "p-4",
-        md: "p-6", 
+        md: "p-6",
         lg: "p-8",
         none: "p-0",
       },
@@ -31,7 +31,7 @@ const gameCardVariants = cva(
       }
     },
     defaultVariants: {
-      variant: "glass",
+      variant: "solid",
       interactive: false,
       padding: "md",
       size: "full",
@@ -69,10 +69,9 @@ export const GameCard: React.FC<GameCardProps> = ({
   if (withAnimation) {
     return (
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: animationDelay }}
-        whileHover={interactive ? { y: -4 } : undefined}
+        transition={{ duration: 0.3, delay: animationDelay, ease: "easeOut" }}
       >
         {content}
       </motion.div>

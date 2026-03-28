@@ -40,7 +40,7 @@ const AboutPage: React.FC = () => {
 
       <PageContainer size="md" className="space-y-8">
           {/* Introduction */}
-          <Card className="vision-card">
+          <Card className="bg-white rounded-xl border border-border shadow-sm">
             <CardContent className="p-8">
               <div className="text-center space-y-4">
                 <h2 className="text-2xl font-bold text-gray-800">
@@ -57,7 +57,7 @@ const AboutPage: React.FC = () => {
 
           {/* Fonctionnalités */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card className="vision-card">
+            <Card className="bg-white rounded-xl border border-border shadow-sm">
               <CardContent className="p-8">
                 <div className="text-center space-y-3">
                   <div className="w-12 h-12 mx-auto rounded-full bg-dutch-blue/10 flex items-center justify-center">
@@ -71,7 +71,7 @@ const AboutPage: React.FC = () => {
               </CardContent>
             </Card>
 
-            <Card className="vision-card">
+            <Card className="bg-white rounded-xl border border-border shadow-sm">
               <CardContent className="p-8">
                 <div className="text-center space-y-3">
                   <div className="w-12 h-12 mx-auto rounded-full bg-dutch-purple/10 flex items-center justify-center">
@@ -85,7 +85,7 @@ const AboutPage: React.FC = () => {
               </CardContent>
             </Card>
 
-            <Card className="vision-card">
+            <Card className="bg-white rounded-xl border border-border shadow-sm">
               <CardContent className="p-8">
                 <div className="text-center space-y-3">
                   <div className="w-12 h-12 mx-auto rounded-full bg-dutch-orange/10 flex items-center justify-center">
@@ -99,7 +99,7 @@ const AboutPage: React.FC = () => {
               </CardContent>
             </Card>
 
-            <Card className="vision-card">
+            <Card className="bg-white rounded-xl border border-border shadow-sm">
               <CardContent className="p-8">
                 <div className="text-center space-y-3">
                   <div className="w-12 h-12 mx-auto rounded-full bg-dutch-green/10 flex items-center justify-center">
@@ -115,7 +115,7 @@ const AboutPage: React.FC = () => {
           </div>
 
           {/* Mission */}
-          <Card className="vision-card">
+          <Card className="bg-white rounded-xl border border-border shadow-sm">
             <CardContent className="p-8">
               <div className="space-y-4">
                 <h3 className="text-xl font-semibold text-center">Notre Mission</h3>
@@ -139,7 +139,7 @@ const AboutPage: React.FC = () => {
               variant="default"
               size="lg"
               onClick={() => navigate('/setup')}
-              className="glass-button"
+
             >
               Commencer une partie
             </Button>

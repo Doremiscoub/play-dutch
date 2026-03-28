@@ -87,7 +87,7 @@ const GameSettings: React.FC = () => {
             animate={{ opacity: adsEnabled ? 1 : 0, height: adsEnabled ? 'auto' : 0 }}
             className="overflow-hidden"
           >
-            <div className="glass-card p-4 mt-3">
+            <div className="bg-blue-50 rounded-xl border border-blue-200 p-4 mt-3">
               <p className="text-xs text-blue-700">
                 Les annonces nous aident à maintenir l'application gratuite et à financer son développement.
                 Merci de votre soutien !
@@ -106,7 +106,7 @@ const GameSettings: React.FC = () => {
               variant="outline" 
               size="sm"
               onClick={handleCleanupStorage}
-              className="glass-button flex items-center gap-2 border-white/30"
+              className="flex items-center gap-2 border-border"
             >
               <Trash2 className="h-4 w-4" />
               Nettoyer

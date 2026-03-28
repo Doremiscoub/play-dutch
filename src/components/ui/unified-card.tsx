@@ -12,16 +12,16 @@ interface UnifiedCardProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
 }
 
-const cardVariants = {
-  light: "kidsBlue",
-  glass: "glassColored",
+const cardVariants: Record<UnifiedCardVariant, string> = {
+  light: "default",
+  glass: "glass",
   elevated: "elevated",
-  subtle: "kidsPurple"
+  subtle: "ghost"
 };
 
-const paddingVariants = {
+const paddingVariants: Record<UnifiedCardPadding, string> = {
   sm: "p-4",
-  md: "p-6", 
+  md: "p-6",
   lg: "p-8",
   xl: "p-10"
 };
@@ -34,7 +34,6 @@ export const UnifiedCard = React.forwardRef<HTMLDivElement, UnifiedCardProps>(
         variant={cardVariants[variant] as any}
         className={cn(
           paddingVariants[padding],
-          "rounded-xl transition-all",
           className
         )}
         {...props}

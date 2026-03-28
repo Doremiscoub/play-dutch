@@ -3,7 +3,6 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Player } from '@/types';
 import { Trophy } from 'lucide-react';
-import { ModernTitle } from '@/components/ui/modern-title';
 import PlayerRankBadge from './PlayerRankBadge';
 
 interface GameOverHeaderProps {
@@ -24,29 +23,14 @@ const GameOverHeader: React.FC<GameOverHeaderProps> = ({ winner }) => {
         }}
         className="flex justify-center mb-4"
       >
-        <motion.div 
-          className="relative flex items-center justify-center"
-          animate={{ 
-            y: [0, -8, 0],
-          }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            repeatType: "reverse",
-          }}
-        >
-          <div className="absolute -inset-1 bg-gradient-to-r from-amber-400 via-amber-300 to-yellow-300 rounded-full blur-md opacity-70 gradient-shift"></div>
-          <Trophy className="h-12 w-12 text-yellow-600 drop-shadow-md" />
-        </motion.div>
+        <div className="flex items-center justify-center">
+          <Trophy className="h-12 w-12 text-yellow-600" />
+        </div>
       </motion.div>
 
-      <ModernTitle 
-        variant="h2"
-        withSparkles
-        className="mb-4"
-      >
+      <h2 className="text-2xl font-bold text-foreground mb-4">
         Félicitations !
-      </ModernTitle>
+      </h2>
 
       <div className="flex items-center justify-center gap-3 mb-6">
         <PlayerRankBadge position={1} size="lg" />
@@ -55,7 +39,7 @@ const GameOverHeader: React.FC<GameOverHeaderProps> = ({ winner }) => {
         </p>
       </div>
 
-      <div className="text-center px-4 py-2 bg-gradient-to-r from-amber-100 to-yellow-100 border border-amber-200 rounded-lg shadow-sm">
+      <div className="text-center px-4 py-2 bg-amber-50 border border-amber-200 rounded-lg">
         <p className="text-amber-800">
           Score final : <span className="font-bold">{winner.totalScore} points</span>
         </p>
