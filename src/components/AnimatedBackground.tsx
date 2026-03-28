@@ -22,6 +22,19 @@ const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ variant = 'defa
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
+    // Respect prefers-reduced-motion: render a static gradient and skip animation
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+      gradient.addColorStop(0, 'rgba(193, 158, 255, 0.08)');
+      gradient.addColorStop(1, 'rgba(255, 223, 117, 0.08)');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      return;
+    }
+
     const resizeCanvas = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;

@@ -44,8 +44,24 @@ class AICommentaryEngine {
   }
 
   private loadMemory(): GameMemory {
+    const defaultMemory: GameMemory = { playerProfiles: {}, notableEvents: [] };
     const stored = localStorage.getItem('professor_cartouche_memory');
-    return stored ? JSON.parse(stored) : { playerProfiles: {}, notableEvents: [] };
+    if (!stored) return defaultMemory;
+
+    try {
+      const parsed = JSON.parse(stored);
+      if (
+        parsed &&
+        typeof parsed === 'object' &&
+        typeof parsed.playerProfiles === 'object' &&
+        Array.isArray(parsed.notableEvents)
+      ) {
+        return parsed as GameMemory;
+      }
+      return defaultMemory;
+    } catch {
+      return defaultMemory;
+    }
   }
 
   private saveMemory(): void {
@@ -165,8 +181,8 @@ class AICommentaryEngine {
         this.memory.playerProfiles[player.name] = {
           name: player.name,
           playStyle: 'consistent',
-          bestScore: player.totalScore,
-          worstScore: player.totalScore,
+          bestScore: Infinity,
+          worstScore: -Infinity,
           averageScore: player.totalScore,
           dutchCount: player.rounds.filter(r => r.isDutch).length,
           comebackCount: 0,

@@ -62,6 +62,7 @@ const GameSummaryStep: React.FC<GameSummaryStepProps> = ({
               variant="ghost"
               size="sm"
               onClick={onEditCount}
+              aria-label="Modifier le nombre de joueurs"
             >
               <Edit className="h-4 w-4 mr-1" />
               Modifier
@@ -85,6 +86,7 @@ const GameSummaryStep: React.FC<GameSummaryStepProps> = ({
               variant="ghost"
               size="sm"
               onClick={onEditPlayers}
+              aria-label="Modifier les noms des joueurs"
             >
               <Edit className="h-4 w-4 mr-1" />
               Modifier
@@ -171,7 +173,7 @@ const GameSummaryStep: React.FC<GameSummaryStepProps> = ({
           variant="primary"
           size="lg"
           onClick={onStartGame}
-          className="flex-2 font-bold text-sm sm:text-lg px-4 py-2 min-w-0 leading-tight"
+          className="flex-[2] font-bold text-sm sm:text-lg px-4 py-2 min-w-0 leading-tight"
         >
           <span className="whitespace-nowrap">{isMobile ? 'Jouer' : '🚀 Commencer la partie !'}</span>
         </UnifiedButton>

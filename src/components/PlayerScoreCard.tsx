@@ -44,6 +44,16 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
         isExpanded ? "ring-2 ring-dutch-blue/20 shadow-xl" : "hover:scale-[1.01]"
       )}
       onClick={toggleExpansion}
+      onKeyDown={(e: React.KeyboardEvent) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggleExpansion();
+        }
+      }}
+      role="button"
+      tabIndex={0}
+      aria-expanded={isExpanded}
+      aria-label={`Scores de ${player.name}`}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}

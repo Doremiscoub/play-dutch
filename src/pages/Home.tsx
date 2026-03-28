@@ -4,7 +4,7 @@ import { useSEO } from '@/hooks/useSEO';
 import { useTutorial } from '@/hooks/useTutorial';
 import { InteractiveTutorialV2 } from '@/components/tutorial/InteractiveTutorialV2';
 import { motion } from 'framer-motion';
-import { Gamepad2, Users, Heart, Sparkles, BookOpen, HelpCircle } from 'lucide-react';
+import { Gamepad2, Users, Heart, Sparkles, BookOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import UnifiedHeader from '@/components/layout/UnifiedHeader';
@@ -224,25 +224,11 @@ const Home: React.FC = () => {
                           <Button
                             onClick={() => navigate('/setup')}
                             size="xl"
+                            aria-label="Lancer une nouvelle partie"
                             className="bg-white text-trinity-purple-900 hover:bg-trinity-purple-700 hover:text-white font-black text-lg px-8 py-4 shadow-xl rounded-2xl border-2 border-trinity-purple-200 transition-all duration-300 min-w-[200px]"
                           >
                             <Gamepad2 className="h-5 w-5 mr-2" />
-                            C'EST PARTI !
-                          </Button>
-                        </motion.div>
-                        
-                        <motion.div
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                        >
-                          <Button
-                            onClick={() => navigate('/rules')}
-                            variant="outline"
-                            size="lg"
-                            className="border-2 border-white/80 text-white bg-white/10 hover:bg-white hover:text-trinity-purple-700 font-semibold text-base px-6 py-3 rounded-2xl backdrop-blur-sm transition-all duration-300 min-w-[140px]"
-                          >
-                            <BookOpen className="h-4 w-4 mr-2" />
-                            Règles
+                            Nouvelle partie
                           </Button>
                         </motion.div>
 
@@ -251,13 +237,14 @@ const Home: React.FC = () => {
                           whileTap={{ scale: 0.95 }}
                         >
                           <Button
-                            onClick={startTutorial}
+                            onClick={() => navigate('/rules')}
                             variant="outline"
                             size="lg"
-                            className="border-2 border-white/80 text-white bg-white/10 hover:bg-white hover:text-trinity-purple-700 font-semibold text-base px-6 py-3 rounded-2xl backdrop-blur-sm transition-all duration-300 min-w-[160px]"
+                            aria-label="Voir les règles du jeu"
+                            className="border-2 border-white/80 text-white bg-white/10 hover:bg-white hover:text-trinity-purple-700 font-semibold text-base px-6 py-3 rounded-2xl backdrop-blur-sm transition-all duration-300 min-w-[140px]"
                           >
-                            <HelpCircle className="h-4 w-4 mr-2" />
-                            Guide interactif
+                            <BookOpen className="h-4 w-4 mr-2" />
+                            Voir les règles
                           </Button>
                         </motion.div>
                       </div>

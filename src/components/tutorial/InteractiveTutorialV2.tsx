@@ -2,7 +2,7 @@
  * Tutorial interactif moderne pour Dutch
  * Guide pas à pas pour les nouveaux utilisateurs
  */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -270,12 +270,25 @@ export const InteractiveTutorialV2: React.FC<InteractiveTutorialV2Props> = ({
   onClose,
   className = ''
 }) => {
-  const [currentStep, setCurrentStep] = useState(1);
+  const [currentStep, setCurrentStep] = useState(() => {
+    const saved = localStorage.getItem('dutch_tutorial_step');
+    if (saved) {
+      const parsed = parseInt(saved, 10);
+      if (parsed >= 1 && parsed <= TUTORIAL_STEPS.length) {
+        return parsed;
+      }
+    }
+    return 1;
+  });
   const [_completedSteps, setCompletedSteps] = useState<number[]>([]);
   const [isCompleted, setIsCompleted] = useState(false);
 
   const totalSteps = TUTORIAL_STEPS.length;
   const progress = (currentStep / totalSteps) * 100;
+
+  useEffect(() => {
+    localStorage.setItem('dutch_tutorial_step', String(currentStep));
+  }, [currentStep]);
   const currentStepData = TUTORIAL_STEPS.find(step => step.id === currentStep);
 
   const handleNext = () => {

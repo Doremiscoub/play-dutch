@@ -40,12 +40,13 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
 
       {/* Sélecteur de nombre de joueurs */}
       <div className="flex items-center justify-center gap-6 sm:gap-8 px-4">
-        <UnifiedButton 
-          variant="secondary" 
-          size="lg" 
-          onClick={decrementCount} 
-          disabled={playerCount <= MIN_PLAYERS} 
+        <UnifiedButton
+          variant="secondary"
+          size="lg"
+          onClick={decrementCount}
+          disabled={playerCount <= MIN_PLAYERS}
           className="w-16 h-16 sm:w-18 sm:h-18 rounded-2xl text-white font-bold text-2xl sm:text-3xl touch-target min-h-[64px] shadow-lg hover:shadow-xl transition-all"
+          aria-label="Retirer un joueur"
         >
           -
         </UnifiedButton>
@@ -64,12 +65,13 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
           </div>
         </div>
 
-        <UnifiedButton 
-          variant="secondary" 
-          size="lg" 
-          onClick={incrementCount} 
-          disabled={playerCount >= MAX_PLAYERS} 
+        <UnifiedButton
+          variant="secondary"
+          size="lg"
+          onClick={incrementCount}
+          disabled={playerCount >= MAX_PLAYERS}
           className="w-16 h-16 sm:w-18 sm:h-18 rounded-2xl text-white font-bold text-2xl sm:text-3xl touch-target min-h-[64px] shadow-lg hover:shadow-xl transition-all"
+          aria-label="Ajouter un joueur"
         >
           +
         </UnifiedButton>
@@ -86,11 +88,12 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
       </div>
 
       {/* Bouton suivant */}
-      <UnifiedButton 
-        variant="primary" 
-        size="lg" 
-        onClick={onNext} 
+      <UnifiedButton
+        variant="primary"
+        size="lg"
+        onClick={onNext}
         className="w-full py-3 sm:py-4 text-base sm:text-lg font-bold touch-target min-h-[48px]"
+        aria-label={`Continuer avec ${playerCount} ${playerCount === 1 ? 'joueur' : 'joueurs'}`}
       >
         Continuer avec {playerCount} {playerCount === 1 ? 'joueur' : 'joueurs'} 🚀
       </UnifiedButton>

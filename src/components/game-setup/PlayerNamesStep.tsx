@@ -26,6 +26,9 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
 }) => {
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [tempName, setTempName] = useState('');
+  const [editError, setEditError] = useState<string | null>(null);
+
+  const MAX_NAME_LENGTH = 20;
 
   // Initialiser les joueurs si nécessaire
   useEffect(() => {
@@ -47,25 +50,50 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
   const startEditing = (index: number) => {
     setEditingIndex(index);
     setTempName(players[index]?.name || '');
+    setEditError(null);
+  };
+
+  const validateName = (name: string, currentIndex: number): string | null => {
+    const trimmed = name.trim();
+    if (!trimmed) {
+      return 'Le nom ne peut pas être vide';
+    }
+    if (trimmed.length > MAX_NAME_LENGTH) {
+      return `Le nom ne peut pas dépasser ${MAX_NAME_LENGTH} caractères`;
+    }
+    const duplicate = players.some(
+      (p, i) => i !== currentIndex && p.name.trim().toLowerCase() === trimmed.toLowerCase()
+    );
+    if (duplicate) {
+      return 'Ce nom est déjà utilisé par un autre joueur';
+    }
+    return null;
   };
 
   const saveEdit = () => {
-    if (editingIndex !== null && tempName.trim()) {
-      const updatedPlayers = [...players];
-      updatedPlayers[editingIndex] = {
-        ...updatedPlayers[editingIndex],
-        name: tempName.trim(),
-        isReady: true
-      };
-      onPlayersChange(updatedPlayers);
-      setEditingIndex(null);
-      setTempName('');
+    if (editingIndex === null) return;
+    const trimmed = tempName.trim();
+    const error = validateName(trimmed, editingIndex);
+    if (error) {
+      setEditError(error);
+      return;
     }
+    const updatedPlayers = [...players];
+    updatedPlayers[editingIndex] = {
+      ...updatedPlayers[editingIndex],
+      name: trimmed,
+      isReady: true
+    };
+    onPlayersChange(updatedPlayers);
+    setEditingIndex(null);
+    setTempName('');
+    setEditError(null);
   };
 
   const cancelEdit = () => {
     setEditingIndex(null);
     setTempName('');
+    setEditError(null);
   };
 
   const updatePlayerEmoji = (index: number, emoji: string) => {
@@ -115,35 +143,54 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
                   />
 
                   {editingIndex === index ? (
-                    <div className="flex-1 flex items-center gap-1 sm:gap-2">
-                      <Input
-                        value={tempName}
-                        onChange={(e) => setTempName(e.target.value)}
-                        placeholder="Nom du joueur"
-                        className="flex-1 text-neutral-800 placeholder:text-neutral-500 h-10 touch-target"
-                        autoFocus
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter') saveEdit();
-                          if (e.key === 'Escape') cancelEdit();
-                        }}
-                      />
-                      <UnifiedButton
-                        variant="primary"
-                        size="sm"
-                        onClick={saveEdit}
-                        disabled={!tempName.trim()}
-                        className="min-h-[40px] min-w-[40px] touch-target"
-                      >
-                        <Check className="h-4 w-4" />
-                      </UnifiedButton>
-                      <UnifiedButton
-                        variant="ghost"
-                        size="sm"
-                        onClick={cancelEdit}
-                        className="min-h-[40px] min-w-[40px] touch-target"
-                      >
-                        <X className="h-4 w-4" />
-                      </UnifiedButton>
+                    <div className="flex-1 flex flex-col gap-1">
+                      <div className="flex items-center gap-1 sm:gap-2">
+                        <div className="flex-1 relative">
+                          <Input
+                            value={tempName}
+                            onChange={(e) => {
+                              const value = e.target.value;
+                              if (value.length <= MAX_NAME_LENGTH) {
+                                setTempName(value);
+                                setEditError(null);
+                              }
+                            }}
+                            maxLength={MAX_NAME_LENGTH}
+                            placeholder="Nom du joueur"
+                            className={`flex-1 text-neutral-800 placeholder:text-neutral-500 h-10 touch-target pr-14 ${editError ? 'border-red-500 focus:ring-red-500' : ''}`}
+                            autoFocus
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') saveEdit();
+                              if (e.key === 'Escape') cancelEdit();
+                            }}
+                          />
+                          <span className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-neutral-400 pointer-events-none">
+                            {tempName.length}/{MAX_NAME_LENGTH}
+                          </span>
+                        </div>
+                        <UnifiedButton
+                          variant="primary"
+                          size="sm"
+                          onClick={saveEdit}
+                          disabled={!tempName.trim()}
+                          className="min-h-[40px] min-w-[40px] touch-target"
+                          aria-label="Confirmer le nom"
+                        >
+                          <Check className="h-4 w-4" />
+                        </UnifiedButton>
+                        <UnifiedButton
+                          variant="ghost"
+                          size="sm"
+                          onClick={cancelEdit}
+                          className="min-h-[40px] min-w-[40px] touch-target"
+                          aria-label="Annuler la modification"
+                        >
+                          <X className="h-4 w-4" />
+                        </UnifiedButton>
+                      </div>
+                      {editError && (
+                        <p className="text-xs text-red-500 ml-1">{editError}</p>
+                      )}
                     </div>
                   ) : (
                     <div className="flex-1 flex items-center justify-between">
@@ -155,6 +202,7 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
                         size="sm"
                         onClick={() => startEditing(index)}
                         className="min-h-[40px] min-w-[40px] touch-target flex-shrink-0"
+                        aria-label={`Modifier le nom de ${player.name}`}
                       >
                         <Edit3 className="h-4 w-4" />
                       </UnifiedButton>
@@ -190,7 +238,7 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
           size="lg"
           onClick={onNext}
           disabled={!canProceed}
-          className="flex-2 font-bold min-h-[48px] touch-target"
+          className="flex-[2] font-bold min-h-[48px] touch-target"
         >
           {canProceed ? 'Créer la partie 🎯' : 'Complétez les noms'}
         </UnifiedButton>

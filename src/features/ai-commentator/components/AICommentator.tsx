@@ -2,7 +2,7 @@
  * AI Commentator - Composant principal consolidé
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Player } from '@/types';
 import { AIPersonality } from '../types';
@@ -13,6 +13,13 @@ import { Button } from '@/components/ui/button';
 import { Sparkles, Brain, Heart, Zap, RotateCcw, Settings, Clock } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useMobileAdaptation } from '@/hooks/useMobileAdaptation';
+
+const PERSONALITY_ICONS = {
+  humorous: { icon: Sparkles, color: 'text-yellow-500', label: 'Humoristique' },
+  analytical: { icon: Brain, color: 'text-blue-500', label: 'Analytique' },
+  encouraging: { icon: Heart, color: 'text-green-500', label: 'Encourageant' },
+  sarcastic: { icon: Zap, color: 'text-purple-500', label: 'Sarcastique' }
+} as const;
 
 interface AICommentatorProps {
   players: Player[];
@@ -44,16 +51,24 @@ export default function AICommentator({
   const [displayedText, setDisplayedText] = useState<string>('');
   const [isTyping, setIsTyping] = useState(false);
   const [showPersonalitySelector, setShowPersonalitySelector] = useState(false);
+  const typingTimeoutRef = useRef<NodeJS.Timeout>();
 
-  const personalityIcons = {
-    humorous: { icon: Sparkles, color: 'text-yellow-500', label: 'Humoristique' },
-    analytical: { icon: Brain, color: 'text-blue-500', label: 'Analytique' },
-    encouraging: { icon: Heart, color: 'text-green-500', label: 'Encourageant' },
-    sarcastic: { icon: Zap, color: 'text-purple-500', label: 'Sarcastique' }
-  };
+  // Persist personality selection to localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem('dutch_ai_personality');
+    if (saved && (saved === 'humorous' || saved === 'analytical' || saved === 'encouraging' || saved === 'sarcastic')) {
+      setPersonality(saved as AIPersonality);
+    }
+  }, [setPersonality]);
 
   // Typing animation
   useEffect(() => {
+    // Clear any in-progress typing animation
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+      typingTimeoutRef.current = undefined;
+    }
+
     if (!currentComment?.comment) return;
 
     if (reducedAnimations) {
@@ -64,16 +79,15 @@ export default function AICommentator({
 
     setIsTyping(true);
     setDisplayedText('');
-    
+
     let currentIndex = 0;
     const words = currentComment.comment.split(' ');
-    let timeoutId: NodeJS.Timeout;
-    
+
     const typeNextWord = () => {
       if (currentIndex < words.length) {
         setDisplayedText(prev => prev + (currentIndex > 0 ? ' ' : '') + words[currentIndex]);
         currentIndex++;
-        timeoutId = setTimeout(typeNextWord, 60 + Math.random() * 30);
+        typingTimeoutRef.current = setTimeout(typeNextWord, 60 + Math.random() * 30);
       } else {
         setIsTyping(false);
       }
@@ -81,13 +95,17 @@ export default function AICommentator({
 
     typeNextWord();
     return () => {
-      if (timeoutId) clearTimeout(timeoutId);
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current);
+        typingTimeoutRef.current = undefined;
+      }
       setIsTyping(false);
     };
   }, [currentComment, reducedAnimations]);
 
   const handlePersonalityChange = (newPersonality: AIPersonality) => {
     setPersonality(newPersonality);
+    localStorage.setItem('dutch_ai_personality', newPersonality);
     setShowPersonalitySelector(false);
   };
 
@@ -151,10 +169,10 @@ export default function AICommentator({
               )}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
-              title={`Mode ${personalityIcons[personality].label}`}
+              title={`Mode ${PERSONALITY_ICONS[personality].label}`}
             >
-              {React.createElement(personalityIcons[personality].icon, {
-                className: cn(singleColumn ? "w-3 h-3" : "w-4 h-4", personalityIcons[personality].color)
+              {React.createElement(PERSONALITY_ICONS[personality].icon, {
+                className: cn(singleColumn ? "w-3 h-3" : "w-4 h-4", PERSONALITY_ICONS[personality].color)
               })}
             </motion.button>
           </div>
@@ -190,11 +208,11 @@ export default function AICommentator({
                   onClick={() => setShowPersonalitySelector(!showPersonalitySelector)}
                   className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gradient-to-r from-blue-50 to-purple-50 hover:from-blue-100 hover:to-purple-100 transition-colors cursor-pointer border border-gray-200"
                 >
-                  {React.createElement(personalityIcons[personality].icon, {
-                    className: cn("w-4 h-4", personalityIcons[personality].color)
+                  {React.createElement(PERSONALITY_ICONS[personality].icon, {
+                    className: cn("w-4 h-4", PERSONALITY_ICONS[personality].color)
                   })}
                   <span className="text-xs font-semibold text-gray-700 uppercase tracking-wide">
-                    {personalityIcons[personality].label}
+                    {PERSONALITY_ICONS[personality].label}
                   </span>
                   {isMemoryActive && (
                     <motion.div
@@ -237,7 +255,7 @@ export default function AICommentator({
               >
                 <h4 className="text-sm font-semibold text-gray-700 mb-3">Personnalité du Professeur</h4>
                 <div className="grid grid-cols-2 gap-2">
-                  {Object.entries(personalityIcons).map(([key, config]) => (
+                  {Object.entries(PERSONALITY_ICONS).map(([key, config]) => (
                     <Button
                       key={key}
                       variant={personality === key ? "default" : "outline"}
