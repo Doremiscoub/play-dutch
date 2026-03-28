@@ -127,6 +127,103 @@ const Home: React.FC = () => {
               </div>
             </section>
 
+            {/* Guide Section - Rich content for SEO/AdSense */}
+            <section className="py-16 sm:py-20 px-4 sm:px-6">
+              <div className="w-full max-w-5xl mx-auto space-y-8">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                  viewport={{ once: true }}
+                  className="text-center mb-8"
+                >
+                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold font-display mb-3 text-foreground">
+                    Tout savoir sur le Dutch
+                  </h2>
+                  <p className="text-muted-foreground text-base sm:text-lg max-w-2xl mx-auto">
+                    Le guide complet pour maîtriser ce jeu de cartes convivial
+                  </p>
+                </motion.div>
+
+                {/* Article-style content cards */}
+                <div className="space-y-6">
+                  <Card>
+                    <CardContent className="p-6 sm:p-8">
+                      <h3 className="text-xl font-bold text-foreground mb-4">Qu'est-ce que le jeu de cartes Dutch ?</h3>
+                      <div className="space-y-3 text-muted-foreground leading-relaxed">
+                        <p>
+                          Le Dutch est un jeu de cartes stratégique et convivial qui se joue avec un jeu de 52 cartes standard.
+                          Contrairement à la plupart des jeux de cartes, l'objectif est d'obtenir le score le plus bas possible.
+                          Chaque manche, les joueurs reçoivent des cartes dont la valeur détermine leurs points. Certaines cartes
+                          possèdent des pouvoirs spéciaux qui permettent de regarder, échanger ou protéger ses cartes.
+                        </p>
+                        <p>
+                          Le jeu se termine lorsqu'un joueur atteint la limite de points convenue (généralement 100).
+                          Le joueur avec le score le plus bas à ce moment-là remporte la partie. C'est un jeu parfait
+                          pour les soirées entre amis, les réunions de famille ou les pauses déjeuner — une partie dure
+                          entre 15 et 45 minutes selon le nombre de joueurs.
+                        </p>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <Card>
+                      <CardContent className="p-6">
+                        <h3 className="text-lg font-bold text-foreground mb-3">Les règles en bref</h3>
+                        <ul className="space-y-2 text-sm text-muted-foreground">
+                          <li className="flex items-start gap-2"><span className="text-dutch-blue font-bold">1.</span> Chaque joueur reçoit 4 cartes face cachée</li>
+                          <li className="flex items-start gap-2"><span className="text-dutch-blue font-bold">2.</span> On ne peut regarder que 2 de ses cartes au début</li>
+                          <li className="flex items-start gap-2"><span className="text-dutch-blue font-bold">3.</span> À chaque tour, piochez ou prenez la défausse</li>
+                          <li className="flex items-start gap-2"><span className="text-dutch-blue font-bold">4.</span> Utilisez les pouvoirs spéciaux des cartes (7, 8, 9-10, Valet)</li>
+                          <li className="flex items-start gap-2"><span className="text-dutch-blue font-bold">5.</span> Dites "Dutch" quand vous pensez avoir le score le plus bas</li>
+                          <li className="flex items-start gap-2"><span className="text-dutch-blue font-bold">6.</span> Additionnez vos cartes — le plus bas score gagne la manche</li>
+                        </ul>
+                      </CardContent>
+                    </Card>
+
+                    <Card>
+                      <CardContent className="p-6">
+                        <h3 className="text-lg font-bold text-foreground mb-3">Pourquoi utiliser cette application ?</h3>
+                        <ul className="space-y-2 text-sm text-muted-foreground">
+                          <li className="flex items-start gap-2"><span className="text-dutch-purple font-bold">✓</span> Calcul automatique des scores sans erreur</li>
+                          <li className="flex items-start gap-2"><span className="text-dutch-purple font-bold">✓</span> Historique complet de toutes vos parties</li>
+                          <li className="flex items-start gap-2"><span className="text-dutch-purple font-bold">✓</span> Statistiques avancées par joueur</li>
+                          <li className="flex items-start gap-2"><span className="text-dutch-purple font-bold">✓</span> Graphiques d'évolution des scores en temps réel</li>
+                          <li className="flex items-start gap-2"><span className="text-dutch-purple font-bold">✓</span> Professeur Cartouche — commentateur IA humoristique</li>
+                          <li className="flex items-start gap-2"><span className="text-dutch-purple font-bold">✓</span> Fonctionne hors-ligne, sans compte ni inscription</li>
+                        </ul>
+                      </CardContent>
+                    </Card>
+                  </div>
+
+                  <Card>
+                    <CardContent className="p-6 sm:p-8">
+                      <h3 className="text-xl font-bold text-foreground mb-4">Conseils stratégiques pour gagner</h3>
+                      <div className="space-y-3 text-muted-foreground leading-relaxed">
+                        <p>
+                          La clé du Dutch est la mémoire. Mémorisez vos deux cartes visibles au début de la manche, puis
+                          gardez en tête les cartes que vous échangez ou regardez grâce aux pouvoirs spéciaux. Un bon joueur
+                          de Dutch connaît au moins 3 de ses 4 cartes à tout moment.
+                        </p>
+                        <p>
+                          Apprenez à lire vos adversaires : quand un joueur hésite avant de défausser, c'est souvent
+                          signe qu'il a un bon jeu. Les cartes basses (As, 2, 3) sont précieuses — gardez-les.
+                          Les figures (Roi, Dame) valent 10 points et doivent être échangées le plus vite possible.
+                          Exception : le Roi noir (Trèfle et Pique) vaut 0 point, c'est la carte la plus forte du jeu !
+                        </p>
+                        <p>
+                          Le timing du "Dutch" est crucial. Ne le dites pas trop tôt (les adversaires pourraient vous rattraper)
+                          ni trop tard (ils pourraient vous dépasser). Le moment idéal est quand vous êtes sûr d'avoir un score
+                          entre 0 et 5, et que vos adversaires semblent avoir des cartes hautes.
+                        </p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
+            </section>
+
             {/* CTA Section */}
             <section className="py-12 sm:py-16 px-4 sm:px-6">
               <motion.div
