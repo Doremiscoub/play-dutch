@@ -15,12 +15,14 @@ const GlobalFooter: React.FC<GlobalFooterProps> = ({
 
   if (variant === 'minimal') {
     return (
-      <footer className={`py-3 px-4 text-center ${className}`}>
+      <footer className={`py-4 px-4 text-center ${className}`}>
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="text-xs text-neutral-500"
+          className="text-sm text-neutral-600"
         >
+          <span className="text-neutral-500">Dutch Card Game</span>
+          {' · '}
           Créé par{' '}
           <motion.a
             href="https://www.seagullstudios.fr/"
@@ -51,7 +53,7 @@ const GlobalFooter: React.FC<GlobalFooterProps> = ({
           {/* Informations principales */}
           <div className="text-center sm:text-left">
             <h4 className="text-sm font-bold text-neutral-800 mb-1">
-              🎯 Dutch Blitz Digital Companion
+              Dutch Card Game Companion
             </h4>
             <p className="text-xs text-neutral-600">
               Votre compagnon numérique pour les parties de cartes Dutch

@@ -16,7 +16,7 @@ const ProductionAdSlot: React.FC<ProductionAdSlotProps> = ({
   const adRef = useRef<HTMLDivElement>(null);
   const [adLoaded, setAdLoaded] = useState(false);
   const [adError, setAdError] = useState(false);
-  const [_isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
 
   // Configuration optimisée pour la production
   const adConfigs = {
@@ -52,7 +52,11 @@ const ProductionAdSlot: React.FC<ProductionAdSlotProps> = ({
 
   const config = adConfigs[placement];
 
-  // Intersection Observer pour lazy loading
+  // Load ad when visible via IntersectionObserver.
+  // The <ins> must be in the DOM before adsbygoogle.push({}) is called,
+  // so we use a separate ref callback to trigger loading after mount.
+  const adInsRef = useRef<HTMLModElement>(null);
+
   useEffect(() => {
     if (!shouldShowAds || !hasConsentedToAds || !adRef.current) return;
 
@@ -60,7 +64,6 @@ const ProductionAdSlot: React.FC<ProductionAdSlotProps> = ({
       ([entry]) => {
         if (entry.isIntersecting && !adLoaded) {
           setIsVisible(true);
-          loadAd();
         }
       },
       { threshold: 0.1, rootMargin: '100px' }
@@ -70,27 +73,23 @@ const ProductionAdSlot: React.FC<ProductionAdSlotProps> = ({
     return () => observer.disconnect();
   }, [shouldShowAds, hasConsentedToAds, adLoaded]);
 
-  const loadAd = async () => {
-    if (adLoaded || !config) return;
+  // Push ad only when visible and <ins> is mounted
+  useEffect(() => {
+    if (!isVisible || adLoaded || adError || !adInsRef.current) return;
 
     try {
-      // Vérifier que AdSense est chargé
       if (!(window as any).adsbygoogle) {
-        console.error('AdSense not loaded');
         setAdError(true);
         return;
       }
-
-      // Initialiser l'ad
       ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({});
       setAdLoaded(true);
     } catch (error) {
-      console.error('❌ Erreur AdSense:', error);
       setAdError(true);
     }
-  };
+  }, [isVisible, adLoaded, adError]);
 
-  // Ne rien afficher si conditions non remplies ou erreur - pas de placeholder
+  // Don't render in dev or without consent
   if (!shouldShowAds || !hasConsentedToAds || adError || !import.meta.env.PROD) {
     return null;
   }
@@ -98,6 +97,7 @@ const ProductionAdSlot: React.FC<ProductionAdSlotProps> = ({
   return (
     <div ref={adRef} className={`${config.dimensions} mx-auto ${className}`}>
       <ins
+        ref={adInsRef}
         className="adsbygoogle"
         style={config.style}
         data-ad-client="ca-pub-2046195502734056"

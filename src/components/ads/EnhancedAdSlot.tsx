@@ -96,9 +96,13 @@ const EnhancedAdSlot: React.FC<EnhancedAdSlotProps> = ({
     return () => observer.disconnect();
   }, [config.show]);
 
-  // Chargement de l'annonce seulement quand visible ET avec consentement
+  // Load the ad when visible, with consent, and <ins> is in the DOM.
+  // Use a longer delay to ensure the ins element is fully rendered.
+  const adInsRef = useRef<HTMLModElement>(null);
+
   useEffect(() => {
-    if (!isIntersecting || !hasConsentedToAds || !config.slotId) return;
+    if (!isIntersecting || !hasConsentedToAds || !config.slotId || !adInsRef.current) return;
+    if (adStatus === 'loaded' || adStatus === 'error' || adStatus === 'blocked') return;
 
     const timer = setTimeout(() => {
       try {
@@ -111,30 +115,27 @@ const EnhancedAdSlot: React.FC<EnhancedAdSlotProps> = ({
       } catch (error) {
         setAdStatus('blocked');
       }
-    }, priority === 'high' ? 100 : priority === 'medium' ? 300 : 500);
+    }, priority === 'high' ? 200 : priority === 'medium' ? 500 : 800);
 
     return () => clearTimeout(timer);
-  }, [isIntersecting, hasConsentedToAds, config.slotId, priority]);
+  }, [isIntersecting, hasConsentedToAds, config.slotId, priority, adStatus]);
 
-  // Ne jamais afficher de placeholder - retourner null si on ne peut pas montrer la vraie pub
+  // Don't render in dev or without consent
   if (!shouldShowAds || !hasConsentedToAds || !config.show || !config.slotId || !import.meta.env.PROD) {
     return null;
   }
 
-  // En cas d'erreur, ne rien afficher pour garder l'UI propre
+  // On error/blocked, hide cleanly
   if (adStatus === 'error' || adStatus === 'blocked') {
     return null;
   }
 
-  // Pendant le chargement, ne rien afficher
-  if (adStatus === 'loading') {
-    return null;
-  }
-
-  // Annonce prête - attendre la visibilité
+  // Always render the container so the IntersectionObserver ref can attach.
+  // The <ins> element must be in the DOM before adsbygoogle.push({}) is called.
   return (
     <div ref={adRef} className={`${config.dimensions} ${className}`}>
       <ins
+        ref={adInsRef}
         className="adsbygoogle"
         style={{ display: 'block' }}
         data-ad-client="ca-pub-2046195502734056"

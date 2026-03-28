@@ -42,38 +42,37 @@ const GamePageLayout: React.FC<GamePageLayoutProps> = ({
         {headerConfig?.title && <UnifiedHeader {...headerConfig as UnifiedHeaderConfig} />}
         
         {/* Container unifié avec max-w-6xl */}
-        <div className={cn("w-full max-w-6xl mx-auto px-4 py-6 md:py-8", className)}>
-          {/* Layout 3 colonnes sur desktop (toujours affiché, avec placeholders si pas de pubs) */}
-          {!isMobile ? (
-            <div className="grid grid-cols-[250px_1fr_250px] gap-6">
-              {/* Sidebar gauche */}
-              <aside className="flex flex-col justify-start items-center pt-4">
-                <div className="sticky top-4">
-                  {shouldShowAds ? (
-                    <EnhancedAdSlot placement="game-sidebar-left" priority="medium" />
-                  ) : (
-                    <AdPlaceholder position="left" />
-                  )}
-                </div>
-              </aside>
-              
-              {/* Contenu central */}
-              <main className="w-full">{children}</main>
-              
-              {/* Sidebar droite */}
-              <aside className="flex flex-col justify-start items-center pt-4">
-                <div className="sticky top-4">
-                  {shouldShowAds ? (
-                    <EnhancedAdSlot placement="game-sidebar-right" priority="medium" />
-                  ) : (
-                    <AdPlaceholder position="right" />
-                  )}
-                </div>
-              </aside>
-            </div>
-          ) : (
+        <div className={cn("w-full max-w-6xl mx-auto px-4 sm:px-6 py-6 md:py-8", className)}>
+          {/* Layout 3 colonnes on xl+ only, single column on mobile/tablet */}
+          <div className="hidden xl:grid grid-cols-[250px_1fr_250px] gap-6">
+            {/* Sidebar gauche */}
+            <aside className="flex flex-col justify-start items-center pt-4">
+              <div className="sticky top-4">
+                {shouldShowAds ? (
+                  <EnhancedAdSlot placement="game-sidebar-left" priority="medium" />
+                ) : (
+                  <AdPlaceholder position="left" />
+                )}
+              </div>
+            </aside>
+
+            {/* Contenu central */}
             <main className="w-full">{children}</main>
-          )}
+
+            {/* Sidebar droite */}
+            <aside className="flex flex-col justify-start items-center pt-4">
+              <div className="sticky top-4">
+                {shouldShowAds ? (
+                  <EnhancedAdSlot placement="game-sidebar-right" priority="medium" />
+                ) : (
+                  <AdPlaceholder position="right" />
+                )}
+              </div>
+            </aside>
+          </div>
+
+          {/* Single column for mobile/tablet (below xl) */}
+          <main className="xl:hidden w-full">{children}</main>
         </div>
       </MobileOptimizer>
     </PageShell>

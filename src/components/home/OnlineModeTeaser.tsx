@@ -15,11 +15,11 @@ const OnlineModeTeaser: React.FC = () => {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <Badge className="bg-gradient-to-r from-purple-500 to-blue-500 text-white mb-4 px-4 py-2 text-sm font-bold">
-            🚀 Bientôt disponible
+          <Badge className="bg-gradient-to-r from-dutch-purple to-dutch-blue text-white mb-4 px-4 py-2 text-sm font-bold">
+            Bientôt disponible
           </Badge>
-          <h2 className="text-4xl md:text-5xl font-black bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-600 bg-clip-text text-transparent mb-6 leading-tight py-2">
-            🌐 Mode En Ligne Dutch 🌐
+          <h2 className="text-4xl md:text-5xl font-black bg-gradient-to-r from-dutch-purple via-dutch-blue to-trinity-blue-600 bg-clip-text text-transparent mb-6 leading-tight py-2">
+            Mode En Ligne Dutch
           </h2>
           <p className="text-xl text-neutral-700 font-bold max-w-4xl mx-auto mb-8">
             Préparez-vous à découvrir le Dutch en ligne complet ! Jouez contre vos amis à distance avec des cartes virtuelles.

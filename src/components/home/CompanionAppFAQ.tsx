@@ -113,7 +113,7 @@ const CompanionAppFAQ: React.FC = () => {
         >
           <div className="bg-gradient-to-r from-blue-100 to-purple-100 rounded-2xl p-8 border-2 border-blue-200">
             <p className="text-lg text-blue-800 font-bold mb-4">
-              📱 Encore des questions ? 
+              Encore des questions ?
             </p>
             <p className="text-blue-700 font-semibold">
               L'application est gratuite et fonctionne instantanément - testez-la dès maintenant avec vos cartes Dutch !

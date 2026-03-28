@@ -7,6 +7,7 @@ import { useSEO } from '@/hooks/useSEO';
 import { StructuredData } from '@/components/seo/StructuredData';
 import { Heart, Users, Smartphone, Zap } from 'lucide-react';
 import PageShell from '@/components/layout/PageShell';
+import PageContainer from '@/components/layout/PageContainer';
 import UnifiedHeader from '@/components/layout/UnifiedHeader';
 
 const AboutPage: React.FC = () => {
@@ -37,8 +38,7 @@ const AboutPage: React.FC = () => {
         showSettings={true}
       />
 
-      <div className="p-8 pt-4">
-        <div className="max-w-4xl mx-auto space-y-8">
+      <PageContainer size="md" className="space-y-8">
           {/* Introduction */}
           <Card className="vision-card">
             <CardContent className="p-8">
@@ -135,7 +135,7 @@ const AboutPage: React.FC = () => {
 
           {/* Call to action */}
           <div className="text-center">
-            <Button 
+            <Button
               variant="default"
               size="lg"
               onClick={() => navigate('/setup')}
@@ -144,8 +144,7 @@ const AboutPage: React.FC = () => {
               Commencer une partie
             </Button>
           </div>
-        </div>
-      </div>
+      </PageContainer>
     </PageShell>
   );
 };

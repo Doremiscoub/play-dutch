@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import UnifiedHeader from '@/components/layout/UnifiedHeader';
 import { useUnifiedHeader } from '@/hooks/useUnifiedHeader';
 import PageShell from '@/components/layout/PageShell';
+import PageContainer from '@/components/layout/PageContainer';
 import { MobileOptimizer } from '@/components/ui/mobile-optimizer';
 import EnhancedGameHistory from '@/components/history/EnhancedGameHistory';
 import { EnrichedStatsV2 } from '@/components/statistics/EnrichedStatsV2';
@@ -41,7 +42,7 @@ const History: React.FC = () => {
       <MobileOptimizer pageType="history" className="min-h-screen">
         <UnifiedHeader {...headerConfig} />
 
-        <div className="container mx-auto px-4 py-6 space-y-6">
+        <PageContainer className="space-y-6">
           <Tabs defaultValue="history" className="w-full">
             <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="history">Historique</TabsTrigger>
@@ -70,7 +71,7 @@ const History: React.FC = () => {
               />
             </TabsContent>
           </Tabs>
-        </div>
+        </PageContainer>
       </MobileOptimizer>
     </PageShell>
   );
