@@ -120,14 +120,14 @@ const StatItem: React.FC<{
       <div className={`w-6 h-6 rounded-full ${badgeColor} flex items-center justify-center text-white`}>
         {icon}
       </div>
-      <span className="text-xs text-gray-600 font-medium">{label}</span>
+      <span className="text-xs text-muted-foreground font-medium">{label}</span>
     </div>
     <div className="flex items-baseline gap-1">
       <span className="text-lg font-bold text-foreground">
         {value}
       </span>
       {subLabel && (
-        <span className="text-xs text-gray-500">{subLabel}</span>
+        <span className="text-xs text-muted-foreground">{subLabel}</span>
       )}
     </div>
   </motion.div>

@@ -196,6 +196,9 @@ const config: Config = {
         'body': ['Inter', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'],
         'mono': ['JetBrains Mono', 'Fira Code', 'Consolas', 'monospace'],
       },
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+      },
       boxShadow: {
         'glass': '0 4px 16px rgba(0, 0, 0, 0.06)',
         'glass-lg': '0 8px 32px rgba(0, 0, 0, 0.08)',

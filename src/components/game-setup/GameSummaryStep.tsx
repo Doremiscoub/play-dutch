@@ -36,10 +36,10 @@ const GameSummaryStep: React.FC<GameSummaryStepProps> = ({
   return (
     <Card className="p-6 space-y-6">
       <div className="text-center">
-        <h2 className="text-xl sm:text-2xl font-display font-bold text-gray-900 mb-2">
+        <h2 className="text-xl sm:text-2xl font-display font-bold text-foreground mb-2">
           Récapitulatif
         </h2>
-        <p className="text-gray-500">
+        <p className="text-muted-foreground">
           Vérifiez les paramètres de votre partie avant de commencer
         </p>
       </div>
@@ -54,8 +54,8 @@ const GameSummaryStep: React.FC<GameSummaryStepProps> = ({
                 <Users className="h-5 w-5 text-blue-600" />
               </div>
               <div>
-                <div className="font-medium text-gray-900">Nombre de joueurs</div>
-                <div className="text-sm text-gray-500">{playerCount} participants</div>
+                <div className="font-medium text-foreground">Nombre de joueurs</div>
+                <div className="text-sm text-muted-foreground">{playerCount} participants</div>
               </div>
             </div>
             <Button
@@ -78,8 +78,8 @@ const GameSummaryStep: React.FC<GameSummaryStepProps> = ({
                 <Target className="h-5 w-5 text-purple-600" />
               </div>
               <div>
-                <div className="font-medium text-gray-900">Joueurs</div>
-                <div className="text-sm text-gray-500">{validPlayers.length} joueurs prêts</div>
+                <div className="font-medium text-foreground">Joueurs</div>
+                <div className="text-sm text-muted-foreground">{validPlayers.length} joueurs prêts</div>
               </div>
             </div>
             <Button
@@ -116,21 +116,21 @@ const GameSummaryStep: React.FC<GameSummaryStepProps> = ({
 
       {/* Rules reminder */}
       <div className="bg-gray-50 border border-gray-200 rounded-xl p-4">
-        <h3 className="font-semibold text-gray-900 mb-2">
+        <h3 className="font-semibold text-foreground mb-2">
           Rappel des règles
         </h3>
-        <ul className="text-sm text-gray-600 space-y-2">
+        <ul className="text-sm text-muted-foreground space-y-2">
           <li className="flex items-start gap-2">
             <span className="text-green-500 font-bold mt-0.5">•</span>
-            <span><strong className="text-gray-800">Objectif :</strong> Avoir le score le plus bas</span>
+            <span><strong className="text-foreground">Objectif :</strong> Avoir le score le plus bas</span>
           </li>
           <li className="flex items-start gap-2">
             <span className="text-blue-500 font-bold mt-0.5">•</span>
-            <span><strong className="text-gray-800">Dutch :</strong> Le joueur avec le score le plus bas de la manche</span>
+            <span><strong className="text-foreground">Dutch :</strong> Le joueur avec le score le plus bas de la manche</span>
           </li>
           <li className="flex items-start gap-2">
             <span className="text-purple-500 font-bold mt-0.5">•</span>
-            <span><strong className="text-gray-800">Fin :</strong> Premier à 100 points, gagnant = score total le plus bas</span>
+            <span><strong className="text-foreground">Fin :</strong> Premier à 100 points, gagnant = score total le plus bas</span>
           </li>
         </ul>
       </div>

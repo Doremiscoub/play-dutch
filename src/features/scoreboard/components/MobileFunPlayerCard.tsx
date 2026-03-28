@@ -73,10 +73,9 @@ const MobileFunPlayerCard: React.FC<MobileFunPlayerCardProps> = ({
   return (
     <motion.div
       className={cn(
-        "relative rounded-xl border transition-all duration-200 cursor-pointer",
-        theme.bg,
+        "relative rounded-xl border transition-all duration-200 cursor-pointer glass-surface",
         theme.border,
-        isSelected || isExpanded ? "ring-2 ring-purple-300 scale-[1.01]" : "hover:shadow-sm"
+        isSelected || isExpanded ? "neon-border-purple scale-[1.01]" : "hover:shadow-sm"
       )}
       onClick={handleCardClick}
       initial={{ opacity: 0, y: 10 }}

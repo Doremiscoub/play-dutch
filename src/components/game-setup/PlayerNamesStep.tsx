@@ -107,10 +107,10 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
   return (
     <Card className="p-6 space-y-6">
       <div className="text-center">
-        <h2 className="text-xl sm:text-2xl font-display font-bold text-gray-900 mb-2">
+        <h2 className="text-xl sm:text-2xl font-display font-bold text-foreground mb-2">
           Noms des joueurs
         </h2>
-        <p className="text-gray-500">
+        <p className="text-muted-foreground">
           Personnalisez les noms des {playerCount} joueurs
         </p>
       </div>
@@ -181,7 +181,7 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
                 </div>
               ) : (
                 <div className="flex-1 flex items-center justify-between">
-                  <span className="font-medium text-gray-800 leading-tight break-words pr-2">
+                  <span className="font-medium text-foreground leading-tight break-words pr-2">
                     {player.name}
                   </span>
                   <Button

@@ -55,7 +55,7 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
       <div className="w-full max-w-5xl mx-auto px-4 sm:px-6">
         {variant === 'game' ? (
           /* Game header — compact info bar */
-          <div className="bg-white rounded-xl border border-border shadow-sm px-4 py-2.5">
+          <div className="glass-elevated rounded-2xl px-4 py-2.5">
             <div className="flex items-center justify-between gap-3">
               {showBackButton && onBack && (
                 <Button variant="ghost" size="icon-sm" onClick={onBack} className="shrink-0">

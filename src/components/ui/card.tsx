@@ -10,6 +10,8 @@ const cardVariants = cva(
       variant: {
         default: "border-border shadow-sm",
         elevated: "border-border/50 shadow-md hover:shadow-lg",
+        glass: "glass-surface",
+        "glass-elevated": "glass-elevated",
         ghost: "border-transparent shadow-none bg-transparent",
         subtle: "border-border/40 bg-muted/30",
       }

@@ -31,7 +31,7 @@ export default function CommentBubble({ displayedText, isTyping }: CommentBubble
           transition={{ delay: 0.6 }}
         >
           <MessageCircle className="w-5 h-5 text-trinity-blue-500" />
-          <span className="text-sm font-semibold text-gray-600 uppercase tracking-wider">
+          <span className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
             Professeur Cartouche
           </span>
         </motion.div>
@@ -43,7 +43,7 @@ export default function CommentBubble({ displayedText, isTyping }: CommentBubble
           animate={{ opacity: 1 }}
           transition={{ delay: 0.8 }}
         >
-          <p className="text-lg font-medium leading-relaxed text-gray-800 mb-4">
+          <p className="text-lg font-medium leading-relaxed text-foreground mb-4">
             {displayedText}
             {isTyping && (
               <motion.span

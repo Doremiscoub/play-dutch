@@ -121,7 +121,7 @@ export default function AICommentator({
           <ProfessorAvatar size={singleColumn ? "sm" : "sm"} animate mood="thinking" />
           <div className="flex items-center gap-2">
             <Clock className="w-4 h-4 animate-spin text-blue-500" />
-            <span className={cn("text-gray-600", singleColumn ? "text-xs" : "text-sm")}>
+            <span className={cn("text-muted-foreground", singleColumn ? "text-xs" : "text-sm")}>
               {isGenerating ? "Le Professeur réfléchit..." : "Analyse en cours..."}
             </span>
           </div>
@@ -189,7 +189,7 @@ export default function AICommentator({
             
             <div className="relative">
               <p className={cn(
-                "leading-relaxed text-gray-800 font-medium break-words",
+                "leading-relaxed text-foreground font-medium break-words",
                 singleColumn ? "text-sm" : "text-lg"
               )}>
                 {displayedText}
@@ -211,7 +211,7 @@ export default function AICommentator({
                   {React.createElement(PERSONALITY_ICONS[personality].icon, {
                     className: cn("w-4 h-4", PERSONALITY_ICONS[personality].color)
                   })}
-                  <span className="text-xs font-semibold text-gray-700 uppercase tracking-wide">
+                  <span className="text-xs font-semibold text-foreground uppercase tracking-wide">
                     {PERSONALITY_ICONS[personality].label}
                   </span>
                   {isMemoryActive && (
@@ -229,10 +229,10 @@ export default function AICommentator({
                 </div>
                 
                 <div className="flex items-center gap-1">
-                  <Button variant="ghost" size="sm" onClick={() => generateComment('manual_refresh')} disabled={isGenerating} className="text-gray-500 hover:text-blue-600 p-1 h-auto">
+                  <Button variant="ghost" size="sm" onClick={() => generateComment('manual_refresh')} disabled={isGenerating} className="text-muted-foreground hover:text-blue-600 p-1 h-auto">
                     <RotateCcw className={cn("w-3 h-3", isGenerating && "animate-spin")} />
                   </Button>
-                  <Button variant="ghost" size="sm" onClick={() => setShowPersonalitySelector(!showPersonalitySelector)} className="text-gray-500 hover:text-purple-600 p-1 h-auto">
+                  <Button variant="ghost" size="sm" onClick={() => setShowPersonalitySelector(!showPersonalitySelector)} className="text-muted-foreground hover:text-purple-600 p-1 h-auto">
                     <Settings className="w-3 h-3" />
                   </Button>
                 </div>
@@ -254,7 +254,7 @@ export default function AICommentator({
                   "sm:min-w-64 max-w-[95vw] sm:max-w-[90vw] mx-auto"
                 )}
               >
-                <h4 className="text-sm font-semibold text-gray-700 mb-3">Personnalité du Professeur</h4>
+                <h4 className="text-sm font-semibold text-foreground mb-3">Personnalité du Professeur</h4>
                 <div className="grid grid-cols-2 gap-2">
                   {Object.entries(PERSONALITY_ICONS).map(([key, config]) => (
                     <Button

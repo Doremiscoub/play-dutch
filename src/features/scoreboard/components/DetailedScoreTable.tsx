@@ -30,7 +30,7 @@ const DetailedScoreTable: React.FC<DetailedScoreTableProps> = ({ players, roundH
   // Fonction pour déterminer la classe de style selon le score
   const getScoreClass = (score: number): string => {
     if (score <= 0) return 'text-green-600 font-semibold';
-    if (score <= 15) return 'text-gray-700';
+    if (score <= 15) return 'text-foreground';
     if (score <= 25) return 'text-red-500';
     return 'text-red-800 font-semibold';
   };
