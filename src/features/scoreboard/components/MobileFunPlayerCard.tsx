@@ -33,29 +33,29 @@ const MobileFunPlayerCard: React.FC<MobileFunPlayerCardProps> = ({
     const themes = {
       1: {
         bg: "bg-amber-50",
-        border: "border-amber-200",
-        text: "text-amber-700",
+        border: "border-amber-300",
+        text: "text-amber-800",
         accent: "bg-amber-500",
         badge: "bg-amber-100"
       },
       2: {
         bg: "bg-blue-50",
-        border: "border-blue-200",
-        text: "text-blue-700",
+        border: "border-blue-300",
+        text: "text-blue-800",
         accent: "bg-blue-500",
         badge: "bg-blue-100"
       },
       3: {
         bg: "bg-emerald-50",
-        border: "border-emerald-200",
-        text: "text-emerald-700",
+        border: "border-emerald-300",
+        text: "text-emerald-800",
         accent: "bg-emerald-500",
         badge: "bg-emerald-100"
       },
       default: {
         bg: "bg-slate-50",
-        border: "border-slate-200",
-        text: "text-slate-700",
+        border: "border-slate-300",
+        text: "text-slate-800",
         accent: "bg-slate-500",
         badge: "bg-slate-100"
       }

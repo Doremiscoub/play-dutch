@@ -8,16 +8,6 @@ import { MobileOptimizer } from '@/components/ui/mobile-optimizer';
 import UnifiedHeader from './UnifiedHeader';
 import type { UnifiedHeaderConfig } from '@/hooks/useUnifiedHeader';
 
-// Placeholder pour les emplacements publicitaires
-const AdPlaceholder: React.FC<{ position: 'left' | 'right' }> = ({ position: _position }) => (
-  <div className="w-[250px] h-[600px] rounded-xl border-2 border-dashed border-gray-300 bg-gray-50/50 flex flex-col items-center justify-center p-4 text-center">
-    <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center mb-3">
-      <span className="text-3xl">📢</span>
-    </div>
-    <p className="text-sm font-semibold text-gray-600 mb-1">Emplacement publicitaire</p>
-    <p className="text-xs text-gray-500">Les publicités apparaîtront ici</p>
-  </div>
-);
 
 interface GamePageLayoutProps {
   children: ReactNode;
@@ -48,10 +38,8 @@ const GamePageLayout: React.FC<GamePageLayoutProps> = ({
             {/* Sidebar gauche */}
             <aside className="flex flex-col justify-start items-center pt-4">
               <div className="sticky top-4">
-                {shouldShowAds ? (
+                {shouldShowAds && (
                   <EnhancedAdSlot placement="game-sidebar-left" priority="medium" />
-                ) : (
-                  <AdPlaceholder position="left" />
                 )}
               </div>
             </aside>
@@ -62,10 +50,8 @@ const GamePageLayout: React.FC<GamePageLayoutProps> = ({
             {/* Sidebar droite */}
             <aside className="flex flex-col justify-start items-center pt-4">
               <div className="sticky top-4">
-                {shouldShowAds ? (
+                {shouldShowAds && (
                   <EnhancedAdSlot placement="game-sidebar-right" priority="medium" />
-                ) : (
-                  <AdPlaceholder position="right" />
                 )}
               </div>
             </aside>

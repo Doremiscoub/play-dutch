@@ -52,34 +52,34 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
     const themes = {
       1: {
         bg: "bg-amber-50",
-        border: "border-amber-200",
-        text: "text-amber-700"
+        border: "border-amber-300",
+        text: "text-amber-800"
       },
       2: {
         bg: "bg-blue-50",
-        border: "border-blue-200",
-        text: "text-blue-700"
+        border: "border-blue-300",
+        text: "text-blue-800"
       },
       3: {
-        bg: "bg-green-50",
-        border: "border-green-200",
-        text: "text-emerald-700"
+        bg: "bg-emerald-50",
+        border: "border-emerald-300",
+        text: "text-emerald-800"
       },
       4: {
         bg: "bg-purple-50",
-        border: "border-purple-200",
-        text: "text-purple-700"
+        border: "border-purple-300",
+        text: "text-purple-800"
       },
       5: {
         bg: "bg-rose-50",
-        border: "border-rose-200",
-        text: "text-rose-700"
+        border: "border-rose-300",
+        text: "text-rose-800"
       }
     };
     return themes[rank as keyof typeof themes] || {
       bg: "bg-slate-50",
-      border: "border-slate-200",
-      text: "text-slate-700"
+      border: "border-slate-300",
+      text: "text-slate-800"
     };
   };
   const theme = getRankTheme();
