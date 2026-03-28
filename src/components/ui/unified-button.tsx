@@ -12,17 +12,17 @@ interface UnifiedButtonProps extends Omit<ButtonProps, "variant" | "size"> {
 }
 
 const variantMap: Record<UnifiedButtonVariant, string> = {
-  primary: "kidsPrimary",
-  secondary: "kidsSecondary", 
-  accent: "kidsTertiary",
+  primary: "default",
+  secondary: "secondary",
+  accent: "accent",
   ghost: "ghost",
-  glass: "glassColored"
+  glass: "glass"
 };
 
 const sizeMap: Record<UnifiedButtonSize, string> = {
   sm: "sm",
   md: "default",
-  lg: "lg", 
+  lg: "lg",
   xl: "xl"
 };
 

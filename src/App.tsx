@@ -45,9 +45,9 @@ const RouteTracker = () => {
 
   useEffect(() => {
     addBreadcrumb(
-      'navigation', 
+      'navigation',
       `Navigated to ${location.pathname}${location.search}`,
-      { 
+      {
         path: location.pathname,
         search: location.search
       }
@@ -59,7 +59,6 @@ const RouteTracker = () => {
 
 /**
  * Composant principal de l'application
- * Gère le routage et l'initialisation globale
  */
 const App: React.FC = () => {
   return (
@@ -67,30 +66,33 @@ const App: React.FC = () => {
       <SupabaseAuthProvider>
         <EnhancedAdProvider>
           <Router>
-          {/* Fond animé global avec vagues et pastilles - visible sur toute l'app */}
-          <div className="fixed inset-0 w-full h-full" style={{ zIndex: -10 }}>
+          {/* V2: Clean static background */}
+          <div className="fixed inset-0 w-full h-full -z-10">
             <AnimatedBackground variant="subtle" />
           </div>
-          
+
           <RouteTracker />
-          <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-dutch-blue"></div></div>}>
+          <Suspense fallback={
+            <div className="flex items-center justify-center min-h-screen">
+              <div className="flex flex-col items-center gap-3">
+                <div className="animate-spin rounded-full h-8 w-8 border-2 border-primary border-t-transparent" />
+                <p className="text-sm text-muted-foreground">Chargement...</p>
+              </div>
+            </div>
+          }>
           <Routes>
             <Route path="/" element={<AppLayout />}>
-              {/* Pages d'authentification */}
               <Route path="sign-in" element={<SignIn />} />
               <Route path="sign-up" element={<SignUp />} />
-              
-              {/* Pages principales */}
+
               <Route index element={<Home />} />
               <Route path="setup" element={<SimpleGameSetup />} />
-              
               <Route path="game" element={<SimpleGamePage />} />
               <Route path="join/:gameId" element={<JoinGamePage />} />
               <Route path="multiplayer" element={<MultiplayerPage />} />
               <Route path="history" element={<History />} />
               <Route path="rules" element={<RulesPage />} />
-              
-              {/* Pages SEO / Contenu */}
+
               <Route path="about" element={<AboutPage />} />
               <Route path="settings" element={<SettingsPage />} />
               <Route path="dev-tools" element={<DeveloperTools />} />
@@ -98,34 +100,31 @@ const App: React.FC = () => {
               <Route path="terms" element={<TermsPage />} />
               <Route path="faq" element={<FAQPage />} />
               <Route path="strategy" element={<GuideStrategy />} />
-              
-              {/* Redirections SEO friendly */}
+
               <Route path="aide" element={<Navigate to="/faq" replace />} />
               <Route path="questions" element={<Navigate to="/faq" replace />} />
               <Route path="guide" element={<Navigate to="/strategy" replace />} />
               <Route path="astuces" element={<Navigate to="/strategy" replace />} />
-              
-              {/* Redirection pour les routes non définies */}
               <Route path="*" element={<Navigate to="/" replace />} />
             </Route>
           </Routes>
           </Suspense>
 
-          {/* Configuration globale du système de toast */}
-          <Toaster 
-            position="top-center" 
-            richColors 
-            closeButton 
+          {/* Toast system */}
+          <Toaster
+            position="top-center"
+            richColors
+            closeButton
             toastOptions={{
               style: {
-                borderRadius: '16px',
-                background: 'rgba(255, 255, 255, 0.9)',
-                backdropFilter: 'blur(8px)',
-                border: '1px solid rgba(255, 255, 255, 0.5)',
+                borderRadius: '12px',
+                background: 'white',
+                border: '1px solid hsl(214 32% 91%)',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
               }
             }}
           />
-          
+
           <PWAInstallPrompt />
           <GDPRConsentBanner />
           </Router>

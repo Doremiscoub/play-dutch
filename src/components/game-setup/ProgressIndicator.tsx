@@ -1,108 +1,64 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { cn } from '@/lib/utils';
+import { Check } from 'lucide-react';
 
 interface ProgressIndicatorProps {
   currentStep: number;
   totalSteps: number;
 }
 
+const STEP_LABELS = ['Joueurs', 'Noms', 'Résumé'];
+
 const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({ currentStep, totalSteps }) => {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: -10 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="mb-6 sm:mb-8"
-    >
-      <div className="flex items-center justify-center gap-1 px-4">
+    <div className="mb-6 sm:mb-8">
+      <div className="flex items-center justify-center px-4">
         {Array.from({ length: totalSteps }, (_, i) => i + 1).map((step) => (
           <div key={step} className="flex items-center">
-            {/* Cercle d'étape */}
-            <motion.div
-              className={`relative w-10 h-10 sm:w-14 sm:h-14 rounded-full flex items-center justify-center text-sm sm:text-lg font-bold transition-all duration-300 ${
-                step === currentStep
-                  ? 'bg-gradient-to-br from-trinity-blue-600 via-trinity-purple-600 to-trinity-orange-600 text-white shadow-xl scale-110 border-2 border-white'
-                  : step < currentStep
-                  ? 'bg-gradient-to-br from-green-500 to-green-600 text-white shadow-lg border-2 border-green-400'
-                  : 'bg-neutral-100 text-neutral-500 border-2 border-neutral-300 shadow-sm'
-              }`}
-              animate={{
-                scale: step === currentStep ? 1.1 : 1,
-                boxShadow: step === currentStep 
-                  ? '0 8px 25px hsl(var(--dutch-blue) / 0.4), 0 15px 35px hsl(var(--dutch-purple) / 0.25)' 
-                  : step < currentStep
-                  ? '0 4px 15px hsl(var(--success) / 0.3)'
-                  : '0 2px 8px hsl(var(--neutral-900) / 0.08)'
-              }}
-              transition={{ duration: 0.3 }}
-            >
-              {/* Effet de brillance pour l'étape actuelle */}
-              {step === currentStep && (
-                <motion.div
-                  className="absolute inset-0 rounded-full bg-gradient-to-br from-white/30 to-white/10"
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-                />
-              )}
-              
-              {/* Icône de validation pour les étapes terminées */}
-              {step < currentStep ? (
-                <motion.div
-                  initial={{ scale: 0, rotate: -180 }}
-                  animate={{ scale: 1, rotate: 0 }}
-                  transition={{ duration: 0.5, type: "spring", bounce: 0.6 }}
-                  className="text-xl"
-                >
-                  ✓
-                </motion.div>
-              ) : (
-                <span className="relative z-10">{step}</span>
-              )}
-            </motion.div>
+            {/* Step circle */}
+            <div className="flex flex-col items-center gap-1.5">
+              <div
+                className={cn(
+                  'w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-sm sm:text-base font-semibold transition-colors duration-200',
+                  step === currentStep &&
+                    'bg-blue-600 text-white ring-4 ring-blue-100',
+                  step < currentStep &&
+                    'bg-green-600 text-white',
+                  step > currentStep &&
+                    'bg-gray-100 text-gray-400 border border-gray-200'
+                )}
+              >
+                {step < currentStep ? (
+                  <Check className="h-5 w-5" />
+                ) : (
+                  <span>{step}</span>
+                )}
+              </div>
+              <span
+                className={cn(
+                  'text-xs sm:text-sm font-medium transition-colors duration-200',
+                  step === currentStep && 'text-blue-700 font-semibold',
+                  step < currentStep && 'text-green-600',
+                  step > currentStep && 'text-gray-400'
+                )}
+              >
+                {STEP_LABELS[step - 1]}
+              </span>
+            </div>
 
-            {/* Ligne de connexion */}
+            {/* Connector line */}
             {step < totalSteps && (
-              <motion.div
-                className={`w-8 sm:w-16 h-1 mx-1 sm:mx-3 rounded-full transition-all duration-500 ${
-                  step < currentStep 
-                    ? 'bg-gradient-to-r from-green-500 to-green-600 shadow-md' 
-                    : 'bg-neutral-200'
-                }`}
-                initial={{ scaleX: 0 }}
-                animate={{ 
-                  scaleX: step < currentStep ? 1 : 0.3,
-                  opacity: step < currentStep ? 1 : 0.5
-                }}
-                transition={{ duration: 0.6, delay: step < currentStep ? 0.2 : 0 }}
-                style={{ transformOrigin: 'left' }}
+              <div
+                className={cn(
+                  'w-12 sm:w-20 h-0.5 mx-3 sm:mx-4 mb-6 transition-colors duration-200',
+                  step < currentStep ? 'bg-green-400' : 'bg-gray-200'
+                )}
               />
             )}
           </div>
         ))}
       </div>
-
-      {/* Labels des étapes */}
-      <div className="flex items-center justify-center gap-1 mt-3 sm:mt-4 px-4">
-        {['Joueurs', 'Noms', 'Résumé'].map((label, index) => (
-          <div key={label} className="flex items-center">
-            <motion.span
-              className={`text-xs sm:text-sm font-medium transition-all duration-300 text-center min-w-0 ${
-                index + 1 === currentStep
-                  ? 'text-trinity-blue-700 font-bold'
-                  : index + 1 < currentStep
-                  ? 'text-green-600 font-semibold'
-                  : 'text-neutral-400'
-              }`}
-              animate={{
-                scale: index + 1 === currentStep ? 1.05 : 1
-              }}
-            >
-              {label}
-            </motion.span>
-            {index < 2 && <div className="w-8 sm:w-16 mx-1 sm:mx-3" />}
-          </div>
-        ))}
-      </div>
-    </motion.div>
+    </div>
   );
 };
 

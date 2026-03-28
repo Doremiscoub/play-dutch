@@ -1,129 +1,108 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Zap, BookOpen, WifiOff } from 'lucide-react';
+import { BookOpen, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useAdaptiveInterface } from '@/components/ui/adaptive-layout';
 
 const SimplifiedHeroSection: React.FC = () => {
   const navigate = useNavigate();
-  const { isMobile } = useAdaptiveInterface();
 
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center px-2 sm:px-4 py-4 sm:py-8 bg-gradient-to-br from-trinity-blue-100 via-trinity-purple-50 to-trinity-orange-100">
-      
-      {/* Contenu principal centré */}
-      <div className="relative z-10 text-center w-full max-w-4xl mx-auto space-y-6 sm:space-y-8 px-2 sm:px-4">
-        
-        {/* Logo principal */}
+    <section className="relative flex flex-col items-center justify-center px-4 sm:px-6 pt-8 pb-16 sm:pt-12 sm:pb-24">
+      {/* Subtle background gradient */}
+      <div className="absolute inset-0 bg-gradient-to-b from-blue-50/60 via-purple-50/30 to-transparent pointer-events-none" />
+
+      <div className="relative z-10 text-center w-full max-w-2xl mx-auto space-y-6 sm:space-y-8">
+        {/* Logo */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-          className="relative"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
         >
-          <img 
+          <img
             src="/lovable-uploads/0532ef39-c77c-4480-8d74-7af7665596ee.png"
             alt="Dutch - Professeur Cartouche"
-            className="w-auto h-64 sm:h-72 md:h-80 lg:h-96 xl:h-[28rem] mx-auto object-contain"
+            className="w-auto h-40 sm:h-52 md:h-60 mx-auto object-contain"
           />
         </motion.div>
 
-        {/* Badge Application Compagnon */}
+        {/* Badge */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3, duration: 0.5 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2, duration: 0.4 }}
           className="flex justify-center"
         >
-          <div className="inline-flex items-center gap-2 bg-white/80 text-trinity-blue-700 px-4 sm:px-6 py-2 sm:py-3 rounded-full font-bold text-xs sm:text-sm border-2 border-trinity-blue-200 backdrop-blur-sm w-full sm:w-auto max-w-xs sm:max-w-none justify-center">
-            Application Compagnon
-          </div>
+          <span className="inline-flex items-center gap-1.5 bg-primary/8 text-primary px-4 py-1.5 rounded-full font-medium text-xs tracking-wide border border-primary/10">
+            Application Compagnon de Jeu
+          </span>
         </motion.div>
 
-        {/* Message principal */}
+        {/* Headline */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5, duration: 0.5 }}
-          className="space-y-4"
+          transition={{ delay: 0.3, duration: 0.5 }}
+          className="space-y-3"
         >
-          <h1 className="relative text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-tight px-2 uppercase tracking-wide">
-            {/* Main text with sophisticated gradient and shadow */}
-            <span className="relative inline-block bg-gradient-to-br from-trinity-blue-600 via-trinity-purple-600 to-trinity-orange-500 bg-clip-text text-transparent filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]">
-              SORTEZ VOS CARTES, 
-              <span className="inline-block ml-2 px-3 py-1 bg-gradient-to-r from-trinity-orange-500 to-trinity-orange-600 text-white rounded-lg shadow-xl transform hover:scale-105 transition-all duration-300 font-extrabold">
-                ON
-              </span>
-              <br className="sm:hidden"/>
-              <span className="inline-block mt-2 px-3 py-1 bg-gradient-to-r from-trinity-orange-500 to-trinity-orange-600 text-white rounded-lg shadow-xl transform hover:scale-105 transition-all duration-300 font-extrabold">
-                S'OCCUPE DES SCORES !
-              </span>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold font-display leading-tight tracking-tight text-foreground">
+            Sortez vos cartes,{' '}
+            <span className="text-gradient-trinity">
+              on gère les scores
             </span>
-            
-            {/* Decorative elements */}
-            <div className="absolute -top-4 -left-2 text-trinity-orange-400 text-2xl animate-bounce" aria-hidden="true">🃏</div>
-            <div className="absolute -bottom-2 -right-4 text-trinity-blue-400 text-xl animate-pulse" aria-hidden="true">⚡</div>
           </h1>
-          
-          <p className="text-base sm:text-lg md:text-xl text-gray-600 font-medium max-w-full sm:max-w-2xl mx-auto leading-relaxed px-2">
-            Votre smartphone devient votre carnet de scores intelligent
+          <p className="text-base sm:text-lg text-muted-foreground max-w-lg mx-auto leading-relaxed">
+            Votre smartphone devient votre carnet de scores intelligent. Gratuit, hors-ligne, sans inscription.
           </p>
         </motion.div>
 
         {/* CTA Buttons */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.7, duration: 0.5 }}
-          className="pt-2 sm:pt-4 w-full flex flex-col sm:flex-row items-center justify-center gap-4"
+          transition={{ delay: 0.5, duration: 0.4 }}
+          className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2"
         >
           <Button
             onClick={() => navigate('/setup')}
             size="xl"
-            aria-label="Lancer une nouvelle partie"
-            className="relative group bg-gradient-to-br from-trinity-blue-500 via-trinity-blue-600 to-trinity-blue-700 hover:from-trinity-blue-600 hover:via-trinity-blue-700 hover:to-trinity-blue-800 text-white font-black px-8 sm:px-12 md:px-16 py-6 sm:py-8 md:py-10 rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-105 border-2 border-white/20 w-full max-w-xs sm:max-w-sm md:max-w-none md:w-auto text-xl sm:text-2xl md:text-3xl uppercase tracking-wider overflow-hidden"
+            variant="trinity"
+            className="w-full sm:w-auto min-w-[200px] text-base font-bold py-6 rounded-xl"
           >
-            {/* Animated background effect */}
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out"></div>
-
-            {/* Button content */}
-            <span className="relative z-10 flex items-center justify-center gap-3">
-              {isMobile ? 'JOUER' : 'JOUER MAINTENANT'}
-            </span>
-
-            {/* Glow effect */}
-            <div className="absolute -inset-1 bg-gradient-to-r from-trinity-blue-400 to-trinity-blue-600 rounded-2xl blur opacity-30 group-hover:opacity-60 transition-opacity duration-300"></div>
+            Nouvelle partie
+            <ArrowRight className="h-4 w-4 ml-1" />
           </Button>
 
           <Button
             onClick={() => navigate('/rules')}
             variant="outline"
             size="lg"
-            aria-label="Voir les règles du jeu"
-            className="border-2 border-trinity-blue-300 text-trinity-blue-700 bg-white/70 hover:bg-white hover:border-trinity-blue-500 font-semibold text-base px-6 py-3 rounded-2xl backdrop-blur-sm transition-all duration-300 min-w-[140px]"
+            className="w-full sm:w-auto"
           >
-            <BookOpen className="h-4 w-4 mr-2" />
-            Règles
+            <BookOpen className="h-4 w-4" />
+            Règles du jeu
           </Button>
         </motion.div>
 
-        {/* Stats simples en bas */}
+        {/* Trust indicators */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.9, duration: 0.5 }}
-          className="flex flex-col sm:flex-row justify-center items-center gap-3 sm:gap-6 pt-6 sm:pt-8 w-full px-2"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.7, duration: 0.4 }}
+          className="flex flex-wrap justify-center gap-6 pt-4 text-sm text-muted-foreground"
         >
-          <div className="flex items-center gap-2 bg-white/90 rounded-full px-4 sm:px-6 py-2 sm:py-3 shadow-md border border-trinity-orange-200 backdrop-blur-sm w-full sm:w-auto max-w-xs sm:max-w-none justify-center">
-            <WifiOff className="h-4 sm:h-5 w-4 sm:w-5 text-trinity-orange-500 flex-shrink-0" />
-            <span className="text-gray-800 font-semibold text-sm sm:text-base">Gratuit & hors-ligne</span>
-          </div>
-          
-          <div className="flex items-center gap-2 bg-white/90 rounded-full px-4 sm:px-6 py-2 sm:py-3 shadow-md border border-trinity-blue-200 backdrop-blur-sm w-full sm:w-auto max-w-xs sm:max-w-none justify-center">
-            <Zap className="h-4 sm:h-5 w-4 sm:w-5 text-trinity-blue-500 flex-shrink-0" />
-            <span className="text-gray-800 font-semibold text-sm sm:text-base">100% gratuit</span>
-          </div>
+          <span className="flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
+            100% gratuit
+          </span>
+          <span className="flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+            Fonctionne hors-ligne
+          </span>
+          <span className="flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-purple-500" />
+            2 à 10 joueurs
+          </span>
         </motion.div>
       </div>
     </section>
