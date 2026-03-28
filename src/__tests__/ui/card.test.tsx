@@ -9,13 +9,13 @@ describe('Card Components', () => {
       render(<Card data-testid="card">Default Card</Card>);
       const card = screen.getByTestId('card');
       expect(card).toBeInTheDocument();
-      expect(card).toHaveClass('rounded-lg', 'text-card-foreground', 'shadow-sm', 'border', 'bg-card');
+      expect(card).toHaveClass('rounded-xl', 'text-card-foreground', 'shadow-sm', 'border', 'bg-card');
     });
 
     it('renders with glass variant', () => {
       render(<Card variant="glass" data-testid="card">Glass Card</Card>);
       const card = screen.getByTestId('card');
-      expect(card).toHaveClass('bg-white/85', 'backdrop-blur-md', 'border-white/60');
+      expect(card).toHaveClass('glass-surface');
     });
 
     it('renders with elevated variant', () => {
@@ -33,7 +33,7 @@ describe('Card Components', () => {
     it('applies custom className', () => {
       render(<Card className="custom-card" data-testid="card">Custom Card</Card>);
       const card = screen.getByTestId('card');
-      expect(card).toHaveClass('custom-card', 'rounded-lg');
+      expect(card).toHaveClass('custom-card', 'rounded-xl');
     });
   });
 
@@ -49,7 +49,7 @@ describe('Card Components', () => {
     it('renders as h3 with correct classes', () => {
       render(<CardTitle>Card Title</CardTitle>);
       const title = screen.getByRole('heading', { level: 3 });
-      expect(title).toHaveClass('text-2xl', 'font-semibold', 'leading-none', 'tracking-tight');
+      expect(title).toHaveClass('text-lg', 'font-semibold', 'leading-none', 'tracking-tight');
     });
   });
 

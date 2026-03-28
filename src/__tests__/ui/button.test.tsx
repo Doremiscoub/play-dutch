@@ -11,16 +11,16 @@ describe('Button Component', () => {
     expect(button).toHaveClass('bg-primary', 'text-primary-foreground', 'h-10', 'px-4', 'py-2');
   });
 
-  it('renders with dutch-primary variant', () => {
-    render(<Button variant="dutch-primary">Dutch Button</Button>);
-    const button = screen.getByRole('button', { name: /dutch button/i });
-    expect(button).toHaveClass('bg-dutch-primary', 'text-white');
+  it('renders with trinity variant', () => {
+    render(<Button variant="trinity">Trinity Button</Button>);
+    const button = screen.getByRole('button', { name: /trinity button/i });
+    expect(button).toHaveClass('bg-gradient-to-r', 'text-white');
   });
 
   it('renders with glass variant', () => {
     render(<Button variant="glass">Glass Button</Button>);
     const button = screen.getByRole('button', { name: /glass button/i });
-    expect(button).toHaveClass('bg-white/85', 'backdrop-blur-md');
+    expect(button).toHaveClass('glass-surface');
   });
 
   it('handles different sizes correctly', () => {
@@ -28,7 +28,7 @@ describe('Button Component', () => {
     expect(screen.getByRole('button')).toHaveClass('h-9', 'px-3');
 
     rerender(<Button size="lg">Large</Button>);
-    expect(screen.getByRole('button')).toHaveClass('h-11', 'px-8');
+    expect(screen.getByRole('button')).toHaveClass('h-11', 'px-6');
 
     rerender(<Button size="icon">Icon</Button>);
     expect(screen.getByRole('button')).toHaveClass('h-10', 'w-10');
