@@ -40,18 +40,18 @@ export const GAME_LAYOUT = {
     }
   },
   
-  // Glassmorphism unifié
+  // Card styles
   glass: {
-    light: 'bg-white/80 backdrop-blur-md border border-white/50',
-    medium: 'bg-white/60 backdrop-blur-lg border border-white/40',
-    strong: 'bg-white/90 backdrop-blur-xl border border-white/60'
+    light: 'bg-white border border-border shadow-sm',
+    medium: 'bg-white border border-border shadow-sm',
+    strong: 'bg-white border border-border shadow-md'
   },
-  
-  // Shadows unifiés
+
+  // Shadows
   shadows: {
-    card: 'shadow-lg shadow-gray-200/50',
-    float: 'shadow-xl shadow-gray-300/60',
-    glow: 'shadow-2xl shadow-purple-500/20'
+    card: 'shadow-sm',
+    float: 'shadow-md',
+    glow: 'shadow-lg'
   }
 };
 

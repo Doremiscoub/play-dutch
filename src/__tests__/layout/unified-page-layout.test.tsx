@@ -96,7 +96,7 @@ describe('UnifiedPageLayout Component', () => {
     );
 
     const header = screen.getByRole('banner');
-    expect(header).toHaveClass('sticky', 'top-0', 'z-50', 'backdrop-blur-xl');
+    expect(header).toHaveClass('sticky', 'top-0', 'z-50', 'backdrop-blur-sm');
     expect(screen.getByText('Sticky Header Test')).toBeInTheDocument();
   });
 });
