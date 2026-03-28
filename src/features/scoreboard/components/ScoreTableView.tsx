@@ -13,7 +13,7 @@ interface ScoreTableViewProps {
 const ScoreTableView: React.FC<ScoreTableViewProps> = ({ players, roundHistory }) => {
   if (!players.length) return (
     <div className="text-center p-8">
-      <p className="text-gray-500">Aucun joueur pour le moment</p>
+      <p className="text-muted-foreground">Aucun joueur pour le moment</p>
     </div>
   );
 
@@ -21,13 +21,13 @@ const ScoreTableView: React.FC<ScoreTableViewProps> = ({ players, roundHistory }
     <div className="space-y-6 w-full">
       {/* Tableau des scores par manche */}
       <div>
-        <h3 className="text-2xl font-medium mb-3 text-gray-700">Scores par manche</h3>
+        <h3 className="text-2xl font-medium mb-3 text-foreground">Scores par manche</h3>
         <DetailedScoreTable players={players} roundHistory={roundHistory} />
       </div>
       
       {/* Tableau des statistiques globales */}
       <div>
-        <h3 className="text-2xl font-medium mb-3 text-gray-700">Statistiques globales</h3>
+        <h3 className="text-2xl font-medium mb-3 text-foreground">Statistiques globales</h3>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

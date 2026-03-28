@@ -65,10 +65,10 @@ const SimpleGameSetup: React.FC = () => {
         <div className="container mx-auto px-4 py-6 sm:py-10 max-w-4xl relative z-20 animate-in fade-in duration-300">
           <ModernGameSetup onStartGame={handleStartGame} />
 
-          <Card className="mt-8 bg-blue-50 border border-blue-100">
+          <Card variant="glass" className="mt-8">
             <CardContent className="p-6">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-display font-semibold text-neutral-800">
+                <h3 className="text-lg font-display font-semibold text-foreground">
                   Rappel des règles Dutch
                 </h3>
                 <Button
@@ -81,7 +81,7 @@ const SimpleGameSetup: React.FC = () => {
                   Guide interactif
                 </Button>
               </div>
-              <div className="grid md:grid-cols-2 gap-4 text-sm text-neutral-600">
+              <div className="grid md:grid-cols-2 gap-4 text-sm text-muted-foreground">
                 <div className="space-y-2">
                   <p><strong>Objectif :</strong> Avoir le score le plus bas</p>
                   <p><strong>Dutch :</strong> Joueur avec le score le plus bas de la manche</p>

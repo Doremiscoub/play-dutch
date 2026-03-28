@@ -28,12 +28,12 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
   };
 
   return (
-    <Card className="p-6 text-center space-y-6">
+    <Card variant="glass" className="p-6 text-center space-y-6">
       <div>
-        <h2 className="text-xl sm:text-2xl font-display font-bold text-gray-900 mb-2">
+        <h2 className="text-xl sm:text-2xl font-display font-bold text-foreground mb-2">
           Combien de joueurs ?
         </h2>
-        <p className="text-gray-500 text-base sm:text-lg">
+        <p className="text-muted-foreground text-base sm:text-lg">
           Choisissez le nombre de participants pour votre partie de Dutch
         </p>
       </div>
@@ -52,10 +52,10 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
         </Button>
 
         <div className="text-center flex-1 max-w-[140px] py-4">
-          <div className="text-6xl sm:text-7xl font-display font-bold text-blue-600 mb-1 leading-none">
+          <div className="text-6xl sm:text-7xl font-display font-bold text-primary mb-1 leading-none">
             {playerCount}
           </div>
-          <div className="text-sm sm:text-base text-gray-500 font-medium">
+          <div className="text-sm sm:text-base text-muted-foreground font-medium">
             {playerCount === 1 ? 'joueur' : 'joueurs'}
           </div>
         </div>

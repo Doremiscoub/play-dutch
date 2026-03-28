@@ -56,10 +56,10 @@ const GameSettings: React.FC = () => {
           <div className="flex items-center justify-between gap-4">
             <div className="flex flex-col gap-1">
               <Label htmlFor="sound" className="text-base font-medium">Son</Label>
-              <span className="text-sm text-gray-600">Activer/désactiver les sons du jeu</span>
+              <span className="text-sm text-muted-foreground">Activer/désactiver les sons du jeu</span>
             </div>
             <div className="flex items-center gap-2">
-              {soundEnabled ? <Volume className="h-4 w-4 text-gray-600" /> : <VolumeX className="h-4 w-4 text-gray-600" />}
+              {soundEnabled ? <Volume className="h-4 w-4 text-muted-foreground" /> : <VolumeX className="h-4 w-4 text-muted-foreground" />}
               <EnhancedSwitch 
                 id="sound" 
                 checked={soundEnabled} 
@@ -73,7 +73,7 @@ const GameSettings: React.FC = () => {
           <div className="flex items-center justify-between gap-4">
             <div className="flex flex-col gap-1">
               <Label htmlFor="ads" className="text-base font-medium">Publicités</Label>
-              <span className="text-sm text-gray-600">Activer/désactiver l'affichage des annonces</span>
+              <span className="text-sm text-muted-foreground">Activer/désactiver l'affichage des annonces</span>
             </div>
             <EnhancedSwitch 
               id="ads" 
@@ -100,7 +100,7 @@ const GameSettings: React.FC = () => {
           <div className="flex items-center justify-between gap-4">
             <div className="flex flex-col gap-1">
               <Label className="text-base font-medium">Maintenance</Label>
-              <span className="text-sm text-gray-600">Nettoyer le cache et les données temporaires</span>
+              <span className="text-sm text-muted-foreground">Nettoyer le cache et les données temporaires</span>
             </div>
             <Button 
               variant="outline" 

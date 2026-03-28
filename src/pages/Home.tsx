@@ -97,7 +97,7 @@ const Home: React.FC = () => {
                       transition={{ duration: 0.4, delay: index * 0.1 }}
                       viewport={{ once: true }}
                     >
-                      <Card className="h-full hover:shadow-md transition-shadow duration-200">
+                      <Card variant="glass" className="h-full hover:shadow-md hover:neon-blue transition-all duration-200">
                         <CardContent className="p-5 sm:p-6 text-center">
                           <div className={`${feature.bg} ${feature.color} rounded-xl w-12 h-12 flex items-center justify-center mx-auto mb-4`}>
                             {feature.icon}
@@ -136,7 +136,7 @@ const Home: React.FC = () => {
 
                 {/* Article-style content cards */}
                 <div className="space-y-6">
-                  <Card>
+                  <Card variant="glass">
                     <CardContent className="p-6 sm:p-8">
                       <h3 className="text-xl font-bold text-foreground mb-4">Qu'est-ce que le jeu de cartes Dutch ?</h3>
                       <div className="space-y-3 text-muted-foreground leading-relaxed">
@@ -157,7 +157,7 @@ const Home: React.FC = () => {
                   </Card>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <Card>
+                    <Card variant="glass">
                       <CardContent className="p-6">
                         <h3 className="text-lg font-bold text-foreground mb-3">Les règles en bref</h3>
                         <ul className="space-y-2 text-sm text-muted-foreground">
@@ -171,7 +171,7 @@ const Home: React.FC = () => {
                       </CardContent>
                     </Card>
 
-                    <Card>
+                    <Card variant="glass">
                       <CardContent className="p-6">
                         <h3 className="text-lg font-bold text-foreground mb-3">Pourquoi utiliser cette application ?</h3>
                         <ul className="space-y-2 text-sm text-muted-foreground">
@@ -186,7 +186,7 @@ const Home: React.FC = () => {
                     </Card>
                   </div>
 
-                  <Card>
+                  <Card variant="glass">
                     <CardContent className="p-6 sm:p-8">
                       <h3 className="text-xl font-bold text-foreground mb-4">Conseils stratégiques pour gagner</h3>
                       <div className="space-y-3 text-muted-foreground leading-relaxed">

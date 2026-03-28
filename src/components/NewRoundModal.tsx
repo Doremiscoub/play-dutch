@@ -95,7 +95,7 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className={`bg-white rounded-xl border border-border shadow-lg ${isMobile ? 'sm:max-w-[95vw] max-h-[85vh]' : 'sm:max-w-lg'}`}>
+      <DialogContent className={`glass-float rounded-2xl ${isMobile ? 'sm:max-w-[95vw] max-h-[85vh]' : 'sm:max-w-lg'}`}>
         <DialogHeader>
           <DialogTitle className={`font-semibold text-foreground ${isMobile ? 'text-lg' : 'text-xl'}`}>
             Ajouter une manche
@@ -106,7 +106,7 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
           {players.map((player, index) => (
             <motion.div
               key={player.id}
-              className={`bg-white rounded-xl border border-border shadow-sm ${isMobile ? 'p-3' : 'p-4'}`}
+              className={`glass-surface rounded-xl ${isMobile ? 'p-3' : 'p-4'}`}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.05, duration: 0.3 }}

@@ -88,11 +88,9 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
     onSelect(player);
   };
   return <motion.div className={cn(
-    "relative rounded-2xl border-2 transition-all duration-200 cursor-pointer overflow-hidden",
-    theme.bg,
+    "relative rounded-2xl border transition-all duration-200 cursor-pointer overflow-hidden glass-surface",
     theme.border,
-    "shadow-sm",
-    isSelected || isExpanded ? "ring-2 ring-purple-300 scale-[1.01] z-10" : "hover:shadow-md hover:-translate-y-0.5"
+    isSelected || isExpanded ? "neon-border-purple scale-[1.01] z-10" : "hover:shadow-md hover:-translate-y-0.5"
   )} onClick={handleCardClick} initial={{
     opacity: 0,
     y: 10

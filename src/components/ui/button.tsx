@@ -28,6 +28,9 @@ const buttonVariants = cva(
           "bg-accent text-accent-foreground hover:bg-[hsl(25,95%,46%)] shadow-sm",
         success:
           "bg-[hsl(142,71%,45%)] text-white hover:bg-[hsl(142,71%,38%)] shadow-sm",
+        // Glass variant
+        glass:
+          "glass-surface text-foreground hover:bg-white/80 transition-all",
       },
       size: {
         default: "h-10 px-4 py-2 rounded-lg",

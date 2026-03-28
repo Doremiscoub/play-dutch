@@ -28,7 +28,7 @@ const MobileNavigation: React.FC = () => {
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 md:hidden z-50">
-      <div className="bg-white/95 backdrop-blur-md border-t border-border shadow-[0_-1px_3px_rgba(0,0,0,0.05)]">
+      <div className="glass-float border-t border-white/30 shadow-[0_-4px_24px_rgba(0,0,0,0.06)]">
         {/* Safe area bottom for iOS */}
         <div className="flex items-center justify-around px-1 pt-1.5 pb-[max(0.375rem,env(safe-area-inset-bottom))]">
           {navItems.map((item) => {

@@ -30,7 +30,7 @@ const NotFound: React.FC = () => {
             <div className="text-9xl font-bold mb-4 bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">
               404
             </div>
-            <p className="text-gray-600 mb-8">
+            <p className="text-muted-foreground mb-8">
               Désolé, nous ne trouvons pas cette page. Vous pourriez vouloir retourner à l'accueil.
             </p>
             <Link to="/">

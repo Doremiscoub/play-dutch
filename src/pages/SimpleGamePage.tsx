@@ -83,10 +83,10 @@ const SimpleGamePage: React.FC = () => {
     return (
       <GamePageLayout variant="game" headerConfig={headerConfig}>
         <div className="flex flex-col items-center justify-center min-h-[60vh] p-8">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">
+          <h2 className="text-2xl font-bold text-foreground mb-4 text-center">
             Aucune partie en cours
           </h2>
-          <p className="text-gray-600 mb-6 text-center">
+          <p className="text-muted-foreground mb-6 text-center">
             Vous devez d'abord créer une partie pour jouer.
           </p>
           <button 

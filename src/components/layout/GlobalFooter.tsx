@@ -34,7 +34,7 @@ const GlobalFooter: React.FC<GlobalFooterProps> = ({
   }
 
   return (
-    <footer className={`border-t border-border bg-white py-6 px-4 ${className}`}>
+    <footer className={`border-t border-white/30 glass-surface py-6 px-4 ${className}`}>
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="text-center sm:text-left">

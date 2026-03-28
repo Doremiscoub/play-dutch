@@ -41,7 +41,7 @@ const EndGameConfirmationDialog: React.FC<EndGameConfirmationDialogProps> = ({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel 
-            className="text-gray-700"
+            className="text-foreground"
             onClick={onCancel}
           >
             Continuer de jouer
