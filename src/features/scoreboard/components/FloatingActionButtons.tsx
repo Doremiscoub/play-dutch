@@ -87,7 +87,7 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
           className="pointer-events-auto"
         >
           <Button
-            variant="liquidPopover"
+            variant="ghost"
             size="icon-lg"
             onClick={onUndoLastRound}
             disabled={!canUndo || disabled}
@@ -122,7 +122,7 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
           className="pointer-events-auto"
         >
           <Button
-            variant="liquidPopover"
+            variant="ghost"
             size="icon-lg"
             onClick={onEndGame}
             disabled={disabled}

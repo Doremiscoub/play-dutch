@@ -53,7 +53,6 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
   }, [open]);
 
   const handleScoreChange = (playerId: string, value: string) => {
-    // Allow negative scores down to -6
     if (value === '' || value === '-') {
       setScores(prev => ({ ...prev, [playerId]: 0 }));
     } else {
@@ -90,7 +89,6 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
     setScores(prev => {
       const currentScore = prev[playerId] || 0;
       const newValue = currentScore + amount;
-      // Allow negative scores down to -6
       return { ...prev, [playerId]: Math.max(-6, newValue) };
     });
   };
@@ -99,7 +97,7 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
     <Dialog open={open} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className={`bg-white rounded-xl border border-border shadow-lg ${isMobile ? 'sm:max-w-[95vw] max-h-[85vh]' : 'sm:max-w-lg'}`}>
         <DialogHeader>
-          <DialogTitle className={`font-semibold text-gray-800 ${isMobile ? 'text-lg' : 'text-xl'}`}>
+          <DialogTitle className={`font-semibold text-foreground ${isMobile ? 'text-lg' : 'text-xl'}`}>
             Ajouter une manche
           </DialogTitle>
         </DialogHeader>
@@ -118,7 +116,7 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
                   <div className={`rounded-full bg-gradient-to-br from-dutch-blue to-dutch-purple flex items-center justify-center text-white font-medium ${isMobile ? 'w-6 h-6 text-xs' : 'w-8 h-8 text-sm'}`}>
                     {index + 1}
                   </div>
-                  <span className={`font-medium text-gray-800 ${isMobile ? 'text-sm' : ''}`}>
+                  <span className={`font-medium text-foreground ${isMobile ? 'text-sm' : ''}`}>
                     {isMobile && player.name.length > 12 ? player.name.substring(0, 12) + '...' : player.name}
                   </span>
                 </div>
@@ -129,7 +127,7 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
                     size="icon"
                     variant="outline"
                     onClick={() => adjustScore(player.id, -1)}
-                    className={`rounded-full lg-popover lg-tint-primary-50 lg-hover-state ${isMobile ? 'w-10 h-10 min-h-[40px] touch-target' : 'w-8 h-8'}`}
+                    className={`rounded-full ${isMobile ? 'w-10 h-10 min-h-[40px]' : 'w-8 h-8'}`}
                     disabled={isSubmitting}
                     aria-label={`Diminuer le score de ${player.name}`}
                   >
@@ -145,8 +143,8 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
                         handleScoreChange(player.id, e.target.value);
                       }
                     }}
-                    className={`px-2 text-center rounded-lg border border-border bg-white text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-dutch-blue/20 transition-all ${
-                      isMobile ? 'w-20 h-12 text-lg touch-target' : 'w-16 h-10'
+                    className={`px-2 text-center rounded-lg border border-border bg-white text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all ${
+                      isMobile ? 'w-20 h-12 text-lg' : 'w-16 h-10'
                     }`}
                     placeholder="0"
                     disabled={isSubmitting}
@@ -157,7 +155,7 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
                     size="icon"
                     variant="outline"
                     onClick={() => adjustScore(player.id, 1)}
-                    className={`rounded-full lg-popover lg-tint-primary-50 lg-hover-state ${isMobile ? 'w-10 h-10 min-h-[40px] touch-target' : 'w-8 h-8'}`}
+                    className={`rounded-full ${isMobile ? 'w-10 h-10 min-h-[40px]' : 'w-8 h-8'}`}
                     disabled={isSubmitting}
                     aria-label={`Augmenter le score de ${player.name}`}
                   >
@@ -168,12 +166,12 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
                     type="button"
                     size="sm"
                     variant={dutchPlayerId === player.id ? "default" : "outline"}
-                    className={`rounded-full transition-all lg-hover-state ${
-                      isMobile ? 'px-3 py-2 text-xs min-h-[40px] touch-target' : 'ml-2 px-4'
+                    className={`rounded-full transition-all ${
+                      isMobile ? 'px-3 py-2 text-xs min-h-[40px]' : 'ml-2 px-4'
                     } ${
                       dutchPlayerId === player.id
-                        ? "lg-card lg-tint-accent-60 text-white lg-elevation-03"
-                        : "lg-popover lg-tint-secondary-50 text-white hover:lg-tint-secondary-70"
+                        ? "bg-gradient-to-r from-dutch-blue to-dutch-purple text-white shadow-md"
+                        : "text-muted-foreground hover:text-foreground"
                     }`}
                     onClick={() => handleDutchToggle(player.id)}
                     disabled={isSubmitting}
@@ -189,12 +187,12 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
           ))}
 
           <DialogFooter className={`${isMobile ? 'mt-4 gap-2 flex-col' : 'mt-6 gap-3'}`}>
-            <Button 
-              variant="outline" 
-              type="button" 
+            <Button
+              variant="outline"
+              type="button"
               onClick={onClose}
               disabled={isSubmitting}
-              className={`lg-popover lg-tint-primary-50 lg-hover-state ${isMobile ? 'w-full min-h-[48px] touch-target' : ''}`}
+              className={`${isMobile ? 'w-full min-h-[48px]' : ''}`}
             >
               Annuler
             </Button>
@@ -202,7 +200,7 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
               type="submit"
               disabled={isSubmitting}
               className={`bg-gradient-to-r from-dutch-blue to-dutch-purple text-white shadow-md hover:shadow-lg transition-all ${
-                isMobile ? 'w-full min-h-[48px] touch-target' : ''
+                isMobile ? 'w-full min-h-[48px]' : ''
               }`}
             >
               {isSubmitting ? 'Validation...' : 'Valider la manche'}
