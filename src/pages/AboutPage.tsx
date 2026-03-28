@@ -40,13 +40,13 @@ const AboutPage: React.FC = () => {
 
       <PageContainer size="md" className="space-y-8">
           {/* Introduction */}
-          <Card className="bg-white rounded-xl border border-border shadow-sm">
+          <Card variant="glass">
             <CardContent className="p-8">
               <div className="text-center space-y-4">
-                <h2 className="text-2xl font-bold text-gray-800">
+                <h2 className="text-2xl font-bold text-foreground">
                   L'application compagnon pour vos soirées jeux
                 </h2>
-                <p className="max-w-2xl mx-auto leading-relaxed text-gray-600">
+                <p className="max-w-2xl mx-auto leading-relaxed text-muted-foreground">
                   Dutch Card Game est née d'une frustration simple : combien de fois avez-vous perdu 
                   le carnet de scores au milieu d'une partie ? Nous avons créé cette application pour 
                   que vous puissiez vous concentrer sur l'essentiel : passer un bon moment entre amis.
@@ -56,18 +56,18 @@ const AboutPage: React.FC = () => {
           </Card>
 
           {/* Histoire */}
-          <Card className="bg-white rounded-xl border border-border shadow-sm">
+          <Card variant="glass">
             <CardContent className="p-8">
               <div className="space-y-4">
                 <div className="flex items-center justify-center gap-3 mb-2">
                   <div className="w-10 h-10 rounded-full bg-dutch-orange/10 flex items-center justify-center">
                     <BookOpen className="w-5 h-5 text-dutch-orange" />
                   </div>
-                  <h2 className="text-2xl font-bold text-gray-800">
+                  <h2 className="text-2xl font-bold text-foreground">
                     L'histoire de Dutch Card Game
                   </h2>
                 </div>
-                <p className="leading-relaxed text-gray-600">
+                <p className="leading-relaxed text-muted-foreground">
                   Tout a commencé lors d'une soirée jeux entre amis, comme tant d'autres. Les scores étaient griffonnés
                   sur un bout de papier, les additions se faisaient de tête, et inévitablement, quelqu'un contestait
                   le total. « Attends, tu as oublié ma manche à 5 points ! » — une phrase que nous avons tous entendue
@@ -75,7 +75,7 @@ const AboutPage: React.FC = () => {
                   une application simple, rapide et fiable pour suivre les scores de vos parties de Dutch, afin que
                   personne ne perde le fil et que tout le monde puisse se concentrer sur le plaisir de jouer.
                 </p>
-                <p className="leading-relaxed text-gray-600">
+                <p className="leading-relaxed text-muted-foreground">
                   Au départ, le projet n'était qu'une simple calculatrice de scores. Mais très vite, nous avons réalisé
                   qu'il y avait une opportunité de créer quelque chose de bien plus riche. Nous avons ajouté un système
                   de statistiques avancées pour suivre l'évolution des joueurs au fil des parties, des graphiques
@@ -84,7 +84,7 @@ const AboutPage: React.FC = () => {
                   artificielle avec le Professeur Cartouche, un commentateur virtuel qui analyse chaque manche et
                   délivre des commentaires drôles, pertinents et parfois piquants sur les performances des joueurs.
                 </p>
-                <p className="leading-relaxed text-gray-600">
+                <p className="leading-relaxed text-muted-foreground">
                   Le choix de développer Dutch Card Game en tant que Progressive Web App (PWA) a été mûrement réfléchi.
                   Plutôt que de publier une application sur l'App Store ou le Google Play Store — avec les contraintes
                   de validation, de mises à jour et de compatibilité que cela implique — nous avons opté pour une
@@ -102,56 +102,56 @@ const AboutPage: React.FC = () => {
 
           {/* Fonctionnalités */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card className="bg-white rounded-xl border border-border shadow-sm">
+            <Card variant="glass">
               <CardContent className="p-8">
                 <div className="text-center space-y-3">
                   <div className="w-12 h-12 mx-auto rounded-full bg-dutch-blue/10 flex items-center justify-center">
                     <Smartphone className="w-6 h-6 text-dutch-blue" />
                   </div>
                   <h3 className="text-lg font-semibold">100% Web</h3>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-muted-foreground">
                     Aucune installation nécessaire. Fonctionne sur tous vos appareils, même hors-ligne.
                   </p>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="bg-white rounded-xl border border-border shadow-sm">
+            <Card variant="glass">
               <CardContent className="p-8">
                 <div className="text-center space-y-3">
                   <div className="w-12 h-12 mx-auto rounded-full bg-dutch-purple/10 flex items-center justify-center">
                     <Users className="w-6 h-6 text-dutch-purple" />
                   </div>
                   <h3 className="text-lg font-semibold">Multijoueur</h3>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-muted-foreground">
                     Jusqu'à 10 joueurs simultanés. Parfait pour les grandes tablées.
                   </p>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="bg-white rounded-xl border border-border shadow-sm">
+            <Card variant="glass">
               <CardContent className="p-8">
                 <div className="text-center space-y-3">
                   <div className="w-12 h-12 mx-auto rounded-full bg-dutch-orange/10 flex items-center justify-center">
                     <Zap className="w-6 h-6 text-dutch-orange" />
                   </div>
                   <h3 className="text-lg font-semibold">IA Intégrée</h3>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-muted-foreground">
                     Le Professeur Cartouche commente vos parties avec humour et perspicacité.
                   </p>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="bg-white rounded-xl border border-border shadow-sm">
+            <Card variant="glass">
               <CardContent className="p-8">
                 <div className="text-center space-y-3">
                   <div className="w-12 h-12 mx-auto rounded-full bg-dutch-green/10 flex items-center justify-center">
                     <Heart className="w-6 h-6 text-dutch-green" />
                   </div>
                   <h3 className="text-lg font-semibold">Gratuit</h3>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-muted-foreground">
                     Et ça le restera ! Aucune publicité intrusive, aucun abonnement caché.
                   </p>
                 </div>
@@ -160,13 +160,13 @@ const AboutPage: React.FC = () => {
           </div>
 
           {/* Comment ça marche */}
-          <Card className="bg-white rounded-xl border border-border shadow-sm">
+          <Card variant="glass">
             <CardContent className="p-8">
               <div className="space-y-6">
-                <h2 className="text-2xl font-bold text-gray-800 text-center">
+                <h2 className="text-2xl font-bold text-foreground text-center">
                   Comment fonctionne l'application
                 </h2>
-                <p className="text-center text-gray-600 max-w-2xl mx-auto">
+                <p className="text-center text-muted-foreground max-w-2xl mx-auto">
                   Dutch Card Game est conçue pour être intuitive et rapide à prendre en main. Voici les étapes
                   pour profiter pleinement de votre expérience de jeu.
                 </p>
@@ -176,8 +176,8 @@ const AboutPage: React.FC = () => {
                       1
                     </div>
                     <div className="space-y-1">
-                      <h4 className="font-semibold text-gray-800">Créer une partie</h4>
-                      <p className="text-sm leading-relaxed text-gray-600">
+                      <h4 className="font-semibold text-foreground">Créer une partie</h4>
+                      <p className="text-sm leading-relaxed text-muted-foreground">
                         Commencez par configurer votre partie en choisissant le nombre de joueurs présents autour de la
                         table, de 2 à 10 personnes. Entrez ensuite le prénom de chaque joueur pour personnaliser
                         l'expérience. Vous pouvez également définir une limite de score qui déterminera la fin de la
@@ -191,8 +191,8 @@ const AboutPage: React.FC = () => {
                       2
                     </div>
                     <div className="space-y-1">
-                      <h4 className="font-semibold text-gray-800">Jouez votre partie de cartes à la table</h4>
-                      <p className="text-sm leading-relaxed text-gray-600">
+                      <h4 className="font-semibold text-foreground">Jouez votre partie de cartes à la table</h4>
+                      <p className="text-sm leading-relaxed text-muted-foreground">
                         Une fois la partie créée dans l'application, posez votre téléphone et profitez du jeu ! Dutch
                         Card Game n'est pas un jeu vidéo : c'est un compagnon pour votre vrai jeu de cartes physique.
                         Jouez normalement avec vos amis ou votre famille, distribuez les cartes, bluffez, riez, et
@@ -206,8 +206,8 @@ const AboutPage: React.FC = () => {
                       3
                     </div>
                     <div className="space-y-1">
-                      <h4 className="font-semibold text-gray-800">Saisir les scores après chaque manche</h4>
-                      <p className="text-sm leading-relaxed text-gray-600">
+                      <h4 className="font-semibold text-foreground">Saisir les scores après chaque manche</h4>
+                      <p className="text-sm leading-relaxed text-muted-foreground">
                         À la fin de chaque manche, reprenez votre téléphone et entrez les scores de chaque joueur.
                         L'interface de saisie est optimisée pour être rapide : un clavier numérique adapté, la possibilité
                         de naviguer facilement entre les joueurs, et une validation instantanée. Vous pouvez également
@@ -221,8 +221,8 @@ const AboutPage: React.FC = () => {
                       4
                     </div>
                     <div className="space-y-1">
-                      <h4 className="font-semibold text-gray-800">Consultez les totaux, classements et commentaires</h4>
-                      <p className="text-sm leading-relaxed text-gray-600">
+                      <h4 className="font-semibold text-foreground">Consultez les totaux, classements et commentaires</h4>
+                      <p className="text-sm leading-relaxed text-muted-foreground">
                         Après chaque saisie, l'application calcule automatiquement les totaux cumulés de chaque joueur
                         et met à jour le classement en temps réel. Vous voyez instantanément qui mène la partie, qui
                         est en danger et qui remonte au classement. C'est aussi le moment où le Professeur Cartouche
@@ -237,8 +237,8 @@ const AboutPage: React.FC = () => {
                       5
                     </div>
                     <div className="space-y-1">
-                      <h4 className="font-semibold text-gray-800">Explorez les statistiques et l'historique</h4>
-                      <p className="text-sm leading-relaxed text-gray-600">
+                      <h4 className="font-semibold text-foreground">Explorez les statistiques et l'historique</h4>
+                      <p className="text-sm leading-relaxed text-muted-foreground">
                         À tout moment pendant ou après la partie, accédez à des statistiques détaillées : graphiques
                         d'évolution des scores au fil des manches, moyennes par joueur, meilleure et pire manche,
                         nombre de Dutch réalisés, et bien plus encore. L'historique complet de vos parties est conservé
@@ -255,11 +255,11 @@ const AboutPage: React.FC = () => {
 
           {/* Pourquoi choisir Dutch */}
           <div className="space-y-4">
-            <h2 className="text-2xl font-bold text-gray-800 text-center">
+            <h2 className="text-2xl font-bold text-foreground text-center">
               Pourquoi choisir Dutch Card Game ?
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <Card className="bg-white rounded-xl border border-border shadow-sm">
+              <Card variant="glass">
                 <CardContent className="p-8">
                   <div className="space-y-3">
                     <div className="flex items-center gap-3">
@@ -268,7 +268,7 @@ const AboutPage: React.FC = () => {
                       </div>
                       <h3 className="text-lg font-semibold">Vs. le papier et le stylo</h3>
                     </div>
-                    <p className="text-sm leading-relaxed text-gray-600">
+                    <p className="text-sm leading-relaxed text-muted-foreground">
                       Fini les carnets de scores égarés, les colonnes mal alignées et les additions approximatives.
                       Avec Dutch Card Game, chaque score est enregistré de manière fiable, les calculs sont
                       automatiques et instantanés, et il n'y a plus jamais d'erreur de mathématiques.
@@ -278,7 +278,7 @@ const AboutPage: React.FC = () => {
                 </CardContent>
               </Card>
 
-              <Card className="bg-white rounded-xl border border-border shadow-sm">
+              <Card variant="glass">
                 <CardContent className="p-8">
                   <div className="space-y-3">
                     <div className="flex items-center gap-3">
@@ -287,7 +287,7 @@ const AboutPage: React.FC = () => {
                       </div>
                       <h3 className="text-lg font-semibold">Vs. les autres applications</h3>
                     </div>
-                    <p className="text-sm leading-relaxed text-gray-600">
+                    <p className="text-sm leading-relaxed text-muted-foreground">
                       Contrairement à d'autres applications de scores, Dutch Card Game fonctionne hors-ligne,
                       ne nécessite aucune création de compte et est entièrement gratuite sans publicité intrusive.
                       Notre fonctionnalité unique de commentateur IA — le Professeur Cartouche — apporte une touche
@@ -297,7 +297,7 @@ const AboutPage: React.FC = () => {
                 </CardContent>
               </Card>
 
-              <Card className="bg-white rounded-xl border border-border shadow-sm">
+              <Card variant="glass">
                 <CardContent className="p-8">
                   <div className="space-y-3">
                     <div className="flex items-center gap-3">
@@ -306,7 +306,7 @@ const AboutPage: React.FC = () => {
                       </div>
                       <h3 className="text-lg font-semibold">Pour les familles</h3>
                     </div>
-                    <p className="text-sm leading-relaxed text-gray-600">
+                    <p className="text-sm leading-relaxed text-muted-foreground">
                       L'interface a été pensée pour être accessible à tous les âges. Les enfants adorent les
                       commentaires du Professeur Cartouche, les parents apprécient la simplicité de la saisie
                       des scores, et les grands-parents trouvent l'affichage clair et lisible. Le design coloré
@@ -316,7 +316,7 @@ const AboutPage: React.FC = () => {
                 </CardContent>
               </Card>
 
-              <Card className="bg-white rounded-xl border border-border shadow-sm">
+              <Card variant="glass">
                 <CardContent className="p-8">
                   <div className="space-y-3">
                     <div className="flex items-center gap-3">
@@ -325,7 +325,7 @@ const AboutPage: React.FC = () => {
                       </div>
                       <h3 className="text-lg font-semibold">Pour les joueurs assidus</h3>
                     </div>
-                    <p className="text-sm leading-relaxed text-gray-600">
+                    <p className="text-sm leading-relaxed text-muted-foreground">
                       Si vous prenez vos parties au sérieux, Dutch Card Game vous offre des statistiques avancées
                       dignes d'un outil professionnel. Courbes d'évolution des scores, moyennes par joueur,
                       analyse des tendances, historique complet des parties passées — tout est là pour vous
@@ -338,16 +338,16 @@ const AboutPage: React.FC = () => {
           </div>
 
           {/* Mission */}
-          <Card className="bg-white rounded-xl border border-border shadow-sm">
+          <Card variant="glass">
             <CardContent className="p-8">
               <div className="space-y-4">
                 <h3 className="text-xl font-semibold text-center">Notre Mission</h3>
-                <p className="leading-relaxed text-gray-600">
+                <p className="leading-relaxed text-muted-foreground">
                   Nous croyons que les meilleurs moments se passent autour d'une table, avec des amis, 
                   des cartes et quelques éclats de rire. Notre mission est de faciliter ces moments 
                   précieux en vous débarrassant des tracas logistiques.
                 </p>
-                <p className="leading-relaxed text-gray-600">
+                <p className="leading-relaxed text-muted-foreground">
                   Dutch Card Game n'est pas qu'une application, c'est un facilitateur de souvenirs. 
                   Chaque partie enregistrée, chaque statistique calculée, chaque commentaire du 
                   Professeur Cartouche contribue à enrichir l'expérience de jeu.
@@ -357,18 +357,18 @@ const AboutPage: React.FC = () => {
           </Card>
 
           {/* Technologies et vie privée */}
-          <Card className="bg-white rounded-xl border border-border shadow-sm">
+          <Card variant="glass">
             <CardContent className="p-8">
               <div className="space-y-4">
                 <div className="flex items-center justify-center gap-3 mb-2">
                   <div className="w-10 h-10 rounded-full bg-dutch-green/10 flex items-center justify-center">
                     <Shield className="w-5 h-5 text-dutch-green" />
                   </div>
-                  <h2 className="text-2xl font-bold text-gray-800">
+                  <h2 className="text-2xl font-bold text-foreground">
                     Technologies et respect de la vie privée
                   </h2>
                 </div>
-                <p className="leading-relaxed text-gray-600">
+                <p className="leading-relaxed text-muted-foreground">
                   Dutch Card Game est construite en tant que Progressive Web App (PWA), une technologie moderne
                   qui combine le meilleur du web et des applications natives. Concrètement, cela signifie que
                   vous pouvez accéder à l'application depuis n'importe quel navigateur web, l'installer sur
@@ -378,7 +378,7 @@ const AboutPage: React.FC = () => {
                   Cette approche nous permet de proposer une expérience identique sur iPhone, Android, tablette
                   et ordinateur, sans avoir à maintenir plusieurs versions de l'application.
                 </p>
-                <p className="leading-relaxed text-gray-600">
+                <p className="leading-relaxed text-muted-foreground">
                   Le respect de votre vie privée est au cœur de nos préoccupations. Toutes les données de vos
                   parties — scores, noms des joueurs, historique — sont stockées exclusivement sur votre propre
                   appareil, dans le stockage local de votre navigateur. Nous ne collectons aucune donnée personnelle,

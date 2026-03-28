@@ -81,7 +81,7 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
 
       {/* Next button */}
       <Button
-        variant="default"
+        variant="trinity"
         size="lg"
         onClick={onNext}
         className="w-full py-3 sm:py-4 text-base sm:text-lg font-semibold"

@@ -21,11 +21,11 @@ const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({ currentStep, tota
                 className={cn(
                   'w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-sm sm:text-base font-semibold transition-colors duration-200',
                   step === currentStep &&
-                    'bg-blue-600 text-white ring-4 ring-blue-100',
+                    'bg-gradient-to-br from-dutch-blue to-dutch-purple text-white ring-4 ring-blue-100/50 neon-blue',
                   step < currentStep &&
                     'bg-green-600 text-white',
                   step > currentStep &&
-                    'bg-gray-100 text-gray-400 border border-gray-200'
+                    'glass-surface text-muted-foreground'
                 )}
               >
                 {step < currentStep ? (
@@ -37,9 +37,9 @@ const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({ currentStep, tota
               <span
                 className={cn(
                   'text-xs sm:text-sm font-medium transition-colors duration-200',
-                  step === currentStep && 'text-blue-700 font-semibold',
+                  step === currentStep && 'text-primary font-semibold',
                   step < currentStep && 'text-green-600',
-                  step > currentStep && 'text-gray-400'
+                  step > currentStep && 'text-muted-foreground'
                 )}
               >
                 {STEP_LABELS[step - 1]}

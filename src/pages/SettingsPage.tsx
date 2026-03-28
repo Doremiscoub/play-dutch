@@ -28,7 +28,7 @@ const SettingsPage: React.FC = () => {
         <Separator className="mb-8" />
 
         {/* Contenu principal */}
-        <Card className="border border-border">
+        <Card variant="glass">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               Configuration avancée

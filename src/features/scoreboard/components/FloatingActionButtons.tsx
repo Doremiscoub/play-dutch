@@ -52,7 +52,7 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
           disabled={disabled}
           variant="trinity"
           size="xl"
-          className="relative group px-3 sm:px-6 py-2.5 sm:py-3 h-11 sm:h-14 rounded-full shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden min-w-[44px] hover:shadow-xl"
+          className="relative group px-3 sm:px-6 py-2.5 sm:py-3 h-11 sm:h-14 rounded-full neon-blue transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden min-w-[44px] hover:shadow-xl"
           aria-label="Ajouter une nouvelle manche"
         >
           {/* Contenu du bouton */}

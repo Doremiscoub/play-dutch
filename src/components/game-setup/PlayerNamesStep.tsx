@@ -105,7 +105,7 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
   const canProceed = players.length >= 2 && players.every(p => p.name && p.name.trim().length > 0);
 
   return (
-    <Card className="p-6 space-y-6">
+    <Card variant="glass" className="p-6 space-y-6">
       <div className="text-center">
         <h2 className="text-xl sm:text-2xl font-display font-bold text-foreground mb-2">
           Noms des joueurs
@@ -120,7 +120,7 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
         {players.map((player, index) => (
           <div
             key={player.id}
-            className="border border-gray-200 bg-white rounded-xl p-3 sm:p-4"
+            className="glass-surface rounded-xl p-3 sm:p-4"
           >
             <div className="flex items-center gap-2 sm:gap-3">
               <SimpleEmojiSelector
@@ -219,7 +219,7 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
         </Button>
 
         <Button
-          variant="default"
+          variant="trinity"
           size="lg"
           onClick={onNext}
           disabled={!canProceed}
