@@ -146,19 +146,19 @@ export const OptimizedStatsDashboard: React.FC<OptimizedStatsDashboardProps> = (
         y: 0
       }} transition={{
         delay: reducedAnimations ? 0 : 0.1
-      }} className="bg-white rounded-2xl md:rounded-3xl p-4 md:p-6 border border-border shadow-sm">
+      }} className="glass-surface rounded-2xl md:rounded-3xl p-4 md:p-6 border border-border shadow-sm">
             <div className={`flex flex-wrap items-center gap-2 md:gap-3 ${getGridClasses('flex')}`}>
               <span className="text-sm md:text-sm font-semibold text-foreground flex items-center gap-2">
                 <Users className="h-3 w-3 md:h-4 md:w-4 text-primary" />
                 {shortLabels ? 'Focus :' : 'Focus sur un joueur :'}
               </span>
-              <Button onClick={() => handlePlayerSelect(null)} variant={!selectedPlayer ? "default" : "ghost"} size="sm" className={`touch-button rounded-xl md:rounded-2xl text-sm md:text-sm font-medium transition-all duration-300 ${!selectedPlayer ? 'bg-gradient-to-r from-trinity-blue-500 to-trinity-purple-500 text-white shadow-lg hover:shadow-xl transform hover:scale-105' : 'bg-white hover:bg-muted/50 text-foreground border border-border'}`} style={!selectedPlayer ? {
+              <Button onClick={() => handlePlayerSelect(null)} variant={!selectedPlayer ? "default" : "ghost"} size="sm" className={`touch-button rounded-xl md:rounded-2xl text-sm md:text-sm font-medium transition-all duration-300 ${!selectedPlayer ? 'bg-gradient-to-r from-trinity-blue-500 to-trinity-purple-500 text-white shadow-lg hover:shadow-xl transform hover:scale-105' : 'glass-surface hover:bg-muted/50 text-foreground border border-border'}`} style={!selectedPlayer ? {
             background: 'linear-gradient(90deg, rgb(10,132,255), rgb(139,92,246))',
             color: 'white'
           } : undefined}>
                 {shortLabels ? 'Tous' : 'Tous les joueurs'}
               </Button>
-              {players.map(player => <Button key={player.id} onClick={() => handlePlayerSelect(player)} variant={selectedPlayer?.id === player.id ? "default" : "ghost"} size="sm" className={`touch-button rounded-xl md:rounded-2xl text-sm md:text-sm font-medium transition-all duration-300 flex items-center gap-1 md:gap-2 ${selectedPlayer?.id === player.id ? 'bg-gradient-to-r from-trinity-blue-500 to-trinity-purple-500 text-white shadow-lg hover:shadow-xl transform hover:scale-105' : 'bg-white hover:bg-muted/50 text-foreground border border-border'}`} style={selectedPlayer?.id === player.id ? {
+              {players.map(player => <Button key={player.id} onClick={() => handlePlayerSelect(player)} variant={selectedPlayer?.id === player.id ? "default" : "ghost"} size="sm" className={`touch-button rounded-xl md:rounded-2xl text-sm md:text-sm font-medium transition-all duration-300 flex items-center gap-1 md:gap-2 ${selectedPlayer?.id === player.id ? 'bg-gradient-to-r from-trinity-blue-500 to-trinity-purple-500 text-white shadow-lg hover:shadow-xl transform hover:scale-105' : 'glass-surface hover:bg-muted/50 text-foreground border border-border'}`} style={selectedPlayer?.id === player.id ? {
             background: 'linear-gradient(90deg, rgb(10,132,255), rgb(139,92,246))',
             color: 'white'
           } : undefined}>
@@ -220,7 +220,7 @@ export const OptimizedStatsDashboard: React.FC<OptimizedStatsDashboardProps> = (
               opacity: 1
             }} transition={{
               delay: 0.3 + index * 0.1
-            }} className="w-full max-w-full bg-white rounded-2xl md:rounded-3xl border border-border shadow-sm overflow-hidden">
+            }} className="w-full max-w-full glass-surface rounded-2xl md:rounded-3xl border border-border shadow-sm overflow-hidden">
                     <div className="p-4 md:p-6 lg:p-8 w-full max-w-full">
                       <LazyStatisticsSection sectionId={section.id} component={section.component} props={section.props} isVisible={shouldRender} />
                     </div>

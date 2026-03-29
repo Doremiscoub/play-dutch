@@ -130,7 +130,7 @@ export const StatsDashboardSinglePage: React.FC<StatsDashboardSinglePageProps> =
               onClick={onBack}
               variant="ghost"
               size="sm"
-              className="h-12 w-12 rounded-2xl bg-white border border-border shadow-sm hover:bg-muted/50 transition-all duration-300 hover:scale-105"
+              className="h-12 w-12 rounded-2xl glass-surface shadow-sm hover:bg-muted/50 transition-all duration-300 hover:scale-105"
             >
               <ArrowLeft className="h-5 w-5 text-primary" />
             </Button>
@@ -161,7 +161,7 @@ export const StatsDashboardSinglePage: React.FC<StatsDashboardSinglePageProps> =
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-white rounded-3xl p-6 border border-border shadow-sm"
+            className="glass-surface rounded-3xl p-6 shadow-sm"
           >
             <div className="flex flex-wrap items-center gap-3">
               <span className="text-sm font-semibold text-foreground flex items-center gap-2">
@@ -235,7 +235,7 @@ export const StatsDashboardSinglePage: React.FC<StatsDashboardSinglePageProps> =
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.3 + index * 0.1 }}
-                className="bg-white rounded-3xl border border-border shadow-sm overflow-hidden"
+                className="glass-surface rounded-3xl shadow-sm overflow-hidden"
               >
                 <div className="p-6 sm:p-8">
                   {section.component}

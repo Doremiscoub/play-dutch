@@ -31,7 +31,7 @@ const SignIn: React.FC = () => {
             transition={{ duration: 0.3 }}
             className="w-full max-w-sm"
           >
-            <div className="bg-white rounded-2xl shadow-elevated border border-border p-8">
+            <div className="glass-elevated rounded-2xl shadow-elevated border border-border p-8">
               <h2 className="text-xl font-bold text-foreground mb-2">Mode hors ligne</h2>
               <p className="text-sm text-muted-foreground mb-6">
                 La connexion n'est pas disponible. Vous pouvez continuer en mode hors ligne.
@@ -77,7 +77,7 @@ const SignIn: React.FC = () => {
           </div>
 
           {/* Form card */}
-          <div className="bg-white rounded-2xl shadow-elevated border border-border p-6">
+          <div className="glass-elevated rounded-2xl shadow-elevated border border-border p-6">
             {isSignUp ? (
               <SignUpForm onSwitchToSignIn={() => setIsSignUp(false)} />
             ) : (

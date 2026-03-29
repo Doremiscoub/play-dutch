@@ -110,12 +110,12 @@ const PlayerStatsChart: React.FC<PlayerStatsChartProps> = ({ players, className 
         </div>
         
         {noDataAvailable ? (
-          <div className="h-64 flex items-center justify-center bg-white rounded-xl border border-border">
+          <div className="h-64 flex items-center justify-center glass-surface rounded-xl border border-border">
             <p className="text-muted-foreground">Aucune donnée disponible</p>
           </div>
         ) : (
           <motion.div
-            className="bg-white rounded-xl border border-border shadow-sm p-4 h-64"
+            className="glass-surface rounded-xl border border-border shadow-sm p-4 h-64"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
@@ -176,12 +176,12 @@ const PlayerStatsChart: React.FC<PlayerStatsChartProps> = ({ players, className 
         </div>
         
         {noDataAvailable ? (
-          <div className="h-64 flex items-center justify-center bg-white rounded-xl border border-border">
+          <div className="h-64 flex items-center justify-center glass-surface rounded-xl border border-border">
             <p className="text-muted-foreground">Aucune donnée disponible</p>
           </div>
         ) : (
           <motion.div
-            className="bg-white rounded-xl border border-border shadow-sm p-4 h-64"
+            className="glass-surface rounded-xl border border-border shadow-sm p-4 h-64"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
@@ -212,7 +212,7 @@ const PlayerStatsChart: React.FC<PlayerStatsChartProps> = ({ players, className 
       
       <div className="grid grid-cols-2 gap-4">
         <motion.div 
-          className="bg-white rounded-xl border border-border shadow-sm p-4"
+          className="glass-surface rounded-xl border border-border shadow-sm p-4"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
@@ -235,7 +235,7 @@ const PlayerStatsChart: React.FC<PlayerStatsChartProps> = ({ players, className 
         </motion.div>
         
         <motion.div 
-          className="bg-white rounded-xl border border-border shadow-sm p-4"
+          className="glass-surface rounded-xl border border-border shadow-sm p-4"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}

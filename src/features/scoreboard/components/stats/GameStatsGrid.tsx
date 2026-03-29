@@ -114,7 +114,7 @@ const StatItem: React.FC<{
   subLabel?: string;
 }> = ({ icon, label, value, badgeColor, subLabel }) => (
   <motion.div
-    className="bg-white border border-border rounded-xl p-3 hover:bg-muted/50 transition-all"
+    className="glass-surface rounded-xl p-3 hover:bg-muted/50 transition-all"
   >
     <div className="flex items-center gap-2 mb-1">
       <div className={`w-6 h-6 rounded-full ${badgeColor} flex items-center justify-center text-white`}>

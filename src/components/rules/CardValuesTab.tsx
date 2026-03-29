@@ -24,7 +24,7 @@ const CardValuesTab = () => {
       transition={{ duration: 0.6 }}
     >
       {/* Cartes spéciales */}
-      <Card className="bg-white border border-border shadow-md overflow-hidden">
+      <Card className="glass-surface border border-border shadow-md overflow-hidden">
         <CardContent className="p-8">
           <div className="flex items-center gap-4 mb-6">
             <div className="bg-gradient-to-br from-trinity-purple-500 to-trinity-blue-500 rounded-2xl p-4 text-white">
@@ -64,7 +64,7 @@ const CardValuesTab = () => {
       </Card>
 
       {/* Cartes numériques */}
-      <Card className="bg-white border border-border shadow-md overflow-hidden">
+      <Card className="glass-surface border border-border shadow-md overflow-hidden">
         <CardContent className="p-8">
           <div className="flex items-center gap-4 mb-6">
             <div className="bg-gradient-to-br from-trinity-orange-500 to-trinity-purple-500 rounded-2xl p-4 text-white">
@@ -88,7 +88,7 @@ const CardValuesTab = () => {
               <p className="text-xl font-bold text-foreground">
                 Valeur = <span className="text-trinity-orange-600">Chiffre inscrit sur la carte</span>
               </p>
-              <div className="mt-4 bg-white rounded-xl p-4">
+              <div className="mt-4 glass-surface rounded-xl p-4">
                 <p className="text-muted-foreground font-semibold">
                   Exemple : Un 7 de cœur = 7 points, un 3 de pique = 3 points
                 </p>

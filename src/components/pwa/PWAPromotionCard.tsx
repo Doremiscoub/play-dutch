@@ -247,7 +247,7 @@ export const PWAPromotionCard: React.FC<PWAPromotionCardProps> = ({
               className="w-full max-w-md"
               onClick={(e) => e.stopPropagation()}
             >
-              <Card className="bg-white">
+              <Card className="glass-float">
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <CardTitle className="flex items-center gap-2">

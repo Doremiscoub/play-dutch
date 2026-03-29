@@ -116,12 +116,7 @@ const App: React.FC = () => {
             richColors
             closeButton
             toastOptions={{
-              style: {
-                borderRadius: '12px',
-                background: 'white',
-                border: '1px solid hsl(214 32% 91%)',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
-              }
+              className: 'glass-elevated !rounded-xl !shadow-md',
             }}
           />
 

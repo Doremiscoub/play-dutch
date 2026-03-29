@@ -79,7 +79,7 @@ const DetailedGameStats: React.FC<DetailedGameStatsProps> = ({
       initial={{ opacity: 0, y: 30, scale: 0.95 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.6, delay: 0.8, type: "spring", stiffness: 100 }}
-      className="mt-8 bg-white border-2 border-border shadow-lg rounded-3xl p-8 relative overflow-hidden"
+      className="mt-8 glass-elevated shadow-lg rounded-3xl p-8 relative overflow-hidden"
     >
       <div className="relative z-10">
         {/* En-tête */}
