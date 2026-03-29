@@ -2,9 +2,9 @@
  * Types centralisés pour l'AI Commentator
  */
 
-export type AICommentType = 
+export type AICommentType =
   | 'game_start'
-  | 'dutch_celebration' 
+  | 'dutch_celebration'
   | 'gap_analysis'
   | 'tension_build'
   | 'poor_performance'
@@ -12,7 +12,15 @@ export type AICommentType =
   | 'early_game'
   | 'general'
   | 'strategic_advice'
-  | 'player_focus';
+  | 'player_focus'
+  | 'lead_change'
+  | 'low_round_score'
+  | 'high_round_score'
+  | 'dutch_win'
+  | 'dutch_fail'
+  | 'close_scores'
+  | 'danger_zone'
+  | 'comeback';
 
 export type AIPersonality = 'humorous' | 'analytical' | 'encouraging' | 'sarcastic';
 
@@ -27,6 +35,18 @@ export interface AICommentContext {
   averageScore?: number;
   hasRecentDutch?: boolean;
   roundCount?: number;
+  /** Score of the focus player in the latest round */
+  lastRoundScore?: number;
+  /** Name of the player who was leading before the latest round */
+  previousLeader?: string;
+  /** Score limit of the current game */
+  scoreLimit?: number;
+  /** How close the focus player is to the score limit */
+  distanceToLimit?: number;
+  /** Score difference between 1st and 2nd place */
+  topGap?: number;
+  /** Number of positions gained by the focus player */
+  positionsGained?: number;
 }
 
 export interface AIComment {
