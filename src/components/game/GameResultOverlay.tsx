@@ -66,13 +66,13 @@ const GameResultOverlay: React.FC<GameResultOverlayProps> = ({
 
   return (
     <motion.div
-      className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+      className="fixed inset-0 bg-black/30 backdrop-blur-md flex items-center justify-center z-50 p-4"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
       <motion.div
-        className="bg-white rounded-2xl shadow-xl max-w-md w-full p-6"
+        className="glass-float rounded-2xl shadow-xl max-w-md w-full p-6"
         initial={{ scale: 0.9, y: 50 }}
         animate={{ scale: 1, y: 0 }}
         transition={{

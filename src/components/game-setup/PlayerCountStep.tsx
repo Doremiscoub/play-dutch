@@ -73,8 +73,8 @@ const PlayerCountStep: React.FC<PlayerCountStepProps> = ({
       </div>
 
       {/* Tip */}
-      <div className="bg-blue-50 rounded-xl p-4 mx-2">
-        <p className="text-sm text-blue-700">
+      <div className="bg-dutch-blue/8 rounded-xl p-4 mx-2">
+        <p className="text-sm text-dutch-blue">
           <strong>Conseil :</strong> Le Dutch est plus amusant avec 3-4 joueurs pour des parties équilibrées
         </p>
       </div>

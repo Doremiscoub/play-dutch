@@ -201,8 +201,8 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
       </div>
 
       {/* Tip */}
-      <div className="bg-purple-50 rounded-xl p-4">
-        <p className="text-sm text-purple-700">
+      <div className="bg-dutch-purple/8 rounded-xl p-4">
+        <p className="text-sm text-dutch-purple">
           <strong>Astuce :</strong> Utilisez des noms courts et facilement reconnaissables pour une meilleure expérience de jeu
         </p>
       </div>

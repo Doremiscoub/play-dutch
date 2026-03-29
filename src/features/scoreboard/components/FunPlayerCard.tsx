@@ -79,7 +79,7 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
     return themes[rank as keyof typeof themes] || {
       bg: "bg-muted/50",
       border: "border-border",
-      text: "text-slate-800"
+      text: "text-foreground"
     };
   };
   const theme = getRankTheme();
