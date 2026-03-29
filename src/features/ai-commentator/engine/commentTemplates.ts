@@ -1,6 +1,6 @@
 /**
- * Templates de commentaires pour l'AI Commentator
- * Extraction centralisée pour faciliter la maintenance et l'extension
+ * Templates de commentaires pour l'AI Commentator - Professeur Cartouche
+ * Event-specific, personality-aware, player-name-injected templates
  */
 
 export const COMMENT_TEMPLATES = {
@@ -13,7 +13,7 @@ export const COMMENT_TEMPLATES = {
     "Bien le bonjour ! {playerCount} têtes brûlées prêtes à s'affronter ! Je sens que mes neurones vont s'amuser ce soir !",
     "Oyez oyez ! Le tournoi du Dutch ouvre ses portes avec {playerCount} concurrents ! Que les dieux de la stratégie vous soient favorables !"
   ],
-  
+
   endgame_pressure: [
     "L'étau se resserre ! {leadingPlayer} sent la pression monter... C'est le moment où les champions révèlent leur vraie nature !",
     "Attention, nous approchons du dénouement ! {leadingPlayer} a {gap} points d'avance, mais dans le Dutch, tout peut basculer en un claquement de doigts !",
@@ -69,6 +69,80 @@ export const COMMENT_TEMPLATES = {
     "Ah ! Les subtilités du Dutch ne cessent de m'émerveiller !",
     "Mes chers joueurs, vous m'offrez un spectacle délicieux !",
     "Continuez comme ça, c'est passionnant à analyser !"
+  ],
+
+  // ========= NEW EVENT-SPECIFIC TEMPLATES =========
+
+  lead_change: [
+    "COUP DE THÉÂTRE ! {focusPlayer} s'empare de la tête ! {previousLeader} vient de perdre sa couronne !",
+    "Renversement de situation ! {focusPlayer} détrône {previousLeader} ! Le Dutch n'a aucune pitié !",
+    "Et paf ! {focusPlayer} passe en première place ! {previousLeader}, ça fait quoi de redescendre sur terre ?",
+    "ALERTE ROUGE ! Changement de leader ! {focusPlayer} prend les commandes, {previousLeader} est relégué ! Quel retournement !",
+    "Ça bouge au sommet ! {focusPlayer} arrache la première place à {previousLeader} ! On n'est jamais tranquille dans le Dutch !",
+    "Ah ah ! {previousLeader} se croyait en sécurité... C'était sans compter sur {focusPlayer} qui débarque en tête !"
+  ],
+
+  low_round_score: [
+    "MAGISTRAL ! {focusPlayer} signe une manche à {lastRoundScore} points ! C'est du travail de chirurgien !",
+    "{focusPlayer} avec {lastRoundScore} points cette manche ! Même moi, je suis impressionné... et c'est pas facile !",
+    "Chapeau bas ! {lastRoundScore} points pour {focusPlayer} ! Une performance digne des plus grands maîtres du Dutch !",
+    "Oh là là ! {focusPlayer} nous sort un {lastRoundScore} de derrière les fagots ! Voilà ce que j'appelle du génie pur !",
+    "{lastRoundScore} points ?! {focusPlayer}, vous nous faites un récital ce soir ! Les autres prennent des notes, j'espère !",
+    "PERFECTION ! {focusPlayer} claque un {lastRoundScore} ! Les rivaux peuvent trembler !"
+  ],
+
+  high_round_score: [
+    "Outch ! {focusPlayer} encaisse {lastRoundScore} points ! Ça pique, ça brûle, ça fait mal !",
+    "Aïe aïe aïe ! {lastRoundScore} points pour {focusPlayer} ! C'est ce qu'on appelle une manche catastrophique !",
+    "{focusPlayer} vient de ramasser {lastRoundScore} points ! Mon cœur de professeur saigne pour vous...",
+    "BOUM ! {lastRoundScore} points dans la figure de {focusPlayer} ! On peut dire que les cartes n'étaient pas de son côté !",
+    "{lastRoundScore} points ! {focusPlayer}, je ne sais pas ce qui s'est passé, mais c'était spectaculairement douloureux !",
+    "Mes condoléances {focusPlayer}... {lastRoundScore} points en une seule manche ! L'horreur absolue !"
+  ],
+
+  dutch_win: [
+    "DUTCH VICTORIEUX ! {focusPlayer} a parié et GAGNÉ ! Score de {lastRoundScore} — du grand art !",
+    "{focusPlayer} tente le Dutch et c'est un TRIOMPHE ! {lastRoundScore} points, les adversaires sont sous le choc !",
+    "LE COUP PARFAIT ! {focusPlayer} Dutch avec {lastRoundScore} points ! Ça, c'est du culot récompensé !",
+    "MAGISTRAL ! {focusPlayer} appelle Dutch et écrase tout le monde ! {lastRoundScore} points de pure domination !",
+    "Dutch gagnant pour {focusPlayer} ! {lastRoundScore} points ! Quand l'audace paie, ça fait des étincelles !",
+    "BOOM SHAKALAKA ! {focusPlayer} Dutch à {lastRoundScore} points ! Les légendes se construisent sur ce genre de coups !"
+  ],
+
+  dutch_fail: [
+    "CATASTROPHE ! {focusPlayer} tente le Dutch mais se prend {lastRoundScore} points ! L'arroseur arrosé !",
+    "OH NON ! Dutch raté pour {focusPlayer} ! {lastRoundScore} points ! Le karma du Dutch a encore frappé !",
+    "{focusPlayer} a voulu jouer les héros avec un Dutch... {lastRoundScore} points ! Retour brutal à la réalité !",
+    "AOUTCH ! Dutch suicidaire de {focusPlayer} ! {lastRoundScore} points ! Parfois il vaut mieux rester discret...",
+    "Le Dutch de la honte ! {focusPlayer} s'effondre avec {lastRoundScore} points ! Même moi j'ai mal pour vous !",
+    "DÉSASTRE ! {focusPlayer} appelle Dutch et se prend un mur ! {lastRoundScore} points ! L'hubris, mes amis, l'hubris !"
+  ],
+
+  close_scores: [
+    "Les scores sont SERRÉS ! {topGap} points entre {leadingPlayer} et {focusPlayer} ! Ça va se jouer au couteau !",
+    "Attention, c'est du coude à coude ! Seulement {topGap} points séparent {leadingPlayer} de {focusPlayer} !",
+    "Le suspense est INSOUTENABLE ! {topGap} points d'écart au sommet ! La moindre erreur sera fatale !",
+    "Tête à tête haletant entre {leadingPlayer} et {focusPlayer} ! {topGap} petits points... Tout peut basculer !",
+    "TENSION MAXIMALE ! {leadingPlayer} mène de seulement {topGap} points ! {focusPlayer} est juste derrière, prêt à bondir !",
+    "On se croirait dans un thriller ! {topGap} points entre les deux premiers ! Un Dutch et tout explose !"
+  ],
+
+  danger_zone: [
+    "ALERTE ! {focusPlayer} n'est plus qu'à {distanceToLimit} points de la limite ! La zone de danger est atteinte !",
+    "Sirène d'alarme pour {focusPlayer} ! Plus que {distanceToLimit} points avant l'élimination... Chaque manche est un défi de survie !",
+    "{focusPlayer} flirte avec la limite à {distanceToLimit} points ! Un gros score maintenant et c'est TERMINÉ !",
+    "Tic tac tic tac... {focusPlayer} est à {distanceToLimit} points de la fin ! Le compte à rebours est lancé !",
+    "ZONE ROUGE pour {focusPlayer} ! {distanceToLimit} points de marge, c'est RIEN dans le Dutch ! Sueurs froides garanties !",
+    "{focusPlayer} marche sur un fil ! {distanceToLimit} points avant le game over... Vous aimez le risque ou quoi ?!"
+  ],
+
+  comeback: [
+    "REMONTADA ! {focusPlayer} revient de nulle part et gagne {positionsGained} places ! Les miracles existent !",
+    "Quelle renaissance pour {focusPlayer} ! +{positionsGained} positions ! Le phénix renaît de ses cendres !",
+    "{focusPlayer} nous fait un comeback monumental ! {positionsGained} places récupérées ! Les frissons, mes amis !",
+    "INCROYABLE remontée de {focusPlayer} ! Qui avait parié sur un tel retour ? Certainement pas moi !",
+    "{focusPlayer} défie les pronostics avec une remontée de {positionsGained} places ! L'espoir n'est JAMAIS mort dans le Dutch !",
+    "Le comeback de l'année signé {focusPlayer} ! +{positionsGained} positions ! Hollywood n'aurait pas fait mieux !"
   ]
 };
 
