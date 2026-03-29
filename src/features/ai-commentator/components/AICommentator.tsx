@@ -165,7 +165,7 @@ export default function AICommentator({
                 "absolute bottom-0 right-0 z-10",
                 singleColumn ? "w-6 h-6" : "w-8 h-8",
                 "rounded-full bg-white shadow-lg flex items-center justify-center",
-                "border-2 border-gray-300 hover:border-gray-400 transition-colors"
+                "border-2 border-border hover:border-muted-foreground/30 transition-colors"
               )}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
@@ -206,7 +206,7 @@ export default function AICommentator({
               <div className="flex items-center justify-between mt-4">
                 <button
                   onClick={() => setShowPersonalitySelector(!showPersonalitySelector)}
-                  className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gradient-to-r from-blue-50 to-purple-50 hover:from-blue-100 hover:to-purple-100 transition-colors cursor-pointer border border-gray-200"
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gradient-to-r from-blue-50 to-purple-50 hover:from-blue-100 hover:to-purple-100 transition-colors cursor-pointer border border-border"
                 >
                   {React.createElement(PERSONALITY_ICONS[personality].icon, {
                     className: cn("w-4 h-4", PERSONALITY_ICONS[personality].color)
@@ -225,7 +225,7 @@ export default function AICommentator({
                 </button>
                 
                 <div className="flex items-center gap-2">
-                  <span className="text-xs text-gray-400">{commentHistory.length} commentaires</span>
+                  <span className="text-xs text-muted-foreground/70">{commentHistory.length} commentaires</span>
                 </div>
                 
                 <div className="flex items-center gap-1">
@@ -250,7 +250,7 @@ export default function AICommentator({
                 className={cn(
                   "absolute top-full mt-2 z-50",
                   "left-0 right-0 sm:left-1/2 sm:right-auto sm:transform sm:-translate-x-1/2",
-                  "bg-white rounded-xl shadow-xl border border-gray-200 p-3 sm:p-4",
+                  "bg-white rounded-xl shadow-xl border border-border p-3 sm:p-4",
                   "sm:min-w-64 max-w-[95vw] sm:max-w-[90vw] mx-auto"
                 )}
               >
@@ -271,7 +271,7 @@ export default function AICommentator({
                 </div>
                 
                 {isMemoryActive && (
-                  <div className="mt-3 pt-3 border-t border-gray-200">
+                  <div className="mt-3 pt-3 border-t border-border">
                     <Button
                       variant="outline"
                       size="sm"

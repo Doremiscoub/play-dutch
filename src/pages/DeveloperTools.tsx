@@ -32,7 +32,7 @@ const DeveloperTools: React.FC = () => {
         
         <div className="container mx-auto px-4 py-6 space-y-6">
           {/* Header */}
-          <Card className="glass-morphism border-gradient-primary">
+          <Card className="glass-surface border-gradient-primary">
             <CardHeader className="text-center">
               <CardTitle className="flex items-center justify-center gap-2 text-xl">
                 <Wrench className="h-6 w-6 text-primary" />
@@ -73,7 +73,7 @@ const DeveloperTools: React.FC = () => {
             <TabsContent value="performance" className="space-y-6">
               <BundleAnalyzer />
               
-              <Card className="glass-morphism border-white/20">
+              <Card className="glass-surface border-white/20">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Monitor className="h-5 w-5" />
@@ -112,7 +112,7 @@ const DeveloperTools: React.FC = () => {
 
             {/* Onglet Tests */}
             <TabsContent value="testing" className="space-y-6">
-              <Card className="glass-morphism border-white/20">
+              <Card className="glass-surface border-white/20">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <TestTube className="h-5 w-5" />
@@ -140,7 +140,7 @@ const DeveloperTools: React.FC = () => {
                 </CardContent>
               </Card>
 
-              <Card className="glass-morphism border-white/20">
+              <Card className="glass-surface border-white/20">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Smartphone className="h-5 w-5" />
@@ -168,7 +168,7 @@ const DeveloperTools: React.FC = () => {
 
             {/* Onglet Monitoring */}
             <TabsContent value="monitoring" className="space-y-6">
-              <Card className="glass-morphism border-white/20">
+              <Card className="glass-surface border-white/20">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Activity className="h-5 w-5" />
@@ -200,7 +200,7 @@ const DeveloperTools: React.FC = () => {
                 </CardContent>
               </Card>
 
-              <Card className="glass-morphism border-white/20">
+              <Card className="glass-surface border-white/20">
                 <CardHeader>
                   <CardTitle>Alerts & Notifications</CardTitle>
                 </CardHeader>
@@ -221,7 +221,7 @@ const DeveloperTools: React.FC = () => {
 
             {/* Onglet AdSense */}
             <TabsContent value="adsense" className="space-y-6">
-              <Card className="glass-morphism border-white/20">
+              <Card className="glass-surface border-white/20">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <DollarSign className="h-5 w-5" />

@@ -71,7 +71,7 @@ const GameContent: React.FC<GameContentProps> = ({
       <p className="text-red-600 mb-4">
         {error.message}
       </p>
-      <p className="text-gray-600">
+      <p className="text-muted-foreground">
         Essayez de rafraîchir la page ou de revenir à l'accueil.
       </p>
     </div>

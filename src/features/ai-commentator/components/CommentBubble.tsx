@@ -18,7 +18,7 @@ export default function CommentBubble({ displayedText, isTyping }: CommentBubble
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: 0.4, duration: 0.5 }}
     >
-      <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/60 relative overflow-hidden">
+      <div className="glass-surface rounded-3xl p-8 shadow-xl border border-white/60 relative overflow-hidden">
         
         {/* Shimmer Effect */}
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] animate-[shimmer_3s_infinite] skew-x-12" />
@@ -57,7 +57,7 @@ export default function CommentBubble({ displayedText, isTyping }: CommentBubble
         
         {/* Footer */}
         <motion.div
-          className="flex items-center justify-between pt-4 border-t border-gray-200/50"
+          className="flex items-center justify-between pt-4 border-t border-border/50"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1 }}

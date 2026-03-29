@@ -25,34 +25,34 @@ const GameplayTab = () => {
           
           <div className="space-y-6">
             <div className="bg-gradient-to-r from-trinity-blue-50 to-trinity-purple-50 rounded-2xl p-6 border-2 border-trinity-blue-200">
-              <h3 className="text-xl font-black text-gray-800 mb-4">🎯 Actions possibles à votre tour (sens horaire)</h3>
+              <h3 className="text-xl font-black text-foreground mb-4">🎯 Actions possibles à votre tour (sens horaire)</h3>
               
               <div className="space-y-4">
                 <div className="bg-white rounded-xl p-4 border-l-4 border-trinity-blue-500">
-                  <h4 className="font-black text-gray-800 mb-2">1️⃣ Piocher ou prendre la défausse</h4>
-                  <p className="text-gray-700 font-semibold">
+                  <h4 className="font-black text-foreground mb-2">1️⃣ Piocher ou prendre la défausse</h4>
+                  <p className="text-foreground font-semibold">
                     Soit vous piochez une carte de la pile, soit vous prenez la carte du dessus de la défausse.
                   </p>
                 </div>
                 
                 <div className="bg-white rounded-xl p-4 border-l-4 border-trinity-purple-500">
-                  <h4 className="font-black text-gray-800 mb-2">2️⃣ Choisir votre action</h4>
+                  <h4 className="font-black text-foreground mb-2">2️⃣ Choisir votre action</h4>
                   <div className="space-y-2 ml-4">
-                    <p className="text-gray-700 font-semibold">
+                    <p className="text-foreground font-semibold">
                       <strong>a)</strong> Remplacer une de vos cartes face cachée (la nouvelle devient visible)
                     </p>
-                    <p className="text-gray-700 font-semibold">
+                    <p className="text-foreground font-semibold">
                       <strong>b)</strong> Défausser et retourner une de vos cartes pour appliquer son pouvoir
                     </p>
-                    <p className="text-gray-700 font-semibold">
+                    <p className="text-foreground font-semibold">
                       <strong>c)</strong> Défausser directement si la carte piochée est mauvaise
                     </p>
                   </div>
                 </div>
                 
                 <div className="bg-white rounded-xl p-4 border-l-4 border-trinity-orange-500">
-                  <h4 className="font-black text-gray-800 mb-2">3️⃣ Fin de tour spéciale</h4>
-                  <p className="text-gray-700 font-semibold">
+                  <h4 className="font-black text-foreground mb-2">3️⃣ Fin de tour spéciale</h4>
+                  <p className="text-foreground font-semibold">
                     Si vous pensez avoir le plus petit total, vous pouvez "sonner" la fin - tous les autres jouent encore une fois !
                   </p>
                 </div>
@@ -77,11 +77,11 @@ const GameplayTab = () => {
           <div className="bg-gradient-to-r from-trinity-orange-50 to-trinity-purple-50 rounded-2xl p-6 border-2 border-trinity-orange-200">
             <div className="space-y-4">
               <div className="bg-white rounded-xl p-4">
-                <h4 className="font-black text-gray-800 mb-2">📊 Décompte des points</h4>
+                <h4 className="font-black text-foreground mb-2">📊 Décompte des points</h4>
                 <div className="space-y-2">
-                  <p className="text-gray-700 font-semibold">• Toutes les cartes sont révélées</p>
-                  <p className="text-gray-700 font-semibold">• Chaque joueur compte ses points (négatifs inclus)</p>
-                  <p className="text-gray-700 font-semibold">• Le joueur avec le <strong>plus bas score</strong> remporte la manche</p>
+                  <p className="text-foreground font-semibold">• Toutes les cartes sont révélées</p>
+                  <p className="text-foreground font-semibold">• Chaque joueur compte ses points (négatifs inclus)</p>
+                  <p className="text-foreground font-semibold">• Le joueur avec le <strong>plus bas score</strong> remporte la manche</p>
                 </div>
               </div>
               
@@ -111,15 +111,15 @@ const GameplayTab = () => {
           <div className="bg-gradient-to-r from-trinity-purple-50 to-trinity-blue-50 rounded-2xl p-6 border-2 border-trinity-purple-200">
             <div className="space-y-4">
               <div className="bg-white rounded-xl p-4">
-                <h4 className="font-black text-gray-800 mb-2">🎯 Condition de fin</h4>
-                <p className="text-gray-700 font-semibold">
+                <h4 className="font-black text-foreground mb-2">🎯 Condition de fin</h4>
+                <p className="text-foreground font-semibold">
                   On joue autant de manches que nécessaire jusqu'à ce qu'un joueur atteigne ou dépasse la <strong>limite fixée</strong> (ex: 100 pts).
                 </p>
               </div>
               
               <div className="bg-white rounded-xl p-4">
-                <h4 className="font-black text-gray-800 mb-2">🏆 Vainqueur final</h4>
-                <p className="text-gray-700 font-semibold">
+                <h4 className="font-black text-foreground mb-2">🏆 Vainqueur final</h4>
+                <p className="text-foreground font-semibold">
                   Le gagnant est celui avec le <span className="text-trinity-purple-600 font-black">plus petit score cumulé</span> à la fin !
                 </p>
               </div>

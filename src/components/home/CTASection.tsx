@@ -21,10 +21,10 @@ export const CTASection: React.FC = () => {
     >
       <Card className="bg-gradient-to-r from-dutch-blue/10 to-dutch-purple/10 border border-white/50 shadow-xl">
         <CardContent className={`${isMobile ? 'p-4' : 'p-8'}`}>
-          <h2 className={`font-bold text-gray-800 ${isMobile ? 'text-2xl mb-2' : 'text-4xl mb-4'}`} style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+          <h2 className={`font-bold text-foreground ${isMobile ? 'text-2xl mb-2' : 'text-4xl mb-4'}`} style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
             Prêt pour votre première partie ?
           </h2>
-          <p className={`text-gray-600 ${isMobile ? 'text-base mb-6' : 'text-xl mb-8'}`}>
+          <p className={`text-muted-foreground ${isMobile ? 'text-base mb-6' : 'text-xl mb-8'}`}>
             Rejoignez des milliers de joueurs qui ont déjà adopté Dutch Card Game
           </p>
           

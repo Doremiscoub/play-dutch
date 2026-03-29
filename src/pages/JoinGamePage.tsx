@@ -208,7 +208,7 @@ const JoinGamePage: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <Card className="relative overflow-hidden bg-gradient-to-br from-white/90 to-white/60 backdrop-blur-md border border-white/20 shadow-xl">
+          <Card className="relative overflow-hidden glass-elevated border border-white/20 shadow-xl">
             <CardHeader className="text-center">
               <div className="flex justify-center mb-4">
                 <ProfessorAvatar 

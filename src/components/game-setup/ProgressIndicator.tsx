@@ -51,7 +51,7 @@ const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({ currentStep, tota
               <div
                 className={cn(
                   'w-12 sm:w-20 h-0.5 mx-3 sm:mx-4 mb-6 transition-colors duration-200',
-                  step < currentStep ? 'bg-green-400' : 'bg-gray-200'
+                  step < currentStep ? 'bg-green-400' : 'bg-muted'
                 )}
               />
             )}

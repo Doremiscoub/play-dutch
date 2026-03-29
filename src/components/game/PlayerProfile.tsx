@@ -17,8 +17,8 @@ export const PlayerProfile = ({ player, position }: PlayerProfileProps): Profile
   const stats = player.stats;
   if (!stats) return {
     profile: 'Joueur',
-    icon: <Cpu className="h-4 w-4 mr-1 text-gray-500" />,
-    colorClass: 'text-gray-500'
+    icon: <Cpu className="h-4 w-4 mr-1 text-muted-foreground" />,
+    colorClass: 'text-muted-foreground'
   };
   
   const consistencyScore = stats.consistencyScore || 0;
@@ -69,7 +69,7 @@ export const PlayerProfile = ({ player, position }: PlayerProfileProps): Profile
   
   return {
     profile: 'Joueur stratégique',
-    icon: <Cpu className="h-4 w-4 mr-1 text-gray-500" />,
-    colorClass: 'text-gray-500'
+    icon: <Cpu className="h-4 w-4 mr-1 text-muted-foreground" />,
+    colorClass: 'text-muted-foreground'
   };
 };

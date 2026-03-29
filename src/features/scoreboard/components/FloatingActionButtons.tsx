@@ -93,8 +93,8 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
             disabled={!canUndo || disabled}
             className={`relative h-11 w-11 sm:h-12 sm:w-12 min-w-[44px] min-h-[44px] rounded-2xl transition-all duration-200 group overflow-hidden border-2 ${
               canUndo && !disabled
-                ? 'bg-orange-500 border-orange-300 hover:bg-orange-600 shadow-md hover:shadow-lg'
-                : 'bg-gray-400 border-gray-300 opacity-70 cursor-not-allowed'
+                ? 'bg-dutch-orange border-dutch-orange/60 hover:bg-dutch-orange/90 shadow-md hover:shadow-lg'
+                : 'bg-muted-foreground/30 border-border opacity-70 cursor-not-allowed'
             }`}
             aria-label="Annuler la dernière manche"
             title="Annuler la dernière manche"
@@ -126,7 +126,7 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
             size="icon-lg"
             onClick={onEndGame}
             disabled={disabled}
-            className="relative h-11 w-11 sm:h-12 sm:w-12 min-w-[44px] min-h-[44px] rounded-2xl bg-purple-500 border-2 border-purple-300 hover:bg-purple-600 shadow-md hover:shadow-lg transition-all duration-200 group overflow-hidden"
+            className="relative h-11 w-11 sm:h-12 sm:w-12 min-w-[44px] min-h-[44px] rounded-2xl bg-dutch-purple border-2 border-dutch-purple/60 hover:bg-dutch-purple/90 shadow-md hover:shadow-lg transition-all duration-200 group overflow-hidden"
             aria-label="Terminer la partie en cours"
             title="Terminer la partie"
           >

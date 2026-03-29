@@ -9,25 +9,25 @@ const GameCompanionSection: React.FC = () => {
       icon: <Heart className="h-8 w-8" />,
       title: "Votre compagnon de soirée",
       description: "Fini les calculs à la main et les disputes de scores ! Dutch Card Game s'occupe de tout.",
-      gradient: "from-red-400 to-pink-500"
+      gradient: "from-dutch-orange to-dutch-purple"
     },
     {
       icon: <Clock className="h-8 w-8" />,
       title: "Plus de temps pour jouer",
       description: "Concentrez-vous sur l'essentiel : le plaisir de jouer entre amis.",
-      gradient: "from-trinity-blue-500 to-trinity-purple-500"
+      gradient: "from-dutch-blue to-dutch-purple"
     },
     {
       icon: <Smartphone className="h-8 w-8" />,
       title: "Toujours dans votre poche",
       description: "Sur mobile, tablette ou ordinateur - partout où vos amis vous accompagnent.",
-      gradient: "from-trinity-purple-500 to-trinity-orange-500"
+      gradient: "from-dutch-purple to-dutch-orange"
     },
     {
       icon: <Cloud className="h-8 w-8" />,
       title: "Hors-ligne et sécurisé",
       description: "Aucune connexion requise, vos données restent privées et sur votre appareil.",
-      gradient: "from-trinity-orange-500 to-trinity-blue-500"
+      gradient: "from-dutch-blue to-dutch-orange"
     }
   ];
 
@@ -41,15 +41,15 @@ const GameCompanionSection: React.FC = () => {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-black bg-gradient-to-r from-trinity-purple-600 via-trinity-blue-600 to-trinity-orange-600 bg-clip-text text-transparent mb-6 leading-tight py-2">
+          <h2 className="text-4xl md:text-5xl font-black text-gradient-trinity mb-6 leading-tight py-2">
             🤝 Votre compagnon de jeu idéal 🤝
           </h2>
-          <p className="text-xl text-neutral-700 font-bold max-w-4xl mx-auto mb-8">
+          <p className="text-xl text-foreground font-bold max-w-4xl mx-auto mb-8">
             Dutch Card Game n'est pas un jeu - c'est le partenaire parfait pour vos parties de cartes réelles !
           </p>
-          <div className="max-w-3xl mx-auto bg-gradient-to-r from-trinity-blue-100 to-trinity-purple-100 rounded-2xl p-8 border-2 border-trinity-blue-200">
-            <p className="text-lg text-neutral-800 font-bold leading-relaxed">
-              <strong>Le concept :</strong> Gardez vos cartes Dutch physiques et laissez l'application s'occuper intelligemment des calculs, statistiques et commentaires du Professeur Cartouche !
+          <div className="max-w-3xl mx-auto glass-elevated rounded-2xl p-8">
+            <p className="text-lg text-foreground font-bold leading-relaxed">
+              <strong className="text-dutch-blue">Le concept :</strong> Gardez vos cartes Dutch physiques et laissez l'application s'occuper intelligemment des calculs, statistiques et commentaires du Professeur Cartouche !
             </p>
           </div>
         </motion.div>
@@ -65,7 +65,7 @@ const GameCompanionSection: React.FC = () => {
               whileHover={{ y: -10, scale: 1.02 }}
               className="group"
             >
-              <Card className="h-full bg-white border border-border shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden">
+              <Card variant="glass" className="h-full hover:shadow-lg transition-all duration-300 overflow-hidden">
                 <CardContent className="p-8 flex items-start gap-6">
                   <motion.div
                     className={`bg-gradient-to-br ${benefit.gradient} rounded-2xl p-4 text-white shadow-lg group-hover:shadow-xl transition-shadow duration-300 flex-shrink-0`}
@@ -75,10 +75,10 @@ const GameCompanionSection: React.FC = () => {
                     {benefit.icon}
                   </motion.div>
                   <div className="flex-1">
-                    <h3 className="font-black text-xl text-gray-900 mb-3">
+                    <h3 className="font-black text-xl text-foreground mb-3">
                       {benefit.title}
                     </h3>
-                    <p className="text-gray-600 font-semibold leading-relaxed">
+                    <p className="text-muted-foreground font-semibold leading-relaxed">
                       {benefit.description}
                     </p>
                   </div>
@@ -88,7 +88,7 @@ const GameCompanionSection: React.FC = () => {
           ))}
         </div>
 
-        {/* Témoignage/Citation imaginaire */}
+        {/* Citation */}
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           whileInView={{ opacity: 1, scale: 1 }}
@@ -96,14 +96,11 @@ const GameCompanionSection: React.FC = () => {
           viewport={{ once: true }}
           className="relative"
         >
-          <Card className="bg-gradient-to-br from-trinity-purple-600 via-trinity-blue-600 to-trinity-orange-600 border-0 shadow-lg overflow-hidden">
-            {/* Overlay pour améliorer le contraste */}
-            <div className="absolute inset-0 bg-black/20" />
-            
+          <Card className="bg-gradient-to-br from-dutch-purple via-dutch-blue to-dutch-orange border-0 shadow-lg neon-purple overflow-hidden">
             {/* Guillemets décoratifs */}
-            <div className="absolute top-6 left-8 text-8xl font-black opacity-30 text-white">"</div>
-            <div className="absolute bottom-6 right-8 text-8xl font-black opacity-30 rotate-180 text-white">"</div>
-            
+            <div className="absolute top-6 left-8 text-8xl font-black opacity-20 text-white">"</div>
+            <div className="absolute bottom-6 right-8 text-8xl font-black opacity-20 rotate-180 text-white">"</div>
+
             <CardContent className="relative z-10 p-12 text-center">
               <motion.div
                 initial={{ opacity: 0, y: 30 }}

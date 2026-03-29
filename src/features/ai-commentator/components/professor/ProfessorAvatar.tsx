@@ -77,7 +77,7 @@ export default function ProfessorAvatar({
         whileTap={{ scale: 0.98, transition: { duration: 0.1 } }}
       >
         {/* Image Container */}
-        <div className="relative rounded-full overflow-hidden bg-white/90 backdrop-blur-sm w-full h-full border border-white/30">
+        <div className="relative rounded-full overflow-hidden glass-surface w-full h-full border border-white/30">
           {imageError ? (
             <div className="w-full h-full flex items-center justify-center text-6xl bg-gradient-to-br from-trinity-blue-100 to-trinity-purple-100">
               👨‍🏫

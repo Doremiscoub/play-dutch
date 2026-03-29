@@ -111,7 +111,7 @@ const PlayerStatsChart: React.FC<PlayerStatsChartProps> = ({ players, className 
         
         {noDataAvailable ? (
           <div className="h-64 flex items-center justify-center bg-white rounded-xl border border-border">
-            <p className="text-gray-500">Aucune donnée disponible</p>
+            <p className="text-muted-foreground">Aucune donnée disponible</p>
           </div>
         ) : (
           <motion.div
@@ -177,7 +177,7 @@ const PlayerStatsChart: React.FC<PlayerStatsChartProps> = ({ players, className 
         
         {noDataAvailable ? (
           <div className="h-64 flex items-center justify-center bg-white rounded-xl border border-border">
-            <p className="text-gray-500">Aucune donnée disponible</p>
+            <p className="text-muted-foreground">Aucune donnée disponible</p>
           </div>
         ) : (
           <motion.div
@@ -225,7 +225,7 @@ const PlayerStatsChart: React.FC<PlayerStatsChartProps> = ({ players, className 
           <div className="space-y-2 mt-3">
             {players.map((player, _index) => (
               <div key={player.id} className="flex items-center justify-between">
-                <span className="text-sm text-gray-700">{player.name}</span>
+                <span className="text-sm text-foreground">{player.name}</span>
                 <Badge variant="outline" className="bg-dutch-orange/10 text-dutch-orange border-none">
                   {player.stats?.dutchCount || 0}
                 </Badge>
@@ -248,7 +248,7 @@ const PlayerStatsChart: React.FC<PlayerStatsChartProps> = ({ players, className 
           <div className="space-y-2 mt-3">
             {players.map((player, _index) => (
               <div key={player.id} className="flex items-center justify-between">
-                <span className="text-sm text-gray-700">{player.name}</span>
+                <span className="text-sm text-foreground">{player.name}</span>
                 <Badge variant="outline" className="bg-dutch-green/10 text-dutch-green border-none">
                   {player.stats?.bestRound !== null ? player.stats?.bestRound : '-'}
                 </Badge>

@@ -87,7 +87,7 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
                 "px-4 py-2 rounded-xl font-bold text-2xl",
                 isNearThreshold ? "bg-dutch-orange/20 text-dutch-orange" :
                 isWinner ? "bg-dutch-purple/20 text-dutch-purple" :
-                "bg-gray-100"
+                "bg-muted"
               )}
               transition={{ type: "spring", stiffness: 400, damping: 10 }}
             >
@@ -96,7 +96,7 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
             
             <ChevronDown 
               className={cn(
-                "h-6 w-6 text-gray-500 transition-transform duration-300",
+                "h-6 w-6 text-muted-foreground transition-transform duration-300",
                 isExpanded ? "rotate-180" : ""
               )}
             />
@@ -122,7 +122,7 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
 
               {/* Barre de progression */}
               {roundCount > 0 && (
-                <div className="mt-4 h-2 bg-gray-100 rounded-full overflow-hidden">
+                <div className="mt-4 h-2 bg-muted rounded-full overflow-hidden">
                   <motion.div 
                     className="h-full bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange"
                     initial={{ width: 0 }}
@@ -164,7 +164,7 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
                   transition={{ delay: 0.2 }}
                 >
                   <div className={cn(
-                    "px-4 py-2 rounded-xl inline-flex items-center bg-gray-50/80",
+                    "px-4 py-2 rounded-xl inline-flex items-center bg-muted/50",
                     profileInfo.colorClass
                   )}>
                     {profileInfo.icon}

@@ -77,7 +77,7 @@ const GamePodium: React.FC<GamePodiumProps> = ({
           <h1 className="text-3xl font-bold bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-pink bg-clip-text text-transparent mb-2">
             Les légendes du Dutch ! 🏆
           </h1>
-          <p className="text-gray-600">
+          <p className="text-muted-foreground">
             {sortedPlayers[0]?.name} remporte la partie avec {sortedPlayers[0]?.totalScore} points !
             {gameDuration && <span className="ml-2">Durée : {gameDuration}</span>}
           </p>
@@ -104,7 +104,7 @@ const GamePodium: React.FC<GamePodiumProps> = ({
           transition={{ duration: 0.5, delay: 0.4 }}
           className="mb-12"
         >
-          <h2 className="text-xl font-semibold mb-4 text-gray-800">Statistiques de la partie</h2>
+          <h2 className="text-xl font-semibold mb-4 text-foreground">Statistiques de la partie</h2>
           <FunStats players={players} />
         </motion.div>
         

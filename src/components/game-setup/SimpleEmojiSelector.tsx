@@ -80,7 +80,7 @@ const SimpleEmojiSelector: React.FC<SimpleEmojiSelectorProps> = ({
         <div className="absolute inset-0 rounded-2xl bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
         
         {/* Texte d'aide */}
-        <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs text-gray-600 opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+        <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
           Cliquer pour changer
         </div>
       </motion.button>

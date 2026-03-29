@@ -52,7 +52,7 @@ export interface GameRecord {
 }
 
 const RARITY_COLORS = {
-  common: { bg: 'bg-gray-100', text: 'text-gray-700', border: 'border-gray-300' },
+  common: { bg: 'bg-muted', text: 'text-foreground', border: 'border-border' },
   rare: { bg: 'bg-blue-100', text: 'text-blue-700', border: 'border-blue-300' },
   epic: { bg: 'bg-purple-100', text: 'text-purple-700', border: 'border-purple-300' },
   legendary: { bg: 'bg-yellow-100', text: 'text-yellow-700', border: 'border-yellow-300' }
@@ -256,8 +256,8 @@ export const AchievementSystem: React.FC<AchievementSystemProps> = ({
         </CardHeader>
         <CardContent>
           <div className="text-center py-8">
-            <Trophy className="w-12 h-12 mx-auto mb-4 text-gray-400" />
-            <p className="text-gray-600">
+            <Trophy className="w-12 h-12 mx-auto mb-4 text-muted-foreground/70" />
+            <p className="text-muted-foreground">
               Vos achievements apparaîtront ici
             </p>
           </div>
@@ -286,19 +286,19 @@ export const AchievementSystem: React.FC<AchievementSystemProps> = ({
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
             <div className="text-center">
               <div className="text-2xl font-bold text-blue-600">{playerStats.totalGames}</div>
-              <div className="text-sm text-gray-600">Parties jouées</div>
+              <div className="text-sm text-muted-foreground">Parties jouées</div>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-green-600">{playerStats.wins}</div>
-              <div className="text-sm text-gray-600">Victoires</div>
+              <div className="text-sm text-muted-foreground">Victoires</div>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-purple-600">{playerStats.winStreak}</div>
-              <div className="text-sm text-gray-600">Meilleure série</div>
+              <div className="text-sm text-muted-foreground">Meilleure série</div>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-orange-600">{unlockedAchievements.length}</div>
-              <div className="text-sm text-gray-600">Achievements</div>
+              <div className="text-sm text-muted-foreground">Achievements</div>
             </div>
           </div>
 
@@ -306,7 +306,7 @@ export const AchievementSystem: React.FC<AchievementSystemProps> = ({
             value={(unlockedAchievements.length / ACHIEVEMENTS.length) * 100} 
             className="h-3"
           />
-          <p className="text-sm text-gray-600 mt-2 text-center">
+          <p className="text-sm text-muted-foreground mt-2 text-center">
             Progression des achievements: {unlockedAchievements.length}/{ACHIEVEMENTS.length}
           </p>
         </CardContent>
@@ -343,7 +343,7 @@ export const AchievementSystem: React.FC<AchievementSystemProps> = ({
                             {achievement.rarity}
                           </Badge>
                         </div>
-                        <p className="text-sm text-gray-600">{achievement.description}</p>
+                        <p className="text-sm text-muted-foreground">{achievement.description}</p>
                       </div>
                     </div>
                   </motion.div>
@@ -368,20 +368,20 @@ export const AchievementSystem: React.FC<AchievementSystemProps> = ({
                 .map((achievement) => (
                   <div
                     key={achievement.id}
-                    className="p-4 rounded-lg border border-gray-200 bg-gray-50"
+                    className="p-4 rounded-lg border border-border bg-muted/50"
                   >
                     <div className="flex items-center gap-3 mb-2">
-                      <div className="p-2 rounded-full text-gray-400">
+                      <div className="p-2 rounded-full text-muted-foreground/70">
                         {achievement.icon}
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center gap-2">
-                          <h4 className="font-medium text-gray-700">{achievement.name}</h4>
-                          <Badge variant="outline" className="text-xs text-gray-500">
+                          <h4 className="font-medium text-foreground">{achievement.name}</h4>
+                          <Badge variant="outline" className="text-xs text-muted-foreground">
                             {achievement.rarity}
                           </Badge>
                         </div>
-                        <p className="text-sm text-gray-600">{achievement.description}</p>
+                        <p className="text-sm text-muted-foreground">{achievement.description}</p>
                       </div>
                     </div>
                     

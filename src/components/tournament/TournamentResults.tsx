@@ -27,16 +27,16 @@ const TournamentResults: React.FC<TournamentResultsProps> = ({
   const getRankIcon = (rank: number) => {
     switch (rank) {
       case 1: return <Trophy className="h-5 w-5 text-yellow-500" />;
-      case 2: return <Medal className="h-5 w-5 text-gray-400" />;
+      case 2: return <Medal className="h-5 w-5 text-muted-foreground/70" />;
       case 3: return <Award className="h-5 w-5 text-amber-600" />;
-      default: return <Users className="h-4 w-4 text-gray-500" />;
+      default: return <Users className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
   const getRankBadge = (rank: number) => {
     switch (rank) {
       case 1: return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 2: return 'bg-gray-100 text-gray-800 border-gray-200';
+      case 2: return 'bg-muted text-foreground border-border';
       case 3: return 'bg-amber-100 text-amber-800 border-amber-200';
       default: return 'bg-blue-100 text-blue-800 border-blue-200';
     }
@@ -98,9 +98,9 @@ const TournamentResults: React.FC<TournamentResultsProps> = ({
               className={`
                 flex items-center justify-between p-4 rounded-xl border
                 ${index === 0 ? 'bg-gradient-to-r from-yellow-50 to-yellow-100 border-yellow-200' :
-                  index === 1 ? 'bg-gradient-to-r from-gray-50 to-gray-100 border-gray-200' :
+                  index === 1 ? 'bg-gradient-to-r from-muted/50 to-muted border-border' :
                   index === 2 ? 'bg-gradient-to-r from-amber-50 to-amber-100 border-amber-200' :
-                  'bg-white border-gray-200'}
+                  'bg-white border-border'}
               `}
             >
               <div className="flex items-center gap-3">
@@ -111,16 +111,16 @@ const TournamentResults: React.FC<TournamentResultsProps> = ({
                   </Badge>
                 </div>
                 <div>
-                  <p className="font-bold text-gray-800">{standing.playerName}</p>
-                  <p className="text-sm text-gray-600">
+                  <p className="font-bold text-foreground">{standing.playerName}</p>
+                  <p className="text-sm text-muted-foreground">
                     {standing.wins} victoire{standing.wins > 1 ? 's' : ''}
                   </p>
                 </div>
               </div>
               
               <div className="text-right">
-                <p className="font-bold text-gray-800">{standing.totalScore} pts</p>
-                <p className="text-sm text-gray-600">Total cumulé</p>
+                <p className="font-bold text-foreground">{standing.totalScore} pts</p>
+                <p className="text-sm text-muted-foreground">Total cumulé</p>
               </div>
             </motion.div>
           ))}
@@ -132,7 +132,7 @@ const TournamentResults: React.FC<TournamentResultsProps> = ({
         <Button
           onClick={exportResults}
           variant="outline"
-          className="bg-white/70 backdrop-blur-sm"
+          className="glass-surface"
         >
           <Download className="h-4 w-4 mr-2" />
           Exporter
@@ -149,7 +149,7 @@ const TournamentResults: React.FC<TournamentResultsProps> = ({
         <Button
           onClick={onBackToHome}
           variant="outline"
-          className="bg-white/70 backdrop-blur-sm"
+          className="glass-surface"
         >
           Retour accueil
         </Button>

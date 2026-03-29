@@ -77,8 +77,8 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
       }
     };
     return themes[rank as keyof typeof themes] || {
-      bg: "bg-slate-50",
-      border: "border-slate-300",
+      bg: "bg-muted/50",
+      border: "border-border",
       text: "text-slate-800"
     };
   };
@@ -175,7 +175,7 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
             <button className={cn(
               "group/btn mt-1 px-2 py-1.5 rounded-lg text-xs font-medium cursor-pointer",
               "border border-border bg-white",
-              "hover:bg-gray-50 active:scale-95",
+              "hover:bg-muted/50 active:scale-95",
               "transition-all duration-200 flex items-center gap-1.5",
               theme.text
             )}>

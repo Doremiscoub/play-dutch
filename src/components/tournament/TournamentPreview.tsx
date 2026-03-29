@@ -40,17 +40,17 @@ const TournamentPreview: React.FC<TournamentPreviewProps> = ({
       animate={{ opacity: 1, y: 0 }}
       className="space-y-4"
     >
-      <Card className="bg-gradient-to-br from-dutch-orange/10 via-white/80 to-dutch-pink/10 backdrop-blur-sm border-white/60">
+      <Card className="bg-gradient-to-br from-dutch-orange/10 via-white/80 to-dutch-pink/10 glass-surface border-white/60">
         <CardContent className="p-4">
           <div className="space-y-4">
             {/* Header */}
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="font-bold text-lg text-gray-800 flex items-center gap-2">
+                <h3 className="font-bold text-lg text-foreground flex items-center gap-2">
                   <Trophy className="h-5 w-5 text-dutch-orange" />
                   {tournamentName}
                 </h3>
-                <p className="text-sm text-gray-600">Aperçu du tournoi</p>
+                <p className="text-sm text-muted-foreground">Aperçu du tournoi</p>
               </div>
               <Badge className={tournamentType.color}>
                 {tournamentType.type}
@@ -64,7 +64,7 @@ const TournamentPreview: React.FC<TournamentPreviewProps> = ({
                   <Users className="h-4 w-4 text-dutch-blue" />
                   <span className="font-bold text-lg text-dutch-blue">{players.length}</span>
                 </div>
-                <p className="text-xs text-gray-600">Participants</p>
+                <p className="text-xs text-muted-foreground">Participants</p>
               </div>
               
               <div className="bg-white/70 rounded-xl p-3 text-center border border-white/50">
@@ -72,7 +72,7 @@ const TournamentPreview: React.FC<TournamentPreviewProps> = ({
                   <Target className="h-4 w-4 text-dutch-purple" />
                   <span className="font-bold text-lg text-dutch-purple">{rounds}</span>
                 </div>
-                <p className="text-xs text-gray-600">Manches</p>
+                <p className="text-xs text-muted-foreground">Manches</p>
               </div>
               
               <div className="bg-white/70 rounded-xl p-3 text-center border border-white/50">
@@ -80,7 +80,7 @@ const TournamentPreview: React.FC<TournamentPreviewProps> = ({
                   <Clock className="h-4 w-4 text-dutch-pink" />
                   <span className="font-bold text-lg text-dutch-pink">{formatDuration(estimatedDuration)}</span>
                 </div>
-                <p className="text-xs text-gray-600">Durée estimée</p>
+                <p className="text-xs text-muted-foreground">Durée estimée</p>
               </div>
               
               <div className="bg-white/70 rounded-xl p-3 text-center border border-white/50">
@@ -88,7 +88,7 @@ const TournamentPreview: React.FC<TournamentPreviewProps> = ({
                   <Zap className="h-4 w-4 text-dutch-orange" />
                   <span className="font-bold text-lg text-dutch-orange">{totalMatches}</span>
                 </div>
-                <p className="text-xs text-gray-600">Parties</p>
+                <p className="text-xs text-muted-foreground">Parties</p>
               </div>
             </div>
             
@@ -98,7 +98,7 @@ const TournamentPreview: React.FC<TournamentPreviewProps> = ({
                 <Calendar className="h-4 w-4 text-dutch-blue" />
                 <span className="text-sm font-medium text-dutch-blue">Fonctionnalités incluses</span>
               </div>
-              <div className="grid grid-cols-2 gap-2 text-xs text-gray-600">
+              <div className="grid grid-cols-2 gap-2 text-xs text-muted-foreground">
                 <div className="flex items-center gap-1">
                   <span className="w-1 h-1 bg-dutch-blue rounded-full"></span>
                   Classement en temps réel

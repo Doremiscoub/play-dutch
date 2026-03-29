@@ -170,7 +170,7 @@ const PodiumView: React.FC<PodiumViewProps> = ({ players, onClose, isMultiplayer
           <h2 className="text-2xl font-bold mb-2 bg-gradient-to-r from-dutch-blue via-dutch-purple to-dutch-orange bg-clip-text text-transparent">
             Résultats de la partie
           </h2>
-          <p className="text-gray-600">
+          <p className="text-muted-foreground">
             {topPlayers[0]?.name} remporte la partie avec {topPlayers[0]?.totalScore} points !
           </p>
         </div>
@@ -193,13 +193,13 @@ const PodiumView: React.FC<PodiumViewProps> = ({ players, onClose, isMultiplayer
             ];
             
             const positionIcons = [
-              <Medal key="silver" className="h-7 w-7 text-gray-400" aria-hidden="true" />,
+              <Medal key="silver" className="h-7 w-7 text-muted-foreground/70" aria-hidden="true" />,
               <Trophy key="gold" className="h-8 w-8 text-dutch-yellow" aria-hidden="true" />,
               <Award key="bronze" className="h-7 w-7 text-dutch-orange" aria-hidden="true" />
             ];
             
             const colorClasses = [
-              "from-gray-100 to-gray-300 border-gray-400",
+              "from-muted to-border border-muted-foreground/30",
               "from-yellow-50 to-yellow-200 border-dutch-yellow",
               "from-orange-50 to-orange-200 border-dutch-orange"
             ];
@@ -251,7 +251,7 @@ const PodiumView: React.FC<PodiumViewProps> = ({ players, onClose, isMultiplayer
                       />
                     </div>
                     <span className="text-sm font-semibold max-w-20 truncate">{player.name}</span>
-                    <span className="text-xs text-gray-500">{getPlayerStat(player)}</span>
+                    <span className="text-xs text-muted-foreground">{getPlayerStat(player)}</span>
                   </motion.div>
                 </motion.div>
               </motion.div>
@@ -261,7 +261,7 @@ const PodiumView: React.FC<PodiumViewProps> = ({ players, onClose, isMultiplayer
         
         {otherPlayers.length > 0 && (
           <div className="mt-10">
-            <h3 className="text-sm font-medium text-gray-500 mb-3">Autres joueurs</h3>
+            <h3 className="text-sm font-medium text-muted-foreground mb-3">Autres joueurs</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {otherPlayers.map((player, index) => (
                 <motion.div
@@ -273,7 +273,7 @@ const PodiumView: React.FC<PodiumViewProps> = ({ players, onClose, isMultiplayer
                   whileHover={{ y: -2, boxShadow: "0 6px 20px -5px hsl(var(--neutral-900) / 0.1)" }}
                 >
                   <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center text-xs font-medium">
+                    <div className="w-7 h-7 rounded-full bg-muted flex items-center justify-center text-xs font-medium">
                       {index + 4}
                     </div>
                     <span className="font-medium text-sm">{player.name}</span>
@@ -294,7 +294,7 @@ const PodiumView: React.FC<PodiumViewProps> = ({ players, onClose, isMultiplayer
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1, duration: 0.4 }}
           >
-          <p className="text-gray-700 mb-3">Partagez vos résultats avec vos amis !</p>
+          <p className="text-foreground mb-3">Partagez vos résultats avec vos amis !</p>
           <div className="flex justify-center gap-2 flex-wrap">
             <Dialog open={shareDialogOpen} onOpenChange={setShareDialogOpen}>
               <DialogTrigger asChild>
@@ -386,8 +386,8 @@ const PodiumView: React.FC<PodiumViewProps> = ({ players, onClose, isMultiplayer
                     </TabsContent>
                     
                     <TabsContent value="reel" className="space-y-4">
-                      <div className="bg-gray-100 p-4 rounded-xl">
-                        <p className="text-sm text-gray-700 mb-3">
+                      <div className="bg-muted p-4 rounded-xl">
+                        <p className="text-sm text-foreground mb-3">
                           Créez un reel à partager sur Instagram ou TikTok !
                         </p>
                         
@@ -436,7 +436,7 @@ const PodiumView: React.FC<PodiumViewProps> = ({ players, onClose, isMultiplayer
                             <p className="font-bold text-lg mb-1">
                               {topPlayers[0]?.name} gagne!
                             </p>
-                            <p className="text-sm text-gray-700 mb-3">
+                            <p className="text-sm text-foreground mb-3">
                               avec {topPlayers[0]?.totalScore} points
                             </p>
                             
@@ -447,7 +447,7 @@ const PodiumView: React.FC<PodiumViewProps> = ({ players, onClose, isMultiplayer
                                     idx === 0 
                                       ? "bg-gradient-to-r from-yellow-200 to-yellow-400 text-yellow-900" 
                                       : idx === 1 
-                                        ? "bg-gradient-to-r from-gray-200 to-gray-400 text-gray-900"
+                                        ? "bg-gradient-to-r from-muted to-muted-foreground/30 text-foreground"
                                         : "bg-gradient-to-r from-orange-200 to-orange-400 text-orange-900"
                                   }`}>
                                     {idx + 1}

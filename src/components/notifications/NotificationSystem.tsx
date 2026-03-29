@@ -97,7 +97,7 @@ export const NotificationSystem: React.FC<NotificationSystemProps> = ({ classNam
   };
 
   return (
-    <Card className={`glass-morphism border-white/20 ${className}`}>
+    <Card className={`glass-surface border-white/20 ${className}`}>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Bell className="h-5 w-5" />

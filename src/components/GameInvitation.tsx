@@ -202,13 +202,13 @@ const GameInvitation: React.FC<GameInvitationProps> = ({
           whileHover={{ scale: 1.02 }}
           transition={{ duration: 0.2 }}
         >
-          <Card className="h-full border border-white/50 bg-gradient-to-br from-white/90 to-white/70 backdrop-blur-md shadow-md hover:shadow-lg transition-all duration-300 flex flex-col">
+          <Card className="h-full border border-white/50 glass-elevated shadow-md hover:shadow-lg transition-all duration-300 flex flex-col">
             <CardHeader className="pb-2">
               <CardTitle className="text-xl font-semibold text-dutch-blue flex items-center gap-2">
                 <MapPin className="w-5 h-5" />
                 Créer un tableau de bord
               </CardTitle>
-              <CardDescription className="text-gray-600">
+              <CardDescription className="text-muted-foreground">
                 Créez un tableau de scores partagé que vos amis peuvent rejoindre
               </CardDescription>
             </CardHeader>
@@ -225,7 +225,7 @@ const GameInvitation: React.FC<GameInvitationProps> = ({
                   checked={isPublic}
                   onCheckedChange={setIsPublic}
                 />
-                <Label htmlFor="public-game" className="text-sm text-gray-700">
+                <Label htmlFor="public-game" className="text-sm text-foreground">
                   Partie publique (visible par tous)
                 </Label>
               </div>
@@ -256,13 +256,13 @@ const GameInvitation: React.FC<GameInvitationProps> = ({
               whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.2 }}
             >
-              <Card className="h-full cursor-pointer border border-white/50 bg-gradient-to-br from-white/90 to-white/70 backdrop-blur-md shadow-md hover:shadow-lg transition-all duration-300 flex flex-col">
+              <Card className="h-full cursor-pointer border border-white/50 glass-elevated shadow-md hover:shadow-lg transition-all duration-300 flex flex-col">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-xl font-semibold text-dutch-purple flex items-center gap-2">
                     <LinkIcon className="w-5 w-5" />
                     Rejoindre un tableau de bord
                   </CardTitle>
-                  <CardDescription className="text-gray-600">
+                  <CardDescription className="text-muted-foreground">
                     Rejoignez un tableau de scores créé par un ami
                   </CardDescription>
                 </CardHeader>
@@ -283,7 +283,7 @@ const GameInvitation: React.FC<GameInvitationProps> = ({
               </Card>
             </motion.div>
           </SheetTrigger>
-          <SheetContent side="bottom" className="rounded-t-3xl bg-white/95 backdrop-blur-lg border-t border-white/50">
+          <SheetContent side="bottom" className="rounded-t-3xl glass-elevated border-t border-white/50">
             <SheetHeader>
               <SheetTitle className="text-2xl font-bold text-dutch-purple">
                 Rejoindre un tableau de scores
@@ -291,14 +291,14 @@ const GameInvitation: React.FC<GameInvitationProps> = ({
             </SheetHeader>
             <div className="space-y-6 py-6">
               <div className="space-y-2">
-                <Label htmlFor="joinCode" className="text-gray-700">Code de la partie</Label>
+                <Label htmlFor="joinCode" className="text-foreground">Code de la partie</Label>
                 <div className="flex space-x-2">
                   <Input 
                     id="joinCode" 
                     placeholder="Entrez le code (ex: ABC123)" 
                     value={joinCode}
                     onChange={(e) => setJoinCode(e.target.value.toUpperCase())}
-                    className="text-center text-lg tracking-wider bg-white/50 border border-white/50 backdrop-blur-md font-medium"
+                    className="text-center text-lg tracking-wider glass-elevated border border-white/50 font-medium"
                     maxLength={6}
                   />
                   <Button 
@@ -317,7 +317,7 @@ const GameInvitation: React.FC<GameInvitationProps> = ({
               
               {publicGames.length > 0 && (
                 <div className="space-y-3">
-                  <h3 className="text-sm font-medium text-gray-700">Tableaux de scores disponibles</h3>
+                  <h3 className="text-sm font-medium text-foreground">Tableaux de scores disponibles</h3>
                   <div className="max-h-60 overflow-y-auto space-y-2">
                     <AnimatePresence>
                       {publicGames.map(game => (
@@ -329,8 +329,8 @@ const GameInvitation: React.FC<GameInvitationProps> = ({
                           className="bg-white/70 rounded-xl p-3 border border-white/50 shadow-sm flex justify-between items-center"
                         >
                           <div>
-                            <p className="font-medium text-gray-800">Partie de {game.hostName}</p>
-                            <p className="text-xs text-gray-500">{game.playerCount} joueur{game.playerCount > 1 ? 's' : ''} • Code: {game.id}</p>
+                            <p className="font-medium text-foreground">Partie de {game.hostName}</p>
+                            <p className="text-xs text-muted-foreground">{game.playerCount} joueur{game.playerCount > 1 ? 's' : ''} • Code: {game.id}</p>
                           </div>
                           <Button 
                             size="sm" 
@@ -346,7 +346,7 @@ const GameInvitation: React.FC<GameInvitationProps> = ({
                 </div>
               )}
               
-              <p className="text-sm text-gray-500 text-center">
+              <p className="text-sm text-muted-foreground text-center">
                 Demandez le code à la personne qui a créé le tableau de bord
               </p>
             </div>

@@ -66,7 +66,7 @@ export const InteractiveTimeline: React.FC = () => {
               key={index}
               onClick={() => setActiveStep(index)}
               className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                index === activeStep ? 'bg-dutch-blue scale-125' : 'bg-gray-300'
+                index === activeStep ? 'bg-dutch-blue scale-125' : 'bg-border'
               }`}
             />
           ))}
@@ -107,7 +107,7 @@ export const InteractiveTimeline: React.FC = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: 0.2 }}
-                  className="font-semibold mb-4 text-2xl text-gray-800"
+                  className="font-semibold mb-4 text-2xl text-foreground"
                 >
                   {timelineSteps[activeStep].title}
                 </motion.h3>
@@ -116,7 +116,7 @@ export const InteractiveTimeline: React.FC = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: 0.3 }}
-                  className="text-gray-600 mb-4 text-lg"
+                  className="text-muted-foreground mb-4 text-lg"
                 >
                   {timelineSteps[activeStep].description}
                 </motion.p>
@@ -125,7 +125,7 @@ export const InteractiveTimeline: React.FC = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: 0.4 }}
-                  className="text-gray-500 text-sm leading-relaxed"
+                  className="text-muted-foreground text-sm leading-relaxed"
                 >
                   {timelineSteps[activeStep].details}
                 </motion.p>

@@ -77,7 +77,7 @@ const TournamentMode: React.FC<TournamentModeProps> = ({ onStartTournament }) =>
           </div>
         </CardContent>
         
-        <CardFooter className="bg-gray-50/50 border-t border-white/40">
+        <CardFooter className="bg-muted/50 border-t border-white/40">
           <motion.div className="w-full" whileHover={{ scale: canProceed ? 1.02 : 1 }}>
             <Button 
               onClick={() => setShowDialog(true)}

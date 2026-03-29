@@ -152,13 +152,13 @@ export const OptimizedStatsDashboard: React.FC<OptimizedStatsDashboardProps> = (
                 <Users className="h-3 w-3 md:h-4 md:w-4 text-primary" />
                 {shortLabels ? 'Focus :' : 'Focus sur un joueur :'}
               </span>
-              <Button onClick={() => handlePlayerSelect(null)} variant={!selectedPlayer ? "default" : "ghost"} size="sm" className={`touch-button rounded-xl md:rounded-2xl text-sm md:text-sm font-medium transition-all duration-300 ${!selectedPlayer ? 'bg-gradient-to-r from-trinity-blue-500 to-trinity-purple-500 text-white shadow-lg hover:shadow-xl transform hover:scale-105' : 'bg-white hover:bg-gray-50 text-foreground border border-border'}`} style={!selectedPlayer ? {
+              <Button onClick={() => handlePlayerSelect(null)} variant={!selectedPlayer ? "default" : "ghost"} size="sm" className={`touch-button rounded-xl md:rounded-2xl text-sm md:text-sm font-medium transition-all duration-300 ${!selectedPlayer ? 'bg-gradient-to-r from-trinity-blue-500 to-trinity-purple-500 text-white shadow-lg hover:shadow-xl transform hover:scale-105' : 'bg-white hover:bg-muted/50 text-foreground border border-border'}`} style={!selectedPlayer ? {
             background: 'linear-gradient(90deg, rgb(10,132,255), rgb(139,92,246))',
             color: 'white'
           } : undefined}>
                 {shortLabels ? 'Tous' : 'Tous les joueurs'}
               </Button>
-              {players.map(player => <Button key={player.id} onClick={() => handlePlayerSelect(player)} variant={selectedPlayer?.id === player.id ? "default" : "ghost"} size="sm" className={`touch-button rounded-xl md:rounded-2xl text-sm md:text-sm font-medium transition-all duration-300 flex items-center gap-1 md:gap-2 ${selectedPlayer?.id === player.id ? 'bg-gradient-to-r from-trinity-blue-500 to-trinity-purple-500 text-white shadow-lg hover:shadow-xl transform hover:scale-105' : 'bg-white hover:bg-gray-50 text-foreground border border-border'}`} style={selectedPlayer?.id === player.id ? {
+              {players.map(player => <Button key={player.id} onClick={() => handlePlayerSelect(player)} variant={selectedPlayer?.id === player.id ? "default" : "ghost"} size="sm" className={`touch-button rounded-xl md:rounded-2xl text-sm md:text-sm font-medium transition-all duration-300 flex items-center gap-1 md:gap-2 ${selectedPlayer?.id === player.id ? 'bg-gradient-to-r from-trinity-blue-500 to-trinity-purple-500 text-white shadow-lg hover:shadow-xl transform hover:scale-105' : 'bg-white hover:bg-muted/50 text-foreground border border-border'}`} style={selectedPlayer?.id === player.id ? {
             background: 'linear-gradient(90deg, rgb(10,132,255), rgb(139,92,246))',
             color: 'white'
           } : undefined}>

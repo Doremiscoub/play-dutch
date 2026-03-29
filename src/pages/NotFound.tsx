@@ -26,7 +26,7 @@ const NotFound: React.FC = () => {
           transition={{ duration: 0.5 }}
           className="text-center"
         >
-          <div className="bg-white/80 backdrop-blur-md rounded-3xl border border-white/40 p-10 shadow-md hover:shadow-lg transition-all mb-8 text-center">
+          <div className="glass-surface rounded-3xl border border-white/40 p-10 shadow-md hover:shadow-lg transition-all mb-8 text-center">
             <div className="text-9xl font-bold mb-4 bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">
               404
             </div>

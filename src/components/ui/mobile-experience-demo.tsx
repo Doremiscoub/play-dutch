@@ -110,10 +110,10 @@ export const MobileExperienceDemo: React.FC = () => {
           onLongPress={() => setGestureStatus('Long press détecté!')}
           className="w-full"
         >
-          <Card className="p-8 text-center border-2 border-dashed border-gray-300 bg-gradient-to-br from-blue-50 to-purple-50">
+          <Card className="p-8 text-center border-2 border-dashed border-border bg-gradient-to-br from-blue-50 to-purple-50">
             <Hand className="h-12 w-12 mx-auto mb-4 text-blue-500" />
             <h3 className="font-semibold mb-2">Zone de Gestes</h3>
-            <p className="text-sm text-gray-600 mb-4">{gestureStatus}</p>
+            <p className="text-sm text-muted-foreground mb-4">{gestureStatus}</p>
             {pinchScale !== 1 && (
               <motion.div
                 animate={{ scale: pinchScale }}
@@ -160,7 +160,7 @@ export const MobileExperienceDemo: React.FC = () => {
           </div>
           
           {!isSupported && (
-            <p className="text-xs text-gray-500 mt-2 text-center">
+            <p className="text-xs text-muted-foreground mt-2 text-center">
               Feedback haptique non supporté sur cet appareil
             </p>
           )}

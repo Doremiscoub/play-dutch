@@ -277,7 +277,7 @@ export const EnhancedGameHistory: React.FC<EnhancedGameHistoryProps> = ({
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ delay: index * 0.05 }}
               >
-                <Card className="relative overflow-hidden bg-gradient-to-r from-white/90 to-white/60 backdrop-blur-md border border-white/20 hover:shadow-lg transition-all duration-300">
+                <Card className="relative overflow-hidden glass-surface border border-white/20 hover:shadow-lg transition-all duration-300">
                   <CardContent className="p-4">
                     <div className="flex items-start justify-between">
                       <div className="flex-1 space-y-3">
@@ -383,7 +383,7 @@ export const EnhancedGameHistory: React.FC<EnhancedGameHistoryProps> = ({
                             <div key={player.id} className="flex items-center gap-1 text-xs">
                               <span className={`w-4 h-4 rounded-full flex items-center justify-center text-white text-xs font-bold ${
                                 idx === 0 ? 'bg-yellow-500' : 
-                                idx === 1 ? 'bg-gray-400' : 
+                                idx === 1 ? 'bg-muted-foreground/30' :
                                 'bg-amber-600'
                               }`}>
                                 {idx + 1}

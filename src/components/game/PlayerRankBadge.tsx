@@ -17,13 +17,13 @@ export default function PlayerRankBadge({
       case 1:
         return "bg-amber-400 text-amber-900";
       case 2:
-        return "bg-gray-300 text-gray-700";
+        return "bg-border text-foreground";
       case 3:
         return "bg-amber-700 text-amber-100";
       default:
         return position <= 5
           ? "bg-dutch-blue text-white"
-          : "bg-gray-400 text-white";
+          : "bg-muted-foreground/30 text-white";
     }
   };
 

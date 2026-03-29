@@ -125,7 +125,7 @@ const AdSenseTestPage: React.FC = () => {
                       <EnhancedAdSlot 
                         placement={placement as any}
                         priority={priority as any}
-                        className="border-dashed border-2 border-gray-300"
+                        className="border-dashed border-2 border-border"
                       />
                     </div>
                   </div>
@@ -173,7 +173,7 @@ const AdSenseTestPage: React.FC = () => {
                   </Button>
                 </div>
 
-                <div className="mt-6 p-4 bg-gray-50 dark:bg-gray-900 rounded-lg">
+                <div className="mt-6 p-4 bg-muted/50 dark:bg-foreground/90 rounded-lg">
                   <h5 className="font-medium mb-2">État du consentement:</h5>
                   <pre className="text-xs overflow-auto">
                     {JSON.stringify(
@@ -199,7 +199,7 @@ const AdSenseTestPage: React.FC = () => {
               <div className="space-y-6">
                 <div>
                   <h5 className="font-medium mb-2">Variables d'environnement AdSense:</h5>
-                  <div className="space-y-1 text-sm font-mono bg-gray-50 dark:bg-gray-900 p-3 rounded">
+                  <div className="space-y-1 text-sm font-mono bg-muted/50 dark:bg-foreground/90 p-3 rounded">
                     <div>VITE_ADSENSE_CLIENT_ID: {import.meta.env.VITE_ADSENSE_CLIENT_ID || "Non défini"}</div>
                     <div>VITE_ADSENSE_SLOT_HOMEPAGE: {import.meta.env.VITE_ADSENSE_SLOT_HOMEPAGE || "Non défini"}</div>
                     <div>VITE_ADSENSE_SLOT_GAME_LEFT: {import.meta.env.VITE_ADSENSE_SLOT_GAME_LEFT || "Non défini"}</div>
@@ -210,7 +210,7 @@ const AdSenseTestPage: React.FC = () => {
 
                 <div>
                   <h5 className="font-medium mb-2">Script AdSense:</h5>
-                  <div className="text-sm bg-gray-50 dark:bg-gray-900 p-3 rounded">
+                  <div className="text-sm bg-muted/50 dark:bg-foreground/90 p-3 rounded">
                     Status: {typeof (window as any).adsbygoogle !== 'undefined' ? "Chargé" : "Non chargé"}
                   </div>
                 </div>

@@ -127,14 +127,14 @@ const PullToRefresh: React.FC<PullToRefreshProps> = ({
         animate={controls}
       >
         <motion.div 
-          className="rounded-full bg-white/50 backdrop-blur-md p-3 shadow-md border border-white/50"
+          className="rounded-full glass-surface p-3 shadow-md border border-white/50"
           style={{ 
             rotate: iconRotation,
             scale: iconScale,
             opacity: iconOpacity
           }}
         >
-          <RefreshCw className={`w-6 h-6 ${refreshing ? 'text-dutch-blue animate-spin' : 'text-gray-500'}`} />
+          <RefreshCw className={`w-6 h-6 ${refreshing ? 'text-dutch-blue animate-spin' : 'text-muted-foreground'}`} />
         </motion.div>
       </motion.div>
       

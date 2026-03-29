@@ -266,7 +266,7 @@ const InteractiveTutorial: React.FC<InteractiveTutorialProps> = ({ onComplete })
 
   if (!showTutorial) {
     return (
-      <Card className="border border-white/50 bg-gradient-to-br from-white/90 to-white/70 backdrop-blur-md rounded-3xl shadow-md">
+      <Card className="glass-elevated bg-gradient-to-br from-white/90 to-white/70 rounded-3xl">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <BookOpen className="h-5 w-5 text-dutch-blue" />
@@ -279,7 +279,7 @@ const InteractiveTutorial: React.FC<InteractiveTutorialProps> = ({ onComplete })
         
         <CardContent>
           <div className="space-y-4">
-            <div className="bg-white/60 backdrop-blur-sm rounded-2xl border border-white/30 p-4 space-y-4">
+            <div className="glass-surface rounded-2xl p-4 space-y-4">
               <div className="flex justify-between items-center">
                 <div className="flex items-center gap-2">
                   <BookOpen className="h-5 w-5 text-dutch-blue" />
@@ -288,7 +288,7 @@ const InteractiveTutorial: React.FC<InteractiveTutorialProps> = ({ onComplete })
                 <Badge variant="outline" className="bg-dutch-blue/10 text-dutch-blue">5 min</Badge>
               </div>
               
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-muted-foreground">
                 Ce tutoriel interactif vous expliquera les règles de base de Dutch Blitz et comment utiliser cette application pour suivre vos scores.
               </p>
               
@@ -331,9 +331,9 @@ const InteractiveTutorial: React.FC<InteractiveTutorialProps> = ({ onComplete })
         animate={{ opacity: 1, x: 0 }}
         exit={{ opacity: 0, x: -20 }}
         transition={{ duration: 0.3 }}
-        className="fixed inset-0 bg-black/50 backdrop-blur-md z-50 flex items-center justify-center p-4"
+        className="fixed inset-0 glass-dark z-50 flex items-center justify-center p-4"
       >
-        <Card className="w-full max-w-md border border-white/50 bg-gradient-to-br from-white/90 to-white/70 backdrop-blur-md rounded-3xl shadow-xl">
+        <Card className="w-full max-w-md glass-float bg-gradient-to-br from-white/90 to-white/70 rounded-3xl">
           <CardHeader className="relative pb-2">
             <Button 
               variant="ghost" 

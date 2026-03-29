@@ -84,12 +84,12 @@ const CardValuesTab = () => {
                   </div>
                 ))}
               </div>
-              <h3 className="text-2xl font-black text-gray-800 mb-4">Cartes 2 à 10</h3>
-              <p className="text-xl font-bold text-gray-700">
+              <h3 className="text-2xl font-black text-foreground mb-4">Cartes 2 à 10</h3>
+              <p className="text-xl font-bold text-foreground">
                 Valeur = <span className="text-trinity-orange-600">Chiffre inscrit sur la carte</span>
               </p>
               <div className="mt-4 bg-white rounded-xl p-4">
-                <p className="text-gray-600 font-semibold">
+                <p className="text-muted-foreground font-semibold">
                   Exemple : Un 7 de cœur = 7 points, un 3 de pique = 3 points
                 </p>
               </div>

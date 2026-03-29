@@ -105,19 +105,19 @@ const SpecialCardsTab = () => {
           
           <div className="space-y-6">
             <div className="bg-gradient-to-r from-trinity-blue-50 to-trinity-orange-50 rounded-2xl p-6 border-2 border-trinity-blue-200">
-              <h3 className="text-xl font-black text-gray-800 mb-4">💡 Conseils stratégiques</h3>
+              <h3 className="text-xl font-black text-foreground mb-4">💡 Conseils stratégiques</h3>
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-3">
                   <div className="bg-white rounded-xl p-4">
-                    <h4 className="font-black text-gray-800 mb-2">🔢 Scores négatifs</h4>
-                    <p className="text-gray-700 font-semibold">
+                    <h4 className="font-black text-foreground mb-2">🔢 Scores négatifs</h4>
+                    <p className="text-foreground font-semibold">
                       Gérer les scores négatifs avec attention - ils sont votre meilleur atout !
                     </p>
                   </div>
                   
                   <div className="bg-white rounded-xl p-4">
-                    <h4 className="font-black text-gray-800 mb-2">👑 Différence Rois</h4>
-                    <p className="text-gray-700 font-semibold">
+                    <h4 className="font-black text-foreground mb-2">👑 Différence Rois</h4>
+                    <p className="text-foreground font-semibold">
                       Noir = 0 pt (bon) vs Rouge = 15 pts (catastrophique)
                     </p>
                   </div>
@@ -125,15 +125,15 @@ const SpecialCardsTab = () => {
                 
                 <div className="space-y-3">
                   <div className="bg-white rounded-xl p-4">
-                    <h4 className="font-black text-gray-800 mb-2">🧠 Mémoire</h4>
-                    <p className="text-gray-700 font-semibold">
+                    <h4 className="font-black text-foreground mb-2">🧠 Mémoire</h4>
+                    <p className="text-foreground font-semibold">
                       Mémorisez vos cartes et observez les actions adverses
                     </p>
                   </div>
                   
                   <div className="bg-white rounded-xl p-4">
-                    <h4 className="font-black text-gray-800 mb-2">⚡ Timing</h4>
-                    <p className="text-gray-700 font-semibold">
+                    <h4 className="font-black text-foreground mb-2">⚡ Timing</h4>
+                    <p className="text-foreground font-semibold">
                       Utilisez les pouvoirs au bon moment pour maximiser l'effet
                     </p>
                   </div>

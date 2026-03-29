@@ -405,7 +405,7 @@ export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({ className = 
             {isSignedIn ? (
               <Wifi className="w-5 h-5 text-green-600" />
             ) : (
-              <WifiOff className="w-5 h-5 text-gray-400" />
+              <WifiOff className="w-5 h-5 text-muted-foreground/70" />
             )}
             Synchronisation
           </CardTitle>
@@ -414,7 +414,7 @@ export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({ className = 
           <div className="flex items-center justify-between">
             <div>
               <Label>État de la sync</Label>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-muted-foreground">
                 {isSignedIn ? `Connecté: ${syncStatus}` : 'Non connecté'}
               </p>
             </div>
@@ -463,7 +463,7 @@ export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({ className = 
               <span>Utilisé</span>
               <span>{formatBytes(storageInfo.used)} / {formatBytes(storageInfo.total)}</span>
             </div>
-            <div className="w-full bg-gray-200 rounded-full h-2">
+            <div className="w-full bg-muted rounded-full h-2">
               <div 
                 className="bg-blue-600 h-2 rounded-full transition-all duration-300"
                 style={{ width: `${(storageInfo.used / storageInfo.total) * 100}%` }}
@@ -474,11 +474,11 @@ export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({ className = 
           <div className="grid grid-cols-2 gap-4 text-center">
             <div>
               <div className="text-lg font-bold">{storageInfo.gamesCount}</div>
-              <div className="text-sm text-gray-600">Parties sauvées</div>
+              <div className="text-sm text-muted-foreground">Parties sauvées</div>
             </div>
             <div>
               <div className="text-lg font-bold">{availableGames.length}</div>
-              <div className="text-sm text-gray-600">Dans le cloud</div>
+              <div className="text-sm text-muted-foreground">Dans le cloud</div>
             </div>
           </div>
 
@@ -635,7 +635,7 @@ export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({ className = 
               <Code2 className="w-4 h-4 mr-2" />
               Accéder aux outils de développement
             </Button>
-            <p className="text-xs text-gray-600 mt-2">
+            <p className="text-xs text-muted-foreground mt-2">
               Bundle analysis, accessibility checker, performance monitor
             </p>
           </CardContent>
@@ -654,7 +654,7 @@ export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({ className = 
           <div className="flex items-center justify-between">
             <div>
               <Label htmlFor="analytics">Analytics anonymes</Label>
-              <p className="text-xs text-gray-600">Nous aide à améliorer l'app</p>
+              <p className="text-xs text-muted-foreground">Nous aide à améliorer l'app</p>
             </div>
             <Switch
               id="analytics"
@@ -668,7 +668,7 @@ export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({ className = 
           <div className="flex items-center justify-between">
             <div>
               <Label htmlFor="crashReports">Rapports de crash</Label>
-              <p className="text-xs text-gray-600">Aide à corriger les bugs</p>
+              <p className="text-xs text-muted-foreground">Aide à corriger les bugs</p>
             </div>
             <Switch
               id="crashReports"
@@ -694,7 +694,7 @@ export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({ className = 
                 <AlertTriangle className="w-5 h-5 text-orange-600" />
                 <div className="flex-1">
                   <p className="text-sm font-medium">Modifications non sauvegardées</p>
-                  <p className="text-xs text-gray-600">Pensez à sauvegarder vos paramètres</p>
+                  <p className="text-xs text-muted-foreground">Pensez à sauvegarder vos paramètres</p>
                 </div>
                 <Button onClick={saveSettings} size="sm">
                   Sauvegarder

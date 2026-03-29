@@ -31,7 +31,7 @@ const TournamentConfigDialog: React.FC<TournamentConfigDialogProps> = ({
 }) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-lg rounded-3xl bg-white/95 backdrop-blur-md border border-white/60 shadow-xl">
+      <DialogContent className="sm:max-w-lg rounded-3xl glass-elevated border border-white/60 shadow-xl">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Trophy className="h-5 w-5 text-dutch-orange" />
@@ -56,18 +56,18 @@ const TournamentConfigDialog: React.FC<TournamentConfigDialogProps> = ({
                 className="space-y-4"
               >
                 <div className="bg-white/80 rounded-xl p-4 border border-white/60">
-                  <h3 className="font-medium mb-2 text-gray-800">Résumé</h3>
+                  <h3 className="font-medium mb-2 text-foreground">Résumé</h3>
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Tournoi :</span>
+                      <span className="text-muted-foreground">Tournoi :</span>
                       <span className="font-medium">{tournamentName}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Participants :</span>
+                      <span className="text-muted-foreground">Participants :</span>
                       <span className="font-medium">{players.length} joueurs</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Manches :</span>
+                      <span className="text-muted-foreground">Manches :</span>
                       <span className="font-medium">{rounds}</span>
                     </div>
                   </div>

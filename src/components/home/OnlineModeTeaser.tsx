@@ -21,7 +21,7 @@ const OnlineModeTeaser: React.FC = () => {
           <h2 className="text-4xl md:text-5xl font-black bg-gradient-to-r from-dutch-purple via-dutch-blue to-trinity-blue-600 bg-clip-text text-transparent mb-6 leading-tight py-2">
             Mode En Ligne Dutch
           </h2>
-          <p className="text-xl text-neutral-700 font-bold max-w-4xl mx-auto mb-8">
+          <p className="text-xl text-foreground font-bold max-w-4xl mx-auto mb-8">
             Préparez-vous à découvrir le Dutch en ligne complet ! Jouez contre vos amis à distance avec des cartes virtuelles.
           </p>
         </motion.div>
@@ -49,19 +49,19 @@ const OnlineModeTeaser: React.FC = () => {
                 <div className="space-y-4">
                   <div className="flex items-center gap-3">
                     <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    <span className="text-gray-700 font-semibold">Application compagnon</span>
+                    <span className="text-foreground font-semibold">Application compagnon</span>
                   </div>
                   <div className="flex items-center gap-3">
                     <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    <span className="text-gray-700 font-semibold">Cartes physiques requises</span>
+                    <span className="text-foreground font-semibold">Cartes physiques requises</span>
                   </div>
                   <div className="flex items-center gap-3">
                     <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    <span className="text-gray-700 font-semibold">Calcul automatique des scores</span>
+                    <span className="text-foreground font-semibold">Calcul automatique des scores</span>
                   </div>
                   <div className="flex items-center gap-3">
                     <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    <span className="text-gray-700 font-semibold">Professeur Cartouche inclus</span>
+                    <span className="text-foreground font-semibold">Professeur Cartouche inclus</span>
                   </div>
                 </div>
               </CardContent>
@@ -102,19 +102,19 @@ const OnlineModeTeaser: React.FC = () => {
                 <div className="space-y-4">
                   <div className="flex items-center gap-3">
                     <Sparkles className="w-4 h-4 text-purple-500" />
-                    <span className="text-gray-700 font-semibold">Jeu en ligne complet</span>
+                    <span className="text-foreground font-semibold">Jeu en ligne complet</span>
                   </div>
                   <div className="flex items-center gap-3">
                     <Users className="w-4 h-4 text-purple-500" />
-                    <span className="text-gray-700 font-semibold">Multijoueur à distance</span>
+                    <span className="text-foreground font-semibold">Multijoueur à distance</span>
                   </div>
                   <div className="flex items-center gap-3">
                     <Clock className="w-4 h-4 text-purple-500" />
-                    <span className="text-gray-700 font-semibold">Parties en temps réel</span>
+                    <span className="text-foreground font-semibold">Parties en temps réel</span>
                   </div>
                   <div className="flex items-center gap-3">
                     <Sparkles className="w-4 h-4 text-purple-500" />
-                    <span className="text-gray-700 font-semibold">Cartes virtuelles intégrées</span>
+                    <span className="text-foreground font-semibold">Cartes virtuelles intégrées</span>
                   </div>
                 </div>
               </CardContent>

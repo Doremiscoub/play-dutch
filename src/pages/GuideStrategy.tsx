@@ -116,7 +116,7 @@ const GuideStrategy: React.FC = () => {
         <div className="space-y-8">
           {/* Introduction */}
           <div className="text-center mb-8">
-            <p className="text-lg text-gray-600 leading-relaxed">
+            <p className="text-lg text-muted-foreground leading-relaxed">
               Maîtrisez l'art du Dutch avec nos stratégies éprouvées. 
               Du débutant à l'expert, découvrez les techniques qui feront de vous un redoutable adversaire.
             </p>
@@ -124,7 +124,7 @@ const GuideStrategy: React.FC = () => {
 
           {/* Niveaux de Stratégie */}
           <section>
-            <h2 className="text-2xl font-bold mb-6 text-gray-800">
+            <h2 className="text-2xl font-bold mb-6 text-foreground">
               <Users className="inline mr-2 h-6 w-6 text-dutch-purple" />
               Stratégies par Niveau
             </h2>
@@ -160,26 +160,26 @@ const GuideStrategy: React.FC = () => {
 
           {/* Tactiques Avancées */}
           <section>
-            <h2 className="text-2xl font-bold mb-6 text-gray-800">
+            <h2 className="text-2xl font-bold mb-6 text-foreground">
               <Brain className="inline mr-2 h-6 w-6 text-dutch-blue" />
               Tactiques Avancées
             </h2>
             
             <div className="space-y-6">
               {tactiques.map((tactique, index) => (
-                <Card key={index} className="border border-gray-200">
+                <Card key={index} className="border border-border">
                   <CardHeader>
                     <CardTitle className="text-xl text-dutch-purple">
                       {tactique.title}
                     </CardTitle>
-                    <p className="text-gray-600">{tactique.description}</p>
+                    <p className="text-muted-foreground">{tactique.description}</p>
                   </CardHeader>
                   <CardContent>
                     <div className="grid gap-2">
                       {tactique.details.map((detail, detailIndex) => (
-                        <div key={detailIndex} className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+                        <div key={detailIndex} className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
                           <Lightbulb className="h-4 w-4 text-yellow-500 mt-0.5 flex-shrink-0" />
-                          <span className="text-sm text-gray-700">{detail}</span>
+                          <span className="text-sm text-foreground">{detail}</span>
                         </div>
                       ))}
                     </div>
@@ -191,7 +191,7 @@ const GuideStrategy: React.FC = () => {
 
           {/* Situations Spéciales */}
           <section>
-            <h2 className="text-2xl font-bold mb-6 text-gray-800">
+            <h2 className="text-2xl font-bold mb-6 text-foreground">
               <AlertTriangle className="inline mr-2 h-6 w-6 text-dutch-orange" />
               Situations Spéciales
             </h2>
@@ -201,10 +201,10 @@ const GuideStrategy: React.FC = () => {
                 <Card key={index} className="border-l-4 border-l-dutch-orange">
                   <CardContent className="p-6">
                     <div className="space-y-3">
-                      <h3 className="font-semibold text-lg text-gray-800">
+                      <h3 className="font-semibold text-lg text-foreground">
                         🎯 {situation.situation}
                       </h3>
-                      <p className="text-gray-600 leading-relaxed">
+                      <p className="text-muted-foreground leading-relaxed">
                         <strong>Solution :</strong> {situation.solution}
                       </p>
                     </div>
@@ -216,7 +216,7 @@ const GuideStrategy: React.FC = () => {
 
           {/* Conseils Généraux */}
           <section>
-            <h2 className="text-2xl font-bold mb-6 text-gray-800">
+            <h2 className="text-2xl font-bold mb-6 text-foreground">
               <Trophy className="inline mr-2 h-6 w-6 text-dutch-purple" />
               Conseils de Pro
             </h2>
@@ -226,7 +226,7 @@ const GuideStrategy: React.FC = () => {
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
                     <h3 className="font-semibold mb-3 text-dutch-purple">Mental et Concentration</h3>
-                    <ul className="space-y-2 text-sm text-gray-600">
+                    <ul className="space-y-2 text-sm text-muted-foreground">
                       <li>• Restez calme même avec de mauvaises cartes</li>
                       <li>• Ne montrez pas vos émotions</li>
                       <li>• Concentrez-vous sur le long terme</li>
@@ -236,7 +236,7 @@ const GuideStrategy: React.FC = () => {
                   
                   <div>
                     <h3 className="font-semibold mb-3 text-dutch-purple">Adaptation au Jeu</h3>
-                    <ul className="space-y-2 text-sm text-gray-600">
+                    <ul className="space-y-2 text-sm text-muted-foreground">
                       <li>• Adaptez votre stratégie au nombre de joueurs</li>
                       <li>• Observez le style de jeu de chacun</li>
                       <li>• Variez vos patterns pour être imprévisible</li>
@@ -252,14 +252,14 @@ const GuideStrategy: React.FC = () => {
           <section className="text-center">
             <Card className="bg-gradient-to-r from-dutch-purple/10 to-dutch-blue/10">
               <CardContent className="p-6">
-                <h3 className="text-xl font-bold mb-4 text-gray-800">
+                <h3 className="text-xl font-bold mb-4 text-foreground">
                   🎊 Prêt à devenir un maître du Dutch ?
                 </h3>
-                <p className="text-gray-600 mb-4">
+                <p className="text-muted-foreground mb-4">
                   Ces stratégies vous donneront un avantage certain, mais n'oubliez pas : 
                   la pratique reste le meilleur moyen de progresser !
                 </p>
-                <div className="text-sm text-gray-500">
+                <div className="text-sm text-muted-foreground">
                   Bonne chance et que les meilleures cartes soient avec vous ! 🃏
                 </div>
               </CardContent>

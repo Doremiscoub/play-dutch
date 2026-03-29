@@ -95,7 +95,7 @@ const FunStats: React.FC<FunStatsProps> = ({ players }) => {
       <div className={`rounded-full bg-${color}/10 p-2 w-10 h-10 flex items-center justify-center mb-2`}>
         <Icon className={`h-5 w-5 text-${color}`} />
       </div>
-      <h3 className="text-sm text-gray-500 font-medium">{title}</h3>
+      <h3 className="text-sm text-muted-foreground font-medium">{title}</h3>
       <p className="text-base font-bold mt-1">{value}</p>
     </motion.div>
   );

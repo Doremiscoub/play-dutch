@@ -52,13 +52,13 @@ const HowItWorksSection: React.FC = () => {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-black bg-gradient-to-r from-trinity-blue-600 via-trinity-purple-600 to-trinity-orange-600 bg-clip-text text-transparent mb-6 leading-tight py-2">
+          <h2 className="text-4xl md:text-5xl font-black text-gradient-trinity mb-6 leading-tight py-2">
             Comment ça marche ?
           </h2>
-          <p className="text-xl text-neutral-700 font-bold max-w-3xl mx-auto mb-4">
+          <p className="text-xl text-foreground font-bold max-w-3xl mx-auto mb-4">
             Sortez vos cartes Dutch et lancez l'application compagnon !
           </p>
-          <p className="text-lg text-neutral-600 font-semibold max-w-3xl mx-auto">
+          <p className="text-lg text-muted-foreground font-semibold max-w-3xl mx-auto">
             Cartes physiques + Application = Expérience parfaite
           </p>
         </motion.div>
@@ -71,7 +71,7 @@ const HowItWorksSection: React.FC = () => {
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 0.6, delay: index * 0.15 }}
               viewport={{ once: true }}
-              whileHover={{ y: -15, scale: 1.05 }}
+              whileHover={{ y: -10, scale: 1.03 }}
               className="relative group"
             >
               {/* Ligne de connexion pour desktop */}
@@ -87,12 +87,12 @@ const HowItWorksSection: React.FC = () => {
                 </div>
               )}
 
-              <Card className="relative z-10 h-full bg-white border border-border shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden">
+              <Card variant="glass" className="relative z-10 h-full hover:shadow-lg transition-all duration-300 overflow-hidden">
                 {/* Badge numéro */}
                 <div className={`absolute -top-4 -right-4 w-12 h-12 bg-gradient-to-br ${step.gradient} rounded-full flex items-center justify-center text-white font-black text-xl shadow-lg`}>
                   {step.number}
                 </div>
-                
+
                 <CardContent className="p-8 text-center h-full flex flex-col">
                   {/* Icône */}
                   <motion.div
@@ -102,12 +102,12 @@ const HowItWorksSection: React.FC = () => {
                   >
                     {step.icon}
                   </motion.div>
-                  
-                  <h3 className="font-black text-xl text-gray-900 mb-4">
+
+                  <h3 className="font-black text-xl text-foreground mb-4">
                     {step.title}
                   </h3>
-                  
-                  <p className="text-gray-600 font-semibold flex-grow">
+
+                  <p className="text-muted-foreground font-semibold flex-grow">
                     {step.description}
                   </p>
                 </CardContent>
@@ -124,8 +124,8 @@ const HowItWorksSection: React.FC = () => {
           viewport={{ once: true }}
           className="text-center mt-16"
         >
-          <p className="text-lg text-neutral-600 font-bold">
-            ✨ <span className="text-trinity-purple-600">Simple, intuitif et amusant</span> - Essayez dès maintenant ! ✨
+          <p className="text-lg text-muted-foreground font-bold">
+            ✨ <span className="text-dutch-purple">Simple, intuitif et amusant</span> - Essayez dès maintenant ! ✨
           </p>
         </motion.div>
       </div>

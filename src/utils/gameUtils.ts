@@ -143,7 +143,7 @@ export const formatGameForHistory = (
  */
 export const getScoreColorClass = (score: number): string => {
   if (score <= 0) return 'bg-green-500 text-white'; // Dutch parfait
-  if (score <= 15) return 'bg-gray-200 text-gray-700'; // Score correct
+  if (score <= 15) return 'bg-muted text-gray-700'; // Score correct
   if (score <= 25) return 'bg-red-300 text-red-800'; // Score faible
   return 'bg-red-900 text-white'; // Score catastrophique
 };

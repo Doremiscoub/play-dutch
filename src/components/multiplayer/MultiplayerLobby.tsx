@@ -149,8 +149,8 @@ export const MultiplayerLobby: React.FC<MultiplayerLobbyProps> = ({
         </CardHeader>
         <CardContent>
           <div className="text-center py-8">
-            <GamepadIcon className="w-12 h-12 mx-auto mb-4 text-gray-400" />
-            <p className="text-gray-600 mb-4">
+            <GamepadIcon className="w-12 h-12 mx-auto mb-4 text-muted-foreground/70" />
+            <p className="text-muted-foreground mb-4">
               Le mode multijoueur nécessite une connexion
             </p>
             <Button 
@@ -185,7 +185,7 @@ export const MultiplayerLobby: React.FC<MultiplayerLobbyProps> = ({
               <Badge variant={isConnected ? "default" : "destructive"}>
                 {isConnecting ? 'Connexion...' : isConnected ? 'Connecté' : 'Déconnecté'}
               </Badge>
-              <p className="text-sm text-gray-600 mt-1">
+              <p className="text-sm text-muted-foreground mt-1">
                 {isConnected 
                   ? 'Prêt pour le multijoueur' 
                   : 'Connexion au serveur multijoueur requise'
@@ -260,12 +260,12 @@ export const MultiplayerLobby: React.FC<MultiplayerLobbyProps> = ({
                   {connectedPlayers.map((player, _index) => (
                     <div
                       key={player.id}
-                      className="flex items-center gap-2 p-2 bg-gray-50 rounded-lg"
+                      className="flex items-center gap-2 p-2 bg-muted/50 rounded-lg"
                     >
                       <div className="text-lg">{player.emoji}</div>
                       <div className="flex-1">
                         <p className="text-sm font-medium">{player.name}</p>
-                        <p className="text-xs text-gray-500">
+                        <p className="text-xs text-muted-foreground">
                           {player.totalScore} points
                         </p>
                       </div>
@@ -278,12 +278,12 @@ export const MultiplayerLobby: React.FC<MultiplayerLobbyProps> = ({
               </div>
 
               <div className="flex items-center gap-2 pt-2">
-                <Trophy className="w-4 h-4 text-gray-600" />
-                <span className="text-sm text-gray-600">
+                <Trophy className="w-4 h-4 text-muted-foreground" />
+                <span className="text-sm text-muted-foreground">
                   Limite: {gameState.scoreLimit} points
                 </span>
-                <Clock className="w-4 h-4 text-gray-600 ml-4" />
-                <span className="text-sm text-gray-600">
+                <Clock className="w-4 h-4 text-muted-foreground ml-4" />
+                <span className="text-sm text-muted-foreground">
                   Manche {gameState.currentRound + 1}
                 </span>
               </div>

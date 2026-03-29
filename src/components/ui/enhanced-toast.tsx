@@ -36,7 +36,7 @@ export const enhancedToast = ({ type, title, description, action }: EnhancedToas
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: -20, scale: 0.9 }}
       className={cn(
-        'glass-morphism rounded-xl p-4 shadow-lg border backdrop-blur-md',
+        'glass-elevated rounded-xl p-4 shadow-lg border',
         'min-w-[300px] max-w-[400px]',
         toastStyles[type]
       )}

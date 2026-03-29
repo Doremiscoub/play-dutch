@@ -57,7 +57,7 @@ const QuickActionMenu: React.FC = () => {
       icon: Settings,
       label: 'Paramètres',
       onClick: () => navigate('/settings'),
-      color: 'text-gray-500'
+      color: 'text-muted-foreground'
     }
   ];
 
@@ -89,7 +89,7 @@ const QuickActionMenu: React.FC = () => {
                       setIsOpen(false);
                     }}
                     className={cn(
-                      'glass-morphism backdrop-blur-md bg-white/10',
+                      'glass-elevated bg-white/10',
                       'border-white/20 hover:bg-white/20',
                       'flex items-center gap-2 text-sm font-medium',
                       'shadow-lg hover:shadow-xl transition-all'
@@ -109,7 +109,7 @@ const QuickActionMenu: React.FC = () => {
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
           'w-14 h-14 rounded-full shadow-lg',
-          'glass-morphism backdrop-blur-md bg-primary/90',
+          'glass-elevated bg-primary/90',
           'hover:bg-primary hover:shadow-xl',
           'transition-all duration-300',
           isOpen && 'rotate-45'

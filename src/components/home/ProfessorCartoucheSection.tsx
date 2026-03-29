@@ -14,10 +14,10 @@ const ProfessorCartoucheSection: React.FC = () => {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-black bg-gradient-to-r from-trinity-purple-600 via-trinity-blue-600 to-trinity-orange-600 bg-clip-text text-transparent mb-6 leading-tight py-2">
+          <h2 className="text-4xl md:text-5xl font-black text-gradient-trinity mb-6 leading-tight py-2">
             Rencontrez le Professeur Cartouche
           </h2>
-          <p className="text-xl text-neutral-700 font-bold max-w-3xl mx-auto">
+          <p className="text-xl text-foreground font-bold max-w-3xl mx-auto">
             Votre compagnon IA intelligent qui transforme chaque partie en aventure mémorable !
           </p>
         </motion.div>
@@ -46,7 +46,7 @@ const ProfessorCartoucheSection: React.FC = () => {
                 }}
               />
               
-              <Card className="relative z-10 bg-white border border-border shadow-lg overflow-hidden">
+              <Card variant="glass-elevated" className="relative z-10 shadow-lg overflow-hidden">
                 <CardContent className="p-8">
                   <img 
                     src="/lovable-uploads/0532ef39-c77c-4480-8d74-7af7665596ee.png"
@@ -101,16 +101,16 @@ const ProfessorCartoucheSection: React.FC = () => {
                 whileHover={{ scale: 1.02, x: 10 }}
                 className="group"
               >
-                <Card className="bg-white border border-border shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden">
+                <Card variant="glass" className="hover:shadow-lg transition-all duration-300 overflow-hidden">
                   <CardContent className="p-6 flex items-start gap-4">
                     <div className={`bg-gradient-to-br ${feature.gradient} rounded-2xl p-3 text-white shadow-lg group-hover:shadow-xl transition-shadow duration-300`}>
                       {feature.icon}
                     </div>
                     <div className="flex-1">
-                      <h3 className="font-black text-lg text-gray-900 mb-2">
+                      <h3 className="font-black text-lg text-foreground mb-2">
                         {feature.title}
                       </h3>
-                      <p className="text-gray-600 font-semibold">
+                      <p className="text-muted-foreground font-semibold">
                         {feature.description}
                       </p>
                     </div>

@@ -22,7 +22,7 @@ const RulesSection: React.FC = () => {
   ];
 
   return (
-    <section className="relative py-24 px-4 z-10 bg-gradient-to-br from-trinity-orange-50/80 via-white to-trinity-blue-50/80">
+    <section className="relative py-24 px-4 z-10 bg-gradient-to-br from-dutch-orange/8 via-transparent to-dutch-blue/8">
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -31,10 +31,10 @@ const RulesSection: React.FC = () => {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-black bg-gradient-to-r from-trinity-orange-600 via-trinity-purple-600 to-trinity-blue-600 bg-clip-text text-transparent mb-6 leading-tight py-2">
+          <h2 className="text-4xl md:text-5xl font-black text-gradient-trinity mb-6 leading-tight py-2">
             📖 Comment jouer au Dutch ? 📖
           </h2>
-          <p className="text-xl text-neutral-700 font-bold max-w-3xl mx-auto">
+          <p className="text-xl text-foreground font-bold max-w-3xl mx-auto">
             Objectif : avoir le score le plus BAS ! Mémorisez, échangez, utilisez les pouvoirs des cartes.
           </p>
         </motion.div>
@@ -48,19 +48,19 @@ const RulesSection: React.FC = () => {
             viewport={{ once: true }}
             className="space-y-8"
           >
-            <Card className="bg-white border border-border shadow-md overflow-hidden">
+            <Card variant="glass-elevated" className="shadow-md overflow-hidden">
               <CardContent className="p-8">
                 <div className="flex items-center gap-4 mb-6">
-                  <div className="bg-gradient-to-br from-trinity-orange-500 to-trinity-purple-500 rounded-2xl p-3 text-white">
+                  <div className="bg-gradient-to-br from-dutch-orange to-dutch-purple rounded-2xl p-3 text-white">
                     <BookOpen className="h-8 w-8" />
                   </div>
-                  <h3 className="text-2xl font-black text-gray-900">
+                  <h3 className="text-2xl font-black text-foreground">
                     Le principe du jeu
                   </h3>
                 </div>
-                
-                <p className="text-gray-700 font-semibold leading-relaxed mb-6">
-                  Le Dutch est un jeu de cartes passionnant où la stratégie rencontre la chance. 
+
+                <p className="text-foreground font-semibold leading-relaxed mb-6">
+                  Le Dutch est un jeu de cartes passionnant où la stratégie rencontre la chance.
                   Chaque manche compte, et un seul moment d'inattention peut tout changer !
                 </p>
 
@@ -72,16 +72,16 @@ const RulesSection: React.FC = () => {
                       whileInView={{ opacity: 1, x: 0 }}
                       transition={{ duration: 0.6, delay: index * 0.1 }}
                       viewport={{ once: true }}
-                      className="flex items-start gap-4 p-4 bg-gradient-to-r from-trinity-orange-50 to-trinity-purple-50 rounded-xl border border-trinity-orange-200"
+                      className="flex items-start gap-4 p-4 glass-surface rounded-xl"
                     >
-                      <div className="bg-gradient-to-br from-trinity-orange-400 to-trinity-purple-400 rounded-lg p-2 text-white flex-shrink-0">
+                      <div className="bg-gradient-to-br from-dutch-orange to-dutch-purple rounded-lg p-2 text-white flex-shrink-0">
                         {rule.icon}
                       </div>
                       <div>
-                        <h4 className="font-black text-gray-900 mb-1">
+                        <h4 className="font-black text-foreground mb-1">
                           {rule.title}
                         </h4>
-                        <p className="text-gray-600 font-semibold">
+                        <p className="text-muted-foreground font-semibold">
                           {rule.description}
                         </p>
                       </div>
@@ -98,11 +98,8 @@ const RulesSection: React.FC = () => {
               transition={{ duration: 0.8, delay: 0.4 }}
               viewport={{ once: true }}
             >
-              <Card className="bg-gradient-to-br from-trinity-orange-600 to-trinity-purple-600 border-0 shadow-md overflow-hidden relative">
-                {/* Overlay pour améliorer le contraste */}
-                <div className="absolute inset-0 bg-black/20" />
-                
-                <CardContent className="relative z-10 p-8 text-center">
+              <Card className="bg-gradient-to-br from-dutch-orange via-dutch-purple to-dutch-blue border-0 shadow-lg neon-purple overflow-hidden">
+                <CardContent className="p-8 text-center">
                   <h3 className="text-2xl font-black mb-4 text-white">
                     Envie d'en savoir plus ?
                   </h3>
@@ -117,7 +114,7 @@ const RulesSection: React.FC = () => {
                       onClick={() => navigate('/rules')}
                       variant="outline"
                       size="lg"
-                      className="group border-4 border-white text-white bg-transparent hover:bg-white hover:text-trinity-purple-700 font-black text-lg px-8 py-4"
+                      className="group border-2 border-white text-white bg-transparent hover:bg-white hover:text-dutch-purple font-black text-lg px-8 py-4"
                     >
                       <BookOpen className="h-5 w-5 mr-3" />
                       Règles complètes
@@ -137,42 +134,42 @@ const RulesSection: React.FC = () => {
             viewport={{ once: true }}
             className="relative"
           >
-            <Card className="bg-white border border-border shadow-md overflow-hidden">
+            <Card variant="glass-elevated" className="shadow-md overflow-hidden">
               <CardContent className="p-8">
-                <h3 className="text-2xl font-black text-gray-900 mb-6 text-center">
+                <h3 className="text-2xl font-black text-foreground mb-6 text-center">
                   🃏 Exemple de manche
                 </h3>
-                
+
                 {/* Simulation d'un petit tableau de scores */}
-                <div className="bg-gradient-to-br from-trinity-blue-50 to-trinity-purple-50 rounded-2xl p-6 border-2 border-trinity-blue-200">
+                <div className="glass-surface rounded-2xl p-6">
                   <div className="space-y-3">
-                    <div className="flex justify-between items-center py-2 px-4 bg-white rounded-lg shadow-sm">
-                      <span className="font-bold text-gray-800">👤 Alex</span>
-                      <span className="font-black text-trinity-blue-600">12 pts</span>
+                    <div className="flex justify-between items-center py-2 px-4 bg-white/60 rounded-lg shadow-sm">
+                      <span className="font-bold text-foreground">👤 Alex</span>
+                      <span className="font-black text-dutch-blue">12 pts</span>
                     </div>
-                    <div className="flex justify-between items-center py-2 px-4 bg-white rounded-lg shadow-sm">
-                      <span className="font-bold text-gray-800">👤 Marie</span>
-                      <span className="font-black text-trinity-purple-600">8 pts</span>
+                    <div className="flex justify-between items-center py-2 px-4 bg-white/60 rounded-lg shadow-sm">
+                      <span className="font-bold text-foreground">👤 Marie</span>
+                      <span className="font-black text-dutch-purple">8 pts</span>
                     </div>
-                    <div className="flex justify-between items-center py-2 px-4 bg-gradient-to-r from-red-100 to-red-200 rounded-lg shadow-sm border-2 border-red-300">
-                      <span className="font-bold text-gray-800">👤 Tom (Dutch!)</span>
+                    <div className="flex justify-between items-center py-2 px-4 bg-red-50 rounded-lg shadow-sm border-2 border-red-300">
+                      <span className="font-bold text-foreground">👤 Tom (Dutch!)</span>
                       <span className="font-black text-red-600">20 pts</span>
                     </div>
-                    <div className="flex justify-between items-center py-2 px-4 bg-white rounded-lg shadow-sm">
-                      <span className="font-bold text-gray-800">👤 Lisa</span>
-                      <span className="font-black text-trinity-orange-600">15 pts</span>
+                    <div className="flex justify-between items-center py-2 px-4 bg-white/60 rounded-lg shadow-sm">
+                      <span className="font-bold text-foreground">👤 Lisa</span>
+                      <span className="font-black text-dutch-orange">15 pts</span>
                     </div>
                   </div>
-                  
-                  <div className="mt-4 p-4 bg-trinity-orange-100 rounded-xl border border-trinity-orange-300">
-                    <p className="text-sm font-bold text-trinity-orange-800 text-center">
+
+                  <div className="mt-4 p-4 bg-dutch-orange/10 rounded-xl border border-dutch-orange/30">
+                    <p className="text-sm font-bold text-foreground text-center">
                       💡 Tom a coupé et a désigné Alex - Alex double ses points !
                     </p>
                   </div>
                 </div>
 
                 <div className="mt-6 text-center">
-                  <p className="text-sm text-gray-600 font-semibold">
+                  <p className="text-sm text-muted-foreground font-semibold">
                     ✨ L'application calcule tout automatiquement !
                   </p>
                 </div>

@@ -70,7 +70,7 @@ export const AchievementsPanel: React.FC<AchievementsPanelProps> = ({
           </div>
           <div className="text-right">
             <div className="text-3xl font-bold text-dutch-purple">Niveau {level}</div>
-            <div className="text-sm text-gray-600">{totalXP} XP total</div>
+            <div className="text-sm text-muted-foreground">{totalXP} XP total</div>
           </div>
         </div>
         
@@ -134,9 +134,9 @@ export const AchievementsPanel: React.FC<AchievementsPanelProps> = ({
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="text-center py-12 text-gray-500"
+              className="text-center py-12 text-muted-foreground"
             >
-              <Award className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+              <Award className="h-12 w-12 mx-auto mb-4 text-muted-foreground/50" />
               <p>Aucun succès trouvé avec ces filtres</p>
             </motion.div>
           )}
@@ -150,7 +150,7 @@ export const AchievementsPanel: React.FC<AchievementsPanelProps> = ({
         transition={{ delay: 0.3 }}
         className="bg-white/60 backdrop-blur-sm rounded-2xl p-4 border border-white/30"
       >
-        <h3 className="font-semibold text-gray-800 mb-3 flex items-center gap-2">
+        <h3 className="font-semibold text-foreground mb-3 flex items-center gap-2">
           <Star className="h-4 w-4" />
           Répartition par rareté
         </h3>
@@ -167,7 +167,7 @@ export const AchievementsPanel: React.FC<AchievementsPanelProps> = ({
                 />
                 <div className="text-sm">
                   <div className="font-medium">{unlockedInRarity}/{rarityAchievements.length}</div>
-                  <div className="text-xs text-gray-500">
+                  <div className="text-xs text-muted-foreground">
                     {Math.round((unlockedInRarity / rarityAchievements.length) * 100)}%
                   </div>
                 </div>

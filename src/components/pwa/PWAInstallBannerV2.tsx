@@ -85,7 +85,7 @@ export const PWAInstallBannerV2: React.FC = () => {
         exit={{ opacity: 0, y: 100 }}
         className="fixed bottom-4 left-4 right-4 z-50 max-w-md mx-auto"
       >
-        <Card className="glass-morphism border border-primary/30 shadow-2xl">
+        <Card className="glass-elevated border border-primary/30 shadow-2xl">
           <div className="p-4">
             <div className="flex items-start gap-3">
               <div className="p-2 bg-primary/20 rounded-lg">

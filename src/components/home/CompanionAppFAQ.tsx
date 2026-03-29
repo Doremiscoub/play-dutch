@@ -55,7 +55,7 @@ const CompanionAppFAQ: React.FC = () => {
           <h2 className="text-4xl md:text-5xl font-black bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent mb-6 leading-tight py-2">
             🤔 Vous avez des questions ? 🤔
           </h2>
-          <p className="text-xl text-neutral-700 font-bold max-w-3xl mx-auto">
+          <p className="text-xl text-foreground font-bold max-w-3xl mx-auto">
             Tout ce que vous devez savoir sur l'application compagnon Dutch Card Game
           </p>
         </motion.div>
@@ -77,20 +77,20 @@ const CompanionAppFAQ: React.FC = () => {
                     transition={{ duration: 0.4, delay: index * 0.1 }}
                     viewport={{ once: true }}
                   >
-                    <AccordionItem value={`item-${index}`} className="border border-gray-200 rounded-lg">
+                    <AccordionItem value={`item-${index}`} className="border border-border rounded-lg">
                       <AccordionTrigger className="px-6 py-4 hover:no-underline">
                         <div className="flex items-center gap-4 text-left">
                           <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white">
                             {item.icon}
                           </div>
-                          <span className="font-bold text-gray-900 text-lg">
+                          <span className="font-bold text-foreground text-lg">
                             {item.question}
                           </span>
                         </div>
                       </AccordionTrigger>
                       <AccordionContent className="px-6 pb-6">
                         <div className="ml-14">
-                          <p className="text-gray-700 font-medium leading-relaxed">
+                          <p className="text-foreground font-medium leading-relaxed">
                             {item.answer}
                           </p>
                         </div>

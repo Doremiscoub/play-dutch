@@ -19,7 +19,7 @@ const GameOverActionButtons: React.FC<GameOverActionButtonsProps> = ({
   return (
     <div className="mt-8 space-y-4">
       <div>
-        <h3 className="text-sm text-gray-500 mb-3 text-center">Continuer la partie ?</h3>
+        <h3 className="text-sm text-muted-foreground mb-3 text-center">Continuer la partie ?</h3>
         <div className="flex justify-center gap-2 mb-4">
           {limits.map(limit => (
             <Button
@@ -29,7 +29,7 @@ const GameOverActionButtons: React.FC<GameOverActionButtonsProps> = ({
               className={`rounded-full transition-colors ${
                 selectedLimit === limit
                   ? "bg-dutch-blue text-white"
-                  : "bg-white border border-gray-200"
+                  : "bg-white border border-border"
               }`}
               onClick={() => setSelectedLimit(limit)}
             >
@@ -49,7 +49,7 @@ const GameOverActionButtons: React.FC<GameOverActionButtonsProps> = ({
 
       <Button
         variant="outline"
-        className="w-full bg-white border border-gray-200 rounded-2xl py-3"
+        className="w-full bg-white border border-border rounded-2xl py-3"
         onClick={onRestart}
       >
         <RotateCcw className="mr-2 h-5 w-5" />

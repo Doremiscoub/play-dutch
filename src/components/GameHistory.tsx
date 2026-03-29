@@ -29,8 +29,8 @@ const GameHistory: React.FC<GameHistoryProps> = ({ games, limit }) => {
             <div className="w-16 h-16 mx-auto rounded-full bg-dutch-blue/10 flex items-center justify-center mb-4">
               <Trophy className="h-7 w-7 text-dutch-blue/50" />
             </div>
-            <p className="text-gray-500">Aucune partie terminée pour le moment.</p>
-            <p className="text-sm text-gray-500 mt-2">
+            <p className="text-muted-foreground">Aucune partie terminée pour le moment.</p>
+            <p className="text-sm text-muted-foreground mt-2">
               Commencez une nouvelle partie pour voir votre historique ici.
             </p>
           </motion.div>
@@ -60,15 +60,15 @@ const GameHistory: React.FC<GameHistoryProps> = ({ games, limit }) => {
                   <CardDescription className="mt-1">
                     <div className="flex items-center gap-4 text-sm">
                       <span className="flex items-center gap-1">
-                        <Calendar className="h-3.5 w-3.5 text-gray-500" />
+                        <Calendar className="h-3.5 w-3.5 text-muted-foreground" />
                         {format(new Date(game.date), 'dd MMM yyyy', { locale: fr })}
                       </span>
                       <span className="flex items-center gap-1">
-                        <Users className="h-3.5 w-3.5 text-gray-500" />
+                        <Users className="h-3.5 w-3.5 text-muted-foreground" />
                         {game.players.length} joueurs
                       </span>
                       <span className="flex items-center gap-1">
-                        <Clock className="h-3.5 w-3.5 text-gray-500" />
+                        <Clock className="h-3.5 w-3.5 text-muted-foreground" />
                         {game.rounds} manches
                       </span>
                     </div>
@@ -94,7 +94,7 @@ const GameHistory: React.FC<GameHistoryProps> = ({ games, limit }) => {
                               ? 'bg-dutch-blue text-white'
                               : playerIndex === 2
                                 ? 'bg-dutch-purple text-white'
-                                : 'bg-gray-200 text-gray-700'
+                                : 'bg-muted text-foreground'
                           } text-xs font-medium transition-transform`}
                         whileHover={{ scale: 1.1 }}
                       >

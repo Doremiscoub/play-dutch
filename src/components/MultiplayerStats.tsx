@@ -162,14 +162,14 @@ const MultiplayerStats: React.FC<MultiplayerStatsProps> = ({ gameId }) => {
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <p className="font-medium text-gray-800 flex items-center">
+                    <p className="font-medium text-foreground flex items-center">
                       {player.name}
                       {!player.online && (
-                        <Badge className="ml-2 bg-gray-100 text-gray-500 border-none text-xs py-0">Hors ligne</Badge>
+                        <Badge className="ml-2 bg-muted text-muted-foreground border-none text-xs py-0">Hors ligne</Badge>
                       )}
                     </p>
                     <div className="flex items-center gap-1.5">
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-muted-foreground">
                         {player.totalScore || 0} points
                       </p>
                       <PlayerBadges player={player} className="scale-90" />
@@ -198,11 +198,11 @@ const MultiplayerStats: React.FC<MultiplayerStatsProps> = ({ gameId }) => {
               <motion.div 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="text-center py-10 text-gray-500 flex flex-col items-center"
+                className="text-center py-10 text-muted-foreground flex flex-col items-center"
               >
-                <Activity className="h-10 w-10 mb-2 text-gray-300" />
+                <Activity className="h-10 w-10 mb-2 text-muted-foreground/50" />
                 <p>Aucune statistique disponible</p>
-                <p className="text-xs text-gray-400 mt-1">Les statistiques apparaîtront après quelques manches</p>
+                <p className="text-xs text-muted-foreground/70 mt-1">Les statistiques apparaîtront après quelques manches</p>
               </motion.div>
             )}
           </div>

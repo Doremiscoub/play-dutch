@@ -108,7 +108,7 @@ const PerformanceMonitor: React.FC = () => {
       animate={{ opacity: 1, x: 0 }}
       className="fixed top-4 right-4 z-[9999]"
     >
-      <Card className="glass-morphism border-white/20 backdrop-blur-md w-64">
+      <Card className="glass-surface border-white/20 w-64">
         <CardContent className="p-3">
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">

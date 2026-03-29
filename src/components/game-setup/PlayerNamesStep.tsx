@@ -151,7 +151,7 @@ const PlayerNamesStep: React.FC<PlayerNamesStepProps> = ({
                           if (e.key === 'Escape') cancelEdit();
                         }}
                       />
-                      <span className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-gray-400 pointer-events-none">
+                      <span className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-muted-foreground/70 pointer-events-none">
                         {tempName.length}/{MAX_NAME_LENGTH}
                       </span>
                     </div>
