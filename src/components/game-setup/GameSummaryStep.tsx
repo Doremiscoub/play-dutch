@@ -50,8 +50,8 @@ const GameSummaryStep: React.FC<GameSummaryStepProps> = ({
         <div className="glass-surface rounded-xl p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
-                <Users className="h-5 w-5 text-blue-600" />
+              <div className="w-10 h-10 rounded-xl bg-dutch-blue/10 flex items-center justify-center">
+                <Users className="h-5 w-5 text-dutch-blue" />
               </div>
               <div>
                 <div className="font-medium text-foreground">Nombre de joueurs</div>
@@ -74,8 +74,8 @@ const GameSummaryStep: React.FC<GameSummaryStepProps> = ({
         <div className="glass-surface rounded-xl p-4">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center">
-                <Target className="h-5 w-5 text-purple-600" />
+              <div className="w-10 h-10 rounded-xl bg-dutch-purple/10 flex items-center justify-center">
+                <Target className="h-5 w-5 text-dutch-purple" />
               </div>
               <div>
                 <div className="font-medium text-foreground">Joueurs</div>

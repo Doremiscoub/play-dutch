@@ -26,7 +26,7 @@ const ScoreBoardTabs: React.FC<ScoreBoardTabsProps> = ({
               "flex items-center gap-1 md:gap-2 px-2 md:px-6 py-1.5 md:py-3 rounded-xl font-bold transition-all duration-150 min-w-0 md:min-w-[120px] justify-center flex-1 text-sm md:text-base",
               currentView === 'list'
                 ? "bg-dutch-purple text-white shadow-md"
-                : "text-purple-700 hover:bg-purple-50"
+                : "text-dutch-purple hover:bg-dutch-purple/8"
             )}
             onClick={() => onViewChange('list')}
             whileTap={{ scale: 0.98 }}
@@ -43,7 +43,7 @@ const ScoreBoardTabs: React.FC<ScoreBoardTabsProps> = ({
               "flex items-center gap-1 md:gap-2 px-2 md:px-6 py-1.5 md:py-3 rounded-xl font-bold transition-all duration-150 min-w-0 md:min-w-[120px] justify-center flex-1 text-sm md:text-base",
               currentView === 'table'
                 ? "bg-dutch-orange text-white shadow-md"
-                : "text-orange-700 hover:bg-orange-50"
+                : "text-dutch-orange hover:bg-dutch-orange/8"
             )}
             onClick={() => onViewChange('table')}
             whileTap={{ scale: 0.98 }}
@@ -60,7 +60,7 @@ const ScoreBoardTabs: React.FC<ScoreBoardTabsProps> = ({
               "flex items-center gap-1 md:gap-2 px-2 md:px-6 py-1.5 md:py-3 rounded-xl font-bold transition-all duration-150 min-w-0 md:min-w-[120px] justify-center flex-1 text-sm md:text-base",
               currentView === 'stats'
                 ? "bg-dutch-blue text-white shadow-md"
-                : "text-cyan-700 hover:bg-cyan-50"
+                : "text-dutch-blue hover:bg-dutch-blue/8"
             )}
             onClick={() => onViewChange('stats')}
             whileTap={{ scale: 0.98 }}

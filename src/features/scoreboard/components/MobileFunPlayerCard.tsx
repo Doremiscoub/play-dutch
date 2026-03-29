@@ -55,7 +55,7 @@ const MobileFunPlayerCard: React.FC<MobileFunPlayerCardProps> = ({
       default: {
         bg: "bg-muted/50",
         border: "border-border",
-        text: "text-slate-800",
+        text: "text-foreground",
         accent: "bg-muted-foreground",
         badge: "bg-muted"
       }
@@ -126,7 +126,7 @@ const MobileFunPlayerCard: React.FC<MobileFunPlayerCardProps> = ({
             </h3>
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
               <span>🎯 {player.rounds.length}</span>
-              {dutchCount > 0 && <span className="text-orange-600">🏆 {dutchCount}</span>}
+              {dutchCount > 0 && <span className="text-dutch-orange">🏆 {dutchCount}</span>}
             </div>
           </div>
 
