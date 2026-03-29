@@ -122,17 +122,19 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
                 </div>
 
                 <div className={`flex items-center ${isMobile ? 'gap-2 w-full justify-center' : 'gap-3'}`}>
-                  <Button
-                    type="button"
-                    size="icon"
-                    variant="outline"
-                    onClick={() => adjustScore(player.id, -1)}
-                    className={`rounded-full ${isMobile ? 'w-10 h-10 min-h-[40px]' : 'w-8 h-8'}`}
-                    disabled={isSubmitting}
-                    aria-label={`Diminuer le score de ${player.name}`}
-                  >
-                    <Minus className={`${isMobile ? 'h-4 w-4' : 'h-3 w-3'}`} />
-                  </Button>
+                  <motion.div whileTap={{ scale: 0.85 }} whileHover={{ scale: 1.1 }}>
+                    <Button
+                      type="button"
+                      size="icon"
+                      variant="outline"
+                      onClick={() => adjustScore(player.id, -1)}
+                      className={`rounded-full ${isMobile ? 'w-10 h-10 min-h-[40px]' : 'w-8 h-8'}`}
+                      disabled={isSubmitting}
+                      aria-label={`Diminuer le score de ${player.name}`}
+                    >
+                      <Minus className={`${isMobile ? 'h-4 w-4' : 'h-3 w-3'}`} />
+                    </Button>
+                  </motion.div>
 
                   <input
                     ref={index === 0 ? firstInputRef : undefined}
@@ -150,37 +152,45 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
                     disabled={isSubmitting}
                   />
 
-                  <Button
-                    type="button"
-                    size="icon"
-                    variant="outline"
-                    onClick={() => adjustScore(player.id, 1)}
-                    className={`rounded-full ${isMobile ? 'w-10 h-10 min-h-[40px]' : 'w-8 h-8'}`}
-                    disabled={isSubmitting}
-                    aria-label={`Augmenter le score de ${player.name}`}
-                  >
-                    <Plus className={`${isMobile ? 'h-4 w-4' : 'h-3 w-3'}`} />
-                  </Button>
+                  <motion.div whileTap={{ scale: 0.85 }} whileHover={{ scale: 1.1 }}>
+                    <Button
+                      type="button"
+                      size="icon"
+                      variant="outline"
+                      onClick={() => adjustScore(player.id, 1)}
+                      className={`rounded-full ${isMobile ? 'w-10 h-10 min-h-[40px]' : 'w-8 h-8'}`}
+                      disabled={isSubmitting}
+                      aria-label={`Augmenter le score de ${player.name}`}
+                    >
+                      <Plus className={`${isMobile ? 'h-4 w-4' : 'h-3 w-3'}`} />
+                    </Button>
+                  </motion.div>
 
-                  <Button
-                    type="button"
-                    size="sm"
-                    variant={dutchPlayerId === player.id ? "default" : "outline"}
-                    className={`rounded-full transition-all ${
-                      isMobile ? 'px-3 py-2 text-xs min-h-[40px]' : 'ml-2 px-4'
-                    } ${
-                      dutchPlayerId === player.id
-                        ? "bg-gradient-to-r from-dutch-blue to-dutch-purple text-white shadow-md"
-                        : "text-muted-foreground hover:text-foreground"
-                    }`}
-                    onClick={() => handleDutchToggle(player.id)}
-                    disabled={isSubmitting}
-                    aria-label={`${dutchPlayerId === player.id ? 'Retirer' : 'Marquer'} Dutch pour ${player.name}`}
-                    aria-pressed={dutchPlayerId === player.id}
+                  <motion.div
+                    whileTap={{ scale: 0.9 }}
+                    animate={dutchPlayerId === player.id ? { scale: [1, 1.15, 1] } : {}}
+                    transition={{ duration: 0.3 }}
                   >
-                    <Zap className={`${isMobile ? 'h-3 w-3 mr-1' : 'h-3 w-3 mr-1'}`} />
-                    {isMobile ? 'D' : 'Dutch'}
-                  </Button>
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant={dutchPlayerId === player.id ? "default" : "outline"}
+                      className={`rounded-full transition-all ${
+                        isMobile ? 'px-3 py-2 text-xs min-h-[40px]' : 'ml-2 px-4'
+                      } ${
+                        dutchPlayerId === player.id
+                          ? "bg-gradient-to-r from-dutch-blue to-dutch-purple text-white shadow-md neon-purple"
+                          : "text-muted-foreground hover:text-foreground"
+                      }`}
+                      onClick={() => handleDutchToggle(player.id)}
+                      disabled={isSubmitting}
+                      aria-label={`${dutchPlayerId === player.id ? 'Retirer' : 'Marquer'} Dutch pour ${player.name}`}
+                      aria-pressed={dutchPlayerId === player.id}
+                    >
+                      <Zap className={`${isMobile ? 'h-3 w-3 mr-1' : 'h-3 w-3 mr-1'}`} />
+                      {isMobile ? 'D' : 'Dutch'}
+                    </Button>
+                  </motion.div>
                 </div>
               </div>
             </motion.div>
@@ -196,15 +206,17 @@ const NewRoundModal: React.FC<NewRoundModalProps> = ({
             >
               Annuler
             </Button>
-            <Button
-              type="submit"
-              disabled={isSubmitting}
-              className={`bg-gradient-to-r from-dutch-blue to-dutch-purple text-white shadow-md hover:shadow-lg transition-all ${
-                isMobile ? 'w-full min-h-[48px]' : ''
-              }`}
-            >
-              {isSubmitting ? 'Validation...' : 'Valider la manche'}
-            </Button>
+            <motion.div whileTap={{ scale: 0.95 }} whileHover={{ scale: 1.02 }} className={isMobile ? 'w-full' : ''}>
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className={`bg-gradient-to-r from-dutch-blue to-dutch-purple text-white shadow-md hover:shadow-lg transition-all ${
+                  isMobile ? 'w-full min-h-[48px]' : ''
+                }`}
+              >
+                {isSubmitting ? 'Validation...' : '🎯 Valider la manche'}
+              </Button>
+            </motion.div>
           </DialogFooter>
         </form>
       </DialogContent>
