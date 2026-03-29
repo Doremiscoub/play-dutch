@@ -24,10 +24,10 @@ const IntroductionTab = () => {
           </div>
           
           <div className="bg-gradient-to-r from-trinity-blue-50 to-trinity-purple-50 rounded-2xl p-6 border-2 border-trinity-blue-200">
-            <p className="text-xl font-bold text-gray-800 mb-4">
+            <p className="text-xl font-bold text-foreground mb-4">
               🎯 <strong>But principal :</strong> Obtenir le total de points le plus <span className="text-trinity-blue-600 font-black">BAS</span> après plusieurs manches.
             </p>
-            <p className="text-lg text-gray-700 font-semibold">
+            <p className="text-lg text-foreground font-semibold">
               Contrairement à la plupart des jeux de cartes, ici vous voulez avoir le <strong>minimum de points possible</strong> ! 
               Certaines cartes rapportent même des points négatifs qui vous aideront à gagner.
             </p>
@@ -49,21 +49,21 @@ const IntroductionTab = () => {
           
           <div className="grid md:grid-cols-2 gap-6">
             <div className="bg-gradient-to-r from-trinity-orange-50 to-trinity-purple-50 rounded-xl p-6 border border-trinity-orange-200">
-              <h3 className="text-xl font-black text-gray-800 mb-3">👥 Participants</h3>
-              <p className="text-lg font-bold text-gray-700">
+              <h3 className="text-xl font-black text-foreground mb-3">👥 Participants</h3>
+              <p className="text-lg font-bold text-foreground">
                 De <span className="text-trinity-orange-600">2 à 10 joueurs</span>
               </p>
-              <p className="text-sm text-gray-600 mt-2 font-medium">
+              <p className="text-sm text-muted-foreground mt-2 font-medium">
                 Idéal entre 4 et 6 joueurs pour plus d'interactions !
               </p>
             </div>
             
             <div className="bg-gradient-to-r from-trinity-purple-50 to-trinity-blue-50 rounded-xl p-6 border border-trinity-purple-200">
-              <h3 className="text-xl font-black text-gray-800 mb-3">⏱️ Durée</h3>
-              <p className="text-lg font-bold text-gray-700">
+              <h3 className="text-xl font-black text-foreground mb-3">⏱️ Durée</h3>
+              <p className="text-lg font-bold text-foreground">
                 <span className="text-trinity-purple-600">15-30 minutes</span> par partie
               </p>
-              <p className="text-sm text-gray-600 mt-2 font-medium">
+              <p className="text-sm text-muted-foreground mt-2 font-medium">
                 Parfait pour une soirée entre amis !
               </p>
             </div>

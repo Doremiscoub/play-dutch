@@ -139,7 +139,7 @@ export const AuthFlowManager: React.FC<AuthFlowManagerProps> = ({
   return (
     <div className={`space-y-6 ${className}`}>
       {/* Avantages de la connexion */}
-      <Card className="bg-gradient-to-br from-white/90 to-white/60 backdrop-blur-md border border-white/20">
+      <Card className="glass-elevated border border-white/20">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Users className="w-5 h-5 text-primary" />

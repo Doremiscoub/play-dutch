@@ -33,29 +33,29 @@ const Home: React.FC = () => {
       icon: <div className="text-xl">🃏</div>,
       title: "Compagnon de cartes",
       description: "Sortez vos cartes Dutch, on gère les scores !",
-      color: "text-orange-600",
-      bg: "bg-orange-50",
+      color: "text-dutch-orange",
+      bg: "bg-dutch-orange/10",
     },
     {
       icon: <Users className="h-5 w-5" />,
       title: "2 à 10 joueurs",
       description: "Parfait pour vos tablées entre amis",
-      color: "text-blue-600",
-      bg: "bg-blue-50",
+      color: "text-dutch-blue",
+      bg: "bg-dutch-blue/10",
     },
     {
       icon: <Heart className="h-5 w-5" />,
       title: "100% hors-ligne",
       description: "Fonctionne sans internet ni inscription",
-      color: "text-purple-600",
-      bg: "bg-purple-50",
+      color: "text-dutch-purple",
+      bg: "bg-dutch-purple/10",
     },
     {
       icon: <Sparkles className="h-5 w-5" />,
       title: "IA Professeur Cartouche",
       description: "Commentaires intelligents en temps réel",
-      color: "text-green-600",
-      bg: "bg-green-50",
+      color: "text-emerald-600",
+      bg: "bg-emerald-50",
     }
   ];
 
@@ -97,7 +97,7 @@ const Home: React.FC = () => {
                       transition={{ duration: 0.4, delay: index * 0.1 }}
                       viewport={{ once: true }}
                     >
-                      <Card variant="glass" className="h-full hover:shadow-md hover:neon-blue transition-all duration-200">
+                      <Card variant="glass" className="h-full hover:shadow-md transition-all duration-200">
                         <CardContent className="p-5 sm:p-6 text-center">
                           <div className={`${feature.bg} ${feature.color} rounded-xl w-12 h-12 flex items-center justify-center mx-auto mb-4`}>
                             {feature.icon}
@@ -222,7 +222,7 @@ const Home: React.FC = () => {
                 viewport={{ once: true }}
                 className="w-full max-w-3xl mx-auto"
               >
-                <Card className="overflow-hidden border-0 bg-gradient-to-br from-[hsl(221,83%,53%)] via-[hsl(258,90%,60%)] to-[hsl(258,90%,50%)] text-white shadow-lg">
+                <Card className="overflow-hidden border-0 bg-gradient-to-br from-dutch-blue via-dutch-purple to-dutch-purple/90 text-white shadow-lg neon-purple">
                   <CardContent className="p-8 sm:p-10 text-center">
                     <h2 className="text-2xl sm:text-3xl font-bold font-display mb-3">
                       Prêt à jouer ?
@@ -234,7 +234,7 @@ const Home: React.FC = () => {
                       <Button
                         onClick={() => navigate('/setup')}
                         size="xl"
-                        className="bg-white text-[hsl(258,90%,50%)] hover:bg-white/90 font-bold rounded-xl"
+                        className="bg-white text-dutch-purple hover:bg-white/90 font-bold rounded-xl"
                       >
                         <Gamepad2 className="h-5 w-5" />
                         Nouvelle partie

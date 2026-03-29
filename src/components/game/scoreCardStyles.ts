@@ -7,7 +7,7 @@ export const getScoreCardContainerClass = (isWinner: boolean, isNearThreshold: b
     "border shadow-sm",
     isWinner ?
       "bg-dutch-purple/5 border-dutch-purple/20" :
-      "bg-white border-gray-200",
+      "bg-white border-border",
     isNearThreshold ?
       "bg-dutch-orange/5 border-dutch-orange/20" : "",
     isExpanded ?
@@ -22,6 +22,6 @@ export const getPositionBadgeClass = (position: number) => {
     position === 1 ? "bg-dutch-purple text-white" :
     position === 2 ? "bg-dutch-blue text-white" :
     position === 3 ? "bg-dutch-orange text-white" :
-    "bg-gray-400 text-white"
+    "bg-muted-foreground/30 text-white"
   );
 };

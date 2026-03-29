@@ -75,10 +75,10 @@ const EnhancedLoading: React.FC<EnhancedLoadingProps> = ({
             </motion.div>
           </div>
           <div className="space-y-2">
-            <h3 className="text-xl font-semibold text-gray-800">{message}</h3>
+            <h3 className="text-xl font-semibold text-foreground">{message}</h3>
             {progress !== undefined && (
               <div className="w-64 mx-auto">
-                <div className="bg-gray-200 rounded-full h-2">
+                <div className="bg-muted rounded-full h-2">
                   <motion.div
                     className="bg-gradient-to-r from-dutch-blue to-dutch-purple h-2 rounded-full"
                     initial={{ width: 0 }}
@@ -86,7 +86,7 @@ const EnhancedLoading: React.FC<EnhancedLoadingProps> = ({
                     transition={{ duration: 0.5 }}
                   />
                 </div>
-                <p className="text-sm text-gray-600 mt-1">{progress}%</p>
+                <p className="text-sm text-muted-foreground mt-1">{progress}%</p>
               </div>
             )}
           </div>
@@ -105,7 +105,7 @@ const EnhancedLoading: React.FC<EnhancedLoadingProps> = ({
         >
           <Loader2 className="h-8 w-8" />
         </motion.div>
-        <p className="text-gray-600">{message}</p>
+        <p className="text-muted-foreground">{message}</p>
       </div>
     </div>
   );

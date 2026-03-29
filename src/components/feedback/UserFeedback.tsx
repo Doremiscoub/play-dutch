@@ -70,7 +70,7 @@ const UserFeedback: React.FC<UserFeedbackProps> = ({ isOpen, onClose }) => {
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             className="fixed inset-0 z-50 flex items-center justify-center p-4"
           >
-            <Card className="w-full max-w-md glass-morphism border-white/20 backdrop-blur-md">
+            <Card className="w-full max-w-md glass-elevated border-white/20">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
                 <div className="flex items-center gap-2">
                   <MessageSquare className="w-5 h-5 text-primary" />

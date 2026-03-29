@@ -88,7 +88,7 @@ const PlayerDetailedStats: React.FC<PlayerDetailedStatsProps> = ({ player, class
   ];
 
   return (
-    <Card className={cn("bg-white/80 backdrop-blur-md border border-white/50 rounded-2xl shadow-sm", className)}>
+    <Card className={cn("glass-elevated rounded-2xl", className)}>
       <CardContent className="p-4">
         <h4 className="text-sm font-medium text-dutch-blue mb-3">Statistiques détaillées</h4>
         
@@ -99,18 +99,18 @@ const PlayerDetailedStats: React.FC<PlayerDetailedStatsProps> = ({ player, class
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: index * 0.05 }}
-              className="bg-white/60 backdrop-blur-sm rounded-xl p-3 border border-white/50 shadow-sm hover:shadow-md transition-all"
+              className="glass-surface rounded-xl p-3 shadow-sm hover:shadow-md transition-all"
             >
               <div className="flex items-center gap-2 mb-1">
                 {stat.icon}
-                <span className="text-xs text-gray-600">{stat.label}</span>
+                <span className="text-xs text-muted-foreground">{stat.label}</span>
               </div>
               <div className="flex items-baseline">
                 <span className={cn("text-lg font-bold", stat.color)}>
                   {typeof stat.value === 'number' ? stat.value.toLocaleString() : stat.value}
                 </span>
                 {stat.value !== 'N/A' && (
-                  <span className="text-xs text-gray-500 ml-1">
+                  <span className="text-xs text-muted-foreground ml-1">
                     {stat.suffix}
                   </span>
                 )}
@@ -125,12 +125,12 @@ const PlayerDetailedStats: React.FC<PlayerDetailedStatsProps> = ({ player, class
           
           <div className="grid grid-cols-2 gap-3">
             {/* Régularité */}
-            <div className="bg-white/60 backdrop-blur-sm rounded-xl p-3 border border-white/50">
+            <div className="glass-surface rounded-xl p-3">
               <div className="flex items-center mb-1">
                 <Activity className="h-4 w-4 text-dutch-blue mr-2" />
-                <span className="text-xs text-gray-600">Régularité</span>
+                <span className="text-xs text-muted-foreground">Régularité</span>
               </div>
-              <div className="mt-1 bg-gray-200 h-2 rounded-full">
+              <div className="mt-1 bg-muted h-2 rounded-full">
                 <div 
                   className="bg-gradient-to-r from-red-500 to-green-500 h-full rounded-full"
                   style={{ width: `${regularity}%` }}
@@ -139,12 +139,12 @@ const PlayerDetailedStats: React.FC<PlayerDetailedStatsProps> = ({ player, class
             </div>
             
             {/* Prise de risque */}
-            <div className="bg-white/60 backdrop-blur-sm rounded-xl p-3 border border-white/50">
+            <div className="glass-surface rounded-xl p-3">
               <div className="flex items-center mb-1">
                 <Crosshair className="h-4 w-4 text-dutch-orange mr-2" />
-                <span className="text-xs text-gray-600">Prise de risque</span>
+                <span className="text-xs text-muted-foreground">Prise de risque</span>
               </div>
-              <div className="mt-1 bg-gray-200 h-2 rounded-full">
+              <div className="mt-1 bg-muted h-2 rounded-full">
                 <div 
                   className="bg-gradient-to-r from-green-500 to-orange-500 h-full rounded-full"
                   style={{ width: `${riskTaking}%` }}
@@ -153,12 +153,12 @@ const PlayerDetailedStats: React.FC<PlayerDetailedStatsProps> = ({ player, class
             </div>
             
             {/* Momentum */}
-            <div className="bg-white/60 backdrop-blur-sm rounded-xl p-3 border border-white/50">
+            <div className="glass-surface rounded-xl p-3">
               <div className="flex items-center mb-1">
                 <Brain className="h-4 w-4 text-dutch-purple mr-2" />
-                <span className="text-xs text-gray-600">Momentum</span>
+                <span className="text-xs text-muted-foreground">Momentum</span>
               </div>
-              <div className="mt-1 bg-gray-200 h-2 rounded-full">
+              <div className="mt-1 bg-muted h-2 rounded-full">
                 <div 
                   className="bg-gradient-to-r from-yellow-500 to-dutch-purple h-full rounded-full"
                   style={{ width: `${momentum}%` }}
@@ -167,12 +167,12 @@ const PlayerDetailedStats: React.FC<PlayerDetailedStatsProps> = ({ player, class
             </div>
             
             {/* Concentration */}
-            <div className="bg-white/60 backdrop-blur-sm rounded-xl p-3 border border-white/50">
+            <div className="glass-surface rounded-xl p-3">
               <div className="flex items-center mb-1">
                 <Focus className="h-4 w-4 text-dutch-green mr-2" />
-                <span className="text-xs text-gray-600">Concentration</span>
+                <span className="text-xs text-muted-foreground">Concentration</span>
               </div>
-              <div className="mt-1 bg-gray-200 h-2 rounded-full">
+              <div className="mt-1 bg-muted h-2 rounded-full">
                 <div 
                   className="bg-gradient-to-r from-blue-300 to-blue-600 h-full rounded-full"
                   style={{ width: `${concentration}%` }}

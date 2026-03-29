@@ -61,7 +61,7 @@ export const ScoreIntegrityMonitor: React.FC<ScoreIntegrityMonitorProps> = ({
     }
     
     if (!auditResult) {
-      return <AlertTriangle className="w-5 h-5 text-gray-400" />;
+      return <AlertTriangle className="w-5 h-5 text-muted-foreground/70" />;
     }
     
     return auditResult.isValid 
@@ -80,7 +80,7 @@ export const ScoreIntegrityMonitor: React.FC<ScoreIntegrityMonitorProps> = ({
 
   const getStatusColor = () => {
     if (isChecking) return 'border-blue-200 bg-blue-50';
-    if (!auditResult) return 'border-gray-200 bg-gray-50';
+    if (!auditResult) return 'border-border bg-muted/50';
     
     return auditResult.isValid 
       ? 'border-green-200 bg-green-50' 

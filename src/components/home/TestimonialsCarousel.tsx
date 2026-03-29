@@ -144,7 +144,7 @@ export const TestimonialsCarousel: React.FC = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: 0.4 }}
-                  className="text-gray-700 mb-6 italic text-lg leading-relaxed"
+                  className="text-foreground mb-6 italic text-lg leading-relaxed"
                 >
                   "{testimonials[currentIndex].comment}"
                 </motion.p>
@@ -154,10 +154,10 @@ export const TestimonialsCarousel: React.FC = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: 0.5 }}
                 >
-                  <p className="font-semibold text-gray-800 text-lg">
+                  <p className="font-semibold text-foreground text-lg">
                     {testimonials[currentIndex].name}
                   </p>
-                  <p className="text-gray-500 text-sm">
+                  <p className="text-muted-foreground text-sm">
                     {testimonials[currentIndex].location}
                   </p>
                 </motion.div>
@@ -173,7 +173,7 @@ export const TestimonialsCarousel: React.FC = () => {
             key={index}
             onClick={() => setCurrentIndex(index)}
             className={`w-2 h-2 rounded-full transition-all duration-300 ${
-              index === currentIndex ? 'bg-dutch-blue w-8' : 'bg-gray-300'
+              index === currentIndex ? 'bg-dutch-blue w-8' : 'bg-border'
             }`}
           />
         ))}

@@ -33,7 +33,7 @@ const FooterSection: React.FC = () => {
   ];
 
   return (
-    <footer className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white pt-20 pb-8">
+    <footer className="relative bg-gradient-to-br from-foreground/95 via-foreground/85 to-foreground text-white pt-20 pb-8">
       {/* Dégradé décoratif en haut */}
       <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-trinity-blue-500 via-trinity-purple-500 to-trinity-orange-500"></div>
       
@@ -55,10 +55,10 @@ const FooterSection: React.FC = () => {
               transition={{ duration: 0.5 }}
             />
           </div>
-          <h2 className="text-3xl font-black bg-gradient-to-r from-trinity-blue-400 via-trinity-purple-400 to-trinity-orange-400 bg-clip-text text-transparent mb-4 leading-tight py-2">
+          <h2 className="text-3xl font-black text-gradient-trinity mb-4 leading-tight py-2">
             Dutch Card Game
           </h2>
-          <p className="text-gray-300 font-semibold max-w-2xl mx-auto">
+          <p className="text-muted-foreground/50 font-semibold max-w-2xl mx-auto">
             Votre compagnon de jeu intelligent pour des soirées cartes inoubliables avec le Professeur Cartouche !
           </p>
         </motion.div>
@@ -73,7 +73,7 @@ const FooterSection: React.FC = () => {
               transition={{ duration: 0.6, delay: categoryIndex * 0.1 }}
               viewport={{ once: true }}
             >
-              <h3 className="text-xl font-black text-white mb-6 border-b border-gray-700 pb-2">
+              <h3 className="text-xl font-black text-white mb-6 border-b border-muted-foreground/30 pb-2">
                 {category.category}
               </h3>
               <ul className="space-y-3">
@@ -85,7 +85,7 @@ const FooterSection: React.FC = () => {
                   >
                     <button
                       onClick={() => navigate(link.path)}
-                      className="flex items-center gap-3 text-gray-300 hover:text-white font-semibold transition-colors duration-200 group"
+                      className="flex items-center gap-3 text-muted-foreground/50 hover:text-white font-semibold transition-colors duration-200 group"
                     >
                       <span className="text-trinity-blue-400 group-hover:text-trinity-purple-400 transition-colors duration-200">
                         {link.icon}
@@ -105,7 +105,7 @@ const FooterSection: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="bg-gradient-to-r from-gray-800 to-gray-700 rounded-2xl p-8 mb-12 border border-gray-600"
+          className="glass-dark rounded-2xl p-8 mb-12"
         >
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             {[
@@ -124,7 +124,7 @@ const FooterSection: React.FC = () => {
               >
                 <div className="text-2xl">{stat.icon}</div>
                 <div className="text-2xl font-black text-white">{stat.value}</div>
-                <div className="text-sm text-gray-400 font-semibold">{stat.label}</div>
+                <div className="text-sm text-muted-foreground/70 font-semibold">{stat.label}</div>
               </motion.div>
             ))}
           </div>
@@ -136,10 +136,10 @@ const FooterSection: React.FC = () => {
           whileInView={{ opacity: 1 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="border-t border-gray-700 pt-8"
+          className="border-t border-muted-foreground/30 pt-8"
         >
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="text-gray-400 font-semibold text-center md:text-left">
+            <div className="text-muted-foreground/70 font-semibold text-center md:text-left">
               <p>© 2024 Dutch Card Game. Tous droits réservés.</p>
               <p className="text-sm mt-1">
                 Développé avec <Heart className="inline h-4 w-4 text-red-400 mx-1" /> pour les amateurs de jeux de cartes
@@ -149,7 +149,7 @@ const FooterSection: React.FC = () => {
             <div className="flex items-center gap-4">
               <motion.a
                 href="mailto:contact@dutchcardgame.com"
-                className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors duration-200"
+                className="flex items-center gap-2 text-muted-foreground/70 hover:text-white transition-colors duration-200"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -159,7 +159,7 @@ const FooterSection: React.FC = () => {
             </div>
           </div>
           
-          <div className="text-center mt-6 text-sm text-gray-500">
+          <div className="text-center mt-6 text-sm text-muted-foreground">
             <p>🎯 Application web gratuite et hors-ligne - Aucune donnée personnelle collectée</p>
           </div>
         </motion.div>

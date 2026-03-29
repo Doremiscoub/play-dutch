@@ -10,7 +10,7 @@ const LoadingSpinner: React.FC = () => {
         className="text-center"
       >
         <div className="w-16 h-16 border-4 border-dutch-blue/20 border-t-dutch-blue rounded-full mx-auto mb-4 animate-spin"></div>
-        <p className="text-gray-600">Chargement de la partie...</p>
+        <p className="text-muted-foreground">Chargement de la partie...</p>
       </motion.div>
     </div>
   );

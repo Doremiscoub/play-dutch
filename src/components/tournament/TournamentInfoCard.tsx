@@ -13,8 +13,8 @@ const TournamentInfoCard: React.FC = () => {
       <div className="flex items-start gap-3">
         <Trophy className="h-5 w-5 text-dutch-orange mt-0.5 flex-shrink-0" />
         <div className="space-y-1">
-          <p className="font-medium text-sm text-gray-800">Mode tournoi avancé</p>
-          <p className="text-xs text-gray-600 leading-relaxed">
+          <p className="font-medium text-sm text-foreground">Mode tournoi avancé</p>
+          <p className="text-xs text-muted-foreground leading-relaxed">
             Créez un tournoi complet avec suivi des performances, classements détaillés et génération automatique de certificats. Parfait pour vos soirées jeux entre amis !
           </p>
         </div>

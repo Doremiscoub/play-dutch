@@ -130,7 +130,7 @@ export const StatsDashboardSinglePage: React.FC<StatsDashboardSinglePageProps> =
               onClick={onBack}
               variant="ghost"
               size="sm"
-              className="h-12 w-12 rounded-2xl bg-white border border-border shadow-sm hover:bg-gray-50 transition-all duration-300 hover:scale-105"
+              className="h-12 w-12 rounded-2xl bg-white border border-border shadow-sm hover:bg-muted/50 transition-all duration-300 hover:scale-105"
             >
               <ArrowLeft className="h-5 w-5 text-primary" />
             </Button>
@@ -174,8 +174,8 @@ export const StatsDashboardSinglePage: React.FC<StatsDashboardSinglePageProps> =
                 size="sm"
                 className={`rounded-2xl font-medium transition-all duration-300 ${
                   !selectedPlayer 
-                    ? 'bg-gradient-to-r from-primary to-secondary text-white shadow-lg hover:shadow-xl transform hover:scale-105' 
-                    : 'bg-white hover:bg-gray-50 text-foreground border border-border'
+                    ? 'bg-gradient-to-r from-primary to-secondary text-white shadow-lg hover:shadow-xl transform hover:scale-105'
+                    : 'bg-white hover:bg-muted/50 text-foreground border border-border'
                 }`}
               >
                 Tous les joueurs
@@ -188,8 +188,8 @@ export const StatsDashboardSinglePage: React.FC<StatsDashboardSinglePageProps> =
                   size="sm"
                   className={`rounded-2xl font-medium transition-all duration-300 flex items-center gap-2 ${
                     selectedPlayer?.id === player.id 
-                      ? 'bg-gradient-to-r from-primary to-secondary text-white shadow-lg hover:shadow-xl transform hover:scale-105' 
-                      : 'bg-white hover:bg-gray-50 text-foreground border border-border'
+                      ? 'bg-gradient-to-r from-primary to-secondary text-white shadow-lg hover:shadow-xl transform hover:scale-105'
+                      : 'bg-white hover:bg-muted/50 text-foreground border border-border'
                   }`}
                 >
                   <span className="text-base">{player.emoji || '😊'}</span>

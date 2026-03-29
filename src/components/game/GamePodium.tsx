@@ -31,7 +31,7 @@ const GamePodium: React.FC<GamePodiumProps> = ({ players }) => {
 
   return (
     <div className="my-8">
-      <h3 className="text-lg font-medium text-gray-700 mb-6 text-center">Podium</h3>
+      <h3 className="text-lg font-medium text-foreground mb-6 text-center">Podium</h3>
 
       <div className="flex items-end justify-center gap-1 h-32">
         {positions.map(({ order, player, height, delay }) => (

@@ -431,7 +431,7 @@ const BadgeSystem: React.FC<BadgeSystemProps> = ({ players, games, currentGameId
                               {getPlayerBadges(player).map((badge) => (
                                 <div
                                   key={badge.id}
-                                  className="flex items-center gap-1 bg-background rounded-full px-2 py-1 border border-glass-border-light cursor-pointer shadow-sm"
+                                  className="flex items-center gap-1 bg-background rounded-full px-2 py-1 border border-border cursor-pointer shadow-sm"
                                   onClick={() => showBadgeDetails(badge)}
                                 >
                                   {renderBadgeIcon(badge, 'h-3.5 w-3.5')}
@@ -453,11 +453,11 @@ const BadgeSystem: React.FC<BadgeSystemProps> = ({ players, games, currentGameId
                                 return (
                                   <div 
                                     key={badge.id} 
-                                    className="card-glass rounded-lg p-2 cursor-pointer hover:shadow-glass-lg"
+                                    className="glass-surface rounded-lg p-2 cursor-pointer hover:shadow-md"
                                     onClick={() => showBadgeDetails(badge)}
                                   >
                                     <div className="flex items-center gap-2 mb-1">
-                                      <div className="h-6 w-6 rounded-full bg-glass-light flex items-center justify-center shadow-sm">
+                                      <div className="h-6 w-6 rounded-full bg-muted flex items-center justify-center shadow-sm">
                                         {renderBadgeIcon(badge, 'h-3.5 w-3.5')}
                                       </div>
                                       <span className="text-xs font-medium">{badge.name}</span>
@@ -482,7 +482,7 @@ const BadgeSystem: React.FC<BadgeSystemProps> = ({ players, games, currentGameId
       <CardFooter>
         <Button 
           variant="outline" 
-          className="w-full btn-glass border-trinity-orange-300/20 text-trinity-orange-600 hover:border-trinity-orange-400"
+          className="w-full border-orange-200 text-orange-600 hover:border-orange-400"
           onClick={() => setCurrentViewTab(currentViewTab === 'all' ? 'progress' : 'all')}
         >
           <Medal className="h-4 w-4 mr-2" />
@@ -492,7 +492,7 @@ const BadgeSystem: React.FC<BadgeSystemProps> = ({ players, games, currentGameId
       
       {/* Badge details dialog */}
       <Dialog open={showBadgeDialog} onOpenChange={setShowBadgeDialog}>
-        <DialogContent className="sm:max-w-md rounded-3xl card-glass border-glass-border-light">
+        <DialogContent className="sm:max-w-md rounded-2xl">
           <DialogHeader>
             <DialogTitle>Détails du badge</DialogTitle>
             <DialogDescription>
@@ -514,7 +514,7 @@ const BadgeSystem: React.FC<BadgeSystemProps> = ({ players, games, currentGameId
                   <span className={`text-xs px-2 py-1 rounded-full ${getRarityColor(selectedBadge.rarity)}`}>
                     {selectedBadge.rarity.charAt(0).toUpperCase() + selectedBadge.rarity.slice(1)}
                   </span>
-                  <span className="text-xs bg-gray-100 px-2 py-1 rounded-full">
+                  <span className="text-xs bg-muted px-2 py-1 rounded-full">
                     {getCategoryName(selectedBadge.category)}
                   </span>
                 </div>
@@ -570,7 +570,7 @@ const BadgeSystem: React.FC<BadgeSystemProps> = ({ players, games, currentGameId
             className="fixed bottom-20 right-0 left-0 flex justify-center z-50 pointer-events-none"
           >
             <motion.div 
-              className="glass-ultra-light backdrop-blur-md border border-glass-border-light rounded-2xl p-4 shadow-lg pointer-events-auto max-w-xs"
+              className="glass-float rounded-2xl p-4 pointer-events-auto max-w-xs"
               initial={{ scale: 0.8 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.1 }}

@@ -28,7 +28,7 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
         )}
       />
       {message && (
-        <p className="mt-4 text-sm text-gray-600">{message}</p>
+        <p className="mt-4 text-sm text-muted-foreground">{message}</p>
       )}
     </div>
   );

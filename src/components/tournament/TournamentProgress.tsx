@@ -57,7 +57,7 @@ const TournamentProgress: React.FC<TournamentProgressProps> = ({
                 <Users className="h-4 w-4 text-dutch-blue" />
                 <span className="text-sm font-medium">{tournament.playerNames.length}</span>
               </div>
-              <p className="text-xs text-gray-600">Joueurs</p>
+              <p className="text-xs text-muted-foreground">Joueurs</p>
             </div>
             
             <div className="space-y-1">
@@ -65,7 +65,7 @@ const TournamentProgress: React.FC<TournamentProgressProps> = ({
                 <Target className="h-4 w-4 text-dutch-purple" />
                 <span className="text-sm font-medium">{tournament.totalRounds}</span>
               </div>
-              <p className="text-xs text-gray-600">Manches</p>
+              <p className="text-xs text-muted-foreground">Manches</p>
             </div>
             
             <div className="space-y-1">
@@ -73,7 +73,7 @@ const TournamentProgress: React.FC<TournamentProgressProps> = ({
                 <Clock className="h-4 w-4 text-dutch-pink" />
                 <span className="text-sm font-medium">{tournament.matches.length}</span>
               </div>
-              <p className="text-xs text-gray-600">Jouées</p>
+              <p className="text-xs text-muted-foreground">Jouées</p>
             </div>
           </div>
 
@@ -82,14 +82,14 @@ const TournamentProgress: React.FC<TournamentProgressProps> = ({
             <div className="bg-white/50 rounded-xl p-3 border border-white/30">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-700">Leader actuel</p>
+                  <p className="text-sm font-medium text-foreground">Leader actuel</p>
                   <p className="font-bold text-dutch-orange">{leader.playerName}</p>
                 </div>
                 <div className="text-right">
                   <Badge variant="outline" className="bg-dutch-orange/10 text-dutch-orange border-dutch-orange/30">
                     {leader.wins} victoire{leader.wins > 1 ? 's' : ''}
                   </Badge>
-                  <p className="text-xs text-gray-600 mt-1">{leader.totalScore} pts</p>
+                  <p className="text-xs text-muted-foreground mt-1">{leader.totalScore} pts</p>
                 </div>
               </div>
             </div>

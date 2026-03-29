@@ -23,15 +23,15 @@ const GameErrorFallback: React.FC<GameErrorFallbackProps> = ({
         </div>
         
         <div className="space-y-2">
-          <h2 className="text-2xl font-bold text-gray-900">Oups ! Une erreur est survenue</h2>
-          <p className="text-gray-600">
+          <h2 className="text-2xl font-bold text-foreground">Oups ! Une erreur est survenue</h2>
+          <p className="text-muted-foreground">
             Le tableau de scores a rencontré un problème. Vous pouvez réessayer ou retourner à l'accueil.
           </p>
         </div>
 
         {import.meta.env.MODE === 'development' && (
-          <details className="text-left bg-gray-100 rounded-lg p-4 text-sm">
-            <summary className="cursor-pointer font-semibold text-gray-700 mb-2">
+          <details className="text-left bg-muted rounded-lg p-4 text-sm">
+            <summary className="cursor-pointer font-semibold text-foreground mb-2">
               Détails de l'erreur (développement)
             </summary>
             <pre className="whitespace-pre-wrap text-red-600 text-xs">

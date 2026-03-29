@@ -166,7 +166,7 @@ const AdvancedThemeSelector = () => {
         <Button 
           variant="ghost" 
           size="icon-sm" 
-          className="shadow-md hover:shadow-lg bg-white/60 backdrop-blur-sm"
+          className="shadow-md hover:shadow-lg glass-surface"
         >
           <div className="relative">
             <Palette className="h-4 w-4" />
@@ -178,7 +178,7 @@ const AdvancedThemeSelector = () => {
         </Button>
       </DialogTrigger>
       
-      <DialogContent className="sm:max-w-md rounded-3xl bg-white/90 backdrop-blur-md border border-white/40 p-0 overflow-hidden">
+      <DialogContent className="sm:max-w-md rounded-3xl glass-float p-0 overflow-hidden">
         <DialogHeader className="px-6 pt-6 pb-2">
           <DialogTitle className="text-xl">Personnaliser l'apparence</DialogTitle>
           <DialogDescription>
@@ -238,7 +238,7 @@ const AdvancedThemeSelector = () => {
                         <Button 
                           variant="ghost" 
                           size="icon-sm"
-                          className="h-7 w-7 rounded-full text-gray-500 hover:text-dutch-blue hover:bg-dutch-blue/10"
+                          className="h-7 w-7 rounded-full text-muted-foreground hover:text-dutch-blue hover:bg-dutch-blue/10"
                           onClick={(e) => {
                             e.stopPropagation();
                             startEditingTheme(theme as CustomTheme);
@@ -252,13 +252,13 @@ const AdvancedThemeSelector = () => {
                             <Button 
                               variant="ghost" 
                               size="icon-sm"
-                              className="h-7 w-7 rounded-full text-gray-500 hover:text-red-500 hover:bg-red-50"
+                              className="h-7 w-7 rounded-full text-muted-foreground hover:text-red-500 hover:bg-red-50"
                               onClick={(e) => e.stopPropagation()}
                             >
                               <Trash2 className="h-3.5 w-3.5" />
                             </Button>
                           </AlertDialogTrigger>
-                          <AlertDialogContent className="rounded-3xl bg-white/90 backdrop-blur-md">
+                          <AlertDialogContent className="rounded-3xl glass-float">
                             <AlertDialogHeader>
                               <AlertDialogTitle>Supprimer ce thème ?</AlertDialogTitle>
                               <AlertDialogDescription>
@@ -436,7 +436,7 @@ const AdvancedThemeSelector = () => {
               <div className="flex flex-col items-center justify-center p-10 h-[300px]">
                 <Palette className="h-16 w-16 text-dutch-blue/20 mb-4" />
                 <h3 className="text-lg font-medium mb-2">Aucun thème en édition</h3>
-                <p className="text-sm text-gray-500 text-center mb-4">
+                <p className="text-sm text-muted-foreground text-center mb-4">
                   Sélectionnez un thème existant à modifier ou créez-en un nouveau
                 </p>
                 <Button onClick={startCreatingTheme}>

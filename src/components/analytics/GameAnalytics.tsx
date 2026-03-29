@@ -194,8 +194,8 @@ export const GameAnalytics: React.FC<GameAnalyticsProps> = ({
         </CardHeader>
         <CardContent>
           <div className="text-center py-8">
-            <Activity className="w-12 h-12 mx-auto mb-4 text-gray-400" />
-            <p className="text-gray-600">
+            <Activity className="w-12 h-12 mx-auto mb-4 text-muted-foreground/70" />
+            <p className="text-muted-foreground">
               Jouez quelques parties pour voir vos analytics
             </p>
           </div>
@@ -215,7 +215,7 @@ export const GameAnalytics: React.FC<GameAnalyticsProps> = ({
             <div className="text-2xl font-bold text-blue-600">
               {analytics.totalGames}
             </div>
-            <div className="text-sm text-gray-600">Parties totales</div>
+            <div className="text-sm text-muted-foreground">Parties totales</div>
           </CardContent>
         </Card>
         
@@ -224,7 +224,7 @@ export const GameAnalytics: React.FC<GameAnalyticsProps> = ({
             <div className="text-2xl font-bold text-green-600">
               {analytics.totalPlayers}
             </div>
-            <div className="text-sm text-gray-600">Joueurs uniques</div>
+            <div className="text-sm text-muted-foreground">Joueurs uniques</div>
           </CardContent>
         </Card>
         
@@ -233,7 +233,7 @@ export const GameAnalytics: React.FC<GameAnalyticsProps> = ({
             <div className="text-2xl font-bold text-purple-600">
               {analytics.averageRoundsPerGame.toFixed(1)}
             </div>
-            <div className="text-sm text-gray-600">Manches/partie</div>
+            <div className="text-sm text-muted-foreground">Manches/partie</div>
           </CardContent>
         </Card>
         
@@ -242,7 +242,7 @@ export const GameAnalytics: React.FC<GameAnalyticsProps> = ({
             <div className="text-2xl font-bold text-orange-600">
               {analytics.averageGameDuration.toFixed(0)}m
             </div>
-            <div className="text-sm text-gray-600">Durée moyenne</div>
+            <div className="text-sm text-muted-foreground">Durée moyenne</div>
           </CardContent>
         </Card>
       </div>
@@ -258,11 +258,11 @@ export const GameAnalytics: React.FC<GameAnalyticsProps> = ({
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-600">Plus actif:</span>
+              <span className="text-sm text-muted-foreground">Plus actif:</span>
               <Badge variant="outline">{analytics.mostActivePlayer}</Badge>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-600">Meilleur taux:</span>
+              <span className="text-sm text-muted-foreground">Meilleur taux:</span>
               <Badge variant="default">{analytics.bestPerformer}</Badge>
             </div>
           </CardContent>
@@ -284,7 +284,7 @@ export const GameAnalytics: React.FC<GameAnalyticsProps> = ({
                   </div>
                   <div className="flex-1">
                     <div className="font-medium">{player.name}</div>
-                    <div className="text-sm text-gray-600">
+                    <div className="text-sm text-muted-foreground">
                       {player.winRate.toFixed(1)}% • {player.games} parties
                     </div>
                   </div>

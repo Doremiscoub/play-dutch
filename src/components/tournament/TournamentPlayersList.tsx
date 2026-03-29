@@ -18,7 +18,7 @@ const TournamentPlayersList: React.FC<TournamentPlayersListProps> = ({
   const getRankIcon = (index: number) => {
     switch (index) {
       case 0: return <Crown className="h-3 w-3 text-yellow-500" />;
-      case 1: return <Medal className="h-3 w-3 text-gray-400" />;
+      case 1: return <Medal className="h-3 w-3 text-muted-foreground/70" />;
       case 2: return <Award className="h-3 w-3 text-amber-600" />;
       default: return null;
     }
@@ -37,7 +37,7 @@ const TournamentPlayersList: React.FC<TournamentPlayersListProps> = ({
     <div className="space-y-3">
       <div className="flex items-center gap-2 mb-3">
         <Users className="h-4 w-4 text-dutch-blue" />
-        <h4 className="text-sm font-medium text-gray-700">
+        <h4 className="text-sm font-medium text-foreground">
           Participants ({players.length})
         </h4>
         {players.length >= 2 && (
@@ -56,7 +56,7 @@ const TournamentPlayersList: React.FC<TournamentPlayersListProps> = ({
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, x: -20, scale: 0.95 }}
               transition={{ duration: 0.2, delay: index * 0.05 }}
-              className="group flex items-center justify-between bg-white/80 backdrop-blur-sm rounded-xl p-3 border border-white/60 hover:bg-white/90 transition-all duration-200"
+              className="group flex items-center justify-between glass-surface rounded-xl p-3 border border-white/60 hover:bg-white/90 transition-all duration-200"
             >
               <div className="flex items-center gap-3">
                 <Avatar className="h-8 w-8">
@@ -67,10 +67,10 @@ const TournamentPlayersList: React.FC<TournamentPlayersListProps> = ({
                 
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="font-medium text-sm text-gray-800">{player}</span>
+                    <span className="font-medium text-sm text-foreground">{player}</span>
                     {getRankIcon(index)}
                   </div>
-                  <span className="text-xs text-gray-500">{getRankBadge(index)}</span>
+                  <span className="text-xs text-muted-foreground">{getRankBadge(index)}</span>
                 </div>
               </div>
               
@@ -90,9 +90,9 @@ const TournamentPlayersList: React.FC<TournamentPlayersListProps> = ({
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="text-center py-8 text-gray-500"
+            className="text-center py-8 text-muted-foreground"
           >
-            <Users className="h-12 w-12 mx-auto mb-2 text-gray-300" />
+            <Users className="h-12 w-12 mx-auto mb-2 text-muted-foreground/50" />
             <p className="text-sm">Ajoutez des joueurs au tournoi</p>
           </motion.div>
         )}

@@ -21,7 +21,7 @@ export const GameSyncManager: React.FC<GameSyncManagerProps> = ({ className = ''
       case 'synced': return 'text-green-600';
       case 'syncing': return 'text-blue-600';
       case 'error': return 'text-red-600';
-      default: return 'text-gray-600';
+      default: return 'text-muted-foreground';
     }
   };
 
@@ -54,7 +54,7 @@ export const GameSyncManager: React.FC<GameSyncManagerProps> = ({ className = ''
               {syncStatus}
             </Badge>
             {lastSync && (
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-muted-foreground mt-1">
                 Dernière sync: {lastSync.toLocaleTimeString()}
               </p>
             )}

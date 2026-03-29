@@ -24,7 +24,7 @@ const SEOFooter: React.FC<SEOFooterProps> = ({ className = '' }) => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5, delay: 0.5 }}
-      className={`text-center text-gray-500 text-sm space-y-4 ${className}`}
+      className={`text-center text-muted-foreground text-sm space-y-4 ${className}`}
     >
       <div className="flex flex-wrap justify-center gap-4 mb-4">
         {footerLinks.map((link, index) => (
@@ -47,7 +47,7 @@ const SEOFooter: React.FC<SEOFooterProps> = ({ className = '' }) => {
           le célèbre jeu de cartes convivial parfait pour vos soirées entre amis. 
           Interface moderne, fonctionnement hors-ligne, IA commentateur incluse.
         </p>
-        <p className="text-xs text-gray-400">
+        <p className="text-xs text-muted-foreground/70">
           Jeu de cartes • Score automatique • Multijoueur • Gratuit • PWA
         </p>
       </div>

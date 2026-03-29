@@ -22,15 +22,15 @@ export const UnifiedPageLayout: React.FC<UnifiedPageLayoutProps> = ({
   className
 }) => {
   const backgroundClasses = {
-    minimal: 'bg-gray-50',
-    subtle: 'bg-gray-50/50',
-    default: 'bg-gray-50'
+    minimal: 'bg-muted/50',
+    subtle: 'bg-muted/50',
+    default: 'bg-muted/50'
   };
 
   return (
     <div className={cn('min-h-screen', backgroundClasses[backgroundVariant])}>
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-border">
+      <header className="sticky top-0 z-50 glass-surface border-b border-border">
         <div className="container mx-auto px-4 py-4 flex items-center gap-4">
           {showBackButton && (
             <Button
@@ -42,7 +42,7 @@ export const UnifiedPageLayout: React.FC<UnifiedPageLayoutProps> = ({
               <ArrowLeft className="h-5 w-5" />
             </Button>
           )}
-          <h1 className="text-xl font-semibold text-gray-800">{title}</h1>
+          <h1 className="text-xl font-semibold text-foreground">{title}</h1>
         </div>
       </header>
 

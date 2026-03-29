@@ -69,7 +69,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
         )}
         {subtitle && (
           <div className="text-center mb-6 sm:mb-8">
-            <p className="text-gray-600 text-sm sm:text-base">{subtitle}</p>
+            <p className="text-muted-foreground text-sm sm:text-base">{subtitle}</p>
           </div>
         )}
         

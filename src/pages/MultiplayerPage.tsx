@@ -188,11 +188,11 @@ const MultiplayerPage: React.FC = () => {
                 <CardContent>
                   <div className="flex items-center gap-4 text-sm">
                     <div className="flex items-center gap-1">
-                      <Trophy className="w-4 h-4 text-gray-600" />
+                      <Trophy className="w-4 h-4 text-muted-foreground" />
                       Limite: {gameState?.scoreLimit || 100} points
                     </div>
                     <div className="flex items-center gap-1">
-                      <GamepadIcon className="w-4 h-4 text-gray-600" />
+                      <GamepadIcon className="w-4 h-4 text-muted-foreground" />
                       Manche {(gameState?.currentRound || 0) + 1}
                     </div>
                   </div>

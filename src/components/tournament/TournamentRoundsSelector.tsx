@@ -19,7 +19,7 @@ const TournamentRoundsSelector: React.FC<TournamentRoundsSelectorProps> = ({
     <div className="space-y-4">
       <div className="flex items-center gap-2 mb-3">
         <Target className="h-4 w-4 text-dutch-orange" />
-        <label className="text-sm font-medium text-gray-700">
+        <label className="text-sm font-medium text-foreground">
           Nombre de manches
         </label>
       </div>
@@ -63,7 +63,7 @@ const TournamentRoundsSelector: React.FC<TournamentRoundsSelectorProps> = ({
           <span className="font-bold text-2xl text-dutch-orange min-w-[3rem] text-center">
             {rounds}
           </span>
-          <span className="text-sm text-gray-600">
+          <span className="text-sm text-muted-foreground">
             manche{rounds > 1 ? 's' : ''}
           </span>
         </div>
@@ -79,7 +79,7 @@ const TournamentRoundsSelector: React.FC<TournamentRoundsSelectorProps> = ({
         </Button>
       </div>
       
-      <div className="text-xs text-gray-500 text-center">
+      <div className="text-xs text-muted-foreground text-center">
         Durée estimée : {Math.round(rounds * 10)} - {Math.round(rounds * 15)} minutes
       </div>
     </div>

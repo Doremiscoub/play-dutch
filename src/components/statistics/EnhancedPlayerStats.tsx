@@ -162,22 +162,22 @@ const EnhancedPlayerStats: React.FC<EnhancedPlayerStatsProps> = ({ players, clas
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="text-center p-3 bg-gradient-to-br from-trinity-blue-50 to-trinity-blue-100 rounded-xl">
-                  <div className="text-sm text-neutral-600 mb-1">Moyenne</div>
+                  <div className="text-sm text-muted-foreground mb-1">Moyenne</div>
                   <div className="text-2xl font-bold text-trinity-blue-600">{stats.average}</div>
                 </div>
                 
                 <div className="text-center p-3 bg-gradient-to-br from-trinity-green-50 to-trinity-green-100 rounded-xl">
-                  <div className="text-sm text-neutral-600 mb-1">Meilleur</div>
+                  <div className="text-sm text-muted-foreground mb-1">Meilleur</div>
                   <div className="text-2xl font-bold text-trinity-green-600">{stats.bestRound}</div>
                 </div>
                 
                 <div className="text-center p-3 bg-gradient-to-br from-trinity-orange-50 to-trinity-orange-100 rounded-xl">
-                  <div className="text-sm text-neutral-600 mb-1">Dutch</div>
+                  <div className="text-sm text-muted-foreground mb-1">Dutch</div>
                   <div className="text-2xl font-bold text-trinity-orange-600">{stats.dutchCount}</div>
                 </div>
                 
                 <div className="text-center p-3 bg-gradient-to-br from-trinity-purple-50 to-trinity-purple-100 rounded-xl">
-                  <div className="text-sm text-neutral-600 mb-1">Régularité</div>
+                  <div className="text-sm text-muted-foreground mb-1">Régularité</div>
                   <div className="text-2xl font-bold text-trinity-purple-600">{stats.consistency}</div>
                 </div>
               </div>

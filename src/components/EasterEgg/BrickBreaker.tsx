@@ -347,7 +347,7 @@ const BrickBreaker: React.FC<{ onClose: () => void }> = ({ onClose }) => {
           onClick={onClose}
           className="absolute top-4 right-4 p-2 rounded-full bg-white/70 hover:bg-white/90 transition-colors"
         >
-          <X className="w-5 h-5 text-gray-600" />
+          <X className="w-5 h-5 text-muted-foreground" />
         </button>
         
         <h2 className="text-2xl font-bold text-center mb-4 bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">
@@ -357,24 +357,24 @@ const BrickBreaker: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         {gameOver ? (
           <div className="text-center mb-4">
             <p className="text-xl font-semibold mb-2">Game Over!</p>
-            <p className="text-gray-600 mb-4">Final Score: {score}</p>
+            <p className="text-muted-foreground mb-4">Final Score: {score}</p>
             <Button onClick={restartGame} className="bg-dutch-blue hover:bg-dutch-blue/90 text-white">
               Play Again
             </Button>
           </div>
         ) : !gameStarted ? (
           <div className="text-center mb-4">
-            <p className="text-gray-600 mb-4">Use arrow keys or touch controls to move the paddle</p>
+            <p className="text-muted-foreground mb-4">Use arrow keys or touch controls to move the paddle</p>
             <Button onClick={startGame} className="bg-dutch-blue hover:bg-dutch-blue/90 text-white">
               Start Game
             </Button>
           </div>
         ) : null}
         
-        <div className="relative bg-gray-100/80 rounded-xl overflow-hidden">
+        <div className="relative bg-muted/80 rounded-xl overflow-hidden">
           <canvas 
             ref={canvasRef} 
-            className="mx-auto border border-gray-200/60 rounded-xl shadow-inner"
+            className="mx-auto border border-border/60 rounded-xl shadow-inner"
           />
           
           {/* Mobile controls */}
@@ -403,7 +403,7 @@ const BrickBreaker: React.FC<{ onClose: () => void }> = ({ onClose }) => {
           </div>
         </div>
         
-        <div className="mt-4 text-center text-sm text-gray-500">
+        <div className="mt-4 text-center text-sm text-muted-foreground">
           <p>Controls: Arrow keys or touch buttons to move the paddle</p>
         </div>
       </motion.div>

@@ -22,13 +22,13 @@ const OtherPlayersRanking: React.FC<OtherPlayersRankingProps> = ({ players }) =>
 
   return (
     <div className="mt-6">
-      <h3 className="text-lg font-medium text-gray-700 mb-4">Autres joueurs</h3>
+      <h3 className="text-lg font-medium text-foreground mb-4">Autres joueurs</h3>
 
       <div className="space-y-2">
         {otherPlayers.map((player, index) => (
           <motion.div
             key={player.id}
-            className="flex items-center gap-3 p-3 rounded-lg bg-gray-50 border border-gray-200"
+            className="flex items-center gap-3 p-3 rounded-lg bg-muted/50 border border-border"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: index * 0.1 }}
@@ -40,7 +40,7 @@ const OtherPlayersRanking: React.FC<OtherPlayersRankingProps> = ({ players }) =>
             </div>
 
             <div className="text-right">
-              <span className="bg-gray-100 px-2 py-1 rounded-md text-sm font-semibold">
+              <span className="bg-muted px-2 py-1 rounded-md text-sm font-semibold">
                 {player.totalScore} pts
               </span>
             </div>

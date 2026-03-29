@@ -155,7 +155,7 @@ export const EnrichedStatsV2: React.FC<EnrichedStatsV2Props> = ({
 
   if (!gameHistory.length) {
     return (
-      <Card className={`${className} glass-morphism border-white/20`}>
+      <Card className={`${className} glass-surface border-white/20`}>
         <CardContent className="flex items-center justify-center h-48">
           <div className="text-center space-y-4">
             <Activity className="h-12 w-12 mx-auto text-muted-foreground" />
@@ -179,7 +179,7 @@ export const EnrichedStatsV2: React.FC<EnrichedStatsV2Props> = ({
   return (
     <div className={`space-y-6 ${className}`}>
       {/* Header avec stats globales */}
-      <Card className="glass-morphism border-gradient-primary">
+      <Card className="glass-surface border-gradient-primary">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-xl">
             <Trophy className="h-6 w-6 text-primary" />
@@ -212,7 +212,7 @@ export const EnrichedStatsV2: React.FC<EnrichedStatsV2Props> = ({
       </Card>
 
       {/* Podium des Champions */}
-      <Card className="glass-morphism border-white/20">
+      <Card className="glass-surface border-white/20">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Crown className="h-5 w-5 text-yellow-500" />
@@ -229,7 +229,7 @@ export const EnrichedStatsV2: React.FC<EnrichedStatsV2Props> = ({
                 transition={{ delay: index * 0.1 }}
                 className={`text-center p-4 rounded-lg ${
                   index === 0 ? 'bg-gradient-to-b from-yellow-100 to-yellow-50 border-yellow-300' :
-                  index === 1 ? 'bg-gradient-to-b from-gray-100 to-gray-50 border-gray-300' :
+                  index === 1 ? 'bg-gradient-to-b from-muted to-muted/50 border-border' :
                   'bg-gradient-to-b from-orange-100 to-orange-50 border-orange-300'
                 } border-2`}
               >
@@ -260,7 +260,7 @@ export const EnrichedStatsV2: React.FC<EnrichedStatsV2Props> = ({
 
       {/* Graphiques comparatifs */}
       <div className="grid md:grid-cols-2 gap-6">
-        <Card className="glass-morphism border-white/20">
+        <Card className="glass-surface border-white/20">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <BarChart className="h-5 w-5" />
@@ -280,7 +280,7 @@ export const EnrichedStatsV2: React.FC<EnrichedStatsV2Props> = ({
           </CardContent>
         </Card>
 
-        <Card className="glass-morphism border-white/20">
+        <Card className="glass-surface border-white/20">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <TrendingUp className="h-5 w-5" />
@@ -302,7 +302,7 @@ export const EnrichedStatsV2: React.FC<EnrichedStatsV2Props> = ({
       </div>
 
       {/* Radar de Performance */}
-      <Card className="glass-morphism border-white/20">
+      <Card className="glass-surface border-white/20">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Target className="h-5 w-5" />
@@ -332,7 +332,7 @@ export const EnrichedStatsV2: React.FC<EnrichedStatsV2Props> = ({
       </Card>
 
       {/* Tableau détaillé */}
-      <Card className="glass-morphism border-white/20">
+      <Card className="glass-surface border-white/20">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Users className="h-5 w-5" />

@@ -29,7 +29,7 @@ export const PWAPromotionCard: React.FC = () => {
   ];
 
   return (
-    <Card className="glass-morphism border-gradient-primary">
+    <Card className="glass-surface border-gradient-primary">
       <CardHeader className="text-center">
         <CardTitle className="flex items-center justify-center gap-2 text-xl">
           <Smartphone className="h-6 w-6 text-primary" />

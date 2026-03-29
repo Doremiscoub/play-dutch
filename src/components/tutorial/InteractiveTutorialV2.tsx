@@ -53,7 +53,7 @@ const TUTORIAL_STEPS: TutorialStep[] = [
         <p className="text-lg">
           Dutch est votre compagnon digital pour les parties de cartes entre amis.
         </p>
-        <p className="text-gray-600">
+        <p className="text-muted-foreground">
           Suivez ce guide interactif pour maîtriser toutes les fonctionnalités.
         </p>
       </div>
@@ -71,7 +71,7 @@ const TUTORIAL_STEPS: TutorialStep[] = [
             <Users className="w-4 h-4" />
             Étape 1: Ajouter les joueurs
           </h4>
-          <p className="text-sm text-gray-600 mb-3">
+          <p className="text-sm text-muted-foreground mb-3">
             Saisissez les noms des joueurs (2 à 10 maximum)
           </p>
           <div className="space-y-2">
@@ -95,7 +95,7 @@ const TUTORIAL_STEPS: TutorialStep[] = [
             <Target className="w-4 h-4" />
             Étape 2: Définir la limite
           </h4>
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-muted-foreground">
             Choisissez le score limite (généralement 100 points)
           </p>
         </div>
@@ -114,7 +114,7 @@ const TUTORIAL_STEPS: TutorialStep[] = [
           <div className="grid grid-cols-3 gap-2 mb-4">
             {['Alice', 'Bob', 'Charlie'].map((name, i) => (
               <div key={name} className="text-center">
-                <div className="bg-gray-100 rounded p-2 mb-1">
+                <div className="bg-muted rounded p-2 mb-1">
                   <span className="text-2xl">🎲</span>
                 </div>
                 <p className="text-sm font-medium">{name}</p>
@@ -147,7 +147,7 @@ const TUTORIAL_STEPS: TutorialStep[] = [
           </div>
           <div>
             <h4 className="font-medium">Professeur Cartouche</h4>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-muted-foreground">
               Votre coach personnel pour Dutch
             </p>
           </div>
@@ -192,7 +192,7 @@ const TUTORIAL_STEPS: TutorialStep[] = [
           <div className="border rounded-lg p-3 text-center">
             <Award className="w-6 h-6 mx-auto mb-2 text-yellow-600" />
             <h5 className="font-medium text-sm">Statistiques</h5>
-            <p className="text-xs text-gray-600">
+            <p className="text-xs text-muted-foreground">
               Moyenne, victoires, performances
             </p>
           </div>
@@ -200,7 +200,7 @@ const TUTORIAL_STEPS: TutorialStep[] = [
           <div className="border rounded-lg p-3 text-center">
             <RotateCcw className="w-6 h-6 mx-auto mb-2 text-blue-600" />
             <h5 className="font-medium text-sm">Historique</h5>
-            <p className="text-xs text-gray-600">
+            <p className="text-xs text-muted-foreground">
               Toutes vos parties sauvegardées
             </p>
           </div>
@@ -211,7 +211,7 @@ const TUTORIAL_STEPS: TutorialStep[] = [
             <Sparkles className="w-4 h-4 text-purple-600" />
             Mode multijoueur (bientôt)
           </h4>
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-muted-foreground">
             Partagez vos parties en temps réel avec vos amis, 
             même à distance !
           </p>
@@ -237,7 +237,7 @@ const TUTORIAL_STEPS: TutorialStep[] = [
         
         <div>
           <h3 className="text-xl font-bold mb-2">Félicitations ! 🎉</h3>
-          <p className="text-gray-600 mb-4">
+          <p className="text-muted-foreground mb-4">
             Vous êtes prêt à créer votre première partie de Dutch.
           </p>
         </div>
@@ -381,7 +381,7 @@ export const InteractiveTutorialV2: React.FC<InteractiveTutorialV2Props> = ({
                     <h3 className="text-xl font-bold mb-2">
                       {currentStepData.title}
                     </h3>
-                    <p className="text-gray-600 mb-4">
+                    <p className="text-muted-foreground mb-4">
                       {currentStepData.description}
                     </p>
                   </div>
@@ -402,7 +402,7 @@ export const InteractiveTutorialV2: React.FC<InteractiveTutorialV2Props> = ({
             </AnimatePresence>
           </CardContent>
 
-          <div className="border-t bg-gray-50 px-6 py-4">
+          <div className="border-t bg-muted/50 px-6 py-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 {currentStep > 1 ? (

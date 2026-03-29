@@ -93,7 +93,7 @@ const GameResultOverlay: React.FC<GameResultOverlayProps> = ({
 
           {winner && (
             <motion.p
-              className="text-lg text-gray-600"
+              className="text-lg text-muted-foreground"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 }}
@@ -105,8 +105,8 @@ const GameResultOverlay: React.FC<GameResultOverlayProps> = ({
 
         {/* Classement des joueurs */}
         <div className="mb-6">
-          <h3 className="text-sm font-medium text-gray-500 mb-2">Classement final</h3>
-          <div className="bg-gray-50 border border-gray-200 rounded-xl p-3 space-y-2">
+          <h3 className="text-sm font-medium text-muted-foreground mb-2">Classement final</h3>
+          <div className="bg-muted/50 border border-border rounded-xl p-3 space-y-2">
             {sortedPlayers.map((player, index) => (
               <div
                 key={player.id}
@@ -116,7 +116,7 @@ const GameResultOverlay: React.FC<GameResultOverlayProps> = ({
                   <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium text-white mr-2 ${
                     index === 0 ? 'bg-dutch-purple' :
                     index === 1 ? 'bg-dutch-blue' :
-                    index === 2 ? 'bg-dutch-orange' : 'bg-gray-400'
+                    index === 2 ? 'bg-dutch-orange' : 'bg-muted-foreground/30'
                   }`}>
                     {index + 1}
                   </div>
@@ -130,12 +130,12 @@ const GameResultOverlay: React.FC<GameResultOverlayProps> = ({
 
         {/* Options pour continuer la partie */}
         <div className="mb-6">
-          <h3 className="text-sm font-medium text-gray-500 mb-2">Continuer la partie ?</h3>
+          <h3 className="text-sm font-medium text-muted-foreground mb-2">Continuer la partie ?</h3>
           <div className="flex items-center space-x-2">
             <Button
               variant="outline"
               size="sm"
-              className="flex-1 bg-white border border-gray-200"
+              className="flex-1 bg-white border border-border"
               onClick={() => onContinue(continueLimit)}
             >
               <Play className="h-4 w-4 mr-1" /> +{continueLimit} pts
@@ -146,7 +146,7 @@ const GameResultOverlay: React.FC<GameResultOverlayProps> = ({
                   key={value}
                   variant={continueLimit === value ? "default" : "outline"}
                   size="sm"
-                  className={continueLimit === value ? "bg-dutch-blue text-white" : "bg-white border border-gray-200"}
+                  className={continueLimit === value ? "bg-dutch-blue text-white" : "bg-white border border-border"}
                   onClick={() => setContinueLimit(value)}
                 >
                   {value}
@@ -160,14 +160,14 @@ const GameResultOverlay: React.FC<GameResultOverlayProps> = ({
         <div className="flex gap-3">
           <Button
             variant="outline"
-            className="flex-1 bg-white border border-gray-200"
+            className="flex-1 bg-white border border-border"
             onClick={() => navigate('/')}
           >
             <Home className="h-4 w-4 mr-1" /> Accueil
           </Button>
           <Button
             variant="outline"
-            className="flex-1 bg-white border border-gray-200"
+            className="flex-1 bg-white border border-border"
             onClick={onRestart}
           >
             <RotateCcw className="h-4 w-4 mr-1" /> Nouvelle partie

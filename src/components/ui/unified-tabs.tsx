@@ -39,7 +39,7 @@ export function UnifiedTabs({
                 "flex items-center gap-3 px-6 py-3 rounded-xl font-bold transition-all duration-300 min-w-[140px] justify-center relative overflow-hidden",
                 value === option.value 
                   ? "bg-gradient-to-r from-trinity-blue-500 via-trinity-purple-500 to-trinity-blue-600 text-white shadow-xl scale-105 transform border border-border" 
-                  : "bg-gray-50 text-trinity-blue-700 hover:bg-gray-100 hover:text-trinity-purple-700 hover:shadow-sm border border-border",
+                  : "bg-muted/50 text-trinity-blue-700 hover:bg-muted hover:text-trinity-purple-700 hover:shadow-sm border border-border",
                 "disabled:opacity-50 disabled:cursor-not-allowed"
               )}
               onClick={() => !option.disabled && onValueChange(option.value)}

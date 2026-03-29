@@ -128,10 +128,10 @@ export const AnimatedStats: React.FC = () => {
       className="py-16"
     >
       <div className="text-center mb-12">
-        <h2 className="text-4xl font-bold text-gray-800 mb-4" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+        <h2 className="text-4xl font-bold text-foreground mb-4" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
           Rejoignez notre communauté
         </h2>
-        <p className="text-xl text-gray-600">
+        <p className="text-xl text-muted-foreground">
           Des milliers de joueurs nous font déjà confiance
         </p>
       </div>
@@ -166,7 +166,7 @@ export const AnimatedStats: React.FC = () => {
                   />
                 </div>
                 
-                <p className="text-gray-600 font-medium">
+                <p className="text-muted-foreground font-medium">
                   {stat.label}
                 </p>
               </CardContent>

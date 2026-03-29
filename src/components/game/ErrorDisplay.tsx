@@ -23,11 +23,11 @@ const ErrorDisplay: React.FC<ErrorDisplayProps> = ({ error, onRetry }) => {
           <ProfessorAvatar size="md" animate={true} />
           <div className="ml-3">
             <h2 className="text-xl font-semibold text-red-600">Échec du chargement</h2>
-            <p className="text-sm text-gray-500">Le Professeur Cartouche a rencontré un problème</p>
+            <p className="text-sm text-muted-foreground">Le Professeur Cartouche a rencontré un problème</p>
           </div>
         </div>
         
-        <p className="text-gray-700 mb-5 p-3 bg-red-50 rounded-lg border border-red-100">{error}</p>
+        <p className="text-foreground mb-5 p-3 bg-red-50 rounded-lg border border-red-100">{error}</p>
         
         <div className="flex gap-3 justify-center">
           <Button 

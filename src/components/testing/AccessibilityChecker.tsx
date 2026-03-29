@@ -146,7 +146,7 @@ export const AccessibilityChecker: React.FC = () => {
   const categories = ['all', 'color', 'keyboard', 'screen-reader', 'focus', 'semantic'];
 
   return (
-    <Card className="glass-morphism border-white/20">
+    <Card className="glass-surface border-white/20">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Eye className="h-5 w-5" />

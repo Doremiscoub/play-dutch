@@ -84,7 +84,7 @@ export const BundleAnalyzer: React.FC = () => {
   const performanceStatus = stats ? getPerformanceStatus(stats.totalSize) : null;
 
   return (
-    <Card className="glass-morphism border-white/20">
+    <Card className="glass-surface border-white/20">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Package className="h-5 w-5" />

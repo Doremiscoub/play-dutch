@@ -41,9 +41,9 @@ const PlayerScoreInput: React.FC<PlayerScoreInputProps> = ({
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.2, delay: index * 0.05 }}
-      className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 p-3 rounded-lg bg-gray-50/50"
+      className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 p-3 rounded-lg bg-muted/50"
     >
-      <div className="font-medium text-gray-700 w-full sm:w-1/3">{player.name}</div>
+      <div className="font-medium text-foreground w-full sm:w-1/3">{player.name}</div>
       
       <div className="flex flex-1 items-center space-x-3">
         <div className="flex items-center space-x-2">

@@ -256,8 +256,8 @@ export const EnhancedPlayerStatsV2: React.FC<EnhancedStatsProps> = ({
         </CardHeader>
         <CardContent>
           <div className="text-center py-8">
-            <Activity className="w-12 h-12 mx-auto mb-4 text-gray-400" />
-            <p className="text-gray-600">
+            <Activity className="w-12 h-12 mx-auto mb-4 text-muted-foreground/70" />
+            <p className="text-muted-foreground">
               Jouez quelques parties pour voir vos statistiques détaillées
             </p>
           </div>
@@ -285,25 +285,25 @@ export const EnhancedPlayerStatsV2: React.FC<EnhancedStatsProps> = ({
               <div className="text-2xl font-bold text-blue-600">
                 {gameHistory.length}
               </div>
-              <div className="text-sm text-gray-600">Parties jouées</div>
+              <div className="text-sm text-muted-foreground">Parties jouées</div>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-green-600">
                 {analytics.length}
               </div>
-              <div className="text-sm text-gray-600">Joueurs uniques</div>
+              <div className="text-sm text-muted-foreground">Joueurs uniques</div>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-purple-600">
                 {Math.round(gameHistory.reduce((sum, game) => sum + game.totalRounds, 0) / gameHistory.length)}
               </div>
-              <div className="text-sm text-gray-600">Manches/partie</div>
+              <div className="text-sm text-muted-foreground">Manches/partie</div>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-orange-600">
                 {analytics.reduce((sum, p) => sum + p.achievements.length, 0)}
               </div>
-              <div className="text-sm text-gray-600">Achievements</div>
+              <div className="text-sm text-muted-foreground">Achievements</div>
             </div>
           </div>
         </CardContent>
@@ -327,14 +327,14 @@ export const EnhancedPlayerStatsV2: React.FC<EnhancedStatsProps> = ({
                 transition={{ delay: index * 0.1 }}
                 className={`relative p-6 rounded-xl border-2 ${
                   index === 0 ? 'border-yellow-300 bg-yellow-50' :
-                  index === 1 ? 'border-gray-300 bg-gray-50' :
+                  index === 1 ? 'border-border bg-muted/50' :
                   'border-orange-300 bg-orange-50'
                 }`}
               >
                 <div className="text-center">
                   <div className={`text-4xl mb-2 ${
                     index === 0 ? 'text-yellow-600' :
-                    index === 1 ? 'text-gray-600' :
+                    index === 1 ? 'text-muted-foreground' :
                     'text-orange-600'
                   }`}>
                     {index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉'}
@@ -344,15 +344,15 @@ export const EnhancedPlayerStatsV2: React.FC<EnhancedStatsProps> = ({
                   
                   <div className="space-y-2">
                     <div className="flex justify-between">
-                      <span className="text-sm text-gray-600">Taux de victoire:</span>
+                      <span className="text-sm text-muted-foreground">Taux de victoire:</span>
                       <span className="font-medium">{player.winRate.toFixed(1)}%</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-sm text-gray-600">Score moyen:</span>
+                      <span className="text-sm text-muted-foreground">Score moyen:</span>
                       <span className="font-medium">{player.averageScore.toFixed(1)}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-sm text-gray-600">Meilleur score:</span>
+                      <span className="text-sm text-muted-foreground">Meilleur score:</span>
                       <span className="font-medium">{player.bestScore}</span>
                     </div>
                   </div>
@@ -376,7 +376,7 @@ export const EnhancedPlayerStatsV2: React.FC<EnhancedStatsProps> = ({
                         ))}
                       </div>
                       {player.achievements.length > 3 && (
-                        <div className="text-xs text-gray-500 mt-1">
+                        <div className="text-xs text-muted-foreground mt-1">
                           +{player.achievements.length - 3} autres
                         </div>
                       )}
@@ -482,7 +482,7 @@ export const EnhancedPlayerStatsV2: React.FC<EnhancedStatsProps> = ({
               </thead>
               <tbody>
                 {analytics.map((player, _index) => (
-                  <tr key={player.playerId} className="border-b hover:bg-gray-50">
+                  <tr key={player.playerId} className="border-b hover:bg-muted/50">
                     <td className="p-2">
                       <div className="font-medium">{player.playerName}</div>
                     </td>

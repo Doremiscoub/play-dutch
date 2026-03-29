@@ -28,21 +28,21 @@ export const LoadingSkeleton: React.FC<LoadingSkeletonProps> = ({
     <div className={cn('animate-pulse', getVariantClasses(), className)}>
       {variant === 'hero' && (
         <>
-          <div className="h-16 bg-gray-200 rounded-3xl w-3/4 mx-auto"></div>
-          <div className="h-8 bg-gray-200 rounded-2xl w-1/2 mx-auto"></div>
+          <div className="h-16 bg-muted rounded-3xl w-3/4 mx-auto"></div>
+          <div className="h-8 bg-muted rounded-2xl w-1/2 mx-auto"></div>
           <div className="flex gap-4 justify-center">
-            <div className="h-12 bg-gray-200 rounded-full w-32"></div>
-            <div className="h-12 bg-gray-200 rounded-full w-24"></div>
+            <div className="h-12 bg-muted rounded-full w-32"></div>
+            <div className="h-12 bg-muted rounded-full w-24"></div>
           </div>
         </>
       )}
       
       {variant === 'card' && (
         <>
-          <div className="h-12 w-12 bg-gray-200 rounded-full mx-auto"></div>
-          <div className="h-6 bg-gray-200 rounded w-3/4 mx-auto"></div>
-          <div className="h-4 bg-gray-200 rounded"></div>
-          <div className="h-4 bg-gray-200 rounded w-5/6"></div>
+          <div className="h-12 w-12 bg-muted rounded-full mx-auto"></div>
+          <div className="h-6 bg-muted rounded w-3/4 mx-auto"></div>
+          <div className="h-4 bg-muted rounded"></div>
+          <div className="h-4 bg-muted rounded w-5/6"></div>
         </>
       )}
       
@@ -51,7 +51,7 @@ export const LoadingSkeleton: React.FC<LoadingSkeletonProps> = ({
           <div
             key={i}
             className={cn(
-              'h-4 bg-gray-200 rounded',
+              'h-4 bg-muted rounded',
               i === lines - 1 ? 'w-3/4' : 'w-full'
             )}
           />

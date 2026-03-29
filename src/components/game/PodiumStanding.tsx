@@ -23,7 +23,7 @@ const PodiumStanding: React.FC<PodiumStandingProps> = ({ player, position }) => 
       fontSize: "text-4xl",
       iconClass: "text-yellow-500",
       nameClass: "text-base",
-      scoreClass: "text-sm text-gray-800 bg-white/70 px-3 py-1 rounded-full font-bold",
+      scoreClass: "text-sm text-foreground bg-white/70 px-3 py-1 rounded-full font-bold",
     },
     2: {
       containerClass: "relative mx-2",
@@ -32,11 +32,11 @@ const PodiumStanding: React.FC<PodiumStandingProps> = ({ player, position }) => 
       podiumSize: "w-24 h-40",
       avatarBg: "bg-gradient-to-br from-gray-200 to-gray-300",
       podiumBg: "bg-gradient-to-b from-gray-100 to-gray-200",
-      icon: <Medal className="h-6 w-6 text-gray-400 mb-1" />,
+      icon: <Medal className="h-6 w-6 text-muted-foreground/70 mb-1" />,
       fontSize: "text-3xl",
-      iconClass: "text-gray-400",
+      iconClass: "text-muted-foreground/70",
       nameClass: "text-sm",
-      scoreClass: "text-xs text-gray-600 bg-white/70 px-2 py-1 rounded-full",
+      scoreClass: "text-xs text-muted-foreground bg-white/70 px-2 py-1 rounded-full",
     },
     3: {
       containerClass: "relative mx-2",
@@ -49,7 +49,7 @@ const PodiumStanding: React.FC<PodiumStandingProps> = ({ player, position }) => 
       fontSize: "text-2xl",
       iconClass: "text-orange-700",
       nameClass: "text-xs",
-      scoreClass: "text-xs text-gray-600 bg-white/70 px-2 py-0.5 rounded-full",
+      scoreClass: "text-xs text-muted-foreground bg-white/70 px-2 py-0.5 rounded-full",
     }
   }[position];
 

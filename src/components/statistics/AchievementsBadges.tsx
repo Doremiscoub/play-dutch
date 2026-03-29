@@ -223,7 +223,7 @@ export const AchievementsBadges: React.FC<AchievementsBadgesProps> = ({
   const getRarityColor = (rarity: string) => {
     switch (rarity) {
       case 'common':
-        return 'bg-gray-500';
+        return 'bg-muted-foreground/50';
       case 'rare':
         return 'bg-blue-500';
       case 'epic':
@@ -231,7 +231,7 @@ export const AchievementsBadges: React.FC<AchievementsBadgesProps> = ({
       case 'legendary':
         return 'bg-orange-500';
       default:
-        return 'bg-gray-500';
+        return 'bg-muted-foreground/50';
     }
   };
   const getRarityLabel = (rarity: string) => {
@@ -260,11 +260,11 @@ export const AchievementsBadges: React.FC<AchievementsBadgesProps> = ({
       }} transition={{
         delay: 0.1
       }}>
-          <Card className="bg-gradient-to-br from-gray-50 to-gray-100 border-gray-200">
+          <Card className="bg-gradient-to-br from-muted/50 to-muted border-border">
             <CardContent className="p-4 text-center">
-              <Medal className="h-6 w-6 text-gray-600 mx-auto mb-2" />
-              <div className="text-sm text-gray-700 font-medium">Exploits Communs</div>
-              <div className="text-2xl font-bold text-gray-800">{rarityCount.common}</div>
+              <Medal className="h-6 w-6 text-muted-foreground mx-auto mb-2" />
+              <div className="text-sm text-foreground font-medium">Exploits Communs</div>
+              <div className="text-2xl font-bold text-foreground">{rarityCount.common}</div>
             </CardContent>
           </Card>
         </motion.div>
@@ -448,7 +448,7 @@ export const AchievementsBadges: React.FC<AchievementsBadgesProps> = ({
                 delay: 0.7 + index * 0.02
               }} className={`p-4 rounded-xl border-2 transition-all duration-300 ${isUnlocked ? 'bg-gradient-to-br from-primary/5 to-secondary/5 border-primary/20' : 'bg-muted/20 border-muted/30 grayscale opacity-60'}`}>
                     <div className="flex items-center gap-3 mb-2">
-                      <div className={`p-2 ${isUnlocked ? achievement.color : 'bg-gray-400'} rounded-lg text-white shadow-md`}>
+                      <div className={`p-2 ${isUnlocked ? achievement.color : 'bg-muted-foreground/30'} rounded-lg text-white shadow-md`}>
                         {achievement.icon}
                       </div>
                       <div className="flex-1 min-w-0">
@@ -456,7 +456,7 @@ export const AchievementsBadges: React.FC<AchievementsBadgesProps> = ({
                           <span className={`font-semibold ${isUnlocked ? 'text-foreground' : 'text-muted-foreground'}`}>
                             {achievement.name}
                           </span>
-                          <Badge variant="outline" className={`text-xs ${isUnlocked ? getRarityColor(achievement.rarity) : 'bg-gray-400'} text-white border-none`}>
+                          <Badge variant="outline" className={`text-xs ${isUnlocked ? getRarityColor(achievement.rarity) : 'bg-muted-foreground/30'} text-white border-none`}>
                             {getRarityLabel(achievement.rarity)}
                           </Badge>
                         </div>

@@ -59,8 +59,8 @@ const ElevenLabsSetup: React.FC<ElevenLabsSetupProps> = ({ className = '' }) => 
   return (
     <div className={`space-y-6 ${className}`}>
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-2">Configuration Eleven Labs</h3>
-        <p className="text-sm text-gray-600">
+        <h3 className="text-lg font-semibold text-foreground mb-2">Configuration Eleven Labs</h3>
+        <p className="text-sm text-muted-foreground">
           Intégrez des voix premium pour une expérience audio immersive
         </p>
       </div>
@@ -99,7 +99,7 @@ const ElevenLabsSetup: React.FC<ElevenLabsSetupProps> = ({ className = '' }) => 
               {error}
             </p>
           )}
-          <p className="text-xs text-gray-500 mt-1">
+          <p className="text-xs text-muted-foreground mt-1">
             Vous pouvez obtenir une clé API sur <a href="https://elevenlabs.io/app" target="_blank" rel="noopener noreferrer" className="text-dutch-blue hover:underline">elevenlabs.io</a>
           </p>
         </div>
@@ -137,7 +137,7 @@ const ElevenLabsSetup: React.FC<ElevenLabsSetupProps> = ({ className = '' }) => 
                   ))}
                 </SelectContent>
               </Select>
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-muted-foreground">
                 Choisissez la voix qui sera utilisée pour le Professeur Cartouche
               </p>
             </div>

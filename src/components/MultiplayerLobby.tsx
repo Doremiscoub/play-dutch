@@ -212,7 +212,7 @@ const MultiplayerLobby: React.FC<MultiplayerLobbyProps> = ({
       )}
       
       <PullToRefresh onRefresh={handlePullToRefresh}>
-        <Card className="border border-white/50 bg-gradient-to-br from-white/90 to-white/70 backdrop-blur-md rounded-3xl shadow-md">
+        <Card className="border border-white/50 glass-surface rounded-3xl shadow-md">
           <CardHeader className="pb-2">
             <div className="flex justify-between items-center">
               <Tabs defaultValue={activeTab} onValueChange={(value) => setActiveTab(value as 'dashboard' | 'online')} className="w-full">
@@ -229,7 +229,7 @@ const MultiplayerLobby: React.FC<MultiplayerLobbyProps> = ({
                 Code: {gameId}
               </Badge>
             </div>
-            <CardDescription className="text-gray-600">
+            <CardDescription className="text-muted-foreground">
               Partagez le code ou le lien avec vos amis pour qu'ils puissent vous rejoindre
             </CardDescription>
           </CardHeader>
@@ -286,8 +286,8 @@ const MultiplayerLobby: React.FC<MultiplayerLobbyProps> = ({
               </Button>
             </div>
             
-            <div className="bg-white/60 backdrop-blur-sm rounded-2xl border border-white/30 p-4">
-              <h3 className="text-sm font-medium text-gray-700 mb-3 flex items-center justify-between">
+            <div className="glass-surface rounded-2xl p-4">
+              <h3 className="text-sm font-medium text-foreground mb-3 flex items-center justify-between">
                 <span>Joueurs ({players.length})</span>
                 {isHost && (
                   <TooltipProvider>
@@ -323,7 +323,7 @@ const MultiplayerLobby: React.FC<MultiplayerLobbyProps> = ({
                           </AvatarFallback>
                         </Avatar>
                         <div>
-                          <p className="font-medium text-gray-800 flex items-center">
+                          <p className="font-medium text-foreground flex items-center">
                             {player.name}
                             {player.id === getGameSession(gameId)?.hostId && (
                               <Badge className="ml-2 bg-dutch-blue/10 text-dutch-blue border-none text-xs py-0">
@@ -339,7 +339,7 @@ const MultiplayerLobby: React.FC<MultiplayerLobbyProps> = ({
                             En ligne
                           </Badge>
                         ) : (
-                          <Badge className="bg-gray-100 text-gray-500 border-none">
+                          <Badge className="bg-muted text-muted-foreground border-none">
                             Hors ligne
                           </Badge>
                         )}
@@ -349,7 +349,7 @@ const MultiplayerLobby: React.FC<MultiplayerLobbyProps> = ({
                 </AnimatePresence>
                 
                 {players.length === 0 && (
-                  <div className="text-center py-4 text-gray-500">
+                  <div className="text-center py-4 text-muted-foreground">
                     Aucun joueur connecté pour le moment
                   </div>
                 )}
@@ -362,7 +362,7 @@ const MultiplayerLobby: React.FC<MultiplayerLobbyProps> = ({
           <CardFooter className="flex justify-between gap-2 pt-0">
             <Button 
               variant="outline"
-              className="bg-white/50 text-gray-600 border-gray-300/50 hover:bg-white/80"
+              className="bg-white/50 text-muted-foreground border-border/50 hover:bg-white/80"
               onClick={onLeaveGame}
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
@@ -390,7 +390,7 @@ const MultiplayerLobby: React.FC<MultiplayerLobbyProps> = ({
         </Card>
       </PullToRefresh>
       
-      <div className="text-center text-sm text-gray-500">
+      <div className="text-center text-sm text-muted-foreground">
         {connectionLost ? (
           <div className="text-red-500">Connexion perdue, tentative de reconnexion...</div>
         ) : players.length < 2 ? (
@@ -398,7 +398,7 @@ const MultiplayerLobby: React.FC<MultiplayerLobbyProps> = ({
         ) : (
           <div>Prêt à jouer ! Cliquez sur "Démarrer" quand tout le monde est là.</div>
         )}
-        <div className="text-xs mt-1 text-gray-400">
+        <div className="text-xs mt-1 text-muted-foreground/70">
           Vous pouvez tirer vers le bas pour actualiser la liste des joueurs
         </div>
       </div>

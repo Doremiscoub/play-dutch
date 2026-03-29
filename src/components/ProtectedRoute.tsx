@@ -25,7 +25,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
           transition={{ duration: 0.5, ease: [0.34, 1.56, 0.64, 1] }}
         >
           <div className="h-10 w-10 rounded-full border-3 border-dutch-blue/20 border-t-dutch-blue border-r-dutch-blue/60 animate-spin mb-4" />
-          <span className="text-lg font-medium text-gray-600">Chargement...</span>
+          <span className="text-lg font-medium text-muted-foreground">Chargement...</span>
         </motion.div>
       </div>
     );

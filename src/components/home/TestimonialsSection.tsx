@@ -12,7 +12,7 @@ export const TestimonialsSection: React.FC = () => {
       transition={{ duration: 0.6 }}
       viewport={{ once: true }}
     >
-      <h2 className="text-4xl font-bold text-center mb-12 text-gray-800" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+      <h2 className="text-4xl font-bold text-center mb-12 text-foreground" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
         🗣️ Ce que disent nos utilisateurs
       </h2>
       

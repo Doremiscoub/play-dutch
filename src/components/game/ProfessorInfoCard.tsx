@@ -89,7 +89,7 @@ const ProfessorInfoCard: React.FC<ProfessorInfoCardProps> = ({ isOpen, onClose }
               </motion.h2>
               
               <motion.p
-                className="text-lg text-gray-600 font-medium"
+                className="text-lg text-muted-foreground font-medium"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
@@ -100,7 +100,7 @@ const ProfessorInfoCard: React.FC<ProfessorInfoCardProps> = ({ isOpen, onClose }
 
             {/* Tabs */}
             <div className="px-8 mb-6">
-              <div className="flex bg-gray-100 rounded-2xl p-1.5 border border-border">
+              <div className="flex bg-muted rounded-2xl p-1.5 border border-border">
                 {(Object.keys(professorData) as Array<keyof typeof professorData>).map((tab, index) => (
                   <motion.button
                     key={tab}
@@ -108,7 +108,7 @@ const ProfessorInfoCard: React.FC<ProfessorInfoCardProps> = ({ isOpen, onClose }
                     className={`flex-1 px-4 py-3 rounded-xl font-semibold text-sm transition-all duration-300 ${
                       activeTab === tab
                         ? 'bg-gradient-to-r from-dutch-blue to-dutch-purple text-white shadow-lg'
-                        : 'text-gray-600 hover:text-gray-800 hover:bg-gray-50'
+                        : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
                     }`}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
@@ -136,9 +136,9 @@ const ProfessorInfoCard: React.FC<ProfessorInfoCardProps> = ({ isOpen, onClose }
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
                   transition={{ duration: 0.3 }}
-                  className="bg-gray-50 rounded-2xl p-6 border border-border"
+                  className="bg-muted/50 rounded-2xl p-6 border border-border"
                 >
-                  <p className="text-gray-700 leading-relaxed text-lg">
+                  <p className="text-foreground leading-relaxed text-lg">
                     {professorData[activeTab].content}
                   </p>
                 </motion.div>
@@ -155,7 +155,7 @@ const ProfessorInfoCard: React.FC<ProfessorInfoCardProps> = ({ isOpen, onClose }
                 ].map((stat, index) => (
                   <motion.div
                     key={stat.label}
-                    className="text-center p-4 bg-gray-50 rounded-xl border border-border"
+                    className="text-center p-4 bg-muted/50 rounded-xl border border-border"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.8 + index * 0.1 }}
@@ -164,7 +164,7 @@ const ProfessorInfoCard: React.FC<ProfessorInfoCardProps> = ({ isOpen, onClose }
                     <div className="font-bold text-2xl bg-gradient-to-r from-dutch-blue to-dutch-purple bg-clip-text text-transparent">
                       {stat.value}
                     </div>
-                    <div className="text-sm text-gray-600 font-medium">{stat.label}</div>
+                    <div className="text-sm text-muted-foreground font-medium">{stat.label}</div>
                   </motion.div>
                 ))}
               </div>

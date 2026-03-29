@@ -118,7 +118,7 @@ const DetailedGameStats: React.FC<DetailedGameStatsProps> = ({
               hidden: { opacity: 0, y: 20, scale: 0.9 },
               visible: { opacity: 1, y: 0, scale: 1 }
             }}
-            className="bg-gray-50 border border-border rounded-2xl p-6 hover:bg-gray-100/80 transition-colors duration-200"
+            className="bg-muted/50 border border-border rounded-2xl p-6 hover:bg-muted/80 transition-colors duration-200"
           >
             <div className="flex items-center gap-3 mb-4">
               <div className="p-3 bg-dutch-blue rounded-xl shadow-sm">
@@ -148,7 +148,7 @@ const DetailedGameStats: React.FC<DetailedGameStatsProps> = ({
               hidden: { opacity: 0, y: 20, scale: 0.9 },
               visible: { opacity: 1, y: 0, scale: 1 }
             }}
-            className="bg-gray-50 border border-border rounded-2xl p-6 hover:bg-gray-100/80 transition-colors duration-200"
+            className="bg-muted/50 border border-border rounded-2xl p-6 hover:bg-muted/80 transition-colors duration-200"
           >
             <div className="flex items-center gap-3 mb-4">
               <div className="p-3 bg-dutch-orange rounded-xl shadow-sm">

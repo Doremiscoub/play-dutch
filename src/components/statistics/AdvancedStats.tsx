@@ -238,7 +238,7 @@ export const AdvancedStats: React.FC<AdvancedStatsProps> = ({
                     ) : stat.momentum < -1 ? (
                       <TrendingUp className="h-3 w-3 text-red-500 rotate-180" />
                     ) : (
-                      <Activity className="h-3 w-3 text-gray-500" />
+                      <Activity className="h-3 w-3 text-muted-foreground" />
                     )}
                     <span className={`text-sm font-semibold ${
                       stat.momentum > 0 ? 'text-green-600' : 'text-red-600'

@@ -53,11 +53,11 @@ const MobileFunPlayerCard: React.FC<MobileFunPlayerCardProps> = ({
         badge: "bg-emerald-100"
       },
       default: {
-        bg: "bg-slate-50",
-        border: "border-slate-300",
+        bg: "bg-muted/50",
+        border: "border-border",
         text: "text-slate-800",
-        accent: "bg-slate-500",
-        badge: "bg-slate-100"
+        accent: "bg-muted-foreground",
+        badge: "bg-muted"
       }
     };
     return themes[rank as keyof typeof themes] || themes.default;
@@ -167,7 +167,7 @@ const MobileFunPlayerCard: React.FC<MobileFunPlayerCardProps> = ({
                     <span>Progression</span>
                     <span>{Math.max(0, scoreLimit - player.totalScore)} restant</span>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div className="w-full bg-muted rounded-full h-2">
                     <motion.div
                       className={cn("h-2 rounded-full", theme.accent)}
                       initial={{ width: 0 }}

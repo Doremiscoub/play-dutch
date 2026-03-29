@@ -30,10 +30,10 @@ const gameBadgeVariants = cva(
       type: {
         // Rank types
         first: "bg-gradient-to-r from-yellow-400 to-yellow-500 text-yellow-900 border-yellow-300",
-        second: "bg-gradient-to-r from-gray-300 to-gray-400 text-gray-800 border-gray-200",
+        second: "bg-gradient-to-r from-border to-muted-foreground/30 text-foreground border-border",
         third: "bg-gradient-to-r from-amber-600 to-amber-700 text-amber-100 border-amber-500",
         top5: "bg-gradient-to-r from-blue-500 to-blue-600 text-white border-blue-400",
-        other: "bg-gradient-to-r from-gray-500 to-gray-600 text-white border-gray-400",
+        other: "bg-gradient-to-r from-muted-foreground/50 to-muted-foreground/70 text-white border-muted-foreground/30",
         
         // Achievement types
         winner: "bg-gradient-to-r from-green-500 to-green-600 text-white border-green-400",
@@ -50,14 +50,14 @@ const gameBadgeVariants = cva(
         psychic: "bg-gradient-to-r from-purple-400 to-purple-500 text-white border-purple-300",
         
         // Rarity types
-        common: "bg-gray-100 text-gray-800 border-gray-200",
+        common: "bg-muted text-foreground border-border",
         rare: "bg-blue-100 text-blue-800 border-blue-200",
         epic: "bg-purple-100 text-purple-800 border-purple-200",
         legendary: "bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-500 text-yellow-900 border-yellow-200",
         mythic: "bg-gradient-to-r from-purple-400 via-pink-400 to-red-400 text-white border-purple-300",
         
         // Default neutral style
-        default: "bg-white/80 text-gray-800 border-gray-200",
+        default: "bg-white/80 text-foreground border-border",
       },
       size: {
         xs: "h-5 w-5 text-xs",

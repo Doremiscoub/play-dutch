@@ -92,15 +92,15 @@ const SimplifiedHeroSection: React.FC = () => {
           className="flex flex-wrap justify-center gap-6 pt-4 text-sm text-muted-foreground"
         >
           <span className="flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
             100% gratuit
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+            <span className="w-1.5 h-1.5 rounded-full bg-dutch-blue" />
             Fonctionne hors-ligne
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-purple-500" />
+            <span className="w-1.5 h-1.5 rounded-full bg-dutch-purple" />
             2 à 10 joueurs
           </span>
         </motion.div>

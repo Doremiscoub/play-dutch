@@ -41,7 +41,7 @@ export const AchievementCard: React.FC<AchievementCardProps> = ({ achievement, i
       case 'legendary': return 'border-yellow-300';
       case 'epic': return 'border-purple-300';
       case 'rare': return 'border-blue-300';
-      default: return 'border-gray-300';
+      default: return 'border-border';
     }
   };
 
@@ -78,7 +78,7 @@ export const AchievementCard: React.FC<AchievementCardProps> = ({ achievement, i
           
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1">
-              <h3 className="font-bold text-gray-800 truncate">{achievement.name}</h3>
+              <h3 className="font-bold text-foreground truncate">{achievement.name}</h3>
               <GameBadge
                 type={achievement.rarity as any}
                 size="xs"
@@ -86,13 +86,13 @@ export const AchievementCard: React.FC<AchievementCardProps> = ({ achievement, i
               />
             </div>
             
-            <p className="text-sm text-gray-600 mb-2 line-clamp-2">
+            <p className="text-sm text-muted-foreground mb-2 line-clamp-2">
               {achievement.description}
             </p>
             
             {/* Progress bar */}
             <div className="space-y-1">
-              <div className="flex justify-between text-xs text-gray-500">
+              <div className="flex justify-between text-xs text-muted-foreground">
                 <span>Progression</span>
                 <span>{Math.round(achievement.progress)}%</span>
               </div>
@@ -104,7 +104,7 @@ export const AchievementCard: React.FC<AchievementCardProps> = ({ achievement, i
             
             {/* Reward info */}
             {achievement.reward && (
-              <div className="flex items-center gap-2 mt-2 text-xs text-gray-500">
+              <div className="flex items-center gap-2 mt-2 text-xs text-muted-foreground">
                 <Star className="h-3 w-3" />
                 <span>{achievement.reward.xp} XP</span>
                 {achievement.reward.title && (

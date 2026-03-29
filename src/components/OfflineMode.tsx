@@ -100,7 +100,7 @@ const OfflineMode: React.FC<OfflineModeProps> = ({ onEnableOfflineMode }) => {
   };
 
   return (
-    <Card className="border border-white/50 bg-gradient-to-br from-white/90 to-white/70 backdrop-blur-md rounded-3xl shadow-md">
+    <Card className="border border-white/50 glass-surface rounded-3xl shadow-md">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <WifiOff className="h-5 w-5 text-dutch-blue" />
@@ -128,9 +128,9 @@ const OfflineMode: React.FC<OfflineModeProps> = ({ onEnableOfflineMode }) => {
           />
         </div>
         
-        <div className="bg-white/60 backdrop-blur-sm rounded-2xl border border-white/30 p-4 space-y-4">
+        <div className="glass-surface rounded-2xl border border-white/30 p-4 space-y-4">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-gray-600">Statut réseau:</span>
+            <span className="text-sm font-medium text-muted-foreground">Statut réseau:</span>
             <div className="flex items-center gap-1">
               {isOnline ? (
                 <>
@@ -149,17 +149,17 @@ const OfflineMode: React.FC<OfflineModeProps> = ({ onEnableOfflineMode }) => {
           {isOfflineEnabled && (
             <>
               <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-gray-600">Parties stockées localement:</span>
+                <span className="text-sm font-medium text-muted-foreground">Parties stockées localement:</span>
                 <span className="font-medium">{offlineData.games}</span>
               </div>
               
               <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-gray-600">Joueurs stockés localement:</span>
+                <span className="text-sm font-medium text-muted-foreground">Joueurs stockés localement:</span>
                 <span className="font-medium">{offlineData.players}</span>
               </div>
               
               <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-gray-600">Dernière synchronisation:</span>
+                <span className="text-sm font-medium text-muted-foreground">Dernière synchronisation:</span>
                 <span className="font-medium">
                   {offlineData.lastSync 
                     ? new Date(offlineData.lastSync).toLocaleString() 
