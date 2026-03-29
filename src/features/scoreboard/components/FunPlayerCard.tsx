@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Player } from '@/types';
 import { cn } from '@/lib/utils';
 import { Trophy } from 'lucide-react';
+import { AnimatedScore } from '@/components/ui/AnimatedScore';
 import useIsMobile from '@/hooks/use-mobile';
 import MobileFunPlayerCard from './MobileFunPlayerCard';
 interface FunPlayerCardProps {
@@ -39,7 +40,16 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
   }
 
   // Desktop uniquement à partir d'ici
+  const prevScoreRef = useRef(player.totalScore);
+  const [prevScore, setPrevScore] = useState(player.totalScore);
   const isWinner = rank === 1;
+
+  useEffect(() => {
+    if (player.totalScore !== prevScoreRef.current) {
+      setPrevScore(prevScoreRef.current);
+      prevScoreRef.current = player.totalScore;
+    }
+  }, [player.totalScore]);
   const _isLastPlace = rank === totalPlayers;
   const avgScore = player.rounds.length > 0 ? Math.round(player.totalScore / player.rounds.length * 10) / 10 : 0;
   const bestRound = player.rounds.length > 0 ? Math.min(...player.rounds.map(r => r.score)) : 0;
@@ -218,9 +228,12 @@ const FunPlayerCard: React.FC<FunPlayerCardProps> = ({
         }}>
               {/* Score principal simplifié */}
               <div className="text-right">
-                <div className={cn("text-3xl font-black", theme.text)}>
-                  {player.totalScore}
-                </div>
+                <AnimatedScore
+                  score={player.totalScore}
+                  previousScore={prevScore}
+                  size="md"
+                  className={cn("font-black", theme.text)}
+                />
                 <div className="text-xs text-muted-foreground mt-1">
                   📊 {avgScore} moy
                 </div>

@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGameState } from '@/hooks/game/unified/useGameState';
 import ScoreBoard from '@/features/scoreboard/ScoreBoard';
@@ -9,6 +9,7 @@ import { AICommentator } from '@/features/ai-commentator';
 import GamePageLayout from '@/components/layout/GamePageLayout';
 import { useH5GameAds } from '@/hooks/useH5GameAds';
 import GameErrorFallback from '@/components/errors/GameErrorFallback';
+import RoundCompletionFeedback from '@/components/game/RoundCompletionFeedback';
 import { logger } from '@/utils/logger';
 import * as Sentry from '@sentry/react';
 
@@ -37,6 +38,24 @@ const SimpleGamePage: React.FC = () => {
   const [scores, setScores] = useState<{ [playerId: string]: number }>({});
   const [dutchPlayerId, setDutchPlayerId] = useState<string | undefined>();
   const { showInterstitial, trackRound } = useH5GameAds();
+
+  // Round completion feedback state
+  const [roundFeedback, setRoundFeedback] = useState<{
+    isVisible: boolean;
+    roundNumber: number;
+    playerScores: { name: string; score: number; totalScore: number; isDutch: boolean }[];
+    previousLeader?: string;
+    currentLeader?: string;
+  }>({ isVisible: false, roundNumber: 0, playerScores: [] });
+  const previousLeaderRef = useRef<string | undefined>();
+
+  // Track leader changes
+  useEffect(() => {
+    if (players.length > 0) {
+      const leader = [...players].sort((a, b) => a.totalScore - b.totalScore)[0];
+      previousLeaderRef.current = leader?.name;
+    }
+  }, []);
   
   // Configuration du header - DOIT être appelé avant tout return conditionnel
   const headerConfig = useUnifiedHeader(
@@ -101,10 +120,34 @@ const SimpleGamePage: React.FC = () => {
   }
 
   const handleAddRound = () => {
+    const prevLeader = previousLeaderRef.current;
+
     // Convertir l'objet scores en array dans l'ordre des joueurs
     const scoresArray = players.map(player => scores[player.id] || 0);
+
+    // Build feedback data before addRound mutates state
+    const feedbackScores = players.map((player, i) => ({
+      name: player.name,
+      score: scoresArray[i],
+      totalScore: player.totalScore + scoresArray[i],
+      isDutch: player.id === dutchPlayerId,
+    }));
+
     addRound(scoresArray, dutchPlayerId);
     setIsScoreFormOpen(false);
+
+    // Determine new leader
+    const newLeader = [...feedbackScores].sort((a, b) => a.totalScore - b.totalScore)[0]?.name;
+    previousLeaderRef.current = newLeader;
+
+    // Show round completion feedback
+    setRoundFeedback({
+      isVisible: true,
+      roundNumber: roundHistory.length + 1,
+      playerScores: feedbackScores,
+      previousLeader: prevLeader,
+      currentLeader: newLeader,
+    });
 
     // Show ad every ~4 rounds at natural break
     if (trackRound()) {
@@ -182,6 +225,16 @@ const SimpleGamePage: React.FC = () => {
           />
         </ErrorBoundary>
       </GamePageLayout>
+
+      {/* Round completion celebration */}
+      <RoundCompletionFeedback
+        roundNumber={roundFeedback.roundNumber}
+        playerScores={roundFeedback.playerScores}
+        previousLeader={roundFeedback.previousLeader}
+        currentLeader={roundFeedback.currentLeader}
+        isVisible={roundFeedback.isVisible}
+        onDismiss={() => setRoundFeedback(prev => ({ ...prev, isVisible: false }))}
+      />
 
       {/* Modal pour ajouter une nouvelle manche */}
       <NewRoundModal
