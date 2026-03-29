@@ -12,7 +12,7 @@ const SpecialCardsTab = () => {
       transition={{ duration: 0.6 }}
     >
       {/* Pouvoirs des cartes */}
-      <Card className="bg-white border border-border shadow-md overflow-hidden">
+      <Card className="glass-surface border border-border shadow-md overflow-hidden">
         <CardContent className="p-8">
           <div className="flex items-center gap-4 mb-6">
             <div className="bg-gradient-to-br from-trinity-purple-500 to-trinity-blue-500 rounded-2xl p-4 text-white">
@@ -92,7 +92,7 @@ const SpecialCardsTab = () => {
       </Card>
 
       {/* Stratégies et astuces */}
-      <Card className="bg-white border border-border shadow-md overflow-hidden">
+      <Card className="glass-surface border border-border shadow-md overflow-hidden">
         <CardContent className="p-8">
           <div className="flex items-center gap-4 mb-6">
             <div className="bg-gradient-to-br from-trinity-blue-500 to-trinity-orange-500 rounded-2xl p-4 text-white">
@@ -108,14 +108,14 @@ const SpecialCardsTab = () => {
               <h3 className="text-xl font-black text-foreground mb-4">💡 Conseils stratégiques</h3>
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-3">
-                  <div className="bg-white rounded-xl p-4">
+                  <div className="glass-surface rounded-xl p-4">
                     <h4 className="font-black text-foreground mb-2">🔢 Scores négatifs</h4>
                     <p className="text-foreground font-semibold">
                       Gérer les scores négatifs avec attention - ils sont votre meilleur atout !
                     </p>
                   </div>
                   
-                  <div className="bg-white rounded-xl p-4">
+                  <div className="glass-surface rounded-xl p-4">
                     <h4 className="font-black text-foreground mb-2">👑 Différence Rois</h4>
                     <p className="text-foreground font-semibold">
                       Noir = 0 pt (bon) vs Rouge = 15 pts (catastrophique)
@@ -124,14 +124,14 @@ const SpecialCardsTab = () => {
                 </div>
                 
                 <div className="space-y-3">
-                  <div className="bg-white rounded-xl p-4">
+                  <div className="glass-surface rounded-xl p-4">
                     <h4 className="font-black text-foreground mb-2">🧠 Mémoire</h4>
                     <p className="text-foreground font-semibold">
                       Mémorisez vos cartes et observez les actions adverses
                     </p>
                   </div>
                   
-                  <div className="bg-white rounded-xl p-4">
+                  <div className="glass-surface rounded-xl p-4">
                     <h4 className="font-black text-foreground mb-2">⚡ Timing</h4>
                     <p className="text-foreground font-semibold">
                       Utilisez les pouvoirs au bon moment pour maximiser l'effet

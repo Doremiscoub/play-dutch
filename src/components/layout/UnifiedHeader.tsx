@@ -64,16 +64,16 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
               )}
 
               <div className="flex items-center justify-center gap-2 flex-1 flex-wrap">
-                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-blue-50 text-blue-700">
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-dutch-blue/10 text-dutch-blue">
                   <Zap className="h-3.5 w-3.5" />
                   <span className="text-xs font-semibold">Manche {roundCount || 1}</span>
                 </div>
-                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-purple-50 text-purple-700">
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-dutch-purple/10 text-dutch-purple">
                   <Target className="h-3.5 w-3.5" />
                   <span className="text-xs font-semibold">{scoreLimit} pts</span>
                 </div>
                 {gameStartTime && (
-                  <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-orange-50 text-orange-700">
+                  <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-dutch-orange/10 text-dutch-orange">
                     <Clock className="h-3.5 w-3.5" />
                     <span className="text-xs font-semibold font-mono">{elapsedTime}</span>
                   </div>
@@ -92,7 +92,7 @@ const UnifiedHeader: React.FC<UnifiedHeaderProps> = ({
           </div>
         ) : (
           /* Default header — simple title bar */
-          <div className="bg-white/90 backdrop-blur-sm rounded-xl border border-border/60 shadow-sm px-4 py-3">
+          <div className="glass-elevated rounded-xl px-4 py-3">
             <div className="flex items-center justify-between min-h-[36px]">
               <div className="flex items-center gap-2 shrink-0">
                 {showBackButton && onBack && (

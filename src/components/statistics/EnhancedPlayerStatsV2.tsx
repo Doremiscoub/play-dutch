@@ -269,7 +269,7 @@ export const EnhancedPlayerStatsV2: React.FC<EnhancedStatsProps> = ({
   return (
     <div className={`space-y-6 ${className}`}>
       {/* Header avec statistiques globales */}
-      <Card>
+      <Card className="glass-surface">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <BarChart3 className="w-5 h-5" />
@@ -310,7 +310,7 @@ export const EnhancedPlayerStatsV2: React.FC<EnhancedStatsProps> = ({
       </Card>
 
       {/* Podium des meilleurs joueurs */}
-      <Card>
+      <Card className="glass-surface">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Trophy className="w-5 h-5 text-yellow-600" />
@@ -406,7 +406,7 @@ export const EnhancedPlayerStatsV2: React.FC<EnhancedStatsProps> = ({
       {/* Graphiques comparatifs */}
       <div className="grid md:grid-cols-2 gap-6">
         {/* Graphique des taux de victoire */}
-        <Card>
+        <Card className="glass-surface">
           <CardHeader>
             <CardTitle className="text-lg">Taux de Victoire par Joueur</CardTitle>
           </CardHeader>
@@ -430,7 +430,7 @@ export const EnhancedPlayerStatsV2: React.FC<EnhancedStatsProps> = ({
         </Card>
 
         {/* Graphique des scores moyens */}
-        <Card>
+        <Card className="glass-surface">
           <CardHeader>
             <CardTitle className="text-lg">Score Moyen par Joueur</CardTitle>
           </CardHeader>
@@ -461,7 +461,7 @@ export const EnhancedPlayerStatsV2: React.FC<EnhancedStatsProps> = ({
       </div>
 
       {/* Tableau détaillé des statistiques */}
-      <Card>
+      <Card className="glass-surface">
         <CardHeader>
           <CardTitle>Statistiques Détaillées</CardTitle>
         </CardHeader>

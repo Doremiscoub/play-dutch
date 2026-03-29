@@ -84,7 +84,7 @@ const TournamentResults: React.FC<TournamentResultsProps> = ({
       </Card>
 
       {/* Podium */}
-      <Card>
+      <Card className="glass-surface border border-border">
         <CardHeader>
           <CardTitle>🏆 Classement Final</CardTitle>
         </CardHeader>

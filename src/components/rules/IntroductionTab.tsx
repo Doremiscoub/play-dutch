@@ -12,7 +12,7 @@ const IntroductionTab = () => {
       transition={{ duration: 0.6 }}
     >
       {/* Objectif principal */}
-      <Card className="bg-white border border-border shadow-md overflow-hidden">
+      <Card className="glass-surface border border-border shadow-md overflow-hidden">
         <CardContent className="p-8">
           <div className="flex items-center gap-4 mb-6">
             <div className="bg-gradient-to-br from-trinity-blue-500 to-trinity-purple-500 rounded-2xl p-4 text-white">
@@ -36,7 +36,7 @@ const IntroductionTab = () => {
       </Card>
 
       {/* Participants */}
-      <Card className="bg-white border border-border shadow-md overflow-hidden">
+      <Card className="glass-surface border border-border shadow-md overflow-hidden">
         <CardContent className="p-8">
           <div className="flex items-center gap-4 mb-6">
             <div className="bg-gradient-to-br from-trinity-orange-500 to-trinity-purple-500 rounded-2xl p-4 text-white">

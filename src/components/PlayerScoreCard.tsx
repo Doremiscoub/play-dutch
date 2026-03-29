@@ -40,7 +40,7 @@ const PlayerScoreCard: React.FC<PlayerScoreCardProps> = ({
     <motion.div
       className={cn(
         "group relative rounded-xl border shadow-lg transition-all duration-300 cursor-pointer overflow-hidden",
-        "bg-white border-border hover:shadow-md",
+        "glass-surface border-border hover:shadow-md",
         isExpanded ? "ring-2 ring-dutch-blue/20 shadow-xl" : "hover:scale-[1.01]"
       )}
       onClick={toggleExpansion}

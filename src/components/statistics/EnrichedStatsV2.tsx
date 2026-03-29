@@ -191,19 +191,19 @@ export const EnrichedStatsV2: React.FC<EnrichedStatsV2Props> = ({
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="text-center p-3 bg-white rounded-lg border border-border shadow-sm">
+            <div className="text-center p-3 glass-surface rounded-lg shadow-sm">
               <div className="text-2xl font-bold text-primary">{totalGames}</div>
               <div className="text-sm text-muted-foreground">Parties jouées</div>
             </div>
-            <div className="text-center p-3 bg-white rounded-lg border border-border shadow-sm">
+            <div className="text-center p-3 glass-surface rounded-lg shadow-sm">
               <div className="text-2xl font-bold text-secondary">{analytics.length}</div>
               <div className="text-sm text-muted-foreground">Joueurs uniques</div>
             </div>
-            <div className="text-center p-3 bg-white rounded-lg border border-border shadow-sm">
+            <div className="text-center p-3 glass-surface rounded-lg shadow-sm">
               <div className="text-2xl font-bold text-accent">{avgRoundsPerGame}</div>
               <div className="text-sm text-muted-foreground">Manches/partie</div>
             </div>
-            <div className="text-center p-3 bg-white rounded-lg border border-border shadow-sm">
+            <div className="text-center p-3 glass-surface rounded-lg shadow-sm">
               <div className="text-2xl font-bold text-primary">{totalAchievements}</div>
               <div className="text-sm text-muted-foreground">Succès débloqués</div>
             </div>
@@ -347,7 +347,7 @@ export const EnrichedStatsV2: React.FC<EnrichedStatsV2Props> = ({
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.05 }}
-                className="p-4 bg-white rounded-lg border border-border shadow-sm"
+                className="p-4 glass-surface rounded-lg shadow-sm"
               >
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-3">
