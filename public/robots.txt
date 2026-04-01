@@ -2,7 +2,7 @@
 User-agent: *
 Allow: /
 
-# Pages importantes pour le SEO
+# Core app pages
 Allow: /setup
 Allow: /rules
 Allow: /history
@@ -11,7 +11,19 @@ Allow: /faq
 Allow: /privacy
 Allow: /terms
 
-# Ressources statiques optimisées
+# SEO/GEO pages
+Allow: /dutch-card-game
+Allow: /dutch-rules
+Allow: /dutch-scoring
+Allow: /score-tracker
+Allow: /card-game-score-app
+Allow: /what-is-dutch-card-game
+Allow: /how-to-play-dutch
+Allow: /how-to-score-dutch
+Allow: /best-score-tracker-card-games
+Allow: /how-to-keep-score-card-games
+
+# Static resources
 Allow: /lovable-uploads/
 Allow: /assets/
 Allow: /*.css
@@ -21,7 +33,7 @@ Allow: /*.jpg
 Allow: /*.svg
 Allow: /manifest.json
 
-# Pages à ne pas indexer
+# Pages to exclude
 Disallow: /admin
 Disallow: /*?*
 
