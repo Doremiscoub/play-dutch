@@ -29,6 +29,18 @@ const MultiplayerPage = React.lazy(() => import('./pages/MultiplayerPage'));
 const SettingsPage = React.lazy(() => import('./pages/SettingsPage'));
 const DeveloperTools = React.lazy(() => import('./pages/DeveloperTools'));
 
+// SEO/GEO pages — isolated from core game logic
+const DutchCardGamePage = React.lazy(() => import('./pages/seo/DutchCardGamePage'));
+const DutchRulesPage = React.lazy(() => import('./pages/seo/DutchRulesPage'));
+const DutchScoringPage = React.lazy(() => import('./pages/seo/DutchScoringPage'));
+const ScoreTrackerPage = React.lazy(() => import('./pages/seo/ScoreTrackerPage'));
+const CardGameScoreAppPage = React.lazy(() => import('./pages/seo/CardGameScoreAppPage'));
+const WhatIsDutchCardGamePage = React.lazy(() => import('./pages/seo/WhatIsDutchCardGamePage'));
+const HowToPlayDutchPage = React.lazy(() => import('./pages/seo/HowToPlayDutchPage'));
+const HowToScoreDutchPage = React.lazy(() => import('./pages/seo/HowToScoreDutchPage'));
+const BestScoreTrackerPage = React.lazy(() => import('./pages/seo/BestScoreTrackerPage'));
+const HowToKeepScorePage = React.lazy(() => import('./pages/seo/HowToKeepScorePage'));
+
 // Composants
 import PWAInstallPrompt from './components/PWAInstallPrompt';
 import AppLayout from './components/layout/AppLayout';
@@ -100,6 +112,18 @@ const App: React.FC = () => {
               <Route path="terms" element={<TermsPage />} />
               <Route path="faq" element={<FAQPage />} />
               <Route path="strategy" element={<GuideStrategy />} />
+
+              {/* SEO/GEO pages — new routes, no impact on existing app */}
+              <Route path="dutch-card-game" element={<DutchCardGamePage />} />
+              <Route path="dutch-rules" element={<DutchRulesPage />} />
+              <Route path="dutch-scoring" element={<DutchScoringPage />} />
+              <Route path="score-tracker" element={<ScoreTrackerPage />} />
+              <Route path="card-game-score-app" element={<CardGameScoreAppPage />} />
+              <Route path="what-is-dutch-card-game" element={<WhatIsDutchCardGamePage />} />
+              <Route path="how-to-play-dutch" element={<HowToPlayDutchPage />} />
+              <Route path="how-to-score-dutch" element={<HowToScoreDutchPage />} />
+              <Route path="best-score-tracker-card-games" element={<BestScoreTrackerPage />} />
+              <Route path="how-to-keep-score-card-games" element={<HowToKeepScorePage />} />
 
               <Route path="aide" element={<Navigate to="/faq" replace />} />
               <Route path="questions" element={<Navigate to="/faq" replace />} />
