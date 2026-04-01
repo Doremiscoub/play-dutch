@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
-import { Link } from 'react-router-dom';
-import { ArrowRight, BookOpen, Calculator, Gamepad2, Trophy } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
+import { ArrowRight, BookOpen, Calculator, Gamepad2, Trophy, HelpCircle, BarChart3, Smartphone, Award, ClipboardList } from 'lucide-react';
 import { useSEO, SEOProps } from '@/hooks/useSEO';
 import PageShell from '@/components/layout/PageShell';
 import PageContainer from '@/components/layout/PageContainer';
@@ -14,11 +14,32 @@ interface SEOPageLayoutProps {
   ctaHref?: string;
 }
 
-const internalLinks = [
-  { label: 'What is Dutch?', href: '/what-is-dutch-card-game', icon: BookOpen },
-  { label: 'How to Play', href: '/how-to-play-dutch', icon: Gamepad2 },
-  { label: 'Scoring Guide', href: '/how-to-score-dutch', icon: Calculator },
-  { label: 'Score Tracker', href: '/score-tracker', icon: Trophy },
+const seoLinkGroups = [
+  {
+    title: 'About Dutch',
+    links: [
+      { label: 'Dutch Card Game', href: '/dutch-card-game', icon: Gamepad2 },
+      { label: 'What Is Dutch?', href: '/what-is-dutch-card-game', icon: HelpCircle },
+      { label: 'Rules', href: '/dutch-rules', icon: BookOpen },
+      { label: 'How to Play', href: '/how-to-play-dutch', icon: ClipboardList },
+    ],
+  },
+  {
+    title: 'Scoring',
+    links: [
+      { label: 'Scoring Guide', href: '/dutch-scoring', icon: Calculator },
+      { label: 'How to Score', href: '/how-to-score-dutch', icon: BarChart3 },
+      { label: 'Keep Score', href: '/how-to-keep-score-card-games', icon: ClipboardList },
+    ],
+  },
+  {
+    title: 'Tools',
+    links: [
+      { label: 'Score Tracker', href: '/score-tracker', icon: Trophy },
+      { label: 'Score App', href: '/card-game-score-app', icon: Smartphone },
+      { label: 'Best Trackers', href: '/best-score-tracker-card-games', icon: Award },
+    ],
+  },
 ];
 
 export default function SEOPageLayout({
@@ -29,7 +50,8 @@ export default function SEOPageLayout({
   ctaText = 'Start Playing Dutch Now',
   ctaHref = '/setup',
 }: SEOPageLayoutProps) {
-  useSEO(seo);
+  useSEO({ ...seo, locale: 'en' });
+  const { pathname } = useLocation();
 
   return (
     <PageShell variant="minimal">
@@ -83,20 +105,33 @@ export default function SEOPageLayout({
           </div>
         )}
 
-        {/* Internal Links */}
+        {/* Internal Links — all 10 SEO pages, grouped */}
         <nav className="mt-10 mb-6" aria-label="Related pages">
           <h3 className="text-lg font-semibold mb-4">Explore More</h3>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            {internalLinks.map((link) => (
-              <Link
-                key={link.href}
-                to={link.href}
-                className="flex flex-col items-center gap-2 p-4 rounded-xl glass-surface hover:glass-elevated transition-all text-center text-sm"
-              >
-                <link.icon className="h-5 w-5 text-primary" />
-                <span className="font-medium">{link.label}</span>
-              </Link>
-            ))}
+          <div className="space-y-5">
+            {seoLinkGroups.map((group) => {
+              const visibleLinks = group.links.filter((l) => l.href !== pathname);
+              if (visibleLinks.length === 0) return null;
+              return (
+                <div key={group.title}>
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
+                    {group.title}
+                  </p>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    {visibleLinks.map((link) => (
+                      <Link
+                        key={link.href}
+                        to={link.href}
+                        className="flex flex-col items-center gap-2 p-4 rounded-xl glass-surface hover:glass-elevated transition-all text-center text-sm"
+                      >
+                        <link.icon className="h-5 w-5 text-primary" aria-hidden="true" />
+                        <span className="font-medium">{link.label}</span>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </nav>
       </PageContainer>

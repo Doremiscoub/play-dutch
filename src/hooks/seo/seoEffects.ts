@@ -13,12 +13,13 @@ export const applySEOConfiguration = ({
   author = 'Dutch Card Game Team',
   publishDate,
   modifiedDate,
+  locale,
   breadcrumbs,
   faqItems,
   gameInfo
 }: SEOProps) => {
   // Title avec limite de caractères optimale
-  const optimizedTitle = title.length > 60 ? title.substring(0, 57) + '...' : title;
+  const optimizedTitle = title.length > 70 ? title.substring(0, 67) + '...' : title;
   document.title = optimizedTitle;
   
   // Meta description optimisée
@@ -45,7 +46,7 @@ export const applySEOConfiguration = ({
   updateMetaTag('og:url', url, 'property');
   updateMetaTag('og:type', type, 'property');
   updateMetaTag('og:site_name', 'Dutch Card Game', 'property');
-  updateMetaTag('og:locale', 'fr_FR', 'property');
+  updateMetaTag('og:locale', locale || 'fr_FR', 'property');
   
   // Twitter Cards enrichi
   updateMetaTag('twitter:card', 'summary_large_image', 'name');

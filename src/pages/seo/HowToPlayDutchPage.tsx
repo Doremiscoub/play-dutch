@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import SEOPageLayout from '@/components/seo/SEOPageLayout';
 import { HowToSchema, FAQSchema, ArticleSchema } from '@/components/seo/SchemaMarkup';
+import { FAQSection } from '@/components/seo/FAQSection';
+import { StepList } from '@/components/seo/StepList';
 
 const howToSteps = [
   { name: 'Gather players and a deck', text: 'You need 2-10 players and a standard 52-card deck. Sit in a circle or around a table. Choose a dealer.' },
@@ -70,19 +72,7 @@ export default function HowToPlayDutchPage() {
 
       {/* Step-by-Step */}
       <h2 className="text-2xl font-bold mb-4">Step-by-Step Instructions</h2>
-      <div className="not-prose space-y-4 mb-10">
-        {howToSteps.map((step, i) => (
-          <div key={step.name} className="flex gap-4 p-5 rounded-xl glass-surface">
-            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 text-primary font-bold flex items-center justify-center text-sm">
-              {i + 1}
-            </div>
-            <div>
-              <h3 className="font-bold mb-1">{step.name}</h3>
-              <p className="text-muted-foreground text-sm">{step.text}</p>
-            </div>
-          </div>
-        ))}
-      </div>
+      <StepList steps={howToSteps} />
 
       {/* Quick Reference Card */}
       <h2 className="text-2xl font-bold mb-4">Quick Reference: Card Values</h2>
@@ -96,6 +86,7 @@ export default function HowToPlayDutchPage() {
             { card: '9–10', pts: '9–10 pts + Peek' },
             { card: 'Jack', pts: '10 pts + Skip' },
             { card: 'Queen', pts: '10 pts' },
+            { card: 'Red King', pts: '10 pts' },
             { card: 'Black King', pts: '0 pts!' },
           ].map((c) => (
             <div key={c.card} className="p-3 rounded-lg glass-surface text-center">
@@ -130,19 +121,7 @@ export default function HowToPlayDutchPage() {
         <Link to="/dutch-scoring" className="text-primary hover:underline">scoring guide</Link>.
       </p>
 
-      {/* FAQ */}
-      <h2 className="text-2xl font-bold mb-4">Frequently Asked Questions</h2>
-      <div className="not-prose space-y-4 mb-8">
-        {faqItems.map((item) => (
-          <details key={item.question} className="group rounded-xl glass-surface">
-            <summary className="px-5 py-4 font-medium cursor-pointer list-none flex items-center justify-between">
-              {item.question}
-              <span className="ml-2 text-muted-foreground group-open:rotate-180 transition-transform">▾</span>
-            </summary>
-            <div className="px-5 pb-4 text-muted-foreground">{item.answer}</div>
-          </details>
-        ))}
-      </div>
+      <FAQSection items={faqItems} />
     </SEOPageLayout>
   );
 }

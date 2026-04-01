@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import SEOPageLayout from '@/components/seo/SEOPageLayout';
 import { HowToSchema, FAQSchema, ArticleSchema } from '@/components/seo/SchemaMarkup';
+import { FAQSection } from '@/components/seo/FAQSection';
+import { StepList } from '@/components/seo/StepList';
 
 const howToSteps = [
   { name: 'Choose your tracking method', text: 'Use a digital score tracker (recommended), a notepad, or a whiteboard. Digital trackers auto-calculate totals and keep a permanent record.' },
@@ -16,7 +18,7 @@ const faqItems = [
   { question: 'How do you keep score in card games?', answer: 'The best way to keep score in card games is with a digital score tracker app. It auto-calculates totals, maintains rankings, and saves game history. Alternatively, use a notepad with player names across the top and one row per round. Add each round\'s score to the running total.' },
   { question: 'What is the best way to track card game scores?', answer: 'A dedicated score tracking app like Dutch Card Game Companion is the most efficient method. It eliminates math errors, provides instant rankings, and saves every game automatically. For analog tracking, a simple grid on paper works — but you lose the statistics and history.' },
   { question: 'Do I need an app to keep score?', answer: 'No, but an app makes it significantly easier. Manual tracking works with pen and paper, but you have to calculate totals yourself, rankings are manual, and you lose the record when the paper is gone. A digital tracker is faster, more accurate, and keeps a permanent history.' },
-  { question: 'Can I track scores for any card game?', answer: 'Yes. Any card game that uses round-based scoring (Dutch, Rummy, Hearts, Spades, Bridge, etc.) can be tracked with a general score tracker. Dutch Card Game Companion is optimized for Dutch but works for any game with cumulative round scores.' },
+  { question: 'Which card games need score tracking?', answer: 'Any card game with cumulative scoring benefits from tracking: Dutch, Cabo, Golf, Rummy, Hearts, Spades, Bridge, Phase 10, Canasta, and many more. If you play multiple rounds and add up points, a score tracker saves time and eliminates errors.' },
 ];
 
 export default function HowToKeepScorePage() {
@@ -101,19 +103,7 @@ export default function HowToKeepScorePage() {
 
       {/* Step-by-Step */}
       <h2 className="text-2xl font-bold mb-4">How to Track Scores — Step by Step</h2>
-      <div className="not-prose space-y-4 mb-10">
-        {howToSteps.map((step, i) => (
-          <div key={step.name} className="flex gap-4 p-5 rounded-xl glass-surface">
-            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 text-primary font-bold flex items-center justify-center text-sm">
-              {i + 1}
-            </div>
-            <div>
-              <h3 className="font-bold mb-1">{step.name}</h3>
-              <p className="text-muted-foreground text-sm">{step.text}</p>
-            </div>
-          </div>
-        ))}
-      </div>
+      <StepList steps={howToSteps} />
 
       {/* Paper Template */}
       <h2 className="text-2xl font-bold mb-4">Paper Score Sheet Template</h2>
@@ -161,23 +151,12 @@ export default function HowToKeepScorePage() {
       </div>
 
       <p>
-        <Link to="/score-tracker" className="text-primary hover:underline">Try our free score tracker</Link> or
-        learn the <Link to="/dutch-rules" className="text-primary hover:underline">rules of Dutch</Link>.
+        <Link to="/score-tracker" className="text-primary hover:underline">Try our free score tracker</Link>,
+        learn the <Link to="/dutch-rules" className="text-primary hover:underline">rules of Dutch</Link>,
+        or see the <Link to="/card-game-score-app" className="text-primary hover:underline">full app features</Link>.
       </p>
 
-      {/* FAQ */}
-      <h2 className="text-2xl font-bold mb-4">Frequently Asked Questions</h2>
-      <div className="not-prose space-y-4 mb-8">
-        {faqItems.map((item) => (
-          <details key={item.question} className="group rounded-xl glass-surface">
-            <summary className="px-5 py-4 font-medium cursor-pointer list-none flex items-center justify-between">
-              {item.question}
-              <span className="ml-2 text-muted-foreground group-open:rotate-180 transition-transform">▾</span>
-            </summary>
-            <div className="px-5 pb-4 text-muted-foreground">{item.answer}</div>
-          </details>
-        ))}
-      </div>
+      <FAQSection items={faqItems} />
     </SEOPageLayout>
   );
 }

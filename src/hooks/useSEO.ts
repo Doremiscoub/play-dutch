@@ -16,6 +16,7 @@ export const useSEO = (props: SEOProps = {}) => {
     props.author,
     props.publishDate,
     props.modifiedDate,
+    props.locale,
     props.breadcrumbs,
     props.faqItems,
     props.gameInfo

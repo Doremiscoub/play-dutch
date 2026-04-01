@@ -1,13 +1,22 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import SEOPageLayout from '@/components/seo/SEOPageLayout';
-import { FAQSchema, ArticleSchema } from '@/components/seo/SchemaMarkup';
+import { FAQSchema, HowToSchema, ArticleSchema } from '@/components/seo/SchemaMarkup';
+import { FAQSection } from '@/components/seo/FAQSection';
 
 const faqItems = [
-  { question: 'How are points counted in Dutch?', answer: 'Each card has a point value: Ace = 1, numbered cards = face value, Jack/Queen = 10, Red King = 10, Black King = 0. At the end of a round, each player sums the values of their 4 cards.' },
+  { question: 'How are points counted in Dutch?', answer: 'Each card has a point value: Ace = 1, numbered cards = face value, Jack/Queen = 10, Red King (Hearts/Diamonds) = 10, Black King (Spades/Clubs) = 0. At the end of a round, each player sums the values of their 4 cards.' },
   { question: 'What is the Dutch penalty?', answer: 'If a player calls Dutch but does not have the lowest score (someone ties or beats them), the caller receives a penalty — typically their score is doubled or extra points are added.' },
   { question: 'What is the best possible score in Dutch?', answer: 'The best possible score in a single round is 0 points, achieved by having four Black Kings (Spades and Clubs). Realistically, a score of 2-4 is excellent.' },
   { question: 'What score limit ends the game?', answer: 'The standard limit is 100 points. The first player to reach 100 loses. Common alternatives: 50 (quick), 75 (medium), 150 or 200 (long session).' },
+];
+
+const howToSteps = [
+  { name: 'Reveal all cards', text: 'When a round ends (after a Dutch call and the final turn), all players flip their 4 cards face-up.' },
+  { name: 'Add each card\'s value', text: 'Sum the point values of all 4 cards: Ace = 1, numbered cards = face value, Jack/Queen = 10, Red King = 10, Black King = 0.' },
+  { name: 'Check for the Dutch penalty', text: 'If the player who called Dutch does NOT have the lowest (or tied lowest) score, their round score is doubled as a penalty.' },
+  { name: 'Record each player\'s score', text: 'Add each player\'s round score to their cumulative total. Use a score tracker app for automatic calculations.' },
+  { name: 'Check for game over', text: 'If any player\'s cumulative score reaches the limit (default: 100), the game ends. That player loses. Everyone else wins.' },
 ];
 
 export default function DutchScoringPage() {
@@ -25,6 +34,12 @@ export default function DutchScoringPage() {
         { label: 'Scoring', href: '/dutch-scoring' },
       ]}
     >
+      <HowToSchema
+        name="How to Score the Dutch Card Game"
+        description="Step-by-step scoring process for the Dutch card game including card values and penalty rules."
+        steps={howToSteps}
+        totalTime="PT2M"
+      />
       <FAQSchema items={faqItems} />
       <ArticleSchema
         title="Dutch Card Game Scoring Guide"
@@ -70,6 +85,11 @@ export default function DutchScoringPage() {
           </table>
         </div>
       </div>
+
+      <p className="mb-8">
+        For a step-by-step walkthrough, see{' '}
+        <Link to="/how-to-score-dutch" className="text-primary hover:underline">how to score Dutch</Link>.
+      </p>
 
       {/* Score Examples */}
       <h2 className="text-2xl font-bold mb-4">Scoring Examples</h2>
@@ -126,21 +146,12 @@ export default function DutchScoringPage() {
         Track scores automatically with our{' '}
         <Link to="/score-tracker" className="text-primary hover:underline">free score tracker</Link>.
         It handles calculations, cumulative totals, and statistics for every player.
+        See our guide on{' '}
+        <Link to="/how-to-keep-score-card-games" className="text-primary hover:underline">how to keep score in card games</Link>{' '}
+        for more tracking methods.
       </p>
 
-      {/* FAQ */}
-      <h2 className="text-2xl font-bold mb-4">Scoring FAQ</h2>
-      <div className="not-prose space-y-4 mb-8">
-        {faqItems.map((item) => (
-          <details key={item.question} className="group rounded-xl glass-surface">
-            <summary className="px-5 py-4 font-medium cursor-pointer list-none flex items-center justify-between">
-              {item.question}
-              <span className="ml-2 text-muted-foreground group-open:rotate-180 transition-transform">▾</span>
-            </summary>
-            <div className="px-5 pb-4 text-muted-foreground">{item.answer}</div>
-          </details>
-        ))}
-      </div>
+      <FAQSection items={faqItems} title="Scoring FAQ" />
     </SEOPageLayout>
   );
 }

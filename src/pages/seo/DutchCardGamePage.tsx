@@ -2,11 +2,12 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import SEOPageLayout from '@/components/seo/SEOPageLayout';
 import { GameSchema, SoftwareAppSchema, FAQSchema } from '@/components/seo/SchemaMarkup';
+import { FAQSection } from '@/components/seo/FAQSection';
 
 const faqItems = [
   {
-    question: 'What is the Dutch card game?',
-    answer: 'Dutch is a strategic card game played with a standard 52-card deck where 2-10 players try to achieve the lowest score by memorizing, swapping, and revealing hidden cards. It is also known as Cabo or Golf in some regions.',
+    question: 'How is Dutch different from other card games?',
+    answer: 'Unlike most card games, Dutch hides your own cards from you. You start knowing only 2 of your 4 cards and must use memory, observation, and special card powers to improve your hand. This hidden-information mechanic creates unique tension and bluffing opportunities.',
   },
   {
     question: 'How many players can play Dutch?',
@@ -72,7 +73,8 @@ export default function DutchCardGamePage() {
         Unlike most card games, Dutch challenges your <strong>memory</strong> as much as your
         strategy. Each player starts with 4 face-down cards and can only peek at 2. The rest of
         the game is about gathering information, making smart swaps, and choosing the perfect
-        moment to call "Dutch."
+        moment to call "Dutch." Learn more in our{' '}
+        <Link to="/what-is-dutch-card-game" className="text-primary hover:underline">deep dive into what makes Dutch unique</Link>.
       </p>
 
       <div className="not-prose my-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -124,8 +126,8 @@ export default function DutchCardGamePage() {
               <tr><td className="px-4 py-3">9–10</td><td className="px-4 py-3">9–10</td><td className="px-4 py-3">Peek at one of your hidden cards</td></tr>
               <tr><td className="px-4 py-3">Jack</td><td className="px-4 py-3">10</td><td className="px-4 py-3">Skip another player's turn</td></tr>
               <tr><td className="px-4 py-3">Queen</td><td className="px-4 py-3">10</td><td className="px-4 py-3">—</td></tr>
-              <tr><td className="px-4 py-3">Red King</td><td className="px-4 py-3">10</td><td className="px-4 py-3">—</td></tr>
-              <tr><td className="px-4 py-3 font-bold">Black King</td><td className="px-4 py-3 font-bold text-green-500">0</td><td className="px-4 py-3 font-bold">Best card in the game!</td></tr>
+              <tr><td className="px-4 py-3">Red King (Hearts/Diamonds)</td><td className="px-4 py-3">10</td><td className="px-4 py-3">—</td></tr>
+              <tr><td className="px-4 py-3 font-bold">Black King (Spades/Clubs)</td><td className="px-4 py-3 font-bold text-green-500">0</td><td className="px-4 py-3 font-bold">Best card in the game!</td></tr>
             </tbody>
           </table>
         </div>
@@ -138,27 +140,19 @@ export default function DutchCardGamePage() {
 
       {/* Why Use the App */}
       <h2 className="text-2xl font-bold mb-4">Why Use Dutch Card Game Companion?</h2>
-      <ul className="space-y-2 mb-8">
+      <ul className="space-y-2 mb-6">
         <li><strong>Instant score tracking</strong> — no pen and paper needed.</li>
         <li><strong>AI commentary</strong> — Professor Cartouche reacts to your plays in real time.</li>
         <li><strong>Statistics & history</strong> — track averages, streaks, and improvement over time.</li>
         <li><strong>Works offline</strong> — play anywhere, no internet required after first load.</li>
         <li><strong>Free & private</strong> — no account needed, data stays on your device.</li>
       </ul>
+      <p className="mb-8">
+        See how it compares to other tools in our{' '}
+        <Link to="/best-score-tracker-card-games" className="text-primary hover:underline">best score trackers comparison</Link>.
+      </p>
 
-      {/* FAQ Section */}
-      <h2 className="text-2xl font-bold mb-4">Frequently Asked Questions</h2>
-      <div className="not-prose space-y-4 mb-8">
-        {faqItems.map((item) => (
-          <details key={item.question} className="group rounded-xl glass-surface">
-            <summary className="px-5 py-4 font-medium cursor-pointer list-none flex items-center justify-between">
-              {item.question}
-              <span className="ml-2 text-muted-foreground group-open:rotate-180 transition-transform">▾</span>
-            </summary>
-            <div className="px-5 pb-4 text-muted-foreground">{item.answer}</div>
-          </details>
-        ))}
-      </div>
+      <FAQSection items={faqItems} />
     </SEOPageLayout>
   );
 }

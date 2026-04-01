@@ -9,6 +9,7 @@ export interface SEOProps {
   author?: string;
   publishDate?: string;
   modifiedDate?: string;
+  locale?: string;
   breadcrumbs?: Array<{ name: string; url: string }>;
   faqItems?: Array<{ question: string; answer: string }>;
   gameInfo?: {

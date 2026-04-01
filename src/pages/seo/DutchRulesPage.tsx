@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import SEOPageLayout from '@/components/seo/SEOPageLayout';
 import { FAQSchema, HowToSchema, ArticleSchema } from '@/components/seo/SchemaMarkup';
+import { FAQSection } from '@/components/seo/FAQSection';
 
 const faqItems = [
   { question: 'What happens when someone calls Dutch?', answer: 'When a player calls "Dutch," every other player gets one final turn. Then all cards are revealed and scores counted. If the caller has the lowest score, others score normally. If someone else ties or beats the caller, the caller receives a penalty.' },
@@ -139,13 +140,15 @@ export default function DutchRulesPage() {
       {/* Scoring */}
       <h2 className="text-2xl font-bold mb-3">Scoring</h2>
       <p className="mb-4">
-        After revealing, add up each player's card values. See the{' '}
+        After revealing, add up each player's card values: Ace = 1, numbered cards = face value,
+        Jack/Queen = 10, Red King = 10, Black King = 0. See the{' '}
         <Link to="/dutch-scoring" className="text-primary hover:underline">full scoring guide</Link>{' '}
         for card values and penalty details.
       </p>
       <p className="mb-6">
         Use our <Link to="/score-tracker" className="text-primary hover:underline">free score tracker</Link> to
-        automate calculations across rounds.
+        automate calculations across rounds, or read our guide on{' '}
+        <Link to="/how-to-keep-score-card-games" className="text-primary hover:underline">how to keep score in card games</Link>.
       </p>
 
       {/* Tips */}
@@ -157,19 +160,7 @@ export default function DutchRulesPage() {
         <li><strong>Use 7s aggressively early.</strong> Opponents haven't optimized yet, so blind swaps are lower risk.</li>
       </ul>
 
-      {/* FAQ */}
-      <h2 className="text-2xl font-bold mb-4">Rules FAQ</h2>
-      <div className="not-prose space-y-4 mb-8">
-        {faqItems.map((item) => (
-          <details key={item.question} className="group rounded-xl glass-surface">
-            <summary className="px-5 py-4 font-medium cursor-pointer list-none flex items-center justify-between">
-              {item.question}
-              <span className="ml-2 text-muted-foreground group-open:rotate-180 transition-transform">▾</span>
-            </summary>
-            <div className="px-5 pb-4 text-muted-foreground">{item.answer}</div>
-          </details>
-        ))}
-      </div>
+      <FAQSection items={faqItems} title="Rules FAQ" />
     </SEOPageLayout>
   );
 }

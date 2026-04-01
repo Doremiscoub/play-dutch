@@ -2,12 +2,12 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import SEOPageLayout from '@/components/seo/SEOPageLayout';
 import { SoftwareAppSchema, FAQSchema } from '@/components/seo/SchemaMarkup';
+import { FAQSection } from '@/components/seo/FAQSection';
 
 const faqItems = [
   { question: 'Is the Dutch score tracker free?', answer: 'Yes, Dutch Card Game Companion is 100% free. No ads wall, no premium tier, no account required.' },
-  { question: 'Does the score tracker work offline?', answer: 'Yes. As a Progressive Web App (PWA), Dutch Card Game Companion works fully offline after your first visit. All data is stored locally on your device.' },
-  { question: 'Can I use this tracker for other card games?', answer: 'The app is optimized for Dutch, but you can use it to track scores for any card game where players accumulate points across rounds.' },
-  { question: 'How do I install the score tracker on my phone?', answer: 'On Android (Chrome): tap the menu (three dots) → "Install app." On iPhone (Safari): tap the share button → "Add to Home Screen." The app will appear like a native app on your home screen.' },
+  { question: 'Does the score tracker work offline?', answer: 'Yes. As a Progressive Web App (PWA), it works fully offline after your first visit. All data is stored locally on your device via browser storage.' },
+  { question: 'How do I install the score tracker on my phone?', answer: 'On Android (Chrome): tap the menu (three dots) then "Install app." On iPhone (Safari): tap the share button then "Add to Home Screen." The app will appear like a native app on your home screen.' },
   { question: 'Is my data private?', answer: 'Yes. All game data is stored locally on your device using browser storage. No data is sent to any server. No account or personal information is required.' },
 ];
 
@@ -91,6 +91,13 @@ export default function ScoreTrackerPage() {
         </div>
       </div>
 
+      <p className="mb-4">
+        See how Dutch Companion stacks up against other options in our{' '}
+        <Link to="/best-score-tracker-card-games" className="text-primary hover:underline">best score trackers comparison</Link>.
+        Or read about the{' '}
+        <Link to="/card-game-score-app" className="text-primary hover:underline">full app features</Link>.
+      </p>
+
       {/* Supported Games */}
       <h2 className="text-2xl font-bold mb-4">Supported Games</h2>
       <p className="mb-4">
@@ -105,19 +112,7 @@ export default function ScoreTrackerPage() {
         <li>Any custom card game with point tracking</li>
       </ul>
 
-      {/* FAQ */}
-      <h2 className="text-2xl font-bold mb-4">Frequently Asked Questions</h2>
-      <div className="not-prose space-y-4 mb-8">
-        {faqItems.map((item) => (
-          <details key={item.question} className="group rounded-xl glass-surface">
-            <summary className="px-5 py-4 font-medium cursor-pointer list-none flex items-center justify-between">
-              {item.question}
-              <span className="ml-2 text-muted-foreground group-open:rotate-180 transition-transform">▾</span>
-            </summary>
-            <div className="px-5 pb-4 text-muted-foreground">{item.answer}</div>
-          </details>
-        ))}
-      </div>
+      <FAQSection items={faqItems} />
     </SEOPageLayout>
   );
 }

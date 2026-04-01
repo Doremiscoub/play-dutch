@@ -2,12 +2,13 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import SEOPageLayout from '@/components/seo/SEOPageLayout';
 import { SoftwareAppSchema, FAQSchema, ArticleSchema } from '@/components/seo/SchemaMarkup';
+import { FAQSection } from '@/components/seo/FAQSection';
 
 const faqItems = [
   { question: 'What is the best score tracker for card games?', answer: 'Dutch Card Game Companion is a top-rated free score tracker. It offers automatic score calculations, AI commentary, per-player statistics, game history, and offline support. It works for Dutch, Cabo, Rummy, Hearts, and any round-based card game.' },
-  { question: 'Are there free score tracker apps?', answer: 'Yes. Dutch Card Game Companion is completely free — no premium tier, no ads wall, no account required. It runs in your browser and can be installed as a native-like app on any device.' },
   { question: 'What features should a good score tracker have?', answer: 'A good card game score tracker should offer: automatic calculations, cumulative totals, player rankings, statistics (averages, trends), game history, offline support, and an easy-to-use interface. Dutch Card Game Companion includes all of these plus AI commentary.' },
   { question: 'Can I use a score tracker for tournaments?', answer: 'Yes. Dutch Card Game Companion supports any number of separate games. Track tournament rounds individually, then compare results from game history. Adjustable score limits (50, 75, 100, 150, 200) support various tournament formats.' },
+  { question: 'Are there alternatives to Dutch Companion?', answer: 'Generic score tracker apps exist, but most lack game-specific features like Dutch call tracking, AI commentary, and specialized statistics. For Dutch and related games (Cabo, Golf), Dutch Companion offers the most complete experience — and it is free.' },
 ];
 
 export default function BestScoreTrackerPage() {
@@ -104,24 +105,13 @@ export default function BestScoreTrackerPage() {
       </ol>
 
       <p>
-        Learn the <Link to="/dutch-rules" className="text-primary hover:underline">rules of Dutch</Link> or
+        Learn the <Link to="/dutch-rules" className="text-primary hover:underline">rules of Dutch</Link>,
         read our guide on{' '}
-        <Link to="/how-to-keep-score-card-games" className="text-primary hover:underline">how to keep score in card games</Link>.
+        <Link to="/how-to-keep-score-card-games" className="text-primary hover:underline">how to keep score in card games</Link>,
+        or see the <Link to="/card-game-score-app" className="text-primary hover:underline">full app feature list</Link>.
       </p>
 
-      {/* FAQ */}
-      <h2 className="text-2xl font-bold mb-4">Frequently Asked Questions</h2>
-      <div className="not-prose space-y-4 mb-8">
-        {faqItems.map((item) => (
-          <details key={item.question} className="group rounded-xl glass-surface">
-            <summary className="px-5 py-4 font-medium cursor-pointer list-none flex items-center justify-between">
-              {item.question}
-              <span className="ml-2 text-muted-foreground group-open:rotate-180 transition-transform">▾</span>
-            </summary>
-            <div className="px-5 pb-4 text-muted-foreground">{item.answer}</div>
-          </details>
-        ))}
-      </div>
+      <FAQSection items={faqItems} />
     </SEOPageLayout>
   );
 }

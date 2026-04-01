@@ -2,12 +2,13 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import SEOPageLayout from '@/components/seo/SEOPageLayout';
 import { FAQSchema, GameSchema, ArticleSchema } from '@/components/seo/SchemaMarkup';
+import { FAQSection } from '@/components/seo/FAQSection';
 
 const faqItems = [
   { question: 'What is the Dutch card game?', answer: 'Dutch is a strategic card game for 2-10 players using a standard 52-card deck. Players receive 4 face-down cards, can peek at only 2, and take turns drawing, swapping, and discarding to achieve the lowest possible score. The game combines memory, strategy, and risk-taking. It is also known as Cabo, Golf, or Cambio in other regions.' },
   { question: 'Where does the Dutch card game come from?', answer: 'Dutch originates from European memory card game traditions dating back to the 19th century. The name references Dutch (Netherlands) card-playing culture, though the game spread widely across Europe, especially in French-speaking countries. Regional variants exist under names like Cabo (Latin America), Golf (USA/UK), and Cambio (Italy).' },
   { question: 'Is Dutch the same as Cabo or Golf?', answer: 'Dutch, Cabo, and Golf are closely related card games that share the core mechanic of hidden cards and low-score objectives. The rules differ slightly between versions — Dutch uses specific special card powers (7 for swapping, 9/10 for peeking, Jack for skipping) that may differ from Cabo or Golf variants.' },
-  { question: 'How is Dutch different from other card games?', answer: 'Dutch is unique because players cannot see all their cards. You start knowing only 2 of your 4 cards, and must use memory, observation, and special card powers to optimize your hand. This hidden information mechanic creates tension and bluffing opportunities not found in most card games.' },
+  { question: 'What is the Black King worth in Dutch?', answer: 'The Black King (Spades and Clubs) is worth 0 points — the lowest possible card value, making it the most valuable card in the game. In contrast, the Red King (Hearts and Diamonds) is worth 10 points.' },
 ];
 
 export default function WhatIsDutchCardGamePage() {
@@ -97,8 +98,9 @@ export default function WhatIsDutchCardGamePage() {
           and you might get a penalty. Wait too long and someone else calls first.
         </li>
         <li>
-          <strong>The Black King:</strong> Worth 0 points, the Black King is the most valuable
-          card — creating high-stakes moments when one appears.
+          <strong>The King split:</strong> The Black King (Spades/Clubs) is worth <strong>0 points</strong> — the best card in
+          the game. But the Red King (Hearts/Diamonds) is worth <strong>10 points</strong> — one of the worst. This
+          creates dramatic moments whenever a King appears.
         </li>
       </ul>
 
@@ -145,19 +147,7 @@ export default function WhatIsDutchCardGamePage() {
         or <Link to="/how-to-play-dutch" className="text-primary hover:underline">follow our step-by-step guide</Link>.
       </p>
 
-      {/* FAQ */}
-      <h2 className="text-2xl font-bold mb-4">Frequently Asked Questions</h2>
-      <div className="not-prose space-y-4 mb-8">
-        {faqItems.map((item) => (
-          <details key={item.question} className="group rounded-xl glass-surface">
-            <summary className="px-5 py-4 font-medium cursor-pointer list-none flex items-center justify-between">
-              {item.question}
-              <span className="ml-2 text-muted-foreground group-open:rotate-180 transition-transform">▾</span>
-            </summary>
-            <div className="px-5 pb-4 text-muted-foreground">{item.answer}</div>
-          </details>
-        ))}
-      </div>
+      <FAQSection items={faqItems} />
     </SEOPageLayout>
   );
 }
